@@ -1,0 +1,6 @@
+﻿信号的处理
+程序是和网络相关的，调试期间经常地收到SIGPIPE，导致gdb停下来。看了一下gdb info，解决方法很简单。用handle命令设置一下缺省signal的处理行为就可以了:
+handle SIGPIPE nostop
+如果连提示信息都不想看见，就可以这样设置:
+handle SIGPIPE nostop noprint
+就可以了。其他相关信号也可以类似处理。想了解目前的signal状态可以使用info signal察看。

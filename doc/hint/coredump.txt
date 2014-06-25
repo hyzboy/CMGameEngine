@@ -1,0 +1,4 @@
+﻿#设置core大小为无限
+ulimit -c unlimited
+#设置文件大小为无限
+ulimit unlimited

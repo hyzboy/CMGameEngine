@@ -1,0 +1,2 @@
+﻿nm -D filename.so
+objdump -tT filename.so

@@ -1,0 +1,18 @@
+
+	#if HGL_OS == HGL_OS_Linux
+		#include<sys/sendfile.h>
+
+		inline int sendfile(int tfd,int sfd,size_t size)
+		{
+			return sendfile(tfd,sfd,NULL,size);
+		}
+	#endif//HGL_OS == HGL_OS_Linux
+
+	#if HGL_OS == HGL_OS_FreeBSD
+		#include<sys/uio.h>
+
+		inline int sendfile(int tfd,int sfd,size_t size)
+		{
+			return sendfile(tfd,sfd,0,size,NULL,NULL,0);
+		}
+	#endif//HGL_OS == HGL_OS_FreeBSD

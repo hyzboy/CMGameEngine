@@ -1,0 +1,40 @@
+﻿文本与字符集
+
+	引擎支持Ansi、UTF8、Wide三种格式的字符串，并提供了一定的转换功能。
+字符串处理类分别定义为AnsiString、UTF8String、WideString。为避免编
+译器自动适配错误，AnsiString使用char *为数据指定，
+UTF8String使用uint8 *为数据指定，WideString使用wchar_t为数据指针。
+
+	其中AnsiString为传统的单字节Ansi编码，由于ansi向unicode格式转换
+需要转换码表，而当前系统并不一定存在这个存换码表，所以AnsiString并不常
+用，仅在一些必须使用Ansi格式字符串的时候使用。
+
+	要注意的是：wchar_t在Windows x86/x64系统下为UTF16LE/UCS2格
+式，而在UNIX类系统下并不确定是什么编码格式。所以因为WideString也会有这
+个现象。
+
+	由于在任何时候都可能要配合其它的第三方库或代码，所以我们并不强制要求
+在编译器中指定wchar_t的格式。当然，强制指定也是没有任何问题的。引擎中的
+WideString可自适应utf16le,utf16be,utf32le,utf32be四种格式的任意一
+种。
+
+
+
+	也因此，我们要求开发人员向任何一个地方输出或输入字符串时，必须非常明
+确的指定字符串的格式。在DataOutputStream类中，包含以下字符串函数：
+
+	WriteUTF8Chars
+	WriteUTF16LEChars
+	WriteUTF16BEChars
+
+	WriteUTF8String
+	WriteUTF16LEString
+	WriteUTF16BEString
+
+	其中WriteUTF??Chars是普通的写入字符串数据，不含0结尾。
+	而WriteUTF??String会在字符串前方，写入一个int32类型的数据用来表示
+字符串长度。
+
+
+	我们提供了易于理解的函数用于在三种字符串之间进行转换，分别定义在
+CodePage.h与WideString.h中，详细请参考开发手册。

@@ -1,0 +1,70 @@
+﻿format:
+
+	struct RoleBase			//假设为结构0
+	{
+		int64		role_id;	//0
+		string[32]	name;		//1 指最大长度为32的字符串
+		bool		sex;
+		int8		job;
+		int32		icon;
+		uint32		body_shape;
+	};
+
+	struct RoleAvatar		//假设为结构1
+	{
+		int32 head;			//头 0
+		int32 hand[2];		//手 1
+		int32 foot[2];		//脚 2
+	};
+
+	struct RoleInfo
+	{
+		RoleBase base;		//第0号数据
+		RoleAvatar avatar;	//第1号数据
+	};
+
+
+	以RoleInfo为数据库结构：
+
+方案一：
+
+	标准树型数据结构
+
+	取得0号数据：							GET 0
+	取得0号数据的Base信息：				GET 0.0
+	取得0号数据的Base.role_id信息：		GET 0.0.0
+	取得0号数据的Base.avatar.hand信息：	GET 0.1.0
+	取得0号数据的Base.avatar.hand[1]信息：	GET 0.1.0.1
+
+方案二：
+
+	将每个人的数据全部展开
+
+		RoleInfo		0号数据，整个RoleInfo结构
+		base			1号数据，整个RoleBase结构
+		avatar			2号数据，整个RoleAvatar结构
+
+		base.role_id	3
+		base.name		4
+		base.sex		5
+		base.job		6
+		base.icon		7
+
+		avatar.head		8
+		avatar.hand		9
+		avatar.hand[0]	10
+		avatar.hand[1]	11
+		avatar.foot		12
+		avatar.foot[0]	13
+		avatar.foot[1]	14
+
+	这样取任何一个数据，都只需要数据编号以及子数据编号，如下：
+
+		取得0号数据：							GET 0.0
+		取得0号数据的Base信息：				GET 0.1
+		取得0号数据的Base.role_id信息：		GET 0.3
+		取得0号数据的Base.avatar.hand信息：	GET 0.9
+		取得0号数据的Base.avatar.hand[1]信息：	GET 0.11
+
+	但坏处在于如果数据扩展，会对原先的编号系统产生影响
+

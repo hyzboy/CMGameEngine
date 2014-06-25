@@ -1,0 +1,27 @@
+[Buildset]
+BuildItems=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x01\x00\x00\x00\x0b\x00\x00\x00\x00\x01\x00\x00\x00\x1c\x00C\x00D\x00B\x00T\x00a\x00b\x00l\x00e\x00V\x00i\x00e\x00w\x00e\x00r)
+
+[CMake]
+BuildDirs=/home/hyzboy/workspace/cm/tools/CDBTableViewer/build
+CMakeDir=/usr/share/cmake/Modules
+Current CMake Binary=file:///usr/bin/cmake
+CurrentBuildDir=file:///home/hyzboy/workspace/cm/tools/CDBTableViewer/build
+CurrentBuildType=Debug
+CurrentInstallDir=
+Extra Arguments=
+ProjectRootRelative=./
+
+[Launch]
+Launch Configurations=Launch Configuration 0
+
+[Launch][Launch Configuration 0]
+Configured Launch Modes=execute
+Configured Launchers=nativeAppLauncher
+Name=CDBTableViewer
+Type=Native Application
+
+[Launch][Launch Configuration 0][Data]
+Configured from ProjectItem=CDBTableViewer,CDBTableViewer
+Project Target=CDBTableViewer,CDBTableViewer
+Working Directory=file:///home/hyzboy/workspace/cm/tools/CDBTableViewer/build/
+isExecutable=false

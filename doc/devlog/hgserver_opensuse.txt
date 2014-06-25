@@ -1,0 +1,31 @@
+﻿1./etc/apache2/conf.d下建立hg.conf，内容如下：
+
+ScriptAliasMatch        ^/hg(.*)        /srv/www/htdocs/hg/hgweb.cgi$1
+
+<Directory /srv/www/htdocs/hg>
+  Options ExecCGI FollowSymLinks
+  AllowOverride None
+</Directory>
+
+如需认证，Directory内举例如下：
+<Directory /srv/www/htdocs/hg>
+  Options ExecCGI FollowSymLinks
+        AuthType Basic
+        AuthName "MicroCity Mercurial repositories"
+        AuthUserFile /srv/www/user_access/password.txt
+        Require valid-user
+</Directory>
+
+这里的password.txt是apache密码文件，用于保存用户名和密码
+示例：htpasswd2 password.txt 用户名
+
+
+2./srv/www/htdocs下建立hg目录,用户改为wwwrun:www
+	chown -R wwwrun:www /srv/www/htdocs/hg
+
+3.复制hgweb.cgi到/srv/www/htdocs/hg目录下
+	修改config中内容为/srv/www/htdocs/hg/hgweb.conf"
+
+4.建立hgweb.conf文件，内容如下：
+[collections]
+repos/ = repos/

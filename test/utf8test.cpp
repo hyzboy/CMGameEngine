@@ -1,0 +1,3 @@
+﻿int main(int,char **)
+{
+}

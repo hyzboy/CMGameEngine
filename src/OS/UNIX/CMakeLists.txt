@@ -1,0 +1,4 @@
+IF(BUILD_OPENGL_LIB)
+# 	add_library(OpenGL_X11	X11Window.cpp)
+ENDIF(BUILD_OPENGL_LIB)
+

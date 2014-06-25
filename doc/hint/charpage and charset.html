@@ -1,0 +1,865 @@
+<html>
+  <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta content="">
+    <style></style>
+    <table align="center" border="1" cellpadding="0" cellspacing="0" width="100%">
+		<tbody>
+			<tr>
+			<th width="10%">代码页(CodePage)</th>
+			<th width="21%">名称(CharSet)</th>
+			<th width="32%">显示名称(中文)</th>
+			<th width="37%">显示名称（英文）</th>
+			</tr>
+			<tr>
+			<th>Info.CodePage</th>
+			<th>Info.Name(CharSet)</th>
+			<th>Info.DisplayName(cn)</th>
+			<th>Info.DisplayName(en)</th>
+			</tr>
+			<tr>
+			<td>37</td>
+			<td>IBM037</td>
+			<td>IBM EBCDIC（美国 - 加拿大）</td>
+			<td>IBM EBCDIC (US-Canada)</td>
+			</tr>
+			<tr>
+			<td>437</td>
+			<td>IBM437</td>
+			<td>OEM 美国</td>
+			<td>OEM United States</td>
+			</tr>
+			<tr>
+			<td>500</td>
+			<td>IBM500</td>
+			<td>IBM EBCDIC（国际）</td>
+			<td>IBM EBCDIC (International)</td>
+			</tr>
+			<tr>
+			<td>708</td>
+			<td>ASMO-708</td>
+			<td>阿拉伯字符 (ASMO 708)</td>
+			<td>Arabic (ASMO 708)</td>
+			</tr>
+			<tr>
+			<td>720</td>
+			<td>DOS-720</td>
+			<td>阿拉伯字符 (DOS)</td>
+			<td>Arabic (DOS)</td>
+			</tr>
+			<tr>
+			<td>737</td>
+			<td>ibm737</td>
+			<td>希腊字符 (DOS)</td>
+			<td>Greek (DOS)</td>
+			</tr>
+			<tr>
+			<td>775</td>
+			<td>ibm775</td>
+			<td>波罗的海字符 (DOS)</td>
+			<td>Baltic (DOS)</td>
+			</tr>
+			<tr>
+			<td>850</td>
+			<td>ibm850</td>
+			<td>西欧字符 (DOS)</td>
+			<td>Western European (DOS)</td>
+			</tr>
+			<tr>
+			<td>852</td>
+			<td>ibm852</td>
+			<td>中欧字符 (DOS)</td>
+			<td>Central European (DOS)</td>
+			</tr>
+			<tr>
+			<td>855</td>
+			<td>IBM855</td>
+			<td>OEM 西里尔语</td>
+			<td>OEM Cyrillic</td>
+			</tr>
+			<tr>
+			<td>857</td>
+			<td>ibm857</td>
+			<td>土耳其字符 (DOS)</td>
+			<td>Turkish (DOS)</td>
+			</tr>
+			<tr>
+			<td>858</td>
+			<td>IBM00858</td>
+			<td>OEM 多语言拉丁语 I</td>
+			<td>OEM Multilingual Latin I</td>
+			</tr>
+			<tr>
+			<td>860</td>
+			<td>IBM860</td>
+			<td>葡萄牙语 (DOS)</td>
+			<td>Portuguese (DOS)</td>
+			</tr>
+			<tr>
+			<td>861</td>
+			<td>ibm861</td>
+			<td>冰岛语 (DOS)</td>
+			<td>Icelandic (DOS)</td>
+			</tr>
+			<tr>
+			<td>862</td>
+			<td>DOS-862</td>
+			<td>希伯来字符 (DOS)</td>
+			<td>Hebrew (DOS)</td>
+			</tr>
+			<tr>
+			<td>863</td>
+			<td>IBM863</td>
+			<td>加拿大法语 (DOS)</td>
+			<td>French Canadian (DOS)</td>
+			</tr>
+			<tr>
+			<td>864</td>
+			<td>IBM864</td>
+			<td>阿拉伯字符 (864)</td>
+			<td>Arabic (864)</td>
+			</tr>
+			<tr>
+			<td>865</td>
+			<td>IBM865</td>
+			<td>北欧字符 (DOS)</td>
+			<td>Nordic (DOS)</td>
+			</tr>
+			<tr>
+			<td>866</td>
+			<td>cp866</td>
+			<td>西里尔字符 (DOS)</td>
+			<td>Cyrillic (DOS)</td>
+			</tr>
+			<tr>
+			<td>869</td>
+			<td>ibm869</td>
+			<td>现代希腊字符 (DOS)</td>
+			<td>Greek, Modern (DOS)</td>
+			</tr>
+			<tr>
+			<td>870</td>
+			<td>IBM870</td>
+			<td>IBM EBCDIC（多语言拉丁语 2）</td>
+			<td>IBM EBCDIC (Multilingual Latin-2)</td>
+			</tr>
+			<tr>
+			<td>874</td>
+			<td>windows-874</td>
+			<td>泰语 (Windows)</td>
+			<td>Thai (Windows)</td>
+			</tr>
+			<tr>
+			<td>875</td>
+			<td>cp875</td>
+			<td>IBM EBCDIC（现代希腊语）</td>
+			<td>IBM EBCDIC (Greek Modern)</td>
+			</tr>
+			<tr>
+			<td>932</td>
+			<td>shift_jis</td>
+			<td>日语 (Shift-JIS)</td>
+			<td>Japanese (Shift-JIS)</td>
+			</tr>
+			<tr>
+			<td>936</td>
+			<td>gb2312</td>
+			<td>简体中文 (GB2312)</td>
+			<td>Chinese Simplified (GB2312)</td>
+			</tr>
+			<tr>
+			<td>949</td>
+			<td>ks_c_5601-1987</td>
+			<td>朝鲜语</td>
+			<td>Korean</td>
+			</tr>
+			<tr>
+			<td>950</td>
+			<td>big5</td>
+			<td>繁体中文 (Big5)</td>
+			<td>Chinese Traditional (Big5)</td>
+			</tr>
+			<tr>
+			<td>1026</td>
+			<td>IBM1026</td>
+			<td>IBM EBCDIC（土耳其拉丁语 5）</td>
+			<td>IBM EBCDIC (Turkish Latin-5)</td>
+			</tr>
+			<tr>
+			<td>1047</td>
+			<td>IBM01047</td>
+			<td>IBM 拉丁语 1</td>
+			<td>IBM Latin-1</td>
+			</tr>
+			<tr>
+			<td>1140</td>
+			<td>IBM01140</td>
+			<td>IBM EBCDIC（美国 - 加拿大 - 欧洲）</td>
+			<td>IBM EBCDIC (US-Canada-Euro)</td>
+			</tr>
+			<tr>
+			<td>1141</td>
+			<td>IBM01141</td>
+			<td>IBM EBCDIC（德国 - 欧洲）</td>
+			<td>IBM EBCDIC (Germany-Euro)</td>
+			</tr>
+			<tr>
+			<td>1142</td>
+			<td>IBM01142</td>
+			<td>IBM EBCDIC（丹麦 - 挪威 - 欧洲）</td>
+			<td>IBM EBCDIC (Denmark-Norway-Euro)</td>
+			</tr>
+			<tr>
+			<td>1143</td>
+			<td>IBM01143</td>
+			<td>IBM EBCDIC（芬兰 - 瑞典 - 欧洲）</td>
+			<td>IBM EBCDIC (Finland-Sweden-Euro)</td>
+			</tr>
+			<tr>
+			<td>1144</td>
+			<td>IBM01144</td>
+			<td>IBM EBCDIC（意大利 - 欧洲）</td>
+			<td>IBM EBCDIC (Italy-Euro)</td>
+			</tr>
+			<tr>
+			<td>1145</td>
+			<td>IBM01145</td>
+			<td>IBM EBCDIC（西班牙 - 欧洲）</td>
+			<td>IBM EBCDIC (Spain-Euro)</td>
+			</tr>
+			<tr>
+			<td>1146</td>
+			<td>IBM01146</td>
+			<td>IBM EBCDIC（英国 - 欧洲）</td>
+			<td>IBM EBCDIC (UK-Euro)</td>
+			</tr>
+			<tr>
+			<td>1147</td>
+			<td>IBM01147</td>
+			<td>IBM EBCDIC（法国 - 欧洲）</td>
+			<td>IBM EBCDIC (France-Euro)</td>
+			</tr>
+			<tr>
+			<td>1148</td>
+			<td>IBM01148</td>
+			<td>IBM EBCDIC（国际 - 欧洲）</td>
+			<td>IBM EBCDIC (International-Euro)</td>
+			</tr>
+			<tr>
+			<td>1149</td>
+			<td>IBM01149</td>
+			<td>IBM EBCDIC（冰岛语 - 欧洲）</td>
+			<td>IBM EBCDIC (Icelandic-Euro)</td>
+			</tr>
+			<tr>
+			<td>1200</td>
+			<td>utf-16</td>
+			<td>Unicode</td>
+			<td>Unicode</td>
+			</tr>
+			<tr>
+			<td>1201</td>
+			<td>UnicodeFFFE</td>
+			<td>Unicode (Big-Endian)</td>
+			<td>Unicode (Big-Endian)</td>
+			</tr>
+			<tr>
+			<td>1250</td>
+			<td>windows-1250</td>
+			<td>中欧字符 (Windows)</td>
+			<td>Central European (Windows)</td>
+			</tr>
+			<tr>
+			<td>1251</td>
+			<td>windows-1251</td>
+			<td>西里尔字符 (Windows)</td>
+			<td>Cyrillic (Windows)</td>
+			</tr>
+			<tr>
+			<td>1252</td>
+			<td>Windows-1252</td>
+			<td>西欧字符 (Windows)</td>
+			<td>Western European (Windows)</td>
+			</tr>
+			<tr>
+			<td>1253</td>
+			<td>windows-1253</td>
+			<td>希腊字符 (Windows)</td>
+			<td>Greek (Windows)</td>
+			</tr>
+			<tr>
+			<td>1254</td>
+			<td>windows-1254</td>
+			<td>土耳其字符 (Windows)</td>
+			<td>Turkish (Windows)</td>
+			</tr>
+			<tr>
+			<td>1255</td>
+			<td>windows-1255</td>
+			<td>希伯来字符 (Windows)</td>
+			<td>Hebrew (Windows)</td>
+			</tr>
+			<tr>
+			<td>1256</td>
+			<td>windows-1256</td>
+			<td>阿拉伯字符 (Windows)</td>
+			<td>Arabic (Windows)</td>
+			</tr>
+			<tr>
+			<td>1257</td>
+			<td>windows-1257</td>
+			<td>波罗的海字符 (Windows)</td>
+			<td>Baltic (Windows)</td>
+			</tr>
+			<tr>
+			<td>1258</td>
+			<td>windows-1258</td>
+			<td>越南字符 (Windows)</td>
+			<td>Vietnamese (Windows)</td>
+			</tr>
+			<tr>
+			<td>1361</td>
+			<td>Johab</td>
+			<td>朝鲜语 (Johab)</td>
+			<td>Korean (Johab)</td>
+			</tr>
+			<tr>
+			<td>10000</td>
+			<td>macintosh</td>
+			<td>西欧字符 (Mac)</td>
+			<td>Western European (Mac)</td>
+			</tr>
+			<tr>
+			<td>10001</td>
+			<td>x-mac-japanese</td>
+			<td>日语 (Mac)</td>
+			<td>Japanese (Mac)</td>
+			</tr>
+			<tr>
+			<td>10002</td>
+			<td>x-mac-chinesetrad</td>
+			<td>繁体中文 (Mac)</td>
+			<td>Chinese Traditional (Mac)</td>
+			</tr>
+			<tr>
+			<td>10003</td>
+			<td>x-mac-korean</td>
+			<td>朝鲜语 (Mac)</td>
+			<td>Korean (Mac)</td>
+			</tr>
+			<tr>
+			<td>10004</td>
+			<td>x-mac-arabic</td>
+			<td>阿拉伯字符 (Mac)</td>
+			<td>Arabic (Mac)</td>
+			</tr>
+			<tr>
+			<td>10005</td>
+			<td>x-mac-hebrew</td>
+			<td>希伯来字符 (Mac)</td>
+			<td>Hebrew (Mac)</td>
+			</tr>
+			<tr>
+			<td>10006</td>
+			<td>x-mac-greek</td>
+			<td>希腊字符 (Mac)</td>
+			<td>Greek (Mac)</td>
+			</tr>
+			<tr>
+			<td>10007</td>
+			<td>x-mac-cyrillic</td>
+			<td>西里尔字符 (Mac)</td>
+			<td>Cyrillic (Mac)</td>
+			</tr>
+			<tr>
+			<td>10008</td>
+			<td>x-mac-chinesesimp</td>
+			<td>简体中文 (Mac)</td>
+			<td>Chinese Simplified (Mac)</td>
+			</tr>
+			<tr>
+			<td>10010</td>
+			<td>x-mac-romanian</td>
+			<td>罗马尼亚语 (Mac)</td>
+			<td>Romanian (Mac)</td>
+			</tr>
+			<tr>
+			<td>10017</td>
+			<td>x-mac-ukrainian</td>
+			<td>乌克兰语 (Mac)</td>
+			<td>Ukrainian (Mac)</td>
+			</tr>
+			<tr>
+			<td>10021</td>
+			<td>x-mac-thai</td>
+			<td>泰语 (Mac)</td>
+			<td>Thai (Mac)</td>
+			</tr>
+			<tr>
+			<td>10029</td>
+			<td>x-mac-ce</td>
+			<td>中欧字符 (Mac)</td>
+			<td>Central European (Mac)</td>
+			</tr>
+			<tr>
+			<td>10079</td>
+			<td>x-mac-icelandic</td>
+			<td>冰岛语 (Mac)</td>
+			<td>Icelandic (Mac)</td>
+			</tr>
+			<tr>
+			<td>10081</td>
+			<td>x-mac-turkish</td>
+			<td>土耳其字符 (Mac)</td>
+			<td>Turkish (Mac)</td>
+			</tr>
+			<tr>
+			<td>10082</td>
+			<td>x-mac-croatian</td>
+			<td>克罗地亚语 (Mac)</td>
+			<td>Croatian (Mac)</td>
+			</tr>
+			<tr>
+			<td>20000</td>
+			<td>x-Chinese-CNS</td>
+			<td>繁体中文 (CNS)</td>
+			<td>Chinese Traditional (CNS)</td>
+			</tr>
+			<tr>
+			<td>20001</td>
+			<td>x-cp20001</td>
+			<td>TCA 台湾</td>
+			<td>TCA Taiwan</td>
+			</tr>
+			<tr>
+			<td>20002</td>
+			<td>x-Chinese-Eten</td>
+			<td>繁体中文 (Eten)</td>
+			<td>Chinese Traditional (Eten)</td>
+			</tr>
+			<tr>
+			<td>20003</td>
+			<td>x-cp20003</td>
+			<td>IBM5550 台湾</td>
+			<td>IBM5550 Taiwan</td>
+			</tr>
+			<tr>
+			<td>20004</td>
+			<td>x-cp20004</td>
+			<td>TeleText 台湾</td>
+			<td>TeleText Taiwan</td>
+			</tr>
+			<tr>
+			<td>20005</td>
+			<td>x-cp20005</td>
+			<td>Wang 台湾</td>
+			<td>Wang Taiwan</td>
+			</tr>
+			<tr>
+			<td>20105</td>
+			<td>x-IA5</td>
+			<td>西欧字符 (IA5)</td>
+			<td>Western European (IA5)</td>
+			</tr>
+			<tr>
+			<td>20106</td>
+			<td>x-IA5-German</td>
+			<td>德语 (IA5)</td>
+			<td>German (IA5)</td>
+			</tr>
+			<tr>
+			<td>20107</td>
+			<td>x-IA5-Swedish</td>
+			<td>瑞典语 (IA5)</td>
+			<td>Swedish (IA5)</td>
+			</tr>
+			<tr>
+			<td>20108</td>
+			<td>x-IA5-Norwegian</td>
+			<td>挪威语 (IA5)</td>
+			<td>Norwegian (IA5)</td>
+			</tr>
+			<tr>
+			<td>20127</td>
+			<td>us-ascii</td>
+			<td>US-ASCII</td>
+			<td>US-ASCII</td>
+			</tr>
+			<tr>
+			<td>20261</td>
+			<td>x-cp20261</td>
+			<td>T.61</td>
+			<td>T.61</td>
+			</tr>
+			<tr>
+			<td>20269</td>
+			<td>x-cp20269</td>
+			<td>ISO-6937</td>
+			<td>ISO-6937</td>
+			</tr>
+			<tr>
+			<td>20273</td>
+			<td>IBM273</td>
+			<td>IBM EBCDIC（德国）</td>
+			<td>IBM EBCDIC (Germany)</td>
+			</tr>
+			<tr>
+			<td>20277</td>
+			<td>IBM277</td>
+			<td>IBM EBCDIC（丹麦 - 挪威）</td>
+			<td>IBM EBCDIC (Denmark-Norway)</td>
+			</tr>
+			<tr>
+			<td>20278</td>
+			<td>IBM278</td>
+			<td>IBM EBCDIC（芬兰 - 瑞典）</td>
+			<td>IBM EBCDIC (Finland-Sweden)</td>
+			</tr>
+			<tr>
+			<td>20280</td>
+			<td>IBM280</td>
+			<td>IBM EBCDIC（意大利）</td>
+			<td>IBM EBCDIC (Italy)</td>
+			</tr>
+			<tr>
+			<td>20284</td>
+			<td>IBM284</td>
+			<td>IBM EBCDIC（西班牙）</td>
+			<td>IBM EBCDIC (Spain)</td>
+			</tr>
+			<tr>
+			<td>20285</td>
+			<td>IBM285</td>
+			<td>IBM EBCDIC（英国）</td>
+			<td>IBM EBCDIC (UK)</td>
+			</tr>
+			<tr>
+			<td>20290</td>
+			<td>IBM290</td>
+			<td>IBM EBCDIC（日语片假名）</td>
+			<td>IBM EBCDIC (Japanese katakana)</td>
+			</tr>
+			<tr>
+			<td>20297</td>
+			<td>IBM297</td>
+			<td>IBM EBCDIC（法国）</td>
+			<td>IBM EBCDIC (France)</td>
+			</tr>
+			<tr>
+			<td>20420</td>
+			<td>IBM420</td>
+			<td>IBM EBCDIC（阿拉伯语）</td>
+			<td>IBM EBCDIC (Arabic)</td>
+			</tr>
+			<tr>
+			<td>20423</td>
+			<td>IBM423</td>
+			<td>IBM EBCDIC（希腊语）</td>
+			<td>IBM EBCDIC (Greek)</td>
+			</tr>
+			<tr>
+			<td>20424</td>
+			<td>IBM424</td>
+			<td>IBM EBCDIC（希伯来语）</td>
+			<td>IBM EBCDIC (Hebrew)</td>
+			</tr>
+			<tr>
+			<td>20833</td>
+			<td>x-EBCDIC-KoreanExtended</td>
+			<td>IBM EBCDIC（朝鲜语扩展）</td>
+			<td>IBM EBCDIC (Korean Extended)</td>
+			</tr>
+			<tr>
+			<td>20838</td>
+			<td>IBM-Thai</td>
+			<td>IBM EBCDIC（泰语）</td>
+			<td>IBM EBCDIC (Thai)</td>
+			</tr>
+			<tr>
+			<td>20866</td>
+			<td>koi8-r</td>
+			<td>西里尔字符 (KOI8-R)</td>
+			<td>Cyrillic (KOI8-R)</td>
+			</tr>
+			<tr>
+			<td>20871</td>
+			<td>IBM871</td>
+			<td>IBM EBCDIC（冰岛语）</td>
+			<td>IBM EBCDIC (Icelandic)</td>
+			</tr>
+			<tr>
+			<td>20880</td>
+			<td>IBM880</td>
+			<td>IBM EBCDIC（西里尔俄语）</td>
+			<td>IBM EBCDIC (Cyrillic Russian)</td>
+			</tr>
+			<tr>
+			<td>20905</td>
+			<td>IBM905</td>
+			<td>IBM EBCDIC（土耳其语）</td>
+			<td>IBM EBCDIC (Turkish)</td>
+			</tr>
+			<tr>
+			<td>20924</td>
+			<td>IBM00924</td>
+			<td>IBM 拉丁语 1</td>
+			<td>IBM Latin-1</td>
+			</tr>
+			<tr>
+			<td>20932</td>
+			<td>EUC-JP</td>
+			<td>日语（JIS 0208-1990 和 0212-1990）</td>
+			<td>Japanese (JIS 0208-1990 and 0212-1990)</td>
+			</tr>
+			<tr>
+			<td>20936</td>
+			<td>x-cp20936</td>
+			<td>简体中文 (GB2312-80)</td>
+			<td>Chinese Simplified (GB2312-80)</td>
+			</tr>
+			<tr>
+			<td>20949</td>
+			<td>x-cp20949</td>
+			<td>朝鲜语 Wansung</td>
+			<td>Korean Wansung</td>
+			</tr>
+			<tr>
+			<td>21025</td>
+			<td>cp1025</td>
+			<td>IBM EBCDIC（西里尔塞尔维亚 - 保加利亚语）</td>
+			<td>IBM EBCDIC (Cyrillic Serbian-Bulgarian)</td>
+			</tr>
+			<tr>
+			<td>21866</td>
+			<td>koi8-u</td>
+			<td>西里尔字符 (KOI8-U)</td>
+			<td>Cyrillic (KOI8-U)</td>
+			</tr>
+			<tr>
+			<td>28591</td>
+			<td>iso-8859-1</td>
+			<td>西欧字符 (ISO)</td>
+			<td>Western European (ISO)</td>
+			</tr>
+			<tr>
+			<td>28592</td>
+			<td>iso-8859-2</td>
+			<td>中欧字符 (ISO)</td>
+			<td>Central European (ISO)</td>
+			</tr>
+			<tr>
+			<td>28593</td>
+			<td>iso-8859-3</td>
+			<td>拉丁语 3 (ISO)</td>
+			<td>Latin 3 (ISO)</td>
+			</tr>
+			<tr>
+			<td>28594</td>
+			<td>iso-8859-4</td>
+			<td>波罗的海字符 (ISO)</td>
+			<td>Baltic (ISO)</td>
+			</tr>
+			<tr>
+			<td>28595</td>
+			<td>iso-8859-5</td>
+			<td>西里尔字符 (ISO)</td>
+			<td>Cyrillic (ISO)</td>
+			</tr>
+			<tr>
+			<td>28596</td>
+			<td>iso-8859-6</td>
+			<td>阿拉伯字符 (ISO)</td>
+			<td>Arabic (ISO)</td>
+			</tr>
+			<tr>
+			<td>28597</td>
+			<td>iso-8859-7</td>
+			<td>希腊字符 (ISO)</td>
+			<td>Greek (ISO)</td>
+			</tr>
+			<tr>
+			<td>28598</td>
+			<td>iso-8859-8</td>
+			<td>希伯来字符 (ISO-Visual)</td>
+			<td>Hebrew (ISO-Visual)</td>
+			</tr>
+			<tr>
+			<td>28599</td>
+			<td>iso-8859-9</td>
+			<td>土耳其字符 (ISO)</td>
+			<td>Turkish (ISO)</td>
+			</tr>
+			<tr>
+			<td>28603</td>
+			<td>iso-8859-13</td>
+			<td>爱沙尼亚语 (ISO)</td>
+			<td>Estonian (ISO)</td>
+			</tr>
+			<tr>
+			<td>28605</td>
+			<td>iso-8859-15</td>
+			<td>拉丁语 9 (ISO)</td>
+			<td>Latin 9 (ISO)</td>
+			</tr>
+			<tr>
+			<td>29001</td>
+			<td>x-Europa</td>
+			<td>欧罗巴</td>
+			<td>Europa</td>
+			</tr>
+			<tr>
+			<td>38598</td>
+			<td>iso-8859-8-i</td>
+			<td>希伯来字符 (ISO-Logical)</td>
+			<td>Hebrew (ISO-Logical)</td>
+			</tr>
+			<tr>
+			<td>50220</td>
+			<td>iso-2022-jp</td>
+			<td>日语 (JIS)</td>
+			<td>Japanese (JIS)</td>
+			</tr>
+			<tr>
+			<td>50221</td>
+			<td>csISO2022JP</td>
+			<td>日语（JIS- 允许 1 字节假名）</td>
+			<td>Japanese (JIS-Allow 1 byte Kana)</td>
+			</tr>
+			<tr>
+			<td>50222</td>
+			<td>iso-2022-jp</td>
+			<td>日语（JIS- 允许 1 字节假名 - SO/SI）</td>
+			<td>Japanese (JIS-Allow 1 byte Kana - SO/SI)</td>
+			</tr>
+			<tr>
+			<td>50225</td>
+			<td>iso-2022-kr</td>
+			<td>朝鲜语 (ISO)</td>
+			<td>Korean (ISO)</td>
+			</tr>
+			<tr>
+			<td>50227</td>
+			<td>x-cp50227</td>
+			<td>简体中文 (ISO-2022)</td>
+			<td>Chinese Simplified (ISO-2022)</td>
+			</tr>
+			<tr>
+			<td>51932</td>
+			<td>euc-jp</td>
+			<td>日语 (EUC)</td>
+			<td>Japanese (EUC)</td>
+			</tr>
+			<tr>
+			<td>51936</td>
+			<td>EUC-CN</td>
+			<td>简体中文 (EUC)</td>
+			<td>Chinese Simplified (EUC)</td>
+			</tr>
+			<tr>
+			<td>51949</td>
+			<td>euc-kr</td>
+			<td>朝鲜语 (EUC)</td>
+			<td>Korean (EUC)</td>
+			</tr>
+			<tr>
+			<td>52936</td>
+			<td>hz-gb-2312</td>
+			<td>简体中文 (HZ)</td>
+			<td>Chinese Simplified (HZ)</td>
+			</tr>
+			<tr>
+			<td>54936</td>
+			<td>GB18030</td>
+			<td>简体中文 (GB18030)</td>
+			<td>Chinese Simplified (GB18030)</td>
+			</tr>
+			<tr>
+			<td>57002</td>
+			<td>x-iscii-de</td>
+			<td>ISCII 梵文</td>
+			<td>ISCII Devanagari</td>
+			</tr>
+			<tr>
+			<td>57003</td>
+			<td>x-iscii-be</td>
+			<td>ISCII 孟加拉语</td>
+			<td>ISCII Bengali</td>
+			</tr>
+			<tr>
+			<td>57004</td>
+			<td>x-iscii-ta</td>
+			<td>ISCII 泰米尔语</td>
+			<td>ISCII Tamil</td>
+			</tr>
+			<tr>
+			<td>57005</td>
+			<td>x-iscii-te</td>
+			<td>ISCII 泰卢固语</td>
+			<td>ISCII Telugu</td>
+			</tr>
+			<tr>
+			<td>57006</td>
+			<td>x-iscii-as</td>
+			<td>ISCII 阿萨姆语</td>
+			<td>ISCII Assamese</td>
+			</tr>
+			<tr>
+			<td>57007</td>
+			<td>x-iscii-or</td>
+			<td>ISCII 奥里雅语</td>
+			<td>ISCII Oriya</td>
+			</tr>
+			<tr>
+			<td>57008</td>
+			<td>x-iscii-ka</td>
+			<td>ISCII 卡纳达语</td>
+			<td>ISCII Kannada</td>
+			</tr>
+			<tr>
+			<td>57009</td>
+			<td>x-iscii-ma</td>
+			<td>ISCII 马拉雅拉姆语</td>
+			<td>ISCII Malayalam</td>
+			</tr>
+			<tr>
+			<td>57010</td>
+			<td>x-iscii-gu</td>
+			<td>ISCII 古吉拉特语</td>
+			<td>ISCII Gujarati</td>
+			</tr>
+			<tr>
+			<td>57011</td>
+			<td>x-iscii-pa</td>
+			<td>ISCII 旁遮普语</td>
+			<td>ISCII Punjabi</td>
+			</tr>
+			<tr>
+			<td>65000</td>
+			<td>utf-7</td>
+			<td>Unicode (UTF-7)</td>
+			<td>Unicode (UTF-7)</td>
+			</tr>
+			<tr>
+			<td>65001</td>
+			<td>utf-8</td>
+			<td>Unicode (UTF-8)</td>
+			<td>Unicode (UTF-8)</td>
+			</tr>
+			<tr>
+			<td>65005</td>
+			<td>utf-32</td>
+			<td>Unicode (UTF-32)</td>
+			<td>Unicode (UTF-32)</td>
+			</tr>
+			<tr>
+			<td>65006</td>
+			<td>utf-32BE</td>
+			<td>Unicode (UTF-32 Big-Endian)</td>
+			<td>Unicode (UTF-32 Big-Endian)</td>
+			</tr>
+		</tbody>
+	</table>
+  </head>
+  <body></body>
+</html>

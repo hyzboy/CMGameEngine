@@ -1,0 +1,8 @@
+﻿从编译好的文件中提取出调试符号
+objcopy --only-keep-debug [被提取的文件] [提取出来的调试符号文件,建议加.debug后缀]
+
+清除文件中的调试符号
+strip --strip-debug [需要处理的文件]
+
+把debug信息加回去：
+objcopy --add-gnu-debuglink=[debug文件] [需要添加debug信息的文件]

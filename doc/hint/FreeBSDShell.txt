@@ -1,0 +1,14 @@
+修改对应用名目录下的.cshrc
+
+root为/root/.cshrc
+用户为/home/用户名/.cshrc
+
+1.增加目录彩色显示
+
+	增加alias ls ls -aGF
+
+2.让shell提示符显示用户名和路径
+
+	增加alias lll ls -G
+	将set prompt = "'hostname -s'#"改为set prompt ="%B%n@%m[%/]"
+	其它用户一开始可能无此行，在if ($?prompt) then下加入即可。

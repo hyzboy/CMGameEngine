@@ -1,0 +1,13 @@
+Mysql与多线程
+
+	MySQLClient库在默认情况下是非线程安全的。
+	所以一个MySQL连接，初始化，关闭，查询，。。。等一系列操作在一个线程中执行时，它将是安全的。
+
+
+MySQL批量删除指定前缀表
+
+	Select CONCAT( 'drop table ', table_name, ';' )
+	FROM information_schema.tables
+	Where table_name LIKE 'dede_%';
+
+	"dede"为要删除的表前缀，执行此SQL语句后会生成一串SQL语句，必须再执行生成的这些SQL语句才能真正执行删除操作

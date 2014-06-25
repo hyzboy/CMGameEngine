@@ -1,0 +1,15 @@
+List与ObjectList，以及与std::list、std::vector的差别
+
+	相信在任何程序中，List都会占据非常重要的地位。
+
+	基于一些历史原因，我们的List与std::list存在着一定的差别，其实质上与std::vector是比较相像
+的，但也有所不同。
+
+	std::list、std::vector使用=对数据之间进行赋值，而我们的List使用memcpy。这一点儿，各有各
+的好处。不过在原生数据类型上并无差别。对于简单的原生数据类型所组成的对象，直接使用memcpy的List速
+度要快过std::list、std::vector。但对于一些不能直接memcpy赋值的类，比如智能指针，这会出现比较严
+重的问题。
+
+	在我们的程序中，还存在一个ObjectList。同样的IndexData也存在的IndexObject，
+Pool存在着ObjectPool。多一个Object的意思其实比较简单，就是它们在创建数据是会new，
+而在删除时会delete。

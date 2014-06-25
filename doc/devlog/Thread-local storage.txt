@@ -1,0 +1,24 @@
+线程本地存储(Thread Local Storage, TLS)
+
+	在多线程编程中, 同一个变量, 如果要让多个线程共享访问, 那么这个变量可以使用关键字volatile进行声明;
+那么如果一个变量不想使多个线程共享访问, 那么该怎么办呢? 与之对应的就是Thread-local storage。
+
+	现今的主流编译器对TLS都有支持，但使用方式不大相同，大致如下：（取自wikipedia）
+
+    Solaris Studio C/C++, IBM XL C/C++, GNU C and Intel C/C++ (Linux systems) use the syntax:
+
+        __thread int number;
+
+    Visual C++[2], Intel C/C++ (Windows systems), C++Builder, and Digital Mars C++ use the syntax:
+
+        __declspec(thread) int number;
+
+    C++Builder also supports the syntax:
+
+        int __thread number;
+
+	在本引擎中，定义了HGL_THREAD来对应不同的编译器和操作系统。写为：
+
+		HGL_THREAD int number;
+
+	TLS可以保证这个变量在每个线程都有一份自己的独立数据。

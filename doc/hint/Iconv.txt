@@ -1,0 +1,12 @@
+/**
+ * linux iconv 函数细节说明
+ * by hyz in Friday,March 30,2012
+ *
+ * iconv(icont_t *cd,
+ * 		char **inbuf,size_t *inbytesleft,
+ * 		char **outbuf,size_t *outbytesleft);
+ *
+ * ps:	1.转换结果并不在outbuf中，而是在最早传入的指针中，所以inbuf,outbuf一定要备份一份出来用
+ * 		2.inbytesleft中得到的是剩下还没有转完的总字节数
+ * 		3.outbytesleft中得到的是剩下还没有用完的输出区总字节数
+ */

@@ -1,0 +1,29 @@
+发包与接包
+
+	/**
+	 * 用户名,密码数据结构
+	 */
+	struct UsernamePassword
+	{
+		UTF8String username;
+		UTF8String password;
+
+	public:
+
+		bool Read(DataInputStream *);
+	};//struct UsernamePassword
+
+	TDS_PACKET_DEFINE(CreateAccount,	UsernamePassword);
+	TDS_PACKET_DEFINE(Login,			UsernamePassword);
+
+
+	1.为什么每一个包的定义与消息号并不对应
+
+		数据包的结构定义，并不一定只在收包时使用。它可能用于游戏中数据的暂时保存，
+	数据库保存，等等。也有可能多个消息的数据结构可能一样，所以我们并不推荐为每一
+	个消息都定义一个数据结构。
+
+	2.为什么发包不是每个消息都有自己的包
+
+		发包可能多种多样，经常会将程序中已有的数据结构直接发送，这样就没有必要再
+	进行一次组包操作。过于简单的数据包如果进行组包操作反而是浪费效能。

@@ -1,0 +1,11 @@
+﻿输出成llvm bitcode file
+clang -c -emit-llvm file.c
+
+输出成llvm bitcode file，并将扩展名指定为.bc
+clang -c -emit-llvm file.c -o file.bc
+
+输出成llvm asm
+clang -S -emit-llvm file.c
+
+输出成llvm asm，并将扩展名指定为.ll
+clang -S -emit-llvm file.c -o file.ll

@@ -1,0 +1,34 @@
+TCPSocket
+
+	最起初的TCPSocket，直接将recv/send功能封装在内，没有提供任何的封包处理。
+	随后的版本，提供了一个封包处理机制，因此，它需要建立一个缓冲区，将从socket中存取与封包存取分离。
+
+	上面的版本状况保持了很久。
+	在接下来的版本中，极大的优化和增强了服务器端的设计。对异步多线程做到了充分的支持，全自动的封包高效分发等等。
+建立起了非常强大，但也复杂的处理机制。
+
+	而在另外一些情况下，我们需要最简单的存取。而这时，TCPSocket已经得到了非常强大的功能，代码也非常之多，要
+求改变相当不易。
+
+	同时，Stream系列的全面重构给TCPSocket也带来了新的概念。在最新一代的TCPSocket设计上，将数据的输入输出与
+TCPSocket本身分离。因此，我们可以给异步、同步、包式、流式。。。。等等各种情况提供各自的最佳效能解决方案。
+
+	新的TCPSocket本身并不提供数据输入输出功能，我们使用如下几种输入输出流为开发提供功能。
+
+	首先是无缓冲、无线程安全的原始输入输出流：
+
+		TCPSocket *tcp;
+
+		...
+
+		SocketInputStream sis(tcp);			//创建一个Socket输入流，使用指定tcpsocket
+		SocketOutputStream sos(tcp);		//创建一个Socket输出流，使用指定tcpsocket
+
+		int result=sis.Read(buf,size);		//读取指定长度的数据
+
+		sos.Write(buf,size);				//写入指定长度的数据
+
+
+	SocketInputStream/SocketOutputStream由InputStream/OutputStream派生，
+所以它们可以由DataInputStream/DataOutputStream接管，对数据进行格式化的访问，
+也可以对接CompressOutputStream/DecompressInputStream对数据流进行压缩处理。

@@ -1,0 +1,7 @@
+IF(APPLE)
+	add_library(OSXGUI Clipboard.cpp)
+ENDIF(APPLE)
+
+IF(BUILD_QT4_SUPPORT_LIB)
+	add_subdirectory(QT) 
+ENDIF(BUILD_QT4_SUPPORT_LIB)

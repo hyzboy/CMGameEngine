@@ -1,0 +1,20 @@
+﻿#!/bin/sh
+while :
+	do
+
+	echo "Current DIR is " $PWD
+	stillRunning=$(ps -ef |grep "$PWD/LobbyServer" |grep -v "grep")
+
+	if [ "$stillRunning" ] ; then
+		echo "GAME service was already started by another way"
+		echo "Kill it and then startup by this shell, other wise this shell will loop out this message annoyingly"
+		kill -9 $pidof $PWD/LobbyServer
+	else
+		echo "GAME service was not started"
+		echo "Starting service ..."
+		$PWD/$PWD/LobbyServer
+		echo "GAME service was exited!"
+	fi
+
+	sleep 10
+done

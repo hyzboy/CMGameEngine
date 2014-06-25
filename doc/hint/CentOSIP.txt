@@ -1,0 +1,40 @@
+ CentOS Server安装好后，可能没有配置ip地址。需要修改以下几个文件：一般只改第二个即可
+
+/etc/sysconfig/network设置主机名和网络配置
+/etc/sysconfig/network-scripts/ifcfg-eth0针对特定的网卡进行设置
+/etc/resolv.conf设置DNS
+/etc/hosts设置指定的域名解析地址
+
+
+/etc/sysconfig/network-scripts/ifcfg-eth0示例配置如下：
+
+	DEVICE=eth0
+    BOOTPROTO=static
+    TYPE=Ethernet
+    NAME="System etho0"
+    BROADCAST=192.168.56.255
+    HWADDR=08:00:27:24:F8:9B
+    IPADDR=192.168.56.101
+    IPV6INIT=yes
+    IPV6_AUTOCONF=yes
+    NETMASK=255.255.255.0
+    NETWORK=192.168.56.1
+    ONBOOT=yes
+
+
+完后成service network restart即可。
+
+》DEVICE=name ，其中，name是物理设备名。
+》IPADDR=addr，其中，addr是IP地址。
+》NETMASK=mask，其中，mask是网络掩码值。
+》NETWORK=addr，其中addr是网络地址。
+》BROADCAST=addr，其中，addr是广播地址。
+》GATEWAY=addr，其中addr是网关地址。
+》ONBOOT=answer，其中，answer是yes（引导时激活设备）或no（引导时不激活设备）
+》USERCTL=answer，其中，answer是yes（非root用户可以控制该设备）或no
+》BOOTPROTO=proto，其中，proto取下列值之一：none，引导时不使用协议；static静态分配地址；bootp，使用BOOTP协议，或dhcp，使用DHCP协议。
+
+
+resolv.conf配置如示例 ：
+nameserver 8.8.8.8
+nameserver 8.8.4.4
