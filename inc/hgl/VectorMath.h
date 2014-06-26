@@ -43,6 +43,21 @@ namespace hgl
 	typedef float3x3 Matrix3f;
 	typedef float4x4 Matrix4f;
 
+	inline bool operator == (const Vector2f &lhs,const Vector2f &rhs)
+	{
+		if(lhs.x!=rhs.x)return(false);
+		if(lhs.y!=rhs.y)return(false);
+		return(true);
+	}
+
+	inline bool operator == (const Vector3f &lhs,const Vector3f &rhs)
+	{
+		if(lhs.x!=rhs.x)return(false);
+		if(lhs.y!=rhs.y)return(false);
+		if(lhs.z!=rhs.z)return(false);
+		return(true);
+	}
+
 	inline void vec3to2(Vector2f &dst,const Vector3f &src)
 	{
 		dst.x=src.x;
