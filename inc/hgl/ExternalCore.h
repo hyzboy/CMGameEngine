@@ -1,9 +1,9 @@
-﻿#ifndef HGL_EXTERNAL_CORE_INCLUDE
+#ifndef HGL_EXTERNAL_CORE_INCLUDE
 #define HGL_EXTERNAL_CORE_INCLUDE
 
 #include<hgl/platform/platform.h>
 #include<hgl/platform/ConsoleSystemInfo.h>
-#include<hgl/hgl.h>
+#include<hgl.h>
 
 #if !defined(__MAKE_HGL__) && !defined(__MAKE_PLUGIN__)
 	#pragma comment(lib,HGL_LIB_Base)         	//连入基础库文件

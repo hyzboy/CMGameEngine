@@ -1,7 +1,7 @@
 #ifndef HGL_LIMIT_INCLUDE
 #define HGL_LIMIT_INCLUDE
 
-#include<hgl/hgl.h>
+#include<hgl.h>
 namespace hgl
 {
 	/**

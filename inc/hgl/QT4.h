@@ -1,7 +1,7 @@
 #ifndef HGL_QT4_INCLUDE
 #define HGL_QT4_INCLUDE
 
-#include<hgl/hgl.h>
+#include<hgl.h>
 #include<hgl/platform/ConsoleSystemInitInfo.h>
 #include<hgl/platform/QT4Application.h>
 

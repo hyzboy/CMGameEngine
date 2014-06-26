@@ -1,7 +1,7 @@
 #ifndef HGL_LOADER_INCLUDE
 #define HGL_LOADER_INCLUDE
 
-#include<hgl/hgl.h>
+#include<hgl.h>
 #include<hgl/type/BaseString.h>
 #include<hgl/object/EnumObject.h>
 #include<hgl/thread/Thread.h>
