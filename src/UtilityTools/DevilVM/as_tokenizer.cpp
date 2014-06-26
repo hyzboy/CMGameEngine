@@ -1,4 +1,4 @@
-/*
+﻿/*
    AngelCode Scripting Library
    Copyright (c) 2003-2007 Andreas Jonsson
 
@@ -56,19 +56,19 @@ namespace angle_script
 
 	const char16_t *asGetTokenDefinition(int tokenType)
 	{
-		if( tokenType == ttUnrecognizedToken			) returnu"<unrecognized token>";
-		if( tokenType == ttEnd							) returnu"<end of file>";
-		if( tokenType == ttWhiteSpace					) returnu"<white space>";
-		if( tokenType == ttOnelineComment				) returnu"<one line comment>";
-		if( tokenType == ttMultilineComment				) returnu"<multiple lines comment>";
-		if( tokenType == ttIdentifier					) returnu"<identifier>";
-		if( tokenType == ttIntConstant					) returnu"<integer constant>";
-		if( tokenType == ttFloatConstant				) returnu"<float constant>";
-		if( tokenType == ttDoubleConstant				) returnu"<double constant>";
-		if( tokenType == ttStringConstant				) returnu"<string constant>";
-		if( tokenType == ttNonTerminatedStringConstant	) returnu"<unterminated string constant>";
-		if( tokenType == ttBitsConstant					) returnu"<bits constant>";
-		if( tokenType == ttHeredocStringConstant		) returnu"<heredoc string constant>";
+		if( tokenType == ttUnrecognizedToken			) return u"<unrecognized token>";
+		if( tokenType == ttEnd							) return u"<end of file>";
+		if( tokenType == ttWhiteSpace					) return u"<white space>";
+		if( tokenType == ttOnelineComment				) return u"<one line comment>";
+		if( tokenType == ttMultilineComment				) return u"<multiple lines comment>";
+		if( tokenType == ttIdentifier					) return u"<identifier>";
+		if( tokenType == ttIntConstant					) return u"<integer constant>";
+		if( tokenType == ttFloatConstant				) return u"<float constant>";
+		if( tokenType == ttDoubleConstant				) return u"<double constant>";
+		if( tokenType == ttStringConstant				) return u"<string constant>";
+		if( tokenType == ttNonTerminatedStringConstant	) return u"<unterminated string constant>";
+		if( tokenType == ttBitsConstant					) return u"<bits constant>";
+		if( tokenType == ttHeredocStringConstant		) return u"<heredoc string constant>";
 
 		for( hgl::uint n = 0; n < numTokenWords; n++ )
 			if( tokenWords[n].tokenType == tokenType )
@@ -88,8 +88,8 @@ namespace angle_script
 
 	eTokenType asCTokenizer::GetToken(const char16_t *source, hgl::uint sourceLength, hgl::uint *tokenLength)
 	{
-		assert(source != 0);
-		assert(tokenLength != 0);
+// 		assert(source != 0);
+// 		assert(tokenLength != 0);
 
 		this->source = source;
 		this->sourceLength = sourceLength;
