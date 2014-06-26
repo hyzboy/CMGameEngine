@@ -1,4 +1,4 @@
-ADD_LIBRARY(BaseObject SHARED
+ADD_LIBRARY(CM.BaseObject SHARED
 	Object.cpp
 	EnumObject.cpp
 	ConsoleFlowControl.cpp
@@ -6,7 +6,7 @@ ADD_LIBRARY(BaseObject SHARED
 	ConsoleObjectControl.cpp
 )
 
-ADD_LIBRARY(BaseGraphObject SHARED
+ADD_LIBRARY(CM.BaseGraphObject SHARED
 	EventObject.cpp
 	VisualObject.cpp
 	RadioObject.cpp

@@ -1,4 +1,4 @@
-﻿add_library(SceneGraph SHARED
+﻿add_library(CM.SceneGraph SHARED
 
 # 	AABox.cpp
 # 	Frustum.cpp
@@ -9,7 +9,7 @@
 )
 
 IF(BUILD_OPENGL_LIB)
-	add_library(SceneGraphRender SHARED
+	add_library(CM.SceneGraphRender SHARED
 		GUIObject.cpp
 		ObjectControl.cpp
 		ObjectControl.KeyFocus.cpp

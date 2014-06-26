@@ -1,7 +1,7 @@
 ﻿#ifndef HGL_CONSOLE_INCLUDE
 #define HGL_CONSOLE_INCLUDE
 
-#include<hgl/hgl.h>
+#include<hgl.h>
 #include<hgl/platform/ConsoleSystemInitInfo.h>
 #include<hgl/platform/ConsoleApplication.h>
 

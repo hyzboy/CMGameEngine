@@ -12,6 +12,6 @@
 	OpenAL.cpp
 	XRAM.cpp)
 
-ADD_LIBRARY(OpenALEE SHARED ${OpenALEESource})
+ADD_LIBRARY(CM.OpenALEE SHARED ${OpenALEESource})
 
-ADD_LIBRARY(OpenALEEStandAlone SHARED ${OpenALEESource} OpenALEEStandAlone.cpp)
+ADD_LIBRARY(CM.OpenALEEStandAlone SHARED ${OpenALEESource} OpenALEEStandAlone.cpp)

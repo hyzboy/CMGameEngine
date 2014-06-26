@@ -1,4 +1,4 @@
-ADD_LIBRARY(DFS SHARED	dfsClientConnect.cpp
+ADD_LIBRARY(CM.DFS SHARED	dfsClientConnect.cpp
 
 						dfsClientID.cpp
 

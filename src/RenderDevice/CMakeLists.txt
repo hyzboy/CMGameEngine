@@ -1,6 +1,6 @@
 add_definitions("-DGLEW_STATIC")
 
-add_library(RenderDevice SHARED
+add_library(CM.RenderDevice SHARED
 			${GLEW_SOURCE}
 # 			Debugger_ATI_GPU_Perf.cpp
 			GenFragmentShader.cpp
