@@ -4,8 +4,8 @@ PROJECT(CMGDK)
 
 set(CMGDK_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 
-include(common.cmake)
-include(cmgdk.cmake)
+include(common.cmake REQUIRED)
+include(cmgdk.cmake REQUIRED)
 
 add_subdirectory(src)
 
