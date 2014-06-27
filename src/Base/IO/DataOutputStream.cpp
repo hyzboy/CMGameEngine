@@ -1,4 +1,4 @@
-#include<hgl/io/DataOutputStream.h>
+﻿#include<hgl/io/DataOutputStream.h>
 #include<hgl/Other.h>
 
 namespace hgl
@@ -83,7 +83,8 @@ namespace hgl
 	{
 		template<> bool DataOutputStream::WriteUTF16LEChars<char>(const char *str,int64 length)
 		{
-			if(!out||!str||!*str||length<=0)return(false);
+			if(length==0)return(true);
+			if(!out||!str||!*str||length<0)return(false);
 
 			UTF16String u16_str=to_u16(str);
 
@@ -92,7 +93,8 @@ namespace hgl
 
 		template<> bool DataOutputStream::WriteUTF16LEChars<char16_t>(const char16_t *str,int64 length)
 		{
-			if(!out||!str||!*str||length<=0)return(false);
+			if(length==0)return(true);
+			if(!out||!str||!*str||length<0)return(false);
 
 			return WriteUTF16Chars<HGL_LITTLE_ENDIAN>(this,str,length);
 		}
@@ -102,7 +104,8 @@ namespace hgl
 	{
 		template<> bool DataOutputStream::WriteUTF16BEChars<char>(const char *str,int64 length)
 		{
-			if(!out||!str||!*str||length<=0)return(false);
+			if(length==0)return(true);
+			if(!out||!str||!*str||length<0)return(false);
 
 			UTF16String u16_str=to_u16(str,length);
 
@@ -111,7 +114,8 @@ namespace hgl
 
 		template<> bool DataOutputStream::WriteUTF16BEChars<char16_t>(const char16_t *str,int64 length)
 		{
-			if(!out||!str||!*str||length<=0)return(false);
+			if(length==0)return(true);
+			if(!out||!str||!*str||length<0)return(false);
 
 			return WriteUTF16Chars<HGL_BIG_ENDIAN>(this,str,length);
 		}

@@ -1,12 +1,14 @@
 ﻿SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE)
 
-PROJECT(CMGDK)
-
-IF(CYGWIN)
-	MESSAGE("use Cygwin")
-
-	set(CMAKE_LEGACY_CYGWIN_WIN32 0) # Remove when CMake >= 2.8.4 is required
-ENDIF(CYGWIN)
+OPTION(BUILD_BASE_LIB 			"Build Base Library"						TRUE	)
+OPTION(BUILD_OPENGL_LIB			"Build OpenGL Library"						FALSE	)
+OPTION(BUILD_OPENAL_LIB			"Build OpenAL Library"						FALSE	)
+OPTION(BUILD_NETWORK_LIB		"Build Network Library"						TRUE	)
+OPTION(BUILD_NETWORK_SCTP		"Include SCTP Support"						FALSE	)
+OPTION(BUILD_QT4_SUPPORT_LIB	"Build QT4 Support Library"					FALSE	)
+OPTION(BUILD_EXAMPLES_PROJECT	"Build Examples Project"					FALSE	)
+OPTION(BUILD_TEST_PROJECT		"Build Test Project"						FALSE	)
+OPTION(BUILD_GUI_TOOLS			"Build GUI Tools"							FALSE	)
 
 OPTION(LOG_INFO					"Output Log info"							TRUE	)
 OPTION(LOG_INFO_THREAD			"Output Log info include ThreadPID"			TRUE	)
