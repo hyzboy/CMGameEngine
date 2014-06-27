@@ -1,4 +1,4 @@
-option(CMGDK_DEBUG "Use Debug CMGDK" ON)
+﻿option(CMGDK_DEBUG "Use Debug CMGDK" ON)
 
 if(CMGDK_DEBUG)
 	set(CMGDK_BUILD_TYPE "Debug")
@@ -21,6 +21,10 @@ ELSE(WIN32)
 	OPTION(USE_GPERF_TOOLS			"Use Google Performance Tools"			FALSE	)
 
 	OPTION(USE_STATIC_STDCXX		"Use Static libstdc++"					FALSE	)
+
+	OPTION(DISABLE_RTTI				"Disable RTTI"							FALSE	)
+
+	OPTION(USE_SSE2					"Use SSE2 (only X86/64)"				TRUE	)
 ENDIF(WIN32)
 
 IF(USE_LLVM_CLANG)
@@ -124,6 +128,11 @@ IF(UNIX)
 		add_definitions(-Ofast)
 	ENDIF()
 
-	add_definitions(-fno-rtti)
-	add_definitions(-msse2)
+	if(DISABLE_RTTI)
+		add_definitions(-fno-rtti)
+	endif()
+
+	if(USE_SSE2)
+		add_definitions(-msse2)
+	endif()
 ENDIF(UNIX)
