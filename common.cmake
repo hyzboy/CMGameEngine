@@ -20,6 +20,8 @@ ELSE(WIN32)
 
 	OPTION(USE_GPERF_TOOLS			"Use Google Performance Tools"			FALSE	)
 
+	OPTION(USE_ALL_STATIC			"Use All Static"						FALSE	)
+	OPTION(USE_STATIC_GLIBC			"Use Static libgcc"						FALSE	)
 	OPTION(USE_STATIC_STDCXX		"Use Static libstdc++"					FALSE	)
 
 	OPTION(DISABLE_RTTI				"Disable RTTI"							FALSE	)
@@ -98,6 +100,14 @@ IF(UNIX)
 			SET(CMAKE_CXX_COMPILER clang++)
 		ENDIF(USE_LLVM_CLANG)
 	ENDIF(USE_ICE_CREAM)
+
+	if(USE_ALL_STATIC)
+		add_definitions("-static")
+	endif(USE_ALL_STATIC)
+
+	if(USE_STATIC_GLIBC)
+		add_definitions("-static-libgcc")
+	endif(USE_STATIC_GLIBC)
 
 	if(USE_STATIC_STDCXX)
 		add_definitions("-static-libstdc++")
