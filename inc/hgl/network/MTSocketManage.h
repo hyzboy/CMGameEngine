@@ -11,8 +11,8 @@ namespace hgl
 
 		class SocketManageThread;
 
-		SocketManageThread *CreateRecvSocketManageThread();
-		SocketManageThread *CreateSendSocketManageThread();
+		SocketManageThread *CreateRecvSocketManageThread(int);
+		SocketManageThread *CreateSendSocketManageThread(int);
 
 		/**
 		 * 多线程Socket I/O管理

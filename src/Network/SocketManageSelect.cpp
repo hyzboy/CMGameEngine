@@ -1,5 +1,4 @@
-﻿#include"SocketManageBase.h"
-#include<hgl/network/IOSocket.h>
+﻿#include<hgl/network/SocketManageBase.h>
 #include<hgl/type/Set.h>
 #include<hgl/LogInfo.h>
 

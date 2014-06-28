@@ -1,4 +1,4 @@
-SET(NETWORK_BASE_SOURCE
+﻿SET(NETWORK_BASE_SOURCE
 	Socket.cpp
 	ServerSocket.cpp
 	AcceptServer.cpp

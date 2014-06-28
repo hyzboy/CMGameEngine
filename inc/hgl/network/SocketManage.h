@@ -1,4 +1,4 @@
-#ifndef HGL_NETWORK_SOCKET_MANAGE_INCLUDE
+﻿#ifndef HGL_NETWORK_SOCKET_MANAGE_INCLUDE
 #define HGL_NETWORK_SOCKET_MANAGE_INCLUDE
 
 #include<hgl/type/IndexData.h>
@@ -118,22 +118,6 @@ namespace hgl
 			const List<IOSocketClassEvent> &GetSendList(){return send_list;}
 			const Set<IOSocket *> &			GetErrorSet(){return error_set;}						///<取得出错的连接列表
 		};//class SocketManage
-
-		/**
-		 * 回呼处理事件式Socket管理器
-		 */
-		class SocketManageCB:public SocketManage
-		{
-		public:
-
-			SocketManageCB(int mc):SocketManage(mc)
-			{
-			}
-
-			virtual ~SocketManageCB()
-			{
-			}
-		};//class SocketManageCB
 	}//namespace network
 }//namespace hgl
 #endif//HGL_NETWORK_SOCKET_MANAGE_INCLUDE
