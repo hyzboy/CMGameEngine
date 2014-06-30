@@ -1,4 +1,4 @@
-#ifndef HGL_NETWORK_DIRECT_SOCKET_IO_USER_THREAD_INCLUDE
+﻿#ifndef HGL_NETWORK_DIRECT_SOCKET_IO_USER_THREAD_INCLUDE
 #define HGL_NETWORK_DIRECT_SOCKET_IO_USER_THREAD_INCLUDE
 
 #include<hgl/network/TCPSocket.h>
@@ -93,7 +93,7 @@ namespace hgl
 			}
 		};//class DirectSocketIOUserThread
 
-		typedef DirectSocketIOUserThread<LEDataInputStream,LEDataOutputStream,TCPSocket> LETCPSocketIOUserThread;
+		typedef DirectSocketIOUserThread<LEDataInputStream,LEDataOutputStream,TCPSocket> rLETCPSocketIOUserThread;
 		typedef DirectSocketIOUserThread<BEDataInputStream,BEDataOutputStream,TCPSocket> BETCPSocketIOUserThread;
 #ifdef HGL_NETWORK_SCTP_SUPPORT
 		typedef DirectSocketIOUserThread<LEDataInputStream,LEDataOutputStream,SCTPSocket> LESCTPSocketIOUserThread;
