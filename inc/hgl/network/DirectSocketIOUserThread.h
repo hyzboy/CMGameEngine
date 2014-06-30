@@ -93,7 +93,7 @@ namespace hgl
 			}
 		};//class DirectSocketIOUserThread
 
-		typedef DirectSocketIOUserThread<LEDataInputStream,LEDataOutputStream,TCPSocket> rLETCPSocketIOUserThread;
+		typedef DirectSocketIOUserThread<LEDataInputStream,LEDataOutputStream,TCPSocket> LETCPSocketIOUserThread;
 		typedef DirectSocketIOUserThread<BEDataInputStream,BEDataOutputStream,TCPSocket> BETCPSocketIOUserThread;
 #ifdef HGL_NETWORK_SCTP_SUPPORT
 		typedef DirectSocketIOUserThread<LEDataInputStream,LEDataOutputStream,SCTPSocket> LESCTPSocketIOUserThread;
