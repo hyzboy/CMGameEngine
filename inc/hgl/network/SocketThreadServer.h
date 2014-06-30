@@ -28,6 +28,10 @@ namespace hgl
 				}
 			}
 
+			SocketThreadServer(const uint16 port):SocketThreadServer("0.0.0.0",port)
+			{
+			}
+
 			~SocketThreadServer()
 			{
 				delete server;
