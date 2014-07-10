@@ -1,2 +1,6 @@
-﻿nm -D filename.so
+﻿查看所需函数依赖
+nm -D filename.so
 objdump -tT filename.so
+
+查看所需动态库依赖
+ldd filename
