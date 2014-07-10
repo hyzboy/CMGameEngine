@@ -107,9 +107,9 @@ namespace hgl
 
 			bool Init(const UTF8String &,uint,const UTF8String &,const int64 _node_id=-1);			///<初始化dfs客户端连接
 
-			InputStream *	LoadFile	(const int64 );											///<加载一个文件
-			OutputStream *	SaveFile	(const int64 ,const uint32 attrib=0);						///<保存一个文件
-			bool			DeleteFile	(const int64 );											///<删除文件
+			InputStream *	LoadFile	(const int64);											///<加载一个文件
+			OutputStream *	SaveFile	(const int64,const uint32 attrib=0);						///<保存一个文件
+			bool			DeleteFile	(const int64);											///<删除文件
 		};//class dfsClientFile
 
 		/**

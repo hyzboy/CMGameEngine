@@ -51,7 +51,7 @@ namespace hgl
 
 		public:
 
-			dfsClientSaveThread(const UTF8String &g,const UTF8String &,const uint ,const uint64 );
+			dfsClientSaveThread(const UTF8String &g,const UTF8String &,const uint,const uint64);
 			~dfsClientSaveThread();
 
 			void Add(dfsClientSaveItem &);

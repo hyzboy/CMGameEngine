@@ -93,9 +93,9 @@ namespace hgl
 			int64 Get(const dfsIDKey &);															///<取得一个key的ID
 			bool Delete(const dfsIDKey &);															///<删除一个key
 
-			bool Lock(const int64 );																///<锁定一个ID
-			bool Unlock(const int64 );																///<解决一个ID
-			bool IsLock(const int64 ,bool &);														///<获取这个ID是否加锁
+			bool Lock(const int64);																///<锁定一个ID
+			bool Unlock(const int64);																///<解决一个ID
+			bool IsLock(const int64,bool &);														///<获取这个ID是否加锁
 
 			bool GetAndLock(const dfsIDKey &,int64 &);												///<取得一个key的ID并加锁这个ID
 		};//class dfsClientID

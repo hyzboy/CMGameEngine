@@ -571,7 +571,7 @@ int main( void )
     for( i = 0; i < 3; i++ )
     {
         memcpy( data, PT, 16 );
-        aes_set_key( &ctx, KEYs[i], 128 + i * 64 );
+        aes_set_key( &ctx, KEYs[i], 128 + i * 64);
         aes_encrypt( &ctx, data );
         printf( "encryption test %d ", i + 1 );
         if( ! memcmp( data, CTs[i], 16 ) )
@@ -587,7 +587,7 @@ int main( void )
     for( i = 0; i < 3; i++ )
     {
         memcpy( data, CTs[i], 16 );
-        aes_set_key( &ctx, KEYs[i], 128 + i * 64 );
+        aes_set_key( &ctx, KEYs[i], 128 + i * 64);
         aes_decrypt( &ctx, data );
         printf( "decryption test %d ", i + 1 );
         if( ! memcmp( data, PT, 16 ) )
