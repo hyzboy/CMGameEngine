@@ -1,4 +1,4 @@
-﻿#ifndef HGL_STR_TEMPLATE_INCLUDE
+#ifndef HGL_STR_TEMPLATE_INCLUDE
 #define HGL_STR_TEMPLATE_INCLUDE
 
 #include<math.h>
@@ -1779,7 +1779,7 @@ namespace hgl
 	 * @param num 进制
 	 * @return 解析出来的值
 	 */
-	inline int parse_dec_number_char(const int &ch)
+	inline int parse_dec_number_char(const int ch)
 	{
 		if(ch>='0'&&ch<='9')
 			return ch-'0';
@@ -1793,7 +1793,7 @@ namespace hgl
 	 * @param num 进制
 	 * @return 解析出来的值
 	 */
-	inline int parse_number_char(const int &ch,int num)
+	inline int parse_number_char(const int ch,int num)
 	{
 		if(ch>='0'&&ch<='9')
 			return ch-'0';

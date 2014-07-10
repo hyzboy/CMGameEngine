@@ -29,7 +29,7 @@ namespace hgl
 				delete lock;
 			}
 
-			bool Lock(const int64 &id)
+			bool Lock(const int64 id)
 			{
 				int index;
 
@@ -40,7 +40,7 @@ namespace hgl
 				return(index!=-1);
 			}
 
-			bool Unlock(const int64 &id)
+			bool Unlock(const int64 id)
 			{
 				bool result;
 
@@ -51,7 +51,7 @@ namespace hgl
 				return(result);
 			}
 
-			bool IsLock(const int64 &id)
+			bool IsLock(const int64 id)
 			{
 				int index;
 
@@ -192,7 +192,7 @@ namespace hgl
 					return(true);
 				}
 
-				bool LockAccess(int32 cmd,const int64 &id,bool &result)
+				bool LockAccess(int32 cmd,const int64 id,bool &result)
 				{
 					ThreadMutexLock tml(con->GetLock());
 
@@ -336,7 +336,7 @@ namespace hgl
 		 * @param id ID号
 		 * @return 是否成功
 		 */
-		bool dfsClientID::Lock(const int64 &id)
+		bool dfsClientID::Lock(const int64 id)
 		{
 			if(!lock_list[id&0xFF].Lock(id))
 				return(false);
@@ -359,7 +359,7 @@ namespace hgl
 		 * @param id ID号
 		 * @return 是否成功
 		 */
-		bool dfsClientID::Unlock(const int64 &id)
+		bool dfsClientID::Unlock(const int64 id)
 		{
 			lock_list[id&0xFF].Unlock(id);
 
@@ -381,7 +381,7 @@ namespace hgl
 		 * @param result 是否加锁的结构保存变量
 		 * @return 是否获取成功
 		 */
-		bool dfsClientID::IsLock(const int64 &id,bool &result)
+		bool dfsClientID::IsLock(const int64 id,bool &result)
 		{
 			if(lock_list[id&0xFF].IsLock(id))
 				return(true);

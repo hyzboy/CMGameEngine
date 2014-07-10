@@ -33,7 +33,7 @@ namespace hgl
 			HGL_RWLOCK(lock);
 			RWLock *GetLock(){return lock;}
 
-			FileBlock(const int64 &fn)
+			FileBlock(const int64 fn)
 			{
 				filename=fn;
 				version=-1;
@@ -107,9 +107,9 @@ namespace hgl
 
 			bool Init(const UTF8String &,uint,const UTF8String &,const int64 _node_id=-1);			///<初始化dfs客户端连接
 
-			InputStream *	LoadFile	(const int64 &);											///<加载一个文件
-			OutputStream *	SaveFile	(const int64 &,const uint32 &attrib=0);						///<保存一个文件
-			bool			DeleteFile	(const int64 &);											///<删除文件
+			InputStream *	LoadFile	(const int64 );											///<加载一个文件
+			OutputStream *	SaveFile	(const int64 ,const uint32 attrib=0);						///<保存一个文件
+			bool			DeleteFile	(const int64 );											///<删除文件
 		};//class dfsClientFile
 
 		/**
@@ -118,7 +118,7 @@ namespace hgl
 		 * @param filename 文件名
 		 * @return 创建好的对象指针
 		 */
-		template<typename T> T *LoadObjectFromDFS(dfsClientFile *dfs,const int64 &filename)
+		template<typename T> T *LoadObjectFromDFS(dfsClientFile *dfs,const int64 filename)
 		{
 			SharedPtr<InputStream> is=dfs->LoadFile(filename);
 
@@ -143,7 +143,7 @@ namespace hgl
 		 * @param obj 要保存的对象，对象必须有实现bool Write(DataOutputStream *)函数
 		 * @return 是否保存成功
 		 */
-		template<typename T> bool SaveObjectToDFS(dfsClientFile *dfs,const int64 &filename,const T *obj)
+		template<typename T> bool SaveObjectToDFS(dfsClientFile *dfs,const int64 filename,const T *obj)
 		{
 			if(!obj)
 				return(false);
@@ -167,7 +167,7 @@ namespace hgl
 
 		public:
 
-			dfsLoadFile(dfsClientFile *dfs,const int64 &filename)
+			dfsLoadFile(dfsClientFile *dfs,const int64 filename)
 			{
 				is=dfs->LoadFile(filename);
 			}
@@ -190,7 +190,7 @@ namespace hgl
 
 		public:
 
-			dfsSaveFile(dfsClientFile *dfs,const int64 &filename,const uint32 &attrib)
+			dfsSaveFile(dfsClientFile *dfs,const int64 filename,const uint32 attrib)
 			{
 				os=dfs->SaveFile(filename,attrib);
 			}

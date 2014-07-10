@@ -1,4 +1,4 @@
-﻿#ifndef HGL_NETWORK_SOCKET_MANAGE_INCLUDE
+#ifndef HGL_NETWORK_SOCKET_MANAGE_INCLUDE
 #define HGL_NETWORK_SOCKET_MANAGE_INCLUDE
 
 #include<hgl/type/IndexData.h>
@@ -110,7 +110,7 @@ namespace hgl
 
 			virtual 		void		Clear			();											///<分离所有连接
 
-							bool		Update			(const double &);
+							bool		Update			(const double );
 
 		public:
 

@@ -115,7 +115,7 @@ namespace hgl
 		 * @return 文件输入流
 		 * @return NULL 加载失败
 		 */
-		InputStream *dfsClientFile::LoadFile(const int64 &file_id)
+		InputStream *dfsClientFile::LoadFile(const int64 file_id)
 		{
 			FileTeam *ft=file_team+(file_id%team_number);
 

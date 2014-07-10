@@ -173,12 +173,12 @@ namespace hgl
 				return(-1);
 			}
 
-			int		FindInteger		(const int &	value){return FindData(value);}
-			int		FindUInteger	(const uint &	value){return FindData(value);}
-			int		FindFloat		(const float &	value){return FindData(value);}
-			int		FindDouble		(const double &	value){return FindData(value);}
-			int		FindChar		(const char &	value){return FindData(value);}
-			int		FindChar		(const char16_t &value){return FindData(value);}
+			int		FindInteger		(const int		value){return FindData(value);}
+			int		FindUInteger	(const uint		value){return FindData(value);}
+			int		FindFloat		(const float 	value){return FindData(value);}
+			int		FindDouble		(const double 	value){return FindData(value);}
+			int		FindChar		(const char		value){return FindData(value);}
+			int		FindChar		(const char16_t	value){return FindData(value);}
 
 			template<typename P>
 			int		FindDataArray	(const P *value)

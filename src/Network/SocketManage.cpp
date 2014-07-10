@@ -1,4 +1,4 @@
-﻿#include<hgl/network/IOSocket.h>
+#include<hgl/network/IOSocket.h>
 #include<hgl/network/SocketManage.h>
 #include"SocketManageBase.h"
 
@@ -227,7 +227,7 @@ namespace hgl
 			}
 		}
 
-		bool SocketManage::Update(const double &cur_time)
+		bool SocketManage::Update(const double cur_time)
 		{
 			if(!manage)
 				return(false);

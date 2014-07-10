@@ -1,4 +1,4 @@
-﻿#include<hgl/db/Field.h>
+#include<hgl/db/Field.h>
 #include<hgl/db/FieldDesc.h>
 #include<hgl/io/DataInputStream.h>
 #include<hgl/io/DataOutputStream.h>
@@ -46,20 +46,20 @@ namespace hgl
 			const bool Get(UTF16String &v	)const HGL_OVERRIDE{v=value;return(true);}
 			const bool Get(UTF8String &v	)const HGL_OVERRIDE{v=value;return(true);}
 
-			const bool Set(const bool &v	)HGL_OVERRIDE{value=v;return(true);}
+			const bool Set(const bool v	)HGL_OVERRIDE{value=v;return(true);}
 
-			const bool Set(const int8 &v	)HGL_OVERRIDE{value=v;return(true);}
-			const bool Set(const int16 &v	)HGL_OVERRIDE{value=v;return(true);}
-			const bool Set(const int32 &v	)HGL_OVERRIDE{value=v;return(true);}
-			const bool Set(const int64 &v	)HGL_OVERRIDE{value=v;return(true);}
+			const bool Set(const int8 v	)HGL_OVERRIDE{value=v;return(true);}
+			const bool Set(const int16 v	)HGL_OVERRIDE{value=v;return(true);}
+			const bool Set(const int32 v	)HGL_OVERRIDE{value=v;return(true);}
+			const bool Set(const int64 v	)HGL_OVERRIDE{value=v;return(true);}
 
-			const bool Set(const uint8 &v	)HGL_OVERRIDE{value=v;return(true);}
-			const bool Set(const uint16 &v	)HGL_OVERRIDE{value=v;return(true);}
-			const bool Set(const uint32 &v	)HGL_OVERRIDE{value=v;return(true);}
-			const bool Set(const uint64 &v	)HGL_OVERRIDE{value=v;return(true);}
+			const bool Set(const uint8 v	)HGL_OVERRIDE{value=v;return(true);}
+			const bool Set(const uint16 v	)HGL_OVERRIDE{value=v;return(true);}
+			const bool Set(const uint32 v	)HGL_OVERRIDE{value=v;return(true);}
+			const bool Set(const uint64 v	)HGL_OVERRIDE{value=v;return(true);}
 
-			const bool Set(const float &v	)HGL_OVERRIDE{value=v;return(true);}
-			const bool Set(const double &v	)HGL_OVERRIDE{value=v;return(true);}
+			const bool Set(const float v	)HGL_OVERRIDE{value=v;return(true);}
+			const bool Set(const double v	)HGL_OVERRIDE{value=v;return(true);}
 		};//template<typename T> class FieldDataValue:public FieldData
 
 		class FieldDataBool:public FieldDataValue<bool>
@@ -70,7 +70,7 @@ namespace hgl
 			using FieldDataValue<bool>::FieldDataValue;
 #else
 			FieldDataBool(const FieldDesc *fd):FieldDataValue<bool>(fd){}
-			FieldDataBool(const FieldDesc *fd,const bool &v):FieldDataValue<bool>(fd,v){}
+			FieldDataBool(const FieldDesc *fd,const bool v):FieldDataValue<bool>(fd,v){}
 #endif//HGL_CONSTRUCTION_REUSE
 
 			const bool Set(const UTF16String &str) HGL_OVERRIDE{return str.ToBool(this->value);}
@@ -206,20 +206,20 @@ namespace hgl
 				return(size);
 			}
 
-			const bool Set(const bool &v		)HGL_OVERRIDE{*(this->array_value.GetData())=(v?'1':'0');return(true);}
+			const bool Set(const bool v		)HGL_OVERRIDE{*(this->array_value.GetData())=(v?'1':'0');return(true);}
 
-			const bool Set(const int8 &v		)HGL_OVERRIDE{return itos(this->array_value.GetData(),this->desc->type.count,v);}
-			const bool Set(const int16 &v		)HGL_OVERRIDE{return itos(this->array_value.GetData(),this->desc->type.count,v);}
-			const bool Set(const int32 &v		)HGL_OVERRIDE{return itos(this->array_value.GetData(),this->desc->type.count,v);}
-			const bool Set(const int64 &v		)HGL_OVERRIDE{return itos(this->array_value.GetData(),this->desc->type.count,v);}
+			const bool Set(const int8 v		)HGL_OVERRIDE{return itos(this->array_value.GetData(),this->desc->type.count,v);}
+			const bool Set(const int16 v		)HGL_OVERRIDE{return itos(this->array_value.GetData(),this->desc->type.count,v);}
+			const bool Set(const int32 v		)HGL_OVERRIDE{return itos(this->array_value.GetData(),this->desc->type.count,v);}
+			const bool Set(const int64 v		)HGL_OVERRIDE{return itos(this->array_value.GetData(),this->desc->type.count,v);}
 
-			const bool Set(const uint8 &v		)HGL_OVERRIDE{return utos(this->array_value.GetData(),this->desc->type.count,v);}
-			const bool Set(const uint16 &v		)HGL_OVERRIDE{return utos(this->array_value.GetData(),this->desc->type.count,v);}
-			const bool Set(const uint32 &v		)HGL_OVERRIDE{return utos(this->array_value.GetData(),this->desc->type.count,v);}
-			const bool Set(const uint64 &v		)HGL_OVERRIDE{return utos(this->array_value.GetData(),this->desc->type.count,v);}
+			const bool Set(const uint8 v		)HGL_OVERRIDE{return utos(this->array_value.GetData(),this->desc->type.count,v);}
+			const bool Set(const uint16 v		)HGL_OVERRIDE{return utos(this->array_value.GetData(),this->desc->type.count,v);}
+			const bool Set(const uint32 v		)HGL_OVERRIDE{return utos(this->array_value.GetData(),this->desc->type.count,v);}
+			const bool Set(const uint64 v		)HGL_OVERRIDE{return utos(this->array_value.GetData(),this->desc->type.count,v);}
 
-			const bool Set(const float &v		)HGL_OVERRIDE{return ftos(this->array_value.GetData(),3,this->desc->type.count,v);}
-			const bool Set(const double &v		)HGL_OVERRIDE{return ftos(this->array_value.GetData(),6,this->desc->type.count,v);}
+			const bool Set(const float v		)HGL_OVERRIDE{return ftos(this->array_value.GetData(),3,this->desc->type.count,v);}
+			const bool Set(const double v		)HGL_OVERRIDE{return ftos(this->array_value.GetData(),6,this->desc->type.count,v);}
 
 			const bool Set(const T *str,int size) HGL_OVERRIDE
 			{
@@ -459,18 +459,18 @@ namespace hgl
 				return size;
 			}
 
-			const bool Set(const int8 &v		)HGL_OVERRIDE{string_value=v;return(true);}
-			const bool Set(const int16 &v		)HGL_OVERRIDE{string_value=v;return(true);}
-			const bool Set(const int32 &v		)HGL_OVERRIDE{string_value=v;return(true);}
-			const bool Set(const int64 &v		)HGL_OVERRIDE{string_value=v;return(true);}
+			const bool Set(const int8 v		)HGL_OVERRIDE{string_value=v;return(true);}
+			const bool Set(const int16 v		)HGL_OVERRIDE{string_value=v;return(true);}
+			const bool Set(const int32 v		)HGL_OVERRIDE{string_value=v;return(true);}
+			const bool Set(const int64 v		)HGL_OVERRIDE{string_value=v;return(true);}
 
-			const bool Set(const uint8 &v		)HGL_OVERRIDE{string_value=v;return(true);}
-			const bool Set(const uint16 &v		)HGL_OVERRIDE{string_value=v;return(true);}
-			const bool Set(const uint32 &v		)HGL_OVERRIDE{string_value=v;return(true);}
-			const bool Set(const uint64 &v		)HGL_OVERRIDE{string_value=v;return(true);}
+			const bool Set(const uint8 v		)HGL_OVERRIDE{string_value=v;return(true);}
+			const bool Set(const uint16 v		)HGL_OVERRIDE{string_value=v;return(true);}
+			const bool Set(const uint32 v		)HGL_OVERRIDE{string_value=v;return(true);}
+			const bool Set(const uint64 v		)HGL_OVERRIDE{string_value=v;return(true);}
 
-			const bool Set(const float &v		)HGL_OVERRIDE{string_value=v;return(true);}
-			const bool Set(const double &v		)HGL_OVERRIDE{string_value=v;return(true);}
+			const bool Set(const float v		)HGL_OVERRIDE{string_value=v;return(true);}
+			const bool Set(const double v		)HGL_OVERRIDE{string_value=v;return(true);}
 
 			const bool Set(const T *str,int size)HGL_OVERRIDE
 			{
@@ -513,7 +513,7 @@ namespace hgl
 			FieldDataUTF16String(const FieldDesc *fd,const BaseString<char16_t> &str):FieldDataString<char16_t>(fd,str){}
 #endif//HGL_CONSTRUCTION_REUSE
 
-			const bool Set(const bool &v		)HGL_OVERRIDE{this->string_value=(v?u'1':u'0');return(true);}
+			const bool Set(const bool v		)HGL_OVERRIDE{this->string_value=(v?u'1':u'0');return(true);}
 
 			const bool Get(UTF8String &str)const HGL_OVERRIDE{str=to_u8(this->string_value);return(true);}
 			const int Get(char *str,int size)const HGL_OVERRIDE
@@ -549,7 +549,7 @@ namespace hgl
 			FieldDataUTF8String(const FieldDesc *fd,const UTF8String &str):FieldDataString<char>(fd,str){}
 #endif//HGL_CONSTRUCTION_REUSE
 
-			const bool Set(const bool &v		)HGL_OVERRIDE{this->string_value=(v?'1':'0');return(true);}
+			const bool Set(const bool v		)HGL_OVERRIDE{this->string_value=(v?'1':'0');return(true);}
 
 			const bool Get(UTF16String &str)const HGL_OVERRIDE{str=to_u16(this->string_value);return(true);}
 			const int Get(char16_t *str,int size)const HGL_OVERRIDE

@@ -7,7 +7,7 @@ namespace hgl
 {
 	namespace network
 	{
-		int TCPSocketRB::ProcRecv(int prev_recv_size,const double &cur_time)
+		int TCPSocketRB::ProcRecv(int prev_recv_size,const double cur_time)
 		{
 			TCPSocket::ProcRecv(prev_recv_size,cur_time);
 

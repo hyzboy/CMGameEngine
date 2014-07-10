@@ -1,4 +1,4 @@
-﻿#include <hgl/type/DataType.h>
+#include <hgl/type/DataType.h>
 #include <hgl/type/DateTime.h>
 #include <apr_time.h>
 
@@ -373,7 +373,7 @@ namespace hgl
 
 namespace hgl
 {
-	void ToDateTime(Date &d,Time &t,const double &cur_time)
+	void ToDateTime(Date &d,Time &t,const double cur_time)
 	{
 		apr_time_exp_t at;
 
@@ -387,9 +387,9 @@ namespace hgl
 		t.SetGMT(at.tm_gmtoff);
 	}
 
-	double FromDateTime(const int &year,const int &month,const int &day,
-						const int &hour,const int &minute,const int &second,const int &micro_second,
-						const int &gmt_off
+	double FromDateTime(const int year,const int month,const int day,
+						const int hour,const int minute,const int second,const int micro_second,
+						const int gmt_off
    					)
 	{
 		apr_time_exp_t at;

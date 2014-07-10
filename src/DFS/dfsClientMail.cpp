@@ -15,7 +15,7 @@ namespace hgl
 	{
 		namespace
 		{
-			dfs::ErrorCode dfsMailSend(DataOutputStream *dos,const int64 &name,int32 index,char *data,int32 size)
+			dfs::ErrorCode dfsMailSend(DataOutputStream *dos,const int64 name,int32 index,char *data,int32 size)
 			{
 				if(!dos->WriteInt32(tdsMailSend))return(dfs::ecSocketSendError);
 				if(!dos->WriteInt64(name))return(dfs::ecSocketSendError);
@@ -26,7 +26,7 @@ namespace hgl
 				return(dfs::ecNone);
 			}
 
-			dfs::ErrorCode dfsMailGetCount(DataInputStream *dis,DataOutputStream *dos,const int64 &name,List<int32> &id_list)
+			dfs::ErrorCode dfsMailGetCount(DataInputStream *dis,DataOutputStream *dos,const int64 name,List<int32> &id_list)
 			{
 				if(!dos->WriteInt32(tdsMailGetCount))return(dfs::ecSocketSendError);
 				if(!dos->WriteInt64(name))return(dfs::ecSocketSendError);
@@ -77,7 +77,7 @@ namespace hgl
 				return(dfs::ecNone);
 			}
 
-			dfs::ErrorCode dfsMailGet(DataInputStream *dis,DataOutputStream *dos,const int64 &name,int32 start,int32 end,dfsMailList &mail_list)
+			dfs::ErrorCode dfsMailGet(DataInputStream *dis,DataOutputStream *dos,const int64 name,int32 start,int32 end,dfsMailList &mail_list)
 			{
 				if(!dos->WriteInt32(tdsMailAcquireScope))return(dfs::ecSocketSendError);
 				if(!dos->WriteInt64(name))return(dfs::ecSocketSendError);
@@ -87,7 +87,7 @@ namespace hgl
 				return dfsMailGet(dis,mail_list);
 			}
 
-			dfs::ErrorCode dfsMailGet(DataInputStream *dis,DataOutputStream *dos,const int64 &name,int32 count,int32 *index,dfsMailList &mail_list)
+			dfs::ErrorCode dfsMailGet(DataInputStream *dis,DataOutputStream *dos,const int64 name,int32 count,int32 *index,dfsMailList &mail_list)
 			{
 				if(!dos->WriteInt32(tdsMailAcquire))return(dfs::ecSocketSendError);
 				if(!dos->WriteInt64(name))return(dfs::ecSocketSendError);
@@ -97,7 +97,7 @@ namespace hgl
 				return dfsMailGet(dis,mail_list);
 			}
 
-			dfs::ErrorCode dfsMailDelete(DataOutputStream *dos,const int64 &name,int32 count,int32 *index)
+			dfs::ErrorCode dfsMailDelete(DataOutputStream *dos,const int64 name,int32 count,int32 *index)
 			{
 				if(!dos->WriteInt32(tdsMailDelete))return(dfs::ecSocketSendError);
 				if(!dos->WriteInt64(name))return(dfs::ecSocketSendError);
@@ -118,7 +118,7 @@ namespace hgl
 
 			public:
 
-				MailSendStream(dfsClientConnect *c,const int64 &n,int32 i)
+				MailSendStream(dfsClientConnect *c,const int64 n,int32 i)
 				{
 					con=c;
 
@@ -153,7 +153,7 @@ namespace hgl
 		 * @return 发送邮件输出流
 		 * @return NULL 失败
 		 */
-		OutputStream *dfsClientMail::MailSend(const int64 &key,int32 index)
+		OutputStream *dfsClientMail::MailSend(const int64 key,int32 index)
 		{
 			ThreadMutexLock tml(lock);
 
@@ -169,7 +169,7 @@ namespace hgl
 		 * @param id_list 邮件id列表
 		 * @return 是否成功
 		 */
-		bool dfsClientMail::MailGetCount(const int64 &key,List<int32> &id_list)
+		bool dfsClientMail::MailGetCount(const int64 key,List<int32> &id_list)
 		{
 			if(!lock->TryLock())
 				return(false);
@@ -194,7 +194,7 @@ namespace hgl
 		 * @param mail_list 获取到的邮件列表存放变量
 		 * @return 是否成功
 		 */
-		bool dfsClientMail::MailGet(const int64 &key,int32 start,int32 end,dfsMailList &mail_list)
+		bool dfsClientMail::MailGet(const int64 key,int32 start,int32 end,dfsMailList &mail_list)
 		{
 			ThreadMutexLock tml(lock);
 
@@ -212,7 +212,7 @@ namespace hgl
 		 * @param mail_list 获取到的邮件列表存放变量
 		 * @return 是否成功
 		 */
-		bool dfsClientMail::MailGet(const int64 &key,int32 number,int32 *index,dfsMailList &mail_list)
+		bool dfsClientMail::MailGet(const int64 key,int32 number,int32 *index,dfsMailList &mail_list)
 		{
 			ThreadMutexLock tml(lock);
 
@@ -229,7 +229,7 @@ namespace hgl
 		 * @param index 要删除的邮件id列表
 		 * @return 是否成功
 		 */
-		bool dfsClientMail::MailDelete(const int64 &key,int32 number,int32 *index)
+		bool dfsClientMail::MailDelete(const int64 key,int32 number,int32 *index)
 		{
 			ThreadMutexLock tml(lock);
 

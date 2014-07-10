@@ -146,8 +146,8 @@ public:
 //
 // // template<typename T> bool WriteFloat(DataOutputStream *dos,const T &value);
 // //
-// // template<> bool WriteFloat<float>(DataOutputStream *dos,const float &value){return dos->WriteFloat(value);};
-// // template<> bool WriteFloat<double>(DataOutputStream *dos,const double &value){return dos->WriteDouble(value);};
+// // template<> bool WriteFloat<float>(DataOutputStream *dos,const float value){return dos->WriteFloat(value);};
+// // template<> bool WriteFloat<double>(DataOutputStream *dos,const double value){return dos->WriteDouble(value);};
 // //
 // // template<typename T> bool ReadFloat(DataInputStream *dis,const T &value);
 // //
@@ -189,7 +189,7 @@ public:
 // {
 // public:
 //
-// 	PropertyBool(const bool &dt)
+// 	PropertyBool(const bool dt)
 // 	{
 // 		this->data=dt;
 // 	}

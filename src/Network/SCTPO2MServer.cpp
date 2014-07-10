@@ -64,7 +64,7 @@ namespace hgl
 		 * 设置自动关闭无通信的客户端
 		 * @param to 超时时间
 		 */
-		void SCTPO2MServer::SetAutoClose(const int &to)
+		void SCTPO2MServer::SetAutoClose(const int to)
 		{
 			setsockopt(ThisSocket,IPPROTO_SCTP,SCTP_AUTOCLOSE,&to,sizeof(int));
 		}

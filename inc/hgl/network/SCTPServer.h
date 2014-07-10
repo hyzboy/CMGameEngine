@@ -41,7 +41,7 @@ namespace hgl
 						SetSocketBlock(ThisSocket,block,sto,rto);
 					}
 
-					void	SetAutoClose(const int &to);											///<设置自动关闭时间
+					void	SetAutoClose(const int to);											///<设置自动关闭时间
 		};//class SCTPO2MServer
 	}//namespace network
 }//namespace hgl

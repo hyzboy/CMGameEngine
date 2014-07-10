@@ -31,7 +31,7 @@ namespace hgl
 		public: //被动事件函数
 
 			virtual void ProcDisconnect()HGL_OVERRIDE{}													///<断线事件处理函数
-			virtual int ProcRecv(int recv_buf_size=-1,const double &cur_time=0)HGL_OVERRIDE				///<接收数据事件处理函数
+			virtual int ProcRecv(int recv_buf_size=-1,const double cur_time=0)HGL_OVERRIDE				///<接收数据事件处理函数
 						{return IOSocket::ProcRecv(recv_buf_size,cur_time);}
 			virtual int ProcSend(int,int &left_bytes)HGL_OVERRIDE{return -1;}							///<发送数据事件处理函数
 
@@ -61,7 +61,7 @@ namespace hgl
 		public:	//事件函数
 
 			DefEvent(void,	OnDisconnect,	(TCPSocket *));											///<断线事件处理函数
-			DefEvent(int,	OnRecv,			(TCPSocket *,int,const double &));						///<接收数据事件处理函数
+			DefEvent(int,	OnRecv,			(TCPSocket *,int,const double ));						///<接收数据事件处理函数
 			DefEvent(int,	OnSend,			(TCPSocket *,int,int &));								///<发送数据事件处理函数
 
 		protected:
@@ -85,7 +85,7 @@ namespace hgl
 				SafeCallEvent(OnDisconnect,(this));
 			}
 
-			virtual int ProcRecv(int size,const double &cur_time) HGL_OVERRIDE
+			virtual int ProcRecv(int size,const double cur_time) HGL_OVERRIDE
 			{
 				if(OnRecv==nullptr)return(-1);
 
@@ -131,7 +131,7 @@ namespace hgl
 
 		protected:
 
-			virtual int ProcRecv(int=-1,const double &cur_time=0)HGL_OVERRIDE;						///<接收数据处理(被回调函数)
+			virtual int ProcRecv(int=-1,const double cur_time=0)HGL_OVERRIDE;						///<接收数据处理(被回调函数)
 
 		public:
 

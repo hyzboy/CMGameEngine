@@ -57,12 +57,12 @@ namespace hgl
 			virtual bool	GetString	(int,UTF8String &){return false;}							///<从字段中取得一个utf8字符串
 			virtual bool	GetString	(int,UTF16String &){return false;}							///<从字段中取得一个utf16字符串
 
-			virtual int		FindInteger	(const int &	){return -1;}
-			virtual int		FindUInteger(const uint &	){return -1;}
-			virtual int		FindFloat	(const float &	){return -1;}
-			virtual int		FindDouble	(const double &	){return -1;}
-			virtual int		FindChar	(const char &	){return -1;}
-			virtual int		FindChar	(const char16_t &){return -1;}
+			virtual int		FindInteger	(const int 		){return -1;}
+			virtual int		FindUInteger(const uint 	){return -1;}
+			virtual int		FindFloat	(const float 	){return -1;}
+			virtual int		FindDouble	(const double 	){return -1;}
+			virtual int		FindChar	(const char		){return -1;}
+			virtual int		FindChar	(const char16_t	){return -1;}
 
 			virtual	int		FindArray(const int8 *		){return -1;}
 			virtual	int		FindArray(const int16 *		){return -1;}
