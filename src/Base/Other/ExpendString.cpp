@@ -4,7 +4,7 @@
 
 namespace hgl
 {
-	IndexData<OSString,OSString> ExpendString;
+	Map<OSString,OSString> ExpendString;
 
 	void SetExpendString(const OSString &flag,const OSString &str)
 	{

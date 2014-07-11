@@ -1,4 +1,4 @@
-﻿#ifndef HGL_MAP_INCLUDE
+#ifndef HGL_MAP_INCLUDE
 #define HGL_MAP_INCLUDE
 
 #include<hgl/type/List.h>
@@ -13,7 +13,7 @@ namespace hgl
 	/**
 	* 索引数据模板
 	*/
-	template<typename F,typename T,typename DataPair> class _IndexData:public _Object
+	template<typename F,typename T,typename DataPair> class _Map:public _Object
 	{
 	public:
 
@@ -24,7 +24,7 @@ namespace hgl
 		ObjectPool<IDItem> data_pool;
 		List<IDItem *> data_list;
 
-		typedef _IndexData<F,T,IDItem> this_calss;
+		typedef _Map<F,T,IDItem> this_calss;
 
     public: //事件
 
@@ -33,8 +33,8 @@ namespace hgl
 
 	public:	//方法
 
-		_IndexData();
-		virtual ~_IndexData()HGL_DEFAULT_MEMFUNC;
+		_Map();
+		virtual ~_Map()HGL_DEFAULT_MEMFUNC;
 
 		const	int		GetCount()const{return data_list.GetCount();}								///<取得数据总量
 
@@ -72,14 +72,14 @@ namespace hgl
 				bool	SaveToFile(const os_char *);												///<保存到文件
 				bool	LoadFromFile(const os_char *);                                         		///<从文件加载
 
-				void	operator=(const _IndexData<F,T,IDItem> &);									///<操作符重载，复制一个列表
-	};//class _IndexData
+				void	operator=(const _Map<F,T,IDItem> &);									///<操作符重载，复制一个列表
+	};//class _Map
 
-	template<typename F,typename T> class IndexData:public _IndexData<F,T,Pair<F,T> >
+	template<typename F,typename T> class Map:public _Map<F,T,Pair<F,T> >
 	{
-	};//class IndexData
+	};//class Map
 
-	template<typename T_ID,typename T_U> T_U *GetObject(IndexData<T_ID,T_U *> &list,const T_ID &id)
+	template<typename T_ID,typename T_U> T_U *GetObject(Map<T_ID,T_U *> &list,const T_ID &id)
 	{
 		T_U *result;
 
@@ -89,11 +89,11 @@ namespace hgl
 		return result;
 	}
 
-	template<typename F,typename T,typename DataPair> class _IndexObject:public _IndexData<F,T *,DataPair>
+	template<typename F,typename T,typename DataPair> class _IndexObject:public _Map<F,T *,DataPair>
 	{
 	protected:
 
-		typedef _IndexData<F,T *,DataPair> SuperClass;
+		typedef _Map<F,T *,DataPair> SuperClass;
 
 		virtual void	DeleteObject(const F &,T *)=0;												///<删除一个数据
 				void	DeleteObject(DataPair *ds){DeleteObject(ds->first,ds->second);}
@@ -197,7 +197,7 @@ namespace hgl
 			while(n--)
 				DeleteObject(n);
 
-			_IndexData<F,T *,DataPair>::Clear();
+			_Map<F,T *,DataPair>::Clear();
 		}
 
 		/**

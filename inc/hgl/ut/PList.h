@@ -12,7 +12,7 @@ namespace hgl
 	/**
 	* 属性列表,类似INI的管理类
 	*/
-	class PList:public IndexData<UTF16String,UTF16String>												///属性列表
+	class PList:public Map<UTF16String,UTF16String>												///属性列表
 	{
 	protected:
 

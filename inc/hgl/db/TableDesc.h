@@ -17,9 +17,9 @@ namespace hgl
 			ObjectList<FieldDesc> field_list;														///<字段列表
 			FieldDesc *primary_field;																///<主字段
 
-			IndexData<UTF8String,FieldDesc *> field_by_name;										///<字段列表
+			Map<UTF8String,FieldDesc *> field_by_name;										///<字段列表
 
-			IndexData<UTF8String,UTF8String> extra_attrib;											///<额外属性
+			Map<UTF8String,UTF8String> extra_attrib;											///<额外属性
 
 		public:
 

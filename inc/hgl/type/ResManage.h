@@ -26,7 +26,7 @@ namespace hgl
 
 		typedef RefFlagData<F,T> ResItem;
 
-		_IndexData<F,T *,ResItem> items;
+		_Map<F,T *,ResItem> items;
 
 		void ReleaseBySerial(int);
 

@@ -55,7 +55,7 @@ namespace hgl
 				}
 			};//struct SocketItem
 
-			typedef IndexData<int,SocketItem> SocketList;
+			typedef Map<int,SocketItem> SocketList;
 
 		protected:
 

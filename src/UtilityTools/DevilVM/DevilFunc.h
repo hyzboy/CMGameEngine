@@ -21,7 +21,7 @@ namespace hgl
 
 		ObjectList<DevilCommand> command;
 
-		IndexData<UTF16String,int> goto_flag;
+		Map<UTF16String,int> goto_flag;
 
 		IndexObject<UTF16String,DevilValueInterface> script_value_list;
 
