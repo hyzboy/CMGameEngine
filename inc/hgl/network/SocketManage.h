@@ -1,7 +1,7 @@
 #ifndef HGL_NETWORK_SOCKET_MANAGE_INCLUDE
 #define HGL_NETWORK_SOCKET_MANAGE_INCLUDE
 
-#include<hgl/type/IndexData.h>
+#include<hgl/type/Map.h>
 #include<hgl/type/Set.h>
 #include<hgl/network/IOSocket.h>
 #include<hgl/thread/ThreadMutex.h>

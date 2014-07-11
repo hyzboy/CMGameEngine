@@ -2,7 +2,7 @@
 #define HGL_DEVIL_SCRIPT_MODULE_INCLUDE
 
 #include<hgl/script/DevilVM.h>
-#include<hgl/type/IndexData.h>
+#include<hgl/type/Map.h>
 #include<hgl/type/StringList.h>
 #include"DevilCommand.h"
 #include"DevilFunc.h"

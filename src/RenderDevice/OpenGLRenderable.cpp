@@ -1,7 +1,7 @@
 #include"OpenGLRenderable.h"
 #include"GLSL.h"
 #include<hgl/type/Smart.h>
-#include<hgl/type/IndexData.h>
+#include<hgl/type/Map.h>
 #include<GL/glew.h>
 namespace hgl
 {

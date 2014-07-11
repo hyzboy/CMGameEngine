@@ -1,7 +1,7 @@
 #ifndef HGL_CDB_TABLE_INCLUDE
 #define HGL_CDB_TABLE_INCLUDE
 
-#include<hgl/type/IndexData.h>
+#include<hgl/type/Map.h>
 #include<hgl/type/StringList.h>
 #include<hgl/db/CDBField.h>
 namespace hgl

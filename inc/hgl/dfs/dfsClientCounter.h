@@ -2,7 +2,7 @@
 #define HGL_DFS_CLIENT_COUNTER_INCLUDE
 
 #include<hgl/dfs/dfsClientConnect.h>
-#include<hgl/type/IndexData.h>
+#include<hgl/type/Map.h>
 namespace hgl
 {
 	class ThreadMutex;

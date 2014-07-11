@@ -1,7 +1,7 @@
 #ifndef HGL_PLIST_INCLUDE
 #define HGL_PLIST_INCLUDE
 
-#include<hgl/type/IndexData.h>
+#include<hgl/type/Map.h>
 #include<hgl/type/StringList.h>
 #include<hgl/io/FileOutputStream.h>
 #include<hgl/io/TextOutputStream.h>

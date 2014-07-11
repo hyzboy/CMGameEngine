@@ -2,7 +2,7 @@
 #include<hgl/Compress.h>
 #include<hgl/PlugIn.h>
 #include<hgl/Other.h>
-#include<hgl/type/IndexData.h>
+#include<hgl/type/Map.h>
 namespace hgl
 {
 	char16_t CAName[caEnd][32]=

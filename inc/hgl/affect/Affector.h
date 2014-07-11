@@ -2,7 +2,7 @@
 #define HGL_AFFECTOR_INCLUDE
 
 #include<hgl/affect/AffectorObject.h>
-#include<hgl/type/IndexData.h>
+#include<hgl/type/Map.h>
 namespace hgl
 {
 	/**

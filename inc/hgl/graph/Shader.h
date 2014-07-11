@@ -2,7 +2,7 @@
 #define HGL_GRAPH_SHADER_INCLUDE
 
 #include<hgl/type/BaseString.h>
-#include<hgl/type/IndexData.h>
+#include<hgl/type/Map.h>
 namespace hgl
 {
 	namespace graph

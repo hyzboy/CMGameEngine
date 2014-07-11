@@ -1,5 +1,5 @@
-﻿#include<hgl/type/BaseString.h>
-#include<hgl/type/IndexData.h>
+#include<hgl/type/BaseString.h>
+#include<hgl/type/Map.h>
 #include<hgl/Info.h>
 
 namespace hgl

@@ -1,5 +1,5 @@
-#ifndef HGL_INDEX_OBJECT_POOL_CPP
-#define HGL_INDEX_OBJECT_POOL_CPP
+﻿#ifndef HGL_MAP_OBJECT_POOL_CPP
+#define HGL_MAP_OBJECT_POOL_CPP
 
 #include<hgl/type/Pool.h>
 #include<hgl/Other.h>
@@ -110,4 +110,4 @@ namespace hgl
 		return(true);
 	}
 }//namespace hgl
-#endif//HGL_INDEX_OBJECT_POOL_CPP
+#endif//HGL_MAP_OBJECT_POOL_CPP

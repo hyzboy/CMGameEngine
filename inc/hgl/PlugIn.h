@@ -1,4 +1,4 @@
-﻿#ifndef HGL_PLUGIN_INCLUDE
+#ifndef HGL_PLUGIN_INCLUDE
 #define HGL_PLUGIN_INCLUDE
 //--------------------------------------------------------------------------------------------------
 #include<hgl/type/DataType.h>
@@ -34,7 +34,7 @@ namespace hgl
 
 #ifndef __MAKE_PLUGIN__
 #include<hgl/type/BaseString.h>
-#include<hgl/type/IndexData.h>
+#include<hgl/type/Map.h>
 #include<hgl/ExternalModule.h>
 #include<hgl/LogInfo.h>
 #include<string.h>

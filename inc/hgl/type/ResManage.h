@@ -1,8 +1,8 @@
-﻿#ifndef HGL_RES_MANAGE_INCLUDE
+#ifndef HGL_RES_MANAGE_INCLUDE
 #define HGL_RES_MANAGE_INCLUDE
 
 #include<hgl/object/Object.h>
-#include<hgl/type/IndexData.h>
+#include<hgl/type/Map.h>
 namespace hgl
 {
 	template<typename F,typename T> struct RefFlagData:public Pair<F,T *>

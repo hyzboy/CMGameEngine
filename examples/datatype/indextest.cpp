@@ -1,7 +1,7 @@
-﻿#include<iostream>
+#include<iostream>
 #include<stdlib.h>
 #include<hgl/type/Set.h>
-#include<hgl/type/IndexData.h>
+#include<hgl/type/Map.h>
 
 using namespace hgl;
 using namespace std;

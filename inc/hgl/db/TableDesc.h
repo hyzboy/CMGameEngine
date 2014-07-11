@@ -1,8 +1,8 @@
-﻿#ifndef HGL_DB_TABLE_DESC_INCLUDE
+#ifndef HGL_DB_TABLE_DESC_INCLUDE
 #define HGL_DB_TABLE_DESC_INCLUDE
 
 #include<hgl/db/FieldDesc.h>
-#include<hgl/type/IndexData.h>
+#include<hgl/type/Map.h>
 namespace hgl
 {
 	namespace db

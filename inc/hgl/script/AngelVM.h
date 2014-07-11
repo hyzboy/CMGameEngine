@@ -2,7 +2,7 @@
 #define HGL_ANGELVM_INCLUDE
 
 #include<hgl/script/VM.h>
-#include<hgl/type/IndexData.h>
+#include<hgl/type/Map.h>
 
 /**
  * AngelVM基于AngelScript实现,根据zlib授权协议取得免费授权.授权协议参见:doc/license/AngelCode Scripting Library.txt

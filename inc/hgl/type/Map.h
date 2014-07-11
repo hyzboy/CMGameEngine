@@ -1,5 +1,5 @@
-﻿#ifndef HGL_INDEX_DATA_INCLUDE
-#define HGL_INDEX_DATA_INCLUDE
+﻿#ifndef HGL_MAP_INCLUDE
+#define HGL_MAP_INCLUDE
 
 #include<hgl/type/List.h>
 #include<hgl/type/Pair.h>
@@ -280,5 +280,5 @@ namespace hgl
 		};
 	};//class IndexObject
 }//namespace hgl
-#include<hgl/type/IndexData.cpp>
-#endif//HGL_INDEX_DATA_INCLUDE
+#include<hgl/type/Map.cpp>
+#endif//HGL_MAP_INCLUDE

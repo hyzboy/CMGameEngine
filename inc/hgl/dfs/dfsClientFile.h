@@ -4,7 +4,7 @@
 #include<hgl/type/BaseString.h>
 #include<hgl/thread/ThreadMutex.h>
 #include<hgl/MemBlock.h>
-#include<hgl/type/IndexData.h>
+#include<hgl/type/Map.h>
 #include<hgl/io/DataInputStream.h>
 #include<hgl/io/DataOutputStream.h>
 #include<hgl/dfs/dfsFileAttrib.h>
