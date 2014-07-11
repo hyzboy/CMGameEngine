@@ -11,10 +11,10 @@ namespace hgl
 {
 	class DevilScriptModule:public DevilModule
 	{
-		IndexObject<UTF16String,DevilPropertyMap>  	prop_map;		//属性映射表
-		IndexObject<UTF16String,DevilFuncMap> 		func_map;		//函数映射表
-		IndexObject<UTF16String,DevilFunc>			script_func;	//脚本函数表
-		IndexObject<UTF16String,DevilEnum>			enum_map;		//枚举映射表
+		MapObject<UTF16String,DevilPropertyMap>  	prop_map;		//属性映射表
+		MapObject<UTF16String,DevilFuncMap> 		func_map;		//函数映射表
+		MapObject<UTF16String,DevilFunc>			script_func;	//脚本函数表
+		MapObject<UTF16String,DevilEnum>			enum_map;		//枚举映射表
 
 	private:
 

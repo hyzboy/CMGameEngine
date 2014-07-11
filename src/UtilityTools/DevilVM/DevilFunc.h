@@ -23,7 +23,7 @@ namespace hgl
 
 		Map<UTF16String,int> goto_flag;
 
-		IndexObject<UTF16String,DevilValueInterface> script_value_list;
+		MapObject<UTF16String,DevilValueInterface> script_value_list;
 
 	public:
 

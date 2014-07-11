@@ -119,7 +119,7 @@ namespace hgl
 	};//template<typename T> struct PlugInFlagData
 
 	template<typename T>
-	T *CheckPlugIn(_IndexObject<OSString,T,PlugInFlagData<T *> > &PIM,const OSString &front,uint ver,const OSString &name)
+	T *CheckPlugIn(_MapObject<OSString,T,PlugInFlagData<T *> > &PIM,const OSString &front,uint ver,const OSString &name)
 	{
 		T *iface;
 
@@ -162,7 +162,7 @@ namespace hgl
 
 	void RegistryPIMClear(void (*)());		//注册清除函数
 
-	#define	PlugInManage(name,str_name,ver) static CusIndexObject<OSString,name##PlugInInterface,PlugInFlagData<name##PlugInInterface *> > name##Interface;	\
+	#define	PlugInManage(name,str_name,ver) static CusMapObject<OSString,name##PlugInInterface,PlugInFlagData<name##PlugInInterface *> > name##Interface;	\
 											\
 											void name##PlugInClear()	\
 											{	\

@@ -1,4 +1,4 @@
-﻿#ifndef HGL_MAP_OBJECT_POOL_CPP
+#ifndef HGL_MAP_OBJECT_POOL_CPP
 #define HGL_MAP_OBJECT_POOL_CPP
 
 #include<hgl/type/Pool.h>
@@ -6,13 +6,13 @@
 namespace hgl
 {
 	template<typename I,typename T>
-	IndexObjectPool<I,T>::IndexObjectPool(T **all_list,int count)
+	MapObjectPool<I,T>::MapObjectPool(T **all_list,int count)
 	{
 		null_list.Push(all_list,count);															//将对象全部压入堆栈
 	}
 
 	template<typename I,typename T>
-	IndexObjectPool<I,T>::~IndexObjectPool()
+	MapObjectPool<I,T>::~MapObjectPool()
 	{
 		null_list.Clear();
 		idle_list.Clear();
@@ -20,7 +20,7 @@ namespace hgl
 	}
 
 	template<typename I,typename T>
-	T *IndexObjectPool<I,T>::Acquire()
+	T *MapObjectPool<I,T>::Acquire()
 	{
 		if(null_list.Count==0)																	//未用对象列表里没有空的可以用
 		{
@@ -58,7 +58,7 @@ namespace hgl
 	}
 
 	template<typename I,typename T>
-	T *IndexObjectPool<I,T>::TryAcquire(const I &flag)
+	T *MapObjectPool<I,T>::TryAcquire(const I &flag)
 	{
 		T *obj;
 
@@ -73,7 +73,7 @@ namespace hgl
 	}
 
 	template<typename I,typename T>
-	T *IndexObjectPool<I,T>::Acquire(const I &flag)
+	T *MapObjectPool<I,T>::Acquire(const I &flag)
 	{
 		T *obj=TryAcquire(flag);																//尝试申请一个对象
 
@@ -83,7 +83,7 @@ namespace hgl
 	}
 
 	template<typename I,typename T>
-	bool IndexObjectPool<I,T>::Release(T *obj)
+	bool MapObjectPool<I,T>::Release(T *obj)
 	{
 		int pos=active_list.Find(obj);															//查找数据是否在活动列表中
 
@@ -97,7 +97,7 @@ namespace hgl
 	}
 
 	template<typename I,typename T>
-	bool IndexObjectPool<I,T>::Release(T *obj,const I &flag)
+	bool MapObjectPool<I,T>::Release(T *obj,const I &flag)
 	{
 		int pos=active_list.Find(obj);															//查找数据是否在活动列表中
 

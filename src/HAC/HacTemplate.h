@@ -9,8 +9,8 @@ namespace hgl
 	template<typename F> struct HacFolder
 	{
 		UTF16String FolderName;								///<目录名称
-		IndexObject<UTF16String,HacFolder<F> >	Folder;		///<子目录列表
-		IndexObject<UTF16String,F>				File;		///<文件列表
+		MapObject<UTF16String,HacFolder<F> >	Folder;		///<子目录列表
+		MapObject<UTF16String,F>				File;		///<文件列表
 
 	public:
 

@@ -23,7 +23,7 @@ namespace hgl
 		 */
 		class dfsClientCounter:public dfsClientConnect												///dfs计数器服务客户端
 		{
-			IndexObject<UTF8String,Counter> counter_list;
+			MapObject<UTF8String,Counter> counter_list;
 
 		public:
 

@@ -61,7 +61,7 @@ namespace hgl
 			}
 		};//class TableDesc
 
-		typedef IndexObject<UTF8String,TableDesc> TableDescList;									///<表描述列表
+		typedef MapObject<UTF8String,TableDesc> TableDescList;									///<表描述列表
 
 		bool LoadTableDesc(TableDescList &table_desc_list,char *,int);								///<从XML数据中加载数据表结构描述列表
 		bool LoadTableDesc(TableDescList &table_desc_list,const OSString &filename);				///<从XML文件中加载数据表结构描述列表

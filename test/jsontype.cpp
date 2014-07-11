@@ -267,7 +267,7 @@ public:
 // // 	}
 // };
 
-template<typename STR_TYPE> class PropertyList:public IndexObject<STR_TYPE,PropertyValue<STR_TYPE> >
+template<typename STR_TYPE> class PropertyList:public MapObject<STR_TYPE,PropertyValue<STR_TYPE> >
 {
 public:
 

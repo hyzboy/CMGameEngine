@@ -15,7 +15,7 @@ namespace hgl
 
 	namespace dfs
 	{
-		typedef IndexObject<int32,MemBlock<char> > dfsMailList;					///<邮件列表
+		typedef MapObject<int32,MemBlock<char> > dfsMailList;					///<邮件列表
 
 		/**
 		 * dfs邮件服务客户端

@@ -89,7 +89,7 @@ namespace hgl
 		return result;
 	}
 
-	template<typename F,typename T,typename DataPair> class _IndexObject:public _Map<F,T *,DataPair>
+	template<typename F,typename T,typename DataPair> class _MapObject:public _Map<F,T *,DataPair>
 	{
 	protected:
 
@@ -101,7 +101,7 @@ namespace hgl
 
 	public:
 
-		virtual ~_IndexObject()
+		virtual ~_MapObject()
 		{
 			if(SuperClass::GetCount()>0)
 			{
@@ -244,9 +244,9 @@ namespace hgl
 		}
 
 		void Clear(){DeleteAll();}
-	};//class _IndexObject
+	};//class _MapObject
 
-	template<typename F,typename T,typename DataPair> class CusIndexObject:public _IndexObject<F,T,DataPair>
+	template<typename F,typename T,typename DataPair> class CusMapObject:public _MapObject<F,T,DataPair>
 	{
 	protected:
 
@@ -255,19 +255,19 @@ namespace hgl
 
 	public:
 
-		virtual ~CusIndexObject()
+		virtual ~CusMapObject()
 		{
-			_IndexObject<F,T,DataPair>::Clear();
+			_MapObject<F,T,DataPair>::Clear();
 		}
-	};//class CusIndexObject
+	};//class CusMapObject
 
-	template<typename F,typename T> class IndexObject:public CusIndexObject<F,T,Pair<F,T *> >
+	template<typename F,typename T> class MapObject:public CusMapObject<F,T,Pair<F,T *> >
 	{
 	public:
 
-		virtual ~IndexObject()
+		virtual ~MapObject()
 		{
-			CusIndexObject<F,T,Pair<F,T *> >::Clear();
+			CusMapObject<F,T,Pair<F,T *> >::Clear();
 		}
 
 		T *operator[](const F &index)const
@@ -278,7 +278,7 @@ namespace hgl
 
 			return this->data_list[pos]->second;
 		};
-	};//class IndexObject
+	};//class MapObject
 }//namespace hgl
 #include<hgl/type/Map.cpp>
 #endif//HGL_MAP_INCLUDE

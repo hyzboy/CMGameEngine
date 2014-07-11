@@ -48,7 +48,7 @@ namespace hgl
 		//shader 仓库管理
 		//1.永不释放
 
-		IndexObject<RenderState,Shader> ShaderStorage;						///<shader仓库
+		MapObject<RenderState,Shader> ShaderStorage;						///<shader仓库
 
 		void InitShaderStorage()
 		{

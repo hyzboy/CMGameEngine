@@ -88,7 +88,7 @@ namespace hgl
 			struct FileTeam
 			{
 				ThreadMutex lock;
-				IndexObject<int64,FileBlock> file_list;
+				MapObject<int64,FileBlock> file_list;
 			};
 
 			FileTeam *file_team;

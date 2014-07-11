@@ -24,7 +24,7 @@ namespace hgl
 
 		public:	//属性
 
-			IndexObject<UTF16String,CDBField> Fields;												///<字段列表
+			MapObject<UTF16String,CDBField> Fields;												///<字段列表
 
 			const int GetDataCount()const{return data_count;}										///<取得数据数量
 
