@@ -1,4 +1,4 @@
-#ifndef HGL_VM_INCLUDE
+﻿#ifndef HGL_VM_INCLUDE
 #define HGL_VM_INCLUDE
 
 #include<string.h>
@@ -36,13 +36,13 @@ namespace hgl
 	#define vm_offset(s,m) ((size_t)(&reinterpret_cast<s*>(100000)->m)-100000)
 
 	//全局用
-//	#define MapMemberFunc(name,this_pointer,class,func)		MapFunc(name,this_pointer,vm_method(class,func))
-//	#define MapCppFunc(name,this_pointer,class,func)		MapMemberFunc(name,this_pointer,class,func)
+//	#define BindMemberFunc(name,this_pointer,class,func)	BindFunc(name,this_pointer,vm_method(class,func))
+//	#define BindCppFunc(name,this_pointer,class,func)		BindMemberFunc(name,this_pointer,class,func)
 
 	//对象用
-	#define MapObject(name,class,create,clear)  			CreateObjectMap(name,sizeof(class),create,clear)
-	#define MapObjectProperty(name,class,value) 			MapProperty(name,vm_offset(class,class::value))
-	#define MapObjectArray(name_type,name,class,get,set)	MapArray(name_type,name,vm_method(class,get),vm_method(class,set))
-	#define MapObjectFunc(name,class,func) 					MapFunc(name,vm_method(class,func))
+	#define BindObject(name,class,create,clear)  			BindObjectCreate(name,sizeof(class),create,clear)
+	#define BindObjectProperty(name,class,value) 			BindProperty(name,vm_offset(class,class::value))
+	#define BindObjectArray(name_type,name,class,get,set)	BindArray(name_type,name,vm_method(class,get),vm_method(class,set))
+	#define BindObjectFunc(name,class,func) 				BindFunc(name,vm_method(class,func))
 }//namespace hgl
 #endif//HGL_VM_INCLUDE
