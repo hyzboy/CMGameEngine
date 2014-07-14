@@ -1,4 +1,4 @@
-﻿#ifndef HGL_TYPE_BASE_STRING_INCLUDE
+#ifndef HGL_TYPE_BASE_STRING_INCLUDE
 #define HGL_TYPE_BASE_STRING_INCLUDE
 
 #include<hgl/type/StringInstance.h>
@@ -1060,7 +1060,7 @@ namespace hgl
 	{
 		static BaseString<T> Conv(const void *ptr)
 		{
-			return HexToString<T,uint32>(reinterpret_cast<const uint32 &>(ptr));
+			return HexToString<T,uint32>(reinterpret_cast<const uint32 >(ptr));
 		}
 	};
 
@@ -1068,7 +1068,7 @@ namespace hgl
 	{
 		static BaseString<T> Conv(const void *ptr)
 		{
-			return HexToString<T,uint64>(reinterpret_cast<const uint64 &>(ptr));
+			return HexToString<T,uint64>(reinterpret_cast<const uint64 >(ptr));
 		}
 	};
 

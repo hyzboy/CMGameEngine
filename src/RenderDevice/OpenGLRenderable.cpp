@@ -1,7 +1,7 @@
 #include"OpenGLRenderable.h"
 #include"GLSL.h"
 #include<hgl/type/Smart.h>
-#include<hgl/type/IndexData.h>
+#include<hgl/type/Map.h>
 #include<GL/glew.h>
 namespace hgl
 {
@@ -48,7 +48,7 @@ namespace hgl
 		//shader 仓库管理
 		//1.永不释放
 
-		IndexObject<RenderState,Shader> ShaderStorage;						///<shader仓库
+		MapObject<RenderState,Shader> ShaderStorage;						///<shader仓库
 
 		void InitShaderStorage()
 		{

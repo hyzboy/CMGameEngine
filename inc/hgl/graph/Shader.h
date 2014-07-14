@@ -2,7 +2,7 @@
 #define HGL_GRAPH_SHADER_INCLUDE
 
 #include<hgl/type/BaseString.h>
-#include<hgl/type/IndexData.h>
+#include<hgl/type/Map.h>
 namespace hgl
 {
 	namespace graph
@@ -33,8 +33,8 @@ namespace hgl
 		{
 		protected:
 
-			IndexData<UTF8String,int> attrib_location;
-			IndexData<UTF8String,int> uniform_location;
+			Map<UTF8String,int> attrib_location;
+			Map<UTF8String,int> uniform_location;
 
 			virtual int _GetAttribLocation(const char *)=0;																///<取得指定属性地址
 			virtual int _GetUniformLocation(const char *)=0;															///<取得一个变量的地址

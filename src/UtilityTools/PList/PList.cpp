@@ -62,7 +62,7 @@ namespace hgl
 			{
 				UTF16String str=value;
 
-				IndexData<UTF16String,UTF16String>::Add(name,str);
+				Map<UTF16String,UTF16String>::Add(name,str);
 
 				return(true);
 			}
@@ -71,6 +71,6 @@ namespace hgl
 
 	bool PList::Add(const UTF16String &key,const UTF16String &value)
 	{
-		return IndexData<UTF16String,UTF16String>::Add(key,value);
+		return Map<UTF16String,UTF16String>::Add(key,value);
 	}
 }//namespace hgl

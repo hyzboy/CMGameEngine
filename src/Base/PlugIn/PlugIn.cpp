@@ -1,4 +1,4 @@
-﻿#include<hgl/type/List.h>
+#include<hgl/type/List.h>
 #include<hgl/Info.h>
 #include<hgl/File.h>
 #include<hgl/PlugIn.h>
@@ -7,7 +7,7 @@ namespace hgl
 {
 	typedef void (*PIMClearFunc)();
 
-	static IndexObject<OSString,PlugIn>	plugin_module;												///<插件模块列表
+	static MapObject<OSString,PlugIn>	plugin_module;												///<插件模块列表
 	static PlugIn *						SpecialPlugIn[pitEnd-1];									///<特殊插件
 	static List<PIMClearFunc>			plugin_manager_list;										///<插件管理器清除函数列表
 

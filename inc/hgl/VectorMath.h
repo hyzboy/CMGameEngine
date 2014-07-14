@@ -1,4 +1,4 @@
-﻿#ifndef HGL_VECTOR_MATH_INCLUDE
+#ifndef HGL_VECTOR_MATH_INCLUDE
 #define HGL_VECTOR_MATH_INCLUDE
 
 #ifdef _MSC_VER
@@ -102,14 +102,14 @@ namespace hgl
 		return Vector2f(src.x,src.y);
 	}
 
-	inline void vec2to3(Vector3f &dst,const Vector2f &src,const float &z)
+	inline void vec2to3(Vector3f &dst,const Vector2f &src,const float z)
 	{
 		dst.x=src.x;
 		dst.y=src.y;
 		dst.z=z;
 	}
 
-	inline Vector3f vec2to3(const Vector2f &src,const float &z)
+	inline Vector3f vec2to3(const Vector2f &src,const float z)
 	{
 		return Vector3f(src.x,src.y,z);
 	}
@@ -322,7 +322,7 @@ namespace hgl
 	 * @param ang 旋转角度
 	 */
 	template<typename T1,typename T2,typename T3>
-	inline void rotate2d(T1 &result,const T2 &source,const T3 &center,const double &ang)
+	inline void rotate2d(T1 &result,const T2 &source,const T3 &center,const double ang)
 	{
 		double as,ac;
 		double nx,ny;

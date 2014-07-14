@@ -1,4 +1,4 @@
-#include<hgl/script/AngelVM.h>
+﻿#include<hgl/script/AngelVM.h>
 #include<angelscript.h>
 
 namespace hgl
@@ -8,12 +8,12 @@ namespace hgl
 	 * @param decl 属性描述（如：“int test”）
 	 * @param off 属性相对偏移地址
 	 */
-	bool AngelObject::MapProperty(const char *decl,int off)
+	bool AngelObject::BindProperty(const char *decl,int off)
 	{
 		if(engine->RegisterObjectProperty(obj_name,decl,off)>=0)
 			return(true);
 
-		LOG_ERROR("AngelObject::MapProperty(ObjectName=\""+obj_name+"\" property decl: "+UTF8String(decl));
+		LOG_ERROR("AngelObject::BindProperty(ObjectName=\""+obj_name+"\" property decl: "+UTF8String(decl));
 		return(false);
 	}
 
@@ -24,7 +24,7 @@ namespace hgl
 	 * @param get 阵列读取函数，如："int get(uint)"
 	 * @param set 阵列写入函数，如："void set(uint,int)"
 	 */
-	bool AngelObject::MapArray(const char *decl_type,const char *decl_name,void *get,void *set)
+	bool AngelObject::BindArray(const char *decl_type,const char *decl_name,void *get,void *set)
 	{
 		{
 			UTF8String get_func=UTF8String(decl_type)+UTF8String(" get_")+UTF8String(decl_name)+UTF8String("(uint)");
@@ -48,7 +48,7 @@ namespace hgl
 	 * @param decl 函数描述(如："bool create(const string &,int,int)")
 	 * @param addr 函数地址
 	 */
-	bool AngelObject::MapFunc(const char *decl,void *addr)
+	bool AngelObject::BindFunc(const char *decl,void *addr)
 	{
 #if ANGELSCRIPT_VERSION>=22700
 		asSFuncPtr p(asCALL_THISCALL);
@@ -65,7 +65,7 @@ namespace hgl
 		if(engine->RegisterObjectMethod(obj_name,decl,p,asCALL_THISCALL)>=0)
 			return(true);
 
-		LOG_ERROR("AngelObject::MapFunc(ObjectName=\""+obj_name+"\" func decl: "+UTF8String(decl));
+		LOG_ERROR("AngelObject::BindFunc(ObjectName=\""+obj_name+"\" func decl: "+UTF8String(decl));
 		return(false);
 	}
 }//namespace hgl

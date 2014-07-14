@@ -1,10 +1,10 @@
-﻿#include<hgl/type/BaseString.h>
-#include<hgl/type/IndexData.h>
+#include<hgl/type/BaseString.h>
+#include<hgl/type/Map.h>
 #include<hgl/Info.h>
 
 namespace hgl
 {
-	IndexData<OSString,OSString> ExpendString;
+	Map<OSString,OSString> ExpendString;
 
 	void SetExpendString(const OSString &flag,const OSString &str)
 	{

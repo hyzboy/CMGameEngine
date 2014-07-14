@@ -11,7 +11,7 @@ namespace hgl
 	{
 		namespace
 		{
-			dfs::ErrorCode dfsDeleteFile(DataInputStream *dis,DataOutputStream *dos,const int64 &filename)
+			dfs::ErrorCode dfsDeleteFile(DataInputStream *dis,DataOutputStream *dos,const int64 filename)
 			{
 				if(!dos->WriteInt32(tdsDeleteFile))RETURN_ERROR(dfs::ecSocketSendError);
 				if(!dos->WriteInt64(filename))RETURN_ERROR(dfs::ecSocketSendError);
@@ -38,7 +38,7 @@ namespace hgl
 		 * @param file_id 文件索引
 		 * @return 是否成功
 		 */
-		bool dfsClientFile::DeleteFile(const int64 &file_id)
+		bool dfsClientFile::DeleteFile(const int64 file_id)
 		{
 			FileTeam *ft=file_team+(file_id%team_number);
 

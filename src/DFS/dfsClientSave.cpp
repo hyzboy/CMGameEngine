@@ -26,7 +26,7 @@ namespace hgl
 
 			public:
 
-				dfsOutputStream(dfsClientSaveThread *c,dfs::FileBlock *fb,const uint32 &a)
+				dfsOutputStream(dfsClientSaveThread *c,dfs::FileBlock *fb,const uint32 a)
 				{
 					cst=c;
 					block=fb;
@@ -72,7 +72,7 @@ namespace hgl
 		 * @param attrib 属性
 		 * @return 保存文件用的输出流
 		 */
-		OutputStream *dfsClientFile::SaveFile(const int64 &file_id,const uint32 &attrib)
+		OutputStream *dfsClientFile::SaveFile(const int64 file_id,const uint32 attrib)
 		{
 			FileTeam *ft=file_team+(file_id%team_number);
 

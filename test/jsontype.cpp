@@ -1,5 +1,5 @@
 #include<hgl/type/BaseString.h>
-#include<hgl/type/IndexData.h>
+#include<hgl/type/Map.h>
 #include<hgl/Str.h>
 #include<hgl/io/DataInputStream.h>
 #include<hgl/io/DataOutputStream.h>
@@ -146,8 +146,8 @@ public:
 //
 // // template<typename T> bool WriteFloat(DataOutputStream *dos,const T &value);
 // //
-// // template<> bool WriteFloat<float>(DataOutputStream *dos,const float &value){return dos->WriteFloat(value);};
-// // template<> bool WriteFloat<double>(DataOutputStream *dos,const double &value){return dos->WriteDouble(value);};
+// // template<> bool WriteFloat<float>(DataOutputStream *dos,const float value){return dos->WriteFloat(value);};
+// // template<> bool WriteFloat<double>(DataOutputStream *dos,const double value){return dos->WriteDouble(value);};
 // //
 // // template<typename T> bool ReadFloat(DataInputStream *dis,const T &value);
 // //
@@ -189,7 +189,7 @@ public:
 // {
 // public:
 //
-// 	PropertyBool(const bool &dt)
+// 	PropertyBool(const bool dt)
 // 	{
 // 		this->data=dt;
 // 	}
@@ -267,7 +267,7 @@ public:
 // // 	}
 // };
 
-template<typename STR_TYPE> class PropertyList:public IndexObject<STR_TYPE,PropertyValue<STR_TYPE> >
+template<typename STR_TYPE> class PropertyList:public MapObject<STR_TYPE,PropertyValue<STR_TYPE> >
 {
 public:
 

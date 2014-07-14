@@ -1,12 +1,12 @@
 ﻿#include<iostream>
 #include<stdlib.h>
 #include<hgl/type/Set.h>
-#include<hgl/type/IndexData.h>
+#include<hgl/type/Map.h>
 
 using namespace hgl;
 using namespace std;
 
-void out_id(IndexData<int,int> &ii)
+void out_id(Map<int,int> &ii)
 {
 	const int count=ii.GetCount();
 	Pair<int,int> **p=ii.GetDataList();
@@ -27,7 +27,7 @@ int main(int,char **)
 	int index;
 	int value;
 	Set<int> si;
-	IndexData<int,int> ii;
+	Map<int,int> ii;
 
 	srand(time(nullptr));
 

@@ -2,7 +2,7 @@
 #define DevilEnumH
 
 #include<hgl/type/BaseString.h>
-#include<hgl/type/IndexData.h>
+#include<hgl/type/Map.h>
 namespace hgl
 {
 	/**
@@ -20,7 +20,7 @@ namespace hgl
 
 	template<typename T>class DevilEnumTypedef:public DevilEnum										///枚举数据类型定义基类
 	{
-		IndexData<UTF16String,T> Items;																///<枚举项名字
+		Map<UTF16String,T> Items;																///<枚举项名字
 
 	public:
 

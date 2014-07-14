@@ -1,4 +1,4 @@
-#include<hgl/script/AngelVM.h>
+﻿#include<hgl/script/AngelVM.h>
 #include<angelscript.h>
 #include<hgl/thread/ThreadMutex.h>
 #include<hgl/LogInfo.h>
@@ -127,7 +127,7 @@ namespace hgl
 	 * @param value_address 属性地址
 	 * @return 是否映射成功
 	 */
-	bool AngelVM::MapProperty(const char *value_name,void *value_address)
+	bool AngelVM::BindProperty(const char *value_name,void *value_address)
 	{
 		if(!engine||!value_name||!value_address)
 			return(false);
@@ -147,7 +147,7 @@ namespace hgl
 	 * @param func_address 函数地址
 	 * @return 是否映射成功
 	 */
-	bool AngelVM::MapFunc(const char *func_name,void *func_address)
+	bool AngelVM::BindFunc(const char *func_name,void *func_address)
 	{
 		if(!engine||!func_name||!(*func_name)||!func_address)
 			return(false);

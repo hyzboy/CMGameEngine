@@ -8,7 +8,7 @@ namespace hgl
 {
 	namespace dfs
 	{
-		dfsClientSaveThread::dfsClientSaveThread(const UTF8String &gn,const UTF8String &i,const uint &p,const uint64 &n)
+		dfsClientSaveThread::dfsClientSaveThread(const UTF8String &gn,const UTF8String &i,const uint p,const uint64 n)
 		{
 			group_name=gn;
 

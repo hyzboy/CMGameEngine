@@ -2,7 +2,7 @@
 #define HGL_ANGELVM_INCLUDE
 
 #include<hgl/script/VM.h>
-#include<hgl/type/IndexData.h>
+#include<hgl/type/Map.h>
 
 /**
  * AngelVM基于AngelScript实现,根据zlib授权协议取得免费授权.授权协议参见:doc/license/AngelCode Scripting Library.txt
@@ -121,9 +121,9 @@ namespace hgl
 			obj_name=n;
 		}
 
-		bool MapProperty(const char *,int);
-		bool MapArray(const char *,const char *,void *get=nullptr,void *set=nullptr);
-		bool MapFunc(const char *,void *);
+		bool BindProperty(const char *,int);
+		bool BindArray(const char *,const char *,void *get=nullptr,void *set=nullptr);
+		bool BindFunc(const char *,void *);
 	};//class AngelObject
 
 #define DEF_ANGEL_OBJECT(script_name,name)	static void Construct##script_name(name *this_pointer)	\
@@ -153,7 +153,7 @@ namespace hgl
 
 	private:
 
-		IndexObject<UTF8String,AngelModule> MList;
+		MapObject<UTF8String,AngelModule> MList;
 
 		ObjectList<AngelObject> OList;
 
@@ -164,8 +164,8 @@ namespace hgl
 
 		static bool IsSupportMultiThread();															///<是否支持多线程
 
-		bool MapProperty(const char *,void *);														///<映射一个属性
-		bool MapFunc(const char *,void *);															///<映射一个函数
+		bool BindProperty(const char *,void *);														///<映射一个属性
+		bool BindFunc(const char *,void *);															///<映射一个函数
 
 		AngelObject *	CreateObject(const char *,int,void *construct,void *destruct);				///<映射一个对象
 

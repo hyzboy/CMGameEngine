@@ -43,6 +43,11 @@ namespace hgl
 			cur_size=size;
 		}
 
+		void AddLength(size_t size)
+		{
+			SetLength(cur_size+size);
+		}
+
 	public:
 
 		MemBlock()

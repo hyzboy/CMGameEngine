@@ -3,7 +3,7 @@
 
 #include"DevilCommand.h"
 #include<hgl/type/BaseString.h>
-#include<hgl/type/IndexData.h>
+#include<hgl/type/Map.h>
 namespace hgl
 {
 	class DevilScriptModule;
@@ -21,9 +21,9 @@ namespace hgl
 
 		ObjectList<DevilCommand> command;
 
-		IndexData<UTF16String,int> goto_flag;
+		Map<UTF16String,int> goto_flag;
 
-		IndexObject<UTF16String,DevilValueInterface> script_value_list;
+		MapObject<UTF16String,DevilValueInterface> script_value_list;
 
 	public:
 

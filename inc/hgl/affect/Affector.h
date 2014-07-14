@@ -2,7 +2,7 @@
 #define HGL_AFFECTOR_INCLUDE
 
 #include<hgl/affect/AffectorObject.h>
-#include<hgl/type/IndexData.h>
+#include<hgl/type/Map.h>
 namespace hgl
 {
 	/**
@@ -25,7 +25,7 @@ namespace hgl
 
 	protected:	//属性
 
-		IndexObject<UTF16String,AffectorObject> affector_list;										///<影响器列表
+		MapObject<UTF16String,AffectorObject> affector_list;										///<影响器列表
 		ObjectList<AffectorObject> delete_list;														///<待删除列表
 
 	public:		//公开属性

@@ -126,8 +126,8 @@ namespace hgl
 					if(err==nseTryAgain)	//资源临时不可用，仅代表没数据，并不是出错的意思
 						break;
 
-// 					if(err==nseTimeOut)		//超时
-// 					{
+ 					if(err==nseTimeOut)		//超时
+ 					{
 // 						if(to_first)
 // 						{
 // 							to_first=false;
@@ -135,7 +135,7 @@ namespace hgl
 // 						}
 
 						LOG_ERROR(OS_TEXT("SocketInputStream::ReadFully TimeOut,Socket:")+OSString(sock));
-// 					}
+					}
 
 					LOG_ERROR(OS_TEXT("SocketInputStream::ReadFully error,Socket:")+OSString(sock)+OS_TEXT(",error code=")+OSString(err));
 					sock=-1;

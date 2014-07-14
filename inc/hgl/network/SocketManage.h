@@ -1,7 +1,7 @@
 ﻿#ifndef HGL_NETWORK_SOCKET_MANAGE_INCLUDE
 #define HGL_NETWORK_SOCKET_MANAGE_INCLUDE
 
-#include<hgl/type/IndexData.h>
+#include<hgl/type/Map.h>
 #include<hgl/type/Set.h>
 #include<hgl/network/IOSocket.h>
 #include<hgl/thread/ThreadMutex.h>
@@ -55,7 +55,7 @@ namespace hgl
 				}
 			};//struct SocketItem
 
-			typedef IndexData<int,SocketItem> SocketList;
+			typedef Map<int,SocketItem> SocketList;
 
 		protected:
 
@@ -97,7 +97,7 @@ namespace hgl
 			SocketManage(int/*max_connect*/);
 			virtual ~SocketManage();
 
-			SocketManageBase *			GetRecvManage	(){return manage;}							///<返回接收处理
+			SocketManageBase *			GetRecvManage	(){return manage;}						///<返回接收处理
 
 							double		GetTimeOut		()const{return time_out;}					///<取得当前超时设置
 			virtual 		void		SetTimeOut		(double);									///<设置新的超时时间
@@ -110,7 +110,7 @@ namespace hgl
 
 			virtual 		void		Clear			();											///<分离所有连接
 
-							bool		Update			(const double &);
+							bool		Update			(const double );
 
 		public:
 

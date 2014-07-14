@@ -48,11 +48,11 @@ namespace hgl
 			}
 
 			virtual const	double &GetRecvTimeOut()const{return recv_time_out;}					///<取得接收数据超时时间
-			virtual 		void	SetRecvTimeOut(const double &to){recv_time_out=to;}				///<设置接收数据超时时间
+			virtual 		void	SetRecvTimeOut(const double to){recv_time_out=to;}				///<设置接收数据超时时间
 
 		public: //被动事件函数
 
-			virtual int		ProcRecv(int recv_buf_size=-1,const double &ct=0)						///<接收数据事件处理函数
+			virtual int		ProcRecv(int recv_buf_size=-1,const double ct=0)						///<接收数据事件处理函数
 			{
 				last_recv_time=ct;
 				return 0;
@@ -71,7 +71,7 @@ namespace hgl
 
 					const	void	RestartLastRecvTime(){last_recv_time=0;}						///<复位最后获取数据时间
 					const	double	GetLastRecvTime()const{return last_recv_time;}					///<取得最后获取数据时间
-					const	bool	CheckRecvTimeOut(const double &ct)								///<检测是否超时
+					const	bool	CheckRecvTimeOut(const double ct)								///<检测是否超时
 					{
 						if((last_recv_time>0)
 						 &&(last_recv_time+recv_time_out<ct))

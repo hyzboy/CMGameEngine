@@ -1,12 +1,12 @@
-﻿#ifndef HGL_INDEX_DATA_CPP
-#define HGL_INDEX_DATA_CPP
+﻿#ifndef HGL_MAP_CPP
+#define HGL_MAP_CPP
 
 #include<hgl/io/FileInputStream.h>
 #include<hgl/io/FileOutputStream.h>
 namespace hgl
 {
 	template<typename F,typename T,typename DataPair>
-	_IndexData<F,T,DataPair>::_IndexData()
+	_Map<F,T,DataPair>::_Map()
 	{
 		OnSaveToStream=nullptr;
 		OnLoadFromStream=nullptr;
@@ -18,7 +18,7 @@ namespace hgl
 	* @return 数据所在索引，-1表示不存在
 	*/
 	template<typename F,typename T,typename DataPair>
-	int _IndexData<F,T,DataPair>::Find(const F &flag)const
+	int _Map<F,T,DataPair>::Find(const F &flag)const
 	{
 		int left=0,right=data_list.GetCount()-1;				//使用left,right而不使用min,max是为了让代码能够更好的阅读。
 		int mid;
@@ -46,12 +46,12 @@ namespace hgl
 			}
 		}
 
-//		LOG_PROBLEM(OS_TEXT("IndexData::Find,no result."));
+//		LOG_PROBLEM(OS_TEXT("Map::Find,no result."));
 		return(-1);
 	}
 
 	template<typename F,typename T,typename DataPair>
-	bool _IndexData<F,T,DataPair>::FindPos(const F &flag,int &pos)const
+	bool _Map<F,T,DataPair>::FindPos(const F &flag,int &pos)const
 	{
 		int left=0,right=data_list.GetCount()-1;
 		int mid;
@@ -128,13 +128,13 @@ namespace hgl
 			}
 		}
 
-//		LOG_PROBLEM(OS_TEXT("IndexData::FindPos,no result."));
+//		LOG_PROBLEM(OS_TEXT("Map::FindPos,no result."));
 		pos=-1;
 		return(false);
 	}
 
 	template<typename F,typename T,typename DataPair>
-	int _IndexData<F,T,DataPair>::FindByData(const T &data)const
+	int _Map<F,T,DataPair>::FindByData(const T &data)const
 	{
 		const int count=data_list.GetCount();
 
@@ -158,7 +158,7 @@ namespace hgl
     * @return 新创建好的数据结构
 	*/
 	template<typename F,typename T,typename DataPair>
-	DataPair *_IndexData<F,T,DataPair>::Add(const F &flag,const T &data)
+	DataPair *_Map<F,T,DataPair>::Add(const F &flag,const T &data)
 	{
 	    DataPair *ds=data_pool.Acquire();
 
@@ -180,7 +180,7 @@ namespace hgl
 	* @return 创建好的数据
 	*/
 	template<typename F,typename T,typename DataPair>
-	T &_IndexData<F,T,DataPair>::Add(const F &flag)
+	T &_Map<F,T,DataPair>::Add(const F &flag)
 	{
 	    DataPair *ds=data_pool.Acquire();
 
@@ -200,7 +200,7 @@ namespace hgl
 	* @param obj 数据
 	*/
 	template<typename F,typename T,typename DataPair>
-	void _IndexData<F,T,DataPair>::Add(DataPair *obj)
+	void _Map<F,T,DataPair>::Add(DataPair *obj)
 	{
 		data_list.Insert(FindPos(obj->first),obj);
 	}
@@ -212,7 +212,7 @@ namespace hgl
 	* @return 是否取得成功
 	*/
 	template<typename F,typename T,typename DataPair>
-	bool _IndexData<F,T,DataPair>::Get(const F &flag,T &data) const
+	bool _Map<F,T,DataPair>::Get(const F &flag,T &data) const
 	{
 		int index=Find(flag);
 
@@ -231,7 +231,7 @@ namespace hgl
 	* @return 是否取得成功
 	*/
 	template<typename F,typename T,typename DataPair>
-	bool _IndexData<F,T,DataPair>::Get(int index,F &f,T &t) const
+	bool _Map<F,T,DataPair>::Get(int index,F &f,T &t) const
 	{
 		if(index<0||index>=data_list.GetCount())return(false);
 
@@ -250,7 +250,7 @@ namespace hgl
 	* @return 是否取得成功
 	*/
 	template<typename F,typename T,typename DataPair>
-	bool _IndexData<F,T,DataPair>::GetIndex(int index,F &f) const
+	bool _Map<F,T,DataPair>::GetIndex(int index,F &f) const
 	{
 		if(index<0||index>=data_list.GetCount())return(false);
 
@@ -268,7 +268,7 @@ namespace hgl
 	* @return 是否取得成功
 	*/
 	template<typename F,typename T,typename DataPair>
-	bool _IndexData<F,T,DataPair>::GetData(int index,T &t) const
+	bool _Map<F,T,DataPair>::GetData(int index,T &t) const
 	{
 		if(index<0||index>=data_list.GetCount())return(false);
 
@@ -287,7 +287,7 @@ namespace hgl
 	 * @param t 数据
 	 */
 	template<typename F,typename T,typename DataPair>
-	bool _IndexData<F,T,DataPair>::SetDataBySerial(int index,T &t)
+	bool _Map<F,T,DataPair>::SetDataBySerial(int index,T &t)
 	{
 		if(index<0||index>=data_list.GetCount())return(false);
 
@@ -303,7 +303,7 @@ namespace hgl
 	* @return 是否成功
 	*/
 	template<typename F,typename T,typename DataPair>
-	bool _IndexData<F,T,DataPair>::Delete(const F &flag,T &data)
+	bool _Map<F,T,DataPair>::Delete(const F &flag,T &data)
 	{
 		int index=Find(flag);
 
@@ -325,7 +325,7 @@ namespace hgl
 	* @return 是否成功
 	*/
 	template<typename F,typename T,typename DataPair>
-	bool _IndexData<F,T,DataPair>::DeleteByIndex(const F &flag)
+	bool _Map<F,T,DataPair>::DeleteByIndex(const F &flag)
 	{
 		int index=Find(flag);
 
@@ -343,7 +343,7 @@ namespace hgl
 	* @return 是否成功
 	*/
 	template<typename F,typename T,typename DataPair>
-	bool _IndexData<F,T,DataPair>::DeleteByData(const T &data)
+	bool _Map<F,T,DataPair>::DeleteByData(const T &data)
 	{
 		int index=FindByData(data);
 
@@ -361,7 +361,7 @@ namespace hgl
 	* @return 是否成功
 	*/
 	template<typename F,typename T,typename DataPair>
-	bool _IndexData<F,T,DataPair>::DeleteBySerial(int index)
+	bool _Map<F,T,DataPair>::DeleteBySerial(int index)
 	{
 		if(index<0
 		 ||index>=data_list.GetCount())return(false);
@@ -379,7 +379,7 @@ namespace hgl
 	 * @return 是否成功
 	 */
 	template<typename F,typename T,typename DataPair>
-	bool _IndexData<F,T,DataPair>::DeleteBySerial(int start,int number)
+	bool _Map<F,T,DataPair>::DeleteBySerial(int start,int number)
 	{
 		DataPair **dp=data_list.GetData()+start;
 
@@ -398,7 +398,7 @@ namespace hgl
 	 * @param data 新的数据内容
 	 */
 	template<typename F,typename T,typename DataPair>
-	void _IndexData<F,T,DataPair>::Update(const F &flag,const T &data)
+	void _Map<F,T,DataPair>::Update(const F &flag,const T &data)
 	{
 		int result;
 
@@ -422,7 +422,7 @@ namespace hgl
 	* @param return 是否更改成功
 	*/
 	template<typename F,typename T,typename DataPair>
-	bool _IndexData<F,T,DataPair>::Change(const F &flag,const T &data)
+	bool _Map<F,T,DataPair>::Change(const F &flag,const T &data)
 	{
 		int result=Find(flag);
 
@@ -438,7 +438,7 @@ namespace hgl
 	* 清除所有数据
 	*/
 	template<typename F,typename T,typename DataPair>
-	void _IndexData<F,T,DataPair>::Clear()
+	void _Map<F,T,DataPair>::Clear()
 	{
 		data_pool.ClearAll();
 		data_list.Clear();
@@ -448,7 +448,7 @@ namespace hgl
 	* 清除所有数据，但不释放内存
 	*/
 	template<typename F,typename T,typename DataPair>
-	void _IndexData<F,T,DataPair>::ClearData()
+	void _Map<F,T,DataPair>::ClearData()
 	{
 		data_pool.ReleaseAll();
 		data_list.ClearData();
@@ -460,7 +460,7 @@ namespace hgl
 	* @return 是否保存成功
 	*/
 	template<typename F,typename T,typename DataPair>
-	bool _IndexData<F,T,DataPair>::SaveToStream(io::DataOutputStream *str)
+	bool _Map<F,T,DataPair>::SaveToStream(io::DataOutputStream *str)
 	{
 		if(!str||OnSaveToStream==nullptr)return(false);
 
@@ -484,7 +484,7 @@ namespace hgl
 	* @return 是否加载成功
 	*/
 	template<typename F,typename T,typename DataPair>
-	bool _IndexData<F,T,DataPair>::LoadFromStream(io::DataInputStream *str)
+	bool _Map<F,T,DataPair>::LoadFromStream(io::DataInputStream *str)
 	{
 		Clear();
 
@@ -518,7 +518,7 @@ namespace hgl
 	* @return 是否保存成功
 	*/
 	template<typename F,typename T,typename DataPair>
-	bool _IndexData<F,T,DataPair>::SaveToFile(const os_char *filename)
+	bool _Map<F,T,DataPair>::SaveToFile(const os_char *filename)
 	{
 		io::FileOutputStream fs;
 
@@ -534,7 +534,7 @@ namespace hgl
 	* @return 是否加载成功
 	*/
 	template<typename F,typename T,typename DataPair>
-	bool _IndexData<F,T,DataPair>::LoadFromFile(const os_char *filename)
+	bool _Map<F,T,DataPair>::LoadFromFile(const os_char *filename)
 	{
 		io::FileInputStream fs;
 
@@ -545,11 +545,11 @@ namespace hgl
 	}
 
 	template<typename F,typename T,typename DataPair>
-	void _IndexData<F,T,DataPair>::operator=(const _IndexData<F,T,DataPair> &ftd)
+	void _Map<F,T,DataPair>::operator=(const _Map<F,T,DataPair> &ftd)
 	{
 		Clear();
 
 		data_list=ftd.data_list;
 	}
 }//namespace hgl
-#endif//HGL_INDEX_DATA_CPP
+#endif//HGL_MAP_CPP

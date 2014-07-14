@@ -1,4 +1,4 @@
-#include<hgl/Console.h>
+﻿#include<hgl/Console.h>
 #include<hgl/script/AngelVM.h>
 #include<unistd.h>
 #include<string>
@@ -60,8 +60,8 @@ HGL_CONSOLE_MAIN_FUNC()
 
 	AngelObject *ao=CreateAngelObject((&vm),TestOut,TestObject);
 
-	ao->MapObjectProperty("int c",TestObject,c);
-	ao->MapObjectFunc("void put_str(int,int)",TestObject,put_str);
+	ao->BindObjectProperty("int c",TestObject,c);
+	ao->BindObjectFunc("void put_str(int,int)",TestObject,put_str);
 
 	AngelModule *module=vm.GetModule();
 

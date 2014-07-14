@@ -57,7 +57,7 @@ namespace hgl
 	//特例化HASH函数，使用传入的值算出属于那一组
 	namespace hgl	//注：在某些编译器如GCC 4.7.2中，出现名字空间无法正确识别的情况下，请将此特例化函数定义在hgl名字空间内
 	{
-		template<> int DataTeam<TestData,int>::FlagToTeam(const int &id)
+		template<> int DataTeam<TestData,int>::FlagToTeam(const int id)
 		{
 			return id&0xFF;
 		}

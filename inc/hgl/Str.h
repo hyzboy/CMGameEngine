@@ -1,4 +1,4 @@
-﻿#ifndef HGL_STR_TEMPLATE_INCLUDE
+#ifndef HGL_STR_TEMPLATE_INCLUDE
 #define HGL_STR_TEMPLATE_INCLUDE
 
 #include<math.h>
@@ -1586,6 +1586,8 @@ namespace hgl
 	{
 		const T name[]={'K','M','G','T','P','E','Z','Y',0};
 
+		//ps2014,现有磁带机单机柜容量百PB，按组破EB。以每十年破一个的速度，2034年将接近使用Y。届时将按条件扩大。
+
 		double new_value=value;
 		int pos=0;
 
@@ -1777,7 +1779,7 @@ namespace hgl
 	 * @param num 进制
 	 * @return 解析出来的值
 	 */
-	inline int parse_dec_number_char(const int &ch)
+	inline int parse_dec_number_char(const int ch)
 	{
 		if(ch>='0'&&ch<='9')
 			return ch-'0';
@@ -1791,7 +1793,7 @@ namespace hgl
 	 * @param num 进制
 	 * @return 解析出来的值
 	 */
-	inline int parse_number_char(const int &ch,int num)
+	inline int parse_number_char(const int ch,int num)
 	{
 		if(ch>='0'&&ch<='9')
 			return ch-'0';

@@ -1,8 +1,8 @@
-﻿#ifndef HGL_DB_TABLE_DESC_INCLUDE
+#ifndef HGL_DB_TABLE_DESC_INCLUDE
 #define HGL_DB_TABLE_DESC_INCLUDE
 
 #include<hgl/db/FieldDesc.h>
-#include<hgl/type/IndexData.h>
+#include<hgl/type/Map.h>
 namespace hgl
 {
 	namespace db
@@ -17,9 +17,9 @@ namespace hgl
 			ObjectList<FieldDesc> field_list;														///<字段列表
 			FieldDesc *primary_field;																///<主字段
 
-			IndexData<UTF8String,FieldDesc *> field_by_name;										///<字段列表
+			Map<UTF8String,FieldDesc *> field_by_name;										///<字段列表
 
-			IndexData<UTF8String,UTF8String> extra_attrib;											///<额外属性
+			Map<UTF8String,UTF8String> extra_attrib;											///<额外属性
 
 		public:
 
@@ -61,7 +61,7 @@ namespace hgl
 			}
 		};//class TableDesc
 
-		typedef IndexObject<UTF8String,TableDesc> TableDescList;									///<表描述列表
+		typedef MapObject<UTF8String,TableDesc> TableDescList;									///<表描述列表
 
 		bool LoadTableDesc(TableDescList &table_desc_list,char *,int);								///<从XML数据中加载数据表结构描述列表
 		bool LoadTableDesc(TableDescList &table_desc_list,const OSString &filename);				///<从XML文件中加载数据表结构描述列表

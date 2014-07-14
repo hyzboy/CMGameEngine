@@ -60,20 +60,20 @@ namespace hgl
 			virtual const int  Get(char16_t *,	int	)const{return(false);}
 			virtual const int  Get(void *,		int	)const{return(false);}
 
-			virtual const bool Set(const bool &			){return(false);}
+			virtual const bool Set(const bool 			){return(false);}
 
-			virtual const bool Set(const int8 &			){return(false);}
-			virtual const bool Set(const int16 &		){return(false);}
-			virtual const bool Set(const int32 &		){return(false);}
-			virtual const bool Set(const int64 &		){return(false);}
+			virtual const bool Set(const int8 			){return(false);}
+			virtual const bool Set(const int16 		){return(false);}
+			virtual const bool Set(const int32 		){return(false);}
+			virtual const bool Set(const int64 		){return(false);}
 
-			virtual const bool Set(const uint8 &		){return(false);}
-			virtual const bool Set(const uint16 &		){return(false);}
-			virtual const bool Set(const uint32 &		){return(false);}
-			virtual const bool Set(const uint64 &		){return(false);}
+			virtual const bool Set(const uint8 		){return(false);}
+			virtual const bool Set(const uint16 		){return(false);}
+			virtual const bool Set(const uint32 		){return(false);}
+			virtual const bool Set(const uint64 		){return(false);}
 
-			virtual const bool Set(const float &		){return(false);}
-			virtual const bool Set(const double &		){return(false);}
+			virtual const bool Set(const float 		){return(false);}
+			virtual const bool Set(const double 		){return(false);}
 
 			virtual const bool Set(const UTF16String &	){return(false);}
 			virtual const bool Set(const UTF8String &	){return(false);}

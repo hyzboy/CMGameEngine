@@ -1,7 +1,7 @@
 #ifndef HGL_CDB_TABLE_INCLUDE
 #define HGL_CDB_TABLE_INCLUDE
 
-#include<hgl/type/IndexData.h>
+#include<hgl/type/Map.h>
 #include<hgl/type/StringList.h>
 #include<hgl/db/CDBField.h>
 namespace hgl
@@ -24,7 +24,7 @@ namespace hgl
 
 		public:	//属性
 
-			IndexObject<UTF16String,CDBField> Fields;												///<字段列表
+			MapObject<UTF16String,CDBField> Fields;												///<字段列表
 
 			const int GetDataCount()const{return data_count;}										///<取得数据数量
 

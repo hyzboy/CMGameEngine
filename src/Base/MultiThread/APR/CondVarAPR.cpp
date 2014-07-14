@@ -1,10 +1,10 @@
-﻿#include<hgl/thread/CondVar.h>
+#include<hgl/thread/CondVar.h>
 #include<apr_thread_cond.h>
 #include<hgl/thread/ThreadMutex.h>
 
 namespace hgl
 {
-	void GetWaitTime(struct timespec &abstime,const double &t);
+	void GetWaitTime(struct timespec &abstime,const double t);
 
 	class CondVarAPR:public CondVar
 	{

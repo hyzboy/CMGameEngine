@@ -1,4 +1,4 @@
-﻿#ifndef HGL_PLUGIN_INCLUDE
+#ifndef HGL_PLUGIN_INCLUDE
 #define HGL_PLUGIN_INCLUDE
 //--------------------------------------------------------------------------------------------------
 #include<hgl/type/DataType.h>
@@ -34,7 +34,7 @@ namespace hgl
 
 #ifndef __MAKE_PLUGIN__
 #include<hgl/type/BaseString.h>
-#include<hgl/type/IndexData.h>
+#include<hgl/type/Map.h>
 #include<hgl/ExternalModule.h>
 #include<hgl/LogInfo.h>
 #include<string.h>
@@ -119,7 +119,7 @@ namespace hgl
 	};//template<typename T> struct PlugInFlagData
 
 	template<typename T>
-	T *CheckPlugIn(_IndexObject<OSString,T,PlugInFlagData<T *> > &PIM,const OSString &front,uint ver,const OSString &name)
+	T *CheckPlugIn(_MapObject<OSString,T,PlugInFlagData<T *> > &PIM,const OSString &front,uint ver,const OSString &name)
 	{
 		T *iface;
 
@@ -162,7 +162,7 @@ namespace hgl
 
 	void RegistryPIMClear(void (*)());		//注册清除函数
 
-	#define	PlugInManage(name,str_name,ver) static CusIndexObject<OSString,name##PlugInInterface,PlugInFlagData<name##PlugInInterface *> > name##Interface;	\
+	#define	PlugInManage(name,str_name,ver) static CusMapObject<OSString,name##PlugInInterface,PlugInFlagData<name##PlugInInterface *> > name##Interface;	\
 											\
 											void name##PlugInClear()	\
 											{	\

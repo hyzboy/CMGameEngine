@@ -1,4 +1,4 @@
-﻿#ifndef HGL_TIME_INCLUDE
+#ifndef HGL_TIME_INCLUDE
 #define HGL_TIME_INCLUDE
 
 #include<hgl/type/DataType.h>
@@ -155,7 +155,7 @@ namespace hgl
 	/**
 	 * 根据当前时间，转换出Date/Time两个结构
 	 */
-	void ToDateTime(Date &,Time &,const double &cur_time=0);
+	void ToDateTime(Date &,Time &,const double cur_time=0);
 
 	/**
 	 * 根据日期和时间，转换出以秒为单位的时间值
@@ -168,8 +168,8 @@ namespace hgl
 	 * @param micro_second 微秒(1/1000秒)
 	 * @return 转换出的值
 	 */
-	double FromDateTime(const int &year,const int &month,const int &day,
-						const int &hour,const int &minute=0,const int &second=0,const int &micro_second=0,const int &gmt_off=0);
+	double FromDateTime(const int year,const int month,const int day,
+						const int hour,const int minute=0,const int second=0,const int micro_second=0,const int gmt_off=0);
 
 	/**
 	 * 根据Date/Time转换出以秒为单位的时间值
