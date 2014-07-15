@@ -11,7 +11,7 @@
 	#elif HGL_OS == HGL_OS_MacOSX
 		#include<hgl/thread/atomic/AtomicOSX.h>
 	#elif defined(__GNUC__)
-		#if ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 1) || __GNUC__ > 4) && (defined(__x86_64__) || defined(__i386__))
+		#if ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 1) || __GNUC__ > 4) && (defined(__x86_64__) || defined(__i386__) || defined(__powerpc__))
 			#include<hgl/thread/atomic/AtomicGNU.h>
 		#else
 			#include<hgl/thread/atomic/AtomicAPR.h>
