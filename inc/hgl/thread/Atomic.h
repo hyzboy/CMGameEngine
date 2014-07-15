@@ -22,6 +22,8 @@
 //ps.1：老旧的Linux/32bit下原子仅支持24位，但我们设定为不支持旧的Linux
 //ps.2：使用GCC 4.1内置宏实现的AtomicGNU的不支持doubel型处理，如需支持，则尽可能不要用atom_double
 
+//ps..........GCC4.7/4.8/4.9下如果使用c++11的atomic会造成一些valgrind-memcheck报错，所以暂不使用。待valgrind更新
+
 namespace hgl
 {
 	#if (HGL_OS == HGL_OS_Windows)//&&(!defined(HGL_ATOMIC_CPP11))
