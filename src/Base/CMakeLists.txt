@@ -67,7 +67,6 @@ SOURCE_GROUP("Application" FILES ${BASE_APPLICATION_SOURCE} ${BASE_OS_APPLICATIO
 
 SET(BASE_TYPE_SOURCE
 	DataType/DataType.cpp
-	DataType/int128.cpp
 	DataType/BitArray.cpp
 	DataType/Color.cpp
 	DataType/Color3f.cpp
