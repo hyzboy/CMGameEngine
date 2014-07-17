@@ -397,39 +397,39 @@ namespace hgl
 			{
 				in_addr_t saddr=inet_addr(name);
 
-// #if HGL_OS == HGL_OS_Windows
-// 				hostent *HostEntry;
-//
-// 				if(saddr==INADDR_NONE)HostEntry=gethostbyname(name);
-// 								 else HostEntry=gethostbyaddr((char *)&saddr,sizeof(in_addr_t),AF_INET);
-//
-// 				if(HostEntry)addr->sin_addr.s_addr=((in_addr *)*HostEntry->h_addr_list)->s_addr;
-// 						else addr->sin_addr.s_addr=saddr;
-// #else
-				//由于gethostbyaddr_r和gethostbyname_r非线程安全，所以暂时注释掉，仅支持ip地址
-// 				hostent hostbuf;
-// 				hostent *res=nullptr;
-// 				char buf[8192];
-// 				int err=0;
-//
-// 				if(saddr==INADDR_NONE)
-// 				{
-// 					gethostbyname_r(name,
-// 									&hostbuf,buf,sizeof(buf),
-// 									&res,&err);
-// 				}
-// 				else
-// 				{
-// 					gethostbyaddr_r((char *)&saddr,sizeof(in_addr_t),AF_INET,
-// 									&hostbuf,buf,sizeof(buf),
-// 									&res,&err);
-// 				}
-//
-// 				if(res)
-// 					addr->sin_addr.s_addr=((in_addr *)*(hostbuf.h_addr_list))->s_addr;
-// 				else
+#if HGL_OS == HGL_OS_Windows
+				hostent *HostEntry;
+
+				if(saddr==INADDR_NONE)HostEntry=gethostbyname(name);
+								 else HostEntry=gethostbyaddr((char *)&saddr,sizeof(in_addr_t),AF_INET);
+
+				if(HostEntry)addr->sin_addr.s_addr=((in_addr *)*HostEntry->h_addr_list)->s_addr;
+						else addr->sin_addr.s_addr=saddr;
+#else
+				//手册讲gethostbyaddr_r和gethostbyname_r线程安全，但valgrind-helgrind会报错
+				hostent hostbuf;
+				hostent *res=nullptr;
+				char buf[8192];
+				int err=0;
+
+				if(saddr==INADDR_NONE)
+				{
+					gethostbyname_r(name,
+									&hostbuf,buf,sizeof(buf),
+									&res,&err);
+				}
+				else
+				{
+					gethostbyaddr_r((char *)&saddr,sizeof(in_addr_t),AF_INET,
+									&hostbuf,buf,sizeof(buf),
+									&res,&err);
+				}
+
+				if(res)
+					addr->sin_addr.s_addr=((in_addr *)*(hostbuf.h_addr_list))->s_addr;
+				else
 					addr->sin_addr.s_addr=saddr;
-// #endif//HGL_OS == HGL_OS_Windows
+#endif//HGL_OS == HGL_OS_Windows
 
 				addr->sin_family    =AF_INET;
 				addr->sin_port      =htons(port);
