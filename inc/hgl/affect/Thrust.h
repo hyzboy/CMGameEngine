@@ -1,8 +1,8 @@
-#ifndef HGL_AFFECTOR_THRUST_INCLUDE
+﻿#ifndef HGL_AFFECTOR_THRUST_INCLUDE
 #define HGL_AFFECTOR_THRUST_INCLUDE
 
 #include<hgl/affect/AffectorObject.h>
-#include<hgl/type/Vertex2.h>
+#include<hgl/VectorMath.h>
 namespace hgl
 {
 	namespace affect
@@ -10,48 +10,84 @@ namespace hgl
 		class Timer;
 
 		/**
-		* 2D推力影响器<br>
-		* 一种提供给2D游戏用的推力模拟影响器，注意它并不符合物理学。
+		* 推力影响器<br>
+		* 一种提供给游戏用的推力模拟影响器，注意它并不符合物理学。
 		*/
-		class Thrust2D:public AffectorObject														///2D推力影响器
+		template<typename T>
+		class Thrust:public AffectorObject															///推力影响器
 		{
 			Timer *time;																			///<时间记录器
 
-			double power;																			///<力量
-			double dec_power;																		///<力量衰减幅度
+			float power;																			///<力量
+			float dec_power;																		///<力量衰减幅度
 
-			Vertex2f dir;																			///<力量方向
+			T dir;																					///<力量方向
 
-			Vertex2f dir_power;																		///<方向推力(结果)
+			T dir_power;																			///<方向推力(结果)
 
 		private:
 
-			double GetPower(){return power;}
-			double GetDecPower(){return dec_power;}
-			Vertex2f GetDir(){return dir;}
-			Vertex2f GetDirPower(){return dir_power;}
+			float GetPower(){return power;}
+			float GetDecPower(){return dec_power;}
+			T GetDir(){return dir;}
+			T GetDirPower(){return dir_power;}
 
-			void SetPower(double p){power=p;}
-			void SetDecPower(double p){dec_power=p;}
-			void SetDir(Vertex2f v){dir=v;}
-
-		public:
-
-			Property<double> Power;																	///<力量
-			Property<double> DecPower;																///<力量衰减幅度(每秒)
-			Property<Vertex2f> Direction;															///<推力方向
-
-			Property<Vertex2f> DirectionPower;														///<方向推力(结果,只读)
+			void SetPower(float p){power=p;}
+			void SetDecPower(float p){dec_power=p;}
+			void SetDir(const T &v){dir=v;}
 
 		public:
 
-			Thrust2D(Timer *,const Vertex2f &v=Vertex2f(0,0),double ss=1.0f,double ds=0.1f);		///<本类构造函数
-			virtual ~Thrust2D()HGL_DEFAULT_MEMFUNC;
+			Property<float> Power;																	///<力量
+			Property<float> DecPower;																///<力量衰减幅度(每秒)
+			Property<T> Direction;																	///<推力方向
 
-			virtual const char16_t *GetClassName(){returnu"Thrust2D";}								///<取得类名
+			Property<T> DirectionPower;																///<方向推力(结果,只读)
 
-			void Update();
-		};//class Thrust2D
+		public:
+
+			/**
+			* 推力影响器构造函数
+			* @param t 时间记录器
+			* @param v 推力方向
+			* @param ss 起始力量
+			* @param ds 每秒力量衰减幅度
+			*/
+			Thrust::Thrust(Timer *t,const T &v,double ss=1.0f,double ds=0.1f)
+			{
+				time=t;
+
+				power=ss;
+				dec_power=ds;
+
+				dir=v;
+
+				hglSetProperty(Power,		this,Thrust2D::GetPower,	Thrust2D::SetPower);
+				hglSetProperty(DecPower,	this,Thrust2D::GetDecPower,	Thrust2D::SetDecPower);
+				hglSetProperty(Direction,	this,Thrust2D::GetDir,		Thrust2D::SetDir);
+
+				hglSetPropertyRead(DirectionPower,this,Thrust2D::GetDirPower);
+			}
+
+			virtual ~Thrust()HGL_DEFAULT_MEMFUNC;
+
+			virtual const char16_t *GetClassName(){return u"Thrust";}								///<取得类名
+
+			virtual void Update()
+			{
+				if(!time)return;
+				if(power<=0)return;
+
+				double gap=time->LastGapTime;
+
+				dir_power=dir*(power*gap);			//计算当前时间所取得的推力
+
+				power-=power*(dec_power*gap);		//力量衰减
+			}
+		};//class Thrust
+
+		using Thrust2f=Thrust<Vector2f>;
+		using Thrust3f=Thrust<Vector3f>;
 	}//namespace affect
 }//namespace hgl
 #endif//HGL_AFFECTOR_THRUST_INCLUDE
