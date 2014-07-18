@@ -4,8 +4,8 @@
 #define HGL_COMPILER_NAME		OS_TEXT("GNU C/C++")
 #define HGL_LIB_COMPILER_NAME	OS_TEXT("GCC")
 
-#if (__GNUC__<4)||(__GNUC__==4&&__GNUC_MINOR__<1)
-	#error Please upgrade your compiler or development tools to GNU C/C++ 4.1 or later
+#if (__GNUC__<4)||(__GNUC__==4&&__GNUC_MINOR__<7)
+	#error Please upgrade your compiler or development tools to GNU C/C++ 4.7 or later
 #else
 
 	#if __GNUC__ == 4
