@@ -12,6 +12,9 @@ namespace hgl
 	protected:
 
 		uint start,end;
+
+	public:
+
 		BitArray bit;
 
 	public:
@@ -22,12 +25,13 @@ namespace hgl
 			end=e;
 		}
 
-		Switch(Switch *sw):bit(sw->end-sw->start+1)
+		Switch(const Switch *sw):Switch(sw->start,sw->end)
 		{
-			start	=sw->start;
-			end		=sw->end;
-
 			bit		=sw->bit;
+		}
+
+		Switch(const Switch &sw):Switch(&sw)
+		{
 		}
 
 		virtual ~Switch()
@@ -109,14 +113,14 @@ namespace hgl
 
 		Switch& operator <<(const E el)
 		{
-			bit.WritePos(el-Start,true);
+			bit.WritePos(el-start,true);
 
 			return *this;
 		}
 
 		Switch& operator >>(const E el)
 		{
-			bit.WritePos(el-Start,false);
+			bit.WritePos(el-start,false);
 
 			return *this;
 		}
@@ -128,7 +132,7 @@ namespace hgl
 
 		bool Check(const E el)const
 		{
-			return bit.ReadPos(el-Start);
+			return bit.ReadPos(el-start);
 		}
 
 		bool operator == (const Switch &rhs) const
@@ -137,9 +141,6 @@ namespace hgl
 		}
 
     	bool operator !=(const Switch& rhs) const {return !operator==(rhs);}
-
-		bool SaveToStream	(io::DataOutputStream *str){return bit.SaveToStream(str);}				///<保存当前位阵列数据到流
-		bool LoadFromStream	(io::DataInputStream *str){return bit.LoadFromStream(str);}				///<从流中读取位阵列数据
 	};//class Switch
 }//namespace hgl
 #endif//HGL_TYPE_SWITCH_INCLUDE
