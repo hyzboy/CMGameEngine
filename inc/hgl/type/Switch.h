@@ -34,9 +34,7 @@ namespace hgl
 		{
 		}
 
-		virtual ~Switch()
-		{
-		}
+		virtual ~Switch()HGL_DEFAULT_MEMFUNC;
 
 		/**
 		* 取得数据访问指针
