@@ -1,4 +1,4 @@
-#ifndef HGL_AFFECTOR_INCLUDE
+﻿#ifndef HGL_AFFECTOR_INCLUDE
 #define HGL_AFFECTOR_INCLUDE
 
 #include<hgl/affect/AffectorObject.h>
@@ -38,8 +38,8 @@ namespace hgl
 
 		AffectorControl();																			///<本类构造函数
 		virtual ~AffectorControl(){DeleteAll();}													///<本类析构函数
-		
-		virtual const char16_t *GetClassName(){returnu"AffectorControl";}							///<取得类名
+
+		virtual const char16_t *GetClassName(){return u"AffectorControl";}							///<取得类名
 
 		virtual bool Add(const UTF16String &,AffectorObject *);										///<添加一个影响器到控制器中
 				bool Add(AffectorObject *ao)														///<使用缺省名称添加一个影响器到控制器中
@@ -62,11 +62,6 @@ namespace hgl
 
 		virtual AffectorObject *Get(const UTF16String &);											///<根据名称取得一个控制器
 
-	//public:		//保存方法
-
-	//	virtual bool SaveToTDF(TDFNode *);															///<将当前影响器保存到TDF节点
-	//	virtual bool LoadFromTDF(TDFNode *);														///<从TDF节点中加载当前影响器
-		
 	public:		//方法
 
 		virtual bool Start();																		///<开始

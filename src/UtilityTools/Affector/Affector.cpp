@@ -1,11 +1,11 @@
-#include<hgl/affect/Affector.h>
+﻿#include<hgl/affect/Affector.h>
 
 	///////////////////
 /*	影响器是一种关键设计，其本质就是通过一个树形的列表，管理一堆可刷新的处理。
 		诸如物理上的重力、旋转力、离心力
 		色彩上的淡入淡出、色调色相变换
 		几何上的缩放、移动、旋转
-		
+
 		等等均可算为影响器对象的一种
 
 		在此建立影响器设计，即是为对应各种复杂变换而设计，同时也可为粒子系统铺路
@@ -41,19 +41,19 @@ namespace hgl
 	{
 		if(!ao)
 		{
-			PutError(u"AffectorControl 添加的新对象指针为空<name:%s>",name.wc_str());
+			LOG_ERROR(u"AffectorControl 添加的新对象指针为空,name:"+name);
 			return(false);
 		}
-			
-		if(name.Length<=0)
+
+		if(name.IsEmpty())
 		{
-			PutError(u"AffectorControl 添加的新对象没有名称<addr:%p>",ao);
+			LOG_ERROR(u"AffectorControl 添加的新对象没有名称,addr:"+PointerToHexUTF16String(ao));
 			return(false);
 		}
 
 		if(affector_list.Find(name)!=-1)
 		{
-			PutError(u"AffectorControl重复添加名为<%s>:<addr:%p>的对象！",name.wc_str(),ao);
+			LOG_ERROR(u"AffectorControl重复添加的对象,name:\""+name+u"\",addr:"+PointerToHexUTF16String(ao));
 			return(false);
 		}
 
@@ -69,9 +69,9 @@ namespace hgl
 	*/
 	bool AffectorControl::Unlink(const UTF16String &name)
 	{
-		if(name.Length<=0)
+		if(name.IsEmpty())
 		{
-			PutError(u"要解除关联的影响器名称为空");
+			LOG_ERROR(OS_TEXT("要解除关联的影响器名称为空"));
 			return(false);
 		}
 
@@ -87,7 +87,7 @@ namespace hgl
 	{
 		if(!ao)
 		{
-			PutError(u"要移除的影响器指针为空");
+			LOG_ERROR(OS_TEXT("要移除的影响器指针为空"));
 			return(false);
 		}
 
@@ -101,9 +101,9 @@ namespace hgl
 	*/
 	bool AffectorControl::Delete(const UTF16String &name)
 	{
-		if(name.Length<=0)
+		if(name.IsEmpty())
 		{
-			PutError(u"要删除的影响器名称为空");
+			LOG_ERROR(OS_TEXT("要删除的影响器名称为空"));
 			return(false);
 		}
 
@@ -119,7 +119,7 @@ namespace hgl
 	{
 		if(!ao)
 		{
-			PutError(u"要删除的影响器指针为空");
+			LOG_ERROR(OS_TEXT("要删除的影响器指针为空"));
 			return(false);
 		}
 
@@ -175,7 +175,7 @@ namespace hgl
 #define AFFECTOR_ENUM_FUNC(func_name)	\
 	bool AffectorControl::_ ##func_name()	\
 	{	\
-		int n=affector_list.Count;	\
+		int n=affector_list.GetCount();	\
 	\
 		if(n<=0)return(false);	\
 	\
@@ -211,7 +211,7 @@ namespace hgl
 
 		return _Pause();
 	}
-	
+
 	bool AffectorControl::Resume()
 	{
 		pause=false;

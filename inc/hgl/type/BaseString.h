@@ -1,4 +1,4 @@
-#ifndef HGL_TYPE_BASE_STRING_INCLUDE
+﻿#ifndef HGL_TYPE_BASE_STRING_INCLUDE
 #define HGL_TYPE_BASE_STRING_INCLUDE
 
 #include<hgl/type/StringInstance.h>
@@ -1083,6 +1083,16 @@ namespace hgl
 	inline BaseString<os_char> PointerToHexOSString(const void *value)
 	{
 		return PointerToHexString<os_char>(value);
+	}
+
+	inline BaseString<char> PointerToHexUTF8String(const void *value)
+	{
+		return PointerToHexString<char>(value);
+	}
+
+	inline BaseString<char16_t> PointerToHexUTF16String(const void *value)
+	{
+		return PointerToHexString<char16_t>(value);
 	}
 }//namespace hgl
 #endif//HGL_TYPE_BASE_STRING_INCLUDE
