@@ -20,6 +20,7 @@ namespace hgl
 			virtual bool Join(int)=0;																///<加入一个Socket
 			virtual bool Unjoin(int)=0;																///<分离一个Socket
 
+			virtual int GetCount()const=0;															///<取得Socket数量
 			virtual void Clear()=0;																	///<清除所有Socket
 
 			virtual int	Update(List<SocketEvent> &sock_list,										///<刷新并取得所有需要处理的IOSocket

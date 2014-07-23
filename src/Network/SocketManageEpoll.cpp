@@ -95,6 +95,11 @@ namespace hgl
 					return(true);
 				}
 
+				int GetCount()const
+				{
+					return cur_count;
+				}
+
 				void Clear()
 				{
 					if(epoll_fd!=-1)
