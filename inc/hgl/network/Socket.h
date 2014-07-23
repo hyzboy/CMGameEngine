@@ -121,22 +121,9 @@ namespace hgl
 		#define HGL_PACKET_SIZE_BYTES		sizeof(HGL_PACKET_SIZE)									///<包长度数据类型字节数
 		#define HGL_PACKET_TYPE_BYTES		sizeof(HGL_PACKET_TYPE)									///<包类型数据类型字节数
 		#define HGL_PACKET_HEADER_BYTES		(HGL_PACKET_SIZE_BYTES+HGL_PACKET_TYPE_BYTES)			///<包头数据类型字节数
-
+		
 		class Socket;
 		class IOSocket;
-
-		/**
-		 * Socket事件
-		 */
-		template<typename T> struct socket_event
-		{
-			T sock;			//socket号
-			int size;		//recv/send时为数据长度，error时为错误号
-		};
-
-		typedef socket_event<int> SocketEvent;
-		typedef socket_event<Socket *> SocketClassEvent;
-		typedef socket_event<IOSocket *> IOSocketClassEvent;
 	}//namespace network
 
 	namespace network

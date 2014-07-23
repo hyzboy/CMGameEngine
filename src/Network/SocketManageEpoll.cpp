@@ -1,4 +1,5 @@
 ﻿#include<hgl/network/SocketManageBase.h>
+#include<hgl/network/Socket.h>
 #include<hgl/LogInfo.h>
 
 #include<unistd.h>
@@ -28,8 +29,12 @@ namespace hgl
 
 					memset(&ev,0,sizeof(epoll_event));
 
-					ev.data.fd=sock;
-					ev.events=event|EPOLLET|EPOLLERR|EPOLLRDHUP|EPOLLHUP;
+					ev.data.fd=	sock;
+					ev.events=	event		//要处理的事件
+								|EPOLLET	//边缘模式(即读/写时，需要一直读/写直到出错为止；相对LT模式是只要有数据就会一直通知)
+								|EPOLLERR	//出错
+								|EPOLLRDHUP	//对方挂断
+								|EPOLLHUP;	//挂断
 
 					return(epoll_ctl(epoll_fd,EPOLL_CTL_ADD,sock,&ev)==0);
 				}
@@ -63,18 +68,18 @@ namespace hgl
 					close(epoll_fd);
 				}
 
-				bool Join(IOSocket *sock)
+				bool Join(int sock)
 				{
-					epoll_add(sock->ThisSocket);
+					epoll_add(sock);
 
-					sock->SetBlock(false);
+					SetSocketBlock(sock,false);
 
 					++cur_count;
 
 					return(true);
 				}
 
-				bool Unjoin(IOSocket *sock)
+				bool Unjoin(int sock)
 				{
 					if(epoll_fd==-1)
 					{
@@ -83,22 +88,11 @@ namespace hgl
 					}
 
 					--cur_count;
-					epoll_del(sock->ThisSocket);
+					epoll_del(sock);
 
-					LOG_INFO(OS_TEXT("SocketManageEpoll::Unjoin() IOSocket:")+OSString(sock->ThisSocket));
+					LOG_INFO(OS_TEXT("SocketManageEpoll::Unjoin() IOSocket:")+OSString(sock));
 
 					return(true);
-				}
-
-				bool Change(IOSocket *sock,bool r,bool w)
-				{
-					if(epoll_fd==-1)
-					{
-						LOG_ERROR(OS_TEXT("SocketManageEpoll::Unjoin() epoll_fd==-1)"));
-						return(false);
-					}
-
-					return epoll_mod(sock->ThisSocket,r,w);
 				}
 
 				void Clear()
@@ -112,7 +106,7 @@ namespace hgl
 					cur_count=0;
 				}
 
-				int Update(List<SocketEvent> &sock_list,List<SocketEvent> &error_list,double time_out)
+				int Update(double time_out)
 				{
 					if(epoll_fd==-1)
 						return(-1);
@@ -136,6 +130,16 @@ namespace hgl
 
 						return(0);
 					}
+
+					return num;
+				}
+
+				int Update(List<SocketEvent> &sock_list,List<SocketEvent> &error_list,double time_out)
+				{
+					const int num=Update(time_out);
+
+					if(num<=0)
+						return num;
 
 					sock_list.SetCount(num);
 					error_list.SetCount(num);
@@ -162,7 +166,7 @@ namespace hgl
 							++error_num;
 						}
 						else
-						if(ee->events&event)				//可以读数据
+						if(ee->events&event)				//有事件了
 						{
 							sp->sock=ee->data.fd;
 							sp->size=-1;
@@ -178,6 +182,67 @@ namespace hgl
 
 					return(num);
 				}
+
+				int Update(List<SocketEvent> &recv_list,List<SocketEvent> &send_list,List<SocketEvent> &error_list,double time_out)
+				{
+					const int num=Update(time_out);
+
+					if(num<=0)
+						return num;
+
+					recv_list.SetCount(num);
+					send_list.SetCount(num);
+					error_list.SetCount(num);
+
+					epoll_event *ee=event_list;
+
+					SocketEvent *rp=recv_list.GetData();
+					SocketEvent *sp=send_list.GetData();
+					SocketEvent *ep=error_list.GetData();
+
+					int recv_num=0;
+					int send_num=0;
+					int error_num=0;
+
+					for(int i=0;i<num;i++)
+					{
+						if(ee->events&(	EPOLLERR|			//出错了
+										EPOLLRDHUP|			//对方关了
+										EPOLLHUP))			//我方强制关了
+						{
+							LOG_ERROR("SocketManageEpoll Error,socket:"+OSString(ee->data.fd)+",epoll event:"+OSString(ee->events));
+
+							ep->sock=ee->data.fd;
+							ep->size=-1;
+							++ep;
+							++error_num;
+						}
+						else
+						if(ee->events&EPOLLIN)				//可以读数据
+						{
+							rp->sock=ee->data.fd;
+							rp->size=-1;
+							++rp;
+							++recv_num;
+						}
+						else
+						if(ee->events&EPOLLOUT)				//可以发数据
+						{
+							sp->sock=ee->data.fd;
+							sp->size=-1;
+							++sp;
+							++send_num;
+						}
+
+						++ee;
+					}
+
+					recv_list.SetCount(recv_num);
+					send_list.SetCount(send_num);
+					error_list.SetCount(error_num);
+
+					return(num);
+				}
 			};//class SocketManageBaseEpoll
 
 			SocketManageBase *CreateSocketManageBaseEpoll(int max_user,uint event)
@@ -186,7 +251,7 @@ namespace hgl
 
 				if(epoll_fd<0)
 				{
-					std::cout<<"epoll_create return error.cur epoll_count is "<<epoll_count<<" ,errno is "<<errno<<std::endl;
+					std::cout<<"epoll_create return error,errno is "<<errno<<std::endl;
 					return(nullptr);
 				}
 
@@ -202,6 +267,11 @@ namespace hgl
 		SocketManageBase *CreateSendSocketManage(int max_user)
 		{
 			return CreateSocketManageBaseEpoll(max_user,EPOLLOUT);
+		}
+
+		SocketManageBase *CreateSocketManage(int max_user)
+		{
+			return CreateSocketManageBaseEpoll(max_user,EPOLLIN|EPOLLOUT);
 		}
 	}//namespace network
 }//namespace hgl
