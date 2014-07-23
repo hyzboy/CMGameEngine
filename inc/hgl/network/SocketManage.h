@@ -6,6 +6,7 @@
 #include<hgl/network/IOSocket.h>
 #include<hgl/thread/ThreadMutex.h>
 #include<hgl/MemBlock.h>
+#include<hgl/network/SocketEvent.h>
 namespace hgl
 {
 	namespace network
@@ -13,8 +14,7 @@ namespace hgl
 		class SocketManageBase;
 
 		/**
-		 * Socket管理类<br>
-		 * 使用select/epoll/kqueue/iocp等手段对大量的socket进行统一管理的类
+		 * Socket管理类
 		 */
 		class SocketManage																			///Socket管理类
 		{
