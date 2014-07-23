@@ -1,4 +1,4 @@
-#ifndef HGL_MAP_INCLUDE
+﻿#ifndef HGL_MAP_INCLUDE
 #define HGL_MAP_INCLUDE
 
 #include<hgl/type/List.h>
@@ -59,6 +59,44 @@ namespace hgl
 		List<IDItem *> &GetList(){return data_list;}												///<取得线性列表
 			IDItem **	GetDataList()const{return data_list.GetData();}								///<取得纯数据线性列表
 
+			template<typename IT>
+				int		GetAllIndex(IT &il_list)
+				{
+					const int count=data_list.GetCount();
+
+					if(count<=0)
+						return count;
+
+					IDItem **idp=data_list.GetData();
+
+					for(int i=0;i<count;i++)
+					{
+						il_list.Add((*idp)->first);
+						++idp;
+					}
+
+					return count;
+				}
+
+				template<typename IT>
+				int		GetAllData(IT &il_list)
+				{
+					const int count=data_list.GetCount();
+
+					if(count<=0)
+						return count;
+
+					IDItem **idp=data_list.GetData();
+
+					for(int i=0;i<count;i++)
+					{
+						il_list.Add((*idp)->second);
+						++idp;
+					}
+
+					return count;
+				}
+
 				IDItem *GetItem(int n)const{return data_list[n];}									///<取指定序号的数据
 				bool 	Get(int,F &,T &)const;														///<取指定序号的数据
 				bool	GetIndex(int,F &)const;														///<取指定序号的索引
@@ -77,6 +115,10 @@ namespace hgl
 
 	template<typename F,typename T> class Map:public _Map<F,T,Pair<F,T> >
 	{
+	public:
+		
+		Map()HGL_DEFAULT_MEMFUNC;
+		virtual ~Map()HGL_DEFAULT_MEMFUNC;
 	};//class Map
 
 	template<typename T_ID,typename T_U> T_U *GetObject(Map<T_ID,T_U *> &list,const T_ID &id)
@@ -101,6 +143,7 @@ namespace hgl
 
 	public:
 
+		_MapObject()HGL_DEFAULT_MEMFUNC;
 		virtual ~_MapObject()
 		{
 			if(SuperClass::GetCount()>0)
@@ -255,6 +298,7 @@ namespace hgl
 
 	public:
 
+		CusMapObject()HGL_DEFAULT_MEMFUNC;
 		virtual ~CusMapObject()
 		{
 			_MapObject<F,T,DataPair>::Clear();
@@ -265,6 +309,7 @@ namespace hgl
 	{
 	public:
 
+		MapObject()HGL_DEFAULT_MEMFUNC;
 		virtual ~MapObject()
 		{
 			CusMapObject<F,T,Pair<F,T *> >::Clear();

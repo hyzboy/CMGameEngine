@@ -83,6 +83,7 @@ namespace hgl
 
 		LOG_INFO(OS_TEXT("Powered by ")+GetString(hfsName));
 		LOG_INFO(OS_TEXT("Version: ")+GetString(hfsVersion));
+		LOG_INFO("SDK Build time: " __DATE__ " " __TIME__);
 
 		GetCMGDKPath(si.path);		//取得CMGDK路径
 

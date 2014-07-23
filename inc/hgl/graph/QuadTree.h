@@ -2,7 +2,6 @@
 #define HGL_GRAPH_QUAD_TREE_INCLUDE
 
 #include<hgl/VectorMath.h>
-#include<hgl/graph/AABox.h>
 namespace hgl
 {
 	namespace graph
@@ -12,7 +11,7 @@ namespace hgl
 		*/
 		template<typename T> struct QuadTreeNode
 		{
-			AABox box;
+			AABB box;
 
 			T *prev;	//上一级
 			T *sub[4];	//子节点
