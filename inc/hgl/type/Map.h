@@ -115,6 +115,10 @@ namespace hgl
 
 	template<typename F,typename T> class Map:public _Map<F,T,Pair<F,T> >
 	{
+	public:
+		
+		Map()HGL_DEFAULT_MEMFUNC;
+		virtual ~Map()HGL_DEFAULT_MEMFUNC;
 	};//class Map
 
 	template<typename T_ID,typename T_U> T_U *GetObject(Map<T_ID,T_U *> &list,const T_ID &id)
@@ -139,6 +143,7 @@ namespace hgl
 
 	public:
 
+		_MapObject()HGL_DEFAULT_MEMFUNC;
 		virtual ~_MapObject()
 		{
 			if(SuperClass::GetCount()>0)
@@ -293,6 +298,7 @@ namespace hgl
 
 	public:
 
+		CusMapObject()HGL_DEFAULT_MEMFUNC;
 		virtual ~CusMapObject()
 		{
 			_MapObject<F,T,DataPair>::Clear();
@@ -303,6 +309,7 @@ namespace hgl
 	{
 	public:
 
+		MapObject()HGL_DEFAULT_MEMFUNC;
 		virtual ~MapObject()
 		{
 			CusMapObject<F,T,Pair<F,T *> >::Clear();
