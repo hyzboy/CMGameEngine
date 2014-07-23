@@ -1,10 +1,9 @@
-#ifndef HGL_GRAPH_RENDERABLE_INCLUDE
+﻿#ifndef HGL_GRAPH_RENDERABLE_INCLUDE
 #define HGL_GRAPH_RENDERABLE_INCLUDE
 
 #include<hgl/graph/Shader.h>
 #include<hgl/graph/Material.h>
 #include<hgl/graph/VertexBuffer.h>
-#include<hgl/graph/AABox.h>
 #include<hgl/graph/ColorFormat.h>
 namespace hgl
 {
@@ -78,7 +77,7 @@ namespace hgl
 
 			Shader *shader;																								///<着色程序
 
-			AABox BoundingBox;																							///<绑定盒
+			AABB BoundingBox;																							///<绑定盒
 
 			uint prim;																									///<绘制的图元类型
 
@@ -132,14 +131,24 @@ namespace hgl
 
 			virtual VertexBufferBase *			GetTexCoord			(int mtc,VertexBufferType *vbt=0);										///<取得贴图坐标对应的缓冲区
 
-			virtual void						SetBoundingBox		(const AABox &box)	{BoundingBox=box;}									///<设置绑定盒
-			virtual void						GetBoundingBox		(AABox &box)		{box=BoundingBox;}									///<取得绑定盒
+			virtual void						SetBoundingBox		(const AABB &box)	{BoundingBox=box;}									///<设置绑定盒
+			virtual void						GetBoundingBox		(AABB &box)		{box=BoundingBox;}										///<取得绑定盒
 
-			virtual const Vector3f &			GetCenter			()					{return BoundingBox.center;}						///<取得中心点
+			virtual const Vector3f 				GetCenter			()const																	///<取得中心点
+			{
+				Vector3f result;
+
+				result.x=(BoundingBox.minPoint.x+BoundingBox.maxPoint.x)/2.0f;
+				result.y=(BoundingBox.minPoint.y+BoundingBox.maxPoint.y)/2.0f;
+				result.z=(BoundingBox.minPoint.z+BoundingBox.maxPoint.z)/2.0f;
+
+				return result;
+			}
+
 			virtual void						GetMinMaxVertex		(Vector3f &min_v,Vector3f &max_v)										///<取得最小顶点和最大顶点
 			{
-				min_v=BoundingBox.corner;
-				max_v=BoundingBox.corner_max;
+				min_v=POINT_TO_FLOAT3(BoundingBox.minPoint);
+				max_v=POINT_TO_FLOAT3(BoundingBox.maxPoint);
 			}
 
 			template<typename T>
@@ -148,13 +157,11 @@ namespace hgl
 				if(!vb)return(false);
 
 				Vector3f min_v,max_v,len;
-				AABox box;
 
 				vb->GetBoundingBox(min_v,max_v);
 
-				box.SetMinMax(min_v,max_v);
-
-				SetBoundingBox(box);
+				BoundingBox.minPoint=min_v;
+				BoundingBox.maxPoint=max_v;
 
 				return SetVertexBuffer(vbtVertex,vb);
 			}

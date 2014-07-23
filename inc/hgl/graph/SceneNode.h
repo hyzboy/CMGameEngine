@@ -30,9 +30,9 @@ namespace hgl
 		{
 		protected:
 
-			AABox BoundingBox;																							///<绑定盒
-//			AABox LocalBoundingBox;																						///<本地坐标绑定盒
-//			AABox WorldBoundingBox;																						///<世界坐标绑定盒
+			AABB BoundingBox;																							///<绑定盒
+//			AABB LocalBoundingBox;																						///<本地坐标绑定盒
+//			AABB WorldBoundingBox;																						///<世界坐标绑定盒
 
 			Vector3f Center;																							///<中心点
 			Vector3f LocalCenter;																						///<本地坐标中心点
@@ -66,9 +66,9 @@ namespace hgl
 			virtual			void		RefreshMatrix		(const Matrix4f *mat=nullptr);									///<刷新世界变换矩阵
 			virtual			void		RefreshBoundingBox	();															///<刷新绑定盒
 
-			virtual const	AABox &		GetBoundingBox		()const{return BoundingBox;}								///<取得绑定盒
-//			virtual	const	AABox &		GetLocalBoundingBox	()const{return LocalBoundingBox;}							///<取得本地坐标绑定盒
-//			virtual	const	AABox &		GetWorldBoundingBox	()const{return WorldBoundingBox;}							///<取得世界坐标绑定盒
+			virtual const	AABB &		GetBoundingBox		()const{return BoundingBox;}								///<取得绑定盒
+//			virtual	const	AABB &		GetLocalBoundingBox	()const{return LocalBoundingBox;}							///<取得本地坐标绑定盒
+//			virtual	const	AABB &		GetWorldBoundingBox	()const{return WorldBoundingBox;}							///<取得世界坐标绑定盒
 
 			virtual const	Vector3f &	GetCenter			()const{return Center;}										///<取得中心点
 			virtual const	Vector3f &	GetLocalCenter		()const{return LocalCenter;}								///<取得本地坐标中心点

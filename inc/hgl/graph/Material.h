@@ -188,7 +188,7 @@ namespace hgl
 
 			void SetLight			(bool l)							{Light=l;}										///<设置是否承接光照
 			void SetLightPosition	(const Vector3f &lp)				{LightPosition=lp;}								///<设置光源位置
-			void SetLightPosition	(float x,float y,float z)			{LightPosition.set(x,y,z);}						///<设置光源位置
+			void SetLightPosition	(float x,float y,float z)			{LightPosition.Set(x,y,z);}						///<设置光源位置
 			void SetGlobalLightIntensity(float gli)						{GlobalLightIntensity=gli;}						///<设置全局环境光强度
 
 		public:
