@@ -1,4 +1,4 @@
-﻿#include<hgl/Console.h>
+#include<hgl/Console.h>
 #include<hgl/platform/QT4Application.h>
 #include<QtGui/QApplication>
 
@@ -14,7 +14,7 @@ int main(int argc,char **argv)
 		sl.Add(argv[i]);
 
 	ConsoleSystemInitInfo sii;
-	QTGuiApplication app(&qt_app);
+	QT4GuiApplication app(&qt_app);
 
-	return QTAppMain(sii,app,sl);
+	return QT4AppMain(sii,app,sl);
 }
