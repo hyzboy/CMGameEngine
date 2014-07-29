@@ -20,9 +20,14 @@ namespace hgl
 			Serialize()HGL_DEFAULT_MEMFUNC;
 			virtual ~Serialize()HGL_DEFAULT_MEMFUNC;
 
-			template<typename T> bool Append(const T &msg)
+			void ClearData()
 			{
-				hgl::int32 size=msg.ByteSize();
+				mb.ClearData();
+			}
+
+			template<typename T> bool Append(const T *msg)
+			{
+				hgl::int32 size=msg->ByteSize();
 
 				if(size<=0)
 					return(true);
@@ -38,13 +43,19 @@ namespace hgl
 				*mb_int=size;
 				++mb_int;
 
-				if(!msg.SerializeToArray(mb_int,size))
+				if(!msg->SerializeToArray(mb_int,size))
 				{
 					mb.SetLength(start);
 					RETURN_FALSE;
 				}
 
 				return(true);
+			}
+
+			template<typename T>
+			Serialize &operator << (const T *msg)
+			{
+				Append(msg);
 			}
 		};//class Serialize
 	}//namespace pb
