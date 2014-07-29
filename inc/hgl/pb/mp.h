@@ -117,6 +117,7 @@ namespace hgl
 		{
 			mp.Init(c2s_login::id,c2s_request_all_level_info::id);								//初始化消息号
 
+																								//定义设置宠
 		#define SET_PB_EVENT(name)	{	\
 										PBCmdFunc pcf;	\
 										\
@@ -125,7 +126,7 @@ namespace hgl
 										mp.SetProc(c2s_##name::id,pcf,new c2s_##name);	\
 									}
 
-			SET_PB_EVENT(login);
+			SET_PB_EVENT(login);																//设置处理函数
 			SET_PB_EVENT(join_game);
 			SET_PB_EVENT(leave_table);
 
@@ -146,6 +147,11 @@ namespace hgl
 
 		#undef SET_PB_EVENT
 		}
+
+		//被映射的函数
+		bool on_login(c2s_login *msg){}
+		bool on_join_game(c2s_join_game *msg){}
+		...
 
 		bool Update()
 		{
