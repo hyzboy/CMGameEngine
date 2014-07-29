@@ -6,10 +6,7 @@
 
 namespace hgl
 {
-	using namespace google;
-	using namespace google::protobuf;
-
-	typedef DefEvent(bool,PBCmdFunc,(MessageLite *));
+	typedef DefEvent(bool,PBCmdFunc,(google::protobuf::MessageLite *));
 
 	/**
 	 * ProtocolBuffer消息处理类
@@ -20,7 +17,7 @@ namespace hgl
 
 		struct PBItem
 		{
-			MessageLite *ml;
+			google::protobuf::MessageLite *ml;
 			PBCmdFunc func;
 
 		public:
@@ -30,7 +27,7 @@ namespace hgl
 				memset(this,0,sizeof(PBItem));
 			}
 
-			PBItem(MessageLite *m,const PBCmdFunc &p)
+			PBItem(google::protobuf::MessageLite *m,const PBCmdFunc &p)
 			{
 				ml=m;
 				func=p;
@@ -69,7 +66,15 @@ namespace hgl
 			end_cmd_pb=end;
 		}
 
-		bool SetProc(int id,PBCmdFunc &func,MessageLite *ml)
+		bool CheckID(int id)const
+		{
+			if(id<start_cmd_pb)return(false);
+			if(id>end_cmd_pb)return(false);
+
+			return(true);
+		}
+
+		bool SetProc(int id,PBCmdFunc &func,google::protobuf::MessageLite *ml)
 		{
 			if(id<start_cmd_pb||id>end_cmd_pb)RETURN_FALSE;
 			if(!ml)RETURN_FALSE;
