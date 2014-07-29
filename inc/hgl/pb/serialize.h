@@ -56,6 +56,8 @@ namespace hgl
 			Serialize &operator << (const T *msg)
 			{
 				Append(msg);
+
+				return(*this);
 			}
 		};//class Serialize
 	}//namespace pb
