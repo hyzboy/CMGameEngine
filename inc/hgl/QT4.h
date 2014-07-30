@@ -42,7 +42,7 @@ inline QString toQString(const hgl::UTF16String &str)
 // 	return QString::fromUcs4((uint *)str.c_str(),str.Length());
 // }
 
-#define HGL_QT_MAIN(sii_name,app_name,arg_name)	extern "C" int QTAppMain(hgl::ConsoleSystemInitInfo &sii_name,hgl::QTGuiApplication &app_name,const hgl::StringList<hgl::OSString> &arg_name)
+#define HGL_QT_MAIN(sii_name,app_name,arg_name)	extern "C" int QT4AppMain(hgl::ConsoleSystemInitInfo &sii_name,hgl::QT4GuiApplication &app_name,const hgl::StringList<hgl::OSString> &arg_name)
 
 #define HGL_QT_MAIN_FUNC()							HGL_QT_MAIN(sii,app,args)
 

@@ -90,7 +90,9 @@
 
 #define HGL_THREAD	__declspec(thread)
 
-#define HGL_FMT_I64				"%i64d"
+#define HGL_FMT_I64				"%I64d"
+#define HGL_FMT_U64				"%I64u"
+//参考文档最后查阅支持版本为VC2013，网址：http://msdn.microsoft.com/en-us/library/tcxf1dw6.aspx
 //--------------------------------------------------------------------------------------------------
 #define _USE_MATH_DEFINES				// 使用数学常数定义
 //--------------------------------------------------------------------------------------------------
