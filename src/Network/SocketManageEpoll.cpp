@@ -79,6 +79,24 @@ namespace hgl
 					return(true);
 				}
 
+				bool Join(int *sock_list,int count)
+                {
+                    if(count<=0)return(false);
+
+                    for(int i=0;i<count;i++)
+                    {
+                        epoll_add(*sock_list);
+
+                        SetSocketBlock(*sock_list,false);
+
+                        ++sock_list;
+                    }
+
+                    cur_count+=count;
+
+                    return(true);
+                }
+
 				bool Unjoin(int sock)
 				{
 					if(epoll_fd==-1)

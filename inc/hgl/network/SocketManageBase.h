@@ -18,6 +18,7 @@ namespace hgl
 			virtual ~SocketManageBase()=0;
 
 			virtual bool Join(int)=0;																///<加入一个Socket
+			virtual bool Join(int *,int)=0;                                                         ///<加入一批Socket
 			virtual bool Unjoin(int)=0;																///<分离一个Socket
 
 			virtual int GetCount()const=0;															///<取得Socket数量
