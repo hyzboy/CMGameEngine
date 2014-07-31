@@ -1,5 +1,5 @@
-#ifndef HGL_FIN_USE_DATA_CPP
-#define HGL_FIN_USE_DATA_CPP
+﻿#ifndef HGL_TYPE_ACTIVE_CHAIN_CPP
+#define HGL_TYPE_ACTIVE_CHAIN_CPP
 
 #include<hgl/LogInfo.h>
 namespace hgl
@@ -9,11 +9,11 @@ namespace hgl
 	* @param value 缓冲区最大数据量
 	*/
 	template<typename F,typename T>
-	FinUseData<F,T>::FinUseData(int value)
+	ActiveChain<F,T>::ActiveChain(int value)
 	{
 		if(value<=0)
 		{
-			LOG_ERROR(OS_TEXT("FinUseData缓冲区大小被设置<=0"));
+			LOG_ERROR(OS_TEXT("ActiveChain缓冲区大小被设置<=0"));
 
 			value=3;
 		}
@@ -26,37 +26,37 @@ namespace hgl
 	}
 
 	template<typename F,typename T>
-	FinUseData<F,T>::~FinUseData()
+	ActiveChain<F,T>::~ActiveChain()
 	{
 		Clear();
 	}
 
 	template<typename F,typename T>
-	void FinUseData<F,T>::SetMaxCount(int value)
+	void ActiveChain<F,T>::SetMaxCount(int value)
 	{
 		if(value<=0)
 		{
-			LOG_ERROR(OS_TEXT("FinUseData缓冲区大小被设置<=0，此次设置无效！"));
+			LOG_ERROR(OS_TEXT("ActiveChain缓冲区大小被设置<=0，此次设置无效！"));
 		}
 		else
 			max_count=value;
 	}
 
 	template<typename F,typename T>
-	bool FinUseData<F,T>::Create(const F &,T &)
+	bool ActiveChain<F,T>::Create(const F &,T &)
 	{
 		return true;
 	}
 
 	template<typename F,typename T>
-	void FinUseData<F,T>::Clear(const F &,T &)
+	void ActiveChain<F,T>::Clear(const F &,T &)
 	{
 	}
 
 	template<typename F,typename T>
-	void FinUseData<F,T>::ClearEnd()
+	void ActiveChain<F,T>::ClearEnd()
 	{
-		FudItem<F,T> *temp=end_item->prev;
+		Item<F,T> *temp=end_item->prev;
 
 		Clear(end_item->flag,end_item->data);
 
@@ -71,7 +71,7 @@ namespace hgl
 			#ifdef _DEBUG
 			if(count!=1)
 			{
-				LOG_ERROR(OS_TEXT("FinUseData出错，end_item=nullptr,count!=1"));
+				LOG_ERROR(OS_TEXT("ActiveChain出错，end_item=nullptr,count!=1"));
 			}
 			#endif//
 			start_item=nullptr;			//如果end_item为空，start_item也应该为空
@@ -86,13 +86,13 @@ namespace hgl
 	* @param data 数据
 	*/
 	template<typename F,typename T>
-	FudItem<F,T> *FinUseData<F,T>::Add(const F &flag,const T &data)
+	Item<F,T> *ActiveChain<F,T>::Add(const F &flag,const T &data)
 	{
-		FudItem<F,T> *temp;
+		Item<F,T> *temp;
 
 		while(count>=max_count)ClearEnd();			//满了，清除超出的数据
 
-		temp=new FudItem<F,T>;
+		temp=new Item<F,T>;
 		temp->flag=flag;
 		temp->data=data;
 
@@ -111,7 +111,7 @@ namespace hgl
 			#ifdef _DEBUG				//理由上end_item为NULL时应该是没有数据
 			if(count!=1)
 			{
-				LOG_ERROR(OS_TEXT("FinUseData出错，end_item=nullptr,count!=1"));
+				LOG_ERROR(OS_TEXT("ActiveChain出错，end_item=nullptr,count!=1"));
 			}
 			else
 			#endif//_DEBUG
@@ -122,7 +122,7 @@ namespace hgl
 	}
 
 	template<typename F,typename T>
-	void FinUseData<F,T>::MoveToStart(FudItem<F,T> *item)
+	void ActiveChain<F,T>::MoveToStart(Item<F,T> *item)
 	{
 		if(item==start_item)
 			return;
@@ -164,12 +164,12 @@ namespace hgl
 	* @return 是否取得数据成功
 	*/
 	template<typename F,typename T>
-	bool FinUseData<F,T>::Find(const F &flag,T &data,bool mts)
+	bool ActiveChain<F,T>::Find(const F &flag,T &data,bool mts)
 	{
 		if(count<=0)return(false);
 
 		int n=count;
-		FudItem<F,T> *temp=start_item;
+		Item<F,T> *temp=start_item;
 
 		while(n--)
 		{
@@ -197,7 +197,7 @@ namespace hgl
 	* @return 是否取得数据 true/false
 	*/
 	template<typename F,typename T>
-	bool FinUseData<F,T>::Get(const F &flag,T &data,bool mts)
+	bool ActiveChain<F,T>::Get(const F &flag,T &data,bool mts)
 	{
 		if(Find(flag,data,mts))
 			return(true);
@@ -218,16 +218,16 @@ namespace hgl
 	* 清数所有数据
 	*/
 	template<typename F,typename T>
-	void FinUseData<F,T>::Clear()
+	void ActiveChain<F,T>::Clear()
 	{
 		if(count<=0)return;
 
 		int n=0;
-		FudItem<F,T> *temp=start_item;
+		Item<F,T> *temp=start_item;
 
 		while(temp)
 		{
-			FudItem<F,T> *obj=temp;
+			Item<F,T> *obj=temp;
 
 			Clear(obj->flag,obj->data);
 
@@ -239,7 +239,7 @@ namespace hgl
 
 		if(n!=count)
 		{
-			LOG_ERROR(OS_TEXT("FinUseData Count=")+OSString(count)+OS_TEXT(",Clear=")+OSString(n));
+			LOG_ERROR(OS_TEXT("ActiveChain Count=")+OSString(count)+OS_TEXT(",Clear=")+OSString(n));
 		}
 
 		count=0;
@@ -248,7 +248,7 @@ namespace hgl
 	}
 
 	template<typename F,typename T>
-	void FinUseData<F,T>::Delete(FudItem<F,T> *obj)
+	void ActiveChain<F,T>::Delete(Item<F,T> *obj)
 	{
 		if(!obj)return;
 
@@ -288,12 +288,12 @@ namespace hgl
 	}
 
 	template<typename F,typename T>
-	void FinUseData<F,T>::DeleteByFlag(const F &flag)
+	void ActiveChain<F,T>::DeleteByFlag(const F &flag)
 	{
 		if(count<=0)return;
 
 		int n=count;
-		FudItem<F,T> *temp=start_item;
+		Item<F,T> *temp=start_item;
 
 		while(n--)
 		{
@@ -308,12 +308,12 @@ namespace hgl
 	}
 
 	template<typename F,typename T>
-	void FinUseData<F,T>::DeleteByData(T &data)
+	void ActiveChain<F,T>::DeleteByData(T &data)
 	{
 		if(count<=0)return;
 
 		int n=count;
-		FudItem<F,T> *temp=start_item;
+		Item<F,T> *temp=start_item;
 
 		while(n--)
 		{
@@ -328,11 +328,11 @@ namespace hgl
 	}
 
 // 	template<typename F,typename T>
-// 	bool FinUseData<F,T>::Update(const F &flag,T &data)
+// 	bool ActiveChain<F,T>::Update(const F &flag,T &data)
 // 	{
 // 		if(Find(flag,data,false))
 // 		{
-// 			FudItem<F,T> *obj=temp;
+// 			Item<F,T> *obj=temp;
 //
 // 			Clear(obj->flag,obj->data);
 //
@@ -351,4 +351,4 @@ namespace hgl
 // 		return(false);
 // 	}
 }//namespace hgl
-#endif//HGL_FIN_USE_DATA_CPP
+#endif//HGL_TYPE_ACTIVE_CHAIN_CPP
