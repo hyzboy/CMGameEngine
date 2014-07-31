@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2008-02-29 16:51:50.640.cpp,C:\Documents and Settings\Administrator\My Documents\RAD Studio\Projects\Unit1.cpp=I:\SH\Tools\TextReplace\MainUnit.cpp</Transaction>
+    <Transaction>2008-02-29 16:51:50.640.h,C:\Documents and Settings\Administrator\My Documents\RAD Studio\Projects\Unit1.h=I:\SH\Tools\TextReplace\MainUnit.h</Transaction>
+    <Transaction>2008-02-29 16:51:50.640.dfm,C:\Documents and Settings\Administrator\My Documents\RAD Studio\Projects\Unit1.dfm=I:\SH\Tools\TextReplace\MainUnit.dfm</Transaction>
+    <Transaction>2008-02-29 16:52:10.625.cbproj,C:\Documents and Settings\Administrator\My Documents\RAD Studio\Projects\Project2.cbproj=I:\SH\Tools\TextReplace\TextReplace.cbproj</Transaction>
+  </Transactions>
+</BorlandProject>

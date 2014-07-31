@@ -1,0 +1,187 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{88d0ee89-a477-4668-98b9-6fd52e7c3ea4}</ProjectGuid>
+			<MainSource>TextReplace.cpp</MainSource>
+			<Config Condition="'$(Config)'==''">Debug</Config>
+			<ProjectVersion>12.0</ProjectVersion>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_1)'!=''">
+			<Cfg_1>true</Cfg_1>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_2)'!=''">
+			<Cfg_2>true</Cfg_2>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Base)'!=''">
+			<BCC_InstructionSet>6</BCC_InstructionSet>
+			<LinkPackageStatics>rtl.lib;vcl.lib;vclx.lib</LinkPackageStatics>
+			<_TCHARMapping>wchar_t</_TCHARMapping>
+			<OutputExt>exe</OutputExt>
+			<BCC_OptimizeForSpeed>true</BCC_OptimizeForSpeed>
+			<DCC_CBuilderOutput>JPHNE</DCC_CBuilderOutput>
+			<Defines>NO_STRICT;UNICODE</Defines>
+			<ILINK_ObjectSearchPath>I:\SH\Tools\TextReplace</ILINK_ObjectSearchPath>
+			<ProjectType>CppVCLApplication</ProjectType>
+			<PackageImports>vcl.bpi;rtl.bpi;bcbie.bpi;vclx.bpi;vclactnband.bpi;xmlrtl.bpi;bcbsmp.bpi;dbrtl.bpi;vcldb.bpi;vcldbx.bpi;bdertl.bpi;dsnap.bpi;dsnapcon.bpi;teeUI.bpi;teedb.bpi;tee.bpi;adortl.bpi;dbxcds.bpi;dbexpress.bpi;DbxCommonDriver.bpi;IndyCore.bpi;IndySystem.bpi;IndyProtocols.bpi;inet.bpi;vclie.bpi;websnap.bpi;webdsnap.bpi;inetdbbde.bpi;inetdbxpress.bpi;soaprtl.bpi</PackageImports>
+			<BCC_wpar>false</BCC_wpar>
+			<IncludePath>$(BDS)\include;$(BDS)\include\dinkumware;$(BDS)\include\vcl;$(CMGDK)\SDK\Include;I:\SH\Tools\TextReplace</IncludePath>
+			<AllPackageLibs>rtl.lib;vcl.lib;vclx.lib</AllPackageLibs>
+			<ILINK_LibraryPath>$(BDS)\lib;$(BDS)\lib\obj;$(BDS)\lib\psdk;I:\SH\Tools\TextReplace</ILINK_LibraryPath>
+			<Multithreaded>true</Multithreaded>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_1)'!=''">
+			<BCC_OptimizeForSpeed>false</BCC_OptimizeForSpeed>
+			<DCC_Optimize>false</DCC_Optimize>
+			<DCC_DebugInfoInExe>true</DCC_DebugInfoInExe>
+			<Defines>_DEBUG;$(Defines)</Defines>
+			<ILINK_FullDebugInfo>true</ILINK_FullDebugInfo>
+			<BCC_InlineFunctionExpansion>false</BCC_InlineFunctionExpansion>
+			<ILINK_DisableIncrementalLinking>true</ILINK_DisableIncrementalLinking>
+			<BCC_UseRegisterVariables>None</BCC_UseRegisterVariables>
+			<DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
+			<BCC_DebugLineNumbers>true</BCC_DebugLineNumbers>
+			<IntermediateOutputDir>Debug</IntermediateOutputDir>
+			<TASM_DisplaySourceLines>true</TASM_DisplaySourceLines>
+			<BCC_StackFrames>true</BCC_StackFrames>
+			<BCC_DisableOptimizations>true</BCC_DisableOptimizations>
+			<ILINK_LibraryPath>$(BDS)\lib\debug;$(CMGDK)\SDK\Library CodeGear 6.1\Debug;$(ILINK_LibraryPath)</ILINK_LibraryPath>
+			<TASM_Debugging>Full</TASM_Debugging>
+			<BCC_SourceDebuggingOn>true</BCC_SourceDebuggingOn>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_2)'!=''">
+			<Defines>NDEBUG;$(Defines)</Defines>
+			<IntermediateOutputDir>Release</IntermediateOutputDir>
+			<ILINK_LibraryPath>$(BDS)\lib\release;$(CMGDK)\SDK\Library CodeGear 6.1\Release;$(ILINK_LibraryPath)</ILINK_LibraryPath>
+			<TASM_Debugging>None</TASM_Debugging>
+		</PropertyGroup>
+		<ItemGroup>
+			<ResFiles Include="TextReplace.res">
+				<BuildOrder>0</BuildOrder>
+			</ResFiles>
+			<CppCompile Include="MainUnit.cpp">
+				<Form>MainForm</Form>
+				<DependentOn>MainUnit.h</DependentOn>
+				<BuildOrder>2</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="SelectFolderUnit.cpp">
+				<Form>SelectFolderForm</Form>
+				<DependentOn>SelectFolderUnit.h</DependentOn>
+				<BuildOrder>3</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="TextReplace.cpp">
+				<BuildOrder>1</BuildOrder>
+			</CppCompile>
+			<FormResources Include="MainUnit.dfm"/>
+			<FormResources Include="SelectFolderUnit.dfm"/>
+			<BuildConfiguration Include="Base">
+				<Key>Base</Key>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Release">
+				<Key>Cfg_2</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Debug">
+				<Key>Cfg_1</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+		</ItemGroup>
+		<Import Project="$(BDS)\Bin\CodeGear.Cpp.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Cpp.Targets')"/>
+		<ProjectExtensions>
+			<Borland.Personality>CPlusPlusBuilder.Personality.12</Borland.Personality>
+			<Borland.ProjectType>CppVCLApplication</Borland.ProjectType>
+			<BorlandProject>
+				<CPlusPlusBuilder.Personality>
+					<Source>
+						<Source Name="MainSource">TextReplace.cpp</Source>
+					</Source>
+					<VersionInfo>
+						<VersionInfo Name="IncludeVerInfo">False</VersionInfo>
+						<VersionInfo Name="AutoIncBuild">False</VersionInfo>
+						<VersionInfo Name="MajorVer">1</VersionInfo>
+						<VersionInfo Name="MinorVer">0</VersionInfo>
+						<VersionInfo Name="Release">0</VersionInfo>
+						<VersionInfo Name="Build">0</VersionInfo>
+						<VersionInfo Name="Debug">False</VersionInfo>
+						<VersionInfo Name="PreRelease">False</VersionInfo>
+						<VersionInfo Name="Special">False</VersionInfo>
+						<VersionInfo Name="Private">False</VersionInfo>
+						<VersionInfo Name="DLL">False</VersionInfo>
+						<VersionInfo Name="Locale">2052</VersionInfo>
+						<VersionInfo Name="CodePage">936</VersionInfo>
+					</VersionInfo>
+					<VersionInfoKeys>
+						<VersionInfoKeys Name="CompanyName"/>
+						<VersionInfoKeys Name="FileDescription"/>
+						<VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys>
+						<VersionInfoKeys Name="InternalName"/>
+						<VersionInfoKeys Name="LegalCopyright"/>
+						<VersionInfoKeys Name="LegalTrademarks"/>
+						<VersionInfoKeys Name="OriginalFilename"/>
+						<VersionInfoKeys Name="ProductName"/>
+						<VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
+						<VersionInfoKeys Name="Comments"/>
+					</VersionInfoKeys>
+					<Debugging>
+						<Debugging Name="DebugSourceDirs"/>
+					</Debugging>
+					<Parameters>
+						<Parameters Name="RunParams"/>
+						<Parameters Name="Launcher"/>
+						<Parameters Name="UseLauncher">False</Parameters>
+						<Parameters Name="DebugCWD"/>
+						<Parameters Name="HostApplication"/>
+						<Parameters Name="RemoteHost"/>
+						<Parameters Name="RemotePath"/>
+						<Parameters Name="RemoteParams"/>
+						<Parameters Name="RemoteLauncher"/>
+						<Parameters Name="UseRemoteLauncher">False</Parameters>
+						<Parameters Name="RemoteCWD"/>
+						<Parameters Name="RemoteDebug">False</Parameters>
+						<Parameters Name="Debug Symbols Search Path"/>
+						<Parameters Name="LoadAllSymbols">True</Parameters>
+						<Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
+					</Parameters>
+					<Linker>
+						<Linker Name="LibPrefix"/>
+						<Linker Name="LibSuffix"/>
+						<Linker Name="LibVersion"/>
+					</Linker>
+					<ProjectProperties>
+						<ProjectProperties Name="AutoShowDeps">True</ProjectProperties>
+						<ProjectProperties Name="ManagePaths">True</ProjectProperties>
+						<ProjectProperties Name="VerifyPackages">False</ProjectProperties>
+					</ProjectProperties>
+					<HistoryLists_hlIncludePath>
+						<HistoryLists_hlIncludePath Name="Count">1</HistoryLists_hlIncludePath>
+						<HistoryLists_hlIncludePath Name="Item0">$(BDS)\include;$(BDS)\include\dinkumware;$(BDS)\include\vcl;$(CMGDK)\SDK\Include;I:\SH\Tools\TextReplace</HistoryLists_hlIncludePath>
+					</HistoryLists_hlIncludePath>
+					<HistoryLists_hlILINK_LibraryPath>
+						<HistoryLists_hlILINK_LibraryPath Name="Count">1</HistoryLists_hlILINK_LibraryPath>
+						<HistoryLists_hlILINK_LibraryPath Name="Item0">$(BDS)\lib\debug;$(CMGDK)\SDK\Library CodeGear 5.9\Debug;$(BDS)\lib;$(BDS)\lib\obj;$(BDS)\lib\psdk;I:\SH\Tools\TextReplace</HistoryLists_hlILINK_LibraryPath>
+					</HistoryLists_hlILINK_LibraryPath>
+					<HistoryLists_hlDefines>
+						<HistoryLists_hlDefines Name="Count">1</HistoryLists_hlDefines>
+						<HistoryLists_hlDefines Name="Item0">_DEBUG;NO_STRICT;UNICODE</HistoryLists_hlDefines>
+					</HistoryLists_hlDefines>
+					<HistoryLists_hlIntermediateOutputDir>
+						<HistoryLists_hlIntermediateOutputDir Name="Count">1</HistoryLists_hlIntermediateOutputDir>
+						<HistoryLists_hlIntermediateOutputDir Name="Item0">Debug</HistoryLists_hlIntermediateOutputDir>
+					</HistoryLists_hlIntermediateOutputDir>
+					<Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\dclwebsnap140.bpl">CodeGear WebSnap Components</Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\dclnet140.bpl">CodeGear Internet Components</Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\dclsoap140.bpl">CodeGear SOAP Components</Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\bcboffice2k140.bpl">CodeGear C++Builder Office 2000 Servers Package</Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\bcbofficexp140.bpl">CodeGear C++Builder Office XP Servers Package</Excluded_Packages>
+					</Excluded_Packages>
+				</CPlusPlusBuilder.Personality>
+			</BorlandProject>
+			<ProjectFileVersion>12</ProjectFileVersion>
+		</ProjectExtensions>
+	</Project>
