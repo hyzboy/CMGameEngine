@@ -56,7 +56,7 @@ namespace hgl
 	template<typename F,typename T>
 	void ActiveChain<F,T>::ClearEnd()
 	{
-		Item<F,T> *temp=end_item->prev;
+		ACItem *temp=end_item->prev;
 
 		Clear(end_item->flag,end_item->data);
 
@@ -86,13 +86,13 @@ namespace hgl
 	* @param data 数据
 	*/
 	template<typename F,typename T>
-	Item<F,T> *ActiveChain<F,T>::Add(const F &flag,const T &data)
+	ACItem *ActiveChain<F,T>::Add(const F &flag,const T &data)
 	{
-		Item<F,T> *temp;
+		ACItem *temp;
 
 		while(count>=max_count)ClearEnd();			//满了，清除超出的数据
 
-		temp=new Item<F,T>;
+		temp=new ACItem;
 		temp->flag=flag;
 		temp->data=data;
 
@@ -122,7 +122,7 @@ namespace hgl
 	}
 
 	template<typename F,typename T>
-	void ActiveChain<F,T>::MoveToStart(Item<F,T> *item)
+	void ActiveChain<F,T>::MoveToStart(ACItem *item)
 	{
 		if(item==start_item)
 			return;
@@ -169,7 +169,7 @@ namespace hgl
 		if(count<=0)return(false);
 
 		int n=count;
-		Item<F,T> *temp=start_item;
+		ACItem *temp=start_item;
 
 		while(n--)
 		{
@@ -223,11 +223,11 @@ namespace hgl
 		if(count<=0)return;
 
 		int n=0;
-		Item<F,T> *temp=start_item;
+		ACItem *temp=start_item;
 
 		while(temp)
 		{
-			Item<F,T> *obj=temp;
+			ACItem *obj=temp;
 
 			Clear(obj->flag,obj->data);
 
@@ -248,7 +248,7 @@ namespace hgl
 	}
 
 	template<typename F,typename T>
-	void ActiveChain<F,T>::Delete(Item<F,T> *obj)
+	void ActiveChain<F,T>::Delete(ACItem *obj)
 	{
 		if(!obj)return;
 
@@ -293,7 +293,7 @@ namespace hgl
 		if(count<=0)return;
 
 		int n=count;
-		Item<F,T> *temp=start_item;
+		ACItem *temp=start_item;
 
 		while(n--)
 		{
@@ -313,7 +313,7 @@ namespace hgl
 		if(count<=0)return;
 
 		int n=count;
-		Item<F,T> *temp=start_item;
+		ACItem *temp=start_item;
 
 		while(n--)
 		{
@@ -332,7 +332,7 @@ namespace hgl
 // 	{
 // 		if(Find(flag,data,false))
 // 		{
-// 			Item<F,T> *obj=temp;
+// 			ACItem *obj=temp;
 //
 // 			Clear(obj->flag,obj->data);
 //
