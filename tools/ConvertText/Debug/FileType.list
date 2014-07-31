@@ -1,0 +1,13 @@
+*.txt
+*.html
+*.htm
+*.h
+*.hpp
+*.hxx
+*.c
+*.cpp
+*.cxx
+*.xml
+*.mac
+*.inc
+*.src

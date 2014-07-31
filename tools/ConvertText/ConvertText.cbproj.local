@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2008-04-15 18:33:45.125.cpp,C:\Documents and Settings\Administrator\My Documents\RAD Studio\Projects\Unit1.cpp=E:\CMGDKv18\Tools\ConvertText\MainUnit.cpp</Transaction>
+    <Transaction>2008-04-15 18:33:45.125.h,C:\Documents and Settings\Administrator\My Documents\RAD Studio\Projects\Unit1.h=E:\CMGDKv18\Tools\ConvertText\MainUnit.h</Transaction>
+    <Transaction>2008-04-15 18:33:45.125.dfm,C:\Documents and Settings\Administrator\My Documents\RAD Studio\Projects\Unit1.dfm=E:\CMGDKv18\Tools\ConvertText\MainUnit.dfm</Transaction>
+    <Transaction>2008-04-15 18:33:50.734.cbproj,C:\Documents and Settings\Administrator\My Documents\RAD Studio\Projects\Project2.cbproj=E:\CMGDKv18\Tools\ConvertText\ConvertText.cbproj</Transaction>
+    <Transaction>2008-09-22 14:08:36.774.res,F:\CMGDKv18\Tools\ConvertText\ConvertText.res=</Transaction>
+  </Transactions>
+</BorlandProject>
