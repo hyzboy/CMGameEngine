@@ -1,0 +1,40 @@
+.sbi_box {
+  background: #EBEFF9 url(chrome://sbi/skin/bottom-left.gif) no-repeat left bottom;
+}
+
+.sbi_box-outer {
+  background: url(chrome://sbi/skin/bottom-right.gif) no-repeat right bottom;
+  padding-bottom: 15px;
+}
+
+.sbi_box-inner {
+  background: url(chrome://sbi/skin/top-left.gif) no-repeat left top;
+}
+
+.sbi_box-header {
+  background: url(chrome://sbi/skin/top-right.gif) no-repeat right top;
+  padding-top: 15px;
+  padding-left: 25px;
+  padding-right: 25px;
+}
+
+.sbi_search {
+  background: url(chrome://sbi/skin/btn_normal.png) no-repeat scroll 0 0 transparent!important;
+  background-position: 5px 5px!important;
+}
+.sbi_search:hover {
+  background: url(chrome://sbi/skin/btn_hover.png) no-repeat scroll 0 0 transparent!important;
+}
+.sbi_search:active {
+  background: url(chrome://sbi/skin/btn_hover.png) no-repeat scroll 0 0 transparent!important;
+  background-position: 1px 1px!important;
+}
+
+@-moz-keyframes sbi_img_hover_capture {
+  from { clip: rect(1px, auto, auto, auto); } to { clip: rect(0px, auto, auto, auto); }
+}
+
+img:hover {
+  -moz-animation-duration: 0.0001s;
+  -moz-animation-name: sbi_img_hover_capture !important;
+}
