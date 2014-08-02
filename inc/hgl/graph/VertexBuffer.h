@@ -234,11 +234,11 @@ namespace hgl
 
 			uint	GetDataType();
 
-			bool Write(const T &v1)
+			bool Write(const T v1)
 			{
 				if(!this->access||this->access+1>this->mem_end)
 				{
-					LOG_HINT(OS_TEXT("VertexBuffer1::Write(const T &) out"));
+					LOG_HINT(OS_TEXT("VertexBuffer1::Write(const T) out"));
 					return(false);
 				}
 
@@ -263,11 +263,11 @@ namespace hgl
 
 			uint	GetDataType();
 
-			bool Write(const T &v1,const T &v2)
+			bool Write(const T v1,const T v2)
 			{
 				if(!this->access||this->access+2>this->mem_end)
 				{
-					LOG_HINT(OS_TEXT("VertexBuffer2::Write(const T &,const T &) out"));
+					LOG_HINT(OS_TEXT("VertexBuffer2::Write(const T ,const T) out"));
 					return(false);
 				}
 
@@ -305,7 +305,7 @@ namespace hgl
 				return(true);
 			}
 
-			bool WriteLine(const T &start_x,const T &start_y,const T &end_x,const T &end_y)
+			bool WriteLine(const T start_x,const T start_y,const T end_x,const T end_y)
 			{
 				if(!this->access||this->access+4>this->mem_end)
 				{
@@ -401,7 +401,7 @@ namespace hgl
 			/**
 			* 写入2D矩形（两个三角形）坐标数据
 			*/
-			bool WriteRect(const T &left,const T &top,const T &width,const T &height)
+			bool WriteRect(const T left,const T top,const T width,const T height)
 			{
 				const Vector2f lt(left		,top);
 				const Vector2f rt(left+width,top);
@@ -461,7 +461,7 @@ namespace hgl
 				}
 			}
 
-			bool Write(const T &v1,const T &v2,const T &v3)
+			bool Write(const T v1,const T v2,const T v3)
 			{
 				if(!this->access||this->access+3>this->mem_end)
 				{
@@ -521,7 +521,7 @@ namespace hgl
 				return(true);
 			}
 
-			bool WriteLine(const T &start_x,const T &start_y,const T &start_z,const T &end_x,const T &end_y,const T &end_z)
+			bool WriteLine(const T start_x,const T start_y,const T start_z,const T end_x,const T end_y,const T end_z)
 			{
 				if(!this->access||this->access+6>this->mem_end)
 				{
@@ -641,7 +641,7 @@ namespace hgl
 
 			uint	GetDataType();
 
-			bool Write(const T &v1,const T &v2,const T &v3,const T &v4)
+			bool Write(const T v1,const T v2,const T v3,const T v4)
 			{
 				if(!this->access||this->access+4>this->mem_end)
 				{
@@ -689,7 +689,7 @@ namespace hgl
 				return(true);
 			}
 
-			bool WriteLine(const T &start_x,const T &start_y,const T &start_z,const T &end_x,const T &end_y,const T &end_z)
+			bool WriteLine(const T start_x,const T start_y,const T start_z,const T end_x,const T end_y,const T end_z)
 			{
 				if(!this->access||this->access+8>this->mem_end)
 				{
