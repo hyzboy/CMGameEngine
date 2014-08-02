@@ -1,4 +1,4 @@
-#ifndef HGL_VERTEX_BUFFER_OBJECT_INCLUDE
+﻿#ifndef HGL_VERTEX_BUFFER_OBJECT_INCLUDE
 #define HGL_VERTEX_BUFFER_OBJECT_INCLUDE
 
 #include<hgl/type/DataType.h>
@@ -234,15 +234,33 @@ namespace hgl
 
 			uint	GetDataType();
 
-			bool Write(const T &v1)
+			bool Write(const T v1)
 			{
 				if(!this->access||this->access+1>this->mem_end)
 				{
-					LOG_HINT(OS_TEXT("VertexBuffer1::Write(const T &) out"));
+					LOG_HINT(OS_TEXT("VertexBuffer1::Write(const T) out"));
 					return(false);
 				}
 
 				*this->access++=v1;
+				return(true);
+			}
+
+			/**
+			 * 将一个值重复多次写入缓冲区
+			 * @param v 值
+			 * @param count 写入数量
+			 */
+			bool Write(const T v,const int count)
+			{
+				if(!this->access||this->access+count>this->mem_end)
+				{
+					LOG_HINT(OS_TEXT("VertexBuffer1::Write(const T,")+OSString(count)+OS_TEXT(") out"));
+					return(false);
+				}
+
+				hgl_set(this->access,v,count);
+				this-access+=count;
 				return(true);
 			}
 		};//class VertexBuffer1
@@ -263,11 +281,11 @@ namespace hgl
 
 			uint	GetDataType();
 
-			bool Write(const T &v1,const T &v2)
+			bool Write(const T v1,const T v2)
 			{
 				if(!this->access||this->access+2>this->mem_end)
 				{
-					LOG_HINT(OS_TEXT("VertexBuffer2::Write(const T &,const T &) out"));
+					LOG_HINT(OS_TEXT("VertexBuffer2::Write(const T ,const T) out"));
 					return(false);
 				}
 
@@ -299,13 +317,35 @@ namespace hgl
 					return(false);
 				}
 
-				*this->access++=v[0];
-				*this->access++=v[1];
+				*this->access++=v.x;
+				*this->access++=v.y;
 
 				return(true);
 			}
 
-			bool WriteLine(const T &start_x,const T &start_y,const T &end_x,const T &end_y)
+			/**
+			 * 将一个值重复多次写入缓冲区
+			 * @param v 值
+			 * @param count 写入数量
+			 */
+			bool Write(const Vector2f &v,const int count)
+			{
+				if(!this->access||this->access+(count<<1)>this->mem_end)
+				{
+					LOG_HINT(OS_TEXT("VertexBuffer1::Write(const Vector2f &,")+OSString(count)+OS_TEXT(") out"));
+					return(false);
+				}
+
+				for(int i=0;i<count;i++)
+				{
+					*this->access++=v.x;
+					*this->access++=v.y;
+				}
+
+				return(true);
+			}
+
+			bool WriteLine(const T start_x,const T start_y,const T end_x,const T end_y)
 			{
 				if(!this->access||this->access+4>this->mem_end)
 				{
@@ -329,10 +369,10 @@ namespace hgl
 					return(false);
 				}
 
-				*this->access++=start[0];
-				*this->access++=start[1];
-				*this->access++=end[0];
-				*this->access++=end[1];
+				*this->access++=start.x;
+				*this->access++=start.y;
+				*this->access++=end.x;
+				*this->access++=end.y;
 
 				return(true);
 			}
@@ -348,14 +388,14 @@ namespace hgl
 					return(false);
 				}
 
-				*this->access++=v1[0];
-				*this->access++=v1[1];
+				*this->access++=v1.x;
+				*this->access++=v1.y;
 
-				*this->access++=v2[0];
-				*this->access++=v2[1];
+				*this->access++=v2.x;
+				*this->access++=v2.y;
 
-				*this->access++=v3[0];
-				*this->access++=v3[1];
+				*this->access++=v3.x;
+				*this->access++=v3.y;
 
 				return(true);
 			}
@@ -371,16 +411,16 @@ namespace hgl
 					return(false);
 				}
 
-				*this->access++=(*v)[0];
-				*this->access++=(*v)[1];
+				*this->access++=v->x;
+				*this->access++=v->y;
 				v++;
 
-				*this->access++=(*v)[0];
-				*this->access++=(*v)[1];
+				*this->access++=v->x;
+				*this->access++=v->y;
 				v++;
 
-				*this->access++=(*v)[0];
-				*this->access++=(*v)[1];
+				*this->access++=v->x;
+				*this->access++=v->y;
 
 				return(true);
 			}
@@ -401,7 +441,7 @@ namespace hgl
 			/**
 			* 写入2D矩形（两个三角形）坐标数据
 			*/
-			bool WriteRect(const T &left,const T &top,const T &width,const T &height)
+			bool WriteRect(const T left,const T top,const T width,const T height)
 			{
 				const Vector2f lt(left		,top);
 				const Vector2f rt(left+width,top);
@@ -439,29 +479,29 @@ namespace hgl
 				T *p=this->mem_type;
 
 				//先以corner为最小值,length为最大值，求取最小最大值
-				min_vertex[0]=*p++;
-				min_vertex[1]=*p++;
-				min_vertex[2]=*p++;
+				min_vertex.x=*p++;
+				min_vertex.y=*p++;
+				min_vertex.z=*p++;
 
 				max_vertex=min_vertex;
 
 				for(int i=1;i<this->count;i++)
 				{
-					if(*p<min_vertex[0])min_vertex[0]=*p;
-					if(*p>max_vertex[0])max_vertex[0]=*p;
+					if(*p<min_vertex.x)min_vertex.x=*p;
+					if(*p>max_vertex.x)max_vertex.x=*p;
 					p++;
 
-					if(*p<min_vertex[1])min_vertex[1]=*p;
-					if(*p>max_vertex[1])max_vertex[1]=*p;
+					if(*p<min_vertex.y)min_vertex.y=*p;
+					if(*p>max_vertex.y)max_vertex.y=*p;
 					p++;
 
-					if(*p<min_vertex[2])min_vertex[2]=*p;
-					if(*p>max_vertex[2])max_vertex[2]=*p;
+					if(*p<min_vertex.z)min_vertex.z=*p;
+					if(*p>max_vertex.z)max_vertex.z=*p;
 					p++;
 				}
 			}
 
-			bool Write(const T &v1,const T &v2,const T &v3)
+			bool Write(const T v1,const T v2,const T v3)
 			{
 				if(!this->access||this->access+3>this->mem_end)
 				{
@@ -499,9 +539,32 @@ namespace hgl
 					return(false);
 				}
 
-				*this->access++=v[0];
-				*this->access++=v[1];
-				*this->access++=v[2];
+				*this->access++=v.x;
+				*this->access++=v.y;
+				*this->access++=v.z;
+
+				return(true);
+			}
+
+			/**
+			 * 将一个值重复多次写入缓冲区
+			 * @param v 值
+			 * @param count 写入数量
+			 */
+			bool Write(const Vector3f &v,const int count)
+			{
+				if(!this->access||this->access+(count*3)>this->mem_end)
+				{
+					LOG_HINT(OS_TEXT("VertexBuffer3::Write(const Vector3f,")+OSString(count)+OS_TEXT(") out"));
+					return(false);
+				}
+
+				for(int i=0;i<count;i++)
+				{
+					*this->access++=v.x;
+					*this->access++=v.y;
+					*this->access++=v.z;
+				}
 
 				return(true);
 			}
@@ -521,7 +584,7 @@ namespace hgl
 				return(true);
 			}
 
-			bool WriteLine(const T &start_x,const T &start_y,const T &start_z,const T &end_x,const T &end_y,const T &end_z)
+			bool WriteLine(const T start_x,const T start_y,const T start_z,const T end_x,const T end_y,const T end_z)
 			{
 				if(!this->access||this->access+6>this->mem_end)
 				{
@@ -547,12 +610,12 @@ namespace hgl
 					return(false);
 				}
 
-				*this->access++=start[0];
-				*this->access++=start[1];
-				*this->access++=start[2];
-				*this->access++=end[0];
-				*this->access++=end[1];
-				*this->access++=end[2];
+				*this->access++=start.x;
+				*this->access++=start.y;
+				*this->access++=start.z;
+				*this->access++=end.x;
+				*this->access++=end.y;
+				*this->access++=end.z;
 
 				return(true);
 			}
@@ -568,17 +631,17 @@ namespace hgl
 					return(false);
 				}
 
-				*this->access++=v1[0];
-				*this->access++=v1[1];
-				*this->access++=v1[2];
+				*this->access++=v1.x;
+				*this->access++=v1.y;
+				*this->access++=v1.z;
 
-				*this->access++=v2[0];
-				*this->access++=v2[1];
-				*this->access++=v2[2];
+				*this->access++=v2.x;
+				*this->access++=v2.y;
+				*this->access++=v2.z;
 
-				*this->access++=v3[0];
-				*this->access++=v3[1];
-				*this->access++=v3[2];
+				*this->access++=v3.x;
+				*this->access++=v3.y;
+				*this->access++=v3.z;
 
 				return(true);
 			}
@@ -594,19 +657,19 @@ namespace hgl
 					return(false);
 				}
 
-				*this->access++=(*v)[0];
-				*this->access++=(*v)[1];
-				*this->access++=(*v)[2];
+				*this->access++=v->x;
+				*this->access++=v->y;
+				*this->access++=v->z;
 				v++;
 
-				*this->access++=(*v)[0];
-				*this->access++=(*v)[1];
-				*this->access++=(*v)[2];
+				*this->access++=v->x;
+				*this->access++=v->y;
+				*this->access++=v->z;
 				v++;
 
-				*this->access++=(*v)[0];
-				*this->access++=(*v)[1];
-				*this->access++=(*v)[2];
+				*this->access++=v->x;
+				*this->access++=v->y;
+				*this->access++=v->z;
 
 				return(true);
 			}
@@ -641,7 +704,7 @@ namespace hgl
 
 			uint	GetDataType();
 
-			bool Write(const T &v1,const T &v2,const T &v3,const T &v4)
+			bool Write(const T v1,const T v2,const T v3,const T v4)
 			{
 				if(!this->access||this->access+4>this->mem_end)
 				{
@@ -673,6 +736,22 @@ namespace hgl
 				return(true);
 			}
 
+			bool Write(const Vector4f &v)
+			{
+				if(!this->access||this->access+4>this->mem_end)
+				{
+					LOG_HINT(OS_TEXT("VertexBuffer4::Write(color4 &) out"));
+					return(false);
+				}
+
+				*this->access++=v.x;
+				*this->access++=v.y;
+				*this->access++=v.z;
+				*this->access++=v.w;
+
+				return(true);
+			}
+
 			bool Write(const Color4f &v)
 			{
 				if(!this->access||this->access+4>this->mem_end)
@@ -689,7 +768,31 @@ namespace hgl
 				return(true);
 			}
 
-			bool WriteLine(const T &start_x,const T &start_y,const T &start_z,const T &end_x,const T &end_y,const T &end_z)
+			/**
+			 * 将一个值重复多次写入缓冲区
+			 * @param v 值
+			 * @param count 写入数量
+			 */
+			bool Write(const Vector4f &v,const int count)
+			{
+				if(!this->access||this->access+(count<<2)>this->mem_end)
+				{
+					LOG_HINT(OS_TEXT("VertexBuffer4::Write(const Vector4f,")+OSString(count)+OS_TEXT(") out"));
+					return(false);
+				}
+
+				for(int i=0;i<count;i++)
+				{
+					*this->access++=v.x;
+					*this->access++=v.y;
+					*this->access++=v.z;
+					*this->access++=v.w;
+				}
+
+				return(true);
+			}
+
+			bool WriteLine(const T start_x,const T start_y,const T start_z,const T end_x,const T end_y,const T end_z)
 			{
 				if(!this->access||this->access+8>this->mem_end)
 				{
@@ -717,13 +820,13 @@ namespace hgl
 					return(false);
 				}
 
-				*this->access++=start[0];
-				*this->access++=start[1];
-				*this->access++=start[2];
+				*this->access++=start.x;
+				*this->access++=start.y;
+				*this->access++=start.z;
 				*this->access++=1.0f;
-				*this->access++=end[0];
-				*this->access++=end[1];
-				*this->access++=end[2];
+				*this->access++=end.x;
+				*this->access++=end.y;
+				*this->access++=end.z;
 				*this->access++=1.0f;
 
 				return(true);
@@ -740,19 +843,19 @@ namespace hgl
 					return(false);
 				}
 
-				*this->access++=v1[0];
-				*this->access++=v1[1];
-				*this->access++=v1[2];
+				*this->access++=v1.x;
+				*this->access++=v1.y;
+				*this->access++=v1.z;
 				*this->access++=1.0f;
 
-				*this->access++=v2[0];
-				*this->access++=v2[1];
-				*this->access++=v2[2];
+				*this->access++=v2.x;
+				*this->access++=v2.y;
+				*this->access++=v2.z;
 				*this->access++=1.0f;
 
-				*this->access++=v3[0];
-				*this->access++=v3[1];
-				*this->access++=v3[2];
+				*this->access++=v3.x;
+				*this->access++=v3.y;
+				*this->access++=v3.z;
 				*this->access++=1.0f;
 
 				return(true);
@@ -769,21 +872,21 @@ namespace hgl
 					return(false);
 				}
 
-				*this->access++=(*v)[0];
-				*this->access++=(*v)[1];
-				*this->access++=(*v)[2];
+				*this->access++=v->x;
+				*this->access++=v->y;
+				*this->access++=v->z;
 				*this->access++=1.0f;
 				v++;
 
-				*this->access++=(*v)[0];
-				*this->access++=(*v)[1];
-				*this->access++=(*v)[2];
+				*this->access++=v->x;
+				*this->access++=v->y;
+				*this->access++=v->z;
 				*this->access++=1.0f;
 				v++;
 
-				*this->access++=(*v)[0];
-				*this->access++=(*v)[1];
-				*this->access++=(*v)[2];
+				*this->access++=v->x;
+				*this->access++=v->y;
+				*this->access++=v->z;
 				*this->access++=1.0f;
 
 				return(true);
@@ -791,41 +894,41 @@ namespace hgl
 		};//class VertexBuffer4
 
 		//缓冲区具体数据类型定义
-		typedef VertexBuffer1<int8	>	VB1i8	,VB1b;
-		typedef VertexBuffer1<int16	>	VB1i16	,VB1s;
-		typedef VertexBuffer1<int32	>	VB1i32	,VB1i;
-		typedef VertexBuffer1<uint8	>	VB1u8	,VB1ub;
-		typedef VertexBuffer1<uint16>	VB1u16	,VB1us;
-		typedef VertexBuffer1<uint32>	VB1u32	,VB1ui;
-		typedef VertexBuffer1<float	>	VB1f;
-		typedef VertexBuffer1<double>	VB1d;
+		typedef VertexBuffer1<int8	>	VB1i8	,VB1b;	__inline uint VertexBuffer1<int8	>::GetDataType(){return HGL_BYTE;			}
+		typedef VertexBuffer1<int16	>	VB1i16	,VB1s;	__inline uint VertexBuffer1<int16	>::GetDataType(){return HGL_SHORT;			}
+		typedef VertexBuffer1<int32	>	VB1i32	,VB1i;	__inline uint VertexBuffer1<int32	>::GetDataType(){return HGL_INT;			}
+		typedef VertexBuffer1<uint8	>	VB1u8	,VB1ub;	__inline uint VertexBuffer1<uint8	>::GetDataType(){return HGL_UNSIGNED_BYTE;	}
+		typedef VertexBuffer1<uint16>	VB1u16	,VB1us;	__inline uint VertexBuffer1<uint16	>::GetDataType(){return HGL_UNSIGNED_SHORT;	}
+		typedef VertexBuffer1<uint32>	VB1u32	,VB1ui;	__inline uint VertexBuffer1<uint32	>::GetDataType(){return HGL_UNSIGNED_INT;	}
+		typedef VertexBuffer1<float	>	VB1f;			__inline uint VertexBuffer1<float	>::GetDataType(){return HGL_FLOAT;			}
+		typedef VertexBuffer1<double>	VB1d;			__inline uint VertexBuffer1<double	>::GetDataType(){return HGL_DOUBLE;			}
 
-		typedef VertexBuffer2<int8	>	VB2i8	,VB2b;
-		typedef VertexBuffer2<int16	>	VB2i16	,VB2s;
-		typedef VertexBuffer2<int32	>	VB2i32	,VB2i;
-		typedef VertexBuffer2<uint8	>	VB2u8	,VB2ub;
-		typedef VertexBuffer2<uint16>	VB2u16	,VB2us;
-		typedef VertexBuffer2<uint32>	VB2u32	,VB2ui;
-		typedef VertexBuffer2<float	>	VB2f;
-		typedef VertexBuffer2<double>	VB2d;
+		typedef VertexBuffer2<int8	>	VB2i8	,VB2b;	__inline uint VertexBuffer2<int8	>::GetDataType(){return HGL_BYTE;			}
+		typedef VertexBuffer2<int16	>	VB2i16	,VB2s;	__inline uint VertexBuffer2<int16	>::GetDataType(){return HGL_SHORT;			}
+		typedef VertexBuffer2<int32	>	VB2i32	,VB2i;	__inline uint VertexBuffer2<int32	>::GetDataType(){return HGL_INT;			}
+		typedef VertexBuffer2<uint8	>	VB2u8	,VB2ub;	__inline uint VertexBuffer2<uint8	>::GetDataType(){return HGL_UNSIGNED_BYTE;	}
+		typedef VertexBuffer2<uint16>	VB2u16	,VB2us;	__inline uint VertexBuffer2<uint16	>::GetDataType(){return HGL_UNSIGNED_SHORT;	}
+		typedef VertexBuffer2<uint32>	VB2u32	,VB2ui;	__inline uint VertexBuffer2<uint32	>::GetDataType(){return HGL_UNSIGNED_INT;	}
+		typedef VertexBuffer2<float	>	VB2f;			__inline uint VertexBuffer2<float	>::GetDataType(){return HGL_FLOAT;			}
+		typedef VertexBuffer2<double>	VB2d;			__inline uint VertexBuffer2<double	>::GetDataType(){return HGL_DOUBLE;			}
 
-		typedef VertexBuffer3<int8	>	VB3i8	,VB3b;
-		typedef VertexBuffer3<int16	>	VB3i16	,VB3s;
-		typedef VertexBuffer3<int32	>	VB3i32	,VB3i;
-		typedef VertexBuffer3<uint8	>	VB3u8	,VB3ub;
-		typedef VertexBuffer3<uint16>	VB3u16	,VB3us;
-		typedef VertexBuffer3<uint32>	VB3u32	,VB3ui;
-		typedef VertexBuffer3<float	>	VB3f;
-		typedef VertexBuffer3<double>	VB3d;
+		typedef VertexBuffer3<int8	>	VB3i8	,VB3b;	__inline uint VertexBuffer3<int8	>::GetDataType(){return HGL_BYTE;			}
+		typedef VertexBuffer3<int16	>	VB3i16	,VB3s;	__inline uint VertexBuffer3<int16	>::GetDataType(){return HGL_SHORT;			}
+		typedef VertexBuffer3<int32	>	VB3i32	,VB3i;	__inline uint VertexBuffer3<int32	>::GetDataType(){return HGL_INT;			}
+		typedef VertexBuffer3<uint8	>	VB3u8	,VB3ub;	__inline uint VertexBuffer3<uint8	>::GetDataType(){return HGL_UNSIGNED_BYTE;	}
+		typedef VertexBuffer3<uint16>	VB3u16	,VB3us;	__inline uint VertexBuffer3<uint16	>::GetDataType(){return HGL_UNSIGNED_SHORT;	}
+		typedef VertexBuffer3<uint32>	VB3u32	,VB3ui;	__inline uint VertexBuffer3<uint32	>::GetDataType(){return HGL_UNSIGNED_INT;	}
+		typedef VertexBuffer3<float	>	VB3f;			__inline uint VertexBuffer3<float	>::GetDataType(){return HGL_FLOAT;			}
+		typedef VertexBuffer3<double>	VB3d;			__inline uint VertexBuffer3<double	>::GetDataType(){return HGL_DOUBLE;			}
 
-		typedef VertexBuffer4<int8	>	VB4i8	,VB4b;
-		typedef VertexBuffer4<int16	>	VB4i16	,VB4s;
-		typedef VertexBuffer4<int32	>	VB4i32	,VB4i;
-		typedef VertexBuffer4<uint8	>	VB4u8	,VB4ub;
-		typedef VertexBuffer4<uint16>	VB4u16	,VB4us;
-		typedef VertexBuffer4<uint32>	VB4u32	,VB4ui;
-		typedef VertexBuffer4<float	>	VB4f;
-		typedef VertexBuffer4<double>	VB4d;
+		typedef VertexBuffer4<int8	>	VB4i8	,VB4b;	__inline uint VertexBuffer4<int8	>::GetDataType(){return HGL_BYTE;			}
+		typedef VertexBuffer4<int16	>	VB4i16	,VB4s;	__inline uint VertexBuffer4<int16	>::GetDataType(){return HGL_SHORT;			}
+		typedef VertexBuffer4<int32	>	VB4i32	,VB4i;	__inline uint VertexBuffer4<int32	>::GetDataType(){return HGL_INT;			}
+		typedef VertexBuffer4<uint8	>	VB4u8	,VB4ub;	__inline uint VertexBuffer4<uint8	>::GetDataType(){return HGL_UNSIGNED_BYTE;	}
+		typedef VertexBuffer4<uint16>	VB4u16	,VB4us;	__inline uint VertexBuffer4<uint16	>::GetDataType(){return HGL_UNSIGNED_SHORT;	}
+		typedef VertexBuffer4<uint32>	VB4u32	,VB4ui;	__inline uint VertexBuffer4<uint32	>::GetDataType(){return HGL_UNSIGNED_INT;	}
+		typedef VertexBuffer4<float	>	VB4f;			__inline uint VertexBuffer4<float	>::GetDataType(){return HGL_FLOAT;			}
+		typedef VertexBuffer4<double>	VB4d;			__inline uint VertexBuffer4<double	>::GetDataType(){return HGL_DOUBLE;			}
 	}//namespace graph
 }//namespace hgl
 #endif//HGL_VERTEX_BUFFER_OBJECT_INCLUDE

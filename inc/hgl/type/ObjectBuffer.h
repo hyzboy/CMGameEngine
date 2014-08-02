@@ -1,21 +1,21 @@
 #ifndef HGL_OBJECT_BUFFER_INCLUDE
 #define HGL_OBJECT_BUFFER_INCLUDE
 
-#include<hgl/type/FinUseData.h>
+#include<hgl/type/ActiveChain.h>
 #include<hgl/type/BaseString.h>
 // #include<hgl/HAC.h>
 namespace hgl
 {
-	template<typename T> class ObjectBuffer:public FinUseData<UTF16String,T *>
+	template<typename T> class ObjectBuffer:public ActiveChain<UTF16String,T *>
     {
-		typedef FinUseData<UTF16String,T *> fud_class;
+		typedef ActiveChain<UTF16String,T *> fud_class;
 
         virtual bool Create(const UTF16String &,T *&);
     	void Clear(const UTF16String &,T *&);
 
     public:
 
-		using FinUseData<UTF16String,T *>::FinUseData;
+		using ActiveChain<UTF16String,T *>::ActiveChain;
     	virtual ~ObjectBuffer();
 	};
 

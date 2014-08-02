@@ -3,7 +3,7 @@
 
 #include<hgl/VectorMath.h>
 #include<hgl/type/Color4f.h>
-#include<hgl/type/FinUseData.h>
+#include<hgl/type/ActiveChain.h>
 #include<hgl/graph/TileData.h>
 #include<hgl/graph/FontSource.h>
 #include<hgl/graph/Makeup.h>
@@ -29,7 +29,7 @@ namespace hgl
 			TileData *tile_data;																	///<Tile管理器
 			FontSource *chs_source,*eng_source;														///<字体数据源
 
-			FinUseData<char16_t,TileData::Object *> fud;												///<字体缓冲管理
+			ActiveChain<char16_t,TileData::Object *> fud;												///<字体缓冲管理
 
 			uint8 *char_bitmap_buffer;																///<字符位图缓冲区
 			uint char_bitmap_bytes;																	///<字符位图字节数

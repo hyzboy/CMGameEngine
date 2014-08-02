@@ -1,4 +1,4 @@
-#ifndef HGL_STR_TEMPLATE_INCLUDE
+﻿#ifndef HGL_STR_TEMPLATE_INCLUDE
 #define HGL_STR_TEMPLATE_INCLUDE
 
 #include<math.h>
@@ -1355,12 +1355,12 @@ namespace hgl
 	}
 
 	/**
-	 * 转换一个有符号整数到字符串
-	 * @param str 转换后的字符串存放处
-	 * @param size 存放处可容纳的字符数
-	 * @param num 要转换的数值
-	 * @return 转换后的字符串长度
-	 */
+	* 转换一个有符号整数到字符串
+	* @param str 转换后的字符串存放处
+	* @param size 存放处可容纳的字符数
+	* @param num 要转换的数值
+	* @return 转换后的字符串长度
+	*/
 	template<typename T,typename I>
 	int itos_rl(T *str,int size,const I num)
 	{
@@ -1647,11 +1647,11 @@ namespace hgl
 		while(*p&&*p!=end_char)
 		{
 			if(hgl::isdigit(*p)
-			 ||*p=='-'
-			 ||*p=='+'
-			 ||*p=='.'
-			 ||*p=='E'
-			 ||*p=='e')
+			||*p=='-'
+			||*p=='+'
+			||*p=='.'
+			||*p=='E'
+			||*p=='e')
 			{
 				p++;
 				continue;
@@ -1747,25 +1747,23 @@ namespace hgl
 	{
 		if(!str)return(false);
 
+		const char err_chr[]=u8R"( <>/\|?%$#@`':"*&!)";
+		const char *sp;
+
 		while(*str)
 		{
 			if(isspace(*str))
 				return(false);
 
-			if(*str==' '
-			||*str=='<'
-			||*str=='>'
-			||*str=='/'
-			||*str=='\\'
-			||*str=='|'
-			||*str=='?'
-			||*str=='%'
-			||*str=='"'
-			||*str=='`'
-			||*str=='\''
-			||*str=='*'
-			)
-				return(false);
+			sp=err_chr;
+
+			while(*sp)
+			{
+				if(*str==*sp)
+					return(false);
+
+				++sp;
+			}
 
 			++str;
 		}
@@ -1774,11 +1772,11 @@ namespace hgl
 	}
 
 	/**
-	 * 解晰一个10进制字符到数值
-	 * @param ch 字符
-	 * @param num 进制
-	 * @return 解析出来的值
-	 */
+	* 解晰一个10进制字符到数值
+	* @param ch 字符
+	* @param num 进制
+	* @return 解析出来的值
+	*/
 	inline int parse_dec_number_char(const int ch)
 	{
 		if(ch>='0'&&ch<='9')
@@ -1788,11 +1786,11 @@ namespace hgl
 	}
 
 	/**
-	 * 解析一个多进制字符到数值
-	 * @param ch 字符
-	 * @param num 进制
-	 * @return 解析出来的值
-	 */
+	* 解析一个多进制字符到数值
+	* @param ch 字符
+	* @param num 进制
+	* @return 解析出来的值
+	*/
 	inline int parse_number_char(const int ch,int num)
 	{
 		if(ch>='0'&&ch<='9')
@@ -1808,11 +1806,11 @@ namespace hgl
 	}
 
 	/**
-	 * 解晰一个16进制数值字符串
-	 * @param dst 解晰出来的原始数据存入处
-	 * @param src 用来解晰的16进制数值字符串
-	 * @param size 原始数据字节数/2
-	 */
+	* 解晰一个16进制数值字符串
+	* @param dst 解晰出来的原始数据存入处
+	* @param src 用来解晰的16进制数值字符串
+	* @param size 原始数据字节数/2
+	*/
 	inline void ParseHexStr(uint8 *dst,const uint8 *src,const int size)
 	{
 		for(int i=0;i<size;i++)
