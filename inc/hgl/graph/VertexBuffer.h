@@ -1,4 +1,4 @@
-#ifndef HGL_VERTEX_BUFFER_OBJECT_INCLUDE
+﻿#ifndef HGL_VERTEX_BUFFER_OBJECT_INCLUDE
 #define HGL_VERTEX_BUFFER_OBJECT_INCLUDE
 
 #include<hgl/type/DataType.h>
@@ -299,8 +299,8 @@ namespace hgl
 					return(false);
 				}
 
-				*this->access++=v[0];
-				*this->access++=v[1];
+				*this->access++=v.x;
+				*this->access++=v.y;
 
 				return(true);
 			}
@@ -329,10 +329,10 @@ namespace hgl
 					return(false);
 				}
 
-				*this->access++=start[0];
-				*this->access++=start[1];
-				*this->access++=end[0];
-				*this->access++=end[1];
+				*this->access++=start.x;
+				*this->access++=start.y;
+				*this->access++=end.x;
+				*this->access++=end.y;
 
 				return(true);
 			}
@@ -348,14 +348,14 @@ namespace hgl
 					return(false);
 				}
 
-				*this->access++=v1[0];
-				*this->access++=v1[1];
+				*this->access++=v1.x;
+				*this->access++=v1.y;
 
-				*this->access++=v2[0];
-				*this->access++=v2[1];
+				*this->access++=v2.x;
+				*this->access++=v2.y;
 
-				*this->access++=v3[0];
-				*this->access++=v3[1];
+				*this->access++=v3.x;
+				*this->access++=v3.y;
 
 				return(true);
 			}
@@ -371,16 +371,16 @@ namespace hgl
 					return(false);
 				}
 
-				*this->access++=(*v)[0];
-				*this->access++=(*v)[1];
+				*this->access++=v->x;
+				*this->access++=v->y;
 				v++;
 
-				*this->access++=(*v)[0];
-				*this->access++=(*v)[1];
+				*this->access++=v->x;
+				*this->access++=v->y;
 				v++;
 
-				*this->access++=(*v)[0];
-				*this->access++=(*v)[1];
+				*this->access++=v->x;
+				*this->access++=v->y;
 
 				return(true);
 			}
@@ -439,24 +439,24 @@ namespace hgl
 				T *p=this->mem_type;
 
 				//先以corner为最小值,length为最大值，求取最小最大值
-				min_vertex[0]=*p++;
-				min_vertex[1]=*p++;
-				min_vertex[2]=*p++;
+				min_vertex.x=*p++;
+				min_vertex.y=*p++;
+				min_vertex.z=*p++;
 
 				max_vertex=min_vertex;
 
 				for(int i=1;i<this->count;i++)
 				{
-					if(*p<min_vertex[0])min_vertex[0]=*p;
-					if(*p>max_vertex[0])max_vertex[0]=*p;
+					if(*p<min_vertex.x)min_vertex.x=*p;
+					if(*p>max_vertex.x)max_vertex.x=*p;
 					p++;
 
-					if(*p<min_vertex[1])min_vertex[1]=*p;
-					if(*p>max_vertex[1])max_vertex[1]=*p;
+					if(*p<min_vertex.y)min_vertex.y=*p;
+					if(*p>max_vertex.y)max_vertex.y=*p;
 					p++;
 
-					if(*p<min_vertex[2])min_vertex[2]=*p;
-					if(*p>max_vertex[2])max_vertex[2]=*p;
+					if(*p<min_vertex.z)min_vertex.z=*p;
+					if(*p>max_vertex.z)max_vertex.z=*p;
 					p++;
 				}
 			}
@@ -499,9 +499,9 @@ namespace hgl
 					return(false);
 				}
 
-				*this->access++=v[0];
-				*this->access++=v[1];
-				*this->access++=v[2];
+				*this->access++=v.x;
+				*this->access++=v.y;
+				*this->access++=v.z;
 
 				return(true);
 			}
@@ -547,12 +547,12 @@ namespace hgl
 					return(false);
 				}
 
-				*this->access++=start[0];
-				*this->access++=start[1];
-				*this->access++=start[2];
-				*this->access++=end[0];
-				*this->access++=end[1];
-				*this->access++=end[2];
+				*this->access++=start.x;
+				*this->access++=start.y;
+				*this->access++=start.z;
+				*this->access++=end.x;
+				*this->access++=end.y;
+				*this->access++=end.z;
 
 				return(true);
 			}
@@ -568,17 +568,17 @@ namespace hgl
 					return(false);
 				}
 
-				*this->access++=v1[0];
-				*this->access++=v1[1];
-				*this->access++=v1[2];
+				*this->access++=v1.x;
+				*this->access++=v1.y;
+				*this->access++=v1.z;
 
-				*this->access++=v2[0];
-				*this->access++=v2[1];
-				*this->access++=v2[2];
+				*this->access++=v2.x;
+				*this->access++=v2.y;
+				*this->access++=v2.z;
 
-				*this->access++=v3[0];
-				*this->access++=v3[1];
-				*this->access++=v3[2];
+				*this->access++=v3.x;
+				*this->access++=v3.y;
+				*this->access++=v3.z;
 
 				return(true);
 			}
@@ -594,19 +594,19 @@ namespace hgl
 					return(false);
 				}
 
-				*this->access++=(*v)[0];
-				*this->access++=(*v)[1];
-				*this->access++=(*v)[2];
+				*this->access++=v->x;
+				*this->access++=v->y;
+				*this->access++=v->z;
 				v++;
 
-				*this->access++=(*v)[0];
-				*this->access++=(*v)[1];
-				*this->access++=(*v)[2];
+				*this->access++=v->x;
+				*this->access++=v->y;
+				*this->access++=v->z;
 				v++;
 
-				*this->access++=(*v)[0];
-				*this->access++=(*v)[1];
-				*this->access++=(*v)[2];
+				*this->access++=v->x;
+				*this->access++=v->y;
+				*this->access++=v->z;
 
 				return(true);
 			}
@@ -717,13 +717,13 @@ namespace hgl
 					return(false);
 				}
 
-				*this->access++=start[0];
-				*this->access++=start[1];
-				*this->access++=start[2];
+				*this->access++=start.x;
+				*this->access++=start.y;
+				*this->access++=start.z;
 				*this->access++=1.0f;
-				*this->access++=end[0];
-				*this->access++=end[1];
-				*this->access++=end[2];
+				*this->access++=end.x;
+				*this->access++=end.y;
+				*this->access++=end.z;
 				*this->access++=1.0f;
 
 				return(true);
@@ -740,19 +740,19 @@ namespace hgl
 					return(false);
 				}
 
-				*this->access++=v1[0];
-				*this->access++=v1[1];
-				*this->access++=v1[2];
+				*this->access++=v1.x;
+				*this->access++=v1.y;
+				*this->access++=v1.z;
 				*this->access++=1.0f;
 
-				*this->access++=v2[0];
-				*this->access++=v2[1];
-				*this->access++=v2[2];
+				*this->access++=v2.x;
+				*this->access++=v2.y;
+				*this->access++=v2.z;
 				*this->access++=1.0f;
 
-				*this->access++=v3[0];
-				*this->access++=v3[1];
-				*this->access++=v3[2];
+				*this->access++=v3.x;
+				*this->access++=v3.y;
+				*this->access++=v3.z;
 				*this->access++=1.0f;
 
 				return(true);
@@ -769,21 +769,21 @@ namespace hgl
 					return(false);
 				}
 
-				*this->access++=(*v)[0];
-				*this->access++=(*v)[1];
-				*this->access++=(*v)[2];
+				*this->access++=v->x;
+				*this->access++=v->y;
+				*this->access++=v->z;
 				*this->access++=1.0f;
 				v++;
 
-				*this->access++=(*v)[0];
-				*this->access++=(*v)[1];
-				*this->access++=(*v)[2];
+				*this->access++=v->x;
+				*this->access++=v->y;
+				*this->access++=v->z;
 				*this->access++=1.0f;
 				v++;
 
-				*this->access++=(*v)[0];
-				*this->access++=(*v)[1];
-				*this->access++=(*v)[2];
+				*this->access++=v->x;
+				*this->access++=v->y;
+				*this->access++=v->z;
 				*this->access++=1.0f;
 
 				return(true);
@@ -799,7 +799,7 @@ namespace hgl
 		typedef VertexBuffer1<uint32>	VB1u32	,VB1ui;	__inline uint VertexBuffer1<uint32	>::GetDataType(){return HGL_UNSIGNED_INT;	}
 		typedef VertexBuffer1<float	>	VB1f;			__inline uint VertexBuffer1<float	>::GetDataType(){return HGL_FLOAT;			}
 		typedef VertexBuffer1<double>	VB1d;			__inline uint VertexBuffer1<double	>::GetDataType(){return HGL_DOUBLE;			}
-																									
+
 		typedef VertexBuffer2<int8	>	VB2i8	,VB2b;	__inline uint VertexBuffer2<int8	>::GetDataType(){return HGL_BYTE;			}
 		typedef VertexBuffer2<int16	>	VB2i16	,VB2s;	__inline uint VertexBuffer2<int16	>::GetDataType(){return HGL_SHORT;			}
 		typedef VertexBuffer2<int32	>	VB2i32	,VB2i;	__inline uint VertexBuffer2<int32	>::GetDataType(){return HGL_INT;			}
