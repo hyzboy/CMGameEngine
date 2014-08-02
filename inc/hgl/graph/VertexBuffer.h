@@ -245,6 +245,24 @@ namespace hgl
 				*this->access++=v1;
 				return(true);
 			}
+
+			/**
+			 * 将一个值重复多次写入缓冲区
+			 * @param v 值
+			 * @param count 写入数量
+			 */
+			bool Write(const T v,const int count)
+			{
+				if(!this->access||this->access+count>this->mem_end)
+				{
+					LOG_HINT(OS_TEXT("VertexBuffer1::Write(const T,")+OSString(count)+OS_TEXT(") out"));
+					return(false);
+				}
+
+				hgl_set(this->access,v,count);
+				this-access+=count;
+				return(true);
+			}
 		};//class VertexBuffer1
 
 		/**
@@ -301,6 +319,28 @@ namespace hgl
 
 				*this->access++=v.x;
 				*this->access++=v.y;
+
+				return(true);
+			}
+
+			/**
+			 * 将一个值重复多次写入缓冲区
+			 * @param v 值
+			 * @param count 写入数量
+			 */
+			bool Write(const Vector2f &v,const int count)
+			{
+				if(!this->access||this->access+(count<<1)>this->mem_end)
+				{
+					LOG_HINT(OS_TEXT("VertexBuffer1::Write(const Vector2f &,")+OSString(count)+OS_TEXT(") out"));
+					return(false);
+				}
+
+				for(int i=0;i<count;i++)
+				{
+					*this->access++=v.x;
+					*this->access++=v.y;
+				}
 
 				return(true);
 			}
@@ -506,6 +546,29 @@ namespace hgl
 				return(true);
 			}
 
+			/**
+			 * 将一个值重复多次写入缓冲区
+			 * @param v 值
+			 * @param count 写入数量
+			 */
+			bool Write(const Vector3f &v,const int count)
+			{
+				if(!this->access||this->access+(count*3)>this->mem_end)
+				{
+					LOG_HINT(OS_TEXT("VertexBuffer3::Write(const Vector3f,")+OSString(count)+OS_TEXT(") out"));
+					return(false);
+				}
+
+				for(int i=0;i<count;i++)
+				{
+					*this->access++=v.x;
+					*this->access++=v.y;
+					*this->access++=v.z;
+				}
+
+				return(true);
+			}
+
 			bool Write(const Color3f &v)
 			{
 				if(!this->access||this->access+3>this->mem_end)
@@ -673,6 +736,22 @@ namespace hgl
 				return(true);
 			}
 
+			bool Write(const Vector4f &v)
+			{
+				if(!this->access||this->access+4>this->mem_end)
+				{
+					LOG_HINT(OS_TEXT("VertexBuffer4::Write(color4 &) out"));
+					return(false);
+				}
+
+				*this->access++=v.x;
+				*this->access++=v.y;
+				*this->access++=v.z;
+				*this->access++=v.w;
+
+				return(true);
+			}
+
 			bool Write(const Color4f &v)
 			{
 				if(!this->access||this->access+4>this->mem_end)
@@ -685,6 +764,30 @@ namespace hgl
 				*this->access++=v.g;
 				*this->access++=v.b;
 				*this->access++=v.a;
+
+				return(true);
+			}
+
+			/**
+			 * 将一个值重复多次写入缓冲区
+			 * @param v 值
+			 * @param count 写入数量
+			 */
+			bool Write(const Vector4f &v,const int count)
+			{
+				if(!this->access||this->access+(count<<2)>this->mem_end)
+				{
+					LOG_HINT(OS_TEXT("VertexBuffer4::Write(const Vector4f,")+OSString(count)+OS_TEXT(") out"));
+					return(false);
+				}
+
+				for(int i=0;i<count;i++)
+				{
+					*this->access++=v.x;
+					*this->access++=v.y;
+					*this->access++=v.z;
+					*this->access++=v.w;
+				}
 
 				return(true);
 			}
