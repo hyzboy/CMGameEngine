@@ -48,6 +48,7 @@ namespace hgl
                 const	int		GetCount	()const{return count;}									///<取得当前有多少数据
                 const	int		GetMaxCount	()const{return max_count;}								///<取得最大可以有多少数据
         virtual 		void	SetMaxCount	(int);													///<设置最大可以有多少数据
+						int		GetFreeCount()const{return max_count-count;}						///<取得当前缓冲区剩于量
 
     public:
 
@@ -58,6 +59,15 @@ namespace hgl
         virtual bool			Find	(const F &,T &,bool=true);									///<取得一个数据(如果没有不会自动创建)
         virtual bool 			Get		(const F &,T &,bool=true); 									///<取得一个数据(如果没有会自动创建)
                 void 			Clear	();						  									///<清除所有数据
+				ACItem *		GetEnd	(bool mts=true)												///<取最后一项
+				{
+					ACItem *obj=end_item;
+
+					if(mts)
+						MoveToStart(obj);
+
+					return(obj);
+				}
 
                 void			DeleteByFlag(const F &);
                 void 			DeleteByData(T &);
