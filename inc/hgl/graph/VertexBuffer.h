@@ -260,7 +260,7 @@ namespace hgl
 				}
 
 				hgl_set(this->access,v,count);
-				this-access+=count;
+				this->access+=count;
 				return(true);
 			}
 		};//class VertexBuffer1
