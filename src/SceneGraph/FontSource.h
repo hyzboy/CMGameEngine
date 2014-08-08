@@ -1,4 +1,4 @@
-#ifndef HGL_GRAPH_FONT_SOURCE_INCLUDE
+﻿#ifndef HGL_GRAPH_FONT_SOURCE_INCLUDE
 #define HGL_GRAPH_FONT_SOURCE_INCLUDE
 
 #include<hgl/graph/Font.h>
@@ -35,7 +35,7 @@ namespace hgl
 
 		protected:
 
-			virtual bool MakeCharBitmap(char16_t)=0;					///<产生字体数据
+			virtual bool MakeCharBitmap(wchar_t)=0;					///<产生字体数据
 			virtual int GetLineHeight()const=0;						///<取得行高
 
 		public:
@@ -43,7 +43,7 @@ namespace hgl
 			FontSource(const Font &);
 			virtual ~FontSource();
 
-			FontSource::Bitmap *GetCharBitmap(char16_t);				///<取得字体数据
+			FontSource::Bitmap *GetCharBitmap(wchar_t);				///<取得字体数据
 		};//class FontSource
 	}//namespace graph
 }//namespace hgl

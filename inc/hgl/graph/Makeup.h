@@ -33,10 +33,11 @@ namespace hgl
 		{
 			struct CharMakeup
 			{
+				CharMakeup():color(0xffffffff){}
 				int left;
 				int top;
 
-				Color4f color;
+				uint32 color;
 
 				RectScope2f scope;
 
@@ -93,13 +94,57 @@ namespace hgl
 			{
 				int n=MakeupString.GetCount();
 
+				CharMakeup *cm=MakeupString.GetData();
+
+				uint32 color=Color4f(r,g,b,a).ToU32();
+
 				while(n--)
-					MakeupString[n].color.Set(r,g,b,a);
+				{
+					cm->color=color;
+					++cm;
+				}
 			}
 
 			void SetColor(const Color4f &c)
 			{
         		SetColor(c.r,c.g,c.b,c.a);
+			}
+
+			void SetColor(int index,const Color4f &c)
+			{
+				if(index<0)return;
+
+				const int count=MakeupString.GetCount();
+
+				if(index>=count)return;
+				
+				CharMakeup *cm=MakeupString.GetData();
+
+				cm[index].color=c.ToU32();
+			}
+
+			void SetColor(int start,int num,const Color4f &c)
+			{
+				if(start<0||num<=0)return;
+
+				const int count=MakeupString.GetCount();
+
+				if(start>=count)return;
+
+				if(start+num>count)
+					num=count-start;
+				
+				CharMakeup *cm=MakeupString.GetData();
+
+				cm+=start;
+
+				uint32 c32=c.ToU32();
+
+				for(int i=0;i<num;i++)
+				{
+					cm->color=c32;
+					++cm;
+				}
 			}
 
 			void ProcEnd(int dw)
