@@ -1,4 +1,4 @@
-#ifndef HGL_GRAPH_TILE_FONT_INCLUDE
+﻿#ifndef HGL_GRAPH_TILE_FONT_INCLUDE
 #define HGL_GRAPH_TILE_FONT_INCLUDE
 
 #include<hgl/VectorMath.h>
@@ -29,14 +29,14 @@ namespace hgl
 			TileData *tile_data;																	///<Tile管理器
 			FontSource *chs_source,*eng_source;														///<字体数据源
 
-			ActiveChain<char16_t,TileData::Object *> fud;												///<字体缓冲管理
+			ActiveChain<char16_t,TileData::Object *> fud;											///<字体缓冲管理
 
 			uint8 *char_bitmap_buffer;																///<字符位图缓冲区
 			uint char_bitmap_bytes;																	///<字符位图字节数
 
-			VertexBuffer2<float> *vertex2d;															///<绘制用顶点坐标
-			VertexBuffer2<float> *tex_coord;														///<绘制用顶点坐标
-//			VertexBuffer4<float> *vertex_color;														///<绘制用顶点色
+			VB2f *vertex2d;																			///<绘制用顶点坐标
+			VB2f *tex_coord;																		///<绘制用顶点坐标
+//			VB1ui *vertex_color;																	///<绘制用顶点色
 			Material *fnt_mtl;																		///<绘制用材质
 			Renderable *fnt_draw;																	///<绘制用对象
 
@@ -140,9 +140,10 @@ namespace hgl
 		* @param height 高
 		* @param bold 加粗,默认false
 		* @param italic 斜体,默认false
+		* @param anti 是否抗矩齿,默认true
 		* @param count 缓冲区内保存的字符个数
 		*/
-		TileFont *CreateTileFont(const char16_t *chs_fontname,const char16_t *eng_fontname,int width,int height,bool bold,bool italic,int count);
+		TileFont *CreateTileFont(const char16_t *chs_fontname,const char16_t *eng_fontname,int width,int height,bool bold=false,bool italic=false,bool anti=true,int count=-1);
 
 		/**
 		* 通过系统字体创建一个Tile字体,中英文字体相同
@@ -151,11 +152,12 @@ namespace hgl
 		* @param height 高
 		* @param bold 加粗,默认false
 		* @param italic 斜体,默认false
+		* @param anti 是否抗矩齿,默认true
 		* @param count 缓冲区内保存的字符个数
 		*/
-		__inline TileFont *CreateTileFont(const char16_t *fontname,int width,int height,bool bold=false,bool italic=false,int num=-1)
+		__inline TileFont *CreateTileFont(const char16_t *fontname,int width,int height,bool bold=false,bool italic=false,bool anti=true,int count=-1)
 		{
-			return CreateTileFont(fontname,fontname,width,height,bold,italic,num);
+			return CreateTileFont(fontname,fontname,width,height,bold,italic,anti,count);
 		}
 
 		/**
@@ -166,9 +168,9 @@ namespace hgl
 		* @param height 高
 		* @param count 缓冲区内保存的字符个数
 		*/
-		__inline TileFont *CreateTileFont(const char16_t *chs_fontname,const char16_t *eng_fontname,int width,int height,int num=-1)
+		__inline TileFont *CreateTileFont(const char16_t *chs_fontname,const char16_t *eng_fontname,int width,int height,int count=-1)
 		{
-			return CreateTileFont(chs_fontname,eng_fontname,width,height,false,false,num);
+			return CreateTileFont(chs_fontname,eng_fontname,width,height,false,false,true,count);
 		}
 	}//namespace graph
 }//namespace hgl

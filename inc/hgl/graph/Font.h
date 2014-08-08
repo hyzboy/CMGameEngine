@@ -1,4 +1,4 @@
-#ifndef HGL_FONT_INCLUDE
+﻿#ifndef HGL_FONT_INCLUDE
 #define HGL_FONT_INCLUDE
 
 #include<hgl/type/DataType.h>
@@ -38,7 +38,7 @@ namespace hgl
 		static void SetDefaultFont(const Font &);													///<设置缺省字体
 		static void ClearDefaultFont();																///<清除缺省字体
 
-		void Set(const UTF16String &,int,int,bool=false,bool=false);									///<设置字体
+		void Set(const UTF16String &,int,int,bool=false,bool=false);								///<设置字体
 
 	public:	//操作符重载
 
