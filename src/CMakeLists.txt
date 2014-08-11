@@ -27,3 +27,5 @@ ENDIF(UNIX)
 add_subdirectory(OS)
 
 add_subdirectory(PlugIn)
+
+add_subdirectory(RedisClient)
