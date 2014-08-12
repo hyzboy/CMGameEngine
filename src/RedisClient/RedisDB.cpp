@@ -1,4 +1,4 @@
-#include<hgl/db/RedisDB.h>
+﻿#include<hgl/db/RedisDB.h>
 #include"hiredis.h"
 #include"RedisDBReply.h"
 #include<string.h>
@@ -73,24 +73,50 @@ namespace hgl
 		void RedisDB::Discard	(){REPLY r(con,"DISCARD");}
 		void RedisDB::Exec		(){REPLY r(con,"EXEC");}
 
-		int RedisDB::MultiParam	(char *str,int number,const char **keys)
+		int RedisDB::MultiParam	(const UTF8String &cmd,int number,const char **keys)
 		{
 			if(number<=0||!keys)return(-1);
 
-			char *p=str+strlen(str);
+			const char *argv[number+1];
+			size_t argv_len[number+1];
+
+			argv[0]=cmd.c_str();
+			argv_len[0]=cmd.Length();
+
 			const char *s;
 
 			for(int i=0;i<number;i++)
 			{
-				*p++=' ';
-				s=keys[i];
-				while(*s)
-					*p++=*s++;
+				argv[i+1]=keys[i];
+				argv_len[i+1]=strlen(keys[i]);
 			}
 
-			*p++=0;
+			REPLY r(con,number+1,argv,argv_len);
 
-			REPLY r(con,str);
+			return_integer;
+		}
+
+		int RedisDB::MultiParam	(const UTF8String &cmd,const UTF8String &param,int number,const char **keys)
+		{
+			if(number<=0||!keys)return(-1);
+
+			const char *argv[number+2];
+			size_t argv_len[number+2];
+
+			argv[0]=cmd.c_str();
+			argv_len[0]=cmd.Length();
+			argv[1]=param.c_str();
+			argv_len[1]=param.Length();
+
+			const char *s;
+
+			for(int i=0;i<number;i++)
+			{
+				argv[i+2]=keys[i];
+				argv_len[i+2]=strlen(keys[i]);
+			}
+
+			REPLY r(con,number+2,argv,argv_len);
 
 			return_integer;
 		}

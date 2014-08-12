@@ -177,9 +177,7 @@ namespace hgl
 			if(number<=0)return(number);
 			if(!keys)return(-1);
 
-			char str[1024]="DEL ";
-
-			return MultiParam(str,number,keys);
+			return MultiParam("DEL",number,keys);
 		}
 
 		bool RedisDB::RandomKey(redis_string &result)

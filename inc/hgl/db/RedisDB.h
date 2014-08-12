@@ -1,4 +1,4 @@
-#ifndef HGL_DB_REDIS_INCLUDE
+﻿#ifndef HGL_DB_REDIS_INCLUDE
 #define HGL_DB_REDIS_INCLUDE
 
 #include<hgl/type/BaseString.h>
@@ -113,7 +113,8 @@ namespace hgl
 
 		private:
 
-			int MultiParam	(char *str,int number,const char **keys);
+			int MultiParam	(const UTF8String &cmd,int number,const char **keys);
+			int MultiParam	(const UTF8String &cmd,const UTF8String &param,int number,const char **keys);
 
 		public:
 
@@ -187,9 +188,9 @@ namespace hgl
 		public:	//集合
 
 			bool SAdd(const redis_string &,const redis_string &);									///<添加一个元素到集合
-			bool SAdd(const char *,int,const char **);												///<添加多个元素到集合
+			bool SAdd(const redis_string &,int,const char **);												///<添加多个元素到集合
 			bool SRem(const redis_string &,const redis_string &);									///<从集合中删除一个元素
-			bool SRem(const char *,int,const char **);												///<从集合中删除多个元素
+			bool SRem(const redis_string &,int,const char **);												///<从集合中删除多个元素
 
 			bool SRandMember(const char *,redis_string &,int count=-1);								///<从集合中随机取出一个元素
 			bool SPop(const char *,redis_string &);													///<从集合中随机取出一个元素，并从合集中移除它
@@ -213,7 +214,7 @@ namespace hgl
 			bool ZAdd(const char *,int64,const char *);												///<添加一个元素到有序集合
 			bool ZAdd(const char *,int,int64 *,const char **);										///<添加多个元素到有序集合
 			bool ZRem(const char *,const char *);													///<从集合中删除一个元素
-			bool ZRem(const char *,int,const char **);												///<从集合中删除多个元素
+			bool ZRem(const redis_string &,int,const char **);										///<从集合中删除多个元素
 			bool ZRemRangeByRank(const char *,int64,int64);											///<从集合中删除指定排名的元素
 			bool ZRemRangeByScore(const char *,int64,int64);										///<从集合中删除指定分数的元素
 

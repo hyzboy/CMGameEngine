@@ -1,4 +1,4 @@
-#include<hgl/db/RedisDB.h>
+﻿#include<hgl/db/RedisDB.h>
 #include"RedisDBReply.h"
 
 namespace hgl
@@ -54,15 +54,11 @@ namespace hgl
 			return_integer;
 		}
 
-		bool RedisDB::ZRem(const char *set,int count,const char **members)
+		bool RedisDB::ZRem(const UTF8String &set,int count,const char **members)
 		{
 			if(!set||!(*set)||count<=0||!members)return(-1);
 
-			char str[1024]="ZREM ";
-
-			strcpy(str+5,set);
-
-			return MultiParam(str,count,members);
+			return MultiParam("ZREM",set,count,members);
 		}
 
 		bool RedisDB::ZRemRangeByRank(const char *set,int64 start,int64 top)

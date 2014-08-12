@@ -29,15 +29,11 @@ namespace hgl
 			return_integer;
 		}
 
-		bool RedisDB::SAdd(const char *set,int count,const char **members)
+		bool RedisDB::SAdd(const UTF8String &set,int count,const char **members)
 		{
 			if(!set||!(*set)||count<=0||!members)return(-1);
 
-			char str[1024]="SADD ";
-
-			strcpy(str+5,set);
-
-			return MultiParam(str,count,members);
+			return MultiParam("SADD",set,count,members);
 		}
 
 		bool RedisDB::SRem(const redis_string &set,const redis_string &member)
@@ -64,15 +60,11 @@ namespace hgl
 			return_integer;
 		}
 
-		bool RedisDB::SRem(const char *set,int count,const char **members)
+		bool RedisDB::SRem(const UTF8String &set,int count,const char **members)
 		{
 			if(!set||!(*set)||count<=0||!members)return(-1);
 
-			char str[1024]="SREM ";
-
-			strcpy(str+5,set);
-
-			return MultiParam(str,count,members);
+			return MultiParam("SREM",set,count,members);
 		}
 
 		bool RedisDB::SRandMember(const char *key,redis_string &result,int count)
@@ -136,8 +128,7 @@ namespace hgl
 
 		bool RedisDB::SIsMember(const redis_string &set,const redis_string &member)
 		{
-			if(!set||!(*set)||!member||!(*member))return(-1);
-
+			if(set.IsEmpty()||member.IsEmpty())RETURN_FALSE;
 
 			const char *argv[]=
 			{
