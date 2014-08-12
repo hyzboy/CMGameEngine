@@ -198,7 +198,7 @@ namespace hgl
 
 			int SCard(const char *);																///<取得集合里的元素数量
 
-			bool SIsMember(const char *,const char *);												///<确认这个元素是否在集合内
+			bool SIsMember(const redis_string &,const redis_string &);								///<确认这个元素是否在集合内
 
 			bool SMembers(const char *,redis_string_list &);										///<取得集合里的所有元素
 

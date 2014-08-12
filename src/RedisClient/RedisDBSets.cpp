@@ -134,11 +134,26 @@ namespace hgl
 			return_integer;
 		}
 
-		bool RedisDB::SIsMember(const char *set,const char *member)
+		bool RedisDB::SIsMember(const redis_string &set,const redis_string &member)
 		{
 			if(!set||!(*set)||!member||!(*member))return(-1);
 
-			REPLY r(con,"SISMEMBER %s %d",set,member);
+
+			const char *argv[]=
+			{
+				"SISMEMBER",
+				set.c_str(),
+				member.c_str()
+			};
+
+			const size_t argvlen[]=
+			{
+				9,
+				set.Length(),
+				member.Length()
+			};
+
+			REPLY r(con,3,argv,argvlen);
 
 			return_integer;
 		}
