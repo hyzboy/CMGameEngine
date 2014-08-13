@@ -39,14 +39,14 @@ set(ANGELSCRIPT_SOURCE
 )
 
 SET(ANGEL_SCRIPT_ADDON_SOURCE	${ANGEL_SCRIPT_PATH}/add_on/scriptarray/scriptarray.cpp)
+SET(ANGEL_VM_SOURCE		AngelVM/AngelVM.cpp
+						AngelVM/AngelMath.cpp
+						AngelVM/AngelString.cpp
+						AngelVM/AngelModule.cpp
+						AngelVM/AngelContext.cpp
+						AngelVM/AngelObject.cpp)
 
 SET(ut_files
-	AngelVM/AngelVM.cpp
-	AngelVM/AngelMath.cpp
-	AngelVM/AngelString.cpp
-	AngelVM/AngelModule.cpp
-	AngelVM/AngelContext.cpp
-	AngelVM/AngelObject.cpp
 
 # 	DevilVM/as_tokenizer.cpp
 # 	DevilVM/DevilCommand.cpp
@@ -68,7 +68,7 @@ SET(ut_files
 	XML/XMLParse.cpp
 )
 
-SET(DB_FILES
+SET(CDB_FILES
 	DB/CDBField.cpp
 	DB/CDBTable.cpp
 	DB/FieldType.cpp
@@ -80,41 +80,55 @@ SET(DB_FILES
 	DB/TableDescXML.cpp
 )
 
+SOURCE_GROUP("DB\\CDB" CDB_FILES)
+
 OPTION(USE_ANGEL_SCRIPT_JIT	"AngelScript use JIT" OFF)
 
 IF(USE_ANGEL_SCRIPT_JIT)
 	ADD_DEFINITIONS("-DUSE_ANGEL_SCRIPT_JIT")
-	SET(ut_files ${ut_files} AngelVM/jit/as_jit.cpp)
+	SET(ANGEL_JIT_SOURCE AngelVM/jit/as_jit.cpp)
 ENDIF(USE_ANGEL_SCRIPT_JIT)
 
 IF(UNIX)
 	IF(USE_ANGEL_SCRIPT_JIT)
-		SET(ut_files ${ut_files}	AngelVM/jit/virtual_asm_linux.cpp)
+		SET(ANGEL_JIT_SOURCE ${ANGEL_JIT_SOURCE}	AngelVM/jit/virtual_asm_linux.cpp)
 	ENDIF(USE_ANGEL_SCRIPT_JIT)
 #
 	IF(HGL_BITS EQUAL 64)
-		SET(ut_files ${ut_files}	DevilVM/GccCallX64.cpp
+		SET(ANGEL_JIT_SOURCE ${ANGEL_JIT_SOURCE}	DevilVM/GccCallX64.cpp
 									${ANGEL_SCRIPT_PATH}/source/as_callfunc_x64_gcc.cpp)
 
 		IF(USE_ANGEL_SCRIPT_JIT)
-			SET(ut_files ${ut_files}	AngelVM/jit/virtual_asm_x64.cpp)
+			SET(ANGEL_JIT_SOURCE ${ANGEL_JIT_SOURCE}	AngelVM/jit/virtual_asm_x64.cpp)
 		ENDIF(USE_ANGEL_SCRIPT_JIT)
 	ELSE(HGL_BITS EQUAL 64)
-		SET(ut_files ${ut_files}	${ANGEL_SCRIPT_PATH}/source/as_callfunc_x86.cpp)
+		SET(ANGEL_JIT_SOURCE ${ANGEL_JIT_SOURCE}	${ANGEL_SCRIPT_PATH}/source/as_callfunc_x86.cpp)
 
 		IF(USE_ANGEL_SCRIPT_JIT)
-			SET(ut_files ${ut_files}	AngelVM/jit/virtual_asm_x86.cpp)
+			SET(ANGEL_JIT_SOURCE ${ANGEL_JIT_SOURCE}	AngelVM/jit/virtual_asm_x86.cpp)
 		ENDIF(USE_ANGEL_SCRIPT_JIT)
 	ENDIF(HGL_BITS EQUAL 64)
 ENDIF(UNIX)
 
 IF(WIN32)
+	IF(USE_ANGEL_SCRIPT_JIT)
+		SET(ANGEL_JIT_SOURCE ${ANGEL_JIT_SOURCE}	AngelVM/jit/virtual_asm_windows.cpp)
+	ENDIF(USE_ANGEL_SCRIPT_JIT)
+	
 	IF(HGL_BITS EQUAL 64)
-		SET(ut_files ${ut_files}	${ANGEL_SCRIPT_PATH}/source/as_callfunc_x64_msvc.cpp
-									${ANGEL_SCRIPT_PATH}/source/as_callfunc_x64_msvc_asm.asm)
+		SET(ANGEL_CALL_SOURCE	${ANGEL_SCRIPT_PATH}/source/as_callfunc_x64_msvc.cpp
+								${ANGEL_SCRIPT_PATH}/source/as_callfunc_x64_msvc_asm.asm)
+								
+		IF(USE_ANGEL_SCRIPT_JIT)
+			SET(ANGEL_JIT_SOURCE ${ANGEL_JIT_SOURCE}	AngelVM/jit/virtual_asm_x64.cpp)
+		ENDIF(USE_ANGEL_SCRIPT_JIT)
 	ELSE(HGL_BITS EQUAL 64)
-		SET(ut_files ${ut_files}	${ANGEL_SCRIPT_PATH}/source/as_callfunc_x86.cpp
-									DevilVM/DevilCallConvX8632.cpp)
+		SET(ANGEL_CALL_SOURCE	${ANGEL_SCRIPT_PATH}/source/as_callfunc_x86.cpp
+								DevilVM/DevilCallConvX8632.cpp)
+
+		IF(USE_ANGEL_SCRIPT_JIT)
+			SET(ANGEL_JIT_SOURCE ${ANGEL_JIT_SOURCE}	AngelVM/jit/virtual_asm_x86.cpp)
+		ENDIF(USE_ANGEL_SCRIPT_JIT)
 	ENDIF(HGL_BITS EQUAL 64)
 ENDIF(WIN32)
 
@@ -130,8 +144,16 @@ ENDIF(WIN32)
 
 ADD_DEFINITIONS("-DAS_USE_NAMESPACE -DANGELSCRIPT_EXPORT")
 
+SOURCE_GROUP("AngelVM" FILES ${ANGEL_VM_SOURCE})
+SOURCE_GROUP("AngelVM\\AngelScript" FILES ${ANGELSCRIPT_SOURCE})
+SOURCE_GROUP("AngelVM\\AngelScript\\Addon" FILES ${ANGEL_SCRIPT_ADDON_SOURCE})
+SOURCE_GROUP("AngelVM\\AngelScript\\Call" FILES ${ANGEL_CALL_SOURCE})
+SOURCE_GROUP("AngelVM\\JIT" FILES ${ANGEL_JIT_SOURCE})
+
 SET(AFFECTOR_SOURCE_FILES	Affector/Affector.cpp
 							Affector/AffectorTimer.cpp
 							Affector/AffectorTrackTimer.cpp)
+							
+SOURCE_GROUP("Affector" FILES ${AFFECTOR_SOURCE_FILES})
 
-ADD_LIBRARY(CM.UT SHARED ${ut_files} ${DB_FILES} ${ANGELSCRIPT_SOURCE} ${ANGEL_SCRIPT_ADDON_SOURCE} ${AFFECTOR_SOURCE_FILES})
+ADD_LIBRARY(CM.UT SHARED ${ut_files} ${CDB_FILES} ${ANGELSCRIPT_SOURCE} ${ANGEL_SCRIPT_ADDON_SOURCE} ${ANGEL_VM_SOURCE} ${ANGEL_CALL_SOURCE} ${ANGEL_JIT_SOURCE} ${AFFECTOR_SOURCE_FILES})
