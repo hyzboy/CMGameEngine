@@ -1,4 +1,4 @@
-ï»¿#ifndef HGL_ATOMIC_INCLUDE
+#ifndef HGL_ATOMIC_INCLUDE
 #define HGL_ATOMIC_INCLUDE
 
 #include<hgl/platform/Platform.h>
@@ -19,10 +19,10 @@
 	#endif//
 // #endif//C++11 ATOMIC
 
-//ps.1ï¼šè€æ—§çš„Linux/32bitä¸‹åŸå­ä»…æ”¯æŒ24ä½ï¼Œä½†æˆ‘ä»¬è®¾å®šä¸ºä¸æ”¯æŒæ—§çš„Linux
-//ps.2ï¼šä½¿ç”¨GCC 4.1å†…ç½®å®å®ç°çš„AtomicGNUçš„ä¸æ”¯æŒdoubelå‹å¤„ç†ï¼Œå¦‚éœ€æ”¯æŒï¼Œåˆ™å°½å¯èƒ½ä¸è¦ç”¨atom_double
+//ps.1£ºÀÏ¾ÉµÄLinux/32bitÏÂÔ­×Ó½öÖ§³Ö24Î»£¬µ«ÎÒÃÇÉè¶¨Îª²»Ö§³Ö¾ÉµÄLinux
+//ps.2£ºÊ¹ÓÃGCC 4.1ÄÚÖÃºêÊµÏÖµÄAtomicGNUµÄ²»Ö§³ÖdoubelĞÍ´¦Àí£¬ÈçĞèÖ§³Ö£¬Ôò¾¡¿ÉÄÜ²»ÒªÓÃatom_double
 
-//ps..........GCC4.7/4.8/4.9ä¸‹å¦‚æœä½¿ç”¨c++11çš„atomicä¼šé€ æˆä¸€äº›valgrind-memcheckæŠ¥é”™ï¼Œæ‰€ä»¥æš‚ä¸ä½¿ç”¨ã€‚å¾…valgrindæ›´æ–°
+//ps..........GCC4.7/4.8/4.9ÏÂÈç¹ûÊ¹ÓÃc++11µÄatomic»áÔì³ÉÒ»Ğ©valgrind-memcheck±¨´í£¬ËùÒÔÔİ²»Ê¹ÓÃ¡£´ıvalgrind¸üĞÂ
 
 namespace hgl
 {
@@ -38,9 +38,9 @@ namespace hgl
 
 		typedef atom_win32<char		> atom_char;
 		typedef atom_win32<uchar	> atom_uchar;
-		typedef atom_win32<wchar_t	> atom_wchar;
+//		typedef atom_win32<wchar_t	> atom_wchar;
 		typedef atom_win32<char16_t	> atom_char16;
-		typedef atom_win32<char32_t	> atom_char32;
+//		typedef atom_win32<char32_t	> atom_char32;
 	#else
 // 		#ifdef HGL_ATOMIC_CPP11
 // 			template<typename T> using atom=std::atomic<T>;
@@ -58,9 +58,9 @@ namespace hgl
 
 		typedef atom<char		> atom_char;
 		typedef atom<uchar		> atom_uchar;
-		typedef atom<wchar_t	> atom_wchar;
+//		typedef atom<wchar_t	> atom_wchar;
 		typedef atom<char16_t	> atom_char16;
-		typedef atom<char32_t	> atom_char32;
+//		typedef atom<char32_t	> atom_char32;
 	#endif//windows & !c++11
 }//namespace hgl
 #endif//HGL_ATOMIC_INCLUDE
