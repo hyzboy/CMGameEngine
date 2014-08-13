@@ -32,7 +32,7 @@ protected:
 	virtual bool Proc_MouseButton			(int,bool);
 	virtual bool Proc_JoystickButton		(int,bool){return(true);}
 	virtual bool Proc_Key         			(int,bool){return(true);}
-	virtual bool Proc_Char          		(char16_t){return(true);}
+	virtual bool Proc_Char          		(u16char){return(true);}
 	virtual bool Proc_Event         		(int,void *){return(true);}
 
 			void DefaultDraw(GUIObject *,const Matrix4f *);

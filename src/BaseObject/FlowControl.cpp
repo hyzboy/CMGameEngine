@@ -37,7 +37,7 @@ namespace hgl
 	* @param name 本流程名称
 	* @param obj 本流程控制器的起始流程
 	*/
-	FlowControl::FlowControl(char16_t *name,FlowObject *obj)
+	FlowControl::FlowControl(u16char *name,FlowObject *obj)
 	{
 		Name=name;
 
@@ -404,7 +404,7 @@ namespace hgl
 
 	#undef PROC
 
-	bool FlowControl::Proc_Char(char16_t ch)
+	bool FlowControl::Proc_Char(u16char ch)
 	{
 		if(active_object)
 			return active_object->Proc_Char(ch);

@@ -136,7 +136,7 @@ namespace hgl
 	PROCFUNC(Proc_KeyDown,	uint);
 	PROCFUNC(Proc_KeyPress,	uint);
 	PROCFUNC(Proc_KeyUp,	uint);
-	PROCFUNC(Proc_Char,		char16_t);
+	PROCFUNC(Proc_Char,		u16char);
 
 	#undef PROCFUNC
 

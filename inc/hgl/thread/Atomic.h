@@ -19,10 +19,10 @@
 	#endif//
 // #endif//C++11 ATOMIC
 
-//ps.1���Ͼɵ�Linux/32bit��ԭ�ӽ�֧��24λ���������趨Ϊ��֧�־ɵ�Linux
-//ps.2��ʹ��GCC 4.1���ú�ʵ�ֵ�AtomicGNU�Ĳ�֧��doubel�ʹ���������֧�֣��򾡿��ܲ�Ҫ��atom_double
+//ps.1：老旧的Linux/32bit下原子仅支持24位，但我们设定为不支持旧的Linux
+//ps.2：使用GCC 4.1内置宏实现的AtomicGNU的不支持doubel型处理，如需支持，则尽可能不要用atom_double
 
-//ps..........GCC4.7/4.8/4.9�����ʹ��c++11��atomic�����һЩvalgrind-memcheck�����������ݲ�ʹ�á���valgrind����
+//ps..........GCC4.7/4.8/4.9下如果使用c++11的atomic会造成一些valgrind-memcheck报错，所以暂不使用。待valgrind更新
 
 namespace hgl
 {
@@ -39,7 +39,7 @@ namespace hgl
 		typedef atom_win32<char		> atom_char;
 		typedef atom_win32<uchar	> atom_uchar;
 //		typedef atom_win32<wchar_t	> atom_wchar;
-		typedef atom_win32<char16_t	> atom_char16;
+		typedef atom_win32<u16char	> atom_char16;
 //		typedef atom_win32<char32_t	> atom_char32;
 	#else
 // 		#ifdef HGL_ATOMIC_CPP11
@@ -59,7 +59,7 @@ namespace hgl
 		typedef atom<char		> atom_char;
 		typedef atom<uchar		> atom_uchar;
 //		typedef atom<wchar_t	> atom_wchar;
-		typedef atom<char16_t	> atom_char16;
+		typedef atom<u16char	> atom_char16;
 //		typedef atom<char32_t	> atom_char32;
 	#endif//windows & !c++11
 }//namespace hgl

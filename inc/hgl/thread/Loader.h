@@ -66,7 +66,7 @@ namespace hgl
 
 	public:	//方法
 
-		bool Load(HAC *,const char16_t *);															///<加载一个文件到某个对象
+		bool Load(HAC *,const u16char *);															///<加载一个文件到某个对象
 
 		LoaderStatus GetStatus();																	///<取得状态
 	};//class Loader

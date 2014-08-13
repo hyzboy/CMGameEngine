@@ -1,4 +1,4 @@
-﻿#include<hgl/type/StringList.h>
+#include<hgl/type/StringList.h>
 #include<hgl/File.h>
 namespace hgl
 {
@@ -11,7 +11,7 @@ namespace hgl
 	*/
 	int LoadStringList(UTF16StringList &sl,const OSString &filename,const CharSet &cs)
 	{
-		char16_t *buf;
+		u16char *buf;
 		const int64 size=LoadTxtToMemory(filename,&buf,cs);
 
 		if(size<=0)

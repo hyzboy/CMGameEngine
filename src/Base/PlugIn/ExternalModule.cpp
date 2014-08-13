@@ -1,4 +1,4 @@
-﻿#include<hgl/ExternalModule.h>
+#include<hgl/ExternalModule.h>
 #include<hgl/LogInfo.h>
 
 #if HGL_OS == HGL_OS_Windows
@@ -78,7 +78,7 @@ namespace hgl
 		if(!fp)
 		{
 			uint dw=GetLastError();
-			char16_t *str=nullptr;
+			u16char *str=nullptr;
 
 			FormatMessageW(	FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_SYSTEM,nullptr,dw,
 							MAKELANGID(LANG_NEUTRAL,SUBLANG_DEFAULT),str,0,nullptr);

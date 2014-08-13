@@ -2,14 +2,14 @@ namespace hgl
 {
 	namespace os
 	{
-		void CopyTextToClipboard(const char16_t *str)
+		void CopyTextToClipboard(const u16char *str)
 		{
 			if(!str||!(*str))return;
 
 			OSXCopyToClipboard(str);
 		}
 
-		const char16_t *GetTextFromClipboard()
+		const u16char *GetTextFromClipboard()
 		{
 			return (OSXCopyFromClipboard());
 		}

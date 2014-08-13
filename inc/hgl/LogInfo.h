@@ -1,4 +1,4 @@
-﻿#ifndef HGL_LOGINFO_INCLUDE
+#ifndef HGL_LOGINFO_INCLUDE
 #define HGL_LOGINFO_INCLUDE
 
 #ifndef __MAKE_PLUGIN__
@@ -13,7 +13,7 @@ namespace hgl
 		bool AddLogger(Logger *);																	///<增加日志输出者
 
 #ifndef NO_LOGINFO
-		void Log(LogLevel,const char16_t *,int=-1);													///<输出日志
+		void Log(LogLevel,const u16char *,int=-1);													///<输出日志
 		void Log(LogLevel,const char *,int=-1);														///<输出日志(utf8)
 		inline	void Log(LogLevel ll,const UTF16String &str){Log(ll,str.c_str(),str.Length());}		///<输出日志
 		inline	void Log(LogLevel ll,const UTF8String &str){Log(ll,str.c_str(),str.Length());}		///<输出日志

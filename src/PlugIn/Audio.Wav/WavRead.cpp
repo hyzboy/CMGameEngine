@@ -1,4 +1,4 @@
-﻿#define __MAKE_PLUGIN__
+#define __MAKE_PLUGIN__
 
 #include<hgl/PlugIn.h>
 #include<string.h>
@@ -171,7 +171,7 @@ static OutInterface out_interface=
 	NULL
 };
 //--------------------------------------------------------------------------------------------------
-const char16_t plugin_intro[]=u"WAV音频文件解码(2014-04-09,代码源自ALUT)";
+const u16char plugin_intro[]=u"WAV音频文件解码(2014-04-09,代码源自ALUT)";
 
 HGL_PLUGIN_FUNC uint32 GetPlugInVersion()
 {
@@ -179,9 +179,9 @@ HGL_PLUGIN_FUNC uint32 GetPlugInVersion()
 					//根据版本号取得不同的API
 }
 
-HGL_PLUGIN_FUNC char16_t * GetPlugInIntro()
+HGL_PLUGIN_FUNC u16char * GetPlugInIntro()
 {
-	return((char16_t *)plugin_intro);
+	return((u16char *)plugin_intro);
 }
 
 HGL_PLUGIN_FUNC bool GetPlugInInterface(uint32 ver,void *data)

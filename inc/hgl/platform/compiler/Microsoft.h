@@ -3,8 +3,8 @@
 //--------------------------------------------------------------------------------------------------
 #define HGL_COMPILER_NAME	OS_TEXT("Microsoft C/C++")
 
-#define HGL_USE_APR			//Ê¹ÓÃApache Portable Runtime
-//#define HGL_USE_C_IO		//Ê¹ÓÃC IO¿â
+#define HGL_USE_APR			//ä½¿ç”¨Apache Portable Runtime
+//#define HGL_USE_C_IO		//ä½¿ç”¨C IOåº“
 
 #if _MSC_VER < 1500							//Visual C++ 2008(9.0)
 	#error Please upgrade your compiler or development tools to Microsoft C/C++ 15.0 (Visual C++ 2008) or later.
@@ -39,39 +39,18 @@
 #endif//_MSC_VER
 
 //--------------------------------------------------------------------------------------------------
-#if _MSC_VER < 1600
-	#ifndef _HAS_CHAR16_T_LANGUAGE_SUPPORT
-	#define _HAS_CHAR16_T_LANGUAGE_SUPPORT 0
-	#endif /* _HAS_CHAR16_T_LANGUAGE_SUPPORT */
-
-	#if _HAS_CHAR16_T_LANGUAGE_SUPPORT
-	#else /* _HAS_CHAR16_T_LANGUAGE_SUPPORT */
-		#if !defined(_CHAR16T)
-			#define _CHAR16T
-			typedef unsigned short char16_t;
-			typedef unsigned int char32_t;
-		#endif /* !defined(_CHAR16T) */
-	#endif /* _HAS_CHAR16_T_LANGUAGE_SUPPORT */
-
-	#define nullptr NULL
-#else
-	#include<cstdint>
-#endif//_MSC_VER < 1600
-
-#define HGL_FORCE_INLINE __forceinline
-
 #include<hgl/platform/compiler/DataTypeTypedef.h>
 #include<hgl/platform/compiler/Property.h>
 
 #ifdef HGL_CPP11
 	#if _MSC_VER>=1800
-		#define HGL_VARIADIC_TEMPLATES				//±ä³¤²ÎÊıÄ£°å
-		#define HGL_INITIALIZER_LIST				//³õÊ¼»¯ÁĞ±í
+		#define HGL_VARIADIC_TEMPLATES				//å˜é•¿å‚æ•°æ¨¡æ¿
+		#define HGL_INITIALIZER_LIST				//åˆå§‹åŒ–åˆ—è¡¨
 	#endif//VC2013
 
 	#if _MSC_VER>=1700
-// 		#define HGL_ATOMIC_CPP11					//C++11Ô­×ÓÄ£°å
-		#define HGL_CONSTRUCTION_REUSE				//¹¹Ôìº¯Êı¸´ÓÃ
+// 		#define HGL_ATOMIC_CPP11					//C++11åŸå­æ¨¡æ¿
+		#define HGL_CONSTRUCTION_REUSE				//æ„é€ å‡½æ•°å¤ç”¨
 		#define HGL_DEFAULT_MEMFUNC 	=default
 		#define HGL_OVERRIDE			override
 	#else
@@ -88,24 +67,25 @@
 #endif
 
 #if _MSC_VER < 1800 // VC2013
+#define nullptr				NULL
 #endif//
 
-#define HGL_FORCE_INLINE __forceinline
+#define HGL_FORCE_INLINE	__forceinline
 
-#define HGL_THREAD	__declspec(thread)
+#define HGL_THREAD			__declspec(thread)
 
-#define HGL_FMT_I64				"%I64d"
-#define HGL_FMT_U64				"%I64u"
-//²Î¿¼ÎÄµµ×îºó²éÔÄÖ§³Ö°æ±¾ÎªVC2013£¬ÍøÖ·£ºhttp://msdn.microsoft.com/en-us/library/tcxf1dw6.aspx
+#define HGL_FMT_I64			"%I64d"
+#define HGL_FMT_U64			"%I64u"
+//å‚è€ƒæ–‡æ¡£æœ€åæŸ¥é˜…æ”¯æŒç‰ˆæœ¬ä¸ºVC2013ï¼Œç½‘å€ï¼šhttp://msdn.microsoft.com/en-us/library/tcxf1dw6.aspx
 //--------------------------------------------------------------------------------------------------
-#define _USE_MATH_DEFINES				// Ê¹ÓÃÊıÑ§³£Êı¶¨Òå
+#define _USE_MATH_DEFINES				// ä½¿ç”¨æ•°å­¦å¸¸æ•°å®šä¹‰
 //--------------------------------------------------------------------------------------------------
 #pragma warning(disable:4819)			// ansi -> unicode
-#pragma warning(disable:4311)			// Ä£°å¾¯¸æ
-#pragma warning(disable:4800)			// -> bool ĞÔÄÜËğÊ§¾¯¸æ
-#pragma warning(disable:4244)			// -> int ¾«¶È¶ªÊ§¾¯¸æ
-#pragma warning(disable:4804)			// ²»°²È«µÄÀàĞÍ±È½Ï
-#pragma warning(disable:4805)			// ²»°²È«µÄÀàĞÍ±È½Ï
+#pragma warning(disable:4311)			// æ¨¡æ¿è­¦å‘Š
+#pragma warning(disable:4800)			// -> bool æ€§èƒ½æŸå¤±è­¦å‘Š
+#pragma warning(disable:4244)			// -> int ç²¾åº¦ä¸¢å¤±è­¦å‘Š
+#pragma warning(disable:4804)			// ä¸å®‰å…¨çš„ç±»å‹æ¯”è¾ƒ
+#pragma warning(disable:4805)			// ä¸å®‰å…¨çš„ç±»å‹æ¯”è¾ƒ
 
 #ifndef _CRT_SECURE_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS

@@ -187,7 +187,7 @@ namespace hgl
 		* @param bEnable “是否被允许通信”信息保存用变量
 		* @return FW_NOERROR 检测成功
 		*/
-		FW_ERROR_CODE WinFireWall::CheckApplication( const char16_t* lpszProcessImageFileName, bool& bEnable )
+		FW_ERROR_CODE WinFireWall::CheckApplication( const u16char* lpszProcessImageFileName, bool& bEnable )
 		{
 			FW_ERROR_CODE ret = FW_NOERROR;
 			HRESULT hr;
@@ -254,7 +254,7 @@ namespace hgl
 		* @param lpszRegisterName 在Windows防火墙名单中的程序名称
 		* @return FW_NOERROR 添加成功
 		*/
-		FW_ERROR_CODE WinFireWall::AddApplication( const char16_t* lpszProcessImageFileName, const char16_t* lpszRegisterName )
+		FW_ERROR_CODE WinFireWall::AddApplication( const u16char* lpszProcessImageFileName, const u16char* lpszRegisterName )
 		{
 			FW_ERROR_CODE ret = FW_NOERROR;
 			HRESULT hr;
@@ -341,7 +341,7 @@ namespace hgl
 		* @param lpszProcessImageFileName 程序可执行文件名称(绝对路径)
 		* @return FW_NOERROR 移除成功
 		*/
-		FW_ERROR_CODE WinFireWall::RemoveApplication( const char16_t* lpszProcessImageFileName )
+		FW_ERROR_CODE WinFireWall::RemoveApplication( const u16char* lpszProcessImageFileName )
 		{
 			FW_ERROR_CODE ret = FW_NOERROR;
 			HRESULT hr;
@@ -450,7 +450,7 @@ namespace hgl
 		* @param lpszRegisterName 是Windows防火墙名单中所显示的名称
 		* @return FW_NOERROR 添加成功
 		*/
-		FW_ERROR_CODE WinFireWall::OpenPort( unsigned int lPortNumber, PROTOCOL ipProtocol, const char16_t* lpszRegisterName )
+		FW_ERROR_CODE WinFireWall::OpenPort( unsigned int lPortNumber, PROTOCOL ipProtocol, const u16char* lpszRegisterName )
 		{
 			FW_ERROR_CODE ret = FW_NOERROR;
 			INetFwOpenPort* pFWOpenPort = NULL;

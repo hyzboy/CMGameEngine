@@ -1,4 +1,4 @@
-﻿#ifndef HGL_AFFECTOR_VECTOR_TRACE_INCLUDE
+#ifndef HGL_AFFECTOR_VECTOR_TRACE_INCLUDE
 #define HGL_AFFECTOR_VECTOR_TRACE_INCLUDE
 
 #include<hgl/affect/AffectorObject.h>
@@ -40,7 +40,7 @@ namespace hgl
 			VectorTrace2D(Timer *,const T &coord,const T &speed);
 			virtual ~VectorTrace()HGL_DEFAULT_MEMFUNC;
 
-			virtual const char16_t *GetClassName()const{return u"VectorTrace";}						///<取得类名
+			virtual const u16char *GetClassName()const{return u"VectorTrace";}						///<取得类名
 
 			virtual void Update();                                                                  ///<更新坐标点
 		};//class VectorTrace

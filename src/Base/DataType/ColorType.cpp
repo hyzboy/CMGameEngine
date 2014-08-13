@@ -4,7 +4,7 @@
 
 namespace hgl
 {
-	const char16_t ColorTypeName[ColorTypeCount][32]=
+	const u16char ColorTypeName[ColorTypeCount][32]=
 	{
 		u"",
 
@@ -68,7 +68,7 @@ namespace hgl
         false,	//	ctEnd
 	};
 
-	unsigned int ColorNameToFormat(const char16_t *str)
+	unsigned int ColorNameToFormat(const u16char *str)
 	{
 		for(int i=ctNone+1;i<ctEnd;i++)
 		{

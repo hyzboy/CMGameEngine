@@ -5,7 +5,7 @@ namespace hgl
 {
 	namespace os
 	{
-		void CopyTextToClipboard(const char16_t *str)
+		void CopyTextToClipboard(const u16char *str)
 		{
 			if(!str||!(*str))return;
 
@@ -14,10 +14,10 @@ namespace hgl
 			EmptyClipboard();
 
 			HGLOBAL clipbuffer;
-			char16_t * buffer;
+			u16char * buffer;
 
 			clipbuffer = GlobalAlloc(GMEM_DDESHARE, strlen(str)+1);
-			buffer = (char16_t *)GlobalLock(clipbuffer);
+			buffer = (u16char *)GlobalLock(clipbuffer);
 
 			strcpy(buffer, str);
 
@@ -26,15 +26,15 @@ namespace hgl
 			CloseClipboard();
 		}
 
-		const char16_t *GetTextFromClipboard()
+		const u16char *GetTextFromClipboard()
 		{
 			if (!OpenClipboard(nullptr))
 				return 0;
 
-			char16_t * buffer = 0;
+			u16char * buffer = 0;
 
 			HANDLE hData = GetClipboardData( CF_UNICODETEXT );
-			buffer = (char16_t *)GlobalLock( hData );
+			buffer = (u16char *)GlobalLock( hData );
 			GlobalUnlock( hData );
 			CloseClipboard();
 			return buffer;

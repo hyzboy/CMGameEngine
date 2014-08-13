@@ -35,7 +35,7 @@ namespace hgl
 		ThreadMutex::Unlock();
 	}
 
-	bool Loader::Load(HAC *hac,const char16_t *filename)
+	bool Loader::Load(HAC *hac,const u16char *filename)
 	{
 		loader_hac=hac;
 		loader_filename=filename;

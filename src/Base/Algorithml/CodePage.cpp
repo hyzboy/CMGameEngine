@@ -1,4 +1,4 @@
-﻿#include<hgl/CodePage.h>
+#include<hgl/CodePage.h>
 #include<hgl/Other.h>
 
 #if HGL_OS == HGL_OS_Windows
@@ -8,7 +8,7 @@ namespace hgl
 {
     CharSet DefaultCharSet();
 
-	int ansi_to_utf16(const CharSet &cs,char16_t **ws,const char *as,const int as_size)
+	int ansi_to_utf16(const CharSet &cs,u16char **ws,const char *as,const int as_size)
 	{
 		const int src_size=(as_size==-1)?strlen(as):as_size;
 
@@ -16,12 +16,12 @@ namespace hgl
 
 		if(len<=0)return(len);
 
-		*ws=new char16_t[len];
+		*ws=new u16char[len];
 
 		return MultiByteToWideChar(cs.codepage,0,as,src_size,*ws,len);
 	}
 
-	int utf16_to_ansi(const CharSet &cs,char **as,const char16_t *ws,const int ws_size)
+	int utf16_to_ansi(const CharSet &cs,char **as,const u16char *ws,const int ws_size)
 	{
 		const int src_size=(ws_size==-1)?strlen(ws):ws_size;
 
@@ -111,21 +111,21 @@ namespace hgl
 		}
 	}
 
-	int ansi_to_utf16(const CharSet &cs,char16_t **ws,const char *as,const int as_size)
+	int ansi_to_utf16(const CharSet &cs,u16char **ws,const char *as,const int as_size)
 	{
-		return CharSetConv<char16_t,char>(ws,endian::GetCharSet<char16_t>(),as,as_size,cs.charset);
+		return CharSetConv<u16char,char>(ws,endian::GetCharSet<u16char>(),as,as_size,cs.charset);
 	}
 
-	int utf16_to_ansi(const CharSet &cs,char **as,const char16_t *ws,const int ws_size)
+	int utf16_to_ansi(const CharSet &cs,char **as,const u16char *ws,const int ws_size)
 	{
-		return CharSetConv<char,char16_t>(as,cs.charset,ws,ws_size,endian::GetCharSet<char16_t>());
+		return CharSetConv<char,u16char>(as,cs.charset,ws,ws_size,endian::GetCharSet<u16char>());
 	}
 }//namespace hgl
 #endif//HGL_OS == HGL_OS_Windows
 
 namespace hgl
 {
-	int	u16_to_u8(char *dst,int dst_size,const char16_t *src,const int src_size)
+	int	u16_to_u8(char *dst,int dst_size,const u16char *src,const int src_size)
 	{
 		if(src_size<=0||!src||!*src)
 		{
@@ -138,7 +138,7 @@ namespace hgl
 		if(!dst||dst_size<=0)
 			return(-1);
 
-		const char16_t *sp=src;
+		const u16char *sp=src;
 		uint8 *tp=(uint8 *)dst;
 
 		while(*sp&&(int(tp-(uint8 *)dst)<dst_size))
@@ -167,7 +167,7 @@ namespace hgl
 		return int(tp-(uint8 *)dst);
 	}
 
-	int	u8_to_u16(char16_t *dst,int dst_size,const char *src,const int src_size)
+	int	u8_to_u16(u16char *dst,int dst_size,const char *src,const int src_size)
 	{
 		if(src_size<=0||!src||!*src)
 		{
@@ -181,7 +181,7 @@ namespace hgl
 			return(-1);
 
 		const uint8 *sp=(uint8 *)src;
-		char16_t *tp=dst;
+		u16char *tp=dst;
 
 		while(*sp&&(int(tp-dst)<dst_size))
 		{
@@ -227,13 +227,13 @@ namespace hgl
 	}
 
 	/**
-	 * 转换char16_t *字符串到utf8格式char *字符串
+	 * 转换u16char *字符串到utf8格式char *字符串
 	 * @param src 源字符串
 	 * @param src_size 源字符串字符数
 	 * @param dst_size 结果字符串字符数
 	 * @return 转换结果，需自行delete[]
 	 */
-	char *u16_to_u8(const char16_t *src,const int src_size,int &dst_size)
+	char *u16_to_u8(const u16char *src,const int src_size,int &dst_size)
 	{
 		if(src_size<=0||!src||!*src)
 		{
@@ -241,7 +241,7 @@ namespace hgl
 			return(nullptr);
 		}
 
-		const char16_t *sp=src;
+		const u16char *sp=src;
 		dst_size=0;
 
 		while(*sp&&(sp-src<src_size))
@@ -274,13 +274,13 @@ namespace hgl
 	}
 
 	/**
-	 * 转换utf8格式char *字符串到char16_t *字符串
+	 * 转换utf8格式char *字符串到u16char *字符串
 	 * @param src 源字符串
 	 * @param src_size 源字符串字符数
 	 * @param dst_size 结果字符串字符数
 	 * @return 转换结果，需自行delete[]
 	 */
-	char16_t *u8_to_u16(const char *src,const int src_size,int &dst_size)
+	u16char *u8_to_u16(const char *src,const int src_size,int &dst_size)
 	{
 		if(src_size<=0||!src||!*src)
 		{
@@ -327,7 +327,7 @@ namespace hgl
 			}
 		}
 
-		char16_t *dst=new char16_t[dst_size+1];
+		u16char *dst=new u16char[dst_size+1];
 
 		dst[dst_size]=0;		//为防止内存检测工具报错，所以提前赋0
 

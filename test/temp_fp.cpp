@@ -13,7 +13,7 @@ typedef unsigned short      uint16;
 typedef unsigned int        uint32;
 typedef unsigned long long  uint64;
 
-typedef char16_t * UTF16String;
+typedef u16char * UTF16String;
 //--------------------------------------------------------------------------------------------------
 enum DataTypeEnum
 {

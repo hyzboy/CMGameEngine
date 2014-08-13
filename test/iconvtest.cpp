@@ -7,7 +7,7 @@ using namespace std;
 
 int main(int argc,char **argv)
 {
-	cout<<"sizeof(char16_t)="<<sizeof(char16_t)<<endl;
+	cout<<"sizeof(u16char)="<<sizeof(u16char)<<endl;
 
 	iconv_t cd=iconv_open("utf-32le","utf-8");
 
@@ -23,7 +23,7 @@ int main(int argc,char **argv)
 	size_t in_len=8;
 
 	size_t out_len=36;
-	char16_t *out_str=new char16_t[out_len];
+	u16char *out_str=new u16char[out_len];
 
 	char *in=utf8_str;
 	char *out=(char *)out_str;

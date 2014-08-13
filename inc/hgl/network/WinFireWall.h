@@ -67,12 +67,12 @@ namespace hgl
 			FW_ERROR_CODE OpenFirewall();
 			FW_ERROR_CODE CloseFirewall();
 
-			FW_ERROR_CODE CheckApplication(const char16_t *,bool &);
-			FW_ERROR_CODE AddApplication(const char16_t *,const char16_t *);
-			FW_ERROR_CODE RemoveApplication(const char16_t *);
+			FW_ERROR_CODE CheckApplication(const u16char *,bool &);
+			FW_ERROR_CODE AddApplication(const u16char *,const u16char *);
+			FW_ERROR_CODE RemoveApplication(const u16char *);
 
 			FW_ERROR_CODE CheckPort(unsigned int,PROTOCOL,bool &);
-			FW_ERROR_CODE OpenPort(unsigned int,PROTOCOL,const char16_t *);
+			FW_ERROR_CODE OpenPort(unsigned int,PROTOCOL,const u16char *);
 			FW_ERROR_CODE ClosePort(unsigned int,PROTOCOL);
 
 

@@ -50,7 +50,7 @@ namespace hgl
 
 		FlowControl();																				///<本类构造函数
 		FlowControl(FlowObject *);																	///<本类构造函数
-		FlowControl(char16_t *,FlowObject *);														///<本类构造函数
+		FlowControl(u16char *,FlowObject *);														///<本类构造函数
 		virtual ~FlowControl();																		///<本类析构函数
 
 		virtual void SetStart(FlowObject *);                                                        ///<设定起始流程对象
@@ -82,7 +82,7 @@ namespace hgl
 #else
 		IAOFlowControl():FlowControl(){}															///<本类构造函数
 		IAOFlowControl(FlowObject *fo):FlowControl(fo){}											///<本类构造函数
-		IAOFlowControl(char16_t *n,FlowObject *fo):FlowControl(n,fo){}								///<本类构造函数
+		IAOFlowControl(u16char *n,FlowObject *fo):FlowControl(n,fo){}								///<本类构造函数
 #endif//HGL_CONSTRUCTION_REUSE
 		virtual ~IAOFlowControl()HGL_DEFAULT_MEMFUNC;
 

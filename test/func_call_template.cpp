@@ -9,8 +9,8 @@ union EventParam			//��������
 	HGL_DEF_EVENT_PARAM_TYPE(void *,		void_pointer	);
 	HGL_DEF_EVENT_PARAM_TYPE(char,			c				);
 	HGL_DEF_EVENT_PARAM_TYPE(char *,		str				);
-	HGL_DEF_EVENT_PARAM_TYPE(char16_t,		wc				);
-	HGL_DEF_EVENT_PARAM_TYPE(char16_t *,		wide_str		);
+	HGL_DEF_EVENT_PARAM_TYPE(u16char,		wc				);
+	HGL_DEF_EVENT_PARAM_TYPE(u16char *,		wide_str		);
 	HGL_DEF_EVENT_PARAM_TYPE(int,			i				);
 	HGL_DEF_EVENT_PARAM_TYPE(int *,			int_pointer		);
 	HGL_DEF_EVENT_PARAM_TYPE(unsigned int,	u				);

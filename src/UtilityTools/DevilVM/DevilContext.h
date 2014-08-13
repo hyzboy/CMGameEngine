@@ -38,15 +38,15 @@ namespace hgl
 	public:
 
 		bool Start(DevilFunc *,...);
-		bool Start(const char16_t *,...);
-		bool StartFlag(DevilFunc *,const char16_t *,);
-		bool StartFlag(const char16_t *,const char16_t *,);
-		bool Run(const char16_t *);
+		bool Start(const u16char *,...);
+		bool StartFlag(DevilFunc *,const u16char *,);
+		bool StartFlag(const u16char *,const u16char *,);
+		bool Run(const u16char *);
 		void Pause();
 		void Stop();
 
-		bool Goto(const char16_t *);
-		bool Goto(const char16_t *,const char16_t *);
+		bool Goto(const u16char *);
+		bool Goto(const u16char *,const u16char *);
 
 		bool GetCurrentState(UTF16String &,int &);
 

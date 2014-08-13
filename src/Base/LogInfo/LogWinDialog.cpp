@@ -9,7 +9,7 @@ namespace hgl
 		{
 			UTF16String name;
 
-			char16_t buf[4096];
+			u16char buf[4096];
 
 		public:
 
@@ -27,7 +27,7 @@ namespace hgl
 			{
 			}
 
-			void Write(const char16_t *str,int)
+			void Write(const u16char *str,int)
 			{
 				MessageBoxW(nullptr,str,name,MB_OK);
 			}

@@ -1,4 +1,4 @@
-﻿#ifndef HGL_TYPE_FUNC_INCLUDE
+#ifndef HGL_TYPE_FUNC_INCLUDE
 #define HGL_TYPE_FUNC_INCLUDE
 
 #include<hgl/platform/Platform.h>
@@ -384,7 +384,7 @@ public:
 	COMPARATOR_ORIGIN_TYPE(wchar_t)
 
 	#ifdef HGL_CPP11
-	COMPARATOR_ORIGIN_TYPE(char16_t)
+	COMPARATOR_ORIGIN_TYPE(u16char)
 	COMPARATOR_ORIGIN_TYPE(char32_t)
 	#endif//HGL_CPP11
 #undef COMPARATOR_ORIGIN_TYPE

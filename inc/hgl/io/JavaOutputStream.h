@@ -41,7 +41,7 @@ namespace hgl
 			bool	writeFloat			(const float	&f)			{return out?out->WriteFloat	(f):false;}
 			bool	writeDouble			(const double	&d)			{return out?out->WriteDouble(d):false;}
 
-			bool	writeChar			(const char16_t	&c)
+			bool	writeChar			(const u16char	&c)
 			{
 				if(!out)
 					return(false);
@@ -49,7 +49,7 @@ namespace hgl
 				return out->Write(ToBigEndian(c));
 			}
 
-			bool	writeChars			(const char16_t *wstr,const int64 count)
+			bool	writeChars			(const u16char *wstr,const int64 count)
 			{
 				return out?out->WriteUTF16BEChars(wstr,count):false;
 			}

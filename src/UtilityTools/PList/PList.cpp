@@ -37,7 +37,7 @@ namespace hgl
 	bool PList::Add(const UTF16String &key)
 	{
 		UTF16String name;
-		char16_t *value;
+		u16char *value;
 		int off;
 
 		if(key.Length()<2)return(false);

@@ -1,6 +1,7 @@
 ﻿#ifndef	HGL_COLOR_TABLE_INCLUDE
 #define	HGL_COLOR_TABLE_INCLUDE
 
+#include<hgl/platform/Platform.h>
 namespace hgl
 {
 	/**
@@ -10,7 +11,7 @@ namespace hgl
 	{
 		int red,green,blue;		///<三原色
 
-		char16_t	name[16];	///<中文名称
+		u16char	name[16];	///<中文名称
 	};
 
 	/**

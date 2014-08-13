@@ -1,4 +1,4 @@
-﻿#define __MAKE_PLUGIN__
+#define __MAKE_PLUGIN__
 
 #include<hgl/PlugIn.h>
 #include<malloc.h>
@@ -229,7 +229,7 @@ static OutInterface out_interface=
 	RestartOGG
 };
 //--------------------------------------------------------------------------------------------------
-const char16_t plugin_intro[]=u"Vorbis OGG 音频文件解码(LibOGG 1.3.0,LibVorbis 1.3.2,MMX,2014-04-09)";
+const u16char plugin_intro[]=u"Vorbis OGG 音频文件解码(LibOGG 1.3.0,LibVorbis 1.3.2,MMX,2014-04-09)";
 
 HGL_PLUGIN_FUNC uint32 GetPlugInVersion()
 {
@@ -237,9 +237,9 @@ HGL_PLUGIN_FUNC uint32 GetPlugInVersion()
 					//根据版本号取得不同的API
 }
 
-HGL_PLUGIN_FUNC char16_t * GetPlugInIntro()
+HGL_PLUGIN_FUNC u16char * GetPlugInIntro()
 {
-	return((char16_t *)plugin_intro);
+	return((u16char *)plugin_intro);
 }
 
 HGL_PLUGIN_FUNC bool GetPlugInInterface(uint32 ver,void *data)

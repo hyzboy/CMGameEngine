@@ -33,7 +33,7 @@ namespace hgl
 	* @param name 本流程名称
 	* @param obj 本流程控制器的起始流程
 	*/
-	ConsoleFlowControl::ConsoleFlowControl(char16_t *name,ConsoleFlowObject *obj)
+	ConsoleFlowControl::ConsoleFlowControl(u16char *name,ConsoleFlowObject *obj)
 	{
 		Name=name;
 

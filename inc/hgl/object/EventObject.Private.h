@@ -7,7 +7,7 @@ public:
 	virtual bool Proc_MouseButton	(int	,bool)	{return(false);}
 	virtual bool Proc_JoystickButton(int	,bool)	{return(false);}
 	virtual bool Proc_Key			(int	,bool)	{return(false);}
-	virtual bool Proc_Char          (char16_t)		{return(false);}
+	virtual bool Proc_Char          (u16char)		{return(false);}
 	virtual bool Proc_Event         (int	,void *);
 
 protected:

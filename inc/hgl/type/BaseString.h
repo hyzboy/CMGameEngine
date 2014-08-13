@@ -8,9 +8,9 @@
 namespace hgl
 {
 	/**
-	* ×Ö·û´®»ùÀà
+	* å­—ç¬¦ä¸²åŸºç±»
 	*/
-	template<typename T> class BaseString															///×Ö·û´®»ùÀà
+	template<typename T> class BaseString															///å­—ç¬¦ä¸²åŸºç±»
 	{
 	protected:
 
@@ -18,7 +18,7 @@ namespace hgl
 		typedef StringInstance<T>		InstClass;
 		typedef SharedPtr<InstClass>	SharedClass;
 
-		SharedClass data;																			///<×Ö·û´®Êı¾İÊµÀı
+		SharedClass data;																			///<å­—ç¬¦ä¸²æ•°æ®å®ä¾‹
 
 	public:
 
@@ -30,10 +30,10 @@ namespace hgl
 		}
 
 		/**
-		* ¸ù¾İÒ»¸öCÖ¸Õë·ç¸ñ×Ö·û´®ÉèÖÃµ±Ç°×Ö·û´®ÄÚÈİ
-		* @param str ×Ö·û´®ÄÚÈİ£¬ÔÚlen<0µÄÇé¿öÏÂ£¬ĞèÒÔ0Îª½áÎ²
-		* @param len ×Ö·û´®³¤¶È£¬Èç¹ûstrÒÔ0Îª½áÎ²£¬¿ÉÒÔÎª¸ºÖµ£¬½«ÆôÓÃ×Ô¶¯¼ÆËã³¤¶È
-		* @param one_instance ÊÇ·ñ½öÓĞÕâÒ»·İÊµÀı£¬Èç¹ûÊÇ½«²»»á²úÉú¸´ŒóÊÇ¶øÊÇÖ±½ÓÊ¹ÓÃ´ËÖµ£¬×îÖÕdelete[]ÊÍ·Å
+		* æ ¹æ®ä¸€ä¸ªCæŒ‡é’ˆé£æ ¼å­—ç¬¦ä¸²è®¾ç½®å½“å‰å­—ç¬¦ä¸²å†…å®¹
+		* @param str å­—ç¬¦ä¸²å†…å®¹ï¼Œåœ¨len<0çš„æƒ…å†µä¸‹ï¼Œéœ€ä»¥0ä¸ºç»“å°¾
+		* @param len å­—ç¬¦ä¸²é•¿åº¦ï¼Œå¦‚æœsträ»¥0ä¸ºç»“å°¾ï¼Œå¯ä»¥ä¸ºè´Ÿå€¼ï¼Œå°†å¯ç”¨è‡ªåŠ¨è®¡ç®—é•¿åº¦
+		* @param one_instance æ˜¯å¦ä»…æœ‰è¿™ä¸€ä»½å®ä¾‹ï¼Œå¦‚æœæ˜¯å°†ä¸ä¼šäº§ç”Ÿå¤å²“æ˜¯è€Œæ˜¯ç›´æ¥ä½¿ç”¨æ­¤å€¼ï¼Œæœ€ç»ˆdelete[]é‡Šæ”¾
 		*/
 		BaseString(const T *str,int len,bool one_instance=false)
 		{
@@ -64,7 +64,7 @@ namespace hgl
 			Set(func(new T[8*sizeof(type)],8*sizeof(type),num),-1,true);	\
 		}
 
-//		BASE_STRING_NUMBER_CONSTRUCT(size_t,utos);
+		BASE_STRING_NUMBER_CONSTRUCT(size_t,utos);
 		BASE_STRING_NUMBER_CONSTRUCT(int,	itos);
 		BASE_STRING_NUMBER_CONSTRUCT(uint,	utos);
 		BASE_STRING_NUMBER_CONSTRUCT(int64,	itos);
@@ -125,26 +125,26 @@ namespace hgl
 		{
 		}
 
-		const T GetEndChar()const																	///<È¡µÃµ±Ç°×Ö·û´®×îºóÒ»¸ö×Ö·û
+		const T GetEndChar()const																	///<å–å¾—å½“å‰å­—ç¬¦ä¸²æœ€åä¸€ä¸ªå­—ç¬¦
 		{
 			if(!this)return(0);
 			return(data.valid()?data->GetEndChar():0);
 		}
 
-		const int Length()const																		///<µ±Ç°×Ö·û´®³¤¶È
+		const int Length()const																		///<å½“å‰å­—ç¬¦ä¸²é•¿åº¦
 		{
 			if(!this)return(0);
 			return(data.valid()?data->GetLength():0);
 		}
 
-		const bool IsEmpty()const																	///<µ±Ç°×Ö·û´®ÊÇ·ñ¿ÕµÄ
+		const bool IsEmpty()const																	///<å½“å‰å­—ç¬¦ä¸²æ˜¯å¦ç©ºçš„
 		{
 			if(!this)return(true);
 			return(data.valid()?data->GetLength()<=0:true);
 		}
 
 		/**
-		* È¡µÃÒ»¸öC·ç¸ñµÄ×Ö·û´®Ö¸Õë,Ê§°Ü·µ»ØNULL
+		* å–å¾—ä¸€ä¸ªCé£æ ¼çš„å­—ç¬¦ä¸²æŒ‡é’ˆ,å¤±è´¥è¿”å›NULL
 		*/
 		T *c_str()const
 		{
@@ -153,7 +153,7 @@ namespace hgl
 		}
 
 		/**
-		* ÕÒµ½Ö¸¶¨×Ö·û£¬²¢·µ»ØÒ»¸öC·ç¸ñµÄ×Ö·û´®Ö¸Õë
+		* æ‰¾åˆ°æŒ‡å®šå­—ç¬¦ï¼Œå¹¶è¿”å›ä¸€ä¸ªCé£æ ¼çš„å­—ç¬¦ä¸²æŒ‡é’ˆ
 		*/
 		T *strchr(T ch)const
 		{
@@ -162,7 +162,7 @@ namespace hgl
 		}
 
 		/**
-		* ´ÓÄ©Î²²éÕÒ×Ö·û£¬²¢·µ»ØÒ»¸öC·ç¸ñµÄ×Ö·û´®Ö¸Õë
+		* ä»æœ«å°¾æŸ¥æ‰¾å­—ç¬¦ï¼Œå¹¶è¿”å›ä¸€ä¸ªCé£æ ¼çš„å­—ç¬¦ä¸²æŒ‡é’ˆ
 		*/
 		T *strrchr(T ch)const
 		{
@@ -171,14 +171,14 @@ namespace hgl
 		}
 
 		/**
-		* ¸ù¾İÒ»¸öCÖ¸Õë·ç¸ñ×Ö·û´®ÉèÖÃµ±Ç°×Ö·û´®ÄÚÈİ
-		* @param str ×Ö·û´®ÄÚÈİ£¬ÔÚlen<0µÄÇé¿öÏÂ£¬ĞèÒÔ0Îª½áÎ²
-		* @param len ×Ö·û´®³¤¶È£¬Èç¹ûstrÒÔ0Îª½áÎ²£¬¿ÉÒÔÎª¸ºÖµ£¬½«ÆôÓÃ×Ô¶¯¼ÆËã³¤¶È
-		* @param one_instance ÊÇ·ñ½öÓĞÕâÒ»·İÊµÀı£¬Èç¹ûÊÇ½«²»»á²úÉú¸´ŒóÊÇ¶øÊÇÖ±½ÓÊ¹ÓÃ´ËÖµ£¬×îÖÕdelete[]ÊÍ·Å
+		* æ ¹æ®ä¸€ä¸ªCæŒ‡é’ˆé£æ ¼å­—ç¬¦ä¸²è®¾ç½®å½“å‰å­—ç¬¦ä¸²å†…å®¹
+		* @param str å­—ç¬¦ä¸²å†…å®¹ï¼Œåœ¨len<0çš„æƒ…å†µä¸‹ï¼Œéœ€ä»¥0ä¸ºç»“å°¾
+		* @param len å­—ç¬¦ä¸²é•¿åº¦ï¼Œå¦‚æœsträ»¥0ä¸ºç»“å°¾ï¼Œå¯ä»¥ä¸ºè´Ÿå€¼ï¼Œå°†å¯ç”¨è‡ªåŠ¨è®¡ç®—é•¿åº¦
+		* @param one_instance æ˜¯å¦ä»…æœ‰è¿™ä¸€ä»½å®ä¾‹ï¼Œå¦‚æœæ˜¯å°†ä¸ä¼šäº§ç”Ÿå¤å²“æ˜¯è€Œæ˜¯ç›´æ¥ä½¿ç”¨æ­¤å€¼ï¼Œæœ€ç»ˆdelete[]é‡Šæ”¾
 		*/
 		void Set(const T *str,int len=-1,bool one_instance=false)
 		{
-			if(!str||!*str||!len)		//len=-1Îª×Ô¼ì²â,Îª0²»´¦Àí
+			if(!str||!*str||!len)		//len=-1ä¸ºè‡ªæ£€æµ‹,ä¸º0ä¸å¤„ç†
 			{
 				Clear();
 				return;
@@ -193,8 +193,8 @@ namespace hgl
 		}
 
 		/**
-		* ÉèÖÃµ±Ç°×Ö·û´®µÄÄÚÈİ
-		* @param bs ÄÚÈİÀ´Ô´×Ö·û´®
+		* è®¾ç½®å½“å‰å­—ç¬¦ä¸²çš„å†…å®¹
+		* @param bs å†…å®¹æ¥æºå­—ç¬¦ä¸²
 		*/
 		void Set(const SelfClass &bs)
 		{
@@ -208,7 +208,7 @@ namespace hgl
 		}
 
 		/**
-		* ÉèÖÃµ±Ç°×Ö·ûÖĞµÄÄÚÈİ
+		* è®¾ç½®å½“å‰å­—ç¬¦ä¸­çš„å†…å®¹
 		*/
 		void Set(const InstClass &si)
 		{
@@ -222,7 +222,7 @@ namespace hgl
 		}
 
 		/**
-		* ÉèÖÃµ±Ç°×Ö·û´®ÖĞµÄÄÚÈİ
+		* è®¾ç½®å½“å‰å­—ç¬¦ä¸²ä¸­çš„å†…å®¹
 		*/
 		void Set(const SharedClass &spsi)
 		{
@@ -236,7 +236,7 @@ namespace hgl
 		}
 
 		/**
-		* ÉèÖÃ×Ö·û´®µÄÄÚÈİ
+		* è®¾ç½®å­—ç¬¦ä¸²çš„å†…å®¹
 		*/
 		bool Set(const SelfClass &bs,int start,int count)
 		{
@@ -250,14 +250,14 @@ namespace hgl
 		}
 
 		/**
-		* ¶Ï¿ªÓëÆäËüBaseString¹²ÓÃµÄÇé¿ö£¬´´½¨Ò»¸ö¶ÀÓĞµÄÊµÀı
+		* æ–­å¼€ä¸å…¶å®ƒBaseStringå…±ç”¨çš„æƒ…å†µï¼Œåˆ›å»ºä¸€ä¸ªç‹¬æœ‰çš„å®ä¾‹
 		*/
 		bool Unlink()
 		{
 			if(!data.valid())
 				return(false);
 
-			if(data.only())		//×Ô¼º¶ÀÓĞ
+			if(data.only())		//è‡ªå·±ç‹¬æœ‰
 				return(true);
 
 			data=data->CreateCopy();
@@ -265,10 +265,10 @@ namespace hgl
 		}
 
 		/**
-		* È¡Ö¸¶¨Ë÷Òı´¦µÄ×Ö·û
-		* @param n Ë÷ÒıÆ«ÒÆ
-		* @param ch ×Ö·û´æ·Å±äÁ¿
-		* @return ÊÇ·ñ»ñÈ¡³É¹¦
+		* å–æŒ‡å®šç´¢å¼•å¤„çš„å­—ç¬¦
+		* @param n ç´¢å¼•åç§»
+		* @param ch å­—ç¬¦å­˜æ”¾å˜é‡
+		* @return æ˜¯å¦è·å–æˆåŠŸ
 		*/
 		bool GetChar(int n,T &ch)const
 		{
@@ -281,10 +281,10 @@ namespace hgl
 		}
 
 		/**
-		* Éè¶¨Ö¸¶¨Ë÷Òı´¦µÄ×Ö·û
-		* @param n Ë÷ÒıÆ«ÒÆ
-		* @param ch ×Ö·û
-		* @return ÊÇ·ñÉèÖÃ³É¹¦
+		* è®¾å®šæŒ‡å®šç´¢å¼•å¤„çš„å­—ç¬¦
+		* @param n ç´¢å¼•åç§»
+		* @param ch å­—ç¬¦
+		* @return æ˜¯å¦è®¾ç½®æˆåŠŸ
 		*/
 		bool SetChar(int n,const T ch)
 		{
@@ -297,10 +297,10 @@ namespace hgl
 		}
 
 		/**
-		* ÔÚÖ¸¶¨Æ«ÒÆ´¦²åÈëÖ¸¶¨³¤¶ÈµÄ×Ö·û´®
-		* @param pos Òª²åÈëµÄÎ»ÖÃ
-		* @param str Òª²åÈëµÄ×Ö·û´®
-		* @param len Òª²åÈëµÄ×Ö·û¸öÊı,Èç¹ûÎª-1Ôò×Ô¶¯¼ì²â×Ö·û´®³¤¶È
+		* åœ¨æŒ‡å®šåç§»å¤„æ’å…¥æŒ‡å®šé•¿åº¦çš„å­—ç¬¦ä¸²
+		* @param pos è¦æ’å…¥çš„ä½ç½®
+		* @param str è¦æ’å…¥çš„å­—ç¬¦ä¸²
+		* @param len è¦æ’å…¥çš„å­—ç¬¦ä¸ªæ•°,å¦‚æœä¸º-1åˆ™è‡ªåŠ¨æ£€æµ‹å­—ç¬¦ä¸²é•¿åº¦
 		*/
 		bool Insert(int pos,const T *str,int len=-1)
 		{
@@ -321,9 +321,9 @@ namespace hgl
 		}
 
 		/**
-		* ÔÚÖ¸¶¨Æ«ÒÆ´¦²åÈë×Ö·û´®
-		* @param pos Òª²åÈëµÄÎ»ÖÃ
-		* @param str Òª²åÈëµÄ×Ö·û´®
+		* åœ¨æŒ‡å®šåç§»å¤„æ’å…¥å­—ç¬¦ä¸²
+		* @param pos è¦æ’å…¥çš„ä½ç½®
+		* @param str è¦æ’å…¥çš„å­—ç¬¦ä¸²
 		*/
 		bool Insert(int pos,const SelfClass &str)
 		{
@@ -341,7 +341,7 @@ namespace hgl
 		}
 
 		/**
-		* ×·¼ÓÒ»¸ö×Ö·û´®µ½µ±Ç°×Ö·û´®ºóÃæ
+		* è¿½åŠ ä¸€ä¸ªå­—ç¬¦ä¸²åˆ°å½“å‰å­—ç¬¦ä¸²åé¢
 		*/
 		bool Strcat(const SelfClass &bs)
 		{
@@ -352,10 +352,10 @@ namespace hgl
 		}
 
 		/**
-		* ´ÓÖ¸¶¨Î»ÖÃÉ¾³ıÖ¸¶¨¸ö×Ö·û
-		* @param pos ÒªÉ¾³ıµÄÆğÊ¼Î»ÖÃ
-		* @param num ÒªÉ¾³ıµÄ×Ö·û¸öÊı
-		* @return ÊÇ·ñ³É¹¦
+		* ä»æŒ‡å®šä½ç½®åˆ é™¤æŒ‡å®šä¸ªå­—ç¬¦
+		* @param pos è¦åˆ é™¤çš„èµ·å§‹ä½ç½®
+		* @param num è¦åˆ é™¤çš„å­—ç¬¦ä¸ªæ•°
+		* @return æ˜¯å¦æˆåŠŸ
 		*/
 		bool Delete(int pos,int num)
 		{
@@ -368,7 +368,7 @@ namespace hgl
 		}
 
 		/**
-		* Çå³ıÀàÖĞµÄ×Ö·û´®Êı¾İ
+		* æ¸…é™¤ç±»ä¸­çš„å­—ç¬¦ä¸²æ•°æ®
 		*/
 		void Clear()
 		{
@@ -376,11 +376,11 @@ namespace hgl
 		}
 
 		/**
-		* ºÍÒ»¸ö×Ö·û´®½øĞĞ±È½Ï
-		* @param bs ±È½Ï×Ö·û´®
-		* @return <0 ×ÔÉíĞ¡
-		* @return 0 µÈÍ¬
-		* @return >0 ×ÔÉí´ó
+		* å’Œä¸€ä¸ªå­—ç¬¦ä¸²è¿›è¡Œæ¯”è¾ƒ
+		* @param bs æ¯”è¾ƒå­—ç¬¦ä¸²
+		* @return <0 è‡ªèº«å°
+		* @return 0 ç­‰åŒ
+		* @return >0 è‡ªèº«å¤§
 		*/
 		int Comp(const SelfClass &bs)const
 		{
@@ -394,11 +394,11 @@ namespace hgl
 		}
 
 		/**
-		* ºÍÒ»¸ö×Ö·û´®½øĞĞ±È½Ï
-		* @param bs ±È½Ï×Ö·û´®
-		* @return <0 ×ÔÉíĞ¡
-		* @return 0 µÈÍ¬
-		* @return >0 ×ÔÉí´ó
+		* å’Œä¸€ä¸ªå­—ç¬¦ä¸²è¿›è¡Œæ¯”è¾ƒ
+		* @param bs æ¯”è¾ƒå­—ç¬¦ä¸²
+		* @return <0 è‡ªèº«å°
+		* @return 0 ç­‰åŒ
+		* @return >0 è‡ªèº«å¤§
 		*/
 		int Comp(const T *str)const
 		{
@@ -414,12 +414,12 @@ namespace hgl
 		}
 
 		/**
-		* ºÍÒ»¸ö×Ö·û´®½øĞĞ±È½Ï
-		* @param pos ÆğÊ¼Î»ÖÃ
-		* @param bs ±È½Ï×Ö·û´®
-		* @return <0 ×ÔÉíĞ¡
-		* @return 0 µÈÍ¬
-		* @return >0 ×ÔÉí´ó
+		* å’Œä¸€ä¸ªå­—ç¬¦ä¸²è¿›è¡Œæ¯”è¾ƒ
+		* @param pos èµ·å§‹ä½ç½®
+		* @param bs æ¯”è¾ƒå­—ç¬¦ä¸²
+		* @return <0 è‡ªèº«å°
+		* @return 0 ç­‰åŒ
+		* @return >0 è‡ªèº«å¤§
 		*/
 		int Comp(const int pos,const SelfClass &bs)const
 		{
@@ -433,11 +433,11 @@ namespace hgl
 		}
 
 		/**
-		* ºÍÒ»¸ö×Ö·û´®½øĞĞ±È½Ï
-		* @param bs ±È½Ï×Ö·û´®
-		* @return <0 ×ÔÉíĞ¡
-		* @return 0 µÈÍ¬
-		* @return >0 ×ÔÉí´ó
+		* å’Œä¸€ä¸ªå­—ç¬¦ä¸²è¿›è¡Œæ¯”è¾ƒ
+		* @param bs æ¯”è¾ƒå­—ç¬¦ä¸²
+		* @return <0 è‡ªèº«å°
+		* @return 0 ç­‰åŒ
+		* @return >0 è‡ªèº«å¤§
 		*/
 		int Comp(const int pos,const T *str)const
 		{
@@ -453,11 +453,11 @@ namespace hgl
 		}
 
 		/**
-		* ºÍÄÇÒ»¸ö×Ö·û´®½øĞĞ±È½Ï,Ó¢ÎÄ²»Çø·Ö´óĞ¡Ğ´
-		* @param bs ±È½Ï×Ö·û´®
-		* @return <0 ×ÔÉíĞ¡
-		* @return 0 µÈÍ¬
-		* @return >0 ×ÔÉí´ó
+		* å’Œé‚£ä¸€ä¸ªå­—ç¬¦ä¸²è¿›è¡Œæ¯”è¾ƒ,è‹±æ–‡ä¸åŒºåˆ†å¤§å°å†™
+		* @param bs æ¯”è¾ƒå­—ç¬¦ä¸²
+		* @return <0 è‡ªèº«å°
+		* @return 0 ç­‰åŒ
+		* @return >0 è‡ªèº«å¤§
 		*/
 		int CaseComp(const SelfClass &bs)const
 		{
@@ -471,11 +471,11 @@ namespace hgl
 		}
 
 		/**
-		* ºÍÄÇÒ»¸ö×Ö·û´®½øĞĞ±È½Ï,Ó¢ÎÄ²»Çø·Ö´óĞ¡Ğ´
-		* @param bs ±È½Ï×Ö·û´®
-		* @return <0 ×ÔÉíĞ¡
-		* @return 0 µÈÍ¬
-		* @return >0 ×ÔÉí´ó
+		* å’Œé‚£ä¸€ä¸ªå­—ç¬¦ä¸²è¿›è¡Œæ¯”è¾ƒ,è‹±æ–‡ä¸åŒºåˆ†å¤§å°å†™
+		* @param bs æ¯”è¾ƒå­—ç¬¦ä¸²
+		* @return <0 è‡ªèº«å°
+		* @return 0 ç­‰åŒ
+		* @return >0 è‡ªèº«å¤§
 		*/
 		int CaseComp(const T *str)const
 		{
@@ -491,12 +491,12 @@ namespace hgl
 		}
 
 		/**
-		* ºÍÄÇÒ»¸ö×Ö·û´®±È½ÏÖ¸×Ö³¤¶ÈµÄ×Ö·û
-		* @param bs ±È½Ï×Ö·û´®
-		* @param num ±È½Ï×ÖÊı
-		* @return <0 ×ÔÉíĞ¡
-		* @return 0 µÈÍ¬
-		* @return >0 ×ÔÉí´ó
+		* å’Œé‚£ä¸€ä¸ªå­—ç¬¦ä¸²æ¯”è¾ƒæŒ‡å­—é•¿åº¦çš„å­—ç¬¦
+		* @param bs æ¯”è¾ƒå­—ç¬¦ä¸²
+		* @param num æ¯”è¾ƒå­—æ•°
+		* @return <0 è‡ªèº«å°
+		* @return 0 ç­‰åŒ
+		* @return >0 è‡ªèº«å¤§
 		*/
 		int Comp(const SelfClass &bs,const int num)const
 		{
@@ -514,12 +514,12 @@ namespace hgl
 		}
 
 		/**
-		* ºÍÄÇÒ»¸ö×Ö·û´®±È½ÏÖ¸×Ö³¤¶ÈµÄ×Ö·û
-		* @param str ±È½Ï×Ö·û´®
-		* @param num ±È½Ï×ÖÊı
-		* @return <0 ×ÔÉíĞ¡
-		* @return 0 µÈÍ¬
-		* @return >0 ×ÔÉí´ó
+		* å’Œé‚£ä¸€ä¸ªå­—ç¬¦ä¸²æ¯”è¾ƒæŒ‡å­—é•¿åº¦çš„å­—ç¬¦
+		* @param str æ¯”è¾ƒå­—ç¬¦ä¸²
+		* @param num æ¯”è¾ƒå­—æ•°
+		* @return <0 è‡ªèº«å°
+		* @return 0 ç­‰åŒ
+		* @return >0 è‡ªèº«å¤§
 		*/
 		int Comp(const T *str,const int num)const
 		{
@@ -535,12 +535,12 @@ namespace hgl
 		}
 
 		/**
-		 * ºÍÄÇÒ»¸ö×Ö·û´®±È½ÏÖ¸×Ö³¤¶ÈµÄ×Ö·û,Ó¢ÎÄ²»Çø·Ö´óĞ¡Ğ´
-		 * @param bs ±È½Ï×Ö·û´®
-		 * @param num ±È½Ï×ÖÊı
-		 * @return <0 ×ÔÉíĞ¡
-		 * @return 0 µÈÍ¬
-		 * @return >0 ×ÔÉí´ó
+		 * å’Œé‚£ä¸€ä¸ªå­—ç¬¦ä¸²æ¯”è¾ƒæŒ‡å­—é•¿åº¦çš„å­—ç¬¦,è‹±æ–‡ä¸åŒºåˆ†å¤§å°å†™
+		 * @param bs æ¯”è¾ƒå­—ç¬¦ä¸²
+		 * @param num æ¯”è¾ƒå­—æ•°
+		 * @return <0 è‡ªèº«å°
+		 * @return 0 ç­‰åŒ
+		 * @return >0 è‡ªèº«å¤§
 		 */
 		int CaseComp(const SelfClass &bs,const int num)const
 		{
@@ -558,12 +558,12 @@ namespace hgl
 		}
 
 		/**
-		 * ºÍÄÇÒ»¸ö×Ö·û´®±È½ÏÖ¸×Ö³¤¶ÈµÄ×Ö·û,Ó¢ÎÄ²»Çø·Ö´óĞ¡Ğ´
-		 * @param str ±È½Ï×Ö·û´®
-		 * @param num ±È½Ï×ÖÊı
-		 * @return <0 ×ÔÉíĞ¡
-		 * @return 0 µÈÍ¬
-		 * @return >0 ×ÔÉí´ó
+		 * å’Œé‚£ä¸€ä¸ªå­—ç¬¦ä¸²æ¯”è¾ƒæŒ‡å­—é•¿åº¦çš„å­—ç¬¦,è‹±æ–‡ä¸åŒºåˆ†å¤§å°å†™
+		 * @param str æ¯”è¾ƒå­—ç¬¦ä¸²
+		 * @param num æ¯”è¾ƒå­—æ•°
+		 * @return <0 è‡ªèº«å°
+		 * @return 0 ç­‰åŒ
+		 * @return >0 è‡ªèº«å¤§
 		 */
 		int CaseComp(const T *str,const int num)const
 		{
@@ -579,34 +579,34 @@ namespace hgl
 		}
 	public:
 
-		bool ToBool(bool &result)const																///<½«±¾ÀàÖĞµÄ×Ö·û´®×ª»»³É²¼¶ûÊıÖµ²¢·µ»Ø
+		bool ToBool(bool &result)const																///<å°†æœ¬ç±»ä¸­çš„å­—ç¬¦ä¸²è½¬æ¢æˆå¸ƒå°”æ•°å€¼å¹¶è¿”å›
 		{
 			return data.valid()?stob(data->c_str(),result):false;
 		}
 
 		template<typename I>
-		bool ToInt(I &result)const																	///<½«±¾ÀàÖĞµÄ×Ö·û´®×ª»»³ÉÕûĞÍÊıÖµ²¢·µ»Ø
+		bool ToInt(I &result)const																	///<å°†æœ¬ç±»ä¸­çš„å­—ç¬¦ä¸²è½¬æ¢æˆæ•´å‹æ•°å€¼å¹¶è¿”å›
 		{
 			return data.valid()?etof(data->c_str(),result):false;
 		}
 
 		template<typename U>
-		bool ToUint(U &result)const																	///<½«±¾ÀàÖĞµÄ×Ö·û´®×ª»»³ÉÕûĞÍÊıÖµ²¢·µ»Ø
+		bool ToUint(U &result)const																	///<å°†æœ¬ç±»ä¸­çš„å­—ç¬¦ä¸²è½¬æ¢æˆæ•´å‹æ•°å€¼å¹¶è¿”å›
 		{
 			return data.valid()?etof(data->c_str(),result):false;
 		}
 
 		template<typename F>
-		bool ToFloat(F &result)const																///<½«±¾ÀàÖĞµÄ×Ö·û´®×ª»»³É¸¡µãÊıÖµ²¢·µ»Ø
+		bool ToFloat(F &result)const																///<å°†æœ¬ç±»ä¸­çš„å­—ç¬¦ä¸²è½¬æ¢æˆæµ®ç‚¹æ•°å€¼å¹¶è¿”å›
 		{
 			return data.valid()?etof(data->c_str(),result):false;
 		}
 
 		/**
-		* ½«µ±Ç°×Ö·û´®È«²¿×ªÎªĞ¡Ğ´
-		* @return ×ª»»ºóµÄµ±Ç°×Ö·û´®
+		* å°†å½“å‰å­—ç¬¦ä¸²å…¨éƒ¨è½¬ä¸ºå°å†™
+		* @return è½¬æ¢åçš„å½“å‰å­—ç¬¦ä¸²
 		*/
-		SelfClass &LowerCase()																		    ///<½«±¾ÀàÖĞµÄ×ÖÄ¸È«²¿×ªÎªĞ¡Ğ´
+		SelfClass &LowerCase()																		    ///<å°†æœ¬ç±»ä¸­çš„å­—æ¯å…¨éƒ¨è½¬ä¸ºå°å†™
 		{
 			if(data.valid()&&Unlink())
 				tolower(data->c_str());
@@ -615,10 +615,10 @@ namespace hgl
 		}
 
 		/**
-		* ½«µ±Ç°×Ö·û´®È«²¿×ªÎªĞ¡Ğ´
-		* @return ×ª»»ºóµÄ×Ö·û´®
+		* å°†å½“å‰å­—ç¬¦ä¸²å…¨éƒ¨è½¬ä¸ºå°å†™
+		* @return è½¬æ¢åçš„å­—ç¬¦ä¸²
 		*/
-		SelfClass &ToLowerCase()																		///<½«±¾ÀàÖĞµÄ×ÖÄ¸È«²¿×ªÎªĞ¡Ğ´
+		SelfClass &ToLowerCase()																		///<å°†æœ¬ç±»ä¸­çš„å­—æ¯å…¨éƒ¨è½¬ä¸ºå°å†™
 		{
 			if(!data.valid())
 				return SelfClass();
@@ -627,10 +627,10 @@ namespace hgl
 		}
 
 		/**
-		* ½«µ±Ç°×Ö·û´®È«²¿×ªÎª´óĞ´
-		* @return ×ª»»ºóµÄµ±Ç°×Ö·û´®
+		* å°†å½“å‰å­—ç¬¦ä¸²å…¨éƒ¨è½¬ä¸ºå¤§å†™
+		* @return è½¬æ¢åçš„å½“å‰å­—ç¬¦ä¸²
 		*/
-		SelfClass &UpperCase()																		///<½«±¾ÀàÖĞµÄ×ÖÄ¸È«²¿×ªÎª´óĞ´
+		SelfClass &UpperCase()																		///<å°†æœ¬ç±»ä¸­çš„å­—æ¯å…¨éƒ¨è½¬ä¸ºå¤§å†™
 		{
 			if(data.valid()&&Unlink())
 				toupper(data->c_str());
@@ -639,10 +639,10 @@ namespace hgl
 		}
 
 		/**
-		* ½«µ±Ç°×Ö·û´®È«²¿×ª»»Îª´óĞ´
-		* @return ×ª»»ºóµÄ×Ö·û´®
+		* å°†å½“å‰å­—ç¬¦ä¸²å…¨éƒ¨è½¬æ¢ä¸ºå¤§å†™
+		* @return è½¬æ¢åçš„å­—ç¬¦ä¸²
 		*/
-		SelfClass &ToUpperCase()																		///<½«±¾ÀàÖĞµÄ×ÖÄ¸È«²¿×ªÎª´óĞ´
+		SelfClass &ToUpperCase()																		///<å°†æœ¬ç±»ä¸­çš„å­—æ¯å…¨éƒ¨è½¬ä¸ºå¤§å†™
 		{
 			if(!data.valid())
 				return SelfClass();
@@ -651,11 +651,11 @@ namespace hgl
 		}
 
 		/**
-		* Ìî³äµ±Ç°×Ö·û´®µÄ²¿·ÖÄÚÈİÎªÖ¸¶¨×Ö·û
-		* @param ch ÒªÌî³äµÄ×Ö·û
-		* @param start Ìî³äµÄÆğÊ¼Î»ÖÃ
-		* @param len Ìî³äµÄ¸öÊı
-		* @return ÊÇ·ñ³É¹¦
+		* å¡«å……å½“å‰å­—ç¬¦ä¸²çš„éƒ¨åˆ†å†…å®¹ä¸ºæŒ‡å®šå­—ç¬¦
+		* @param ch è¦å¡«å……çš„å­—ç¬¦
+		* @param start å¡«å……çš„èµ·å§‹ä½ç½®
+		* @param len å¡«å……çš„ä¸ªæ•°
+		* @return æ˜¯å¦æˆåŠŸ
 		*/
 		bool FillChar(const T ch,int start=0,int len=-1)
 		{
@@ -701,16 +701,16 @@ namespace hgl
 
 	public:
 
-		bool TrimLeft(){return StrConv(trimleft);}													///<É¾³ı×Ö·û´®Ç°¶ËµÄ¿Õ¸ñ¡¢»»ĞĞµÈ²»¿ÉÊÓ×Ö·û´®
-		bool TrimRight(){return StrConv(trimright);}												///<É¾³ı×Ö·û´®ºó¶ËµÄ¿Õ¸ñ¡¢»»ĞĞµÈ²»¿ÉÊÓ×Ö·û´®
-		bool Trim(){return StrConv(trim);}															///<É¾³ı×Ö·û´®Á½¶ËµÄ¿Õ¸ñ¡¢»»ĞĞµÈ²»¿ÉÊÓ×Ö·û´®
+		bool TrimLeft(){return StrConv(trimleft);}													///<åˆ é™¤å­—ç¬¦ä¸²å‰ç«¯çš„ç©ºæ ¼ã€æ¢è¡Œç­‰ä¸å¯è§†å­—ç¬¦ä¸²
+		bool TrimRight(){return StrConv(trimright);}												///<åˆ é™¤å­—ç¬¦ä¸²åç«¯çš„ç©ºæ ¼ã€æ¢è¡Œç­‰ä¸å¯è§†å­—ç¬¦ä¸²
+		bool Trim(){return StrConv(trim);}															///<åˆ é™¤å­—ç¬¦ä¸²ä¸¤ç«¯çš„ç©ºæ ¼ã€æ¢è¡Œç­‰ä¸å¯è§†å­—ç¬¦ä¸²
 
-		bool TrimLeft(int n){return Delete(0,n);}													///<É¾³ı×Ö·û´®Ç°¶ËµÄÖ¸¶¨¸ö×Ö·û
-		bool TrimRight(int n){return Unlink()?data->TrimRight(n):false;}							///<É¾³ı×Ö·û´®ºó¶ËµÄÖ¸¶¨¸ö×Ö·û
+		bool TrimLeft(int n){return Delete(0,n);}													///<åˆ é™¤å­—ç¬¦ä¸²å‰ç«¯çš„æŒ‡å®šä¸ªå­—ç¬¦
+		bool TrimRight(int n){return Unlink()?data->TrimRight(n):false;}							///<åˆ é™¤å­—ç¬¦ä¸²åç«¯çš„æŒ‡å®šä¸ªå­—ç¬¦
 
-		bool ClipLeft(int n){return Unlink()?data->ClipLeft(n):false;}								///<½ØÈ¡×Ö·û´®Ç°¶ËµÄÖ¸¶¨¸ö×Ö·û,µÈÍ¬TrimRight(lengths-n))
-		bool ClipRight(int n){return Delete(0,Length()-n);}											///<½ØÈ¡×Ö·û´®ºó¶ËµÄÖ¸¶¨¸ö×Ö·û,µÈÍ¬TrimLeft(length-n)
-		bool Clip(int pos,int num)																	///<´ÓÖ¸¶¨Î»ÖÃÉ¾³ıÖ¸¶¨¸ö×Ö·û
+		bool ClipLeft(int n){return Unlink()?data->ClipLeft(n):false;}								///<æˆªå–å­—ç¬¦ä¸²å‰ç«¯çš„æŒ‡å®šä¸ªå­—ç¬¦,ç­‰åŒTrimRight(lengths-n))
+		bool ClipRight(int n){return Delete(0,Length()-n);}											///<æˆªå–å­—ç¬¦ä¸²åç«¯çš„æŒ‡å®šä¸ªå­—ç¬¦,ç­‰åŒTrimLeft(length-n)
+		bool Clip(int pos,int num)																	///<ä»æŒ‡å®šä½ç½®åˆ é™¤æŒ‡å®šä¸ªå­—ç¬¦
 		{
 			if(!Unlink())
 				return(false);
@@ -719,12 +719,12 @@ namespace hgl
 		}
 
 		/**
-		 * ´Ó×Ö·û´®ÖĞÈ¡Ö¸¶¨×Ó´®ÎªĞÂµÄÄÚÈİ
-		 * @param start ÆğÊ¼×Ö·ûË÷Òı
-		 * @param n ×Ö·ûÊıÁ¿
-		 * @return ³É·ñ³É¹¦
+		 * ä»å­—ç¬¦ä¸²ä¸­å–æŒ‡å®šå­ä¸²ä¸ºæ–°çš„å†…å®¹
+		 * @param start èµ·å§‹å­—ç¬¦ç´¢å¼•
+		 * @param n å­—ç¬¦æ•°é‡
+		 * @return æˆå¦æˆåŠŸ
 		 */
-		bool SubString(int start,int n)																///<È¡×Ö·û´®Ö¸¶¨¶ÎµÄ×Ö·û
+		bool SubString(int start,int n)																///<å–å­—ç¬¦ä¸²æŒ‡å®šæ®µçš„å­—ç¬¦
 		{
 			if(!Unlink())
 				return(false);
@@ -733,13 +733,13 @@ namespace hgl
 		}
 
 		/**
-		 * ´Ó×Ö·û´®ÖĞÈ¡Ö¸¶¨×Ó´®ÎªĞÂµÄÄÚÈİ
-		 * @param sc ĞÂµÄ×Ö·û´®
-		 * @param start ÆğÊ¼×Ö·ûË÷Òı
-		 * @param n ×Ö·ûÊıÁ¿
-		 * @return ³É·ñ³É¹¦
+		 * ä»å­—ç¬¦ä¸²ä¸­å–æŒ‡å®šå­ä¸²ä¸ºæ–°çš„å†…å®¹
+		 * @param sc æ–°çš„å­—ç¬¦ä¸²
+		 * @param start èµ·å§‹å­—ç¬¦ç´¢å¼•
+		 * @param n å­—ç¬¦æ•°é‡
+		 * @return æˆå¦æˆåŠŸ
 		 */
-		bool SubString(SelfClass &sc,int start,int n)																///<È¡×Ö·û´®Ö¸¶¨¶ÎµÄ×Ö·û
+		bool SubString(SelfClass &sc,int start,int n)																///<å–å­—ç¬¦ä¸²æŒ‡å®šæ®µçš„å­—ç¬¦
 		{
 			if(Length()<start+n)
 				return(false);
@@ -762,10 +762,10 @@ namespace hgl
 			return data->Resize(n);
 		}
 
-		int StatChar(const T ch)const{return data.valid()?StatChar(data->c_str(),ch):-1;}			///<Í³¼Æ×Ö·û´®ÖĞÄ³¸ö×Ö·ûµÄ¸öÊı
-		int StatLine()const{return data.valid()?StatLine(data->c_str()):-1;}						///<Í³¼Æ×Ö·û´®ĞĞÊı
+		int StatChar(const T ch)const{return data.valid()?StatChar(data->c_str(),ch):-1;}			///<ç»Ÿè®¡å­—ç¬¦ä¸²ä¸­æŸä¸ªå­—ç¬¦çš„ä¸ªæ•°
+		int StatLine()const{return data.valid()?StatLine(data->c_str()):-1;}						///<ç»Ÿè®¡å­—ç¬¦ä¸²è¡Œæ•°
 
-		int FindChar(int pos,const T ch)const														///<·µ»Øµ±Ç°×Ö·û´®ÖĞÖ¸¶¨×Ö·û¿ªÊ¼µÄË÷Òı(´Ó×óÖÁÓÒ)
+		int FindChar(int pos,const T ch)const														///<è¿”å›å½“å‰å­—ç¬¦ä¸²ä¸­æŒ‡å®šå­—ç¬¦å¼€å§‹çš„ç´¢å¼•(ä»å·¦è‡³å³)
 		{
 			if(!data.valid())
 				return(-1);
@@ -778,8 +778,8 @@ namespace hgl
 			return(-1);
 		}
 
-		int FindChar(const T ch)const{return FindChar(0,ch);}										///<·µ»Øµ±Ç°×Ö·û´®ÖĞÖ¸¶¨×Ö·û¿ªÊ¼µÄË÷Òı(´Ó×óÖÁÓÒ)
-		int FindRightChar(const T ch)const															///<·µ»Øµ±Ç°×Ö·û´®ÖĞÖ¸¶¨×Ö·û¿ªÊ¼µÄË÷Òı(´ÓÓÒÖÁ×ó)
+		int FindChar(const T ch)const{return FindChar(0,ch);}										///<è¿”å›å½“å‰å­—ç¬¦ä¸²ä¸­æŒ‡å®šå­—ç¬¦å¼€å§‹çš„ç´¢å¼•(ä»å·¦è‡³å³)
+		int FindRightChar(const T ch)const															///<è¿”å›å½“å‰å­—ç¬¦ä¸²ä¸­æŒ‡å®šå­—ç¬¦å¼€å§‹çš„ç´¢å¼•(ä»å³è‡³å·¦)
 		{
 			if(!data.valid())
 				return(-1);
@@ -793,13 +793,13 @@ namespace hgl
 		}
 
 		/**
-		* ÔÚÕû¸ö×Ö·û´®ÄÚ£¬²éÕÒÖ¸¶¨×Ö·û´®
-		* @param str Òª²éÕÒµÄ×Ö·û´®
-		* @param start ´ÓµÚ¼¸¸ö×Ö·û¿ªÊ¼²éÕÒ£¬Ä¬ÈÏ0
-		* @return Ö¸¶¨×Ó´®ËùÔÚµÄÆ«ÒÆ
-		* @return -1 ³ö´í
+		* åœ¨æ•´ä¸ªå­—ç¬¦ä¸²å†…ï¼ŒæŸ¥æ‰¾æŒ‡å®šå­—ç¬¦ä¸²
+		* @param str è¦æŸ¥æ‰¾çš„å­—ç¬¦ä¸²
+		* @param start ä»ç¬¬å‡ ä¸ªå­—ç¬¦å¼€å§‹æŸ¥æ‰¾ï¼Œé»˜è®¤0
+		* @return æŒ‡å®šå­ä¸²æ‰€åœ¨çš„åç§»
+		* @return -1 å‡ºé”™
 		*/
-		int FindString(const SelfClass &str,int start=0)const										///<·µ»Øµ±Ç°×Ö·û´®ÖĞÖ¸¶¨×Ó´®¿ªÊ¼µÄË÷Òı
+		int FindString(const SelfClass &str,int start=0)const										///<è¿”å›å½“å‰å­—ç¬¦ä¸²ä¸­æŒ‡å®šå­ä¸²å¼€å§‹çš„ç´¢å¼•
 		{
 			if(!data.valid())
 				return(-1);
@@ -819,12 +819,12 @@ namespace hgl
 		}
 
 		/**
-		* ÔÚÕû¸ö×Ö·û´®ÄÚ£¬Çå³ıÖ¸¶¨×Ö·û´®
-		* @param sub ÒªÇå³ıµÄ×Ö·û´®
-		* @return ×Ü¼ÆÇå³ıµÄ¸öÊı
-		* @return -1 ³ö´í
+		* åœ¨æ•´ä¸ªå­—ç¬¦ä¸²å†…ï¼Œæ¸…é™¤æŒ‡å®šå­—ç¬¦ä¸²
+		* @param sub è¦æ¸…é™¤çš„å­—ç¬¦ä¸²
+		* @return æ€»è®¡æ¸…é™¤çš„ä¸ªæ•°
+		* @return -1 å‡ºé”™
 		*/
-		int ClearString(const SelfClass &sub)													///<Çå³ıµ±Ç°×Ö·û´®ÖĞÖ¸¶¨×Ó´®
+		int ClearString(const SelfClass &sub)													///<æ¸…é™¤å½“å‰å­—ç¬¦ä¸²ä¸­æŒ‡å®šå­ä¸²
 		{
 			if(!Unlink())
 				return(-1);
@@ -851,10 +851,10 @@ namespace hgl
 		}
 
 		/**
-		* ÔÚÖ¸¶¨Î»ÖÃĞ´Èë×Ö·û´®
-		* @param pos ¿ªÊ¼Ğ´ÈëµÄÎ»ÖÃ
-		* @param str ÒªĞ´ÈëµÄ×Ö·û´®
-		* @return ÊÇ·ñ³É¹¦
+		* åœ¨æŒ‡å®šä½ç½®å†™å…¥å­—ç¬¦ä¸²
+		* @param pos å¼€å§‹å†™å…¥çš„ä½ç½®
+		* @param str è¦å†™å…¥çš„å­—ç¬¦ä¸²
+		* @return æ˜¯å¦æˆåŠŸ
 		*/
 		bool WriteString(int pos,const SelfClass &str)
 		{
@@ -868,13 +868,13 @@ namespace hgl
 		}
 
 		/**
-		* Ìæ»»µ±Ç°×Ö·û´®ÖĞÖ¸¶¨×Ö·ûµ½ÁíÒ»¸ö×Ö·û
-		* @param sch ÒªÌæ»»µÄ×Ö·û
-		* @param tch Ìæ»»ºóµÄ×Ö·û
-		* @return ×Ü¼ÆÌæ»»¸öÊı
-		* @return <0 ³ö´í
+		* æ›¿æ¢å½“å‰å­—ç¬¦ä¸²ä¸­æŒ‡å®šå­—ç¬¦åˆ°å¦ä¸€ä¸ªå­—ç¬¦
+		* @param sch è¦æ›¿æ¢çš„å­—ç¬¦
+		* @param tch æ›¿æ¢åçš„å­—ç¬¦
+		* @return æ€»è®¡æ›¿æ¢ä¸ªæ•°
+		* @return <0 å‡ºé”™
 		*/
-		int Replace(const T tch,const T sch)														///<Ìæ»»×Ö·û
+		int Replace(const T tch,const T sch)														///<æ›¿æ¢å­—ç¬¦
 		{
 			if(!Unlink())
 				return(-1);
@@ -882,7 +882,7 @@ namespace hgl
 			return replace(data->c_str(),tch,sch);
 		}
 
-	public:	//²Ù×÷·ûÖØÔØ
+	public:	//æ“ä½œç¬¦é‡è½½
 
 		operator const InstClass &()
 		{
@@ -937,10 +937,10 @@ namespace hgl
 
 		SelfClass  operator +	(const SelfClass &str) const
 		{
-			if(str.Length()<=0)		//Èç¹û¶Ô·½Îª¿Õ
+			if(str.Length()<=0)		//å¦‚æœå¯¹æ–¹ä¸ºç©º
 				return(*this);
 
-			if(!data.valid())		//Èç¹ûÎÒ·½Îª¿Õ
+			if(!data.valid())		//å¦‚æœæˆ‘æ–¹ä¸ºç©º
 				return(str);
 
 			return ComboString(data->c_str(),data->GetLength(),str.c_str(),str.Length());
@@ -969,7 +969,7 @@ namespace hgl
 			return operator+(vstr->data);	\
 		}
 
-		//BASE_STRING_NUMBER_OPERATOR_ADD(size_t,	utos);
+		BASE_STRING_NUMBER_OPERATOR_ADD(size_t,	utos);
 		BASE_STRING_NUMBER_OPERATOR_ADD(int,	itos);
 		BASE_STRING_NUMBER_OPERATOR_ADD(uint,	utos);
 		BASE_STRING_NUMBER_OPERATOR_ADD(int64,	itos);
@@ -984,8 +984,8 @@ namespace hgl
 		CompOperator(const SelfClass &,Comp);
 	};//template<typename T> class BaseString
 
-	//ÕâÖÖÖØÔØÓÃÓÚvalue+strµÄÇé¿ö
-	//¶øÀàÖĞµÄµÄÖØÔØÓÃÓÚstr+valueµÄÇé¿ö
+	//è¿™ç§é‡è½½ç”¨äºvalue+strçš„æƒ…å†µ
+	//è€Œç±»ä¸­çš„çš„é‡è½½ç”¨äºstr+valueçš„æƒ…å†µ
 
 	template<typename V,typename T> BaseString<T> operator + (const V &value,const BaseString<T> &str)
 	{
@@ -1003,7 +1003,7 @@ namespace hgl
 	typedef BaseString<wchar_t>		WideString;
 
 	/**
-	 * ÒÔÀÛ¼ÓµÄ·½Ê½ÎªÒ»¸ö×Ö·û´®¼ÆËã³öÒ»¸öhashÂë
+	 * ä»¥ç´¯åŠ çš„æ–¹å¼ä¸ºä¸€ä¸ªå­—ç¬¦ä¸²è®¡ç®—å‡ºä¸€ä¸ªhashç 
 	 */
 	template<typename T,int HASH_MAX> uint StringFastHash(const BaseString<T> &str)
 	{
@@ -1019,9 +1019,9 @@ namespace hgl
 	}
 
 	/**
-	 * ½«Ò»´®Ô­Ê¼Êı¾İ£¬×ª»»³ÉÒ»¸ö16½øÖÆÊıÖµ×é³ÉµÄ×Ö·û´®
-	 * @param value Òª×ª»»µÄÔ­Ê¼Êı¾İ
-	 * @return ×ª»»ºÃµÄ×Ö·û´®
+	 * å°†ä¸€ä¸²åŸå§‹æ•°æ®ï¼Œè½¬æ¢æˆä¸€ä¸ª16è¿›åˆ¶æ•°å€¼ç»„æˆçš„å­—ç¬¦ä¸²
+	 * @param value è¦è½¬æ¢çš„åŸå§‹æ•°æ®
+	 * @return è½¬æ¢å¥½çš„å­—ç¬¦ä¸²
 	 * @see HexToString
 	 */
 	template<typename T,typename I> BaseString<T> ToHexString(const I &value)
@@ -1034,9 +1034,9 @@ namespace hgl
 	}
 
 	/**
-	 * ½«Ò»¸öÊıÖµ×ª»»ÎªÒ»¸öÓÃ16½øÖÆ±íÊ¾µÄ×Ö·û´®<br>
-	 * Í¬ToHexStringÇø±ğÔÚÓÚ£¬HexToString°´ÊıÖµ´óĞ¡´¦Àí
-	 * @param value Òª×ª»»µÄÊıÖµ
+	 * å°†ä¸€ä¸ªæ•°å€¼è½¬æ¢ä¸ºä¸€ä¸ªç”¨16è¿›åˆ¶è¡¨ç¤ºçš„å­—ç¬¦ä¸²<br>
+	 * åŒToHexStringåŒºåˆ«åœ¨äºï¼ŒHexToStringæŒ‰æ•°å€¼å¤§å°å¤„ç†
+	 * @param value è¦è½¬æ¢çš„æ•°å€¼
 	 * @see ToHexString
 	 */
 	template<typename T,typename I> BaseString<T> HexToString(const I &value)
@@ -1067,7 +1067,7 @@ namespace hgl
 	};
 
 	/**
-	 * ½«Ò»¸öÖ¸Õë×ª»»³ÉÒ»¸ö16½øÖÆ×Ö·û´®
+	 * å°†ä¸€ä¸ªæŒ‡é’ˆè½¬æ¢æˆä¸€ä¸ª16è¿›åˆ¶å­—ç¬¦ä¸²
 	 */
 	template<typename T> BaseString<T> PointerToHexString(const void *value)
 	{
@@ -1084,9 +1084,9 @@ namespace hgl
 		return PointerToHexString<char>(value);
 	}
 
-	inline BaseString<char16_t> PointerToHexUTF16String(const void *value)
+	inline BaseString<u16char> PointerToHexUTF16String(const void *value)
 	{
-		return PointerToHexString<char16_t>(value);
+		return PointerToHexString<u16char>(value);
 	}
 }//namespace hgl
 #endif//HGL_TYPE_BASE_STRING_INCLUDE

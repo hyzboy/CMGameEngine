@@ -13,7 +13,7 @@ namespace hgl
 
 			void *console_handle;
 
-			char16_t buf[4096];
+			u16char buf[4096];
 
 		public:
 
@@ -37,7 +37,7 @@ namespace hgl
 				CloseHandle(console_handle);
 			}
 
-			void Write(const char16_t *str,int size)
+			void Write(const u16char *str,int size)
 			{
 				WriteConsole(console_handle,str,size,&result,nullptr);
 				WriteConsole(console_handle,u"\n",1,&result,nullptr);
