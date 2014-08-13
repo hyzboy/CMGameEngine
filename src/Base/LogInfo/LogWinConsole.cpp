@@ -1,4 +1,5 @@
 #include<hgl/Logger.h>
+#include<hgl/CodePage.h>
 #include<windows.h>
 
 namespace hgl
@@ -40,7 +41,7 @@ namespace hgl
 			void Write(const u16char *str,int size)
 			{
 				WriteConsole(console_handle,str,size,&result,nullptr);
-				WriteConsole(console_handle,u"\n",1,&result,nullptr);
+				WriteConsole(console_handle,L"\n", 1, &result, nullptr);
 			}
 
 			void Write(const char *str,int size)
@@ -49,7 +50,7 @@ namespace hgl
 
 				if(len<=0)return;
 
-				buf[len]=u'\n';
+				buf[len]=L'\n';
 
 				WriteConsole(console_handle,buf,len+1,&result,nullptr);
 			}

@@ -1,4 +1,4 @@
-#ifndef HGL_PLUGIN_INCLUDE
+﻿#ifndef HGL_PLUGIN_INCLUDE
 #define HGL_PLUGIN_INCLUDE
 //--------------------------------------------------------------------------------------------------
 #include<hgl/type/DataType.h>

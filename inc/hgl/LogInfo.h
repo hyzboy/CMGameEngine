@@ -1,4 +1,4 @@
-#ifndef HGL_LOGINFO_INCLUDE
+﻿#ifndef HGL_LOGINFO_INCLUDE
 #define HGL_LOGINFO_INCLUDE
 
 #ifndef __MAKE_PLUGIN__

@@ -1,4 +1,4 @@
-#ifndef HGL_IO_DATA_DISTRIBUTE_INCLUDE
+﻿#ifndef HGL_IO_DATA_DISTRIBUTE_INCLUDE
 #define HGL_IO_DATA_DISTRIBUTE_INCLUDE
 
 #include<hgl/type/DataType.h>

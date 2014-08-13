@@ -1,4 +1,4 @@
-#include <hgl/File.h>
+﻿#include <hgl/File.h>
 #include <hgl/LogInfo.h>
 #include <hgl/Other.h>
 #include <hgl/io/FileInputStream.h>
@@ -258,7 +258,28 @@ namespace hgl
 	 */
 	bool FileCanExec(const OSString &filename)
 	{
+#if HGL_OS==HGL_OS_Windows
+		int index = filename.FindRightChar('.');
+
+		if (index == -1)return(false);
+
+		if (index > filename.Length() - 4)
+			return(false);
+
+		const os_char *ext = filename.c_str() + index + 1;
+
+		if (!ext)return(false);
+
+		if (stricmp(ext, "exe") == 0)return(true);
+		if (stricmp(ext, "com") == 0)return(true);
+		if (stricmp(ext, "bat") == 0)return(true);
+		if (stricmp(ext, "msi") == 0)return(true);
+		if (stricmp(ext, "msp") == 0)return(true);
+
+		return(false);
+#else
 		return access(filename.c_str(),X_OK)>=0;
+#endif//HGL_OS==HGL_OS_Windows
 	}
 
 	/**
@@ -445,7 +466,7 @@ namespace hgl
 #if HGL_OS == HGL_OS_Windows
 		strcpy(str,dirname.c_str());
 
-		if(str[1]==u':')sp=str+3;
+		if(str[1]==OS_TEXT(':'))sp=str+3;
 				   else sp=str;
 #else
 		strcpy(str,HGL_MAX_PATH,dirname.c_str());
@@ -508,7 +529,7 @@ namespace hgl
 		int len;
 		u16char *dir;
 
-		len=GetCurrentDirectoryW(nullptr,nullptr);
+		len=GetCurrentDirectoryW(0,nullptr);
 
 		if(len==0)
 			return(nullptr);
@@ -517,7 +538,7 @@ namespace hgl
 
 		if(GetCurrentDirectoryW(len,dir))
 		{
-			if(len==3&&dir[1]==u':')
+			if(len==3&&dir[1]==OS_TEXT(':'))
 				dir[len=2]=0;        //如果是"C:\"这种情况，去掉"\"
 			else
 				dir[len]=0;
@@ -724,8 +745,8 @@ namespace hgl
 
 		do
 		{
-			if(strcmp(FindFileData.cFileName,u".")==0
-			 ||strcmp(FindFileData.cFileName,u"..")==0)
+			if(strcmp(FindFileData.cFileName,OS_TEXT("."))==0
+			|| strcmp(FindFileData.cFileName, OS_TEXT("..")) == 0)
 			{
 				continue;
 			}
@@ -1001,7 +1022,7 @@ namespace hgl
 				vi.unicode=file_system_flags&FILE_UNICODE_ON_DISK;
 			}
 			else
-				LOG_PROBLEM(u"取得卷<"+UTF16String(path_name)+u">信息失败！Windows错误编号: "+UTF16String((uint)GetLastError()));
+				LOG_PROBLEM(U16_TEXT("取得卷<") + UTF16String(path_name) + U16_TEXT(">信息失败！Windows错误编号: ") + UTF16String((uint)GetLastError()));
 
 			if(GetDiskFreeSpaceEx(	path_name,
 									(ULARGE_INTEGER *)&vi.available_space,
@@ -1011,7 +1032,7 @@ namespace hgl
 				func(data,vi);
 			}
 			else
-				LOG_PROBLEM(u"取得驱动器<"+UTF16String(path_name)+u">容量数据失败！");
+				LOG_PROBLEM(U16_TEXT("取得驱动器<") + UTF16String(path_name) + U16_TEXT(">容量数据失败！"));
 
 			count++;
 

@@ -1,4 +1,4 @@
-#ifndef HGL_LOGGER_INCLUDE
+﻿#ifndef HGL_LOGGER_INCLUDE
 #define HGL_LOGGER_INCLUDE
 
 #include<hgl/type/BaseString.h>

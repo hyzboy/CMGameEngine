@@ -1,4 +1,4 @@
-#include<hgl/PlugIn.h>
+﻿#include<hgl/PlugIn.h>
 #include<hgl/Logger.h>
 #include<hgl/type/DateTime.h>
 

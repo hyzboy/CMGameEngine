@@ -1,4 +1,4 @@
-#include <hgl/type/Color4f.h>
+﻿#include <hgl/type/Color4f.h>
 #include <hgl/Other.h>
 namespace hgl
 {

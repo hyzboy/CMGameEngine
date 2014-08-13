@@ -72,8 +72,13 @@ namespace hgl
 		}
 
 		apr_initialize();			//初始化apr
+
+#if HGL_OS == HGL_OS_Windows
+		srand(GetMicroTime());
+#else
 		srand48(GetMicroTime());
 		srand(lrand48());
+#endif//
 
 		InitStartTime();			//初始化启动时间
 
