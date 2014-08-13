@@ -20,7 +20,11 @@ namespace hgl
 
 		inline	void DebugLog(LogLevel ll,const UTF16String &str,const char *filename,int line)
 		{
+		#if HGL_COMPILER == HGL_COMPILER_Microsoft
+			Log(ll,str+L" in \""+to_u16(filename)+L"\", "+UTF16String(line)+L" line.");
+		#else
 			Log(ll,str+u" in \""+to_u16(filename)+u"\", "+UTF16String(line)+u" line.");
+		#endif//HGL_COMPILER == HGL_COMPILER_Microsoft
 		}
 
 		inline	void DebugLog(LogLevel ll,const UTF8String &str,const char *filename,int line)
