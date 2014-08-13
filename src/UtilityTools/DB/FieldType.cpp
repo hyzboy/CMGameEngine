@@ -1,4 +1,4 @@
-﻿#include<hgl/db/FieldType.h>
+#include<hgl/db/FieldType.h>
 #include<hgl/db/CDBField.h>
 #include<hgl/LogInfo.h>
 namespace hgl
@@ -13,7 +13,7 @@ namespace hgl
 		};
 
 		#define FIELD_TYPE_CONVERY(name,type)	{u##name,type},
-			const cdb_type_name_convert<char16_t> typename_convert_list_u16[]=
+			const cdb_type_name_convert<u16char> typename_convert_list_u16[]=
 			#include"FieldTypeConvert.h"
 		#undef FIELD_TYPE_CONVERY
 
@@ -122,9 +122,9 @@ namespace hgl
 			return ParseStringToFieldType<char>(typename_convert_list_u8,'[',']',str);
 		}
 
-		FieldType ParseFieldType(const char16_t *str)
+		FieldType ParseFieldType(const u16char *str)
 		{
-			return ParseStringToFieldType<char16_t>(typename_convert_list_u16,u'[',u']',str);
+			return ParseStringToFieldType<u16char>(typename_convert_list_u16,u'[',u']',str);
 		}
 
 		bool ParseFieldType(FieldTypeList &ctl,const UTF16StringList &type_list)

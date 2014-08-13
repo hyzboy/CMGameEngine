@@ -5,7 +5,7 @@
 #include<hgl/type/Map.h>
 namespace hgl
 {
-	char16_t CAName[caEnd][32]=
+	u16char CAName[caEnd][32]=
 	{
 		u"",
 

@@ -33,7 +33,7 @@ namespace hgl
 		{
 			memset(dsi,0,DFS_ID_KEY_SIZE);
 
-			char16_t *sp=name.c_str();
+			u16char *sp=name.c_str();
 			char *p=dsi;
 			int n=0;
 
@@ -54,7 +54,7 @@ namespace hgl
 					if(n>=DFS_ID_KEY_SIZE-1)
 						break;
 
-					*((char16_t *)p)=*sp;
+					*((u16char *)p)=*sp;
 					++p;
 					++p;
 					++sp;

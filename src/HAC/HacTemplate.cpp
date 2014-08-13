@@ -11,7 +11,7 @@ namespace hgl
 	{
 		int start,end,pos;
 		int result;
-		char16_t *psym=filename.strchr(HGL_DIRECTORY_SEPARATOR);
+		u16char *psym=filename.strchr(HGL_DIRECTORY_SEPARATOR);
 
 		if(psym)
 		{
@@ -37,7 +37,7 @@ namespace hgl
 	{
 		int start,end,pos;
 		int result;
-		char16_t *psym=filename.strchr(HGL_DIRECTORY_SEPARATOR);
+		u16char *psym=filename.strchr(HGL_DIRECTORY_SEPARATOR);
 
 		if(psym)
 		{
@@ -105,7 +105,7 @@ namespace hgl
 	}
 
 /*	template<typename F>
-	bool HacTemplate<F>::OpenFile(const char16_t *filename,FileStream **fp,int *offset,int *size)
+	bool HacTemplate<F>::OpenFile(const u16char *filename,FileStream **fp,int *offset,int *size)
 	{
 		LowerString(filename,lower_filename);
 

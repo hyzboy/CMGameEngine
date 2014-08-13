@@ -320,7 +320,7 @@ namespace hgl
 		* @return NULL 生成失身为
 		*/
 #ifdef _DEBUG
-		char *MakeVertexShader(Renderable *able,bool mvp,RenderState *state,const char16_t *filename)
+		char *MakeVertexShader(Renderable *able,bool mvp,RenderState *state,const u16char *filename)
 #else
 		char *MakeVertexShader(Renderable *able,bool mvp,RenderState *state)
 #endif//

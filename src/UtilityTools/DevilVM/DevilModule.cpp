@@ -10,7 +10,7 @@ namespace hgl
 	* @param address 属性的地址
 	* @return 是否创建映射成功
 	*/
-	bool DevilScriptModule::MapProperty(const char16_t *intro,void *address)
+	bool DevilScriptModule::MapProperty(const u16char *intro,void *address)
 	{
     	DevilParse parse(this,intro);
 		eTokenType type;
@@ -42,7 +42,7 @@ namespace hgl
 		}
 	}
 
-	bool DevilScriptModule::_MapFunc(const char16_t *intro,void *this_pointer,void *func_pointer)
+	bool DevilScriptModule::_MapFunc(const u16char *intro,void *this_pointer,void *func_pointer)
 	{
     	DevilParse parse(this,intro);
 		eTokenType type;
@@ -126,7 +126,7 @@ namespace hgl
 	* @param func_pointer 函数指针
 	* @return 是否映射成功
 	*/
-	bool DevilScriptModule::MapFunc(const char16_t *intro,void *func_pointer)
+	bool DevilScriptModule::MapFunc(const u16char *intro,void *func_pointer)
 	{
 		return _MapFunc(intro,nullptr,func_pointer);
 	}
@@ -138,7 +138,7 @@ namespace hgl
 	//* @param func_pointer 函数指针
 	//* @return 是否映射成功
 	//*/
-	//bool DevilScriptModule::MapFunc(void *data,const char16_t *intro,void *func_pointer)
+	//bool DevilScriptModule::MapFunc(void *data,const u16char *intro,void *func_pointer)
 	//{
 	//	return _MapFunc(DevilFuncMap::fcmFirstObject,	intro,data,func_pointer);
 	//}
@@ -150,7 +150,7 @@ namespace hgl
 	* @param func_pointer 函数指针
 	* @return 是否映射成功
 	*/
-	bool DevilScriptModule::MapFunc(const char16_t *intro,void *this_pointer,void *func_pointer)
+	bool DevilScriptModule::MapFunc(const u16char *intro,void *this_pointer,void *func_pointer)
 	{
 		return _MapFunc(intro,this_pointer,func_pointer);
 	}
@@ -176,7 +176,7 @@ namespace hgl
         	return(nullptr);
 	}
 
-	bool DevilScriptModule::AddEnum(const char16_t *enum_name,DevilEnum *script_enum)
+	bool DevilScriptModule::AddEnum(const u16char *enum_name,DevilEnum *script_enum)
 	{
 		if(enum_map.Find(enum_name)!=-1)
 		{
@@ -204,7 +204,7 @@ namespace hgl
 	* @param source_length 脚本长度，-1表示自动检测
 	* @return 是否添加并编译成功
 	*/
-	bool DevilScriptModule::AddScript(const char16_t *source,int source_length)
+	bool DevilScriptModule::AddScript(const u16char *source,int source_length)
 	{
 		if(!source)return(false);
 

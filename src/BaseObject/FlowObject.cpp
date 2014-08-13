@@ -63,7 +63,7 @@ namespace hgl
 	HGL_PROC_EVENT(Key,int,bool);
 	HGL_PROC_EVENT(Event,int,void *);
 
-	bool FlowObject::Proc_Char(char16_t ch)
+	bool FlowObject::Proc_Char(u16char ch)
 	{
 		if(Control.Proc_Char(ch))return(true);
 

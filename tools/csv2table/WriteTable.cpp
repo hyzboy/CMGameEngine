@@ -1,4 +1,4 @@
-﻿#include"Common.h"
+#include"Common.h"
 #include<hgl/type/List.h>
 #include<hgl/db/FieldType.h>
 
@@ -45,11 +45,11 @@ bool WriteUTF16LE(void *buf,int max_count,const UTF16String &str)
 	if((*(str.c_str())==u'"')
 	 &&(str.GetEndChar()==u'"'))
 	{
-		hgl_typecpy((char16_t *)buf,str.c_str()+1,count-2);	//去掉前后的引号
+		hgl_typecpy((u16char *)buf,str.c_str()+1,count-2);	//去掉前后的引号
 	}
 	else
 	{
-		hgl_typecpy((char16_t *)buf,str.c_str(),count);
+		hgl_typecpy((u16char *)buf,str.c_str(),count);
 	}
 
 	return(true);

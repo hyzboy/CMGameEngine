@@ -1,4 +1,4 @@
-﻿#include<hgl/platform/SystemInfo.h>
+#include<hgl/platform/SystemInfo.h>
 #include<hgl/platform/ConsoleSystemInitInfo.h>
 #include<hgl/PlugIn.h>
 #include<hgl/Info.h>
@@ -57,7 +57,7 @@ namespace hgl
 			LOG_ERROR(OS_TEXT("cpu endian error,this library is bad.library macro Cpu=") HGL_CPU_NAME OS_TEXT(", Endian is ") HGL_CPU_ENDIAN);
 
 //         #if HGL_COMPILER == HGL_COMPILER_GNU
-//         if(sizeof(char16_t)!=2
+//         if(sizeof(u16char)!=2
 //          ||L'中'!=0x4E2D)
 //         {
 // 			LOG_ERROR(u"please use \"-fwide-exec-charset=UTF-16LE -fshort-wchar\"");

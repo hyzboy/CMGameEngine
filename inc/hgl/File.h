@@ -29,8 +29,8 @@ namespace hgl
 	void *LoadFileToMemory(const OSString &,int64,void *buf,int64);									///<加载一个文件的一部分到内存
 	bool SaveMemoryToFile(const OSString &,int64,const void *,int64);							    ///<保存一块内存到一个文件
 
-	int64 LoadTxtToMemory(io::InputStream *,const int64,char16_t **,const CharSet &cs=CharSet());	///<加载文本文件到内存
-	int64 LoadTxtToMemory(const OSString &,char16_t **,const CharSet &cs=CharSet());					///<加载文本文件到内存
+	int64 LoadTxtToMemory(io::InputStream *,const int64,u16char **,const CharSet &cs=CharSet());	///<加载文本文件到内存
+	int64 LoadTxtToMemory(const OSString &,u16char **,const CharSet &cs=CharSet());					///<加载文本文件到内存
 
 			bool IsDirectory(const os_char *);
 	inline	bool IsDirectory(const OSString &str){return IsDirectory(str.c_str());}					///<判断这个名称是否是目录
@@ -80,7 +80,7 @@ namespace hgl
 
 	bool GetFileInfo(const OSString &filename,struct FileInfo &);	///<取得文件信息
 
-	List<FileInfo> GetlistFiles(const char16_t *folder_name,bool proc_folder,bool proc_file,bool sub_folder);
+	List<FileInfo> GetlistFiles(const u16char *folder_name,bool proc_folder,bool proc_file,bool sub_folder);
 
 	/**
 	* 枚举一个目录内的所有文件
@@ -94,7 +94,7 @@ namespace hgl
 	* @return 查找到文件数据,-1表示失败
 	*/
 #if HGL_OS == HGL_OS_Windows
-	int EnumFile(const os_char *folder_name,const char16_t *find_name,void *data,bool proc_folder,bool proc_file,bool sub_folder,void (*func)(void *,hgl::FileInfo &));
+	int EnumFile(const os_char *folder_name,const u16char *find_name,void *data,bool proc_folder,bool proc_file,bool sub_folder,void (*func)(void *,hgl::FileInfo &));
 #endif //HGL_OS == HGL_OS_Windows
 
 	inline int EnumFile(const os_char *folder_name,void *data,bool proc_folder,bool proc_file,bool sub_folder,void (*func)(void *,hgl::FileInfo &))
@@ -115,7 +115,7 @@ namespace hgl
 	* @return 查找到文件数据,-1表示失败
 	*/
 #if HGL_OS == HGL_OS_Windows
-	int EnumFile(const os_char *folder_name,const char16_t *find_name,void *data,void (*func)(void *,hgl::FileInfo &));
+	int EnumFile(const os_char *folder_name,const u16char *find_name,void *data,void (*func)(void *,hgl::FileInfo &));
 #endif
 
 	/**
@@ -136,17 +136,17 @@ namespace hgl
 			dtEnd					//结束定义
 		};
 
-		char16_t 			name[1024];			//卷名称
+		u16char 			name[1024];			//卷名称
 
-		char16_t 			path[1024];			//卷所对应的路径名(注意:不是所有卷都有对应路径)
+		u16char 			path[1024];			//卷所对应的路径名(注意:不是所有卷都有对应路径)
 
 		DriverType 			driver_type;		//驱动器类型(注意:不是所有的卷都对应驱动器)
 
 		uint32 				serial;				//卷序列号
 
-		char16_t				volume_label[256];	//卷标名称
+		u16char				volume_label[256];	//卷标名称
 
-		char16_t 			file_system[256];	//文件系统名称
+		u16char 			file_system[256];	//文件系统名称
 
 		uint32 				filename_max_length;//文件名最大长度
 

@@ -38,27 +38,6 @@
 #endif//_MSC_VER
 
 //--------------------------------------------------------------------------------------------------
-#if _MSC_VER < 1600
-	#ifndef _HAS_CHAR16_T_LANGUAGE_SUPPORT
-	#define _HAS_CHAR16_T_LANGUAGE_SUPPORT 0
-	#endif /* _HAS_CHAR16_T_LANGUAGE_SUPPORT */
-
-	#if _HAS_CHAR16_T_LANGUAGE_SUPPORT
-	#else /* _HAS_CHAR16_T_LANGUAGE_SUPPORT */
-		#if !defined(_CHAR16T)
-			#define _CHAR16T
-			typedef unsigned short char16_t;
-			typedef unsigned int char32_t;
-		#endif /* !defined(_CHAR16T) */
-	#endif /* _HAS_CHAR16_T_LANGUAGE_SUPPORT */
-
-	#define nullptr NULL
-#else
-	#include<cstdint>
-#endif//_MSC_VER < 1600
-
-#define HGL_FORCE_INLINE __forceinline
-
 #include<hgl/platform/compiler/DataTypeTypedef.h>
 #include<hgl/platform/compiler/Property.h>
 
@@ -86,12 +65,13 @@
 	#define _mm_set_ss set1_ps
 #endif
 
-#define HGL_FORCE_INLINE __forceinline
+#define nullptr				NULL
+#define HGL_FORCE_INLINE	__forceinline
 
-#define HGL_THREAD	__declspec(thread)
+#define HGL_THREAD			__declspec(thread)
 
-#define HGL_FMT_I64				"%I64d"
-#define HGL_FMT_U64				"%I64u"
+#define HGL_FMT_I64			"%I64d"
+#define HGL_FMT_U64			"%I64u"
 //参考文档最后查阅支持版本为VC2013，网址：http://msdn.microsoft.com/en-us/library/tcxf1dw6.aspx
 //--------------------------------------------------------------------------------------------------
 #define _USE_MATH_DEFINES				// 使用数学常数定义

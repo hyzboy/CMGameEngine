@@ -48,7 +48,7 @@ namespace hgl
 
 	public: //方法 查找
 
-		virtual Object *FindObject(const char16_t *);                                                ///<查找对象
+		virtual Object *FindObject(const u16char *);                                                ///<查找对象
 		virtual bool FindObject(Object *);															///<查找对象
 	};//class ConsoleObjectControl
 }//namespace hgl

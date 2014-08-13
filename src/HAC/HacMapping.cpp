@@ -7,7 +7,7 @@
 //--------------------------------------------------------------------------------------------------
 namespace hgl
 {
-	HacMapping::HacMapping(const char16_t *folder_name)
+	HacMapping::HacMapping(const u16char *folder_name)
 	{                              
 		if(!folder_name||!*folder_name||IsDirectory(folder_name))
 		{
@@ -24,7 +24,7 @@ namespace hgl
     	CloseThread();
 	}
 
-	bool HacMapping::FindFile(const char16_t *filename)
+	bool HacMapping::FindFile(const u16char *filename)
 	{
 //		if(FolderName.Length==0)
 //		{
@@ -46,7 +46,7 @@ namespace hgl
 		return hgl::FileConfirm(full_filename);
 	}
 
-	bool HacMapping::FindFile(void *folder,const char16_t *filename)
+	bool HacMapping::FindFile(void *folder,const u16char *filename)
 	{
 		if(folder)
 		{            
@@ -92,7 +92,7 @@ namespace hgl
 		return(result==length);
 	}
 
-	Stream *HacMapping::LoadFileFrom(void *folder,const char16_t *filename,bool load_to_memory)
+	Stream *HacMapping::LoadFileFrom(void *folder,const u16char *filename,bool load_to_memory)
 	{
 		if(folder)
 		{           
@@ -109,7 +109,7 @@ namespace hgl
         	return this->LoadFile(filename,load_to_memory);
 	}
 
-	bool 	HacMapping::LoadFileFrom(void *folder,const char16_t *filename,void **data,int *size)
+	bool 	HacMapping::LoadFileFrom(void *folder,const u16char *filename,void **data,int *size)
 	{
 		if(folder)
 		{                        
@@ -126,7 +126,7 @@ namespace hgl
         	return this->LoadFile(filename,data,size);
 	}
 
-	Stream *HacMapping::LoadFile(const char16_t *filename,bool load_to_memory)
+	Stream *HacMapping::LoadFile(const u16char *filename,bool load_to_memory)
 	{
 		if(this->FindFile(filename))
 		{
@@ -147,7 +147,7 @@ namespace hgl
 			return(nullptr);
 	}
 
-	bool HacMapping::LoadFile(const char16_t *filename,void **data,int *size)
+	bool HacMapping::LoadFile(const u16char *filename,void **data,int *size)
 	{
 		if(this->FindFile(filename))
 		{
@@ -158,7 +158,7 @@ namespace hgl
 			return(false);
 	}
 
-/*	bool HacMapping::OpenFile(const char16_t *filename,FileStream **stream,int *offset,int *size)
+/*	bool HacMapping::OpenFile(const u16char *filename,FileStream **stream,int *offset,int *size)
 	{
 		if(this->FindFile(filename))
 		{
@@ -191,7 +191,7 @@ namespace hgl
 		fm->filename.LowerCase();
 	}
 
-	void *HacMapping::GetFolder(const char16_t *folder_name)
+	void *HacMapping::GetFolder(const u16char *folder_name)
 	{
 //		if(FolderName.Length==0)
 //		{
@@ -259,7 +259,7 @@ namespace hgl
 		return(true);
 	}
 
-	void *HacMapping::GetFile(void *folder,const char16_t *filename,int *filesize)
+	void *HacMapping::GetFile(void *folder,const u16char *filename,int *filesize)
 	{
 		if(!filename||!(*filename))return(nullptr);
 		      
@@ -286,16 +286,16 @@ namespace hgl
 		return(nullptr);    	
 	}
 
-	void *HacMapping::GetFile(const char16_t *filename,int *filesize)
+	void *HacMapping::GetFile(const u16char *filename,int *filesize)
 	{               
 		if(!filename||!(*filename))return(nullptr);
 
-		const char16_t *end=strrchr(filename,HGL_DIRECTORY_SEPARATOR);
+		const u16char *end=strrchr(filename,HGL_DIRECTORY_SEPARATOR);
         void *folder=nullptr;
 
 		if(end)
 		{
-			char16_t *pathname=new char16_t[end-filename+1];
+			u16char *pathname=new u16char[end-filename+1];
 
 			strcpy(pathname,filename,end-filename);
 

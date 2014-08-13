@@ -5,11 +5,11 @@
 
 namespace hgl
 {
-	void ConvertString(UTF16String &targe,char16_t *source,int length)
+	void ConvertString(UTF16String &targe,u16char *source,int length)
 	{
-		char16_t *temp;
-		char16_t *sp,*tp;
-		const char16_t conv[][2]=
+		u16char *temp;
+		u16char *sp,*tp;
+		const u16char conv[][2]=
 		{
 			{'t',	'\t'},
 			{'n',	'\n'},
@@ -20,7 +20,7 @@ namespace hgl
 			{0,0}
 		};
 
-		temp=new char16_t[length+1];
+		temp=new u16char[length+1];
 		sp=source;
 		tp=temp;
 
@@ -28,7 +28,7 @@ namespace hgl
 		{
 			if(*sp=='\\')
 			{
-				char16_t sc=*(sp+1);
+				u16char sc=*(sp+1);
 				int select;
 
 				for(select=0;;select++)
@@ -67,7 +67,7 @@ namespace hgl
 
 namespace hgl
 {
-	DevilParse::DevilParse(DevilScriptModule *dm,const char16_t *str,int len)
+	DevilParse::DevilParse(DevilScriptModule *dm,const u16char *str,int len)
 	{
     	module=dm;
 
@@ -86,7 +86,7 @@ namespace hgl
 		{
 			uint len;
 			eTokenType type;
-			const char16_t *source;
+			const u16char *source;
 
 			if(source_length<=0)return(ttEnd);
 
@@ -110,7 +110,7 @@ namespace hgl
 
 	eTokenType DevilParse::CheckToken(UTF16String &intro)
 	{
-		const char16_t *cur=source_cur;
+		const u16char *cur=source_cur;
 		uint len=source_length;
 		eTokenType type;
 
@@ -523,7 +523,7 @@ namespace hgl
 
 									index=module->string_list.Add(str.c_str());
 
-									*(char16_t **)(p)=(char16_t *)(module->string_list[index].c_str());
+									*(u16char **)(p)=(u16char *)(module->string_list[index].c_str());
 
 									#ifdef _DEBUG
 									intro.Strcat(name);
@@ -565,7 +565,7 @@ namespace hgl
 		if(map->result==ttUInt16)return(new DevilSystemFuncCallFixed<uint16		>(map,param,param_count));else
 		if(map->result==ttUInt	)return(new DevilSystemFuncCallFixed<uint32		>(map,param,param_count));else
 		if(map->result==ttFloat	)return(new DevilSystemFuncCallFixed<float		>(map,param,param_count));else
-		if(map->result==ttString)return(new DevilSystemFuncCallFixed<char16_t *	>(map,param,param_count));else
+		if(map->result==ttString)return(new DevilSystemFuncCallFixed<u16char *	>(map,param,param_count));else
 		{
 			delete[] param;
 			return(nullptr);
@@ -738,7 +738,7 @@ namespace hgl
 
 								case ttFloat:   dcii=new DevilValueFuncMap<float	>(module,cmd,ttFloat	);break;
 
-								case ttString:	dcii=new DevilValueFuncMap<char16_t *>(module,cmd,ttString	);break;
+								case ttString:	dcii=new DevilValueFuncMap<u16char *>(module,cmd,ttString	);break;
 
 								default:		LOG_ERROR(u"if中调用的函数返回类型无法支持");break;
 							}

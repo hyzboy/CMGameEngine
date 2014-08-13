@@ -31,19 +31,19 @@ namespace hgl
 	{
 	public:	//事件
 
-		DefEvent(bool,OnTrueFuncCall,(const char16_t *));						///<真实函数呼叫
+		DefEvent(bool,OnTrueFuncCall,(const u16char *));						///<真实函数呼叫
 
 	public:
 
 		DevilModule(){OnTrueFuncCall=nullptr;}
 		virtual ~DevilModule()HGL_DEFAULT_MEMFUNC;
 
-		virtual bool		MapProperty		(const char16_t *,void *)=0;			///<映射属性(真实变量的映射，在整个模块中全局有效)
-		virtual bool		MapFunc			(const char16_t *,void *)=0;			///<映射C函数
-//		virtual bool		MapFunc			(void *,const char16_t *,void *)=0;	///<映射C函数,并传入一个对像
-		virtual bool		MapFunc			(const char16_t *,void *,void *)=0;	///<映射C++成员函数
+		virtual bool		MapProperty		(const u16char *,void *)=0;			///<映射属性(真实变量的映射，在整个模块中全局有效)
+		virtual bool		MapFunc			(const u16char *,void *)=0;			///<映射C函数
+//		virtual bool		MapFunc			(void *,const u16char *,void *)=0;	///<映射C函数,并传入一个对像
+		virtual bool		MapFunc			(const u16char *,void *,void *)=0;	///<映射C++成员函数
 
-		virtual bool		AddScript		(const char16_t *,int=-1)=0;			///<添加脚本并编译
+		virtual bool		AddScript		(const u16char *,int=-1)=0;			///<添加脚本并编译
 
 		virtual DevilFunc *	GetScriptFunc	(const UTF16String &);				///<取得脚本函数
 
@@ -74,15 +74,15 @@ namespace hgl
 		DevilContext(){State=dvsStop;}
 		virtual ~DevilContext()HGL_DEFAULT_MEMFUNC;
 
-		virtual bool Start(const char16_t *)=0;									///<开始运行虚拟机
-		virtual bool Start(const char16_t *,const char16_t *)=0;					///<开始运行虚拟机
+		virtual bool Start(const u16char *)=0;									///<开始运行虚拟机
+		virtual bool Start(const u16char *,const u16char *)=0;					///<开始运行虚拟机
 		virtual bool Start(DevilFunc *,...)=0;									///<从指令函数开始运行虚拟机
-		virtual bool Run(const char16_t *func_name=0)=0;							///<运行虚拟机，如Start或End状态则从开始运行，Pause状态会继续运行
+		virtual bool Run(const u16char *func_name=0)=0;							///<运行虚拟机，如Start或End状态则从开始运行，Pause状态会继续运行
 		virtual void Pause()=0;													///<暂停虚拟机，仅能从Run状态变为Pause，其它情况会失败
 		virtual void Stop()=0;													///<终止虚拟机，从任何状况变为Start状态
 
-		virtual bool Goto(const char16_t *)=0;									///<跳转到指定位置
-		virtual bool Goto(const char16_t *,const char16_t *)=0;					///<跳转到指定位置
+		virtual bool Goto(const u16char *)=0;									///<跳转到指定位置
+		virtual bool Goto(const u16char *,const u16char *)=0;					///<跳转到指定位置
 
 		virtual bool GetCurrentState(UTF16String &,int &)=0;						///<取得当前状态
 

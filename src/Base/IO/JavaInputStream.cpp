@@ -20,7 +20,7 @@ namespace hgl
 			if(in->Read(utf8_str,utf8_length)!=utf8_length)
 				return(false);
 
-			char16_t *wide_str=u8_to_u16(utf8_str,utf8_length,wide_len);
+			u16char *wide_str=u8_to_u16(utf8_str,utf8_length,wide_len);
 
 			ws.Set(wide_str,wide_len,true);
 

@@ -70,7 +70,7 @@ namespace hgl
 			const RenderState *GetRenderState()const{return &state;}						///<取得渲染状态
 
 #ifdef _DEBUG
-			Shader *AutoCreateShader	(bool mvp=true,const char16_t *filename=nullptr);		///<自动创建着色程序
+			Shader *AutoCreateShader	(bool mvp=true,const u16char *filename=nullptr);		///<自动创建着色程序
 #else
 			Shader *AutoCreateShader	(bool mvp=true);									///<自动创建着色程序
 #endif//_DEBUG

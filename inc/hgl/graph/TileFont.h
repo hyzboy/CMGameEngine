@@ -1,4 +1,4 @@
-﻿#ifndef HGL_GRAPH_TILE_FONT_INCLUDE
+#ifndef HGL_GRAPH_TILE_FONT_INCLUDE
 #define HGL_GRAPH_TILE_FONT_INCLUDE
 
 #include<hgl/VectorMath.h>
@@ -29,7 +29,7 @@ namespace hgl
 			TileData *tile_data;																	///<Tile管理器
 			FontSource *chs_source,*eng_source;														///<字体数据源
 
-			ActiveChain<char16_t,TileData::Object *> fud;											///<字体缓冲管理
+			ActiveChain<u16char,TileData::Object *> fud;											///<字体缓冲管理
 
 			uint8 *char_bitmap_buffer;																///<字符位图缓冲区
 			uint char_bitmap_bytes;																	///<字符位图字节数
@@ -46,16 +46,16 @@ namespace hgl
 
 		protected:
 
-			void Clear(const char16_t &,TileData::Object *&);										///<清除某个字
+			void Clear(const u16char &,TileData::Object *&);										///<清除某个字
 
-			FontSource::Bitmap *GetCharBitmap(const char16_t &ch)									///<取得字符位图数据
+			FontSource::Bitmap *GetCharBitmap(const u16char &ch)									///<取得字符位图数据
 				{return ((ch<=0xFF?eng_source:chs_source)->GetCharBitmap(ch));}
 
-			FontSource::Bitmap *MakeCharBitmap(const char16_t &ch);									///<生成字符位图数据
+			FontSource::Bitmap *MakeCharBitmap(const u16char &ch);									///<生成字符位图数据
 
-			TileData::Object *GetCharData(const char16_t &);											///<取得字符数据
+			TileData::Object *GetCharData(const u16char &);											///<取得字符数据
 
-			bool MakeupText(Makeup &,int,int,const char16_t *,int);									///<排版字符串
+			bool MakeupText(Makeup &,int,int,const u16char *,int);									///<排版字符串
 
 		public:
 
@@ -73,13 +73,13 @@ namespace hgl
 			TileFont(int,TileData *,FontSource *,FontSource *);
 			virtual ~TileFont();
 
-			float CharWidth(char16_t);																///<指定字符宽度
-			float GetStringWidth(const char16_t *,int=-1);											///<求字符串宽度
+			float CharWidth(u16char);																///<指定字符宽度
+			float GetStringWidth(const u16char *,int=-1);											///<求字符串宽度
 
 		public:
 
-			bool MakeupText(Makeup &,const char16_t *,int=-1);										///<排版字符串
-			bool MakeupText(Makeup &,const char16_t *,int,TextAlignment);							///<排版字符串
+			bool MakeupText(Makeup &,const u16char *,int=-1);										///<排版字符串
+			bool MakeupText(Makeup &,const u16char *,int,TextAlignment);							///<排版字符串
 
 			void Draw(const Matrix4f *,const Makeup &,int=-1);										///<根据排版进行绘制
 
@@ -98,7 +98,7 @@ namespace hgl
 			* @return 字符串的象素级宽度
 			* @return <0 错误
 			*/
-			float DrawString(const Matrix4f *mat,const char16_t *str,int limit_char=-1)				///<绘制一个字符串,可限制字数,并且处理\n
+			float DrawString(const Matrix4f *mat,const u16char *str,int limit_char=-1)				///<绘制一个字符串,可限制字数,并且处理\n
 			{
 				Makeup m;
 
@@ -119,15 +119,15 @@ namespace hgl
 			* @return 字符串的象素级宽度
 			* @return <0 错误
 			*/
-			float DrawString(float x,float y,const char16_t *str,int limit_char=-1)					///<绘制一个字符串,可限制字数,并且处理\n
+			float DrawString(float x,float y,const u16char *str,int limit_char=-1)					///<绘制一个字符串,可限制字数,并且处理\n
 			{
 				const Matrix4f mat=translate(x,y,0);
 
 				return DrawString(&mat,str,limit_char);
 			}
 
-			float DrawFormat(const Matrix4f *mat,const char16_t *,...);								///<绘制一个格式化的字符串
-			float DrawFormat(float,float,const char16_t *,...);										///<绘制一个格式化的字符串
+			float DrawFormat(const Matrix4f *mat,const u16char *,...);								///<绘制一个格式化的字符串
+			float DrawFormat(float,float,const u16char *,...);										///<绘制一个格式化的字符串
 		};//class TileFont
 
 		TileFont *CreateTileFont(const Font &,const Font &,int=-1);									///<创建一个字体,使用系统字体
@@ -143,7 +143,7 @@ namespace hgl
 		* @param anti 是否抗矩齿,默认true
 		* @param count 缓冲区内保存的字符个数
 		*/
-		TileFont *CreateTileFont(const char16_t *chs_fontname,const char16_t *eng_fontname,int width,int height,bool bold=false,bool italic=false,bool anti=true,int count=-1);
+		TileFont *CreateTileFont(const u16char *chs_fontname,const u16char *eng_fontname,int width,int height,bool bold=false,bool italic=false,bool anti=true,int count=-1);
 
 		/**
 		* 通过系统字体创建一个Tile字体,中英文字体相同
@@ -155,7 +155,7 @@ namespace hgl
 		* @param anti 是否抗矩齿,默认true
 		* @param count 缓冲区内保存的字符个数
 		*/
-		__inline TileFont *CreateTileFont(const char16_t *fontname,int width,int height,bool bold=false,bool italic=false,bool anti=true,int count=-1)
+		__inline TileFont *CreateTileFont(const u16char *fontname,int width,int height,bool bold=false,bool italic=false,bool anti=true,int count=-1)
 		{
 			return CreateTileFont(fontname,fontname,width,height,bold,italic,anti,count);
 		}
@@ -168,7 +168,7 @@ namespace hgl
 		* @param height 高
 		* @param count 缓冲区内保存的字符个数
 		*/
-		__inline TileFont *CreateTileFont(const char16_t *chs_fontname,const char16_t *eng_fontname,int width,int height,int count=-1)
+		__inline TileFont *CreateTileFont(const u16char *chs_fontname,const u16char *eng_fontname,int width,int height,int count=-1)
 		{
 			return CreateTileFont(chs_fontname,eng_fontname,width,height,false,false,true,count);
 		}

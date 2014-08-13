@@ -57,7 +57,7 @@ namespace hgl
 			virtual const bool Get(UTF16String &	)const{return(false);}
 			virtual const bool Get(UTF8String &		)const{return(false);}
 			virtual const int  Get(char *,		int	)const{return(false);}
-			virtual const int  Get(char16_t *,	int	)const{return(false);}
+			virtual const int  Get(u16char *,	int	)const{return(false);}
 			virtual const int  Get(void *,		int	)const{return(false);}
 
 			virtual const bool Set(const bool 			){return(false);}
@@ -78,10 +78,10 @@ namespace hgl
 			virtual const bool Set(const UTF16String &	){return(false);}
 			virtual const bool Set(const UTF8String &	){return(false);}
 			virtual const bool Set(const char *,	int	){return(false);}
-			virtual const bool Set(const char16_t *,int	){return(false);}
+			virtual const bool Set(const u16char *,int	){return(false);}
 
 					const bool Set(const char *str		){return Set(str,hgl::strlen(str)+1);}
-					const bool Set(const char16_t *str	){return Set(str,hgl::strlen(str)+1);}
+					const bool Set(const u16char *str	){return Set(str,hgl::strlen(str)+1);}
 
 			virtual const bool Set(const void *,	int	){return(false);}
 		};//class FieldData

@@ -36,7 +36,7 @@ namespace hgl
 			Timer();
 			virtual ~Timer()HGL_DEFAULT_MEMFUNC;
 
-			virtual const char16_t *GetClassName()const{return u"Timer";}							///<取得类名
+			virtual const u16char *GetClassName()const{return u"Timer";}							///<取得类名
 
 			virtual bool Start();
 			virtual bool Pause();
@@ -78,7 +78,7 @@ namespace hgl
 			TrackTimer(double=1.0);
 			virtual ~TrackTimer()HGL_DEFAULT_MEMFUNC;
 
-			virtual const char16_t *GetClassName()const{return u"TrackTimer";}						///<取得类名
+			virtual const u16char *GetClassName()const{return u"TrackTimer";}						///<取得类名
 
 			virtual bool Start();
 

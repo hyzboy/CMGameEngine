@@ -62,9 +62,9 @@ namespace hgl
 			return(data);
 		}
 
-		bool CreateScreenShotFilename(UTF16String &fn,const char16_t *ext_name)
+		bool CreateScreenShotFilename(UTF16String &fn,const u16char *ext_name)
 		{
-			const char16_t *path=GetString(hfsStartPath);
+			const u16char *path=GetString(hfsStartPath);
 
 			fn=path;
 			fn+=u"\\ScreenShot";
@@ -96,7 +96,7 @@ namespace hgl
 		* @param filename 文件名,如不输入表示自动产生文件名(于 启动目录\ScreenShot 目录下)
 		* @return 保存是否成功
 		*/
-		bool SaveScreenToBMP(const char16_t *filename,int width,int height)
+		bool SaveScreenToBMP(const u16char *filename,int width,int height)
 		{
 			FileStream fp;
 			uint32 line_size;
@@ -158,7 +158,7 @@ namespace hgl
 		* @param filename 文件名,如不输入表示自动产生文件名(于 启动目录\ScreenShot 目录下)
 		* @return 保存是否成功
 		*/
-		bool SaveScreenToTGA(const char16_t *filename,int width,int height)
+		bool SaveScreenToTGA(const u16char *filename,int width,int height)
 		{
 			const uint8 TGAHeader[12]={0,0,2,0,0,0,0,0,0,0,0,0};
 

@@ -12,9 +12,9 @@ namespace hgl
 	{
 		DevilScriptModule *	module;
 
-		const char16_t *		source_start;
+		const u16char *		source_start;
 
-		const char16_t *		source_cur;
+		const u16char *		source_cur;
 		uint 				source_length;
 
 		asCTokenizer 		parse;
@@ -42,7 +42,7 @@ namespace hgl
 
 	public:
 
-		DevilParse(DevilScriptModule *,const char16_t *,int=-1);
+		DevilParse(DevilScriptModule *,const u16char *,int=-1);
 
 		eTokenType GetToken(UTF16String &);		//取得一个token,自动跳过注释、换行、空格
 		eTokenType CheckToken(UTF16String &);	//检测下一个token,自动跳过注释、换行、空格,但不取出

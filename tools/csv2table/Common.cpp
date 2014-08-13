@@ -1,9 +1,9 @@
 #include"Common.h"
 
-int ParseField(UTF16StringList *sl,const UTF16String &str,const char16_t ch,bool null_end)
+int ParseField(UTF16StringList *sl,const UTF16String &str,const u16char ch,bool null_end)
 {
-	const char16_t *sp,*p;
-	char16_t *tmp;
+	const u16char *sp,*p;
+	u16char *tmp;
 	bool all_null=true;
 
 	sl->Clear();
@@ -16,7 +16,7 @@ int ParseField(UTF16StringList *sl,const UTF16String &str,const char16_t ch,bool
 	if(!sp)
 		return(-1);
 
-	tmp=new char16_t[str.Length()+1];
+	tmp=new u16char[str.Length()+1];
 
 	do
 	{

@@ -1,4 +1,4 @@
-﻿#include<hgl/PlugIn.h>
+#include<hgl/PlugIn.h>
 #include<hgl/Logger.h>
 #include<hgl/type/DateTime.h>
 
@@ -95,7 +95,7 @@ namespace hgl
 			bool (*Init)();																				///<初始化日志输出
 			void (*Close)();																			///<关闭所有日志输出
 
-			void (*WriteUTF16)(LogLevel,const char16_t *,int);											///<输出一行日志
+			void (*WriteUTF16)(LogLevel,const u16char *,int);											///<输出一行日志
 			void (*WriteUTF8)(LogLevel,const char *,int);												///<输出一行日志
 		};//struct LogInterface
 
@@ -106,7 +106,7 @@ namespace hgl
 			PutLogHeader,
 			CloseAllLog,
 
-			WriteLog<char16_t>,
+			WriteLog<u16char>,
 			WriteLog<char>
 		};
 
@@ -170,7 +170,7 @@ namespace hgl
 			}
 		}
 
-		void Log(LogLevel level,const char16_t *str,int size)
+		void Log(LogLevel level,const u16char *str,int size)
 		{
 			if(li)
 				li->WriteUTF16(level,str,size==-1?hgl::strlen(str):size);

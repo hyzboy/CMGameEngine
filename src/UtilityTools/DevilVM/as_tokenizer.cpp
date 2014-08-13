@@ -1,4 +1,4 @@
-﻿/*
+/*
    AngelCode Scripting Library
    Copyright (c) 2003-2007 Andreas Jonsson
 
@@ -54,7 +54,7 @@ namespace angle_script
 	{
 	}
 
-	const char16_t *asGetTokenDefinition(int tokenType)
+	const u16char *asGetTokenDefinition(int tokenType)
 	{
 		if( tokenType == ttUnrecognizedToken			) return u"<unrecognized token>";
 		if( tokenType == ttEnd							) return u"<end of file>";
@@ -77,7 +77,7 @@ namespace angle_script
 		return 0;
 	}
 
-	const char16_t *GetTokenName(eTokenType type)
+	const u16char *GetTokenName(eTokenType type)
 	{
 		for(hgl::uint i=0;i<numTokenWords;i++)
 			if(tokenWords[i].tokenType==type)
@@ -86,7 +86,7 @@ namespace angle_script
 		return(nullptr);
 	}
 
-	eTokenType asCTokenizer::GetToken(const char16_t *source, hgl::uint sourceLength, hgl::uint *tokenLength)
+	eTokenType asCTokenizer::GetToken(const u16char *source, hgl::uint sourceLength, hgl::uint *tokenLength)
 	{
 // 		assert(source != 0);
 // 		assert(tokenLength != 0);
@@ -362,8 +362,8 @@ namespace angle_script
 			// Make sure the identifier isn't a reserved keyword
 			if( tokenLength > 50 ) return true;
 
-			char16_t test[51];
-			memcpy(test, source, tokenLength*sizeof(char16_t));
+			u16char test[51];
+			memcpy(test, source, tokenLength*sizeof(u16char));
 			test[tokenLength] = 0;
 
 			for( hgl::uint i = 0; i < numTokenWords; i++ )

@@ -41,7 +41,7 @@ namespace hgl
 
 				RectScope2f scope;
 
-				char16_t ch;
+				u16char ch;
 			};
 
 			List<CharMakeup> MakeupString;

@@ -1,4 +1,4 @@
-﻿#include<hgl/Other.h>
+#include<hgl/Other.h>
 #include<hgl/type/DataType.h>
 #include<hgl/type/BaseString.h>
 
@@ -16,7 +16,7 @@ namespace hgl
 		* 弹出一个网页浏览器,并自动打开指定的网址。示例: PopupWebBrowser(u"http://www.hyzgame.com.cn");
         * @param url 网址
         */
-        void PopupWebBrowser(const char16_t *url)
+        void PopupWebBrowser(const u16char *url)
         {
             ShellExecute(nullptr,nullptr,url,nullptr,nullptr,nullptr);
         }
@@ -26,9 +26,9 @@ namespace hgl
         * @param email 电子邮件地址
         * @param subject 邮件主题
         */
-        void PopupEmailClient(const char16_t *email,const char16_t *subject)
+        void PopupEmailClient(const u16char *email,const u16char *subject)
         {
-            char16_t url[4096]=u"mailto:";
+            u16char url[4096]=u"mailto:";
 
 			strcat(url,email);
 
@@ -48,7 +48,7 @@ namespace hgl
 		* @param icon 图标文件
 		* @return 是否成功
 		*/
-		bool CreateShortCut(const char16_t *lnk_fname,const char16_t *filename,const char16_t *work_directory,const char16_t *param,const char16_t *icon)
+		bool CreateShortCut(const u16char *lnk_fname,const u16char *filename,const u16char *work_directory,const u16char *param,const u16char *icon)
 		{
 			IShellLinkW   *psl   =   NULL;
 			IPersistFile  *pPf   =   NULL;
@@ -91,7 +91,7 @@ namespace hgl
 //		* @param color 图标色彩数
 //		* @return 图标象素数据(请自行delete[],另返回NULL表示失败)
 //		*/
-//		void *GetFileIcon(const char16_t *filename,int &width,int &height,int &color)
+//		void *GetFileIcon(const u16char *filename,int &width,int &height,int &color)
 //		{
 //			IShellItemImageFactory *pShellItemImageFactory = NULL;
 //    		IBindCtx *m_pBindContext;

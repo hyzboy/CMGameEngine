@@ -1,4 +1,4 @@
-﻿#ifndef HGL_GRAPH_RENDERABLE_INCLUDE
+#ifndef HGL_GRAPH_RENDERABLE_INCLUDE
 #define HGL_GRAPH_RENDERABLE_INCLUDE
 
 #include<hgl/graph/Shader.h>
@@ -106,7 +106,7 @@ namespace hgl
 			*/
 			virtual Shader *					AutoCreateShader	(bool mvp=true															///<自动创建着色程序
 #ifdef _DEBUG
-																	,const char16_t *filename=nullptr
+																	,const u16char *filename=nullptr
 #endif//_DEBUG
 			)=0;
 

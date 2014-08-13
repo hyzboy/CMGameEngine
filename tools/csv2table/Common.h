@@ -7,7 +7,7 @@
 
 using namespace hgl;
 
-int ParseField(UTF16StringList *sl,const UTF16String &str,const char16_t ch,bool null_end=false);
+int ParseField(UTF16StringList *sl,const UTF16String &str,const u16char ch,bool null_end=false);
 
 inline int ParseFieldName(UTF16StringList *sl,const UTF16String &str)
 {

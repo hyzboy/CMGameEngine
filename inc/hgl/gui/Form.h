@@ -27,7 +27,7 @@ namespace hgl
 				#include<hgl/object/Object.ProcEvent.h>
 				#include<hgl/object/Object.OnEvent.h>
 
-				void InitPrivate(const char16_t * =nullptr);
+				void InitPrivate(const u16char * =nullptr);
 
 				void SetCaption();
 
@@ -54,8 +54,8 @@ namespace hgl
 			public:
 
 				Form();
-				Form(const RectScope2i &,const char16_t * =nullptr);
-				Form(int,int,int,int,const char16_t * =nullptr);
+				Form(const RectScope2i &,const u16char * =nullptr);
+				Form(int,int,int,int,const u16char * =nullptr);
 				virtual ~Form();
 
 				void SetSize(int,int,bool client_rect=false);											///<设置尺寸

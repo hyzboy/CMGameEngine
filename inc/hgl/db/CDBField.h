@@ -1,4 +1,4 @@
-﻿#ifndef HGL_CDB_FIELD_INCLUDE
+#ifndef HGL_CDB_FIELD_INCLUDE
 #define HGL_CDB_FIELD_INCLUDE
 
 #include<hgl/db/FieldType.h>
@@ -38,7 +38,7 @@ namespace hgl
 			virtual bool	GetFloat	(int,float &	){return false;}							///<从字段中取得一个浮点数
 			virtual bool	GetDouble	(int,double &	){return false;}							///<从字段中取得一个浮点数
 			virtual bool	GetChar		(int,char &		){return false;}							///<从字段中取得一个utf8字符
-			virtual bool	GetChar		(int,char16_t &	){return false;}							///<从字段中取得一个utf16字符
+			virtual bool	GetChar		(int,u16char &	){return false;}							///<从字段中取得一个utf16字符
 
 			virtual bool	GetArray	(int,bool *,	int=-1,int=-1){return false;}				///<从字段中取得一组布尔型数
 			virtual bool	GetArray	(int,int8 *,	int=-1,int=-1){return false;}				///<从字段中取得一组8位有符号整型数
@@ -52,7 +52,7 @@ namespace hgl
 			virtual bool	GetArray	(int,float *,	int=-1,int=-1){return false;}				///<从字段中取得一组浮点数
 			virtual bool	GetArray	(int,double *,	int=-1,int=-1){return false;}				///<从字段中取得一组浮点数
 			virtual bool	GetArray	(int,char *,	int=-1,int=-1){return false;}				///<从字段中取得一组utf8字符
-			virtual bool	GetArray	(int,char16_t *,int=-1,int=-1){return false;}				///<从字段中取得一组utf16字符
+			virtual bool	GetArray	(int,u16char *,int=-1,int=-1){return false;}				///<从字段中取得一组utf16字符
 
 			virtual bool	GetString	(int,UTF8String &){return false;}							///<从字段中取得一个utf8字符串
 			virtual bool	GetString	(int,UTF16String &){return false;}							///<从字段中取得一个utf16字符串
@@ -62,7 +62,7 @@ namespace hgl
 			virtual int		FindFloat	(const float 	){return -1;}
 			virtual int		FindDouble	(const double 	){return -1;}
 			virtual int		FindChar	(const char		){return -1;}
-			virtual int		FindChar	(const char16_t	){return -1;}
+			virtual int		FindChar	(const u16char	){return -1;}
 
 			virtual	int		FindArray(const int8 *		){return -1;}
 			virtual	int		FindArray(const int16 *		){return -1;}
@@ -75,10 +75,10 @@ namespace hgl
 			virtual	int		FindArray(const float *		){return -1;}
 			virtual	int		FindArray(const double *	){return -1;}
 			virtual int		FindArray(const char *		){return -1;}								///<查找utf8字符陈列，不处理0结尾
-			virtual int		FindArray(const char16_t *	){return -1;}								///<查找utf16字符陈列，不处理0结尾
+			virtual int		FindArray(const u16char *	){return -1;}								///<查找utf16字符陈列，不处理0结尾
 
 			virtual int		FindCharArray(const char *){return -1;}									///<查找utf8字符阵列，处理0结尾
-			virtual int		FindCharArray(const char16_t *){return -1;}								///<查找utf16字符阵列，处理0结尾
+			virtual int		FindCharArray(const u16char *){return -1;}								///<查找utf16字符阵列，处理0结尾
 		};//class CDBField
 
 		/**

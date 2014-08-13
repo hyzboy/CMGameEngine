@@ -1,4 +1,4 @@
-﻿#include"Hac4.h"
+#include"Hac4.h"
 #include<hgl/LogInfo.h>
 #include<hgl/Compress.h>
 #include<hgl/io/MemoryInputStream.h>
@@ -43,7 +43,7 @@ namespace hgl
 		int n;
 		Hac4File *file;
 		UTF16String folder_name;
-		char16_t ca_name[33];
+		u16char ca_name[33];
 
 		fp->ReadUTF16LEString(folder->FolderName);
 		folder->FolderName.ToLowerCase();

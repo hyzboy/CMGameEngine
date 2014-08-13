@@ -100,7 +100,7 @@ namespace hgl
 				fos.Close();
 			}
 
-			void Write(const char16_t *str,int size)
+			void Write(const u16char *str,int size)
 			{
 				if(tos&&str&&*str&&size>0)
 				{

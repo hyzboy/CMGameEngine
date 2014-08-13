@@ -23,7 +23,7 @@
 		return WCharToQString<sizeof(wchar_t)>(str,size);
 	}
 
-	inline QString ToQString(const char16_t *str,int size){return QString::fromUtf16((ushort *)str,size);}
+	inline QString ToQString(const u16char *str,int size){return QString::fromUtf16((ushort *)str,size);}
 	inline QString ToQString(const char32_t *str,int size){return QString::fromUcs4((uint *)str,size);}
 #endif//HGL_OS == HGL_OS_Windows
 

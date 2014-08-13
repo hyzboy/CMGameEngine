@@ -1,4 +1,4 @@
-﻿#ifndef HGL_SYSTEMINFO_INCLUDE
+#ifndef HGL_SYSTEMINFO_INCLUDE
 #define HGL_SYSTEMINFO_INCLUDE
 
 #include<hgl/type/DataType.h>
@@ -136,7 +136,7 @@ namespace hgl
 		CpuInfo     cpu;				///<CPU信息
 		MemInfo     mem;				///<内存信息
 
-		char16_t	os_name[256];		///<操作系统全名
+		u16char	os_name[256];		///<操作系统全名
 
 		CMGDKPATH	path;				///<《古月》相关路径
 

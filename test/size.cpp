@@ -9,7 +9,7 @@ void test(T &t)
 
 int main(int argc,char **argv)
 {
-	char16_t str[128];
+	u16char str[128];
 
 	test(str);
 

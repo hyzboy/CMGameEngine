@@ -129,7 +129,7 @@ namespace hgl
 		}
 	}
 
-	Object *ConsoleObjectControl::FindObject(const char16_t *obj_name)
+	Object *ConsoleObjectControl::FindObject(const u16char *obj_name)
 	{
 		int n=clas_object[ocName].GetCount();
 

@@ -232,17 +232,17 @@ namespace hgl
 			const bool Set(const BaseString<T> &str) HGL_OVERRIDE{return Set(str.c_str(),str.Length()+1);}
 		};//template<typename T> class FieldDataFixedString:public FieldDataFixedArray<T>
 
-		class FieldDataUTF16Chars:public FieldDataFixedString<char16_t>
+		class FieldDataUTF16Chars:public FieldDataFixedString<u16char>
 		{
 		public:
 
 #ifdef HGL_CONSTRUCTION_REUSE
-			using FieldDataFixedString<char16_t>::FieldDataFixedString;
+			using FieldDataFixedString<u16char>::FieldDataFixedString;
 #else
-			FieldDataUTF16Chars(const FieldDesc *fd):FieldDataFixedString<char16_t>(fd){}
-			FieldDataUTF16Chars(const FieldDesc *fd,const char16_t *str,int length):FieldDataFixedString<char16_t>(fd,str,length){}
-			FieldDataUTF16Chars(const FieldDesc *fd,const char16_t *str):FieldDataFixedString<char16_t>(fd,str){}
-			FieldDataUTF16Chars(const FieldDesc *fd,const UTF16String &v):FieldDataFixedString<char16_t>(fd,v){}
+			FieldDataUTF16Chars(const FieldDesc *fd):FieldDataFixedString<u16char>(fd){}
+			FieldDataUTF16Chars(const FieldDesc *fd,const u16char *str,int length):FieldDataFixedString<u16char>(fd,str,length){}
+			FieldDataUTF16Chars(const FieldDesc *fd,const u16char *str):FieldDataFixedString<u16char>(fd,str){}
+			FieldDataUTF16Chars(const FieldDesc *fd,const UTF16String &v):FieldDataFixedString<u16char>(fd,v){}
 #endif//HGL_CONSTRUCTION_REUSE
 
 			const int Get(char *str,int size)const HGL_OVERRIDE
@@ -271,7 +271,7 @@ namespace hgl
 				u8_to_u16(this->array_value.GetData(),this->desc->type.count,str,size);
 				return(true);
 			}
-		};//class FieldDataUTF16Chars:public FieldDataFixedArray<char16_t>
+		};//class FieldDataUTF16Chars:public FieldDataFixedArray<u16char>
 
 		class FieldDataUTF8Chars:public FieldDataFixedString<char>
 		{
@@ -286,7 +286,7 @@ namespace hgl
 			FieldDataUTF8Chars(const FieldDesc *fd,const UTF8String &v):FieldDataFixedString<char>(fd,v){}
 #endif//HGL_CONSTRUCTION_REUSE
 
-			const int Get(char16_t *str,int size)const HGL_OVERRIDE
+			const int Get(u16char *str,int size)const HGL_OVERRIDE
 			{
 				if(!str||size<=0)return(-1);
 
@@ -305,7 +305,7 @@ namespace hgl
 				return(true);
 			}
 
-			const bool Set(const char16_t *str,int size) HGL_OVERRIDE
+			const bool Set(const u16char *str,int size) HGL_OVERRIDE
 			{
 				if(!str||size<0)return(false);
 
@@ -339,22 +339,22 @@ namespace hgl
 				return(size);
 			}
 
-			const int Get(char16_t *str,int size)const HGL_OVERRIDE
+			const int Get(u16char *str,int size)const HGL_OVERRIDE
 			{
 				if(!str||size<0)return(false);
 
-				size*=sizeof(char16_t);
+				size*=sizeof(u16char);
 
 				if(size>this->desc->type.count)
 					size=this->desc->type.count;
 
 				memcpy(str,this->array_value.GetData(),size);
-				return(size/sizeof(char16_t));
+				return(size/sizeof(u16char));
 			}
 
 			const bool Get(UTF16String &str)const HGL_OVERRIDE
 			{
-				str.Strcpy((char16_t *)(this->array_value.GetData()),this->desc->type.count/sizeof(char16_t));
+				str.Strcpy((u16char *)(this->array_value.GetData()),this->desc->type.count/sizeof(u16char));
 				return(true);
 			}
 
@@ -373,7 +373,7 @@ namespace hgl
 				return(true);
 			}
 
-			const bool Set(const char16_t *str,int size)
+			const bool Set(const u16char *str,int size)
 			{
 				size<<=1;
 
@@ -500,17 +500,17 @@ namespace hgl
 		/**
 		 * UTF16LE字符串数据字段
 		 */
-		class FieldDataUTF16String:public FieldDataString<char16_t>
+		class FieldDataUTF16String:public FieldDataString<u16char>
 		{
 		public:
 
 #ifdef HGL_CONSTRUCTION_REUSE
-			using FieldDataString<char16_t>::FieldDataString;
+			using FieldDataString<u16char>::FieldDataString;
 #else
-			FieldDataUTF16String(const FieldDesc *fd):FieldDataString<char16_t>(fd){}
-			FieldDataUTF16String(const FieldDesc *fd,const char16_t *str,int len):FieldDataString<char16_t>(fd,str,len){}
-			FieldDataUTF16String(const FieldDesc *fd,const char16_t *str):FieldDataString<char16_t>(fd,str){}
-			FieldDataUTF16String(const FieldDesc *fd,const BaseString<char16_t> &str):FieldDataString<char16_t>(fd,str){}
+			FieldDataUTF16String(const FieldDesc *fd):FieldDataString<u16char>(fd){}
+			FieldDataUTF16String(const FieldDesc *fd,const u16char *str,int len):FieldDataString<u16char>(fd,str,len){}
+			FieldDataUTF16String(const FieldDesc *fd,const u16char *str):FieldDataString<u16char>(fd,str){}
+			FieldDataUTF16String(const FieldDesc *fd,const BaseString<u16char> &str):FieldDataString<u16char>(fd,str){}
 #endif//HGL_CONSTRUCTION_REUSE
 
 			const bool Set(const bool v		)HGL_OVERRIDE{this->string_value=(v?u'1':u'0');return(true);}
@@ -531,7 +531,7 @@ namespace hgl
 				this->string_value=to_u16(str,size);
 				return(true);
 			}
-		};//class FieldDataUTF16String:public FieldDataString<char16_t>
+		};//class FieldDataUTF16String:public FieldDataString<u16char>
 
 		/**
 		 * UTF8字符串数据字段
@@ -552,7 +552,7 @@ namespace hgl
 			const bool Set(const bool v		)HGL_OVERRIDE{this->string_value=(v?'1':'0');return(true);}
 
 			const bool Get(UTF16String &str)const HGL_OVERRIDE{str=to_u16(this->string_value);return(true);}
-			const int Get(char16_t *str,int size)const HGL_OVERRIDE
+			const int Get(u16char *str,int size)const HGL_OVERRIDE
 			{
 				if(!str||size<=0)return(false);
 
@@ -560,7 +560,7 @@ namespace hgl
 			}
 
 			const bool Set(const UTF8String &str)HGL_OVERRIDE{this->string_value=str;return(true);}
-			const bool Set(const char16_t *str,int size) HGL_OVERRIDE
+			const bool Set(const u16char *str,int size) HGL_OVERRIDE
 			{
 				if(!str||size<=0)return(false);
 
@@ -586,7 +586,7 @@ namespace hgl
 			FieldDataVarBinary(const FieldDesc *fd):FieldData(fd){}
 #endif//HGL_CONSTRUCTION_REUSE
 
-			const bool Get(UTF16String &str)const HGL_OVERRIDE{str.Set((char16_t *)(mem_block.GetData()),mem_block.GetBytes()/sizeof(char16_t));return(true);}
+			const bool Get(UTF16String &str)const HGL_OVERRIDE{str.Set((u16char *)(mem_block.GetData()),mem_block.GetBytes()/sizeof(u16char));return(true);}
 			const bool Get(UTF8String &str)const HGL_OVERRIDE{str.Set(mem_block.GetData(),mem_block.GetBytes());return(true);}
 			const int  Get(void *data,int size)const HGL_OVERRIDE
 			{
@@ -602,9 +602,9 @@ namespace hgl
 				return Get((void *)data,size);
 			}
 
-			const int Get(char16_t *data,int size)const HGL_OVERRIDE
+			const int Get(u16char *data,int size)const HGL_OVERRIDE
 			{
-				return Get((void *)data,size*sizeof(char16_t));
+				return Get((void *)data,size*sizeof(u16char));
 			}
 
 			const bool Set(const void *data,int size)HGL_OVERRIDE
@@ -623,11 +623,11 @@ namespace hgl
 				return Set((void *)data,size);
 			}
 
-			const bool Set(const char16_t *data,int size)HGL_OVERRIDE
+			const bool Set(const u16char *data,int size)HGL_OVERRIDE
 			{
 				if(!data||size<0)return(false);
 
-				return Set((void *)data,size*sizeof(char16_t));
+				return Set((void *)data,size*sizeof(u16char));
 			}
 
 			const bool Set(const UTF16String &str	)HGL_OVERRIDE{return Set(str.c_str(),str.Length()+1);}

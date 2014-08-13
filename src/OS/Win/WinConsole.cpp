@@ -12,7 +12,7 @@ int main()
 #endif//_DEBUG
 		StringList<UTF16String> sl;
 
-		char16_t **argv;
+		u16char **argv;
 		int argc;
 
 		argv = CommandLineToArgvW(GetCommandLineW(), &argc);

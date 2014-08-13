@@ -12,8 +12,8 @@ namespace hgl
 {
 	namespace graph
 	{
-		bool SaveScreenToBMP(const char16_t * =0,int=-1,int=-1);										///<保存当前屏幕内容到指定BMP文件
-		bool SaveScreenToTGA(const char16_t * =0,int=-1,int=-1);										///<保存当前屏幕内容到指定TGA文件
+		bool SaveScreenToBMP(const u16char * =0,int=-1,int=-1);										///<保存当前屏幕内容到指定BMP文件
+		bool SaveScreenToTGA(const u16char * =0,int=-1,int=-1);										///<保存当前屏幕内容到指定TGA文件
 	}//namespace graph
 
 	namespace graph
