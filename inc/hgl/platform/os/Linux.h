@@ -1,7 +1,8 @@
 ﻿#ifndef HGL_OS_LINUX_INCLUDE
 #define HGL_OS_LINUX_INCLUDE
 //--------------------------------------------------------------------------------------------------
-typedef char			os_char;
+#define u16char			char16_t
+#define os_char			char
 #define to_oschar		to_u8
 #define OS_TEXT(str)	u8##str
 #define U16_TEXT(str)	u##str

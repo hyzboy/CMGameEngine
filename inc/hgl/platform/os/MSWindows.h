@@ -1,7 +1,8 @@
 ﻿#ifndef HGL_OS_WIN_INCLUDE
 #define HGL_OS_WIN_INCLUDE
 //--------------------------------------------------------------------------------------------------
-typedef wchar_t			os_char;
+#define u16char			wchar_t
+#define os_char			wchar_t
 #define to_oschar		to_u16
 #define OS_TEXT(str)	L##str
 #define U16_TEXT(str)	L##str
