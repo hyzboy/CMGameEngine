@@ -1,4 +1,4 @@
-#include<hgl/script/AngelVM.h>
+﻿#include<hgl/script/AngelVM.h>
 #include<angelscript.h>
 #include<stdarg.h>
 #include<hgl/platform/Platform.h>
@@ -98,7 +98,18 @@ namespace hgl
 
 		for(uint i=0;i<param_count;i++)
 		{
-			type=func->GetParamTypeId(i,&flag);
+#if	ANGELSCRIPT_VERSION<22900
+			type=func->GetParamTypeId(i,&flag);			//Deprecated since 2.29.0, 2014-04-06
+#else
+			const char *param_name;
+
+			if(func->GetParam(i,&type,nullptr,&param_name,nullptr)!=asSUCCESS)
+			{
+				LOG_INFO(UTF8String("无法自动识别脚本函数")+UTF8String(func->GetDeclaration())+UTF8String("的第")+UTF8String(i+1)+UTF8String("个参数,参数名称：")+UTF8String(param_name)+UTF8String("，请联系开发者已便取得支持."));
+				va_end(va);
+				return(false);
+			}
+#endif//
 
 			if(flag==asTM_OUTREF
 			 ||flag==asTM_INOUTREF)

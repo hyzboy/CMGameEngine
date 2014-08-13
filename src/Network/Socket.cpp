@@ -3,6 +3,7 @@
 #include<hgl/network/Socket.h>
 #include<hgl/Other.h>
 #include<time.h>
+#include<iostream>
 
 #if HGL_OS != HGL_OS_Windows
 #include<netinet/tcp.h>
