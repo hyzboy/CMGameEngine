@@ -1,4 +1,4 @@
-#include<hgl/platform/ConsoleApplication.h>
+﻿#include<hgl/platform/ConsoleApplication.h>
 #include<hgl/object/ConsoleFlowControl.h>
 #include<hgl/platform/ConsoleSystemInitInfo.h>
 #include<hgl/Info.h>
@@ -46,7 +46,7 @@ namespace hgl
 #if HGL_OS == HGL_OS_Windows
 			if(sii->CheckDebugger&&IsDebuggerPresent())
 			{
-				LOG_ERROR(u"本程序不能运行在调试模式下!");
+				LOG_ERROR(OS_TEXT("本程序不能运行在调试模式下!"));
 				return(false);
 			}
 #else

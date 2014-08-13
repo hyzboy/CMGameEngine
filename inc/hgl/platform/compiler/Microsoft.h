@@ -1,4 +1,4 @@
-#ifndef HGL_COMPILER_MICROSOFT_INCLUDE
+﻿#ifndef HGL_COMPILER_MICROSOFT_INCLUDE
 #define HGL_COMPILER_MICROSOFT_INCLUDE
 //--------------------------------------------------------------------------------------------------
 #define HGL_COMPILER_NAME	OS_TEXT("Microsoft C/C++")

@@ -194,7 +194,10 @@ namespace hgl
 
 	public:
 
+#ifdef HGL_CONSTRUCTION_REUSE
 		using Pool<T *>::Pool;
+#else
+#endif//HGL_CONSTRUCTION_REUSE
 		virtual ~_ObjectPool(){Pool<T *>::ClearAll();}
 	};//template<typename T> class _ObjectPool
 
@@ -204,7 +207,10 @@ namespace hgl
 
 	public:
 
+#ifdef HGL_CONSTRUCTION_REUSE
 		using _ObjectPool<T>::_ObjectPool;
+#else
+#endif//HGL_CONSTRUCTION_REUSE
 		virtual ~ObjectPool(){_ObjectPool<T>::ClearAll();}
 	};//template<typename T> class ObjectPool
 
@@ -216,7 +222,10 @@ namespace hgl
 
 	public:
 
+#ifdef HGL_CONSTRUCTION_REUSE
 		using MTPool<T *>::MTPool;
+#else
+#endif//HGL_CONSTRUCTION_REUSE
 		virtual ~_MTObjectPool(){MTPool<T *>::ClearAll();}
 	};//template<typename T> class MTObjectPool
 
@@ -228,7 +237,10 @@ namespace hgl
 
 	public:
 
+#ifdef HGL_CONSTRUCTION_REUSE
 		using _MTObjectPool<T>::_MTObjectPool;
+#else
+#endif//HGL_CONSTRUCTION_REUSE
 		virtual ~MTObjectPool(){_MTObjectPool<T>::ClearAll();}
 	};//template<typename T> class MTObjectPool
 

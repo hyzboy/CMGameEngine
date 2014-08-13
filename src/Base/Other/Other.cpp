@@ -1,4 +1,4 @@
-#include<hgl/Other.h>
+﻿#include<hgl/Other.h>
 #include<hgl/type/DataType.h>
 #include<hgl/type/BaseString.h>
 

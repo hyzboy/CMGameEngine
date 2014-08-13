@@ -1,4 +1,4 @@
-#include<hgl/CodePage.h>
+﻿#include<hgl/CodePage.h>
 #include<hgl/Other.h>
 
 #if HGL_OS == HGL_OS_Windows

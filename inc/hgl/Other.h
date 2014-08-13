@@ -1,4 +1,4 @@
-#ifndef HGL_OTHER_INCLUDE
+﻿#ifndef HGL_OTHER_INCLUDE
 #define HGL_OTHER_INCLUDE
 
 #include<hgl/File.h>

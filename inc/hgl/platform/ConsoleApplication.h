@@ -1,4 +1,4 @@
-#ifndef HGL_CONSOLE_APPLICATION_INCLUDE
+﻿#ifndef HGL_CONSOLE_APPLICATION_INCLUDE
 #define HGL_CONSOLE_APPLICATION_INCLUDE
 
 #include<hgl/platform/BaseApplication.h>

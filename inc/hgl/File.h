@@ -1,4 +1,4 @@
-#ifndef HGL_FILE_INCLUDE
+﻿#ifndef HGL_FILE_INCLUDE
 #define HGL_FILE_INCLUDE
 
 #include<hgl/type/BaseString.h>
@@ -100,7 +100,7 @@ namespace hgl
 	inline int EnumFile(const os_char *folder_name,void *data,bool proc_folder,bool proc_file,bool sub_folder,void (*func)(void *,hgl::FileInfo &))
 #if HGL_OS == HGL_OS_Windows
 	{
-		return EnumFile(folder_name,u"*.*",data,proc_folder,proc_file,sub_folder,func);
+		return EnumFile(folder_name,OS_TEXT("*.*"),data,proc_folder,proc_file,sub_folder,func);
 	}
 #else
 	;

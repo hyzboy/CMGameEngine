@@ -1,4 +1,4 @@
-#include<hgl/platform/ConsoleSystemInitInfo.h>
+﻿#include<hgl/platform/ConsoleSystemInitInfo.h>
 #include<hgl/proc/ProcMutex.h>
 #include<hgl/File.h>
 
@@ -41,7 +41,7 @@ namespace hgl
 	{
 		if(args.GetCount()<2)return;
 
-		if(args.CaseFind(u"-no_check")!=-1)
+		if(args.CaseFind(OS_TEXT("-no_check"))!=-1)
 			CheckSystem=false;
 	}
 
@@ -67,7 +67,7 @@ namespace hgl
 
 		if(mutex->Create(mutex_name))
 		{
-			LOG_ERROR(u"Please don't repeat start of the current program.");
+			LOG_ERROR(OS_TEXT("Please don't repeat start of the current program."));
 			return(false);
 		}
 

@@ -85,7 +85,7 @@ namespace hgl
 		cur_path.ClipLeft(end_index);
 
 		CheckCMGDKPath(cp.gui,		cp.start,cur_path,cp.cm,OS_TEXT("gui"));
-		CheckCMGDKPath(cp.plug_ins,	cp.start,cur_path,cp.cm,OS_TEXT("plug-in")+OSString(HGL_DIRECTORY_SEPARATOR)+OSString(HGL_PLATFORM_STRING));		//HGL_PLATFORM_STRING在CMAKE中定义
+		CheckCMGDKPath(cp.plug_ins, cp.start, cur_path, cp.cm, OS_TEXT("plug-in") + OSString(HGL_DIRECTORY_SEPARATOR) + OS_TEXT(HGL_PLATFORM_STRING));		//HGL_PLATFORM_STRING在CMAKE中定义
 
 		GetOSPath(cp);
 
