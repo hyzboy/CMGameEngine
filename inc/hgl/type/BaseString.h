@@ -996,15 +996,9 @@ namespace hgl
 	}
 
 	typedef BaseString<char>		UTF8String;
-
-#if HGL_OS == HGL_OS_Windows
-	typedef BaseString<u16char>	UTF16String;
-	typedef UTF16String				OSString;
-#else
-	typedef BaseString<u16char>	UTF16String;
-	typedef UTF8String				OSString;
-#endif//HGL_OS == HGL_OS_Windows
-
+	typedef BaseString<char>		AnsiString;
+	typedef BaseString<u16char>		UTF16String;
+	typedef BaseString<os_char>		OSString;
 	typedef BaseString<char32_t>	UTF32String;
 	typedef BaseString<wchar_t>		WideString;
 

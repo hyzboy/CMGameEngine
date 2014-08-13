@@ -63,6 +63,19 @@ namespace openal                                                									///Open
 
 	unsigned int AudioTime(ALenum,ALsizei);
 	double AudioDataTime(ALuint,ALenum,ALsizei);
+
+	// #define AL_INVERSE_DISTANCE                      0xD001	//倒数距离
+	// #define AL_INVERSE_DISTANCE_CLAMPED              0xD002	//钳位倒数距离
+	// #define AL_LINEAR_DISTANCE                       0xD003	//线性距离
+	// #define AL_LINEAR_DISTANCE_CLAMPED               0xD004	//钳位线性距离
+	// #define AL_EXPONENT_DISTANCE                     0xD005	//指数距离
+	// #define AL_EXPONENT_DISTANCE_CLAMPED             0xD006	//钳位指数距离
+	bool SetDistanceModel(ALenum dm = AL_INVERSE_DISTANCE_CLAMPED);									///<设置距离模型
+
+	bool SetSpeedOfSound(const float ss = 343.3f);													///<设置声音速度
+
+	bool SetDopplerFactor(const float);																///<设置多普勒缩放倍数
+	bool SetDopplerVelocity(const float);															///<设置多普勒速度
 	//--------------------------------------------------------------------------------------------------
 	#define alLastError()   alGetErrorInfo(__FILE__,__LINE__)
 }//namespace openal

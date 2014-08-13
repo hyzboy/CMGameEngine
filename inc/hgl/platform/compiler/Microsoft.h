@@ -1,4 +1,4 @@
-﻿#ifndef HGL_COMPILER_MICROSOFT_INCLUDE
+#ifndef HGL_COMPILER_MICROSOFT_INCLUDE
 #define HGL_COMPILER_MICROSOFT_INCLUDE
 //--------------------------------------------------------------------------------------------------
 #define HGL_COMPILER_NAME	OS_TEXT("Microsoft C/C++")
@@ -35,6 +35,7 @@
 	#endif//_MSC_VER
 
 	#define enum_uint(name)	enum name:unsigned int
+	#define enum_int(name)	enum name:int
 #endif//_MSC_VER
 
 //--------------------------------------------------------------------------------------------------
@@ -61,11 +62,14 @@
 	#define HGL_OVERRIDE
 #endif//C++11
 
-#if _MSC_VER < 1700 // == VS2012
+#if _MSC_VER < 1700 // VC2012
 	#define _mm_set_ss set1_ps
 #endif
 
+#if _MSC_VER < 1800 // VC2013
 #define nullptr				NULL
+#endif//
+
 #define HGL_FORCE_INLINE	__forceinline
 
 #define HGL_THREAD			__declspec(thread)
