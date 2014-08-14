@@ -131,7 +131,6 @@ ENDIF(UNIX)
 
 IF(WIN32)
 	SET(BASE_MULTI_THREAD_SOURCE ${BASE_MULTI_THREAD_SOURCE}
-		MultiThread/APR/RWLockAPR.cpp
 		MultiThread/WinNT/CondVarNT6.cpp
 		MultiThread/WinNT/RWLockNT6.cpp
 		MultiThread/WinNT/SemaphoreNT4.cpp
