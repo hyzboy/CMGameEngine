@@ -1,4 +1,4 @@
-#ifndef HGL_NETWORK_TCP_SOCKET_RB_THREAD_INCLUDE
+﻿#ifndef HGL_NETWORK_TCP_SOCKET_RB_THREAD_INCLUDE
 #define HGL_NETWORK_TCP_SOCKET_RB_THREAD_INCLUDE
 
 #include<hgl/type/Set.h>
@@ -23,7 +23,7 @@ namespace hgl
 		{
 		protected:
 
-			RWLock *sock_lock;
+			RWLock sock_lock;
 
 			SocketManageCB *sock_manage;
 

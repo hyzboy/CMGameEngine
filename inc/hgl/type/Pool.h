@@ -53,7 +53,7 @@ namespace hgl
 
 	template<typename T> class MTPool:public Pool<T>												///多线程数据池
 	{
-		RWLock *lock;
+		RWLock lock;
 
 	protected:
 
@@ -62,25 +62,17 @@ namespace hgl
 
 	public:
 
-		virtual int GetActiveCount()	const{OnlyReadLock rl(lock);return Pool<T>::Active.GetCount();	}
-		virtual int GetInactiveCount()	const{OnlyReadLock rl(lock);return Pool<T>::Inactive.GetCount();}
-		virtual int GetHistoryMaxCount()const{OnlyReadLock rl(lock);return Pool<T>::history_max;		}
+		virtual int GetActiveCount()	{OnlyReadLock rl(&lock);return Pool<T>::Active.GetCount();	}
+		virtual int GetInactiveCount()	{OnlyReadLock rl(&lock);return Pool<T>::Inactive.GetCount();}
+		virtual int GetHistoryMaxCount(){OnlyReadLock rl(&lock);return Pool<T>::history_max;		}
 
 	public:
 
-		MTPool()
-		{
-			lock=CreateRWLock();
-		}
-
-		virtual ~MTPool()
-		{
-			SAFE_CLEAR(lock);
-		}
+		virtual ~MTPool()HGL_DEFAULT_MEMFUNC;
 
 		virtual T *ReadLock(int &c)																	///<读列表锁定(用于访问整个列表)
 		{
-			lock->ReadLock();
+			lock.ReadLock();
 
 			c=Pool<T>::GetActiveCount();
 			return(Pool<T>::Active.GetData());
@@ -88,7 +80,7 @@ namespace hgl
 
 		virtual T *WriteLock(int &c)																///<写列表锁定(用于访问整个列表)
 		{
-			lock->WriteLock();
+			lock.WriteLock();
 
 			c=Pool<T>::GetActiveCount();
 			return(Pool<T>::Active.GetData());
@@ -96,7 +88,7 @@ namespace hgl
 
 		virtual T *TryReadLock(int &c)																///<尝试读列表锁定(用于访问整个列表)
 		{
-			if(!lock->TryReadLock())
+			if(!lock.TryReadLock())
 				return(nullptr);
 
 			c=Pool<T>::GetActiveCount();
@@ -105,46 +97,46 @@ namespace hgl
 
 		virtual T *TryWriteLock(int &c)																///<尝试写列表锁定(用于访问整个列表)
 		{
-			if(!lock->TryWriteLock())
+			if(!lock.TryWriteLock())
 				return(nullptr);
 
 			c=Pool<T>::GetActiveCount();
 			return(Pool<T>::Active.GetData());
 		}
 
-		virtual void ReadLock(){lock->ReadLock();}
-		virtual void WriteLock(){lock->WriteLock();}
-		virtual bool TryReadLock(){return lock->TryReadLock();}
-		virtual bool TryWriteLock(){return lock->TryWriteLock();}
+		virtual void ReadLock(){lock.ReadLock();}
+		virtual void WriteLock(){lock.WriteLock();}
+		virtual bool TryReadLock(){return lock.TryReadLock();}
+		virtual bool TryWriteLock(){return lock.TryWriteLock();}
 
-		virtual void ReadUnlock(){lock->ReadUnlock();}												///<读访问解锁(用于访问整个列表)
-		virtual void WriteUnlock(){lock->WriteUnlock();}											///<写访问解锁(用于访问整个列表)
+		virtual void ReadUnlock(){lock.ReadUnlock();}												///<读访问解锁(用于访问整个列表)
+		virtual void WriteUnlock(){lock.WriteUnlock();}											///<写访问解锁(用于访问整个列表)
 
 		virtual T SafeAcquire()                                                                     ///<安全申请一个数据
 		{
 			T tmp;
 
-			lock->WriteLock();
+			lock.WriteLock();
             tmp=Pool<T>::Acquire();
-			lock->WriteUnlock();
+			lock.WriteUnlock();
 
 			return tmp;
 		}
 
 		virtual void SafeAppend(T tmp)																///<安全添加一个数据
 		{
-			lock->WriteLock();
+			lock.WriteLock();
 			Pool<T>::Append(tmp);
-			lock->WriteUnlock();
+			lock.WriteUnlock();
 		}
 
 		virtual bool SafeRelease(T tmp)																///<安全释放一个数据
 		{
 			bool result;
 
-			lock->WriteLock();
+			lock.WriteLock();
 			result=Pool<T>::Release(tmp);
-			lock->WriteUnlock();
+			lock.WriteUnlock();
 
 			return result;
 		}
@@ -153,9 +145,9 @@ namespace hgl
 		{
 			int result;
 
-			lock->WriteLock();
+			lock.WriteLock();
 			result=Pool<T>::Release(tmp,num);
-			lock->WriteUnlock();
+			lock.WriteUnlock();
 
 			return result;
 		}
@@ -164,25 +156,25 @@ namespace hgl
 		{
 			int result;
 
-			lock->WriteLock();
+			lock.WriteLock();
 			result=Pool<T>::ReleaseAll();
-			lock->WriteUnlock();
+			lock.WriteUnlock();
 
 			return(result);
 		}
 
 		virtual void SafeClearInactive()															///<安全清除所有空闲数据
 		{
-			lock->WriteLock();
+			lock.WriteLock();
 			Pool<T>::ClearInactive();
-			lock->WriteUnlock();
+			lock.WriteUnlock();
 		}
 
 		virtual void SafeClearAll()																	///<安全清除所有的
 		{
-			lock->WriteLock();
+			lock.WriteLock();
 			Pool<T>::ClearAll();
-			lock->WriteUnlock();
+			lock.WriteUnlock();
 		}
 	};//template<typename T> class MTPool
 

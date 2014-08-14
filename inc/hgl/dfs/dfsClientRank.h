@@ -1,4 +1,4 @@
-#ifndef HGL_DFS_CLIENT_RANK_INCLUDE
+﻿#ifndef HGL_DFS_CLIENT_RANK_INCLUDE
 #define HGL_DFS_CLIENT_RANK_INCLUDE
 
 #include<hgl/dfs/dfsClientConnect.h>
@@ -31,14 +31,11 @@ namespace hgl
 		{
 			List<RankItem> ri_list;
 
-			RWLock *lock;
+			RWLock lock;
 
 		public:
 
 			HGL_RWLOCK(lock);
-
-			RankList();
-			~RankList();
 
 			List<RankItem> &GetList(){return ri_list;}
 

@@ -32,17 +32,20 @@ namespace hgl
 #endif//HGL_OS != HGL_OS_Windows
 	};//class RWLock
 
-	inline RWLock *CreateRWLock()																			///<创建读写锁
-	{
-		return(new RWLock);
-	}
+	#define HGL_RWLOCK(lock)	bool ReadLock()		{return lock.ReadLock();	}	\
+								bool WriteLock()	{return lock.WriteLock();	}	\
+								bool TryReadLock()	{return lock.TryReadLock();	}	\
+								bool TryWriteLock()	{return lock.TryWriteLock();}	\
+								bool ReadUnlock()	{return lock.ReadUnlock();	}	\
+								bool WriteUnlock()	{return lock.WriteUnlock();	}
 
-	#define HGL_RWLOCK(lock)	void ReadLock()		{lock->ReadLock();		}	\
-								void WriteLock()	{lock->WriteLock();		}	\
-								bool TryReadLock()	{return lock->TryReadLock();	}	\
-								bool TryWriteLock()	{return lock->TryWriteLock();	}	\
-								void ReadUnlock()	{lock->ReadUnlock();	}	\
-								void WriteUnlock()	{lock->WriteUnlock();	}
+	#define HGL_RWLOCK_PTR(lock)	bool ReadLock()		{return lock->ReadLock();		}	\
+									bool WriteLock()	{return lock->WriteLock();		}	\
+									bool TryReadLock()	{return lock->TryReadLock();	}	\
+									bool TryWriteLock()	{return lock->TryWriteLock();	}	\
+									bool ReadUnlock()	{return lock->ReadUnlock();		}	\
+									bool WriteUnlock()	{return lock->WriteUnlock();	}
+
 
 	/**
 	 * 读写锁共享锁定自动释放类
