@@ -1,4 +1,4 @@
-#ifndef HGL_IO_TEXT_OUTPUT_STREAM_INCLUDE
+﻿#ifndef HGL_IO_TEXT_OUTPUT_STREAM_INCLUDE
 #define HGL_IO_TEXT_OUTPUT_STREAM_INCLUDE
 
 #include<hgl/endian/Endian.h>

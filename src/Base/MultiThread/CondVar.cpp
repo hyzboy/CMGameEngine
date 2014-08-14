@@ -1,4 +1,4 @@
-#include<hgl/thread/CondVar.h>
+﻿#include<hgl/thread/CondVar.h>
 #include<hgl/platform/Platform.h>
 
 #if HGL_OS == HGL_OS_Windows

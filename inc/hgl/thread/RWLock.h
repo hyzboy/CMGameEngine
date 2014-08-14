@@ -9,24 +9,29 @@ namespace hgl
 	*/
 	class RWLock																					///读写锁/共享锁
 	{
+		void *lock;
+
 	public:
 
 		virtual ~RWLock()HGL_DEFAULT_MEMFUNC;
 
-		virtual void *GetRWLock()=0;
+		void *GetRWLock(){ return lock; }															///<返回操作系级锁
 
-		virtual bool TryReadLock()=0;																///<尝试读(共享访问)锁定
-		virtual bool WaitReadLock(double)=0;														///<等待读(共享访问)锁定
-		virtual bool ReadLock()=0;																	///<读(共享访问)锁定
-		virtual bool ReadUnlock()=0;																///<读(共享访问)解锁
+		bool TryReadLock();																			///<尝试读(共享访问)锁定
+//		bool WaitReadLock(double);																	///<等待读(共享访问)锁定
+		bool ReadLock();																			///<读(共享访问)锁定
+		bool ReadUnlock();																			///<读(共享访问)解锁
 
-		virtual bool TryWriteLock()=0;																///<尝试写(独占访问)锁定
-		virtual bool WaitWriteLock(double)=0;														///<等待写(独占访问)锁定
-		virtual bool WriteLock()=0;																	///<写(独占访问)锁定
-		virtual bool WriteUnlock()=0;																///<写(独占访问)解锁
+		bool TryWriteLock();																		///<尝试写(独占访问)锁定
+//		bool WaitWriteLock(double);																	///<等待写(独占访问)锁定
+		bool WriteLock();																			///<写(独占访问)锁定
+		bool WriteUnlock();																			///<写(独占访问)解锁
 	};//class RWLock
 
-	RWLock *CreateRWLock();																			///<创建读写锁
+	RWLock *CreateRWLock()																			///<创建读写锁
+	{
+		return(new RWLock);
+	}
 
 	#define HGL_RWLOCK(lock)	void ReadLock()		{lock->ReadLock();		}	\
 								void WriteLock()	{lock->WriteLock();		}	\

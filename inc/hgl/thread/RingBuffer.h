@@ -1,4 +1,4 @@
-#ifndef HGL_THREAD_RING_BUFFER_INCLUDE
+﻿#ifndef HGL_THREAD_RING_BUFFER_INCLUDE
 #define HGL_THREAD_RING_BUFFER_INCLUDE
 
 #include<hgl/thread/ThreadMutex.h>

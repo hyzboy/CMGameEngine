@@ -1,4 +1,4 @@
-#ifndef HGL_ENDIAN_INCLUDE
+﻿#ifndef HGL_ENDIAN_INCLUDE
 #define HGL_ENDIAN_INCLUDE
 
 #include<hgl/platform/Platform.h>				// 平台定义

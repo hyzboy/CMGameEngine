@@ -6,38 +6,22 @@ namespace hgl
 {
 	apr_pool_t *get_default_apr_pool();
 
-	namespace apr
+	RWLock::RWLock()
 	{
-		class RWLockAPR:public RWLock
-		{
-			apr_thread_rwlock_t *lock;
-
-		public:
-
-			RWLockAPR()
-			{
-				apr_thread_rwlock_create(&lock,get_default_apr_pool());
-			}
-
-			~RWLockAPR()
-			{
-				apr_thread_rwlock_destroy(lock);
-			}
-
-			void *GetRWLock()	{return lock;}
-
-			bool TryReadLock()	{return apr_thread_rwlock_tryrdlock(lock)==APR_SUCCESS;}
-			void ReadLock()		{apr_thread_rwlock_rdlock(lock);}
-			void ReadUnlock()	{apr_thread_rwlock_unlock(lock);}
-
-			bool TryWriteLock()	{return apr_thread_rwlock_trywrlock(lock)==APR_SUCCESS;}
-			void WriteLock()	{apr_thread_rwlock_wrlock(lock);}
-			void WriteUnlock()	{apr_thread_rwlock_unlock(lock);}
-		};//class RWLockAPR
-	}//namespace apr
-
-	RWLock *CreateRWLockAPR()
-	{
-		return(new apr::RWLockAPR);
+		apr_thread_rwlock_create((apr_thread_rwlock_t **)&lock, get_default_apr_pool());
 	}
+
+	RWLock::~RWLockAPR()
+	{
+		apr_thread_rwlock_destroy((apr_thread_rwlock_t *)lock);
+	}
+	
+	bool RWLock::TryReadLock()	{ return apr_thread_rwlock_tryrdlock((apr_thread_rwlock_t *)lock) == APR_SUCCESS; }
+	void RWLock::ReadLock()		{ apr_thread_rwlock_rdlock((apr_thread_rwlock_t *)lock); }
+	void RWLock::ReadUnlock()	{ apr_thread_rwlock_unlock((apr_thread_rwlock_t *)lock); }
+
+	bool RWLock::TryWriteLock()	{ return apr_thread_rwlock_trywrlock((apr_thread_rwlock_t *)lock) == APR_SUCCESS; }
+	void RWLock::WriteLock()	{ apr_thread_rwlock_wrlock((apr_thread_rwlock_t *)lock); }
+	void RWLock::WriteUnlock()	{ apr_thread_rwlock_unlock((apr_thread_rwlock_t *)lock); }
+
 }//namespace hgl
