@@ -13,7 +13,8 @@ namespace hgl
 
 	public:
 
-		virtual ~RWLock()HGL_DEFAULT_MEMFUNC;
+		RWLock();
+		virtual ~RWLock();
 
 		void *GetRWLock(){ return lock; }															///<返回操作系级锁
 

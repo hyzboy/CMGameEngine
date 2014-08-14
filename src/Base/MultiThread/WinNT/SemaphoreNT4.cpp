@@ -1,4 +1,4 @@
-#include<hgl/thread/Semaphore.h>
+﻿#include<hgl/thread/Semaphore.h>
 #include<hgl/LogInfo.h>
 
 #include<wchar.h>

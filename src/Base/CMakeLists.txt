@@ -110,7 +110,6 @@ SET(BASE_MULTI_PROCESS_SOURCE
 	MultiProcess/ProcMutexAPR.cpp)
 
 SET(BASE_MULTI_THREAD_SOURCE
-	MultiThread/CondVar.cpp
 	MultiThread/RingBuffer.cpp
 	MultiThread/RingBufferRead.cpp
 	MultiThread/RingBufferWrite.cpp)

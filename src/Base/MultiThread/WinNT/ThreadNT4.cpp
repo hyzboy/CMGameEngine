@@ -1,4 +1,4 @@
-#include<hgl/thread/Thread.h>
+﻿#include<hgl/thread/Thread.h>
 #include<hgl/thread/CondVar.h>
 #include<hgl/LogInfo.h>
 #include<windows.h>

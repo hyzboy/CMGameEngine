@@ -1,4 +1,4 @@
-#ifndef HGL_THREAD_INCLUDE
+﻿#ifndef HGL_THREAD_INCLUDE
 #define HGL_THREAD_INCLUDE
 
 #include<hgl/type/DataType.h>

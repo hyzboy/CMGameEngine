@@ -17,10 +17,10 @@ namespace hgl
 	}
 
 	bool RWLock::TryReadLock()	{ return TryAcquireSRWLockShared((SRWLOCK *)lock); }
-	void RWLock::ReadLock()		{ AcquireSRWLockShared((SRWLOCK *)lock); }
-	void RWLock::ReadUnlock()	{ ReleaseSRWLockShared((SRWLOCK *)lock); }
+	bool RWLock::ReadLock()		{ AcquireSRWLockShared((SRWLOCK *)lock); return(true); }
+	bool RWLock::ReadUnlock()	{ ReleaseSRWLockShared((SRWLOCK *)lock); return(true); }
 
 	bool RWLock::TryWriteLock()	{ return TryAcquireSRWLockExclusive((SRWLOCK *)lock); }
-	void RWLock::WriteLock()	{ AcquireSRWLockExclusive((SRWLOCK *)lock); }
-	void RWLock::WriteUnlock()	{ ReleaseSRWLockExclusive((SRWLOCK *)lock); }
+	bool RWLock::WriteLock()	{ AcquireSRWLockExclusive((SRWLOCK *)lock); return(true); }
+	bool RWLock::WriteUnlock()	{ ReleaseSRWLockExclusive((SRWLOCK *)lock); return(true); }
 }//namespace hgl
