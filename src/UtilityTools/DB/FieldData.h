@@ -1,4 +1,4 @@
-#include<hgl/db/Field.h>
+﻿#include<hgl/db/Field.h>
 #include<hgl/db/FieldDesc.h>
 #include<hgl/io/DataInputStream.h>
 #include<hgl/io/DataOutputStream.h>

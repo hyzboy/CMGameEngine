@@ -1,4 +1,4 @@
-#include<hgl/db/CDBField.h>
+﻿#include<hgl/db/CDBField.h>
 #include<hgl/endian/Endian.h>
 #include<hgl/type/BaseString.h>
 
@@ -89,7 +89,7 @@ namespace hgl
 						if(!GetBool(index,value))
 							return(false);
 
-						str=(value?u"YES":u"no");
+						str = (value ? U16_TEXT("YES") : U16_TEXT("no"));
 					}
 
 					return(true);
@@ -101,7 +101,7 @@ namespace hgl
 
 				for(int i=1;i<Type.count;i++)
 				{
-					str+=u',';
+					str += U16_TEXT(',');
 					str+=UTF16String(*p++);
 				}
 

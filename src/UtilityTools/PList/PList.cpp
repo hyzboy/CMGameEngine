@@ -42,9 +42,9 @@ namespace hgl
 
 		if(key.Length()<2)return(false);
 
-		if(((off=key.FindChar(L'\t'))==-1)
-		 &&((off=key.FindChar(L' '))==-1)
-		 &&((off=key.FindChar(L'='))==-1))
+		if(((off=key.FindChar(U16_TEXT('\t')))==-1)
+		&& ((off=key.FindChar(U16_TEXT(' '))) == -1)
+		&& ((off=key.FindChar(U16_TEXT('='))) == -1))
 			return(false);
 
 		name.Strcpy(key,off);
@@ -54,9 +54,9 @@ namespace hgl
 
 		while(true)
 		{
-			if(*value==u'\t'
-			 ||*value==u'='
-			 ||*value==u' ')
+			if(*value == U16_TEXT('\t')
+			|| *value == U16_TEXT('=')
+			|| *value == U16_TEXT(' '))
 				value++;
 			else
 			{

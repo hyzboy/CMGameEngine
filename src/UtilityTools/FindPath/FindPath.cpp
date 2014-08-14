@@ -39,7 +39,7 @@ namespace hgl
 
 		if(CheckPoint==nullptr)
 		{
-			LOG_ERROR(u"FindPath无CheckPoint函数!");
+			LOG_ERROR(OS_TEXT("FindPath无CheckPoint函数!"));
 			return(false);
 		}
 
@@ -119,13 +119,13 @@ namespace hgl
 	{
 		if(fpa<=fpaNone||fpa>=fpaEnd)
 		{
-			LOG_ERROR(u"未知的寻路器");
+			LOG_ERROR(OS_TEXT("未知的寻路器"));
 			return(nullptr);
 		}
 
 		if(width<=1||height<=1)
 		{
-			LOG_ERROR(u"寻路范围太小");
+			LOG_ERROR(OS_TEXT("寻路范围太小"));
 			return(nullptr);
 		}
 

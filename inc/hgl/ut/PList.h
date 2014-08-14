@@ -1,4 +1,4 @@
-#ifndef HGL_PLIST_INCLUDE
+﻿#ifndef HGL_PLIST_INCLUDE
 #define HGL_PLIST_INCLUDE
 
 #include<hgl/type/Map.h>

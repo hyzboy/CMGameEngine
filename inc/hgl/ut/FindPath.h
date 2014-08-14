@@ -1,4 +1,4 @@
-#ifndef HGL_ASTAR_FIND_PATH_INCLUDE
+﻿#ifndef HGL_ASTAR_FIND_PATH_INCLUDE
 #define HGL_ASTAR_FIND_PATH_INCLUDE
 
 #include<hgl/type/List.h>

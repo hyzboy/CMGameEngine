@@ -1,4 +1,4 @@
-#ifndef HGL_DB_FIELD_TYPE_INCLUDE
+﻿#ifndef HGL_DB_FIELD_TYPE_INCLUDE
 #define HGL_DB_FIELD_TYPE_INCLUDE
 
 #include<hgl/type/List.h>
