@@ -44,6 +44,13 @@ namespace hgl
 
 	public:
 
+		OnlyReadLock(RWLock &rw_lock)
+		{
+			rw=&rw_lock;
+
+			rw->ReadLock();
+		}
+
 		OnlyReadLock(RWLock *rw_lock)
 		{
 			rw=rw_lock;
@@ -74,6 +81,13 @@ namespace hgl
 		RWLock *rw;
 
 	public:
+
+		OnlyWriteLock(RWLock &rw_lock)
+		{
+			rw=&rw_lock;
+
+			rw->WriteLock();
+		}
 
 		OnlyWriteLock(RWLock *rw_lock)
 		{
