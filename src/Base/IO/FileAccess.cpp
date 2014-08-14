@@ -33,7 +33,7 @@ namespace hgl
 
 			GetTempPathW(buf_size,PathBuffer);
 
-			GetTempFileNameW(PathBuffer,u"NEW",0,TempName);
+			GetTempFileNameW(PathBuffer,L"NEW",0,TempName);
 
 			return Open(TempName,fomCreate);
 #else

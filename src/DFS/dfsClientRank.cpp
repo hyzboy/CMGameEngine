@@ -1,4 +1,4 @@
-#include<hgl/dfs/dfs.h>
+﻿#include<hgl/dfs/dfs.h>
 #include<hgl/dfs/dfsClientRank.h>
 #include<hgl/dfs/dstCmd.h>
 #include<hgl/dfs/trsCmd.h>
@@ -38,16 +38,6 @@ namespace hgl
 			if(ri->size>sizeof(RankItem::data))RETURN_FALSE;
 
 			return(dis->ReadFully(ri->data,ri->size)==ri->size);
-		}
-
-		RankList::RankList()
-		{
-			lock=CreateRWLock();
-		}
-
-		RankList::~RankList()
-		{
-			SAFE_CLEAR(lock);
 		}
 
 		bool RankList::Read(DataInputStream *dis)

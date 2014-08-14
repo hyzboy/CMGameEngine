@@ -1,4 +1,4 @@
-#ifndef HGL_COLOR_4_FLOAT_INCLUDE
+﻿#ifndef HGL_COLOR_4_FLOAT_INCLUDE
 #define HGL_COLOR_4_FLOAT_INCLUDE
 
 #include<hgl/type/Color3f.h>

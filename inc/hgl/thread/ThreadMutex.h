@@ -1,4 +1,4 @@
-#ifndef HGL_THREAD_MUTEX_INCLUDE
+﻿#ifndef HGL_THREAD_MUTEX_INCLUDE
 #define HGL_THREAD_MUTEX_INCLUDE
 
 #include<hgl/platform/Platform.h>

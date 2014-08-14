@@ -1,4 +1,4 @@
-#ifndef HGL_SYSTEMINFO_INCLUDE
+﻿#ifndef HGL_SYSTEMINFO_INCLUDE
 #define HGL_SYSTEMINFO_INCLUDE
 
 #include<hgl/type/DataType.h>

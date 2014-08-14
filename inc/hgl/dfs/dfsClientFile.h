@@ -1,4 +1,4 @@
-#ifndef HGL_DFS_FILE_INCLUDE
+﻿#ifndef HGL_DFS_FILE_INCLUDE
 #define HGL_DFS_FILE_INCLUDE
 
 #include<hgl/type/BaseString.h>
@@ -26,12 +26,12 @@ namespace hgl
 			char *file_data;
 			int64 file_length;
 
-			RWLock *lock;
+			RWLock lock;
 
 		public:
 
 			HGL_RWLOCK(lock);
-			RWLock *GetLock(){return lock;}
+			RWLock *GetLock(){return &lock;}
 
 			FileBlock(const int64 fn)
 			{
@@ -39,23 +39,20 @@ namespace hgl
 				version=-1;
 				file_data=0;
 				file_length=0;
-
-				lock=CreateRWLock();
 			}
 
 			~FileBlock()
 			{
 				Clear();
-				delete lock;
 			}
 
 			void Clear()
 			{
-				lock->WriteLock();
+				lock.WriteLock();
 					hgl_free(file_data);
 					file_length=0;
 					version=-1;
-				lock->WriteUnlock();
+				lock.WriteUnlock();
 			}
 
 			void Update(char *data,int64 size,int64 ver)

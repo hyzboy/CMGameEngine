@@ -1,4 +1,4 @@
-#ifndef HGL_TYPE_BASE_STRING_INCLUDE
+﻿#ifndef HGL_TYPE_BASE_STRING_INCLUDE
 #define HGL_TYPE_BASE_STRING_INCLUDE
 
 #include<hgl/type/StringInstance.h>
@@ -64,7 +64,6 @@ namespace hgl
 			Set(func(new T[8*sizeof(type)],8*sizeof(type),num),-1,true);	\
 		}
 
-		BASE_STRING_NUMBER_CONSTRUCT(size_t,utos);
 		BASE_STRING_NUMBER_CONSTRUCT(int,	itos);
 		BASE_STRING_NUMBER_CONSTRUCT(uint,	utos);
 		BASE_STRING_NUMBER_CONSTRUCT(int64,	itos);
@@ -969,7 +968,6 @@ namespace hgl
 			return operator+(vstr->data);	\
 		}
 
-		BASE_STRING_NUMBER_OPERATOR_ADD(size_t,	utos);
 		BASE_STRING_NUMBER_OPERATOR_ADD(int,	itos);
 		BASE_STRING_NUMBER_OPERATOR_ADD(uint,	utos);
 		BASE_STRING_NUMBER_OPERATOR_ADD(int64,	itos);

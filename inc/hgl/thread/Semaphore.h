@@ -1,4 +1,4 @@
-#ifndef HGL_SEMAPHORE_INCLUDE
+﻿#ifndef HGL_SEMAPHORE_INCLUDE
 #define HGL_SEMAPHORE_INCLUDE
 
 #include<hgl/object/_Object.h>

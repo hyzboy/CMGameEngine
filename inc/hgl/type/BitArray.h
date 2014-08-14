@@ -1,4 +1,4 @@
-#ifndef HGL_BITARRAY_INCLUDE
+﻿#ifndef HGL_BITARRAY_INCLUDE
 #define HGL_BITARRAY_INCLUDE
 
 #include<hgl/type/DataType.h>

@@ -1,4 +1,4 @@
-#include<hgl/dfs/dfsClientID.h>
+﻿#include<hgl/dfs/dfsClientID.h>
 #include<hgl/type/Set.h>
 #include<hgl/type/Pool.h>
 #include<hgl/thread/RWLock.h>
@@ -13,29 +13,19 @@ namespace hgl
 	{
 		struct IDLockTeam
 		{
-			RWLock *lock;
+			RWLock lock;
 
 			Set<int64> lock_set;
 
 		public:
 
-			IDLockTeam()
-			{
-				lock=CreateRWLock();
-			}
-
-			~IDLockTeam()
-			{
-				delete lock;
-			}
-
 			bool Lock(const int64 id)
 			{
 				int index;
 
-				lock->WriteLock();
+				lock.WriteLock();
 					index=lock_set.Add(id);
-				lock->WriteUnlock();
+				lock.WriteUnlock();
 
 				return(index!=-1);
 			}
@@ -44,9 +34,9 @@ namespace hgl
 			{
 				bool result;
 
-				lock->WriteLock();
+				lock.WriteLock();
 					result=lock_set.Delete(id);
-				lock->WriteUnlock();
+				lock.WriteUnlock();
 
 				return(result);
 			}
@@ -55,9 +45,9 @@ namespace hgl
 			{
 				int index;
 
-				lock->ReadLock();
+				lock.ReadLock();
 					index=lock_set.Find(id);
-				lock->ReadUnlock();
+				lock.ReadUnlock();
 
 				return(index!=-1);
 			}

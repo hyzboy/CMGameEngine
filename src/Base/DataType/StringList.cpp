@@ -1,4 +1,4 @@
-#include<hgl/type/StringList.h>
+﻿#include<hgl/type/StringList.h>
 #include<hgl/File.h>
 namespace hgl
 {

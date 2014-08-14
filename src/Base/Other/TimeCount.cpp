@@ -1,4 +1,4 @@
-#include<hgl/Other.h>
+﻿#include<hgl/Other.h>
 #include<apr_time.h>
 
 namespace hgl

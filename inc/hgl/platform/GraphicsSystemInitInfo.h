@@ -1,4 +1,4 @@
-#ifndef HGL_GRAPHICS_SYSTEM_INIT_INFO_INCLUDE
+﻿#ifndef HGL_GRAPHICS_SYSTEM_INIT_INFO_INCLUDE
 #define HGL_GRAPHICS_SYSTEM_INIT_INFO_INCLUDE
 
 #include<hgl/platform/ConsoleSystemInitInfo.h>
@@ -109,7 +109,7 @@ namespace hgl
 		GraphicsSystemInitInfo();                                                                   ///<本类构造函数
 // 		virtual ~GraphicsSystemInitInfo()HGL_DEFAULT_MEMFUNC;													///<本类析构函数
 
-		void Init(const UTF16StringList &args);														///<使用外部命令行参数
+		void Init(const OSStringList &args);														///<使用外部命令行参数
 
 		void ProcBlankValue();                                                              		///<处理未填写的值
 	};//class SystemInitInfo

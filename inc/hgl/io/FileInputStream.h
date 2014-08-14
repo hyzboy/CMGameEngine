@@ -1,4 +1,4 @@
-#ifndef HGL_IO_FILE_INPUT_STREAM_INCLUDE
+﻿#ifndef HGL_IO_FILE_INPUT_STREAM_INCLUDE
 #define HGL_IO_FILE_INPUT_STREAM_INCLUDE
 
 #include<hgl/io/InputStream.h>

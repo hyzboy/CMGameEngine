@@ -1,4 +1,4 @@
-#include<hgl/type/DataType.h>
+﻿#include<hgl/type/DataType.h>
 
 namespace hgl
 {

@@ -1,4 +1,4 @@
-#include<hgl/type/BitArray.h>
+﻿#include<hgl/type/BitArray.h>
 #include<hgl/io/DataInputStream.h>
 #include<hgl/io/DataOutputStream.h>
 #include<string.h>

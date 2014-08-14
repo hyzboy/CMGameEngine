@@ -1,4 +1,4 @@
-#include<hgl/proc/SharedMemory.h>
+﻿#include<hgl/proc/SharedMemory.h>
 #include<apr_shm.h>
 #include<hgl/LogInfo.h>
 
@@ -40,7 +40,7 @@ namespace hgl
 		}
 		else
 		{
-			LOG_ERROR(u"Create SharedMemory error.");
+			LOG_ERROR(OS_TEXT("Create SharedMemory error."));
 			return(nullptr);
 		}
 	}
@@ -64,7 +64,7 @@ namespace hgl
 		}
 		else
 		{
-			LOG_ERROR(u"Attach SharedMemory error.");
+			LOG_ERROR(OS_TEXT("Attach SharedMemory error."));
 			return(nullptr);
 		}
 	}
@@ -95,7 +95,7 @@ namespace hgl
 		apr_status_t rv=apr_shm_destroy((apr_shm_t *)data);
 
 		if(rv!=APR_SUCCESS)
-			LOG_ERROR(u"Destroy SharedMemory error.");
+			LOG_ERROR(OS_TEXT("Destroy SharedMemory error."));
 #endif//_DEBUG
 
 		data=nullptr;
@@ -112,7 +112,7 @@ namespace hgl
 		if(data)
 			return(apr_shm_baseaddr_get((apr_shm_t *)data));
 
-		LOG_ERROR(u"Error of Get address from SharedMemory.");
+		LOG_ERROR(OS_TEXT("Error of Get address from SharedMemory."));
 		return(nullptr);
 	}
 }//namespace hgl

@@ -1,4 +1,4 @@
-#include<hgl/Other.h>
+﻿#include<hgl/Other.h>
 #include<hgl/type/DataType.h>
 #include<hgl/type/BaseString.h>
 
@@ -18,7 +18,7 @@ namespace hgl
         */
         void PopupWebBrowser(const u16char *url)
         {
-            ShellExecute(nullptr,nullptr,url,nullptr,nullptr,nullptr);
+            ShellExecute(nullptr,nullptr,url,nullptr,nullptr,0);
         }
 
         /**
@@ -28,15 +28,15 @@ namespace hgl
         */
         void PopupEmailClient(const u16char *email,const u16char *subject)
         {
-            u16char url[4096]=u"mailto:";
+            u16char url[4096]=U16_TEXT("mailto:");
 
 			strcat(url,email);
 
-			strcat(url,u"?Subject=\"");
+			strcat(url, U16_TEXT("?Subject=\""));
 			strcat(url,subject);
-			strcat(url,u"\"");
+			strcat(url, U16_TEXT("\""));
 
-            ShellExecute(nullptr,nullptr,url,nullptr,nullptr,nullptr);
+            ShellExecute(nullptr,nullptr,url,nullptr,nullptr,0);
 		}
 
 		/**
@@ -57,7 +57,7 @@ namespace hgl
 
 			UTF16String lnk_filename=lnk_fname;
 
-            lnk_filename+=u".lnk";
+			lnk_filename += U16_TEXT(".lnk");
 
 			if(CoCreateInstance(CLSID_ShellLink,nullptr,CLSCTX_INPROC_SERVER,IID_IShellLinkW,(LPVOID*)&psl)==S_OK)
 			if(psl->QueryInterface(IID_IPersistFile,(LPVOID*)&pPf)==S_OK)

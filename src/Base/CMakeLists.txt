@@ -110,7 +110,6 @@ SET(BASE_MULTI_PROCESS_SOURCE
 	MultiProcess/ProcMutexAPR.cpp)
 
 SET(BASE_MULTI_THREAD_SOURCE
-	MultiThread/CondVar.cpp
 	MultiThread/RingBuffer.cpp
 	MultiThread/RingBufferRead.cpp
 	MultiThread/RingBufferWrite.cpp)
@@ -131,7 +130,6 @@ ENDIF(UNIX)
 
 IF(WIN32)
 	SET(BASE_MULTI_THREAD_SOURCE ${BASE_MULTI_THREAD_SOURCE}
-		MultiThread/APR/RWLockAPR.cpp
 		MultiThread/WinNT/CondVarNT6.cpp
 		MultiThread/WinNT/RWLockNT6.cpp
 		MultiThread/WinNT/SemaphoreNT4.cpp
@@ -155,3 +153,7 @@ ADD_LIBRARY(CM.Base SHARED
 			${BASE_PLUG_IN_SOURCE}
 			${BASE_MULTI_PROCESS_SOURCE}
 			${BASE_MULTI_THREAD_SOURCE})
+
+IF(WIN32)
+	target_link_libraries(CM.Base libapr-1)
+ENDIF(WIN32)

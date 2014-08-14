@@ -1,4 +1,4 @@
-#include<hgl/platform/BaseApplication.h>
+﻿#include<hgl/platform/BaseApplication.h>
 #include<hgl/platform/ConsoleSystemInitInfo.h>
 #include<hgl/Other.h>
 #include<hgl/Info.h>

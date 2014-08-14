@@ -1,4 +1,4 @@
-#ifndef HGL_IO_JAVA_INPUT_STREAM_INCLUDE
+﻿#ifndef HGL_IO_JAVA_INPUT_STREAM_INCLUDE
 #define HGL_IO_JAVA_INPUT_STREAM_INCLUDE
 
 #include<hgl/io/DataInputStream.h>

@@ -1,4 +1,4 @@
-#include<hgl/thread/RingBuffer.h>
+﻿#include<hgl/thread/RingBuffer.h>
 #include<string.h>
 
 namespace hgl

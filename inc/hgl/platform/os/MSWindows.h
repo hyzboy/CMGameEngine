@@ -26,12 +26,12 @@
 	#define HGL_LIB_OS					"Win64"											//库操作系统前缀
 #endif//HGL_CPU
 //--------------------------------------------------------------------------------------------------
-#define HGL_PLUGIN_FRONTNAME			u"CMP."											//插件文件名前缀
-#define HGL_PLUGIN_EXTNAME	    		u".DLL"											//插件文件扩展名
+#define HGL_PLUGIN_FRONTNAME			OS_TEXT("CMP.")									//插件文件名前缀
+#define HGL_PLUGIN_EXTNAME	    		OS_TEXT(".DLL")									//插件文件扩展名
 #define HGL_PLUGIN_FUNC					extern "C" __declspec(dllexport)				//插件函数定义
 
-#define HGL_DIRECTORY_SEPARATOR 		L'\\'											//目录分隔符
-#define HGL_LINE_END					u"\n\r"											//换行符
+#define HGL_DIRECTORY_SEPARATOR 		OS_TEXT('\\')									//目录分隔符
+#define HGL_LINE_END					OS_TEXT("\n\r")									//换行符
 #define HGL_LINE_END_SIZE				2												//换行符长度
 
 #define HGL_MAX_PATH					256

@@ -1,4 +1,4 @@
-#include<hgl/io/DataOutputStream.h>
+﻿#include<hgl/io/DataOutputStream.h>
 #include<hgl/Other.h>
 
 namespace hgl

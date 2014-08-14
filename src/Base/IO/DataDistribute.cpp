@@ -1,4 +1,4 @@
-#include<hgl/io/DataDistribute.h>
+﻿#include<hgl/io/DataDistribute.h>
 #include<hgl/io/DataInputStream.h>
 #include<hgl/LogInfo.h>
 
