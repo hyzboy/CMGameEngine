@@ -63,7 +63,7 @@ namespace hgl
 			{
         		graphics.gui.use=false;
 
-				graphics.gui.pack=u"AquaGUI.HAC";
+				graphics.gui.pack=U16_TEXT("AquaGUI.HAC");
 			}
 
 			{
@@ -71,7 +71,7 @@ namespace hgl
 				{
 					graphics.fnt.use=false;
 
-					graphics.fnt.eng_fnt.Name=u"Tahoma";
+					graphics.fnt.eng_fnt.Name=U16_TEXT("Tahoma");
 
 					graphics.fnt.eng_fnt.Width=0;
 					graphics.fnt.eng_fnt.Height=14;
@@ -81,7 +81,7 @@ namespace hgl
 				}
 
 				{
-					graphics.fnt.chs_fnt.Name=u"黑体";
+					graphics.fnt.chs_fnt.Name=U16_TEXT("黑体");
 
 					graphics.fnt.chs_fnt.Width=0;
 					graphics.fnt.chs_fnt.Height=14;
@@ -118,7 +118,7 @@ namespace hgl
 	* 传入命令行参数
 	* @param args 命令行参数
 	*/
-	void GraphicsSystemInitInfo::Init(const UTF16StringList &args)
+	void GraphicsSystemInitInfo::Init(const OSStringList &args)
 	{
 		ConsoleSystemInitInfo::Init(args);
 
@@ -126,23 +126,23 @@ namespace hgl
 
 		int pos;
 
-		if(args.Find(u"-joystick")!=-1)
+		if(args.Find(OS_TEXT("-joystick"))!=-1)
 			UseJoystick=true;
 
-		if(args.Find(u"-no_enum_audio")!=-1)
+		if(args.Find(OS_TEXT("-no_enum_audio"))!=-1)
 			audio.enum_device=false;
 
-		pos=args.Find(u"-audio_device");
+		pos=args.Find(OS_TEXT("-audio_device"));
 		if(pos!=-1)
 			audio.DeviceName=args[pos+1];
 
-		if(args.Find(u"-top_most")!=-1)
+		if(args.Find(OS_TEXT("-top_most"))!=-1)
 			win.TopMost=true;
 
-		if(args.Find(u"-no_app_task_bar")!=-1)
+		if(args.Find(OS_TEXT("-no_app_task_bar"))!=-1)
 			win.AppTaskBar=false;
 
-// 		if(args.Find(u"-fullscreen")!=-1)
+// 		if(args.Find(OS_TEXT("-fullscreen"))!=-1)
 // 		{
 // 			int w,h,b,v;
 //
@@ -157,50 +157,50 @@ namespace hgl
 // 			}
 // 		}
 
-		pos=args.Find(u"-res");
+		pos=args.Find(OS_TEXT("-res"));
 		if(pos!=-1)
 		{
 			stoi(args[pos+1].c_str(),graphics.Width);
 			stoi(args[pos+2].c_str(),graphics.Height);
 		}
 
-		pos=args.Find(u"-bit");
+		pos=args.Find(OS_TEXT("-bit"));
 		if(pos!=-1)
 			stoi(args[pos+1].c_str(),graphics.Bit);
 
-		pos=args.Find(u"-vsync");
+		pos=args.Find(OS_TEXT("-vsync"));
 		if(pos!=-1)
 			stoi(args[pos+1].c_str(),graphics.VSync);
 
-		pos=args.Find(u"-chsfnt");
+		pos=args.Find(OS_TEXT("-chsfnt"));
 		if(pos!=-1)
 			graphics.fnt.chs_fnt.Name=args[pos+1];
 
-		pos=args.Find(u"-engfnt");
+		pos=args.Find(OS_TEXT("-engfnt"));
 		if(pos!=-1)
 			graphics.fnt.eng_fnt.Name=args[pos+1];
 
-		pos=args.Find(u"-no_vbo");
+		pos=args.Find(OS_TEXT("-no_vbo"));
 		if(pos!=-1)
 			graphics.gl.vbo=false;
 
-		pos=args.Find(u"-no_fbo");
+		pos=args.Find(OS_TEXT("-no_fbo"));
 		if(pos!=-1)
 			graphics.gl.fbo=false;
 
-		pos=args.Find(u"-no_pbo");
+		pos=args.Find(OS_TEXT("-no_pbo"));
 		if(pos!=-1)
 			graphics.gl.pbo=false;
 
-		pos=args.Find(u"-no_glsl");
+		pos=args.Find(OS_TEXT("-no_glsl"));
 		if(pos!=-1)
 			graphics.gl.glsl=false;
 
-		pos=args.Find(u"-no_rect");
+		pos=args.Find(OS_TEXT("-no_rect"));
 		if(pos!=-1)
 			graphics.gl.texture_rectangle=false;
 
-		pos=args.Find(u"-no_npot");
+		pos=args.Find(OS_TEXT("-no_npot"));
 		if(pos!=-1)
 			graphics.gl.texture_non_power_of_two=false;
 	}
@@ -220,7 +220,7 @@ namespace hgl
 
 #if HGL_OS == HGL_OS_Windows
 		if(win.ClassName.Length==0)
-			win.ClassName=u"CMGDK Window Class";
+			win.ClassName=L"CMGDK Window Class";
 #endif//HGL_OS == HGL_OS_Windows
 
 		if(win.Name.IsEmpty())

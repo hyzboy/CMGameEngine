@@ -71,7 +71,7 @@ namespace hgl
 
 						if(setrlimit64(RLIMIT_NOFILE,&rl))
 						{
-							LOG_ERROR(OS_TEXT("Set Max Open file maximum value to ")+OSString(rl.rlim_cur)+OS_TEXT("error."));
+							LOG_ERROR(OS_TEXT("Set Max Open file maximum value to ")+OSString((uint64)(rl.rlim_cur))+OS_TEXT("error."));
 							return(false);
 						}
 					}

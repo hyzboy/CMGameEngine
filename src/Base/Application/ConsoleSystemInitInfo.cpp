@@ -37,7 +37,7 @@ namespace hgl
 	* 传入命令行参数
 	* @param args 命令行参数列表
 	*/
-	void ConsoleSystemInitInfo::Init(const UTF16StringList &args)
+	void ConsoleSystemInitInfo::Init(const OSStringList &args)
 	{
 		if(args.GetCount()<2)return;
 
