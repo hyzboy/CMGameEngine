@@ -19,14 +19,17 @@ namespace hgl
 		void *GetRWLock(){ return lock; }															///<返回操作系级锁
 
 		bool TryReadLock();																			///<尝试读(共享访问)锁定
-//		bool WaitReadLock(double);																	///<等待读(共享访问)锁定
 		bool ReadLock();																			///<读(共享访问)锁定
 		bool ReadUnlock();																			///<读(共享访问)解锁
 
 		bool TryWriteLock();																		///<尝试写(独占访问)锁定
-//		bool WaitWriteLock(double);																	///<等待写(独占访问)锁定
 		bool WriteLock();																			///<写(独占访问)锁定
 		bool WriteUnlock();																			///<写(独占访问)解锁
+
+#if HGL_OS != HGL_OS_Windows
+		bool WaitReadLock(double);																	///<等待读(共享访问)锁定
+		bool WaitWriteLock(double);																	///<等待写(独占访问)锁定
+#endif//HGL_OS != HGL_OS_Windows
 	};//class RWLock
 
 	inline RWLock *CreateRWLock()																			///<创建读写锁
