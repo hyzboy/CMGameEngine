@@ -33,7 +33,7 @@ namespace hgl
 
 		ThreadPtr threadptr;
 
-		virtual void SetCancelState(bool,bool=true);
+//		virtual void SetCancelState(bool,bool=true);
 
 	public:
 
@@ -61,7 +61,7 @@ namespace hgl
 
 		virtual bool IsCurThread();																	///<是否是当前线程
 
-		virtual bool Cancel();																		///<放弃这个线程
+//		virtual bool Cancel();																		///<放弃这个线程
 
 		virtual void Wait(double time=0);                                                 			///<等待当前线程
 	};//class Thread

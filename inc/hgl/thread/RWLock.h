@@ -29,7 +29,7 @@ namespace hgl
 		bool WriteUnlock();																			///<写(独占访问)解锁
 	};//class RWLock
 
-	RWLock *CreateRWLock()																			///<创建读写锁
+	inline RWLock *CreateRWLock()																			///<创建读写锁
 	{
 		return(new RWLock);
 	}

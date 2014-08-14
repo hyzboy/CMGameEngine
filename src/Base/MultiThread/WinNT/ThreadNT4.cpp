@@ -1,5 +1,4 @@
 ﻿#include<hgl/thread/Thread.h>
-#include<hgl/thread/CondVar.h>
 #include<hgl/LogInfo.h>
 #include<windows.h>
 
@@ -22,7 +21,7 @@ namespace hgl
 
 		if(!threadptr)
 		{
-			LOG_ERROR(u"创建线程失败，Windows错误码："+UTF16String((uint)GetLastError()));
+			LOG_ERROR(OS_TEXT("创建线程失败，Windows错误码：")+OSString((uint)GetLastError()));
 			return(false);
 		}
 
