@@ -1,4 +1,4 @@
-#ifndef HGL_INPUT_DEVICE_INCLUDE
+﻿#ifndef HGL_INPUT_DEVICE_INCLUDE
 #define HGL_INPUT_DEVICE_INCLUDE
 namespace hgl
 {

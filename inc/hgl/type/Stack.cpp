@@ -69,7 +69,7 @@ namespace hgl
 	{
 		if(n<0||n>=count)
 		{
-			LOG_ERROR(u"从堆栈中按索引<"+UTF16String(n)+u">取数据，超出正常范围<"+UTF16String(count)+u'>');
+			LOG_ERROR(OS_TEXT("从堆栈中按索引<") + OSString(n) + OS_TEXT(">取数据，超出正常范围<")+OSString(count) + OS_TEXT('>'));
 
 			return(*(T *)NULL);
 		}

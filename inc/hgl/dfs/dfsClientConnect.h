@@ -1,4 +1,4 @@
-#ifndef HGL_DFS_CLIENT_CONNECT_INCLUDE
+﻿#ifndef HGL_DFS_CLIENT_CONNECT_INCLUDE
 #define HGL_DFS_CLIENT_CONNECT_INCLUDE
 
 #include<hgl/type/BaseString.h>

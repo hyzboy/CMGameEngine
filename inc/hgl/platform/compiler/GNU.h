@@ -96,7 +96,6 @@
 	#define HGL_OVERRIDE
 #endif//C++11
 
-#define u16char	char16_t
 #define HGL_CPP11_INT128
 #define HGL_FORCE_INLINE __inline __attribute__ ((always_inline))
 

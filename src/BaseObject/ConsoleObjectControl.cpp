@@ -1,4 +1,4 @@
-#include<hgl/object/ConsoleObjectControl.h>
+﻿#include<hgl/object/ConsoleObjectControl.h>
 #include<hgl/LogInfo.h>
 
 namespace hgl
@@ -7,7 +7,7 @@ namespace hgl
 
 	ConsoleObjectControl::ConsoleObjectControl()
 	{
-		Name=u"ConsoleObjectControl";
+		Name = U16_TEXT("ConsoleObjectControl");
 
 		object_attrib|=oaControl;
 	}
@@ -91,7 +91,7 @@ namespace hgl
 		if(!obj)
 		{
 			#ifdef _DEBUG
-				LOG_ERROR(u"添加了一个空的对象到控制器中！");
+				LOG_ERROR(OS_TEXT("添加了一个空的对象到控制器中！"));
 			#endif//_DEBUG
 
 			return;
@@ -171,7 +171,7 @@ namespace hgl
 			#ifdef _DEBUG
 			if(all_object.Find(obj)==-1)
 			{
-				LOG_ERROR(u"一个被要求设置为显示属性的对象并不在这个对象控制器里");
+				LOG_ERROR(OS_TEXT("一个被要求设置为显示属性的对象并不在这个对象控制器里"));
 			}
 			else
 			#endif//_DEBUG
@@ -187,7 +187,7 @@ namespace hgl
 
 		if(all_object.Find(obj)==-1)
 		{
-			LOG_ERROR(u"一个被要求设置刷新属性的对象并不在这个对象控制器里");
+			LOG_ERROR(OS_TEXT("一个被要求设置刷新属性的对象并不在这个对象控制器里"));
 		}
 		else
 		{

@@ -1,4 +1,4 @@
-#include"hgl/object/ConsoleFlowControl.h"
+﻿#include"hgl/object/ConsoleFlowControl.h"
 
 namespace hgl
 {
@@ -129,7 +129,7 @@ namespace hgl
 		#ifdef _DEBUG
 		if(!sub)
 		{
-			LOG_ERROR(u"错误！呼叫进入的子流程对象不存在！");
+			LOG_ERROR(OS_TEXT("错误！呼叫进入的子流程对象不存在！"));
 		}
 		else
 		#endif//_DEBUG
@@ -149,7 +149,7 @@ namespace hgl
 		#ifdef _DEBUG
 		if(!next)
 		{
-			LOG_ERROR(u"错误！呼叫进入的子流程对象不存在！");
+			LOG_ERROR(OS_TEXT("错误！呼叫进入的子流程对象不存在！"));
 		}
 		else
 		#endif//_DEBUG

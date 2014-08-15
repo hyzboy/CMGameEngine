@@ -1,4 +1,4 @@
-#ifndef HGL_VISUALOBJECT_INCLUDE
+﻿#ifndef HGL_VISUALOBJECT_INCLUDE
 #define HGL_VISUALOBJECT_INCLUDE
 
 #include<hgl/object/EnumObject.h>

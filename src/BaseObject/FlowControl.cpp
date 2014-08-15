@@ -1,4 +1,4 @@
-#include"hgl/object/FlowControl.h"
+﻿#include"hgl/object/FlowControl.h"
 
 namespace hgl
 {
@@ -128,7 +128,7 @@ namespace hgl
 		#ifdef _DEBUG
 		if(!sub)
 		{
-			PutError(u"错误！呼叫进入的子流程对象不存在！");
+			LOG_ERROR(OS_TEXT("错误！呼叫进入的子流程对象不存在！"));
 		}
 		else
 		#endif//_DEBUG
@@ -148,7 +148,7 @@ namespace hgl
 		#ifdef _DEBUG
 		if(!next)
 		{
-			PutError(u"错误！呼叫进入的子流程对象不存在！");
+			LOG_ERROR(OS_TEXT("错误！呼叫进入的子流程对象不存在！"));
 		}
 		else
 		#endif//_DEBUG
