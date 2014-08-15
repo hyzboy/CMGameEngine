@@ -1,4 +1,4 @@
-#ifndef HGL_STACK_CPP
+﻿#ifndef HGL_STACK_CPP
 #define HGL_STACK_CPP
 
 #include<hgl/LogInfo.h>
@@ -69,7 +69,7 @@ namespace hgl
 	{
 		if(n<0||n>=count)
 		{
-			LOG_ERROR(OS_TEXT("从堆栈中按索引<") + OSString(n) + OS_TEXT(">取数据，超出正常范围<")+OSString(count) + OS_TEXT('>'));
+			LOG_ERROR(OS_TEXT("从堆栈中按索引<") + OSString(n) + OS_TEXT(">取数据，超出正常范围<")+OSString(count) + OS_TEXT(">"));
 
 			return(*(T *)NULL);
 		}
