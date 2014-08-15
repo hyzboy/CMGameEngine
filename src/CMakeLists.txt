@@ -1,6 +1,5 @@
 IF(BUILD_BASE_LIB)
 	add_subdirectory(Base)
-	add_subdirectory(BaseObject)
 	add_subdirectory(UtilityTools)
 ENDIF(BUILD_BASE_LIB)
 
