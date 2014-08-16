@@ -18,6 +18,12 @@ ELSE(WIN32)
 	OPTION(USE_CPP11				"Use C++ 11"							TRUE	)
 	OPTION(USE_ICE_CREAM			"Use IceCream"							TRUE	)
 
+	IF(APPLE)
+		OPTION(USE_LLVM_CLANG			"Use LLVM Clang"						TRUE	)
+	ELSE()
+		OPTION(USE_LLVM_CLANG			"Use LLVM Clang"						FALSE	)
+	ENDIF()
+
 	OPTION(USE_GPERF_TOOLS			"Use Google Performance Tools"			FALSE	)
 
 	OPTION(USE_ALL_STATIC			"Use All Static"						FALSE	)
@@ -132,8 +138,10 @@ IF(UNIX)
 
 	IF(HGL_BITS EQUAL 32)
 		add_definitions(-DHGL_32_BITS)
+		add_definitions(-DHGL_POINTER_UINT=uint32)
 	ELSE()
 		add_definitions(-DHGL_64_BITS)
+		add_definitions(-DHGL_POINTER_UINT=uint64)
 	ENDIF(HGL_BITS EQUAL 32)
 
 	IF(CMGDK_DEBUG)
