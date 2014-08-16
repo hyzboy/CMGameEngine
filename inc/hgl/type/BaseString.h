@@ -1046,30 +1046,12 @@ namespace hgl
 		return BaseString<T>(str);
 	}
 
-	template<typename T,int POINTER_SIZE> struct PointerToHexStringConvert;
-
-	template<typename T> struct PointerToHexStringConvert<T,4>
-	{
-		static BaseString<T> Conv(const void *ptr)
-		{
-			return HexToString<T,uint32>(reinterpret_cast<const uint32 >(ptr));
-		}
-	};
-
-	template<typename T> struct PointerToHexStringConvert<T,8>
-	{
-		static BaseString<T> Conv(const void *ptr)
-		{
-			return HexToString<T,uint64>(reinterpret_cast<const uint64 >(ptr));
-		}
-	};
-
 	/**
 	 * 将一个指针转换成一个16进制字符串
 	 */
-	template<typename T> BaseString<T> PointerToHexString(const void *value)
+	template<typename T> BaseString<T> PointerToHexString(const void *ptr)
 	{
-		return PointerToHexStringConvert<T,sizeof(void *)>::Conv(value);
+		return HexToString<T,HGL_POINTER_UINT>(reinterpret_cast<const HGL_POINTER_UINT>(ptr));
 	}
 
 	inline BaseString<os_char> PointerToHexOSString(const void *value)
