@@ -28,9 +28,9 @@ namespace hgl
 				const size_t argvlen[]=
 				{
 					5,
-					key.Length(),
-					value.Length(),
-					etstr.Length()
+					(size_t)key.Length(),
+					(size_t)value.Length(),
+					(size_t)etstr.Length()
 				};
 
 				REPLY r(con,4,argv,argvlen);
@@ -50,8 +50,8 @@ namespace hgl
 				const size_t argvlen[]=
 				{
 					3,
-					key.Length(),
-					value.Length()
+					(size_t)key.Length(),
+					(size_t)value.Length()
 				};
 
 				REPLY r(con,3,argv,argvlen);
@@ -80,8 +80,8 @@ namespace hgl
 			const size_t argvlen[]=
 			{
 				5,
-				key.Length(),
-				value.Length()
+				(size_t)key.Length(),
+				(size_t)value.Length()
 			};
 
 			REPLY r(con,3,argv,argvlen);
@@ -101,7 +101,7 @@ namespace hgl
 			const size_t argvlen[]=
 			{
 				3,
-				key.Length()
+				(size_t)key.Length()
 			};
 
 			REPLY r(con,2,argv,argvlen);
@@ -134,8 +134,8 @@ namespace hgl
 			const size_t argvlen[]=
 			{
 				6,
-				key.Length(),
-				value.Length()
+				(size_t)key.Length(),
+				(size_t)value.Length()
 			};
 
 			REPLY r(con,3,argv,argvlen);
@@ -163,7 +163,7 @@ namespace hgl
 			const size_t argvlen[]=
 			{
 				3,
-				key.Length(),
+				(size_t)key.Length(),
 			};
 
 			REPLY r(con,2,argv,argvlen);
@@ -214,7 +214,7 @@ namespace hgl
 			const size_t argvlen[]=
 			{
 				6,
-				key.Length(),
+				(size_t)key.Length(),
 			};
 
 			REPLY r(con,2,argv,argvlen);
@@ -240,9 +240,9 @@ namespace hgl
 
 			const size_t argvlen[]=
 			{
-				nx?8:6,
-				old_name.Length(),
-				new_name.Length()
+				(size_t)(nx?8:6),
+				(size_t)old_name.Length(),
+				(size_t)new_name.Length()
 			};
 
 			REPLY r(con,3,argv,argvlen);
@@ -272,7 +272,7 @@ namespace hgl
 			const size_t argvlen[]=
 			{
 				7,
-				key.Length(),
+				(size_t)key.Length(),
 			};
 
 			REPLY r(con,2,argv,argvlen);
@@ -292,7 +292,7 @@ namespace hgl
 			const size_t argvlen[]=
 			{
 				3,
-				key.Length(),
+				(size_t)key.Length(),
 			};
 
 			REPLY r(con,2,argv,argvlen);
@@ -312,7 +312,7 @@ namespace hgl
 			const size_t argvlen[]=
 			{
 				6,
-				key.Length(),
+				(size_t)key.Length(),
 			};
 
 			REPLY r(con,2,argv,argvlen);
@@ -339,8 +339,8 @@ namespace hgl
 			const size_t argvlen[]=
 			{
 				6,
-				key.Length(),
-				value.Length()
+				(size_t)key.Length(),
+				(size_t)value.Length()
 			};
 
 			REPLY r(con,3,argv,argvlen);

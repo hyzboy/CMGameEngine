@@ -19,8 +19,8 @@ namespace hgl
 			const size_t argvlen[]=
 			{
 				4,
-				set.Length(),
-				member.Length()
+				(size_t)set.Length(),
+				(size_t)member.Length()
 			};
 
 			REPLY r(con,3,argv,argvlen);
@@ -50,8 +50,8 @@ namespace hgl
 			const size_t argvlen[]=
 			{
 				4,
-				set.Length(),
-				member.Length()
+				(size_t)set.Length(),
+				(size_t)member.Length()
 			};
 
 			REPLY r(con,3,argv,argvlen);
@@ -140,8 +140,8 @@ namespace hgl
 			const size_t argvlen[]=
 			{
 				9,
-				set.Length(),
-				member.Length()
+				(size_t)set.Length(),
+				(size_t)member.Length()
 			};
 
 			REPLY r(con,3,argv,argvlen);

@@ -18,9 +18,9 @@ namespace hgl
 			const size_t argvlen[]=
 			{
 				4,
-				key.Length(),
-				field.Length(),
-				size
+				(size_t)key.Length(),
+				(size_t)field.Length(),
+				(size_t)size
 			};
 
 			REPLY r(con,4,argv,argvlen);
@@ -42,9 +42,9 @@ namespace hgl
 			const size_t argvlen[]=
 			{
 				6,
-				key.Length(),
-				field.Length(),
-				value.Length()
+				(size_t)key.Length(),
+				(size_t)field.Length(),
+				(size_t)value.Length()
 			};
 
 			REPLY r(con,4,argv,argvlen);
@@ -235,8 +235,8 @@ namespace hgl
 			const size_t argvlen[]=
 			{
 				4,
-				key.Length(),
-				field.Length()
+				(size_t)key.Length(),
+				(size_t)field.Length()
 			};
 
 			REPLY r(con,3,argv,argvlen);
@@ -298,7 +298,7 @@ namespace hgl
 			const size_t argvlen[]=
 			{
 				7,
-				key.Length()
+				(size_t)key.Length()
 			};
 
 			REPLY r(con,2,argv,argvlen);
@@ -318,7 +318,7 @@ namespace hgl
 			const size_t argvlen[]=
 			{
 				7,
-				key.Length()
+				(size_t)key.Length()
 			};
 
 			REPLY r(con,2,argv,argvlen);
@@ -338,7 +338,7 @@ namespace hgl
 			const size_t argvlen[]=
 			{
 				5,
-				key.Length()
+				(size_t)key.Length()
 			};
 
 			REPLY r(con,2,argv,argvlen);
@@ -380,8 +380,8 @@ namespace hgl
 			const size_t argvlen[]=
 			{
 				4,
-				key.Length(),
-				field.Length()
+				(size_t)key.Length(),
+				(size_t)field.Length()
 			};
 
 			REPLY r(con,3,argv,argvlen);
@@ -440,8 +440,8 @@ namespace hgl
 			const size_t argvlen[]=
 			{
 				7,
-				key.Length(),
-				field.Length()
+				(size_t)key.Length(),
+				(size_t)field.Length()
 			};
 
 			REPLY r(con,3,argv,argvlen);
@@ -461,7 +461,7 @@ namespace hgl
 			const size_t argvlen[]=
 			{
 				5,
-				key.Length()
+				(size_t)key.Length()
 			};
 
 			REPLY r(con,2,argv,argvlen);
@@ -481,7 +481,7 @@ namespace hgl
 			const size_t argvlen[]=
 			{
 				4,
-				key.Length()
+				(size_t)key.Length()
 			};
 
 			REPLY r(con,2,argv,argvlen);
