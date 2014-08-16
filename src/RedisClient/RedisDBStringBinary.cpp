@@ -12,17 +12,51 @@ namespace hgl
 		* @param size 长度
 		* @param et 过期时间(以秒为单位,0表示永不过期)
 		*/
-		bool RedisDB::SetBinary(const char *key,const void *value,int size,int et)
+		bool RedisDB::SetBinary(const UTF8String &key,const void *value,int size,int et)
 		{
 			if(et>0)
 			{
-				REPLY r(con,"SETEX %s %d %b",key,et,value,size);
+				UTF8String et_str(et);
+
+				const char *argv[]=
+				{
+					"SETEX",
+					key.c_str(),
+					et_str.c_str(),
+					(const char *)value
+				};
+
+				const size_t argvlen[]=
+				{
+					5,
+					(size_t)key.Length(),
+					(size_t)et_str.Length(),
+					(size_t)size
+				};
+
+				//REPLY r(con,"SETEX %s %d %b",key,et,value,size);
+				REPLY r(con,4,argv,argvlen);
 
 				if(!r)return(false);
 			}
 			else
 			{
-				REPLY r(con,"SET %s %b",key,value,size);
+				const char *argv[]=
+				{
+					"SET",
+					key.c_str(),
+					(const char *)value
+				};
+
+				const size_t argvlen[]=
+				{
+					3,
+					(size_t)key.Length(),
+					(size_t)size
+				};
+
+				//REPLY r(con,"SET %s %b",key,value,size);
+				REPLY r(con,3,argv,argvlen);
 
 				if(!r)return(false);
 			}
@@ -36,9 +70,24 @@ namespace hgl
 		* @param value 内容
 		* @param size 长度
 		*/
-		bool RedisDB::SetNxBinary(const char *key,const void *value,int size)
+		bool RedisDB::SetNxBinary(const redis_string &key,const void *value,int size)
 		{
-			REPLY r(con,"SETNX %s %b",key,value,size);
+			const char *argv[]=
+			{
+				"SETNX",
+				key.c_str(),
+				(const char *)value
+			};
+
+			const size_t argvlen[]=
+			{
+				5,
+				(size_t)key.Length(),
+				(size_t)size
+			};
+
+			REPLY r(con,3,argv,argvlen);
+			//REPLY r(con,"SETNX %s %b",key,value,size);
 
 			return_bool;
 		}
@@ -50,9 +99,22 @@ namespace hgl
 		 * @param max_size 内存最大长度
 		 * @return 取出的数据长度
 		 */
-		int RedisDB::GetBinary(const char *key,void *result,int max_size)
+		int RedisDB::GetBinary(const redis_string &key,void *result,int max_size)
 		{
-			REPLY r(con,"GET %s",key);
+			const char *argv[]=
+			{
+				"GET",
+				key.c_str(),
+			};
+
+			const size_t argvlen[]=
+			{
+				3,
+				(size_t)key.Length(),
+			};
+
+			REPLY r(con,2,argv,argvlen);
+			//REPLY r(con,"GET %s",key);
 
 			if(!r)return(false);
 
@@ -75,9 +137,22 @@ namespace hgl
 		 * @param size 获取出的数据长度
 		 * @return 取出的数据
 		 */
-		void *RedisDB::GetBinary(const char *key,int &size)
+		void *RedisDB::GetBinary(const redis_string &key,int &size)
 		{
-			REPLY r(con,"GET %s",key);
+			const char *argv[]=
+			{
+				"GET",
+				key.c_str(),
+			};
+
+			const size_t argvlen[]=
+			{
+				3,
+				(size_t)key.Length(),
+			};
+
+			REPLY r(con,2,argv,argvlen);
+			//REPLY r(con,"GET %s",key);
 
 			if(!r)return(nullptr);
 
@@ -103,9 +178,24 @@ namespace hgl
 		* @param result 取出的旧值所放入的位置
 		* @param max_size 最大存放长度
 		*/
-		int RedisDB::GetSetBinary(const char *key,const void *data,int size,void *result,int max_size)
+		int RedisDB::GetSetBinary(const redis_string &key,const void *data,int size,void *result,int max_size)
 		{
-			REPLY r(con,"GETSET %s %b",key,data,size);
+			const char *argv[]=
+			{
+				"GETSET",
+				key.c_str(),
+				(const char *)data
+			};
+
+			const size_t argvlen[]=
+			{
+				6,
+				(size_t)key.Length(),
+				(size_t)size
+			};
+
+			REPLY r(con,3,argv,argvlen);
+			//REPLY r(con,"GETSET %s %b",key,data,size);
 
 			if(!r)return(false);
 
@@ -131,9 +221,24 @@ namespace hgl
 		* @param size 要追加的数据长度
 		* @return 追加数据后新的数据长度,返回-1表示出错
 		*/
-		int RedisDB::AppendBinary(const char *key,const void *data,int size)
+		int RedisDB::AppendBinary(const redis_string &key,const void *data,int size)
 		{
-			REPLY r(con,"APPEND %s %b",key,data,size);
+			const char *argv[]=
+			{
+				"APPEND",
+				key.c_str(),
+				(const char *)data
+			};
+
+			const size_t argvlen[]=
+			{
+				6,
+				(size_t)key.Length(),
+				(size_t)size
+			};
+
+			REPLY r(con,3,argv,argvlen);
+			//REPLY r(con,"APPEND %s %b",key,data,size);
 
 			return_integer;
 		}

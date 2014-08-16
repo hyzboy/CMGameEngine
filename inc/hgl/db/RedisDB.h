@@ -162,12 +162,12 @@ namespace hgl
 
 		public:	//二进制
 
-			bool SetBinary(const char *,const void *,int,int=0);									///<设置数据
-			bool SetNxBinary(const char *,const void *,int);										///<设置数据，如果已存在则不做处理
-			int GetBinary(const char *,void *,int);													///<获取数据
-			void *GetBinary(const char *,int &);													///<获取数据
-			int GetSetBinary(const char *,const void *,int,void *,int);								///<获取旧的数据，并写入新的数据
-			int AppendBinary(const char *,const void *,int);										///<追加一段数据到原本的数据后面
+			bool SetBinary(const redis_string &,const void *,int,int=0);									///<设置数据
+			bool SetNxBinary(const redis_string &,const void *,int);										///<设置数据，如果已存在则不做处理
+			int GetBinary(const redis_string &,void *,int);													///<获取数据
+			void *GetBinary(const redis_string &,int &);													///<获取数据
+			int GetSetBinary(const redis_string &,const void *,int,void *,int);								///<获取旧的数据，并写入新的数据
+			int AppendBinary(const redis_string &,const void *,int);										///<追加一段数据到原本的数据后面
 
 		public:	//数字
 
