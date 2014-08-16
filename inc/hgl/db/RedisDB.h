@@ -162,35 +162,35 @@ namespace hgl
 
 		public:	//二进制
 
-			bool SetBinary(const redis_string &,const void *,int,int=0);									///<设置数据
-			bool SetNxBinary(const redis_string &,const void *,int);										///<设置数据，如果已存在则不做处理
-			int GetBinary(const redis_string &,void *,int);													///<获取数据
-			void *GetBinary(const redis_string &,int &);													///<获取数据
-			int GetSetBinary(const redis_string &,const void *,int,void *,int);								///<获取旧的数据，并写入新的数据
-			int AppendBinary(const redis_string &,const void *,int);										///<追加一段数据到原本的数据后面
+			bool SetBinary(const redis_string &,const void *,int,int=0);							///<设置数据
+			bool SetNxBinary(const redis_string &,const void *,int);								///<设置数据，如果已存在则不做处理
+			int GetBinary(const redis_string &,void *,int);											///<获取数据
+			void *GetBinary(const redis_string &,int &);											///<获取数据
+			int GetSetBinary(const redis_string &,const void *,int,void *,int);						///<获取旧的数据，并写入新的数据
+			int AppendBinary(const redis_string &,const void *,int);								///<追加一段数据到原本的数据后面
 
 		public:	//数字
 
-			bool Incr(const char *,int32 &);														///<原子+1
-			bool Incr(const char *,const int32,int32 &);											///<增加一个整数
+			bool Incr(const redis_string &,int32 &);												///<原子+1
+			bool Incr(const redis_string &,const int32,int32 &);									///<增加一个整数
 
-			bool Incr(const char *,int64 &);														///<原子+1
-			bool Incr(const char *,const int64,int64 &);											///<增加一个整数
+			bool Incr(const redis_string &,int64 &);												///<原子+1
+			bool Incr(const redis_string &,const int64,int64 &);									///<增加一个整数
 
-			bool Incr(const char *,const float,float &);											///<增加一个浮点数
+			bool Incr(const redis_string &,const float,float &);									///<增加一个浮点数
 
-			bool Decr(const char *,int32 &);														///<原子-1
-			bool Decr(const char *,const int32,int32 &);											///<减少一个整数
+			bool Decr(const redis_string &,int32 &);												///<原子-1
+			bool Decr(const redis_string &,const int32,int32 &);									///<减少一个整数
 
-			bool Decr(const char *,int64 &);														///<原子-1
-			bool Decr(const char *,const int64,int64 &);											///<减少一个整数
+			bool Decr(const redis_string &,int64 &);												///<原子-1
+			bool Decr(const redis_string &,const int64,int64 &);									///<减少一个整数
 
 		public:	//集合
 
 			bool SAdd(const redis_string &,const redis_string &);									///<添加一个元素到集合
-			bool SAdd(const redis_string &,int,const char **);												///<添加多个元素到集合
+			bool SAdd(const redis_string &,int,const char **);										///<添加多个元素到集合
 			bool SRem(const redis_string &,const redis_string &);									///<从集合中删除一个元素
-			bool SRem(const redis_string &,int,const char **);												///<从集合中删除多个元素
+			bool SRem(const redis_string &,int,const char **);										///<从集合中删除多个元素
 
 			bool SRandMember(const char *,redis_string &,int count=-1);								///<从集合中随机取出一个元素
 			bool SPop(const char *,redis_string &);													///<从集合中随机取出一个元素，并从合集中移除它
