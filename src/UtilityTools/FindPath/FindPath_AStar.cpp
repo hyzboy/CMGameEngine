@@ -183,7 +183,7 @@ namespace hgl
 
 						while(sn--)
 						{
-							(*fi)->step==cur->step+1;
+							(*fi)->step=cur->step+1;
 							++fi;
 						}
 					}
