@@ -27,8 +27,8 @@ namespace hgl
 		return !pthread_rwlock_timedrdlock((pthread_rwlock_t *)lock,&abstime);
 	}
 
-	bool RWLock::ReadLock()		{!pthread_rwlock_rdlock((pthread_rwlock_t *)lock);}
-	bool RWLock::ReadUnlock()	{!pthread_rwlock_unlock((pthread_rwlock_t *)lock);}
+	bool RWLock::ReadLock()		{return !pthread_rwlock_rdlock((pthread_rwlock_t *)lock);}
+	bool RWLock::ReadUnlock()	{return !pthread_rwlock_unlock((pthread_rwlock_t *)lock);}
 
 	bool RWLock::TryWriteLock()	{return !pthread_rwlock_trywrlock((pthread_rwlock_t *)lock);}
 	bool RWLock::WaitWriteLock(double t)
@@ -40,6 +40,6 @@ namespace hgl
 		return !pthread_rwlock_timedwrlock((pthread_rwlock_t *)lock,&abstime);
 	}
 
-	bool RWLock::WriteLock()	{!pthread_rwlock_wrlock((pthread_rwlock_t *)lock);}
-	bool RWLock::WriteUnlock()	{!pthread_rwlock_unlock((pthread_rwlock_t *)lock);}
+	bool RWLock::WriteLock()	{return !pthread_rwlock_wrlock((pthread_rwlock_t *)lock);}
+	bool RWLock::WriteUnlock()	{return !pthread_rwlock_unlock((pthread_rwlock_t *)lock);}
 }//namespace hgl
