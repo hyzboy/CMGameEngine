@@ -3,6 +3,15 @@
 
 SOURCE_GROUP("Common" FILES ${BASE_COMMON_SOURCE})
 
+SET(BASE_OBJECT_SOURCE
+	Object/Object.cpp
+	Object/EnumObject.cpp
+	Object/ConsoleFlowControl.cpp
+	Object/ConsoleFlowObject.cpp
+	Object/ConsoleObjectControl.cpp)
+
+SOURCE_GROUP("Object"	FILES ${BASE_OBJECT_SOURCE})
+
 SET(BASE_OTHER_SOURCE
 	Other/ProbSelect.cpp
 	Other/ExpendString.cpp
@@ -142,6 +151,7 @@ SOURCE_GROUP("MultiProcess"	FILES ${BASE_MULTI_PROCESS_SOURCE})
 
 ADD_LIBRARY(CM.Base SHARED
 			${BASE_COMMON_SOURCE}
+			${BASE_OBJECT_SOURCE}
 			${BASE_OTHER_SOURCE}
 			${BASE_OTHER_ALGORITHML_SOURCE}
 			${BASE_LOG_SOURCE}
