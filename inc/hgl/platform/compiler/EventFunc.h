@@ -49,6 +49,11 @@ namespace hgl
 					memset(this,0,sizeof(EventFunc<RT,Func>));			//omf可能不止一个指针的长度，所以必须这样清
 			}
 
+			void operator = (const EventFunc<RT,Func> &ef)
+			{
+				memcpy(this,&ef,sizeof(EventFunc<RT,Func>));
+			}
+
 			bool operator == (void *v)
 			{
 				return(vp_func==v);

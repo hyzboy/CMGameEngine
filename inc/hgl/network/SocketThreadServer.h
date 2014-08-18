@@ -3,6 +3,7 @@
 
 #include<hgl/thread/Thread.h>
 #include<hgl/Other.h>
+#include<hgl/network/Socket.h>
 namespace hgl
 {
 	namespace network

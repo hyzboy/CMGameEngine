@@ -32,20 +32,33 @@ namespace hgl
 #endif//HGL_OS != HGL_OS_Windows
 	};//class RWLock
 
-	#define HGL_RWLOCK(lock)	bool ReadLock()		{return lock.ReadLock();	}	\
-								bool WriteLock()	{return lock.WriteLock();	}	\
-								bool TryReadLock()	{return lock.TryReadLock();	}	\
-								bool TryWriteLock()	{return lock.TryWriteLock();}	\
-								bool ReadUnlock()	{return lock.ReadUnlock();	}	\
-								bool WriteUnlock()	{return lock.WriteUnlock();	}
+	#define HGL_RWLOCK(lock)				bool ReadLock()		{return lock.ReadLock();	}	\
+											bool WriteLock()	{return lock.WriteLock();	}	\
+											bool TryReadLock()	{return lock.TryReadLock();	}	\
+											bool TryWriteLock()	{return lock.TryWriteLock();}	\
+											bool ReadUnlock()	{return lock.ReadUnlock();	}	\
+											bool WriteUnlock()	{return lock.WriteUnlock();	}
 
-	#define HGL_RWLOCK_PTR(lock)	bool ReadLock()		{return lock->ReadLock();		}	\
-									bool WriteLock()	{return lock->WriteLock();		}	\
-									bool TryReadLock()	{return lock->TryReadLock();	}	\
-									bool TryWriteLock()	{return lock->TryWriteLock();	}	\
-									bool ReadUnlock()	{return lock->ReadUnlock();		}	\
-									bool WriteUnlock()	{return lock->WriteUnlock();	}
+	#define HGL_RWLOCK_PTR(lock)			bool ReadLock()		{return lock->ReadLock();		}	\
+											bool WriteLock()	{return lock->WriteLock();		}	\
+											bool TryReadLock()	{return lock->TryReadLock();	}	\
+											bool TryWriteLock()	{return lock->TryWriteLock();	}	\
+											bool ReadUnlock()	{return lock->ReadUnlock();		}	\
+											bool WriteUnlock()	{return lock->WriteUnlock();	}
 
+	#define HGL_NULL_RWLOCK					bool ReadLock()		{return true;}	\
+											bool WriteLock()	{return true;}	\
+											bool TryReadLock()	{return true;}	\
+											bool TryWriteLock()	{return true;}	\
+											bool ReadUnlock()	{return true;}	\
+											bool WriteUnlock()	{return true;}	\
+
+	#define HGL_VIRTUAL_NULL_RWLOCK	virtual bool ReadLock()		{return true;}	\
+									virtual bool WriteLock()	{return true;}	\
+									virtual bool TryReadLock()	{return true;}	\
+									virtual bool TryWriteLock()	{return true;}	\
+									virtual bool ReadUnlock()	{return true;}	\
+									virtual bool WriteUnlock()	{return true;}	\
 
 	/**
 	 * 读写锁共享锁定自动释放类
