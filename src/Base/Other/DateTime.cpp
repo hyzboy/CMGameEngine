@@ -1,11 +1,13 @@
-﻿#include <hgl/type/DataType.h>
-#include <hgl/type/DateTime.h>
-#include <apr_time.h>
+﻿#include<hgl/type/DataType.h>
+#include<hgl/type/DateTime.h>
 
-#include <hgl/io/DataInputStream.h>
-#include <hgl/io/DataOutputStream.h>
+#include<hgl/io/DataInputStream.h>
+#include<hgl/io/DataOutputStream.h>
 
 #include<hgl/thread/RWLock.h>
+
+#include<time.h>
+#include<sys/time.h>
 
 namespace hgl
 {
@@ -193,22 +195,25 @@ namespace hgl
 	}
 
 	//和系统时间同步
-	void Time::Sync(const double t)
+	void Time::Sync(const double cur_time)
 	{
-		apr_time_exp_t d;
+		tm m;
+		time_t tt;
 
-		if(t<=0)
-			apr_time_exp_lt(&d,apr_time_now());
+		if(cur_time<=0)
+			tt=time(nullptr);
 		else
-			apr_time_exp_lt(&d,t*HGL_MICRO_SEC_PER_SEC);
+			tt=cur_time*HGL_MICRO_SEC_PER_SEC;
 
-		hours			=d.tm_hour;
-		minutes			=d.tm_min;
-		seconds			=d.tm_sec;
-		micro_seconds	=d.tm_usec;
-		week_day		=d.tm_wday;
+		localtime_r(&tt,&m);
 
-		gmt_off			=d.tm_gmtoff;
+		hours			=m.tm_hour;
+		minutes			=m.tm_min;
+		seconds			=m.tm_sec;
+		micro_seconds	=tt%HGL_MICRO_SEC_PER_SEC;
+		week_day		=m.tm_wday;
+
+		gmt_off			=m.tm_gmtoff;
 	}
 }//namespace hgl
 //--------------------------------------------------------------------------------------------------
@@ -354,20 +359,23 @@ namespace hgl
 		SetMonth(m);
 	}
 
-	void Date::Sync(const double t)
+	void Date::Sync(const double cur_time)
 	{
-		apr_time_exp_t d;
+		tm m;
+		time_t tt;
 
-		if(t<=0)
-			apr_time_exp_lt(&d,apr_time_now());
+		if(cur_time<=0)
+			tt=time(nullptr);
 		else
-			apr_time_exp_lt(&d,t*HGL_MICRO_SEC_PER_SEC);
+			tt=cur_time*HGL_MICRO_SEC_PER_SEC;
 
-		year	=d.tm_year+1900;
-		SetMonth(d.tm_mon+1);
-		SetDay	(d.tm_mday);
-		week_day=d.tm_wday;
-		year_day=d.tm_yday;
+		localtime_r(&tt,&m);
+
+		year	=m.tm_year+1900;
+		SetMonth(m.tm_mon+1);
+		SetDay	(m.tm_mday);
+		week_day=m.tm_wday;
+		year_day=m.tm_yday;
 	}
 }//namespace hgl
 
@@ -375,24 +383,36 @@ namespace hgl
 {
 	void ToDateTime(Date &d,Time &t,const double cur_time)
 	{
-		apr_time_exp_t at;
+		tm m;
+		time_t tt;
+		uint micro_sec;
 
 		if(cur_time<=0)
-			apr_time_exp_lt(&at,apr_time_now());
-		else
-			apr_time_exp_lt(&at,cur_time*HGL_MICRO_SEC_PER_SEC);
+		{
+			struct timeval tv;
+			gettimeofday(&tv, nullptr);
 
-		d.Set(at.tm_year+1900,at.tm_mon+1,at.tm_mday,at.tm_wday,at.tm_yday);
-		t.Set(at.tm_hour,at.tm_min,at.tm_sec,at.tm_usec,at.tm_wday);
-		t.SetGMT(at.tm_gmtoff);
+			tt=tv.tv_sec;
+			micro_sec=tv.tv_usec;
+		}
+		else
+		{
+			tt=cur_time;
+			micro_sec=(cur_time-tt)*HGL_MICRO_SEC_PER_SEC;
+		}
+
+		localtime_r(&tt,&m);
+
+		d.Set(m.tm_year+1900,m.tm_mon+1,m.tm_mday,m.tm_wday,m.tm_yday);
+		t.Set(m.tm_hour,m.tm_min,m.tm_sec,micro_sec,m.tm_wday);
+		t.SetGMT(m.tm_gmtoff);
 	}
 
 	double FromDateTime(const int year,const int month,const int day,
 						const int hour,const int minute,const int second,const int micro_second,
-						const int gmt_off
-   					)
+						const int gmt_off)
 	{
-		apr_time_exp_t at;
+		tm at;
 
 		hgl_zero(at);
 
@@ -403,15 +423,12 @@ namespace hgl
 		at.tm_hour	=hour;
 		at.tm_min	=minute;
 		at.tm_sec	=second;
-		at.tm_usec	=micro_second;
 
 		at.tm_gmtoff=gmt_off;
 
-		apr_time_t result;
+		double result=mktime(&at);
 
-		apr_time_exp_gmt_get(&result,&at);
-
-		return double(result)/HGL_MICRO_SEC_PER_SEC;
+		return(result+(double(micro_second)/HGL_MICRO_SEC_PER_SEC));
 	}
 
 	double FromDateTime(const Date &d,const Time &t)

@@ -19,9 +19,9 @@ namespace hgl   //排序,查找
 
 namespace hgl   //时间
 {
-	uint64 GetStartTime();																			///<取得程序启动时间(单位：1/1000秒)
-	uint64 GetMicroStartTime();																		///<取得程序启动时间(单位：1/1000000秒)
-	double GetDoubleStartTime();																	///<取得程序启动时间(单位：秒)
+	uint64 GetMilliStartTime();																		///<取得毫秒程序启动时间(单位：1/1000秒)
+	uint64 GetMicroStartTime();																		///<取得微秒程序启动时间(单位：1/1000000秒)
+	double GetDoubleStartTime();																	///<取得秒程序启动时间(单位：秒)
 
 	uint64 GetTime();																				///<取得当前时间(单位：1/1000秒)
 	uint64 GetMicroTime();																			///<取得当前时间(单位：1/1000000秒)

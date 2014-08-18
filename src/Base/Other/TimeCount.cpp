@@ -1,5 +1,7 @@
 ﻿#include<hgl/Other.h>
-#include<apr_time.h>
+#if HGL_OS != HGL_OS_Windows
+#include<sys/time.h>
+#endif//HGL_OS != HGL_OS_Windows
 
 namespace hgl
 {
@@ -14,7 +16,12 @@ namespace hgl
 	*/
 	uint64 GetTime()
 	{
-		return apr_time_as_msec(apr_time_now());
+#if HGL_OS != HGL_OS_Windows
+		struct timeval tv;
+		gettimeofday(&tv, nullptr);
+		return (tv.tv_sec * 1000) + (tv.tv_usec/1000);
+#else
+#endif//HGL_OS != HGL_OS_Windows
 	}
 
 	/**
@@ -23,7 +30,12 @@ namespace hgl
 	*/
 	uint64 GetMicroTime()
 	{
-		return apr_time_now();
+#if HGL_OS != HGL_OS_Windows
+		struct timeval tv;
+		gettimeofday(&tv, nullptr);
+		return tv.tv_sec * HGL_MICRO_SEC_PER_SEC + tv.tv_usec;
+#else
+#endif//HGL_OS != HGL_OS_Windows
 	}
 
 	/**
@@ -32,28 +44,47 @@ namespace hgl
 	*/
 	double GetDoubleTime()																		///<取得当前时间(双精度，单位秒)
 	{
-		return double(apr_time_now())/HGL_MICRO_SEC_PER_SEC;
+#if HGL_OS != HGL_OS_Windows
+		struct timeval tv;
+		gettimeofday(&tv, nullptr);
+		return double(tv.tv_sec) + (double(tv.tv_usec)/HGL_MICRO_SEC_PER_SEC);
+#else
+#endif//HGL_OS != HGL_OS_Windows
 	}
 
 	/**
 	* 等待指定时间
 	* @param time 时间(单位：秒)
 	*/
-	void WaitTime(double time)
+	void WaitTime(double t)
 	{
 		if(time<=0)return;
 
-		apr_sleep(time*HGL_MICRO_SEC_PER_SEC);
+#if HGL_OS == HGL_OS_Windows
+#else
+	#if HGL_OS == HGL_OS_OS2
+		DosSleep(t/1000);
+	#elif (HGL_OS == HGL_OS_BeOS)||(HGL_OS == HGL_OS_Haiku)
+		snooze(t);
+	#elif HGL_OS == HGL_OS_NetWare
+		delay(t/1000);
+	#else
+		struct timeval tv;
+		tv.tv_sec = t;
+		tv.tv_usec = (t-tv.tv_sec)*HGL_MICRO_SEC_PER_SEC;
+		select(0, NULL, NULL, NULL, &tv);
+	#endif
+#endif//HGL_OS == HGL_OS_Windows
 	}
 
 	void InitStartTime()
 	{
-		program_start_time=apr_time_now();
+		program_start_time=GetMicroTime();
 	}
 
-	uint64 GetStartTime()
+	uint64 GetMilliStartTime()
 	{
-		return apr_time_as_msec(program_start_time);
+		return program_start_time/1000;
 	}
 
 	uint64 GetMicroStartTime()
