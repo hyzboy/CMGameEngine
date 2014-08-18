@@ -35,7 +35,8 @@ public:
 	UserThread(int sock,const sockaddr_in &sa)
 		:UserThreadBASE(sock,sa)							//基类，用当前工作类名称+BASE做为基类名称
 	{
-		mp.Init(0,100);
+		mp.Init(c2s_login::id,				//结起消息ID
+				c2s_login::id);			//结束消息ID
 
 	#define SET_PB_EVENT(name)	{	\
 									PBCmdFunc pcf;	\
@@ -45,7 +46,7 @@ public:
 									mp.SetProc(c2s_##name::id,pcf,new c2s_##name);	\
 								}
 
-			SET_PB_EVENT(login);
+			SET_PB_EVENT(login);					//设定login消息处理函数
 
 	#undef SET_PB_EVENT
 	}

@@ -1,9 +1,9 @@
-option optimize_for = LITE_RUNTIME;
+﻿option optimize_for = LITE_RUNTIME;
 message c2s_login
 {
 	enum MsgID
 	{
-		id= 0;
+		id= 0;		//每个消息都必须有一个，并且不能重复
 	}
 
 	required string name = 1;
