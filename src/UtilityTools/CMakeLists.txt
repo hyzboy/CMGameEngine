@@ -61,6 +61,9 @@ SET(ut_files
 	FindPath/FindPath_AStar.cpp
 	FindPath/FindPath_Line.cpp
 	Hash/adler32.cpp
+	Hash/md4.cpp
+	Hash/md5.cpp
+	Hash/sha1.cpp
 	Hash/Hash.cpp
 	PList/PList.cpp
 	TaskManager/TaskManager.cpp
@@ -114,11 +117,11 @@ IF(WIN32)
 	IF(USE_ANGEL_SCRIPT_JIT)
 		SET(ANGEL_JIT_SOURCE ${ANGEL_JIT_SOURCE}	AngelVM/jit/virtual_asm_windows.cpp)
 	ENDIF(USE_ANGEL_SCRIPT_JIT)
-	
+
 	IF(HGL_BITS EQUAL 64)
 		SET(ANGEL_CALL_SOURCE	${ANGEL_SCRIPT_PATH}/source/as_callfunc_x64_msvc.cpp
 								${ANGEL_SCRIPT_PATH}/source/as_callfunc_x64_msvc_asm.asm)
-								
+
 		IF(USE_ANGEL_SCRIPT_JIT)
 			SET(ANGEL_JIT_SOURCE ${ANGEL_JIT_SOURCE}	AngelVM/jit/virtual_asm_x64.cpp)
 		ENDIF(USE_ANGEL_SCRIPT_JIT)
@@ -153,7 +156,7 @@ SOURCE_GROUP("AngelVM\\JIT" FILES ${ANGEL_JIT_SOURCE})
 SET(AFFECTOR_SOURCE_FILES	Affector/Affector.cpp
 							Affector/AffectorTimer.cpp
 							Affector/AffectorTrackTimer.cpp)
-							
+
 SOURCE_GROUP("Affector" FILES ${AFFECTOR_SOURCE_FILES})
 
 ADD_LIBRARY(CM.UT SHARED ${ut_files} ${CDB_FILES} ${ANGELSCRIPT_SOURCE} ${ANGEL_SCRIPT_ADDON_SOURCE} ${ANGEL_VM_SOURCE} ${ANGEL_CALL_SOURCE} ${ANGEL_JIT_SOURCE} ${AFFECTOR_SOURCE_FILES})
