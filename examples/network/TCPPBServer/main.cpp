@@ -1,7 +1,11 @@
 ﻿#include<hgl/ConsolePBServer.h>
-#include"msg.pb.h"
+#include"msg.pb.h"											//自动生成的头文件
 
-using USER_ID=uint32;
+using USER_ID=uint32;										//用户ID类型定义
+
+/**
+ * 用户信息结构定义
+ */
 struct UserInfo:public PBUserInfo
 {
 public:
@@ -11,11 +15,13 @@ public:
 	}
 };//struct UserInfo
 
-HGL_PB_WORK_THREAD_CLASS(USER_ID,UserInfo,256,UserWorkThread)
+//定义工作类
+HGL_PB_WORK_THREAD_CLASS(USER_ID,							// 由于分流的ID数据类型
+						UserInfo,							// 用户信息类型
+						256,								// 分组数量
+						UserThread)							// 工作类名称
 {
-public:
-
-	using UserWorkThreadBASE::UserWorkThreadBASE;
+private:
 
 	USER_ID CreateUserID()
 	{
@@ -23,13 +29,11 @@ public:
 
 		return(++id_count);
 	}
-};//class UserWorkThread
 
-class UserThread:public UserWorkThread
-{
 public:
 
-	UserThread(int sock,const sockaddr_in &sa):UserWorkThread(sock,sa)
+	UserThread(int sock,const sockaddr_in &sa)
+		:UserThreadBASE(sock,sa)							//基类，用当前工作类名称+BASE做为基类名称
 	{
 		mp.Init(0,100);
 
@@ -50,8 +54,9 @@ public:
 	{
 		return Registry();
 	}
-};//class UserThread:public UserWorkThread
+};//class UserThread
 
+//定义工作应用
 HGL_CONSOLE_PB_SERVER_APPLICATION(	"基于Google Protocol Buffer的TCP服务器范例",
 									"TCPPBServer",
 								   UserThread,
