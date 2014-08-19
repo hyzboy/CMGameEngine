@@ -502,22 +502,25 @@ namespace hgl
 		{
 			int par=(block?0:1);
 
-			timeval stv,rtv;
-
-			SetTimeVal(stv,send_time_out);
-			SetTimeVal(rtv,recv_time_out);
-
 			#ifdef _WIN32
-				ioctlsocket(ThisSocket,FIONBIO,&par);
-			#else
-				ioctl(ThisSocket,FIONBIO,&par);
-			#endif//_LINUX
+				DWORD stv=send_time_out*1000;
+				DWORD rtv=recv_time_out*1000;
 
-// 			if(block)
- 			{
- 				setsockopt(ThisSocket,SOL_SOCKET,SO_RCVTIMEO,(char *)&stv,sizeof(timeval));
- 				setsockopt(ThisSocket,SOL_SOCKET,SO_SNDTIMEO,(char *)&rtv,sizeof(timeval));
- 			}
+				ioctlsocket(sock,FIONBIO,&par);
+
+				setsockopt(sock,SOL_SOCKET,SO_RCVTIMEO,(char *)&rtv,sizeof(DWORD));
+				setsockopt(sock,SOL_SOCKET,SO_SNDTIMEO,(char *)&stv,sizeof(DWORD));
+			#else
+				timeval stv,rtv;
+
+				SetTimeVal(stv,send_time_out);
+				SetTimeVal(rtv,recv_time_out);
+
+				ioctl(ThisSocket,FIONBIO,&par);
+
+ 				setsockopt(ThisSocket,SOL_SOCKET,SO_RCVTIMEO,(char *)&rtv,sizeof(timeval));
+ 				setsockopt(ThisSocket,SOL_SOCKET,SO_SNDTIMEO,(char *)&stv,sizeof(timeval));
+			#endif//_LINUX
 		}
 	}//namespace network
 }//namespace hgl
