@@ -86,7 +86,7 @@ namespace hgl
 	* @param data 数据
 	*/
 	template<typename F,typename T>
-	ACItem *ActiveChain<F,T>::Add(const F &flag,const T &data)
+	ActiveChainItem<F,T> *ActiveChain<F,T>::Add(const F &flag,const T &data)
 	{
 		ACItem *temp;
 

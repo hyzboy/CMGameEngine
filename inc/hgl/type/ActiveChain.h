@@ -4,7 +4,17 @@
 #include<hgl/type/List.h>
 namespace hgl
 {
-    /**
+    template<typename F,typename T> struct ActiveChainItem
+	{
+		F flag;                 //识别标识
+
+		T data;                 //数据
+
+		ActiveChainItem<F,T>    *prev,          //前一数据
+								*next;          //后一数据
+	};//template<typename F,typename T> struct ActiveChainItem
+
+	/**
     * 活跃链表缓冲区管理模板(当缓冲区满时，将最长时间没有使用的清除)<br>
     * 现这个模板使用双头链表，每次添加或使用的数据会被移到链表的最前端。<br>
     * 这样使用率最低的数据会被存在链表的最末端，当缓冲区满时，最末端的数据将会被清除。
@@ -15,17 +25,7 @@ namespace hgl
 
     protected:
 
-        struct Item
-        {
-            F flag;                 //识别标识
-
-            T data;                 //数据
-
-            Item    *prev,          //前一数据
-                    *next;          //后一数据
-        };
-
-        using ACItem=ActiveChain<F,T>::Item;
+        using ACItem=ActiveChainItem<F,T>;
 
         ACItem  *start_item,	    //首数据
                 *end_item;		    //尾数据
