@@ -47,10 +47,16 @@ namespace hgl
 				int32 msg_id;
 				int32 msg_size;
 
-				if(!this->dis->ReadInt32(msg_id))RETURN_FALSE;
 				if(!this->dis->ReadInt32(msg_size))RETURN_FALSE;
+				
+				if(msg_size==0)return(true);				//heart
+				
+				if(msg_size<sizeof(int32))RETURN_FALSE;
+				
+				if(!this->dis->ReadInt32(msg_id))RETURN_FALSE;
 
-				if(msg_size<0)RETURN_FALSE;
+				msg_size-=sizeof(int32);
+				
 				if(msg_size>0)
 				{
 					msg_data.SetLength(msg_size);
