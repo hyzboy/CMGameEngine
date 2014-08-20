@@ -1,6 +1,5 @@
-﻿#include<hgl/type/DataType.h>
+﻿#include<hgl/network/Socket.h>
 #include<hgl/LogInfo.h>
-#include<hgl/network/Socket.h>
 #include<hgl/Other.h>
 #include<time.h>
 #include<iostream>
@@ -56,7 +55,9 @@ namespace hgl
 
 			if(p==IPPROTO_UDP){LOG_INFO(OS_TEXT("Create UDP Socket OK: ")+OSString(s));}else
 			if(p==IPPROTO_TCP){LOG_INFO(OS_TEXT("Create TCP Socket OK: ")+OSString(s));}else
+#if HGL_OS != HGL_OS_Windows
 			if(p==IPPROTO_SCTP){LOG_INFO(OS_TEXT("Create SCTP Socket OK: ")+OSString(s));}else
+#endif//HGL_OS != HGL_OS_Windows
 			{
 				LOG_INFO(OS_TEXT("Create Protocol[")+OSString(p)+OS_TEXT("] Socket OK: ")+OSString(s));
 			}
@@ -91,6 +92,7 @@ namespace hgl
 		{
 			{0,     OS_TEXT("没有错误")},
 
+#if HGL_OS != HGL_OS_Windows
 // 			//errno-base.h
 // 			#define	EPERM		 1	/* Operation not permitted */
 // 			#define	ENOENT		 2	/* No such file or directory */
@@ -236,7 +238,7 @@ namespace hgl
 // 			#define ERFKILL		132	/* Operation not possible due to RF-kill */
 //
 // 			#define EHWPOISON	133	/* Memory page has hardware error */
-
+#else
 			{10004, OS_TEXT("阻塞操作被函数WSACancelBlockingCall ()调用所中断")},
 			{10013, OS_TEXT("试图使用被禁止的访问权限去访问套接字")},
 			{10014, OS_TEXT("系统检测到调用试图使用的一个指针参数指向的是一个非法指针地址")},
@@ -280,6 +282,8 @@ namespace hgl
 			{11003, OS_TEXT("在数据库查找时发生了某种不可恢复错误")},
 			{11004, OS_TEXT("请求的名字合法并且在数据库中找到了，但它没有正确的关联数据用于解析")},
 			{11092, OS_TEXT("当前的Windows Sockets实现不支持应用程序指定的Windows Sockets规范版本")},
+#endif//HGL_OS != HGL_OS_Windows
+
 			{-1,    OS_TEXT("未知错误")},
 		};
 
@@ -446,9 +450,13 @@ namespace hgl
 		*/
 		bool BindAddr(int ThisSocket,const sockaddr_in &addr)
 		{
-			int val=1;
+			const int val=1;
 
+#if HGL_OS == HGL_OS_Windows
+			setsockopt(ThisSocket,SOL_SOCKET,SO_REUSEADDR,(const char *)&val,sizeof(int));
+#else
 			setsockopt(ThisSocket,SOL_SOCKET,SO_REUSEADDR,&val,sizeof(int));
+#endif//HGL_OS == HGL_OS_Windows
 
 			if(bind(ThisSocket,(sockaddr *)&addr,sizeof(sockaddr_in)))
 			{
@@ -500,17 +508,19 @@ namespace hgl
 		*/
 		void SetSocketBlock(int ThisSocket,bool block,double send_time_out,double recv_time_out)
 		{
-			int par=(block?0:1);
+			#if HGL_OS == HGL_OS_Windows
+				ulong par = (block ? 0 : 1);
 
-			#ifdef _WIN32
 				DWORD stv=send_time_out*1000;
 				DWORD rtv=recv_time_out*1000;
 
-				ioctlsocket(sock,FIONBIO,&par);
+				ioctlsocket(ThisSocket, FIONBIO, &par);
 
-				setsockopt(sock,SOL_SOCKET,SO_RCVTIMEO,(char *)&rtv,sizeof(DWORD));
-				setsockopt(sock,SOL_SOCKET,SO_SNDTIMEO,(char *)&stv,sizeof(DWORD));
+				setsockopt(ThisSocket,SOL_SOCKET,SO_RCVTIMEO,(char *)&rtv,sizeof(DWORD));
+				setsockopt(ThisSocket,SOL_SOCKET,SO_SNDTIMEO,(char *)&stv,sizeof(DWORD));
 			#else
+				int par=(block?0:1);
+
 				timeval stv,rtv;
 
 				SetTimeVal(stv,send_time_out);
@@ -520,7 +530,7 @@ namespace hgl
 
  				setsockopt(ThisSocket,SOL_SOCKET,SO_RCVTIMEO,(char *)&rtv,sizeof(timeval));
  				setsockopt(ThisSocket,SOL_SOCKET,SO_SNDTIMEO,(char *)&stv,sizeof(timeval));
-			#endif//_LINUX
+			#endif//HGL_OS == HGL_OS_Windows
 		}
 	}//namespace network
 }//namespace hgl
