@@ -1,4 +1,4 @@
-#ifndef HGL_AFFECTOR_TIMER_INCLUDE
+﻿#ifndef HGL_AFFECTOR_TIMER_INCLUDE
 #define HGL_AFFECTOR_TIMER_INCLUDE
 
 #include<hgl/affect/AffectorObject.h>
@@ -36,7 +36,7 @@ namespace hgl
 			Timer();
 			virtual ~Timer()HGL_DEFAULT_MEMFUNC;
 
-			virtual const u16char *GetClassName()const{return u"Timer";}							///<取得类名
+			virtual const u16char *GetClassName()const{ return U16_TEXT("Timer"); }					///<取得类名
 
 			virtual bool Start();
 			virtual bool Pause();
@@ -78,7 +78,7 @@ namespace hgl
 			TrackTimer(double=1.0);
 			virtual ~TrackTimer()HGL_DEFAULT_MEMFUNC;
 
-			virtual const u16char *GetClassName()const{return u"TrackTimer";}						///<取得类名
+			virtual const u16char *GetClassName()const{ return U16_TEXT("TrackTimer"); }			///<取得类名
 
 			virtual bool Start();
 

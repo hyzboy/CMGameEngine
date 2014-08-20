@@ -13,12 +13,7 @@
 	#endif//
 
 	typedef int socklen_t;
-
-	struct hgl_fd_set
-	{
-		u_int fd_count;
-		SOCKET fd_array[1024];
-	};
+	typedef ULONG in_addr_t;
 
 	#define GetLastSocketError() WSAGetLastError()
 #else
@@ -203,13 +198,7 @@ namespace hgl
 		template<typename T>
 		void SockToStr(const sockaddr_in &sock,T *name,bool port)
 		{
-			#if (HGL_COMPILER == HGL_COMPILER_GNU)||(HGL_COMPILER == HGL_COMPILER_LLVM)
-				return SockToStr<T>(sock.sin_addr.s_addr,sock.sin_port,name,port);
-			#else
-				#if (HGL_OS == HGL_OS_Windows)
-					return SockToStr<T>(sock.sin_addr.S_addr,sock.sin_port,name,port);
-				#endif//
-			#endif//
+			return SockToStr<T>(sock.sin_addr.s_addr,sock.sin_port,name,port);
 		}
 
 		bool Read(io::DataInputStream *dis,sockaddr_in &addr);

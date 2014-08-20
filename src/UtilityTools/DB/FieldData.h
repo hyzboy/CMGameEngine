@@ -513,7 +513,7 @@ namespace hgl
 			FieldDataUTF16String(const FieldDesc *fd,const BaseString<u16char> &str):FieldDataString<u16char>(fd,str){}
 #endif//HGL_CONSTRUCTION_REUSE
 
-			const bool Set(const bool v		)HGL_OVERRIDE{this->string_value=(v?u'1':u'0');return(true);}
+			const bool Set(const bool v)HGL_OVERRIDE{ this->string_value = (v ? U16_TEXT('1') : U16_TEXT('0')); return(true); }
 
 			const bool Get(UTF8String &str)const HGL_OVERRIDE{str=to_u8(this->string_value);return(true);}
 			const int Get(char *str,int size)const HGL_OVERRIDE

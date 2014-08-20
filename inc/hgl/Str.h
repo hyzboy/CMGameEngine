@@ -1552,7 +1552,7 @@ namespace hgl
 			return(str);
 		}
 
-		*p++=u'.';							//加小数点
+		*p++='.';							//加小数点
 		++len;
 
 		while(value>min_value&&len<size&&fsize--)

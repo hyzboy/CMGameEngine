@@ -1,4 +1,4 @@
-#ifndef HGL_AFFECTOR_OBJECT_INCLUDE
+﻿#ifndef HGL_AFFECTOR_OBJECT_INCLUDE
 #define HGL_AFFECTOR_OBJECT_INCLUDE
 
 #include<hgl/object/EnumObject.h>

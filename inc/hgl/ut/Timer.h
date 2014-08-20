@@ -1,4 +1,4 @@
-#ifndef HGL_TIMER_INCLUDE
+﻿#ifndef HGL_TIMER_INCLUDE
 #define HGL_TIMER_INCLUDE
 
 #include<hgl/type/DataType.h>

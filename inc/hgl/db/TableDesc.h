@@ -1,4 +1,4 @@
-#ifndef HGL_DB_TABLE_DESC_INCLUDE
+﻿#ifndef HGL_DB_TABLE_DESC_INCLUDE
 #define HGL_DB_TABLE_DESC_INCLUDE
 
 #include<hgl/db/FieldDesc.h>

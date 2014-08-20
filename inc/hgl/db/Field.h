@@ -1,4 +1,4 @@
-#ifndef HGL_DB_FIELD_INCLUDE
+﻿#ifndef HGL_DB_FIELD_INCLUDE
 #define HGL_DB_FIELD_INCLUDE
 
 #include<hgl/type/BaseString.h>

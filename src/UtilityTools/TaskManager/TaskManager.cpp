@@ -1,4 +1,4 @@
-#include<hgl/ut/TaskManager.h>
+﻿#include<hgl/ut/TaskManager.h>
 #include<hgl/LogInfo.h>
 
 namespace hgl

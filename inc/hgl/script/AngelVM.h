@@ -1,4 +1,4 @@
-#ifndef HGL_ANGELVM_INCLUDE
+﻿#ifndef HGL_ANGELVM_INCLUDE
 #define HGL_ANGELVM_INCLUDE
 
 #include<hgl/script/VM.h>

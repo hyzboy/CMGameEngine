@@ -1,4 +1,4 @@
-#ifndef HGL_NETWORK_ThisSocket_INCLUDE
+﻿#ifndef HGL_NETWORK_ThisSocket_INCLUDE
 #define HGL_NETWORK_ThisSocket_INCLUDE
 
 #include<hgl/network/Socket.h>

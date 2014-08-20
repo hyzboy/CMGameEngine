@@ -1,4 +1,4 @@
-#include<hgl/network/AcceptServer.h>
+﻿#include<hgl/network/AcceptServer.h>
 #include<hgl/LogInfo.h>
 #include<hgl/Other.h>
 

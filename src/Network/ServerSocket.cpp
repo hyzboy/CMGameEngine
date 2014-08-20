@@ -1,4 +1,4 @@
-#include<hgl/network/ServerSocket.h>
+﻿#include<hgl/network/ServerSocket.h>
 #include<hgl/LogInfo.h>
 #include<hgl/Other.h>
 
@@ -64,7 +64,7 @@ namespace hgl
 				return(false);
 			}
 
-			LOG_HINT(u8"ServerSocket Listen Address: "+UTF8String(hostname));
+			LOG_HINT(U8_TEXT("ServerSocket Listen Address: ")+UTF8String(hostname));
 			LOG_HINT(OS_TEXT("ServerSocket Listen Port: ")+OSString(port));
 
 			return(true);

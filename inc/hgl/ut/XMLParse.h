@@ -69,7 +69,7 @@ namespace hgl
 									const char *flag=*name;++name;	\
 									const char *info=*name;++name;
 
-#define XML_END_PARSE()				LOG_ERROR(UTF8String(__FILE__)+u8":"+UTF8String(__LINE__)+u8" can't parse atts \""+UTF8String(flag)+u8"\" , info \""+UTF8String(info)+u8"\".");	\
+#define XML_END_PARSE()				LOG_ERROR(UTF8String(__FILE__)+U8_TEXT(":")+UTF8String(__LINE__)+U8_TEXT(" can't parse atts \"")+UTF8String(flag)+U8_TEXT("\" , info \"")+UTF8String(info)+U8_TEXT("\"."));	\
 								}
 
 #define xml_parse_skip(name)		if(hgl::strcmp(flag,#name)==0)continue;else
