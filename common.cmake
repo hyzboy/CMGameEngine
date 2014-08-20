@@ -59,6 +59,14 @@ ELSE(WIN32)
 	endif(CMAKE_SIZEOF_VOID_P EQUAL 4)
 ENDIF(WIN32)
 
+IF(HGL_BITS EQUAL 32)
+	add_definitions(-DHGL_32_BITS)
+	add_definitions(-DHGL_POINTER_UINT=uint32)
+ELSE()
+	add_definitions(-DHGL_64_BITS)
+	add_definitions(-DHGL_POINTER_UINT=uint64)
+ENDIF(HGL_BITS EQUAL 32)
+
 ADD_DEFINITIONS("-DUNICODE -D_UNICODE")
 
 IF(USE_LLVM_CLANG_STATIC_ANALYZER)
@@ -135,14 +143,6 @@ IF(UNIX)
 	ENDIF(USE_CPP14)
 
 	SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
-
-	IF(HGL_BITS EQUAL 32)
-		add_definitions(-DHGL_32_BITS)
-		add_definitions(-DHGL_POINTER_UINT=uint32)
-	ELSE()
-		add_definitions(-DHGL_64_BITS)
-		add_definitions(-DHGL_POINTER_UINT=uint64)
-	ENDIF(HGL_BITS EQUAL 32)
 
 	IF(CMGDK_DEBUG)
 		add_definitions(-ggdb3)

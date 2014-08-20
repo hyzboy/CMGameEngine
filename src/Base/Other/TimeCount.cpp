@@ -1,6 +1,30 @@
 ﻿#include<hgl/Other.h>
 #if HGL_OS != HGL_OS_Windows
 #include<sys/time.h>
+#else
+#include<minwinbase.h>
+
+namespace hgl
+{
+	namespace
+	{
+#define APR_DELTA_EPOCH_IN_USEC 11644473600000000		//转Windows时间到Unix时间的一个差值
+		//Windows是1601.1.1
+		//Unix是1970.1.1
+		//tanks for APR
+
+		static inline void FileTimeToMicroTime(uint64 *result, FILETIME *input)
+		{
+			/* Convert FILETIME one 64 bit number so we can work with it. */
+			*result = input->dwHighDateTime;
+			*result = (*result) << 32;
+			*result |= input->dwLowDateTime;
+			*result /= 10;    /* Convert from 100 nano-sec periods to micro-seconds. */
+			*result -= APR_DELTA_EPOCH_IN_USEC;  /* Convert from Windows epoch to Unix epoch */
+			return;
+		}
+	}//namespace
+}//namespace hgl
 #endif//HGL_OS != HGL_OS_Windows
 
 namespace hgl
@@ -21,6 +45,7 @@ namespace hgl
 		gettimeofday(&tv, nullptr);
 		return (tv.tv_sec * 1000) + (tv.tv_usec/1000);
 #else
+		return(GetMicroTime() / 1000);
 #endif//HGL_OS != HGL_OS_Windows
 	}
 
@@ -35,6 +60,17 @@ namespace hgl
 		gettimeofday(&tv, nullptr);
 		return tv.tv_sec * HGL_MICRO_SEC_PER_SEC + tv.tv_usec;
 #else
+		SYSTEMTIME st;
+		FILETIME ft;
+		uint64 result;
+
+		GetLocalTime(&st);
+
+		SystemTimeToFileTime(&st, &ft);
+
+		FileTimeToMicroTime(&result, &ft);
+
+		return(result);
 #endif//HGL_OS != HGL_OS_Windows
 	}
 
@@ -49,6 +85,7 @@ namespace hgl
 		gettimeofday(&tv, nullptr);
 		return double(tv.tv_sec) + (double(tv.tv_usec)/HGL_MICRO_SEC_PER_SEC);
 #else
+		return(double(GetMicroTime()) / HGL_MICRO_SEC_PER_SEC);
 #endif//HGL_OS != HGL_OS_Windows
 	}
 
@@ -58,16 +95,17 @@ namespace hgl
 	*/
 	void WaitTime(double t)
 	{
-		if(time<=0)return;
+		if(t<=0)return;
 
 #if HGL_OS == HGL_OS_Windows
+		::Sleep(DWORD(t*HGL_MILLI_SEC_PRE_SEC));
 #else
 	#if HGL_OS == HGL_OS_OS2
-		DosSleep(t/1000);
+		DosSleep(t*HGL_MILLI_SEC_PRE_SEC);
 	#elif (HGL_OS == HGL_OS_BeOS)||(HGL_OS == HGL_OS_Haiku)
-		snooze(t);
+		snooze(t*HGL_MICRO_SEC_PER_SEC);
 	#elif HGL_OS == HGL_OS_NetWare
-		delay(t/1000);
+		delay(t*HGL_MILLI_SEC_PRE_SEC);
 	#else
 		struct timeval tv;
 		tv.tv_sec = t;

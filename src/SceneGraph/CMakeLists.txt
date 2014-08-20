@@ -1,4 +1,24 @@
-﻿add_library(CM.SceneGraph SHARED
+﻿SET(BASE_GRAPH_OBJECT_SOURCE 	Object/EventObject.cpp
+								Object/FlowObject.cpp
+								Object/FlowControl.cpp
+								Object/MultiFlowControl.cpp
+								Object/RadioObject.cpp
+								Object/VisualObject.cpp
+								Object/ObjectControl.cpp
+								Object/ObjectControl.KeyFocus.cpp
+								Object/ObjectControl.Makeup.cpp
+								Object/ObjectControl.Proc.cpp
+								Object/GUIObject.cpp)
+								
+SOURCE_GROUP("Object" FILES ${BASE_GRAPH_OBJECT_SOURCE})
+
+SET(GRAPHICS_APPLICATION_SOURCE 
+		GraphicsApplication.cpp
+		GraphicsApplicationEvent.cpp)
+		
+SOURCE_GROUP("Application" FILES ${GRAPHICS_APPLICATION_SOURCE})
+								
+add_library(CM.SceneGraph SHARED
 
 # 	AABox.cpp
 # 	Frustum.cpp
@@ -10,13 +30,8 @@
 
 IF(BUILD_OPENGL_LIB)
 	add_library(CM.SceneGraphRender SHARED
-		GUIObject.cpp
-		ObjectControl.cpp
-		ObjectControl.KeyFocus.cpp
-		ObjectControl.Makeup.cpp
-		ObjectControl.Proc.cpp
-		GraphicsApplication.cpp
-		GraphicsApplicationEvent.cpp
+		${BASE_GRAPH_OBJECT_SOURCE}
+		${GRAPHICS_APPLICATION_SOURCE}
 	# 	HeightMapTerrain.cpp
 		Image.cpp
 		InlineRenderable.cpp
