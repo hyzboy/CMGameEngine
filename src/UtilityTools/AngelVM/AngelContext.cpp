@@ -103,7 +103,7 @@ namespace hgl
 #else
 			const char *param_name;
 
-			if(func->GetParam(i,&type,nullptr,&param_name,nullptr)!=asSUCCESS)
+			if(func->GetParam(i,&type,&flag,&param_name,nullptr)!=asSUCCESS)
 			{
 				LOG_INFO(UTF8String("无法自动识别脚本函数")+UTF8String(func->GetDeclaration())+UTF8String("的第")+UTF8String(i+1)+UTF8String("个参数,参数名称：")+UTF8String(param_name)+UTF8String("，请联系开发者已便取得支持."));
 				va_end(va);
