@@ -166,6 +166,18 @@ namespace hgl
 	#define HGL_UNIVERSAL_GRAVITATION		(6.6742e-11)	//万有引力常数
 	#define HGL_GRAVITATIONAL_ACCELERATION	9.80665			//重力加速度
 
+#if HGL_OS == HGL_OS_Windows
+	inline uint64 pow10(const int p)
+	{
+		uint64 value = 10;
+
+		for (int i = 1; i < p; i++)
+			value *= 10;
+
+		return value;
+	}
+#endif//HGL_OS == HGL_OS_Windows
+
 	/**
 	 * 指数计算模板类
 	 */
