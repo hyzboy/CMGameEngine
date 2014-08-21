@@ -1,0 +1,31 @@
+id	name	type	piece	Level	Experience	Time	Function	Price	Price_Type	image	Attribute
+10001	小铃铛	active	0	99	0		游戏开始前增加一格HP	300	coins	CloseSelected.png	1
+10002	时光腰带	active	0	99	0		游戏时间增加10秒	500	coins	CloseSelected.png	10
+10003	外送电话	active	0	99	0		游戏开始前随机获得一个道具	100	coins	CloseSelected.png	1
+10004	竹蜻蜓	active	0	99	0		游戏开始前自动跳跃10个台阶	100	coins	CloseSelected.png	10
+11001	时光腰带	active	0	99	0		游戏结束时，时间增加10秒	500	coins	CloseSelected.png	10
+11002	穿透环	active	0	99	0		角色体力为0时，返回上一个地点	300	coins	CloseSelected.png	
+20001	驯服丸子	passive	0	1	0	5	消除范围内敌人			CloseSelected.png	 
+20002	爆炸胡椒	passive	0	1	0	5	无敌+冲刺			CloseSelected.png	
+20003	放大灯	passive	0	1	0	10	角色放大			CloseSelected.png	1.2
+20004	缩小灯	passive	0	1	0	10	角色缩小			CloseSelected.png	0.8
+20005	隐身斗篷	passive	0	1	0	5	角色隐身			CloseSelected.png	127
+20006	空气炮	passive	0	1	0	5	自动攻击飞行类敌人			CloseSelected.png	
+20007	摔跤客	passive	0	1	0	5	自动攻击行走类敌人			CloseSelected.png	
+20008	睡意吸收枪	passive	0	1	0	5	所有敌人进入睡眠状态			CloseSelected.png	
+20009	飞毛腿乳液	passive	0	1	0	10	移动速度×1.5			CloseSelected.png	1.5
+20010	竹马	passive	0	1	0	10	跳跃距离×1.5			CloseSelected.png	1.5
+20011	天才头盔	passive	0	1	0	10	响应范围×1.5			CloseSelected.png	1.5
+20012	定时器	passive	0	1	0	5	时间停止			CloseSelected.png	
+21001	驯服丸子	passive	1	1	0	5	消除范围内敌人			CloseSelected.png	1
+21002	爆炸胡椒	passive	1	1	0	5	无敌+冲刺			CloseSelected.png	
+21003	放大灯	passive	1	1	0	10	角色放大			CloseSelected.png	1.2
+21004	缩小灯	passive	1	1	0	10	角色缩小			CloseSelected.png	0.8
+21005	隐身斗篷	passive	1	1	0	5	角色隐身			CloseSelected.png	
+21006	空气炮	passive	1	1	0	5	自动攻击飞行类敌人			CloseSelected.png	
+21007	摔跤客	passive	1	1	0	5	自动攻击行走类敌人			CloseSelected.png	
+21008	睡意吸收枪	passive	1	1	0	5	所有敌人进入睡眠状态			CloseSelected.png	
+21009	飞毛腿乳液	passive	1	1	0	10	移动速度×1.5			CloseSelected.png	1.5
+21010	竹马	passive	1	1	0	10	跳跃距离×1.5			CloseSelected.png	1.5
+21011	天才头盔	passive	1	1	0	10	响应范围×1.5			CloseSelected.png	1.5
+21012	定时器	passive	1	1	0	5	时间停止			CloseSelected.png	

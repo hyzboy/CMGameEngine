@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/hyzboy/workspace/CMGDK/CM/3rdpty/MathGeoLib
+CMAKE_SOURCE_DIR = /home/zhangchao/CM/3rdpty/MathGeoLib
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/hyzboy/workspace/CMGDK/CM/3rdpty/MathGeoLib
+CMAKE_BINARY_DIR = /home/zhangchao/CM/3rdpty/MathGeoLib
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -54,7 +54,7 @@ CMAKE_BINARY_DIR = /home/hyzboy/workspace/CMGDK/CM/3rdpty/MathGeoLib
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	/usr/bin/cmake-gui -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/usr/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -73,9 +73,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/hyzboy/workspace/CMGDK/CM/3rdpty/MathGeoLib/CMakeFiles /home/hyzboy/workspace/CMGDK/CM/3rdpty/MathGeoLib/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/zhangchao/CM/3rdpty/MathGeoLib/CMakeFiles /home/zhangchao/CM/3rdpty/MathGeoLib/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/hyzboy/workspace/CMGDK/CM/3rdpty/MathGeoLib/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/zhangchao/CM/3rdpty/MathGeoLib/CMakeFiles 0
 .PHONY : all
 
 # The main clean target

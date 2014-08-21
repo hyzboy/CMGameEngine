@@ -1,0 +1,94 @@
+ID	Group	Type	LevelLimit	Attribute1	Attribute2	Content	RewardType	RewardNum	NextID
+int	char[32]	int	int	int	int		char[32]	int	int
+10001	normal	101	1	1			diamond	5	10002
+10002	normal	101	1	2			diamond	5	10003
+10003	normal	101	1	3			diamond	5	10004
+10004	normal	101	1	4			diamond	5	10005
+10005	normal	101	1	5			diamond	5	10006
+10006	normal	101	1	6			diamond	5	10007
+10007	normal	101	1	7			diamond	5	10008
+10008	normal	101	1	8			diamond	5	10009
+10009	normal	101	1	9			diamond	5	10010
+10010	normal	101	1	10			diamond	5	10011
+10011	normal	101	1	11			diamond	5	10012
+10012	normal	101	1	12			diamond	5	10013
+10013	normal	101	1	13			diamond	5	10014
+10014	normal	101	1	14			diamond	5	10015
+10015	normal	101	1	15			diamond	5	10016
+10016	normal	101	1	16			diamond	5	10017
+10017	normal	101	1	17			diamond	5	10018
+10018	normal	101	1	18			diamond	5	10019
+10019	normal	101	1	19			diamond	5	10020
+10020	normal	101	1	20			diamond	5	10021
+10021	normal	101	1	21			diamond	5	10022
+10022	normal	101	1	22			diamond	5	10023
+10023	normal	101	1	23			diamond	5	10024
+10024	normal	101	1	24			diamond	5	10025
+10025	normal	101	1	25			diamond	5	10026
+10026	normal	101	1	26			diamond	5	10027
+10027	normal	101	1	27			diamond	5	10028
+10028	normal	101	1	28			diamond	5	10029
+10029	normal	101	1	29			diamond	5	10030
+10030	normal	101	1	30			diamond	5	10031
+10031	normal	101	1	31			diamond	5	10032
+10032	normal	101	1	32			diamond	5	10033
+10033	normal	101	1	33			diamond	5	10034
+10034	normal	101	1	34			diamond	5	10035
+10035	normal	101	1	35			diamond	5	10036
+10036	normal	101	1	36			diamond	5	10037
+10037	normal	101	1	37			diamond	5	10038
+10038	normal	101	1	38			diamond	5	10039
+10039	normal	101	1	39			diamond	5	10040
+10040	normal	101	1	40			diamond	5	10041
+10041	normal	101	1	41			diamond	5	10042
+10042	normal	101	1	42			diamond	5	10043
+10043	normal	101	1	43			diamond	5	10044
+10044	normal	101	1	44			diamond	5	10045
+10045	normal	101	1	45			diamond	5	10046
+10046	normal	101	1	46			diamond	5	10047
+10047	normal	101	1	47			diamond	5	10048
+10048	normal	101	1	48			diamond	5	10049
+10049	normal	101	1	49			diamond	5	10050
+10050	normal	101	1	50			diamond	5	10051
+10051	normal	101	1	51			diamond	5	10052
+10052	normal	101	1	52			diamond	5	10053
+10053	normal	101	1	53			diamond	5	10054
+10054	normal	101	1	54			diamond	5	10055
+10055	normal	101	1	55			diamond	5	10056
+10056	normal	101	1	56			diamond	5	10057
+10057	normal	101	1	57			diamond	5	10058
+10058	normal	101	1	58			diamond	5	10059
+10059	normal	101	1	59			diamond	5	10060
+10060	normal	101	1	60			diamond	5	10061
+10061	normal	101	1	61			diamond	5	10062
+10062	normal	101	1	62			diamond	5	10063
+10063	normal	101	1	63			diamond	5	10064
+10064	normal	101	1	64			diamond	5	0
+11001	normal	102	1	1	10		coins	1000	11002
+11002	normal	102	10	1	20		coins	2000	11003
+11003	normal	102	20	1	30		coins	5000	11004
+11004	normal	102	30	2	10		coins	5000	0
+12001	normal	103	10	2			coins	10000	12002
+12002	normal	103	10	3			coins	10000	12003
+12003	normal	103	10	4			diamond	100	12004
+12004	normal	103	10	5			diamond	100	0
+13001	normal	104	10	3			coins	500	13002
+13002	normal	104	10	4			coins	500	13003
+13003	normal	104	10	5			coins	500	13004
+13004	normal	104	10	6			coins	500	13005
+13005	normal	104	10	7			coins	500	0
+14001	normal	105	20	2	16		coins	3000	14002
+14002	normal	105	20	2	32		coins	4000	14003
+14003	normal	105	20	2	64		coins	5000	0
+21001	daily	201	5	0	5		coins	100	
+21002	daily	201	10	1	3		coins	100	
+22001	daily	202	20	16			coins	200	
+22002	daily	202	20	32			coins	200	
+22003	daily	202	20	64			coins	200	
+23001	daily	203	10	20000			coins	100	
+23002	daily	203	20	40000			coins	200	
+23003	daily	203	30	50000			coins	250	
+24001	daily	204	10	10			coins	100	
+24002	daily	204	20	20			coins	200	
+24003	daily	204	30	30			coins	250	
+25001	daily	205	0	1			diamond	200	
