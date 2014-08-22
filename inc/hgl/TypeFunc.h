@@ -1,4 +1,4 @@
-﻿#ifndef HGL_TYPE_FUNC_INCLUDE
+#ifndef HGL_TYPE_FUNC_INCLUDE
 #define HGL_TYPE_FUNC_INCLUDE
 
 #include<hgl/platform/Platform.h>
@@ -165,6 +165,18 @@ namespace hgl
 
 	#define HGL_UNIVERSAL_GRAVITATION		(6.6742e-11)	//万有引力常数
 	#define HGL_GRAVITATIONAL_ACCELERATION	9.80665			//重力加速度
+
+#if HGL_OS == HGL_OS_Windows
+	inline uint64 pow10(const int p)
+	{
+		uint64 value = 10;
+
+		for (int i = 1; i < p; i++)
+			value *= 10;
+
+		return value;
+	}
+#endif//HGL_OS == HGL_OS_Windows
 
 	/**
 	 * 指数计算模板类
@@ -384,7 +396,7 @@ public:
 	COMPARATOR_ORIGIN_TYPE(wchar_t)
 
 	#ifdef HGL_CPP11
-	COMPARATOR_ORIGIN_TYPE(char16_t)
+	COMPARATOR_ORIGIN_TYPE(u16char)
 	COMPARATOR_ORIGIN_TYPE(char32_t)
 	#endif//HGL_CPP11
 #undef COMPARATOR_ORIGIN_TYPE

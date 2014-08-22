@@ -1,4 +1,4 @@
-﻿/*
+/*
    AngelCode Scripting Library
    Copyright (c) 2003-2007 Andreas Jonsson
 
@@ -170,7 +170,7 @@ namespace angle_script
 
 	struct sTokenWord
 	{
-		const char16_t *word;
+		const u16char *word;
 		eTokenType   tokenType;
 	};
 
@@ -286,7 +286,7 @@ namespace angle_script
 
 	const unsigned int numTokenWords = sizeof(tokenWords)/sizeof(sTokenWord);
 
-	const char16_t * const whiteSpace =u" \t\r\n\xFEFF";
+	const u16char * const whiteSpace =u" \t\r\n\xFEFF";
 	const int whiteSpaceNumber=5;
 }//namespace angle_script
 #endif

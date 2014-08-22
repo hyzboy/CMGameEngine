@@ -6,7 +6,7 @@ namespace hgl
 {
 	namespace graph
 	{
-		void PutOpenGLIntegerValue(const char16_t *name,const GLenum flag)
+		void PutOpenGLIntegerValue(const u16char *name,const GLenum flag)
 		{
 			int value;
 
@@ -22,7 +22,7 @@ namespace hgl
 			}
 		}
 
-		void PutOpenGLFloatValue(const char16_t *name,const GLenum flag)
+		void PutOpenGLFloatValue(const u16char *name,const GLenum flag)
 		{
 			float value;
 
@@ -38,7 +38,7 @@ namespace hgl
 			}
 		}
 
-		void PutOpenGLFloatRange(const char16_t *name,const GLenum flag)
+		void PutOpenGLFloatRange(const u16char *name,const GLenum flag)
 		{
 			float value[2];
 

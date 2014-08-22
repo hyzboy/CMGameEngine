@@ -43,11 +43,11 @@ namespace hgl
 				{
 					if(Type.count>1)
 					{
- 						str=UTF16String((const char16_t *)(data+Type.count*index),Type.count);
+ 						str=UTF16String((const u16char *)(data+Type.count*index),Type.count);
 					}
 					else
 					{
-						char16_t value;
+						u16char value;
 
 						if(!GetChar(index,value))
 							return(false);
@@ -89,7 +89,7 @@ namespace hgl
 						if(!GetBool(index,value))
 							return(false);
 
-						str=(value?u"YES":u"no");
+						str = (value ? U16_TEXT("YES") : U16_TEXT("no"));
 					}
 
 					return(true);
@@ -101,7 +101,7 @@ namespace hgl
 
 				for(int i=1;i<Type.count;i++)
 				{
-					str+=u',';
+					str += U16_TEXT(',');
 					str+=UTF16String(*p++);
 				}
 
@@ -123,7 +123,7 @@ namespace hgl
 			bool GetFloat	(int index,float &value){return GetData(index,value);}
 			bool GetDouble	(int index,double &value){return GetData(index,value);}
 			bool GetChar	(int index,char &value){return GetData(index,value);}
-			bool GetChar	(int index,char16_t &value){return GetData(index,value);}
+			bool GetChar	(int index,u16char &value){return GetData(index,value);}
 
 			template<typename P>
 			bool GetDataArray(int index,P *buf,int start,int number)
@@ -157,7 +157,7 @@ namespace hgl
 			bool	GetArray	(int index,float *	buf,	int start,int number){return(Type.base==fbtFloat	?GetDataArray(index,buf,start,number):false);}			///<从字段中取得一个浮点数
 			bool	GetArray	(int index,double *	buf,	int start,int number){return(Type.base==fbtDouble	?GetDataArray(index,buf,start,number):false);}			///<从字段中取得一个浮点数
 			bool	GetArray	(int index,char *	buf,	int start,int number){return(Type.base==fbtChar8	?GetDataArray(index,buf,start,number):false);}			///<从字段中取得一个utf8字符
-			bool	GetArray	(int index,char16_t *buf,	int start,int number){return(Type.base==fbtChar16le	?GetDataArray(index,buf,start,number):false);}			///<从字段中取得一个utf16字符
+			bool	GetArray	(int index,u16char *buf,	int start,int number){return(Type.base==fbtChar16le	?GetDataArray(index,buf,start,number):false);}			///<从字段中取得一个utf16字符
 
 			template<typename V>
 			int		FindData(const V &value)
@@ -178,7 +178,7 @@ namespace hgl
 			int		FindFloat		(const float 	value){return FindData(value);}
 			int		FindDouble		(const double 	value){return FindData(value);}
 			int		FindChar		(const char		value){return FindData(value);}
-			int		FindChar		(const char16_t	value){return FindData(value);}
+			int		FindChar		(const u16char	value){return FindData(value);}
 
 			template<typename P>
 			int		FindDataArray	(const P *value)
@@ -209,7 +209,7 @@ namespace hgl
 			int		FindArray(const float *		buf){return(Type.base==fbtFloat?FindDataArray(buf):-1);}
 			int		FindArray(const double *	buf){return(Type.base==fbtDouble?FindDataArray(buf):-1);}
 			int		FindArray(const char *		buf){return(Type.base==fbtChar8?FindDataArray(buf):-1);}
-			int		FindArray(const char16_t *	buf){return(Type.base==fbtChar16le?FindDataArray(buf):-1);}
+			int		FindArray(const u16char *	buf){return(Type.base==fbtChar16le?FindDataArray(buf):-1);}
 
 			int		FindCharArray	(const char *str)
 			{
@@ -228,7 +228,7 @@ namespace hgl
 				return(-1);
 			}
 
-			int		FindCharArray	(const char16_t *str)
+			int		FindCharArray	(const u16char *str)
 			{
 				if(Type.base!=fbtChar16le)return(-1);
 
@@ -255,7 +255,7 @@ namespace hgl
 		template<> void CDBFieldFixed<float		>::LoadFieldData(io::DataInputStream *dis){dis->ReadFloat		(data,Type.count*data_count);}
 		template<> void CDBFieldFixed<double	>::LoadFieldData(io::DataInputStream *dis){dis->ReadDouble		(data,Type.count*data_count);}
 		template<> void CDBFieldFixed<char		>::LoadFieldData(io::DataInputStream *dis){dis->ReadArrays<char>(data,Type.count*data_count);}
-		template<> void CDBFieldFixed<char16_t	>::LoadFieldData(io::DataInputStream *dis){dis->ReadUTF16LEChars(data,Type.count*data_count);}
+		template<> void CDBFieldFixed<u16char	>::LoadFieldData(io::DataInputStream *dis){dis->ReadUTF16LEChars(data,Type.count*data_count);}
 	}//namespace db
 
 	namespace db
@@ -283,7 +283,7 @@ namespace hgl
 			if(ft.base==fbtFloat	)return(new CDBFieldFixed<float		>(name,ft,dis,count));else
 			if(ft.base==fbtDouble	)return(new CDBFieldFixed<double	>(name,ft,dis,count));else
 			if(ft.base==fbtChar8	)return(new CDBFieldFixed<char		>(name,ft,dis,count));else
-			if(ft.base==fbtChar16le	)return(new CDBFieldFixed<char16_t	>(name,ft,dis,count));else
+			if(ft.base==fbtChar16le	)return(new CDBFieldFixed<u16char	>(name,ft,dis,count));else
 				return(nullptr);
 		}
 	}//namespace db

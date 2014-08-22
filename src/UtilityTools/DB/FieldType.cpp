@@ -12,12 +12,12 @@ namespace hgl
 			FieldBaseType type;
 		};
 
-		#define FIELD_TYPE_CONVERY(name,type)	{u##name,type},
-			const cdb_type_name_convert<char16_t> typename_convert_list_u16[]=
+		#define FIELD_TYPE_CONVERY(name,type)	{U16_TEXT(name),type},
+			const cdb_type_name_convert<u16char> typename_convert_list_u16[]=
 			#include"FieldTypeConvert.h"
 		#undef FIELD_TYPE_CONVERY
 
-		#define FIELD_TYPE_CONVERY(name,type)	{name,type},
+		#define FIELD_TYPE_CONVERY(name,type)	{U8_TEXT(name),type},
 			const cdb_type_name_convert<char> typename_convert_list_u8[]=
 			#include"FieldTypeConvert.h"
 		#undef FIELD_TYPE_CONVERY
@@ -122,9 +122,9 @@ namespace hgl
 			return ParseStringToFieldType<char>(typename_convert_list_u8,'[',']',str);
 		}
 
-		FieldType ParseFieldType(const char16_t *str)
+		FieldType ParseFieldType(const u16char *str)
 		{
-			return ParseStringToFieldType<char16_t>(typename_convert_list_u16,u'[',u']',str);
+			return ParseStringToFieldType<u16char>(typename_convert_list_u16,U16_TEXT('['),U16_TEXT(']'),str);
 		}
 
 		bool ParseFieldType(FieldTypeList &ctl,const UTF16StringList &type_list)

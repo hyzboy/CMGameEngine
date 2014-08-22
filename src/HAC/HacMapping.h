@@ -28,36 +28,36 @@ namespace hgl
 	{
 		UTF16String FolderName;
 
-		char16_t full_filename[4096];
+		u16char full_filename[4096];
 
 		ObjectList<FolderMapping> Folder;
 
 	public:
 
-		HacMapping(const char16_t *);
+		HacMapping(const u16char *);
 		~HacMapping();
 
-		bool 	FindFile(const char16_t *);                                                          ///<查找一个文件
+		bool 	FindFile(const u16char *);                                                          ///<查找一个文件
 
-		bool	FindFile(void *,const char16_t *);
+		bool	FindFile(void *,const u16char *);
 
 		bool	LoadFilePart(void *,uint,uint,void *);												///<加载一个文件的一部分
 
-		Stream *LoadFileFrom(void *,const char16_t *,bool=false);                                    ///<加载一个文件到内存流
-		bool 	LoadFileFrom(void *,const char16_t *,void **,int *);                                 ///<加载一个文件到指定内存块
+		Stream *LoadFileFrom(void *,const u16char *,bool=false);                                    ///<加载一个文件到内存流
+		bool 	LoadFileFrom(void *,const u16char *,void **,int *);                                 ///<加载一个文件到指定内存块
 
-		Stream *LoadFile(const char16_t *,bool=false);                                               ///<加载一个文件到内存流
-		bool 	LoadFile(const char16_t *,void **,int *);                                            ///<加载一个文件到指定内存块
-//		bool 	OpenFile(const char16_t *,FileStream **,int *,int *);                                ///<打开一个文件
+		Stream *LoadFile(const u16char *,bool=false);                                               ///<加载一个文件到内存流
+		bool 	LoadFile(const u16char *,void **,int *);                                            ///<加载一个文件到指定内存块
+//		bool 	OpenFile(const u16char *,FileStream **,int *,int *);                                ///<打开一个文件
 
-		void *	GetFolder(const char16_t *);															///<取得一个目录
+		void *	GetFolder(const u16char *);															///<取得一个目录
 
 		int 	GetFileCount(void *);																///<取得目录下的文件数量
 
 		bool 	GetFileInfo(void *,int,UTF16String &,int &);												///<取得文件信息
 		
-		void *	GetFile(void *,const char16_t *,int *);												///<取得文件指针
-		void *	GetFile(const char16_t *,int *);														///<取得文件指针
+		void *	GetFile(void *,const u16char *,int *);												///<取得文件指针
+		void *	GetFile(const u16char *,int *);														///<取得文件指针
 	};
 }
 #endif//HAC_MAPPING_INCLUDE

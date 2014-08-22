@@ -1,4 +1,4 @@
-#include <hgl/File.h>
+﻿#include <hgl/File.h>
 #include <hgl/LogInfo.h>
 #include <hgl/Other.h>
 #include <hgl/io/FileInputStream.h>
@@ -258,7 +258,28 @@ namespace hgl
 	 */
 	bool FileCanExec(const OSString &filename)
 	{
+#if HGL_OS==HGL_OS_Windows
+		int index = filename.FindRightChar('.');
+
+		if (index == -1)return(false);
+
+		if (index > filename.Length() - 4)
+			return(false);
+
+		const os_char *ext = filename.c_str() + index + 1;
+
+		if (!ext)return(false);
+
+		if (stricmp(ext, "exe") == 0)return(true);
+		if (stricmp(ext, "com") == 0)return(true);
+		if (stricmp(ext, "bat") == 0)return(true);
+		if (stricmp(ext, "msi") == 0)return(true);
+		if (stricmp(ext, "msp") == 0)return(true);
+
+		return(false);
+#else
 		return access(filename.c_str(),X_OK)>=0;
+#endif//HGL_OS==HGL_OS_Windows
 	}
 
 	/**
@@ -306,20 +327,20 @@ namespace hgl
 		return fs.Write(buf,size);
 	}
 
-	int ParseAnsi(char16_t **buf,uchar *raw_str,int byte_size,const CharSet &cs)
+	int ParseAnsi(u16char **buf,uchar *raw_str,int byte_size,const CharSet &cs)
 	{
 		return ansi_to_utf16(cs,buf,(char *)raw_str,byte_size);
 	}
 
 	//转换utf16/32
 	template<typename T>
-	int ParseUTF(char16_t **buf,void *raw_str,int byte_size,bool is_little_endian)
+	int ParseUTF(u16char **buf,void *raw_str,int byte_size,bool is_little_endian)
 	{
 		const int size=byte_size/sizeof(T);
 
 		if(size==0)return(0);
 
-		*buf=new char16_t[size];
+		*buf=new u16char[size];
 
 		if(is_little_endian)
 			LittleToCurrentEndian(*buf,(T *)raw_str,size);
@@ -329,7 +350,7 @@ namespace hgl
 		return size;
 	}
 
-	int ParseUTF8(char16_t **wide_str,const uchar *utf8_str,int size)
+	int ParseUTF8(u16char **wide_str,const uchar *utf8_str,int size)
 	{
 		int wlen;
 
@@ -338,7 +359,7 @@ namespace hgl
 		return wlen;
 	}
 
-	int64 LoadTxtToMemory(io::InputStream *str,const int64 str_length,char16_t **buf,const CharSet &cs)
+	int64 LoadTxtToMemory(io::InputStream *str,const int64 str_length,u16char **buf,const CharSet &cs)
 	{
 		if(!str||!buf)
 			return(-1);
@@ -387,7 +408,7 @@ namespace hgl
 	* @param cs 如果为ansi，将使用的转换代码页/字符集
 	* @return 文本长度
 	*/
-	int64 LoadTxtToMemory(const OSString &filename,char16_t **buf,const CharSet &cs)
+	int64 LoadTxtToMemory(const OSString &filename,u16char **buf,const CharSet &cs)
 	{
 		io::FileInputStream fs;
 
@@ -445,7 +466,7 @@ namespace hgl
 #if HGL_OS == HGL_OS_Windows
 		strcpy(str,dirname.c_str());
 
-		if(str[1]==u':')sp=str+3;
+		if(str[1]==OS_TEXT(':'))sp=str+3;
 				   else sp=str;
 #else
 		strcpy(str,HGL_MAX_PATH,dirname.c_str());
@@ -506,18 +527,18 @@ namespace hgl
 	{
 #if HGL_OS == HGL_OS_Windows
 		int len;
-		char16_t *dir;
+		u16char *dir;
 
-		len=GetCurrentDirectoryW(nullptr,nullptr);
+		len=GetCurrentDirectoryW(0,nullptr);
 
 		if(len==0)
 			return(nullptr);
 
-		dir=new char16_t[len+1];
+		dir=new u16char[len+1];
 
 		if(GetCurrentDirectoryW(len,dir))
 		{
-			if(len==3&&dir[1]==u':')
+			if(len==3&&dir[1]==OS_TEXT(':'))
 				dir[len=2]=0;        //如果是"C:\"这种情况，去掉"\"
 			else
 				dir[len]=0;
@@ -691,9 +712,9 @@ namespace hgl
 	* @param func 回调函数
 	* @return 查找到文件数据,-1表示失败
 	*/
-	int EnumFile(const char16_t *folder_name,const char16_t *find_name,void *data,bool proc_folder,bool proc_file,bool sub_folder,void (*func)(void *,hgl::FileInfo &))
+	int EnumFile(const u16char *folder_name,const u16char *find_name,void *data,bool proc_folder,bool proc_file,bool sub_folder,void (*func)(void *,hgl::FileInfo &))
 	{
-		char16_t full_name[HGL_MAX_PATH];
+		u16char full_name[HGL_MAX_PATH];
 		int count=0;
 
 		if(!func)return(-1);
@@ -724,8 +745,8 @@ namespace hgl
 
 		do
 		{
-			if(strcmp(FindFileData.cFileName,u".")==0
-			 ||strcmp(FindFileData.cFileName,u"..")==0)
+			if(strcmp(FindFileData.cFileName,OS_TEXT("."))==0
+			|| strcmp(FindFileData.cFileName, OS_TEXT("..")) == 0)
 			{
 				continue;
 			}
@@ -736,7 +757,7 @@ namespace hgl
 				{
 					if(sub_folder)
 					{
-						char16_t child_name[HGL_MAX_PATH];
+						u16char child_name[HGL_MAX_PATH];
 
 						strcpy(child_name,folder_name);
 
@@ -773,7 +794,7 @@ namespace hgl
 				if(folder_name[strlen(folder_name)-1]!=HGL_DIRECTORY_SEPARATOR)
 					strcat(fi.fullname,HGL_DIRECTORY_SEPARATOR);
 
-				const char16_t *rp=hgl::strchr(find_name,HGL_DIRECTORY_SEPARATOR);		//防止查询名称内仍有路径
+				const u16char *rp=hgl::strchr(find_name,HGL_DIRECTORY_SEPARATOR);		//防止查询名称内仍有路径
 
 				if(rp)
 					strcat(fi.fullname,find_name,rp-find_name+1);
@@ -938,7 +959,7 @@ namespace hgl
 	* @return 查找到文件数据,-1表示失败
 	*/
 #if HGL_OS == HGL_OS_Windows
-	int EnumFile(const char16_t *folder_name,const char16_t *find_name,void *data,void (*func)(void *,hgl::FileInfo &))
+	int EnumFile(const u16char *folder_name,const u16char *find_name,void *data,void (*func)(void *,hgl::FileInfo &))
 	{
 		return EnumFile(folder_name,find_name,data,true,true,false,func);
 	}
@@ -955,8 +976,8 @@ namespace hgl
 	int EnumVolume(void *data,void (__cdecl *func)(void *,hgl::VolumeInfo &),bool check_removable,bool check_remote,bool check_cd)
 	{
 		HANDLE handle;
-		char16_t volume_name[HGL_MAX_PATH+1];
-		char16_t path_name[HGL_MAX_PATH];
+		u16char volume_name[HGL_MAX_PATH+1];
+		u16char path_name[HGL_MAX_PATH];
 		int count=0;
 
 		handle=FindFirstVolume(volume_name,HGL_MAX_PATH);
@@ -1001,7 +1022,7 @@ namespace hgl
 				vi.unicode=file_system_flags&FILE_UNICODE_ON_DISK;
 			}
 			else
-				LOG_PROBLEM(u"取得卷<"+UTF16String(path_name)+u">信息失败！Windows错误编号: "+UTF16String((uint)GetLastError()));
+				LOG_PROBLEM(U16_TEXT("取得卷<") + UTF16String(path_name) + U16_TEXT(">信息失败！Windows错误编号: ") + UTF16String((uint)GetLastError()));
 
 			if(GetDiskFreeSpaceEx(	path_name,
 									(ULARGE_INTEGER *)&vi.available_space,
@@ -1011,7 +1032,7 @@ namespace hgl
 				func(data,vi);
 			}
 			else
-				LOG_PROBLEM(u"取得驱动器<"+UTF16String(path_name)+u">容量数据失败！");
+				LOG_PROBLEM(U16_TEXT("取得驱动器<") + UTF16String(path_name) + U16_TEXT(">容量数据失败！"));
 
 			count++;
 

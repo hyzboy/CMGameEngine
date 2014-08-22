@@ -1,4 +1,4 @@
-#ifndef HGL_CONSOLE_FLOW_CONTROL_INCLUDE
+﻿#ifndef HGL_CONSOLE_FLOW_CONTROL_INCLUDE
 #define HGL_CONSOLE_FLOW_CONTROL_INCLUDE
 
 #include<hgl/object/ConsoleFlowObject.h>
@@ -39,7 +39,7 @@ namespace hgl
 
 		ConsoleFlowControl();                                                                       ///<本类构造函数
 		ConsoleFlowControl(ConsoleFlowObject *);                                                    ///<本类构造函数
-		ConsoleFlowControl(char16_t *,ConsoleFlowObject *);                                          ///<本类构造函数
+		ConsoleFlowControl(u16char *,ConsoleFlowObject *);                                          ///<本类构造函数
 		virtual ~ConsoleFlowControl();                                                              ///<本类析构函数
 
 		virtual void SetStart(ConsoleFlowObject *);                                                 ///<设定起始流程对象

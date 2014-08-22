@@ -39,7 +39,7 @@ namespace hgl
 		AffectorControl();																			///<本类构造函数
 		virtual ~AffectorControl(){DeleteAll();}													///<本类析构函数
 
-		virtual const char16_t *GetClassName(){return u"AffectorControl";}							///<取得类名
+		virtual const u16char *GetClassName(){return U16_TEXT("AffectorControl");}					///<取得类名
 
 		virtual bool Add(const UTF16String &,AffectorObject *);										///<添加一个影响器到控制器中
 				bool Add(AffectorObject *ao)														///<使用缺省名称添加一个影响器到控制器中

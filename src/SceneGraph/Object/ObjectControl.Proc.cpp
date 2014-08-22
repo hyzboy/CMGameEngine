@@ -166,7 +166,7 @@ namespace hgl
 
 			return(result);
 		}
-		bool ObjectControl::Proc_Char(char16_t ch)
+		bool ObjectControl::Proc_Char(u16char ch)
 		{
 			const bool result=GUIObject::Proc_Char(ch);
 

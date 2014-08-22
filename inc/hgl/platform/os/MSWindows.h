@@ -1,9 +1,11 @@
 ﻿#ifndef HGL_OS_WIN_INCLUDE
 #define HGL_OS_WIN_INCLUDE
 //--------------------------------------------------------------------------------------------------
-typedef wchar_t			os_char;
+#define u16char			wchar_t
+#define os_char			wchar_t
 #define to_oschar		to_u16
 #define OS_TEXT(str)	L##str
+#define U8_TEXT(str)	str
 #define U16_TEXT(str)	L##str
 
 #define HGL_OS_NAME				OS_TEXT("Windows")
@@ -25,12 +27,12 @@ typedef wchar_t			os_char;
 	#define HGL_LIB_OS					"Win64"											//库操作系统前缀
 #endif//HGL_CPU
 //--------------------------------------------------------------------------------------------------
-#define HGL_PLUGIN_FRONTNAME			u"CMP."											//插件文件名前缀
-#define HGL_PLUGIN_EXTNAME	    		u".DLL"											//插件文件扩展名
+#define HGL_PLUGIN_FRONTNAME			OS_TEXT("CMP.")									//插件文件名前缀
+#define HGL_PLUGIN_EXTNAME	    		OS_TEXT(".DLL")									//插件文件扩展名
 #define HGL_PLUGIN_FUNC					extern "C" __declspec(dllexport)				//插件函数定义
 
-#define HGL_DIRECTORY_SEPARATOR 		L'\\'											//目录分隔符
-#define HGL_LINE_END					u"\n\r"											//换行符
+#define HGL_DIRECTORY_SEPARATOR 		OS_TEXT('\\')									//目录分隔符
+#define HGL_LINE_END					OS_TEXT("\n\r")									//换行符
 #define HGL_LINE_END_SIZE				2												//换行符长度
 
 #define HGL_MAX_PATH					256

@@ -107,7 +107,7 @@ namespace hgl
 			STREAM_READ(uint32,		Uint32	);
 			STREAM_READ(uint64,		Uint64	);
 
-			STREAM_READ(char16_t,	UTF16Char);
+			STREAM_READ(u16char,	UTF16Char);
 			STREAM_READ(float,		Float	);
 			STREAM_READ(double,		Double	);
 
@@ -168,12 +168,12 @@ namespace hgl
 				return data;
 			}
 
-			virtual bool ReadUTF16LEChars(char16_t *,int);											///<读取utf16-le格式字符阵列到char16_t *
-			virtual bool ReadUTF16BEChars(char16_t *,int);											///<读取utf16-be格式字符阵列到char16_t *
+			virtual bool ReadUTF16LEChars(u16char *,int);											///<读取utf16-le格式字符阵列到u16char *
+			virtual bool ReadUTF16BEChars(u16char *,int);											///<读取utf16-be格式字符阵列到u16char *
 
 			virtual bool ReadUTF8String(char *,int max_len=0);
-			virtual bool ReadUTF16LEString(char16_t *,int max_len=0);
-			virtual bool ReadUTF16BEString(char16_t *,int max_len=0);
+			virtual bool ReadUTF16LEString(u16char *,int max_len=0);
+			virtual bool ReadUTF16BEString(u16char *,int max_len=0);
 
 			virtual bool ReadUTF8String(UTF8String &,int max_len=0);								///<读取utf8格式字符串(前缀四字节的字符串字节长度)
 			virtual bool ReadUTF8String(UTF16String &,int max_len=0);								///<读取utf8格式字符串(前缀四字节的字符串字节长度)

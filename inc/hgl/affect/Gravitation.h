@@ -1,4 +1,4 @@
-﻿#ifndef HGL_AFFECTOR_GRAVITATION_INCLUDE
+#ifndef HGL_AFFECTOR_GRAVITATION_INCLUDE
 #define HGL_AFFECTOR_GRAVITATION_INCLUDE
 
 #include<hgl/affect/AffectorObject.h>
@@ -61,7 +61,7 @@ namespace hgl
 
 			virtual ~Gravitation()HGL_DEFAULT_MEMFUNC;
 
-			virtual const char16_t *GetClassName(){return u"Gravitation";}							///<取得类名
+			virtual const u16char *GetClassName(){return u"Gravitation";}							///<取得类名
 
 			virtual void Update()
 			{

@@ -83,7 +83,7 @@ namespace hgl
 		}
 	}
 
-	bool DevilScriptContext::Goto(const char16_t *func_name,const char16_t *flag)
+	bool DevilScriptContext::Goto(const u16char *func_name,const u16char *flag)
 	{
 		ClearStack();
 
@@ -122,7 +122,7 @@ namespace hgl
 
 	bool Start(DevilFunc *,const va_list &);
 
-	bool DevilScriptContext::Start(const char16_t *func_name)
+	bool DevilScriptContext::Start(const u16char *func_name)
 	{
 		ClearStack();
 
@@ -145,7 +145,7 @@ namespace hgl
 		return RunContext();
 	}
 
-	bool DevilScriptContext::StartFlag(const char16_t *func_name,const char16_t *goto_flag)
+	bool DevilScriptContext::StartFlag(const u16char *func_name,const u16char *goto_flag)
 	{
 		DevilFunc *func;
 
@@ -159,7 +159,7 @@ namespace hgl
         	return(false);
 	}
 
-	bool DevilScriptContext::Run(const char16_t *func_name)
+	bool DevilScriptContext::Run(const u16char *func_name)
 	{
 		if(run_state.GetCount()>0)
 		{
@@ -206,7 +206,7 @@ namespace hgl
 		cur_state=nullptr;
 	}
 
-	bool DevilScriptContext::Goto(const char16_t *flag)
+	bool DevilScriptContext::Goto(const u16char *flag)
 	{
 		if(!cur_state)
 		{

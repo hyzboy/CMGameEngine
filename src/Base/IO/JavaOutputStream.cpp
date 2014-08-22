@@ -11,7 +11,7 @@ namespace hgl
 
 			if(utf8_len>0xffff)
 			{
-				LOG_ERROR(u"Java String max length 65535");
+				LOG_ERROR(OS_TEXT("Java String max length 65535"));
 				return(false);
 			}
 

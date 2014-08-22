@@ -46,18 +46,18 @@ namespace hgl
 
 				virtual void Draw();
 
-				MenuItem *CreateRadio(int index,const char16_t *name=nullptr)							///<创建收音机按钮性质子菜单并设置点击事件
+				MenuItem *CreateRadio(int index,const u16char *name=nullptr)							///<创建收音机按钮性质子菜单并设置点击事件
 					{return Item.CreateRadio(index,name);}
 
-				MenuItem *Create(const char16_t *name=nullptr){return Item.Create(name);}				///<创建子菜单并设置点击事件
+				MenuItem *Create(const u16char *name=nullptr){return Item.Create(name);}				///<创建子菜单并设置点击事件
 
-				MenuItem *CreateRadio(int index,const char16_t *name,MenuItemClickPROC proc)				///<创建收音机按钮性质子菜单并设置点击事件
+				MenuItem *CreateRadio(int index,const u16char *name,MenuItemClickPROC proc)				///<创建收音机按钮性质子菜单并设置点击事件
 					{return Item.CreateRadio(index,name,proc);}
 
-				MenuItem *Create(const char16_t *name,MenuItemClickPROC proc)							///<创建子菜单并设置点击事件
+				MenuItem *Create(const u16char *name,MenuItemClickPROC proc)							///<创建子菜单并设置点击事件
 					{return Item.Create(name,proc);}
 
-				MenuItem *CreateCheck(const char16_t *name,bool *value)                      			///<创建勾选项子菜单，并绑定指定变量
+				MenuItem *CreateCheck(const u16char *name,bool *value)                      			///<创建勾选项子菜单，并绑定指定变量
 					{return Item.CreateCheck(name,value);}
 			};//class MenuBar
 		}//namespace gui

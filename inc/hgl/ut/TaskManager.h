@@ -1,4 +1,4 @@
-#ifndef HGL_TASK_MANAGER_INCLUDE
+﻿#ifndef HGL_TASK_MANAGER_INCLUDE
 #define HGL_TASK_MANAGER_INCLUDE
 
 #include<hgl/type/List.h>

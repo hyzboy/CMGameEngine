@@ -1,4 +1,4 @@
-#include<hgl/dfs/dfsClientFile.h>
+﻿#include<hgl/dfs/dfsClientFile.h>
 #include<hgl/dfs/dstCmd.h>
 #include<hgl/dfs/tdsCmd.h>
 #include<hgl/network/TCPClient.h>
@@ -7,6 +7,7 @@
 #include<hgl/io/MemoryInputStream.h>
 #include<hgl/thread/ThreadMutex.h>
 #include"dfsClientFileConnect.h"
+#include<iostream>
 namespace hgl
 {
 	namespace dfs

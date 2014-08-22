@@ -1,7 +1,8 @@
 ﻿#ifndef HGL_COMPILER_MICROSOFT_INCLUDE
 #define HGL_COMPILER_MICROSOFT_INCLUDE
 //--------------------------------------------------------------------------------------------------
-#define HGL_COMPILER_NAME	OS_TEXT("Microsoft C/C++")
+#define HGL_COMPILER_NAME			OS_TEXT("Microsoft C/C++")
+#define HGL_LIB_COMPILER_NAME		OS_TEXT("MSC")
 
 #define HGL_USE_APR			//使用Apache Portable Runtime
 //#define HGL_USE_C_IO		//使用C IO库
@@ -9,56 +10,31 @@
 #if _MSC_VER < 1500							//Visual C++ 2008(9.0)
 	#error Please upgrade your compiler or development tools to Microsoft C/C++ 15.0 (Visual C++ 2008) or later.
 #else
-	#if _MSC_VER == 1800
-		#define HGL_LIB_COMPILER_NAME		OS_TEXT("VC2013")
+	#if _MSC_VER == 1900
+		#define HGL_LIB_COMPILER_VERSION	OS_TEXT("19")
+	#elif _MSC_VER == 1800
 		#define HGL_LIB_COMPILER_VERSION	OS_TEXT("18")
 	#elif _MSC_VER == 1700
-		#define HGL_LIB_COMPILER_NAME		OS_TEXT("VC2012")
 		#define HGL_LIB_COMPILER_VERSION	OS_TEXT("17")
 	#elif _MSC_VER == 1600
 		#if _MSC_FULL_VER < 160040219		//Visual C++ 2010 SP1
 			#error Please install Visual C++ 2010 Service Pack 1 and Windows SDK v7.1.
 		#endif//_MSC_FULL_VER
 
-		#define HGL_LIB_COMPILER_NAME		OS_TEXT("VC2010")
 		#define HGL_LIB_COMPILER_VERSION	OS_TEXT("16")
 	#elif _MSC_VER == 1500
 		#if _MSC_FULL_VER < 150030729		//Visual C++ 2008 SP1
 			#error Please install Visual C++ 2008 Service Pack 1 and Windows SDK v7.1.
 		#endif//_MSC_FULL_VER
 
-		#define HGL_LIB_COMPILER_NAME		OS_TEXT("VC2008")
 		#define HGL_LIB_COMPILER_VERSION	OS_TEXT("15")
-	#else
-		#define HGL_LIB_COMPILER_NAME		OS_TEXT("VC_UnknownVersion")
-		#define HGL_LIB_COMPILER_VERSION	OS_TEXT("Unknown")
 	#endif//_MSC_VER
 
 	#define enum_uint(name)	enum name:unsigned int
+	#define enum_int(name)	enum name:int
 #endif//_MSC_VER
 
 //--------------------------------------------------------------------------------------------------
-#if _MSC_VER < 1600
-	#ifndef _HAS_CHAR16_T_LANGUAGE_SUPPORT
-	#define _HAS_CHAR16_T_LANGUAGE_SUPPORT 0
-	#endif /* _HAS_CHAR16_T_LANGUAGE_SUPPORT */
-
-	#if _HAS_CHAR16_T_LANGUAGE_SUPPORT
-	#else /* _HAS_CHAR16_T_LANGUAGE_SUPPORT */
-		#if !defined(_CHAR16T)
-			#define _CHAR16T
-			typedef unsigned short char16_t;
-			typedef unsigned int char32_t;
-		#endif /* !defined(_CHAR16T) */
-	#endif /* _HAS_CHAR16_T_LANGUAGE_SUPPORT */
-
-	#define nullptr NULL
-#else
-	#include<cstdint>
-#endif//_MSC_VER < 1600
-
-#define HGL_FORCE_INLINE __forceinline
-
 #include<hgl/platform/compiler/DataTypeTypedef.h>
 #include<hgl/platform/compiler/Property.h>
 
@@ -82,16 +58,20 @@
 	#define HGL_OVERRIDE
 #endif//C++11
 
-#if _MSC_VER < 1700 // == VS2012
+#if _MSC_VER < 1700 // VC2012
 	#define _mm_set_ss set1_ps
 #endif
 
-#define HGL_FORCE_INLINE __forceinline
+#if _MSC_VER < 1800 // VC2013
+#define nullptr				NULL
+#endif//
 
-#define HGL_THREAD	__declspec(thread)
+#define HGL_FORCE_INLINE	__forceinline
 
-#define HGL_FMT_I64				"%I64d"
-#define HGL_FMT_U64				"%I64u"
+#define HGL_THREAD			__declspec(thread)
+
+#define HGL_FMT_I64			"%I64d"
+#define HGL_FMT_U64			"%I64u"
 //参考文档最后查阅支持版本为VC2013，网址：http://msdn.microsoft.com/en-us/library/tcxf1dw6.aspx
 //--------------------------------------------------------------------------------------------------
 #define _USE_MATH_DEFINES				// 使用数学常数定义
@@ -102,6 +82,9 @@
 #pragma warning(disable:4244)			// -> int 精度丢失警告
 #pragma warning(disable:4804)			// 不安全的类型比较
 #pragma warning(disable:4805)			// 不安全的类型比较
+
+#pragma warning(disable:4458)			// 类成员变量名与类函数参数名相同
+#pragma warning(disable:4459)			// 全局变量名与类函数参数名相同
 
 #ifndef _CRT_SECURE_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS

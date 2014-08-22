@@ -1,4 +1,4 @@
-#ifndef HGL_EVENTOBJECT_INCLUDE
+﻿#ifndef HGL_EVENTOBJECT_INCLUDE
 #define HGL_EVENTOBJECT_INCLUDE
 
 #include<hgl/object/VisualObject.h>

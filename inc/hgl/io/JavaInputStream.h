@@ -1,4 +1,4 @@
-#ifndef HGL_IO_JAVA_INPUT_STREAM_INCLUDE
+﻿#ifndef HGL_IO_JAVA_INPUT_STREAM_INCLUDE
 #define HGL_IO_JAVA_INPUT_STREAM_INCLUDE
 
 #include<hgl/io/DataInputStream.h>
@@ -42,7 +42,7 @@ namespace hgl
 			bool	readFloat			(float		&f)		{return in?in->ReadFloat	(f):false;}
 			bool	readDouble			(double		&d)		{return in?in->ReadDouble	(d):false;}
 
-			bool	readChar			(char16_t	&c)
+			bool	readChar			(u16char	&c)
 			{
 				if(!in)
 					return(false);
@@ -56,7 +56,7 @@ namespace hgl
 				return(true);
 			}
 
-			bool	readChars			(char16_t *wstr,const int count)
+			bool	readChars			(u16char *wstr,const int count)
 			{
 				return in?in->ReadUTF16BEChars(wstr,count):false;
 			}

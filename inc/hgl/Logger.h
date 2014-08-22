@@ -1,4 +1,4 @@
-#ifndef HGL_LOGGER_INCLUDE
+﻿#ifndef HGL_LOGGER_INCLUDE
 #define HGL_LOGGER_INCLUDE
 
 #include<hgl/type/BaseString.h>
@@ -33,7 +33,7 @@ namespace hgl
 
 			virtual void Close()=0;																	///<关闭日志
 
-			virtual void Write(const char16_t *,int)=0;												///<输出一行char16_t日志
+			virtual void Write(const u16char *,int)=0;												///<输出一行u16char日志
 			virtual void Write(const char *,int)=0;													///<输出一行char(utf8)日志
 		};//class Logger
 	}//namespace logger

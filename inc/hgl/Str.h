@@ -1552,7 +1552,7 @@ namespace hgl
 			return(str);
 		}
 
-		*p++=u'.';							//加小数点
+		*p++='.';							//加小数点
 		++len;
 
 		while(value>min_value&&len<size&&fsize--)
@@ -1747,7 +1747,25 @@ namespace hgl
 	{
 		if(!str)return(false);
 
-		const char err_chr[]=u8R"( <>/\|?%$#@`':"*&!)";
+		//const char err_chr[]=u8R"( <>/\|?%$#@`':"*&!)";
+		const char err_chr[] = { ' ',
+			'<',
+			'>',
+			'/',
+			'\\',
+			'|',
+			'?',
+			'%',
+			'$',
+			'#',
+			'@',
+			'`',
+			'\'',
+			':',
+			'"',
+			'*',
+			'&',
+			'!'};
 		const char *sp;
 
 		while(*str)
@@ -1873,5 +1891,8 @@ namespace hgl
 
 	template<typename T,typename HC> void ToUpperHexStr(T *str,const HC &hc){DataToHexStr<T,HC>(str,hc,UpperHexChar);}
 	template<typename T,typename HC> void ToLowerHexStr(T *str,const HC &hc){DataToHexStr<T,HC>(str,hc,LowerHexChar);}
+
+	template<typename T> void ToUpperHexStr(T *str,const void *data,const int size){DataToHexStr<T>(str,(const uint8 *)data,size,UpperHexChar);}
+	template<typename T> void ToLowerHexStr(T *str,const void *data,const int size){DataToHexStr<T>(str,(const uint8 *)data,size,LowerHexChar);}
 }//namespace hgl
 #endif//HGL_STR_TEMPLATE_INCLUDE

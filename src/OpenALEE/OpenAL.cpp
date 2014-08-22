@@ -348,6 +348,49 @@ namespace openal
 		ClearXRAM();
 		ClearEFX();
 	}
+
+	/**
+	* 设置距离衰减模型(默认钳位倒数距离模型)
+	*/
+	bool SetDistanceModel(ALenum distance_model)
+	{
+		if (!AudioDLL)return(false);
+		if (!alDistanceModel)return(false);
+
+		if (distance_model<AL_INVERSE_DISTANCE
+		  ||distance_model>AL_EXPONENT_DISTANCE_CLAMPED)
+			return(false);
+
+		alDistanceModel(distance_model);
+		return(true);
+	}
+
+	bool SetSpeedOfSound(const float ss)
+	{
+		if (!AudioDLL)return(false);
+		if (!alSpeedOfSound)return(false);
+
+		alSpeedOfSound(ss);
+		return(true);
+	}
+
+	bool SetDopplerFactor(const float df)
+	{
+		if (!AudioDLL)return(false);
+		if (!alDopplerFactor)return(false);
+
+		alDopplerFactor(df);
+		return(true);
+	}
+
+	bool SetDopplerVelocity(const float dv)
+	{
+		if (!AudioDLL)return(false);
+		if (!alDopplerVelocity)return(false);
+
+		alDopplerVelocity(dv);
+		return(true);
+	}
 	//--------------------------------------------------------------------------------------------------
 //	void *alcGetCurrentDevice() { return (AudioDevice); }
 //	char *alcGetCurrentDeviceName() { return(AudioDeviceName); }
@@ -580,5 +623,30 @@ namespace openal
 		#ifdef _DEBUG
 		LOG_INFO(OS_TEXT("输出OpenAL信息完成"));
 		#endif//
+	}
+	
+	/**
+	* 初始化OpenAL
+	* @param driver_name 驱动名称,如果不写则自动查找
+	* @param device_name 设备名称,如果不写则自动选择缺省设备
+	* @param enum_device 是否枚举所有的设备
+	* @return 是否初始化成功
+	*/
+	bool InitOpenAL(const wchar_t *driver_name,const char *device_name,bool enum_device)
+	{		
+		if (!InitOpenALDriver(driver_name))
+			return(false);
+
+		if (enum_device)
+			EnumOpenALDevice();
+
+		if (!InitOpenALDevice(device_name))
+		{
+			CloseOpenAL();
+			return(false);
+		}
+
+		PutOpenALInfo();
+		return(true);
 	}
 }//namespace openal

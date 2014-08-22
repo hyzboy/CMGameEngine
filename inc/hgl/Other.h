@@ -19,9 +19,9 @@ namespace hgl   //排序,查找
 
 namespace hgl   //时间
 {
-	uint64 GetStartTime();																			///<取得程序启动时间(单位：1/1000秒)
-	uint64 GetMicroStartTime();																		///<取得程序启动时间(单位：1/1000000秒)
-	double GetDoubleStartTime();																	///<取得程序启动时间(单位：秒)
+	uint64 GetMilliStartTime();																		///<取得毫秒程序启动时间(单位：1/1000秒)
+	uint64 GetMicroStartTime();																		///<取得微秒程序启动时间(单位：1/1000000秒)
+	double GetDoubleStartTime();																	///<取得秒程序启动时间(单位：秒)
 
 	uint64 GetTime();																				///<取得当前时间(单位：1/1000秒)
 	uint64 GetMicroTime();																			///<取得当前时间(单位：1/1000000秒)
@@ -44,19 +44,19 @@ namespace hgl   //其它
 	namespace os		///操作系统相关功能名字空间
 	{
 #if HGL_OS == HGL_OS_Windows
-		void PopupWebBrowser(const char16_t *);															///<弹出网页浏览器
-		void PopupEmailClient(const char16_t *,const char16_t *sub=nullptr);							///<弹出电子邮件客户端
+		void PopupWebBrowser(const u16char *);															///<弹出网页浏览器
+		void PopupEmailClient(const u16char *,const u16char *sub=nullptr);							///<弹出电子邮件客户端
 
-		bool CreateShortCut(const char16_t *lnk_fname,const char16_t *filename,
-							const char16_t *work_directory,const char16_t *param,
-							const char16_t *icon=nullptr);												///<创建快捷方式
+		bool CreateShortCut(const u16char *lnk_fname,const u16char *filename,
+							const u16char *work_directory,const u16char *param,
+							const u16char *icon=nullptr);												///<创建快捷方式
 
-//        void *GetFileIcon(const char16_t *,int &,int &,int &);										///<取得文件的系统图标(仅Vista以上可用)
+//        void *GetFileIcon(const u16char *,int &,int &,int &);										///<取得文件的系统图标(仅Vista以上可用)
 #endif//HGL_OS == HGL_OS_Windows
 
 #if (HGL_OS==HGL_OS_Windows)||(HGL_OS==HGL_OS_MacOS)
-		void CopyTextToClipboard(const char16_t *);													///<复制字符串到剪贴板
-		const char16_t *GetTextFromClipboard();														///<从剪贴板取得字符串
+		void CopyTextToClipboard(const u16char *);													///<复制字符串到剪贴板
+		const u16char *GetTextFromClipboard();														///<从剪贴板取得字符串
 #endif//(HGL_OS==HGL_OS_Windows)||(HGL_OS==HGL_OS_MacOS)
 	}//namespace os
 

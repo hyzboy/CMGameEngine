@@ -38,9 +38,9 @@ namespace hgl
 
 				hgl::int32 *mb_int=(hgl::int32 *)(mb.data()+start);
 
-				*mb_int=T::id;
+				*mb_int=size+sizeof(hgl::int32);
 				++mb_int;
-				*mb_int=size;
+				*mb_int=T::id;
 				++mb_int;
 
 				if(!msg->SerializeToArray(mb_int,size))

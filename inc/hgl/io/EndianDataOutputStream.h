@@ -40,7 +40,7 @@ namespace hgl
 			STREAM_DIRECT_WRITE(uint32,	Uint32	);
 			STREAM_DIRECT_WRITE(uint64,	Uint64	);
 
-			STREAM_DIRECT_WRITE(char16_t,UTF16Char);
+			STREAM_DIRECT_WRITE(u16char,UTF16Char);
 			STREAM_DIRECT_WRITE(float,	Float	);
 			STREAM_DIRECT_WRITE(double,	Double	);
 
@@ -84,7 +84,7 @@ namespace hgl
 			STREAM_SWAP_WRITE(uint32,	Uint32	);
 			STREAM_SWAP_WRITE(uint64,	Uint64	);
 
-			STREAM_SWAP_WRITE(char16_t,	UTF16Char);
+			STREAM_SWAP_WRITE(u16char,	UTF16Char);
 			STREAM_SWAP_WRITE(float,	Float	);
 			STREAM_SWAP_WRITE(double,	Double	);
 

@@ -1,4 +1,4 @@
-#ifndef HGL_FIXEDLIST_CPP
+﻿#ifndef HGL_FIXEDLIST_CPP
 #define HGL_FIXEDLIST_CPP
 
 #include<hgl/type/FixedList.h>

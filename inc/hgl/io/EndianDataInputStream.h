@@ -39,7 +39,7 @@ namespace hgl
 			STREAM_DIRECT_READ(uint32,	Uint32	);
 			STREAM_DIRECT_READ(uint64,	Uint64	);
 
-			STREAM_DIRECT_READ(char16_t,UTF16Char);
+			STREAM_DIRECT_READ(u16char,UTF16Char);
 			STREAM_DIRECT_READ(float,	Float	);
 			STREAM_DIRECT_READ(double,	Double	);
 
@@ -89,7 +89,7 @@ namespace hgl
 			STREAM_SWAP_READ(uint32,	Uint32	);
 			STREAM_SWAP_READ(uint64,	Uint64	);
 
-			STREAM_SWAP_READ(char16_t,	UTF16Char);
+			STREAM_SWAP_READ(u16char,	UTF16Char);
 			STREAM_SWAP_READ(float,		Float	);
 			STREAM_SWAP_READ(double,	Double	);
 

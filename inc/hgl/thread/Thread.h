@@ -1,4 +1,4 @@
-#ifndef HGL_THREAD_INCLUDE
+﻿#ifndef HGL_THREAD_INCLUDE
 #define HGL_THREAD_INCLUDE
 
 #include<hgl/type/DataType.h>
@@ -33,7 +33,9 @@ namespace hgl
 
 		ThreadPtr threadptr;
 
+#if HGL_OS != HGL_OS_Windows
 		virtual void SetCancelState(bool,bool=true);
+#endif//HGL_OS != HGL_OS_Windows
 
 	public:
 
@@ -61,7 +63,9 @@ namespace hgl
 
 		virtual bool IsCurThread();																	///<是否是当前线程
 
+#if HGL_OS != HGL_OS_Windows
 		virtual bool Cancel();																		///<放弃这个线程
+#endif//HGL_OS != HGL_OS_Windows
 
 		virtual void Wait(double time=0);                                                 			///<等待当前线程
 	};//class Thread

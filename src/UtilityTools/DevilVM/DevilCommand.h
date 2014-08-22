@@ -20,8 +20,8 @@ namespace hgl
 
 		char	c;
 		char *	str;
-		char16_t	wc;
-		char16_t *wide_str;
+		u16char	wc;
+		u16char *wide_str;
 		int		i;
 		int *	int_pointer;
 		uint	u;
@@ -192,7 +192,7 @@ namespace hgl
 											\
 										public:	\
 										\
-											name(DevilScriptModule *dm,const char16_t *str):DevilValue<T>(dm,tt)	\
+											name(DevilScriptModule *dm,const u16char *str):DevilValue<T>(dm,tt)	\
 											{	\
 												proc(str,value);	\
 											}	\

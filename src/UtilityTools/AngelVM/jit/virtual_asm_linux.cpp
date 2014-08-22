@@ -88,15 +88,19 @@ Register Processor::floatReturn64() {
 	return Register(*this, XMM0);
 }
 
-CodePage::CodePage(unsigned int Size, void* requestedStart) : used(0), final(false) {
+CodePage::CodePage(unsigned int Size, void* requestedStart) : used(0), final(false), references(1) {
 	unsigned minPageSize = getMinimumPageSize();
 	unsigned pages = Size / minPageSize;
 
 	if(Size % minPageSize != 0)
 		pages += 1;
 
+	size_t reqptr = (size_t)requestedStart;
+	if(reqptr % minPageSize != 0)
+		reqptr -= (reqptr % minPageSize);
+
 	page = mmap(
-		requestedStart,
+		(void*)reqptr,
 		Size,
 		PROT_READ | PROT_WRITE | PROT_EXEC,
 		MAP_ANONYMOUS | MAP_PRIVATE,

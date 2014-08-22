@@ -20,7 +20,7 @@ namespace hgl
 		ExternalModulePointer fp;
 
 #if HGL_OS == HGL_OS_Windows
-		fp=LoadLibraryW(name);
+		fp=LoadLibraryW(filename);
 
 		if(!fp)
 		{
@@ -78,12 +78,12 @@ namespace hgl
 		if(!fp)
 		{
 			uint dw=GetLastError();
-			char16_t *str=nullptr;
+			u16char *str=nullptr;
 
 			FormatMessageW(	FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_SYSTEM,nullptr,dw,
 							MAKELANGID(LANG_NEUTRAL,SUBLANG_DEFAULT),str,0,nullptr);
 
-			LOG_ERROR(u"LoadModule <"+OSString(name)+u"> error! os info: "+UTF16String(dw)+UTF16String(L',')+str);
+			LOG_ERROR(L"LoadModule <"+UTF16String(name)+L"> error! os info: "+UTF16String(dw)+UTF16String(L',')+str);
 
 			return(false);
 		}
@@ -118,13 +118,13 @@ namespace hgl
 			void *func=pi_get(fp,name);
 
 			if(!func)
-				LOG_ERROR(u"don't find "+to_u16(name));
+				LOG_ERROR("don't find "+UTF8String(name));
 
 			return(func);
 		}
 		else
 		{
-			LOG_ERROR(u"Get func <"+to_u16(name)+u" need load module！");
+			LOG_ERROR("Get func <" + UTF8String(name) + "> need load module！");
 
 			return(nullptr);
 		}

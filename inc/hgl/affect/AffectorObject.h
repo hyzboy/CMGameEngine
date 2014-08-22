@@ -23,7 +23,7 @@ namespace hgl
 
 		virtual void SetControl(AffectorControl *ac){control=ac;}									///<设置控制器
 
-		virtual const char16_t *GetClassName(){return nullptr;}										///<取得类名
+		virtual const u16char *GetClassName(){return nullptr;}										///<取得类名
 
 		virtual bool Start(){return(true);}															///<开始
 		virtual bool Pause(){return(true);}															///<暂停

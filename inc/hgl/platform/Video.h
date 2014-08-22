@@ -36,7 +36,7 @@ namespace hgl
 
 			bool TopMost;									///<是否永远在最上方
 
-			char16_t Name[128];								///<窗口标题
+			u16char Name[128];								///<窗口标题
 
 			int Width;										///<窗口宽
 			int Height;										///<窗口高

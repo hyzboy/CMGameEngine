@@ -27,7 +27,7 @@ namespace hgl
 			return out?out->WriteUTF8Chars(str,size):false;
 		}
 
-		template<> bool TextOutputStream<bomUTF8>::WriteChars(const char16_t *str,int64 size)
+		template<> bool TextOutputStream<bomUTF8>::WriteChars(const u16char *str,int64 size)
 		{
 			return out?out->WriteUTF8Chars(str,size):false;
 		}
@@ -37,7 +37,7 @@ namespace hgl
 			return out?out->WriteUTF16LEChars(str,size):false;
 		}
 
-		template<> bool TextOutputStream<bomUTF16LE>::WriteChars(const char16_t *str,int64 size)
+		template<> bool TextOutputStream<bomUTF16LE>::WriteChars(const u16char *str,int64 size)
 		{
 			return out?out->WriteUTF16LEChars(str,size):false;
 		}
@@ -47,7 +47,7 @@ namespace hgl
 			return out?out->WriteUTF16BEChars(str,size):false;
 		}
 
-		template<> bool TextOutputStream<bomUTF16BE>::WriteChars(const char16_t *str,int64 size)
+		template<> bool TextOutputStream<bomUTF16BE>::WriteChars(const u16char *str,int64 size)
 		{
 			return out?out->WriteUTF16BEChars(str,size):false;
 		}

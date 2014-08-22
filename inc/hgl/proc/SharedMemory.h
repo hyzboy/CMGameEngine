@@ -1,4 +1,4 @@
-#ifndef HGL_SHARED_MEMORY_INCLUDE
+﻿#ifndef HGL_SHARED_MEMORY_INCLUDE
 #define HGL_SHARED_MEMORY_INCLUDE
 
 #include<hgl/type/DataType.h>

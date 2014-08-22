@@ -15,7 +15,7 @@ protected:	//光标
 protected:
 
 	bool password_edit;																		///<是否密码输入状态
-	char16_t password_char;																	///<密码字符
+	u16char password_char;																	///<密码字符
 
 	UTF16String edit_text;																	///<编辑用文本
 	UTF16String pw_text;																		///<密码用文本
@@ -24,7 +24,7 @@ protected:
 
 	bool Proc_MouseButton(int,bool);
 	bool Proc_Key(int,bool);
-	bool Proc_Char(char16_t);
+	bool Proc_Char(u16char);
 
 	virtual void Change(bool=true);
 
@@ -38,5 +38,5 @@ protected:
 	bool GetPassword()const{return password_edit;}
 	void SetPassword(bool);
 
-	char16_t GetPasswordChar()const{return password_char;}
-	void SetPasswordChar(char16_t ch);
+	u16char GetPasswordChar()const{return password_char;}
+	void SetPasswordChar(u16char ch);

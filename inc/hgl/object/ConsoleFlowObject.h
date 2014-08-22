@@ -1,4 +1,4 @@
-#ifndef HGL_CONSOLE_FLOW_OBJECT_INCLUDE
+﻿#ifndef HGL_CONSOLE_FLOW_OBJECT_INCLUDE
 #define HGL_CONSOLE_FLOW_OBJECT_INCLUDE
 
 #include<hgl/platform/BaseApplication.h>

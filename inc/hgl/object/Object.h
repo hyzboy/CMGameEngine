@@ -1,4 +1,4 @@
-#ifndef HGL_OBJECT_INCLUDE
+﻿#ifndef HGL_OBJECT_INCLUDE
 #define HGL_OBJECT_INCLUDE
 
 #include<hgl/object/_Object.h>

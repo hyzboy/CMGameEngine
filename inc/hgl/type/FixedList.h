@@ -1,4 +1,4 @@
-#ifndef HGL_FIXEDLIST_INCLUDE
+﻿#ifndef HGL_FIXEDLIST_INCLUDE
 #define HGL_FIXEDLIST_INCLUDE
 
 #include<hgl/type/DataType.h>
@@ -73,24 +73,18 @@ namespace hgl
 
 	template<typename T> class MTFixedList:public FixedList<T>										///<多线程定长数据列表
 	{
-		RWLock *lock;
+		RWLock lock;
 
 	public:
 
-		MTFixedList():FixedList<T>()
-		{
-			lock=CreateRWLock();
-		}
+#ifdef HGL_CONSTRUCTION_REUSE
+		using FixedList<T>::FixedList;
+#else
+		MTFixedList():FixedList<T>(){}
+		MTFixedList(int n):FixedList<T>(n){}
+#endif//HGL_CONSTRUCTION_REUSE
 
-		MTFixedList(int n):FixedList<T>(n)
-		{
-			lock=CreateRWLock();
-		}
-
-		virtual ~MTFixedList()
-		{
-			SafeClear();
-		}
+		virtual ~MTFixedList()HGL_DEFAULT_MEMFUNC;
 
 	public:
 
@@ -100,18 +94,18 @@ namespace hgl
 
 		virtual void SafeCreate(int c)
 		{
-			lock->WriteLock();
+			lock.WriteLock();
 			FixedList<T>::Create(c);
-			lock->WriteUnlock();
+			lock.WriteUnlock();
 		}
 
 		virtual T *SafeCreateCopy(int &c)
 		{
 			T *copy;
 
-			lock->ReadLock();
+			lock.ReadLock();
 			copy=FixedList<T>::CreateCopy(c);
-			lock->ReadUnlock();
+			lock.ReadUnlock();
 
 			return copy;
 		}
@@ -120,9 +114,9 @@ namespace hgl
 		{
 			int result;
 
-			lock->ReadLock();
+			lock.ReadLock();
 			result=FixedList<T>::count;
-			lock->ReadUnlock();
+			lock.ReadUnlock();
 
 			return result;
 		}
@@ -131,28 +125,28 @@ namespace hgl
 		{
 			int result;
 
-			lock->ReadLock();
+			lock.ReadLock();
 			result=FixedList<T>::max_count;
-			lock->ReadUnlock();
+			lock.ReadUnlock();
 
 			return result;
 		}
 
 		void SafeGetCount(int &c,int &m)
 		{
-			lock->ReadLock();
+			lock.ReadLock();
 			c=FixedList<T>::count;
 			m=FixedList<T>::max_count;
-			lock->ReadUnlock();
+			lock.ReadUnlock();
 		}
 
 		bool SafeIsFull()
 		{
 			bool result;
 
-			lock->ReadLock();
+			lock.ReadLock();
 			result=FixedList<T>::IsFull();
-			lock->ReadUnlock();
+			lock.ReadUnlock();
 
 			return result;
 		}
@@ -161,9 +155,9 @@ namespace hgl
 		{
 			bool result;
 
-			lock->WriteLock();
+			lock.WriteLock();
 			result=FixedList<T>::Append(data);
-			lock->WriteUnlock();
+			lock.WriteUnlock();
 
 			return(result);
 		}
@@ -172,9 +166,9 @@ namespace hgl
 		{
 			bool result;
 
-			lock->WriteLock();
+			lock.WriteLock();
 			result=FixedList<T>::Append(data,n);
-			lock->WriteUnlock();
+			lock.WriteUnlock();
 
 			return(result);
 		}
@@ -183,9 +177,9 @@ namespace hgl
 		{
 			int result;
 
-			lock->ReadLock();
+			lock.ReadLock();
 			result=FixedList<T>::Find(data);
-			lock->ReadUnlock();
+			lock.ReadUnlock();
 
 			return(result);
 		}
@@ -194,9 +188,9 @@ namespace hgl
 		{
 			bool result;
 
-			lock->WriteLock();
+			lock.WriteLock();
 			result=FixedList<T>::Delete(n);
-			lock->WriteUnlock();
+			lock.WriteUnlock();
 
 			return(result);
 		}
@@ -206,35 +200,35 @@ namespace hgl
 			int index;
 			bool result;
 
-			lock->WriteLock();
+			lock.WriteLock();
 			index=FixedList<T>::Find(data);
 			result=FixedList<T>::Delete(index);
-			lock->WriteUnlock();
+			lock.WriteUnlock();
 
 			return(result);
 		}
 
 		virtual void SafeDelete(const T *data,int n)
 		{
-			lock->WriteLock();
+			lock.WriteLock();
 			FixedList<T>::Delete(data,n);
-			lock->WriteUnlock();
+			lock.WriteUnlock();
 		}
 
 		virtual void SafeClear()
 		{
-			lock->WriteLock();
+			lock.WriteLock();
 			FixedList<T>::Clear();
-			lock->WriteUnlock();
+			lock.WriteUnlock();
 		}
 
 		virtual T SafeGetItem(int n)
 		{
 			T result;
 
-			lock->ReadLock();
+			lock.ReadLock();
 			result=FixedList<T>::operator[](n);
-			lock->ReadUnlock();
+			lock.ReadUnlock();
 
 			return result;
 		}

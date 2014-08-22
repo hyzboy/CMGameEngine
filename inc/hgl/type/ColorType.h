@@ -25,11 +25,11 @@ namespace hgl
 
 	const unsigned int 	ColorTypeCount		=ctEnd+1;
 
-	extern const char16_t		ColorTypeName		[ColorTypeCount][32];	///色彩类型名称
+	extern const u16char		ColorTypeName		[ColorTypeCount][32];	///色彩类型名称
 	extern const unsigned int	GLFormatByColorType	[ColorTypeCount]; 		///针对色彩类型而对应的OpenGL格式
 	extern const unsigned int	BytesByColorType	[ColorTypeCount];  		///针对色彩类型而对应的每象素字节数
 	extern const bool			BlendByColorType	[ColorTypeCount];    	///这一种格式是否需要混合
 
-	unsigned int ColorNameToFormat(const char16_t *);						///<将色彩类型名称转成OpenGL格式
+	unsigned int ColorNameToFormat(const u16char *);						///<将色彩类型名称转成OpenGL格式
 }//namespace hgl
 #endif//HGL_COLOR_TYPE_INCLUDE

@@ -33,7 +33,7 @@ namespace hgl
 				PropertyString		Text;																///<当前文本
 				Property<int>		Cursor;                                                     		///<光标位置
 				Property<bool>		Password;															///<是否是在密码输入状态
-				Property<char16_t>	PasswordChar;														///<密码字符
+				Property<u16char>	PasswordChar;														///<密码字符
 
 				//MenuItem *PopupMenu;                                                                    ///<弹出式菜单
 
@@ -41,14 +41,14 @@ namespace hgl
 
 				DefEvent(void,OnChange,	(GUIObject *));                                                	///<改变事件
 				DefEvent(bool,OnKey,	(GUIObject *,uint32));                              			///<按钮按下事件
-				DefEvent(bool,OnChar,	(GUIObject *,char16_t));                                         ///<字符输入事件
+				DefEvent(bool,OnChar,	(GUIObject *,u16char));                                         ///<字符输入事件
 				DefEvent(void,OnEmpty,	(GUIObject *,bool));                                            ///<当输入框被置空/不为空时所产生的事件
 
 			public:
 
 				EditBox();                                                                              ///<本类构造函数
-				EditBox(int,int,int,const char16_t * =nullptr);											///<本类构造函数
-				EditBox(int,int,int,int,const char16_t * =nullptr);										///<本类构造函数
+				EditBox(int,int,int,const u16char * =nullptr);											///<本类构造函数
+				EditBox(int,int,int,int,const u16char * =nullptr);										///<本类构造函数
 				virtual ~EditBox();                                                                     ///<本类析构函数
 
 				virtual void Draw(const Matrix4f *);

@@ -1,23 +1,23 @@
-#include<hgl/LogInfo.h>
+﻿#include<hgl/LogInfo.h>
 #include<hgl/Compress.h>
 #include<hgl/PlugIn.h>
 #include<hgl/Other.h>
 #include<hgl/type/Map.h>
 namespace hgl
 {
-	char16_t CAName[caEnd][32]=
+	u16char CAName[caEnd][32]=
 	{
-		u"",
+		U16_TEXT(""),
 
-		u"Bzip2",
-		u"Lzo",
-		u"Lzma",
-		u"Zip",
-		u"RLE",
-		u"RYC",
-		u"RSC",
-		u"Jpeg2000"
-		u"VSRLE"
+		U16_TEXT("Bzip2"),
+		U16_TEXT("Lzo"),
+		U16_TEXT("Lzma"),
+		U16_TEXT("Zip"),
+		U16_TEXT("RLE"),
+		U16_TEXT("RYC"),
+		U16_TEXT("RSC"),
+		U16_TEXT("Jpeg2000"),
+		U16_TEXT("VSRLE")
 	};
 
 	CA NameToCA(const UTF16String &name)
@@ -29,7 +29,7 @@ namespace hgl
 		while(++ca<caEnd)
 			if(name==CAName[ca])return(CA(ca));
 
-		LOG_PROBLEM(u"未知的压缩算法："+name);
+		LOG_PROBLEM(U16_TEXT("未知的压缩算法：") + name);
 
 		return(caNone);
 	}
@@ -38,7 +38,7 @@ namespace hgl
 	{
 		UTF16String name;
 
-		if(ca<=caNone||ca>=caEnd)name=u"未知算法";
+		if (ca <= caNone || ca >= caEnd)name = U16_TEXT("未知算法");
 			else name=CAName[ca];
 
 		return name;

@@ -52,7 +52,7 @@ namespace hgl
 			public:
 
 				MenuItem(int=-1);                                                                       ///<本类构造函数
-				MenuItem(const char16_t *,int=-1);                                              			///<本类构造函数
+				MenuItem(const u16char *,int=-1);                                              			///<本类构造函数
 				virtual ~MenuItem();                                                                    ///<本类析构函数
 
 				virtual void Draw(const Matrix4f *);
@@ -64,15 +64,15 @@ namespace hgl
 				virtual void Measure(float &,float &);                                                  ///<取菜单项尺寸
 				virtual void Draw(float,float,const Color4f &);											///<绘制菜单项
 
-				MenuItem *Find(const char16_t *);                                                    	///<根据名称查找菜单项
+				MenuItem *Find(const u16char *);                                                    	///<根据名称查找菜单项
 
-				MenuItem *CreateRadio(int,const char16_t * =nullptr);										///<创建收音机按钮性质子菜单并设置点击事件
-				MenuItem *Create(const char16_t * =nullptr);												///<创建子菜单并设置点击事件
+				MenuItem *CreateRadio(int,const u16char * =nullptr);										///<创建收音机按钮性质子菜单并设置点击事件
+				MenuItem *Create(const u16char * =nullptr);												///<创建子菜单并设置点击事件
 
-				MenuItem *CreateRadio(int,const char16_t *,MenuItemClickPROC);							///<创建收音机按钮性质子菜单并设置点击事件
-				MenuItem *Create(const char16_t *,MenuItemClickPROC);									///<创建子菜单并设置点击事件
+				MenuItem *CreateRadio(int,const u16char *,MenuItemClickPROC);							///<创建收音机按钮性质子菜单并设置点击事件
+				MenuItem *Create(const u16char *,MenuItemClickPROC);									///<创建子菜单并设置点击事件
 
-				MenuItem *CreateCheck(const char16_t *,bool *);											///<创建勾选项子菜单，并绑定指定变量
+				MenuItem *CreateCheck(const u16char *,bool *);											///<创建勾选项子菜单，并绑定指定变量
 
 				void Clear(){SubMenu.Clear();}															///<清除所有子菜单
 			};//class MenuItem

@@ -47,9 +47,9 @@ using namespace hgl;
 
 namespace angle_script
 {
-	const char16_t *asGetTokenDefinition(int tokenType);
+	const u16char *asGetTokenDefinition(int tokenType);
 
-	const char16_t *GetTokenName(eTokenType);
+	const u16char *GetTokenName(eTokenType);
 
 	class asCTokenizer
 	{
@@ -58,7 +58,7 @@ namespace angle_script
 		asCTokenizer();
 		~asCTokenizer();
 
-		eTokenType GetToken(const char16_t *source, hgl::uint sourceLength, hgl::uint *tokenLength);
+		eTokenType GetToken(const u16char *source, hgl::uint sourceLength, hgl::uint *tokenLength);
 
 	protected:
 
@@ -69,7 +69,7 @@ namespace angle_script
 		bool IsKeyWord();
 		bool IsIdentifier();
 
-		const char16_t *source;
+		const u16char *source;
 		hgl::uint sourceLength;
 
 		eTokenType tokenType;

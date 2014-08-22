@@ -59,7 +59,7 @@ namespace hgl
 		typedef List<FieldType> FieldTypeList;
 
 		FieldType ParseFieldType(const char *str);
-		FieldType ParseFieldType(const char16_t *str);
+		FieldType ParseFieldType(const u16char *str);
 
 		bool ParseFieldType(FieldTypeList &,const UTF16StringList &);
 	}//namespace db

@@ -69,7 +69,7 @@ namespace hgl
 
 			virtual ~Fade()HGL_DEFAULT_MEMFUNC;
 
-			const char16_t *GetClassName(){return name.wc_str();}									///<返回类名
+			const u16char *GetClassName(){return name.wc_str();}									///<返回类名
 
 			void Update()
 			{

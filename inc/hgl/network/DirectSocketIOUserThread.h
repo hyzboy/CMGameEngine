@@ -56,7 +56,7 @@ namespace hgl
 				wait_time=10;
 			}
 
-			virtual bool ProcStartThread()
+			virtual bool ProcStartThread() HGL_OVERRIDE
 			{
 				s=new S(sock,&addr);
 

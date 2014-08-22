@@ -5,53 +5,41 @@ namespace hgl
 {
 	void GetWaitTime(struct timespec &,double);
 
-	class CreateRWLockPOSIX:public RWLock
+	RWLock::RWLock()
 	{
-		pthread_rwlock_t lock;
+		lock=new pthread_rwlock_t;
 
-	public:
-
-		CreateRWLockPOSIX()
-		{
-			pthread_rwlock_init(&lock,nullptr);
-		}
-
-		~CreateRWLockPOSIX()
-		{
-			pthread_rwlock_destroy(&lock);
-		}
-
-		void *GetRWLock()	{return &lock;}
-
-		bool TryReadLock()	{return !pthread_rwlock_tryrdlock(&lock);}
-		bool WaitReadLock(double t)
-		{
-			struct timespec abstime;
-
-			GetWaitTime(abstime,t);
-
-			return !pthread_rwlock_timedrdlock(&lock,&abstime);
-		}
-
-		bool ReadLock()		{!pthread_rwlock_rdlock(&lock);}
-		bool ReadUnlock()	{!pthread_rwlock_unlock(&lock);}
-
-		bool TryWriteLock()	{return !pthread_rwlock_trywrlock(&lock);}
-		bool WaitWriteLock(double t)
-		{
-			struct timespec abstime;
-
-			GetWaitTime(abstime,t);
-
-			return !pthread_rwlock_timedwrlock(&lock,&abstime);
-		}
-
-		bool WriteLock()	{!pthread_rwlock_wrlock(&lock);}
-		bool WriteUnlock()	{!pthread_rwlock_unlock(&lock);}
-	};//class RWLockPOSIX
-
-	RWLock *CreateRWLock()
-	{
-		return(new CreateRWLockPOSIX);
+		pthread_rwlock_init((pthread_rwlock_t *)lock,nullptr);
 	}
+
+	RWLock::~RWLock()
+	{
+		pthread_rwlock_destroy((pthread_rwlock_t *)lock);
+	}
+
+	bool RWLock::TryReadLock()	{return !pthread_rwlock_tryrdlock((pthread_rwlock_t *)lock);}
+	bool RWLock::WaitReadLock(double t)
+	{
+		struct timespec abstime;
+
+		GetWaitTime(abstime,t);
+
+		return !pthread_rwlock_timedrdlock((pthread_rwlock_t *)lock,&abstime);
+	}
+
+	bool RWLock::ReadLock()		{return !pthread_rwlock_rdlock((pthread_rwlock_t *)lock);}
+	bool RWLock::ReadUnlock()	{return !pthread_rwlock_unlock((pthread_rwlock_t *)lock);}
+
+	bool RWLock::TryWriteLock()	{return !pthread_rwlock_trywrlock((pthread_rwlock_t *)lock);}
+	bool RWLock::WaitWriteLock(double t)
+	{
+		struct timespec abstime;
+
+		GetWaitTime(abstime,t);
+
+		return !pthread_rwlock_timedwrlock((pthread_rwlock_t *)lock,&abstime);
+	}
+
+	bool RWLock::WriteLock()	{return !pthread_rwlock_wrlock((pthread_rwlock_t *)lock);}
+	bool RWLock::WriteUnlock()	{return !pthread_rwlock_unlock((pthread_rwlock_t *)lock);}
 }//namespace hgl

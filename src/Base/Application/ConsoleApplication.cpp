@@ -1,4 +1,4 @@
-#include<hgl/platform/ConsoleApplication.h>
+﻿#include<hgl/platform/ConsoleApplication.h>
 #include<hgl/object/ConsoleFlowControl.h>
 #include<hgl/platform/ConsoleSystemInitInfo.h>
 #include<hgl/Info.h>
@@ -46,7 +46,7 @@ namespace hgl
 #if HGL_OS == HGL_OS_Windows
 			if(sii->CheckDebugger&&IsDebuggerPresent())
 			{
-				LOG_ERROR(u"本程序不能运行在调试模式下!");
+				LOG_ERROR(OS_TEXT("本程序不能运行在调试模式下!"));
 				return(false);
 			}
 #else
@@ -71,7 +71,7 @@ namespace hgl
 
 						if(setrlimit64(RLIMIT_NOFILE,&rl))
 						{
-							LOG_ERROR(OS_TEXT("Set Max Open file maximum value to ")+OSString(rl.rlim_cur)+OS_TEXT("error."));
+							LOG_ERROR(OS_TEXT("Set Max Open file maximum value to ")+OSString((uint64)(rl.rlim_cur))+OS_TEXT("error."));
 							return(false);
 						}
 					}

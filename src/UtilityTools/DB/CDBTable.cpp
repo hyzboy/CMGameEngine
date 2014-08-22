@@ -66,7 +66,7 @@ namespace hgl
 				if(f)
 					Fields.Add(field_name[i],f);
 				else
-					LOG_ERROR(u"Create Field failed,name \""+field_name[i]);
+					LOG_ERROR(U16_TEXT("Create Field failed,name \"") + field_name[i]);
 			}
 #ifdef LOG_CDB_LOADER_LOG
 			{

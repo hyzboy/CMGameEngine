@@ -1,4 +1,4 @@
-#ifndef HGL_EXTERNAL_MODULE_INCLUDE
+﻿#ifndef HGL_EXTERNAL_MODULE_INCLUDE
 #define HGL_EXTERNAL_MODULE_INCLUDE
 
 #include<hgl/type/DataType.h>

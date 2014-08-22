@@ -14,7 +14,7 @@ extern "C"
 
 namespace openal
 {
-//	bool InitOpenAL(const char16_t *driver_name=0,const char16_t *device_name=0,bool=false);     //初始化OpenAL,参数为设备名称,返回AL_TRUE或AL_FALSE
+//	bool InitOpenAL(const u16char *driver_name=0,const u16char *device_name=0,bool=false);     //初始化OpenAL,参数为设备名称,返回AL_TRUE或AL_FALSE
 //	void CloseOpenAL();
 }//namespace openal
 
@@ -33,7 +33,7 @@ namespace hgl
 
 	/*	namespace gui																					//初始化GUI
 		{
-			bool InitGUI(const char16_t *);
+			bool InitGUI(const u16char *);
 			void CloseGUI();
 		}
 
@@ -289,7 +289,7 @@ namespace hgl
 		PROC(Proc_Key			,int);
 		#undef PROC
 
-		bool GraphicsApplication::Proc_Char				(char16_t ch)
+		bool GraphicsApplication::Proc_Char				(u16char ch)
 		{
 			return flow->Proc_Char(ch);
 		}

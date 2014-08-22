@@ -1,4 +1,4 @@
-#ifndef HGL_CONSOLE_SYSTEM_INIT_INFO_INCLUDE
+﻿#ifndef HGL_CONSOLE_SYSTEM_INIT_INFO_INCLUDE
 #define HGL_CONSOLE_SYSTEM_INIT_INFO_INCLUDE
 
 #include<hgl/type/StringList.h>
@@ -80,7 +80,7 @@ namespace hgl
 		ConsoleSystemInitInfo();                                                                    ///<本类构造函数
 		virtual ~ConsoleSystemInitInfo();                                                           ///<本类析构函数
 
-		virtual void Init(const UTF16StringList &args);												///<使用外部命令行参数
+		virtual void Init(const OSStringList &args);												///<使用外部命令行参数
 
 		virtual void ProcBlankValue();                                                             	///<处理未填写的值
 

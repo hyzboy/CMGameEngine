@@ -1,4 +1,4 @@
-#ifndef HGL_IO_RANDOM_ACCESS_FILE_INCLUDE
+﻿#ifndef HGL_IO_RANDOM_ACCESS_FILE_INCLUDE
 #define HGL_IO_RANDOM_ACCESS_FILE_INCLUDE
 
 #include<hgl/io/InputStream.h>

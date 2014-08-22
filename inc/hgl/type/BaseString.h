@@ -64,7 +64,6 @@ namespace hgl
 			Set(func(new T[8*sizeof(type)],8*sizeof(type),num),-1,true);	\
 		}
 
-		BASE_STRING_NUMBER_CONSTRUCT(size_t,utos);
 		BASE_STRING_NUMBER_CONSTRUCT(int,	itos);
 		BASE_STRING_NUMBER_CONSTRUCT(uint,	utos);
 		BASE_STRING_NUMBER_CONSTRUCT(int64,	itos);
@@ -969,7 +968,6 @@ namespace hgl
 			return operator+(vstr->data);	\
 		}
 
-		BASE_STRING_NUMBER_OPERATOR_ADD(size_t,	utos);
 		BASE_STRING_NUMBER_OPERATOR_ADD(int,	itos);
 		BASE_STRING_NUMBER_OPERATOR_ADD(uint,	utos);
 		BASE_STRING_NUMBER_OPERATOR_ADD(int64,	itos);
@@ -996,15 +994,9 @@ namespace hgl
 	}
 
 	typedef BaseString<char>		UTF8String;
-
-#if HGL_OS == HGL_OS_Windows
-	typedef BaseString<char16_t>	UTF16String;
-	typedef UTF16String				OSString;
-#else
-	typedef BaseString<char16_t>	UTF16String;
-	typedef UTF8String				OSString;
-#endif//HGL_OS == HGL_OS_Windows
-
+	typedef BaseString<char>		AnsiString;
+	typedef BaseString<u16char>		UTF16String;
+	typedef BaseString<os_char>		OSString;
 	typedef BaseString<char32_t>	UTF32String;
 	typedef BaseString<wchar_t>		WideString;
 
@@ -1054,30 +1046,12 @@ namespace hgl
 		return BaseString<T>(str);
 	}
 
-	template<typename T,int POINTER_SIZE> struct PointerToHexStringConvert;
-
-	template<typename T> struct PointerToHexStringConvert<T,4>
-	{
-		static BaseString<T> Conv(const void *ptr)
-		{
-			return HexToString<T,uint32>(reinterpret_cast<const uint32 >(ptr));
-		}
-	};
-
-	template<typename T> struct PointerToHexStringConvert<T,8>
-	{
-		static BaseString<T> Conv(const void *ptr)
-		{
-			return HexToString<T,uint64>(reinterpret_cast<const uint64 >(ptr));
-		}
-	};
-
 	/**
 	 * 将一个指针转换成一个16进制字符串
 	 */
-	template<typename T> BaseString<T> PointerToHexString(const void *value)
+	template<typename T> BaseString<T> PointerToHexString(const void *ptr)
 	{
-		return PointerToHexStringConvert<T,sizeof(void *)>::Conv(value);
+		return HexToString<T,HGL_POINTER_UINT>(reinterpret_cast<const HGL_POINTER_UINT>(ptr));
 	}
 
 	inline BaseString<os_char> PointerToHexOSString(const void *value)
@@ -1090,9 +1064,9 @@ namespace hgl
 		return PointerToHexString<char>(value);
 	}
 
-	inline BaseString<char16_t> PointerToHexUTF16String(const void *value)
+	inline BaseString<u16char> PointerToHexUTF16String(const void *value)
 	{
-		return PointerToHexString<char16_t>(value);
+		return PointerToHexString<u16char>(value);
 	}
 }//namespace hgl
 #endif//HGL_TYPE_BASE_STRING_INCLUDE

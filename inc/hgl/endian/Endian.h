@@ -1,4 +1,4 @@
-#ifndef HGL_ENDIAN_INCLUDE
+﻿#ifndef HGL_ENDIAN_INCLUDE
 #define HGL_ENDIAN_INCLUDE
 
 #include<hgl/platform/Platform.h>				// 平台定义
@@ -156,38 +156,38 @@ namespace hgl
 
 		template<> struct UTF16CharConvert<HGL_LITTLE_ENDIAN>
 		{
-			static void convert(const char16_t *str,const int length)
+			static void convert(const u16char *str,const int length)
 			{
 				#if HGL_ENDIAN == HGL_BIG_ENDIAN
-					swap_strcpy<char16_t>(str,length);
+					swap_strcpy<u16char>(str,length);
 				#endif//HGL_ENDIAN == HGL_LITTLE_ENDIAN
 			}
 
-			static void convert(char16_t *out_str,const char16_t *in_str,const int length)
+			static void convert(u16char *out_str,const u16char *in_str,const int length)
 			{
 				#if HGL_ENDIAN == HGL_LITTLE_ENDIAN
-					memcpy(out_str,in_str,length*sizeof(char16_t));
+					memcpy(out_str,in_str,length*sizeof(u16char));
 				#else
-					swap_strcpy<char16_t>(in_str,length);
+					swap_strcpy<u16char>(in_str,length);
 				#endif//HGL_ENDIAN == HGL_LITTLE_ENDIAN
 			}
 		};//template<> struct UTF16CharConvert<HGL_LITTLE_ENDIAN>
 
 		template<> struct UTF16CharConvert<HGL_BIG_ENDIAN>
 		{
-			static void convert(const char16_t *str,const int length)
+			static void convert(const u16char *str,const int length)
 			{
 				#if HGL_ENDIAN == HGL_LITTLE_ENDIAN
-					swap_strcpy<char16_t>(str,length);
+					swap_strcpy<u16char>(str,length);
 				#endif//HGL_ENDIAN == HGL_LITTLE_ENDIAN
 			}
 
-			static void convert(char16_t *out_str,const char16_t *in_str,const int length)
+			static void convert(u16char *out_str,const u16char *in_str,const int length)
 			{
 				#if HGL_ENDIAN == HGL_LITTLE_ENDIAN
-					memcpy(out_str,in_str,length*sizeof(char16_t));
+					memcpy(out_str,in_str,length*sizeof(u16char));
 				#else
-					swap_strcpy<char16_t>(in_str,length);
+					swap_strcpy<u16char>(in_str,length);
 				#endif//HGL_ENDIAN == HGL_LITTLE_ENDIAN
 			}
 		};//template<> struct UTF16ToWideChar<HGL_BIG_ENDIAN>

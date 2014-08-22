@@ -1,4 +1,4 @@
-#ifndef HGL_NETWORK_IOSOCKET_INCLUDE
+﻿#ifndef HGL_NETWORK_IOSOCKET_INCLUDE
 #define HGL_NETWORK_IOSOCKET_INCLUDE
 
 #include<hgl/network/Socket.h>

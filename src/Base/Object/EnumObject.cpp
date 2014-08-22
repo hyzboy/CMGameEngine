@@ -1,4 +1,4 @@
-#include<hgl/object/EnumObject.h>
+﻿#include<hgl/object/EnumObject.h>
 // #include<hgl/object/ObjectControl.h>
 namespace hgl
 {

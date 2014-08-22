@@ -1,4 +1,4 @@
-﻿#include<hgl/io/FileAccess.h>
+#include<hgl/io/FileAccess.h>
 #include<hgl/LogInfo.h>
 #if HGL_OS == HGL_OS_Windows
 	#include<io.h>
@@ -28,12 +28,12 @@ namespace hgl
 #if HGL_OS == HGL_OS_Windows
 			const uint buf_size=HGL_MAX_PATH;
 
-			char16_t PathBuffer[buf_size];
-			char16_t TempName[buf_size];
+			u16char PathBuffer[buf_size];
+			u16char TempName[buf_size];
 
 			GetTempPathW(buf_size,PathBuffer);
 
-			GetTempFileNameW(PathBuffer,u"NEW",0,TempName);
+			GetTempFileNameW(PathBuffer,L"NEW",0,TempName);
 
 			return Open(TempName,fomCreate);
 #else

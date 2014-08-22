@@ -1,4 +1,4 @@
-#ifndef HGL_CONSOLE_OBJECT_CONTROL_INCLUDE
+﻿#ifndef HGL_CONSOLE_OBJECT_CONTROL_INCLUDE
 #define HGL_CONSOLE_OBJECT_CONTROL_INCLUDE
 
 #include<hgl/object/EnumObject.h>
@@ -48,7 +48,7 @@ namespace hgl
 
 	public: //方法 查找
 
-		virtual Object *FindObject(const char16_t *);                                                ///<查找对象
+		virtual Object *FindObject(const u16char *);                                                ///<查找对象
 		virtual bool FindObject(Object *);															///<查找对象
 	};//class ConsoleObjectControl
 }//namespace hgl

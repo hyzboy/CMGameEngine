@@ -1,4 +1,4 @@
-﻿#include<hgl/io/DataInputStream.h>
+#include<hgl/io/DataInputStream.h>
 #include<hgl/Other.h>
 
 namespace hgl
@@ -6,31 +6,31 @@ namespace hgl
 	namespace io
 	{
 		template<char T>
-		bool ReadUTF16Chars(char16_t *str,DataInputStream *dis,int count)
+		bool ReadUTF16Chars(u16char *str,DataInputStream *dis,int count)
 		{
-			if(dis->ReadArrays<char16_t>(str,count)!=count)
+			if(dis->ReadArrays<u16char>(str,count)!=count)
 				return(false);
 
-			EndianSwap<char16_t>(str,count);
+			EndianSwap<u16char>(str,count);
 			str[count]=0;
 
 			return(true);
 		}
 
 		template<>
-		bool ReadUTF16Chars<HGL_ENDIAN>(char16_t *str,DataInputStream *dis,int count)
+		bool ReadUTF16Chars<HGL_ENDIAN>(u16char *str,DataInputStream *dis,int count)
 		{
-			return(dis->ReadArrays<char16_t>(str,count)==count);
+			return(dis->ReadArrays<u16char>(str,count)==count);
 		}
 
-		bool DataInputStream::ReadUTF16LEChars(char16_t *wstr,int count)
+		bool DataInputStream::ReadUTF16LEChars(u16char *wstr,int count)
 		{
 			if(!in||!wstr||count<=0)return(false);
 
 			return ReadUTF16Chars<HGL_LITTLE_ENDIAN>(wstr,this,count);
 		}
 
-		bool DataInputStream::ReadUTF16BEChars(char16_t *wstr,int count)
+		bool DataInputStream::ReadUTF16BEChars(u16char *wstr,int count)
 		{
 			if(!in||!wstr||count<=0)return(false);
 
@@ -143,7 +143,7 @@ namespace hgl
 
 			int wide_count;
 
-			char16_t *wide_str=u8_to_u16(utf8_str,count,wide_count);
+			u16char *wide_str=u8_to_u16(utf8_str,count,wide_count);
 
 			wstr.Set(wide_str,wide_count,true);
 
@@ -151,7 +151,7 @@ namespace hgl
 		}
 
 		template<char T>
-		bool ReadUTF16String(char16_t *str,int max_len,DataInputStream *dis)
+		bool ReadUTF16String(u16char *str,int max_len,DataInputStream *dis)
 		{
 			if(!dis)return(false);
 			if(!str||max_len<=0)return(false);
@@ -169,7 +169,7 @@ namespace hgl
 
 			if(max_len>=count)
 			{
-				if(dis->ReadArrays<char16_t>(str,count)!=count)
+				if(dis->ReadArrays<u16char>(str,count)!=count)
 					return(false);
 
 				if(max_len>count)
@@ -177,7 +177,7 @@ namespace hgl
 			}
 			else
 			{
-				if(dis->ReadArrays<char16_t>(str,max_len)!=max_len)
+				if(dis->ReadArrays<u16char>(str,max_len)!=max_len)
 					return(false);
 
 				count=max_len;
@@ -188,14 +188,14 @@ namespace hgl
 			return(true);
 		}
 
-		bool DataInputStream::ReadUTF16LEString(char16_t *str,int max_len)
+		bool DataInputStream::ReadUTF16LEString(u16char *str,int max_len)
 		{
 			if(!in)return(false);
 
 			return ReadUTF16String<HGL_LITTLE_ENDIAN>(str,max_len,this);
 		}
 
-		bool DataInputStream::ReadUTF16BEString(char16_t *wstr,int max_len)
+		bool DataInputStream::ReadUTF16BEString(u16char *wstr,int max_len)
 		{
 			if(!in)return(false);
 
@@ -227,12 +227,12 @@ namespace hgl
 				return(true);
 			}
 
-			char16_t *utf16_str=new char16_t[count+1];
+			u16char *utf16_str=new u16char[count+1];
 
 			if(!utf16_str)
 				return(false);
 
-			if(dis->ReadArrays<char16_t>(utf16_str,count)!=count)
+			if(dis->ReadArrays<u16char>(utf16_str,count)!=count)
 			{
 				delete[] utf16_str;
 				return(false);

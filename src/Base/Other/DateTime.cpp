@@ -1,11 +1,61 @@
-#include <hgl/type/DataType.h>
-#include <hgl/type/DateTime.h>
-#include <apr_time.h>
+﻿#include<hgl/type/DataType.h>
+#include<hgl/type/DateTime.h>
 
-#include <hgl/io/DataInputStream.h>
-#include <hgl/io/DataOutputStream.h>
+#include<hgl/io/DataInputStream.h>
+#include<hgl/io/DataOutputStream.h>
 
 #include<hgl/thread/RWLock.h>
+
+#include<time.h>
+
+#if HGL_OS==HGL_OS_Windows
+namespace hgl
+{
+	namespace
+	{
+#define APR_DELTA_EPOCH_IN_USEC 11644473600000000		//转Windows时间到Unix时间的一个差值
+		//Windows是1601.1.1
+		//Unix是1970.1.1
+		//tanks for APR
+
+		static inline void SystemTimeToMicroTime(uint64 *result, SYSTEMTIME *st_input)
+		{
+			FILETIME ft;
+
+			SystemTimeToFileTime(st_input, &ft);
+
+			/* Convert FILETIME one 64 bit number so we can work with it. */
+			*result = ft.dwHighDateTime;
+			*result = (*result) << 32;
+			*result |= ft.dwLowDateTime;
+			*result /= 10;    /* Convert from 100 nano-sec periods to micro-seconds. */
+			*result -= APR_DELTA_EPOCH_IN_USEC;  /* Convert from Windows epoch to Unix epoch */
+			return;
+		}
+
+		static inline void MicroTimeToFileTime(LPFILETIME pft, uint64 t)
+		{
+			LONGLONG ll;
+			t += APR_DELTA_EPOCH_IN_USEC;
+			ll = t * 10;
+			pft->dwLowDateTime = (DWORD)ll;
+			pft->dwHighDateTime = (DWORD)(ll >> 32);
+			return;
+		}
+
+		static inline void MicroTimeToSystemTime(LPSYSTEMTIME pst, uint64 t)
+		{
+			FILETIME ft;
+
+			MicroTimeToFileTime(&ft, t);
+
+			FileTimeToSystemTime(&ft, pst);
+		}
+	}
+}//namespace hgl
+#else
+	#include<sys/time.h>
+#endif//HGL_OS==HGL_OS_Windows
 
 namespace hgl
 {
@@ -193,22 +243,59 @@ namespace hgl
 	}
 
 	//和系统时间同步
-	void Time::Sync(const double t)
+	void Time::Sync(const double cur_time)
 	{
-		apr_time_exp_t d;
+#if HGL_OS != HGL_OS_Windows
+		tm m;
+		time_t tt;
 
-		if(t<=0)
-			apr_time_exp_lt(&d,apr_time_now());
+		if(cur_time<=0)
+			tt=time(nullptr);
 		else
-			apr_time_exp_lt(&d,t*HGL_MICRO_SEC_PER_SEC);
+			tt=cur_time*HGL_MICRO_SEC_PER_SEC;
 
-		hours			=d.tm_hour;
-		minutes			=d.tm_min;
-		seconds			=d.tm_sec;
-		micro_seconds	=d.tm_usec;
-		week_day		=d.tm_wday;
+		localtime_r(&tt,&m);
 
-		gmt_off			=d.tm_gmtoff;
+		hours			=m.tm_hour;
+		minutes			=m.tm_min;
+		seconds			=m.tm_sec;
+		micro_seconds	=tt%HGL_MICRO_SEC_PER_SEC;
+		week_day		=m.tm_wday;
+
+		gmt_off			=m.tm_gmtoff;
+#else
+		uint64 st64;
+		uint64 lt64;
+
+		SYSTEMTIME st;
+		SYSTEMTIME local_time;
+		TIME_ZONE_INFORMATION time_zone;
+
+		if (cur_time <= 0)
+		{
+			GetSystemTime(&st);
+			SystemTimeToMicroTime(&st64, &st);
+		}
+		else
+		{
+			st64 = cur_time*HGL_MICRO_SEC_PER_SEC;
+			MicroTimeToSystemTime(&st, st64);
+		}
+
+		GetTimeZoneInformation(&time_zone);
+
+		SystemTimeToTzSpecificLocalTime(&time_zone, &st, &local_time);
+
+		hours			= local_time.wHour;
+		minutes			= local_time.wMinute;
+		seconds			= local_time.wSecond;
+		micro_seconds	= local_time.wMilliseconds * 1000;
+		week_day		= local_time.wDayOfWeek;
+
+		SystemTimeToMicroTime(&lt64, &local_time);
+
+		gmt_off			= lt64 - st64;
+#endif//HGL_OS != HGL_OS_Windows
 	}
 }//namespace hgl
 //--------------------------------------------------------------------------------------------------
@@ -354,20 +441,38 @@ namespace hgl
 		SetMonth(m);
 	}
 
-	void Date::Sync(const double t)
+	void Date::Sync(const double cur_time)
 	{
-		apr_time_exp_t d;
+	#if HGL_OS != HGL_OS_Windows
+		tm m;
+		time_t tt;
 
-		if(t<=0)
-			apr_time_exp_lt(&d,apr_time_now());
+		if(cur_time<=0)
+			tt=time(nullptr);
 		else
-			apr_time_exp_lt(&d,t*HGL_MICRO_SEC_PER_SEC);
+			tt=cur_time*HGL_MICRO_SEC_PER_SEC;
 
-		year	=d.tm_year+1900;
-		SetMonth(d.tm_mon+1);
-		SetDay	(d.tm_mday);
-		week_day=d.tm_wday;
-		year_day=d.tm_yday;
+		localtime_r(&tt,&m);
+
+		year	=m.tm_year+1900;
+		SetMonth(m.tm_mon+1);
+		SetDay	(m.tm_mday);
+		week_day=m.tm_wday;
+		year_day=m.tm_yday;
+	#else
+		SYSTEMTIME st;
+
+		if (cur_time <= 0)
+			GetLocalTime(&st);
+		else
+			MicroTimeToSystemTime(&st, cur_time*HGL_MICRO_SEC_PER_SEC);
+
+		year = st.wYear;
+		month = st.wMonth;
+		day = st.wDay;
+
+		week_day = st.wDayOfWeek;
+	#endif//HGL_OS != HGL_OS_Windows
 	}
 }//namespace hgl
 
@@ -375,24 +480,51 @@ namespace hgl
 {
 	void ToDateTime(Date &d,Time &t,const double cur_time)
 	{
-		apr_time_exp_t at;
+#if HGL_OS != HGL_OS_Windows
+		tm m;
+		time_t tt;
+		uint micro_sec;
 
 		if(cur_time<=0)
-			apr_time_exp_lt(&at,apr_time_now());
-		else
-			apr_time_exp_lt(&at,cur_time*HGL_MICRO_SEC_PER_SEC);
+		{
+			struct timeval tv;
+			gettimeofday(&tv, nullptr);
 
-		d.Set(at.tm_year+1900,at.tm_mon+1,at.tm_mday,at.tm_wday,at.tm_yday);
-		t.Set(at.tm_hour,at.tm_min,at.tm_sec,at.tm_usec,at.tm_wday);
-		t.SetGMT(at.tm_gmtoff);
+			tt=tv.tv_sec;
+			micro_sec=tv.tv_usec;
+		}
+		else
+		{
+			tt=cur_time;
+			micro_sec=(cur_time-tt)*HGL_MICRO_SEC_PER_SEC;
+		}
+
+		localtime_r(&tt,&m);
+
+		d.Set(m.tm_year+1900,m.tm_mon+1,m.tm_mday,m.tm_wday,m.tm_yday);
+		t.Set(m.tm_hour,m.tm_min,m.tm_sec,micro_sec,m.tm_wday);
+		t.SetGMT(m.tm_gmtoff);
+#else
+		FILETIME ft,local_ft;
+		SYSTEMTIME st;
+
+		MicroTimeToFileTime(&ft, cur_time*HGL_MICRO_SEC_PER_SEC);
+
+		FileTimeToSystemTime(&ft, &st);
+		FileTimeToLocalFileTime(&ft, &local_ft);
+
+		d.Set(st.wYear, st.wMonth, st.wDay, st.wDayOfWeek);
+		t.Set(st.wHour, st.wMinute, st.wSecond, st.wMilliseconds * 1000, st.wDayOfWeek);
+		t.SetGMT((local_ft.dwLowDateTime - ft.dwLowDateTime) / 10);
+#endif//HGL_OS != HGL_OS_Windows
 	}
 
 	double FromDateTime(const int year,const int month,const int day,
 						const int hour,const int minute,const int second,const int micro_second,
-						const int gmt_off
-   					)
+						const int gmt_off)
 	{
-		apr_time_exp_t at;
+#if HGL_OS != HGL_OS_Windows
+		tm at;
 
 		hgl_zero(at);
 
@@ -403,15 +535,31 @@ namespace hgl
 		at.tm_hour	=hour;
 		at.tm_min	=minute;
 		at.tm_sec	=second;
-		at.tm_usec	=micro_second;
 
 		at.tm_gmtoff=gmt_off;
 
-		apr_time_t result;
+		double result=mktime(&at);
 
-		apr_time_exp_gmt_get(&result,&at);
+		return(result + (double(micro_second) / HGL_MICRO_SEC_PER_SEC));
+#else
+		SYSTEMTIME st;
 
-		return double(result)/HGL_MICRO_SEC_PER_SEC;
+		st.wYear = year;
+		st.wMonth = month;
+		st.wDay = day;
+		st.wDayOfWeek = 0;
+
+		st.wHour = hour;
+		st.wMinute = minute;
+		st.wSecond = second;
+		st.wMilliseconds = micro_second / 1000;
+
+		uint64 result;
+		SystemTimeToMicroTime(&result, &st);
+
+		result -= gmt_off;
+		return(double(result) / HGL_MICRO_SEC_PER_SEC);
+#endif//HGL_OS != HGL_OS_Windows
 	}
 
 	double FromDateTime(const Date &d,const Time &t)

@@ -1,70 +1,47 @@
-#include<hgl/thread/CondVar.h>
+﻿#include<hgl/thread/CondVar.h>
 #include<hgl/thread/ThreadMutex.h>
 #include<pthread.h>
-#include<errno.h>
-#include<iostream>
 
 namespace hgl
 {
 	void GetWaitTime(struct timespec &,double);
 
-	class CondVarPOSIX:public CondVar
+	CondVar::CondVar()
 	{
-		pthread_cond_t *cond;
+		cond_var=new pthread_cond_t;
 
-	public:
+		pthread_cond_init((pthread_cond_t *)cond_var,nullptr);
+	}
 
-		CondVarPOSIX(pthread_cond_t *c)
-		{
-			cond=c;
-		}
-
-		~CondVarPOSIX()
-		{
-			pthread_cond_destroy(cond);
-			delete cond;
-		}
-
-		bool Wait(ThreadMutex *tm,double t)
-		{
-			if(t>0)
-			{
-				struct timespec abstime;
-
-				GetWaitTime(abstime,t);
-
-				return(!pthread_cond_timedwait(cond,tm->GetThreadMutex(),&abstime));
-			}
-			else
-			{
-				return(!pthread_cond_wait(cond,tm->GetThreadMutex()));
-			}
-		}
-
-		void Signal()
-		{
-			pthread_cond_signal(cond);
-		}
-
-		void Broadcast()
-		{
-			pthread_cond_broadcast(cond);
-		}
-	};//class CondVarAPR
-
-	CondVar *CreateCondVarPOSIX()
+	CondVar::~CondVar()
 	{
-		pthread_cond_t *cond=new pthread_cond_t;
+		pthread_cond_destroy((pthread_cond_t *)cond_var);
+		delete (pthread_cond_t *)cond_var;
+	}
 
-		int rv=pthread_cond_init(cond,nullptr);
-
-		if(rv)
+	bool CondVar::Wait(ThreadMutex *tm,double t)
+	{
+		if(t>0)
 		{
-			std::cout<<"pthread_cond_init error,errno:"<<errno<<std::endl;
-			delete cond;
-			return(nullptr);
-		}
+			struct timespec abstime;
 
-		return(new CondVarPOSIX(cond));
+			GetWaitTime(abstime,t);
+
+			return(!pthread_cond_timedwait((pthread_cond_t *)cond_var,tm->GetThreadMutex(),&abstime));
+		}
+		else
+		{
+			return(!pthread_cond_wait((pthread_cond_t *)cond_var,tm->GetThreadMutex()));
+		}
+	}
+
+	void CondVar::Signal()
+	{
+		pthread_cond_signal((pthread_cond_t *)cond_var);
+	}
+
+	void CondVar::Broadcast()
+	{
+		pthread_cond_broadcast((pthread_cond_t *)cond_var);
 	}
 }//namespace hgl

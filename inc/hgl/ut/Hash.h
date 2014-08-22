@@ -74,11 +74,13 @@ namespace hgl
 
 			virtual ~Hash()HGL_DEFAULT_MEMFUNC;
 
+			virtual void GetName(UTF8String &)const=0;		///<取得HASH算法的名称
+			virtual void GetName(UTF16String &)const=0;		///<取得HASH算法的名称
 			virtual const int GetHashBytes()const=0;		///<取得HASH码字节长度(MD4/MD5为16,SHA1为20)
 
 			virtual void Init()=0;							///<初始化散列值计算
-			virtual void Update(const void *,int)=0;		///<提交新的数据
-			virtual void GetResult(void *)=0;				///<结束并取得结果
+			virtual void Update(const void *,uint)=0;		///<提交新的数据
+			virtual void Final(void *)=0;					///<结束并取得结果
 		};//class Hash
 
 		Hash *CreateHash(HASH_ALGORITHML);					///<创建一个hash值计算类实例
@@ -93,9 +95,9 @@ namespace hgl
 		*/
 		bool CountHash(const void *data,int size,void *hash_code,HASH_ALGORITHML ha);
 
-		bool CountMD5(const void *data,int size,MD5Code &md5){return CountHash(data,size,&md5,hashMD5);}
-		bool CountMD4(const void *data,int size,MD4Code &md4){return CountHash(data,size,&md4,hashMD4);}
-		bool CountSHA1(const void *data,int size,SHA1Code &sha1){return CountHash(data,size,&sha1,hashSHA1);}
+		inline bool CountMD5(const void *data,int size,MD5Code &md5){return CountHash(data,size,&md5,hashMD5);}
+		inline bool CountMD4(const void *data,int size,MD4Code &md4){return CountHash(data,size,&md4,hashMD4);}
+		inline bool CountSHA1(const void *data,int size,SHA1Code &sha1){return CountHash(data,size,&sha1,hashSHA1);}
 
 		/**
 		* 取得一个文件的hash值

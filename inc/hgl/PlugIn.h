@@ -1,4 +1,4 @@
-#ifndef HGL_PLUGIN_INCLUDE
+﻿#ifndef HGL_PLUGIN_INCLUDE
 #define HGL_PLUGIN_INCLUDE
 //--------------------------------------------------------------------------------------------------
 #include<hgl/type/DataType.h>
@@ -23,12 +23,12 @@ namespace hgl
 	typedef void 		(*ClosePlugInPROC)();														//关闭插件
 
 	typedef uint32		(*GetPlugInVersionPROC)();					                				//取得插件版本号
-	typedef char16_t *	(*GetPlugInIntroPROC)();				                    				//取得插件介绍信息
+	typedef u16char *	(*GetPlugInIntroPROC)();				                    				//取得插件介绍信息
 
 	typedef bool		(*GetPlugInInterfacePROC)(uint32,void *);			        				//取得插件接口
 	typedef void		(*SetPlugInInterfacePROC)(void *,void *);	                				//设置插件接口
 
-	typedef bool		(*LoadInterfaceByNamePROC)(const char16_t *,uint32,void *);					//取得接口
+	typedef bool		(*LoadInterfaceByNamePROC)(const u16char *,uint32,void *);					//取得接口
 	typedef bool		(*LoadInterfaceByIndexPROC)(uint32,uint32,void *);							//取得接口
 }//namespace hgl
 
@@ -50,7 +50,7 @@ namespace hgl
 		int ref_count;
 
 		uint ver;
-		char16_t *intro;
+		u16char *intro;
 
 		PlugInType type;																			///<插件类型
 
@@ -61,7 +61,7 @@ namespace hgl
 
 		const PlugInType &	GetType		()const{return type;}										///<取得插件类型
 		const uint			GetVersion	()const{return ver;}										///<取得插件版本
-		const char16_t *	GetIntro	()const{return intro;}										///<取得插件介绍
+		const u16char *	GetIntro	()const{return intro;}										///<取得插件介绍
 		const OSString &	GetName		()const{return name;}										///<取得插件名称
 
 	public:

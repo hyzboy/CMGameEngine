@@ -177,7 +177,7 @@ namespace hgl
 
 		if(!path_pointer)
 		{
-			const char16_t *p=filename.strrchr(HGL_DIRECTORY_SEPARATOR);
+			const u16char *p=filename.strrchr(HGL_DIRECTORY_SEPARATOR);
 
 			if(p)
 			{

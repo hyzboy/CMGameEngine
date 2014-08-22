@@ -8,19 +8,19 @@
 
 namespace hgl
 {
-	bool GetTempPath(char16_t *path,unsigned long s)
+	bool GetTempPath(u16char *path,unsigned long s)
 	{
 		HKEY hKey;
 		DWORD type;
 		unsigned long size=1024;
 
-		LONG result = RegOpenKeyEx(HKEY_CURRENT_USER,u"Environment",0,KEY_READ,&hKey);
+		LONG result = RegOpenKeyEx(HKEY_CURRENT_USER,L"Environment",0,KEY_READ,&hKey);
 
 		if(result==ERROR_SUCCESS)
 		{
-			char16_t temp[1024];
+			u16char temp[1024];
 
-			result = RegQueryValueEx( hKey,u"TEMP", NULL, &type, (LPBYTE)temp, &size );
+			result = RegQueryValueEx( hKey,L"TEMP", NULL, &type, (LPBYTE)temp, &size );
 
 			RegCloseKey(hKey);
 
@@ -39,14 +39,14 @@ namespace hgl
 		HKEY hKey;
 		DWORD type;
 
-		char16_t path[HGL_MAX_PATH];
+		u16char path[HGL_MAX_PATH];
 		unsigned long size=HGL_MAX_PATH;
 
-		LONG result = RegOpenKeyEx(HKEY_CURRENT_USER,u"Environment",0,KEY_READ,&hKey);
+		LONG result = RegOpenKeyEx(HKEY_CURRENT_USER,L"Environment",0,KEY_READ,&hKey);
 
 		if(result==ERROR_SUCCESS)
 		{
-			result = RegQueryValueEx( hKey,u"CMGDK", NULL, &type, (LPBYTE)path, &size );
+			result = RegQueryValueEx( hKey,L"CMGDK", NULL, &type, (LPBYTE)path, &size );
 
 			RegCloseKey(hKey);
 
@@ -60,7 +60,7 @@ namespace hgl
 
 	void GetOSPath(CMGDKPATH &cp)
 	{
-		char16_t path[HGL_MAX_PATH];
+		u16char path[HGL_MAX_PATH];
 
 		#define GET_FOLDER(str,attrib)	SHGetFolderPath(nullptr,attrib,nullptr,0,path);	\
 										cp.str=path;

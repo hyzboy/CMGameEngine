@@ -44,7 +44,7 @@ namespace hgl
 		const int size=count>>1;
 		uint16 *p=(uint16 *)data;
 
-		for(uint32 i=0;i<size;i++)
+		for(int i=0;i<size;i++)
 			*p++=rand();
 	}
 

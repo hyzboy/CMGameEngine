@@ -1,4 +1,4 @@
-#ifndef HGL_IO_TEXT_OUTPUT_STREAM_INCLUDE
+﻿#ifndef HGL_IO_TEXT_OUTPUT_STREAM_INCLUDE
 #define HGL_IO_TEXT_OUTPUT_STREAM_INCLUDE
 
 #include<hgl/endian/Endian.h>
@@ -52,7 +52,7 @@ namespace hgl
 			}
 
 			bool WriteChars(const char *,int64);													///<写入一个字符串
-			bool WriteChars(const char16_t *,int64);													///<写入一个字符串
+			bool WriteChars(const u16char *,int64);													///<写入一个字符串
 
 			template<typename N>
 			bool WriteString(const BaseString<N> &str)												///<写入一个字符串

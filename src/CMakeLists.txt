@@ -1,6 +1,5 @@
 IF(BUILD_BASE_LIB)
 	add_subdirectory(Base)
-	add_subdirectory(BaseObject)
 	add_subdirectory(UtilityTools)
 ENDIF(BUILD_BASE_LIB)
 
@@ -27,3 +26,5 @@ ENDIF(UNIX)
 add_subdirectory(OS)
 
 add_subdirectory(PlugIn)
+
+add_subdirectory(RedisClient)

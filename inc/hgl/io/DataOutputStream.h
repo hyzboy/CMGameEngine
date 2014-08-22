@@ -94,7 +94,7 @@ namespace hgl
 			STREAM_WRITE(uint32,	Uint32	);
 			STREAM_WRITE(uint64,	Uint64	);
 
-			STREAM_WRITE(char16_t,	UTF16Char);
+			STREAM_WRITE(u16char,	UTF16Char);
 			STREAM_WRITE(float,		Float	);
 			STREAM_WRITE(double,	Double	);
 
@@ -142,8 +142,8 @@ namespace hgl
 			bool WriteUTF16LEString	(const UTF8String &str);							///<按utf16-le格式写入字符串(前置4字节字符串长度,再写入字符阵列)
 			bool WriteUTF16BEString	(const UTF8String &str);							///<按utf16-be格式写入字符串(前置4字节字符串长度,再写入字符阵列)
 
-			bool WriteUTF16LEString	(const char16_t *,int32=-1);							///<按utf16-le格式写入字符串(前置4字节字符串长度,再写入字符阵列)
-			bool WriteUTF16BEString	(const char16_t *,int32=-1);							///<按utf16-be格式写入字符串(前置4字节字符串长度,再写入字符阵列)
+			bool WriteUTF16LEString	(const u16char *,int32=-1);							///<按utf16-le格式写入字符串(前置4字节字符串长度,再写入字符阵列)
+			bool WriteUTF16BEString	(const u16char *,int32=-1);							///<按utf16-be格式写入字符串(前置4字节字符串长度,再写入字符阵列)
 			bool WriteUTF8String	(const UTF16String &str);							///<按utf8格式写入字符串(前置4字节字符串长度,再写入字符阵列)
 			bool WriteUTF16LEString	(const UTF16String &str);							///<按utf16-le格式写入字符串(前置4字节字符串长度,再写入字符阵列)
 			bool WriteUTF16BEString	(const UTF16String &str);							///<按utf16-be格式写入字符串(前置4字节字符串长度,再写入字符阵列)

@@ -34,7 +34,7 @@ namespace hgl
 	*/
 	class HAC:public Thread                                                                        	///HAC-3包裹文件支持类
 	{
-		friend HAC *OpenHAC(const char16_t *);
+		friend HAC *OpenHAC(const u16char *);
 
 	private:
 

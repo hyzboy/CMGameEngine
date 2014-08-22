@@ -1,4 +1,4 @@
-#include<hgl/network/TCPSocketRBThread.h>
+﻿#include<hgl/network/TCPSocketRBThread.h>
 #include<hgl/network/SocketManage.h>
 #include<hgl/network/TCPSocket.h>
 #include<hgl/thread/Semaphore.h>
@@ -10,8 +10,6 @@ namespace hgl
 	{
 		TCPSocketRBThread::TCPSocketRBThread(int max_user,const double time_out)
 		{
-			sock_lock=CreateRWLock();
-
 			sock_manage=new SocketManageCB(max_user);
 			sock_manage->SetTimeOut(time_out);
 
@@ -22,7 +20,6 @@ namespace hgl
 		{
 			delete join_sem;
 			delete sock_manage;
-			delete sock_lock;
 		}
 
 		bool TCPSocketRBThread::Join(TCPSocketRB **tcp,int count)
@@ -40,7 +37,7 @@ namespace hgl
 		void TCPSocketRBThread::ProcJoin()
 		{
 			join_list.Lock();
-			sock_lock->WriteLock();
+			sock_lock.WriteLock();
 
 			const int count=join_list->GetCount();
 			TCPSocketRB **p=join_list->GetData();
@@ -55,7 +52,7 @@ namespace hgl
 
 			join_list->ClearData();
 
-			sock_lock->WriteUnlock();
+			sock_lock.WriteUnlock();
 			join_list.Unlock();
 		}
 
@@ -73,7 +70,7 @@ namespace hgl
 		void TCPSocketRBThread::ProcUnjoin()
 		{
 			unjoin_set.Lock();
-			sock_lock->WriteLock();
+			sock_lock.WriteLock();
 				if(unjoin_set->GetCount()>0)
 				{
 					sock_manage->Unjoin((IOSocket **)(unjoin_set->GetData()),unjoin_set->GetCount());
@@ -81,7 +78,7 @@ namespace hgl
 
 					unjoin_set->DeleteClear();
 				}
-			sock_lock->WriteUnlock();
+			sock_lock.WriteUnlock();
 			unjoin_set.Unlock();
 		}
 

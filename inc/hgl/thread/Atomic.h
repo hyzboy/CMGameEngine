@@ -1,4 +1,4 @@
-﻿#ifndef HGL_ATOMIC_INCLUDE
+#ifndef HGL_ATOMIC_INCLUDE
 #define HGL_ATOMIC_INCLUDE
 
 #include<hgl/platform/Platform.h>
@@ -38,9 +38,9 @@ namespace hgl
 
 		typedef atom_win32<char		> atom_char;
 		typedef atom_win32<uchar	> atom_uchar;
-		typedef atom_win32<wchar_t	> atom_wchar;
-		typedef atom_win32<char16_t	> atom_char16;
-		typedef atom_win32<char32_t	> atom_char32;
+//		typedef atom_win32<wchar_t	> atom_wchar;
+		typedef atom_win32<u16char	> atom_char16;
+//		typedef atom_win32<char32_t	> atom_char32;
 	#else
 // 		#ifdef HGL_ATOMIC_CPP11
 // 			template<typename T> using atom=std::atomic<T>;
@@ -58,9 +58,9 @@ namespace hgl
 
 		typedef atom<char		> atom_char;
 		typedef atom<uchar		> atom_uchar;
-		typedef atom<wchar_t	> atom_wchar;
-		typedef atom<char16_t	> atom_char16;
-		typedef atom<char32_t	> atom_char32;
+//		typedef atom<wchar_t	> atom_wchar;
+		typedef atom<u16char	> atom_char16;
+//		typedef atom<char32_t	> atom_char32;
 	#endif//windows & !c++11
 }//namespace hgl
 #endif//HGL_ATOMIC_INCLUDE

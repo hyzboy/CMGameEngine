@@ -1,4 +1,4 @@
-#ifndef HGL_PLIST_INCLUDE
+﻿#ifndef HGL_PLIST_INCLUDE
 #define HGL_PLIST_INCLUDE
 
 #include<hgl/type/Map.h>
@@ -28,7 +28,7 @@ namespace hgl
 		virtual bool LoadTxt(const OSString &);														///<从文件中加载列表
 
 		template<ByteOrderMask BOM>
-				bool SaveTxt(const OSString &filename,const char16_t gap_ch=u'\t')					///<保存列表到文件
+				bool SaveTxt(const OSString &filename,const u16char gap_ch=u'\t')					///<保存列表到文件
 		{
 			FileOutputStream fos;
 			TextOutputStream<BOM> tos(&fos);

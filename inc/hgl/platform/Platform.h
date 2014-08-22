@@ -10,6 +10,8 @@
 #define HGL_MERGE32(a,b,c,d)		(a|b<<8|c<<16|d<<24)
 
 #define HGL_OS_Windows				HGL_MERGE32('W','i','n',' ')
+#define HGL_OS_OS2					HGL_MERGE32('O','S','/','2')
+#define HGL_OS_NetWare				HGL_MERGE32('N','e','t','W')
 #define HGL_OS_MacOSX				HGL_MERGE32('M','a','c','X')
 #define HGL_OS_iOS					HGL_MERGE32('i','O','S',' ')
 #define HGL_OS_FreeBSD				HGL_MERGE32('F','B','S','D')
@@ -138,6 +140,10 @@
 
 #if defined(__WIN32__)||defined(_WIN32)||defined(WIN32)||defined(__WINDOWS__)||defined(__WIN64__)||defined(_WIN64)||defined(WIN64)
 	#define HGL_OS 			HGL_OS_Windows
+#elif defined(OS2)
+	#define HGL_OS			HGL_OS_OS2
+#elif defined(NETWARE)
+	#define HGL_OS			HGL_OS_NetWare
 #elif defined(__APPLE__)||defined(__MAC__)||defined(macintosh)||defined(__APPLE_CC__)
 	#define HGL_OS			HGL_OS_MacOS
 #elif defined(__FreeBSD)||defined(__FreeBSD__)

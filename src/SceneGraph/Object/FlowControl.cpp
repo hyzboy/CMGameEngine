@@ -1,4 +1,4 @@
-#include"hgl/object/FlowControl.h"
+﻿#include"hgl/object/FlowControl.h"
 
 namespace hgl
 {
@@ -37,7 +37,7 @@ namespace hgl
 	* @param name 本流程名称
 	* @param obj 本流程控制器的起始流程
 	*/
-	FlowControl::FlowControl(char16_t *name,FlowObject *obj)
+	FlowControl::FlowControl(u16char *name,FlowObject *obj)
 	{
 		Name=name;
 
@@ -128,7 +128,7 @@ namespace hgl
 		#ifdef _DEBUG
 		if(!sub)
 		{
-			PutError(u"错误！呼叫进入的子流程对象不存在！");
+			LOG_ERROR(OS_TEXT("错误！呼叫进入的子流程对象不存在！"));
 		}
 		else
 		#endif//_DEBUG
@@ -148,7 +148,7 @@ namespace hgl
 		#ifdef _DEBUG
 		if(!next)
 		{
-			PutError(u"错误！呼叫进入的子流程对象不存在！");
+			LOG_ERROR(OS_TEXT("错误！呼叫进入的子流程对象不存在！"));
 		}
 		else
 		#endif//_DEBUG
@@ -404,7 +404,7 @@ namespace hgl
 
 	#undef PROC
 
-	bool FlowControl::Proc_Char(char16_t ch)
+	bool FlowControl::Proc_Char(u16char ch)
 	{
 		if(active_object)
 			return active_object->Proc_Char(ch);

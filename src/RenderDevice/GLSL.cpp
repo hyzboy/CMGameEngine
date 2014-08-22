@@ -33,8 +33,8 @@ namespace hgl
 		struct RenderState;
 
 #ifdef _DEBUG
-		char *MakeVertexShader(Renderable *,bool,RenderState *,const char16_t *save_filename=0);
-		char *MakeFragmentShader(Renderable *,RenderState *,const char16_t *save_filename=0);
+		char *MakeVertexShader(Renderable *,bool,RenderState *,const u16char *save_filename=0);
+		char *MakeFragmentShader(Renderable *,RenderState *,const u16char *save_filename=0);
 #else
 		char *MakeVertexShader(Renderable *,bool,RenderState *);
 		char *MakeFragmentShader(Renderable *,RenderState *);
@@ -56,14 +56,14 @@ namespace hgl
 // 		}
 
 #ifdef _DEBUG
-		Shader *CreateShader(Renderable *able,bool mvp,RenderState *state,const char16_t *save_filename)
+		Shader *CreateShader(Renderable *able,bool mvp,RenderState *state,const u16char *save_filename)
 		{
 			char *vs,*fs;
 
 			if(save_filename)
 			{
-				char16_t vs_filename[1024];
-				char16_t fs_filename[1024];
+				u16char vs_filename[1024];
+				u16char fs_filename[1024];
 
 				strcpy(vs_filename,save_filename);strcat(vs_filename,u".vs");
 				strcpy(fs_filename,save_filename);strcat(fs_filename,u".fs");

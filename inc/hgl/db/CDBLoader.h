@@ -1,4 +1,4 @@
-﻿#ifndef HGL_CDB_LOADER_INCLUDE
+#ifndef HGL_CDB_LOADER_INCLUDE
 #define HGL_CDB_LOADER_INCLUDE
 
 #include<hgl/db/CDBTable.h>
@@ -145,7 +145,7 @@ namespace hgl
 
 			void Convert(int row,void *base)
 			{
-				field->GetChar(row,*(char16_t *)(((char *)base)+offset));
+				field->GetChar(row,*(u16char *)(((char *)base)+offset));
 			}
 		};//class CDBFieldMapChar16
 
@@ -193,7 +193,7 @@ namespace hgl
 				return table.Load(filename);
 			}
 
-			bool Map(const char16_t *name,size_t offset)
+			bool Map(const u16char *name,size_t offset)
 			{
 				db::CDBField *field=table.Fields[name];
 
@@ -217,7 +217,7 @@ namespace hgl
 					if(field->Type.base==fbtFloat	){map_list.Add(new CDBFieldMapArray<float	>(field,offset));return(true);}
 					if(field->Type.base==fbtDouble	){map_list.Add(new CDBFieldMapArray<double	>(field,offset));return(true);}
 					if(field->Type.base==fbtChar8	){map_list.Add(new CDBFieldMapArray<char	>(field,offset));return(true);}
-					if(field->Type.base==fbtChar16le){map_list.Add(new CDBFieldMapArray<char16_t>(field,offset));return(true);}
+					if(field->Type.base==fbtChar16le){map_list.Add(new CDBFieldMapArray<u16char>(field,offset));return(true);}
 				}
 				else
 				{
@@ -239,7 +239,7 @@ namespace hgl
 			}
 
 			template<typename T>
-			bool MapArray(const char16_t *name,size_t offset)
+			bool MapArray(const u16char *name,size_t offset)
 			{
 				db::CDBField *field=table.Fields[name];
 

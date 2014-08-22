@@ -18,7 +18,7 @@ namespace hgl
 
 	private:
 
-		bool _MapFunc(const char16_t *,void *,void *);
+		bool _MapFunc(const u16char *,void *,void *);
 
 	public:	//内部属性
 
@@ -32,14 +32,14 @@ namespace hgl
 
 	public:
 
-		bool MapProperty(const char16_t *,void *);
-		bool MapFunc(const char16_t *,void *);
-//		bool MapFunc(void *,const char16_t *,void *);
-		bool MapFunc(const char16_t *,void *,void *);
+		bool MapProperty(const u16char *,void *);
+		bool MapFunc(const u16char *,void *);
+//		bool MapFunc(void *,const u16char *,void *);
+		bool MapFunc(const u16char *,void *,void *);
 
-		bool AddEnum(const char16_t *,DevilEnum *);
+		bool AddEnum(const u16char *,DevilEnum *);
 
-		bool AddScript(const char16_t *,int=-1);
+		bool AddScript(const u16char *,int=-1);
 
 		void Clear();
 

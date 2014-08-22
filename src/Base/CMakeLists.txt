@@ -3,6 +3,15 @@
 
 SOURCE_GROUP("Common" FILES ${BASE_COMMON_SOURCE})
 
+SET(BASE_OBJECT_SOURCE
+	Object/Object.cpp
+	Object/EnumObject.cpp
+	Object/ConsoleFlowControl.cpp
+	Object/ConsoleFlowObject.cpp
+	Object/ConsoleObjectControl.cpp)
+
+SOURCE_GROUP("Object"	FILES ${BASE_OBJECT_SOURCE})
+
 SET(BASE_OTHER_SOURCE
 	Other/ProbSelect.cpp
 	Other/ExpendString.cpp
@@ -110,7 +119,6 @@ SET(BASE_MULTI_PROCESS_SOURCE
 	MultiProcess/ProcMutexAPR.cpp)
 
 SET(BASE_MULTI_THREAD_SOURCE
-	MultiThread/CondVar.cpp
 	MultiThread/RingBuffer.cpp
 	MultiThread/RingBufferRead.cpp
 	MultiThread/RingBufferWrite.cpp)
@@ -131,7 +139,6 @@ ENDIF(UNIX)
 
 IF(WIN32)
 	SET(BASE_MULTI_THREAD_SOURCE ${BASE_MULTI_THREAD_SOURCE}
-		MultiThread/APR/RWLockAPR.cpp
 		MultiThread/WinNT/CondVarNT6.cpp
 		MultiThread/WinNT/RWLockNT6.cpp
 		MultiThread/WinNT/SemaphoreNT4.cpp
@@ -144,6 +151,7 @@ SOURCE_GROUP("MultiProcess"	FILES ${BASE_MULTI_PROCESS_SOURCE})
 
 ADD_LIBRARY(CM.Base SHARED
 			${BASE_COMMON_SOURCE}
+			${BASE_OBJECT_SOURCE}
 			${BASE_OTHER_SOURCE}
 			${BASE_OTHER_ALGORITHML_SOURCE}
 			${BASE_LOG_SOURCE}
@@ -155,3 +163,7 @@ ADD_LIBRARY(CM.Base SHARED
 			${BASE_PLUG_IN_SOURCE}
 			${BASE_MULTI_PROCESS_SOURCE}
 			${BASE_MULTI_THREAD_SOURCE})
+
+IF(WIN32)
+	target_link_libraries(CM.Base libapr-1)
+ENDIF(WIN32)

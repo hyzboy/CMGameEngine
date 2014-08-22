@@ -41,19 +41,19 @@ namespace hgl
 	{
 		if(!ao)
 		{
-			LOG_ERROR(u"AffectorControl 添加的新对象指针为空,name:"+name);
+			LOG_ERROR(U16_TEXT("AffectorControl 添加的新对象指针为空,name:")+name);
 			return(false);
 		}
 
 		if(name.IsEmpty())
 		{
-			LOG_ERROR(u"AffectorControl 添加的新对象没有名称,addr:"+PointerToHexUTF16String(ao));
+			LOG_ERROR(U16_TEXT("AffectorControl 添加的新对象没有名称,addr:") + PointerToHexUTF16String(ao));
 			return(false);
 		}
 
 		if(affector_list.Find(name)!=-1)
 		{
-			LOG_ERROR(u"AffectorControl重复添加的对象,name:\""+name+u"\",addr:"+PointerToHexUTF16String(ao));
+			LOG_ERROR(U16_TEXT("AffectorControl重复添加的对象,name:\"") + name + U16_TEXT("\",addr:") + PointerToHexUTF16String(ao));
 			return(false);
 		}
 

@@ -1,4 +1,4 @@
-﻿#include<hgl/Logger.h>
+#include<hgl/Logger.h>
 #include<hgl/Other.h>
 #include<hgl/thread/ThreadMutex.h>
 #include<unistd.h>
@@ -63,7 +63,7 @@ namespace hgl
 			}
 #endif//LOG_INFO_TIME
 
-			void Write(const char16_t *str,int size)
+			void Write(const u16char *str,int size)
 			{
 			#ifdef LOGINFO_THREAD_MUTEX
 				mutex.Lock();

@@ -158,7 +158,7 @@ namespace hgl
 #ifdef _DEBUG
 		if(KeyConvert[key]==0)
 		{
-			char16_t name[64];
+			u16char name[64];
 
 			GetKeyNameText(key,name,64);
 			PutInfo(u"δ֪�İ���: %02X ,name: %s",key,name);

@@ -57,7 +57,7 @@ namespace hgl
 			LOG_ERROR(OS_TEXT("cpu endian error,this library is bad.library macro Cpu=") HGL_CPU_NAME OS_TEXT(", Endian is ") HGL_CPU_ENDIAN);
 
 //         #if HGL_COMPILER == HGL_COMPILER_GNU
-//         if(sizeof(char16_t)!=2
+//         if(sizeof(u16char)!=2
 //          ||L'中'!=0x4E2D)
 //         {
 // 			LOG_ERROR(u"please use \"-fwide-exec-charset=UTF-16LE -fshort-wchar\"");
@@ -72,8 +72,13 @@ namespace hgl
 		}
 
 		apr_initialize();			//初始化apr
+
+#if HGL_OS == HGL_OS_Windows
+		srand(GetMicroTime());
+#else
 		srand48(GetMicroTime());
 		srand(lrand48());
+#endif//
 
 		InitStartTime();			//初始化启动时间
 
