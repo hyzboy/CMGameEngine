@@ -1,7 +1,7 @@
 ﻿#ifndef HGL_NETWORK_MULTI_THREAD_SOCKET_MANAGE_INCLUDE
 #define HGL_NETWORK_MULTI_THREAD_SOCKET_MANAGE_INCLUDE
 
-#include<hgl.h>
+#include<hgl/network/SocketManageThread.h>
 namespace hgl
 {
 	namespace network

@@ -14,8 +14,7 @@ namespace hgl
 		{
 		public:
 
-			SocketManageBase();
-			virtual ~SocketManageBase()=0;
+			virtual ~SocketManageBase()HGL_DEFAULT_MEMFUNC;
 
 			virtual bool Join(int)=0;																///<加入一个Socket
 			virtual bool Join(int *,int)=0;                                                         ///<加入一批Socket
