@@ -274,7 +274,7 @@ namespace hgl
 
 				if(epoll_fd<0)
 				{
-					std::cout<<"epoll_create return error,errno is "<<errno<<std::endl;
+//					std::cout<<"epoll_create return error,errno is "<<errno<<std::endl;
 					return(nullptr);
 				}
 

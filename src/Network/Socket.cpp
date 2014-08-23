@@ -10,7 +10,31 @@
 	#if HGL_OS == HGL_OS_Solaris
 		#include<sys/filio.h>
 	#endif//HGL_OS == HGL_OS_Solaris
+#else//HGL_OS != HGL_OS_Windows
+namespace
+{
+	class WindowsSocketInit
+	{
+	public:
+
+		static bool ws_init;
+
+	public:
+
+		WindowsSocketInit()
+		{
+			WSADATA wsa;
+
+			ws_init=(WSAStartup(MAKEWORD(2,2),&wsa)==NO_ERROR);
+		}
+	};//class WindowsSocketInit
+
+	bool WindowsSocketInit::ws_init=false;
+	static WindowsSocketInit wsi;
+}//HGL_OS != HGL_OS_Windows
 #endif//HGL_OS != HGL_OS_Windows
+
+//setsockopt函数的Windows下使用参数格式请参见http://msdn.microsoft.com/en-us/library/windows/desktop/ms740476(v=vs.85).aspx
 
 namespace hgl
 {
@@ -40,6 +64,11 @@ namespace hgl
 
 		bool Socket::CreateSocket(int d,int t,int p)
 		{
+			#if HGL_OS == HGL_OS_Windows
+			if(!WindowsSocketInit::ws_init)
+				RETURN_FALSE;
+			#endif//HGL_OS == HGL_OS_Windows
+
 			int s=socket(d,t,p);
 
 			if(s<0)
@@ -50,7 +79,7 @@ namespace hgl
 							OS_TEXT(") return ")+OSString(s)+
 							OS_TEXT("; errno ")+OSString(GetLastSocketError()));
 
-				return(false);
+				RETURN_FALSE;
 			}
 
 			if(p==IPPROTO_UDP){LOG_INFO(OS_TEXT("Create UDP Socket OK: ")+OSString(s));}else
@@ -450,11 +479,12 @@ namespace hgl
 		*/
 		bool BindAddr(int ThisSocket,const sockaddr_in &addr)
 		{
-			const int val=1;
-
 #if HGL_OS == HGL_OS_Windows
-			setsockopt(ThisSocket,SOL_SOCKET,SO_REUSEADDR,(const char *)&val,sizeof(int));
+			const BOOL val=true;
+
+			setsockopt(ThisSocket,SOL_SOCKET,SO_REUSEADDR,(const char *)&val,sizeof(BOOL));
 #else
+			const int val=1;
 			setsockopt(ThisSocket,SOL_SOCKET,SO_REUSEADDR,&val,sizeof(int));
 #endif//HGL_OS == HGL_OS_Windows
 
@@ -509,7 +539,7 @@ namespace hgl
 		void SetSocketBlock(int ThisSocket,bool block,double send_time_out,double recv_time_out)
 		{
 			#if HGL_OS == HGL_OS_Windows
-				ulong par = (block ? 0 : 1);
+				u_long par = (block ? 0 : 1);
 
 				DWORD stv=send_time_out*1000;
 				DWORD rtv=recv_time_out*1000;
