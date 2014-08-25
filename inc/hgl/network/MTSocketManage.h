@@ -72,12 +72,12 @@ namespace hgl
 			MTSocketManage();
 			virtual ~MTSocketManage();
 
-			bool Init(int _max_socket_count,int _thread_count);										///<初始化
+			virtual bool Init(int _max_socket_count,int _thread_count);								///<初始化
 
-			bool Join(IOSocket *);																	///<增加一个Socket
-			bool Unjoin(IOSocket *);																///<移除一个Socket
+			virtual bool Join(IOSocket *);															///<增加一个Socket
+			virtual bool Unjoin(IOSocket *);														///<移除一个Socket
 
-			bool Execute();
+			virtual bool Execute();																	///<线程刷新函数(主要处理错误socket删除)
 
 		public:
 
