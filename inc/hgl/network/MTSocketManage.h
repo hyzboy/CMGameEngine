@@ -10,13 +10,10 @@ namespace hgl
 {
 	namespace network
 	{
-		class IOSocket;
-		class SocketManageThread;
-
 		/**
 		 * 多线程Socket I/O管理
 		 */
-		class MTSocketManageBase:public Thread
+		class MTSocketManageBase
 		{
 			template<typename T> friend class MTSocketWorkThread;
 
@@ -48,7 +45,7 @@ namespace hgl
 		/**
 		 * 多线程Socket I/O管理
 		 */
-		class MTSocketManage:public MTSocketManageBase
+		class MTSocketManage:public MTSocketManageBase,public Thread
 		{
 			int max_socket_count;																	///<最大socket数
 			int thread_count;																		///<线程数量
@@ -81,12 +78,12 @@ namespace hgl
 
 		public:
 
-			virtual SocketManageThread *CreateRecvSocketManageThread()
+			virtual SocketManageThread *CreateRecvSocketManageThread()								///<创建Socket收接管理线程
 			{
 				return(new MTSocketWorkThread<RecvSocketManageThread>(this,max_socket_count));
 			}
 
-			virtual SocketManageThread *CreateSendSocketManageThread()
+			virtual SocketManageThread *CreateSendSocketManageThread()								///<创建Socket发送管理线程
 			{
 				return(new MTSocketWorkThread<SendSocketManageThread>(this,max_socket_count));
 			}
