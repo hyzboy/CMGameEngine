@@ -11,11 +11,11 @@ namespace hgl
 	namespace network
 	{
 		/**
-		 * 多线程Socket I/O管理
+		 * 多线程Socket I/O管理基类
 		 */
 		class MTSocketManageBase
 		{
-			template<typename T> friend class MTSocketWorkThread;
+			template<typename T> friend class SocketManageThreadPass;
 
 			virtual void ProcError(SocketManageThread *,IOSocket **,const int)=0;					///<处理出错Socket列表
 
@@ -25,13 +25,16 @@ namespace hgl
 			virtual SocketManageThread *CreateSendSocketManageThread()=0;
 		};//class MTSocketManageBase
 
-		template<typename T> class MTSocketWorkThread:public T
+		/**
+		 * Socket管理线程错误回馈模板<br>
+		 */
+		template<typename T> class SocketManageThreadPass:public T
 		{
 			MTSocketManageBase *manage;
 
 		public:
 
-			MTSocketWorkThread(MTSocketManageBase *sm,int max_socket_count):T(max_socket_count)
+			SocketManageThreadPass(MTSocketManageBase *sm,int max_socket_count):T(max_socket_count)
 			{
 				manage=sm;
 			}
@@ -80,12 +83,12 @@ namespace hgl
 
 			virtual SocketManageThread *CreateRecvSocketManageThread()								///<创建Socket收接管理线程
 			{
-				return(new MTSocketWorkThread<RecvSocketManageThread>(this,max_socket_count));
+				return(new SocketManageThreadPass<RecvSocketManageThread>(this,max_socket_count));
 			}
 
 			virtual SocketManageThread *CreateSendSocketManageThread()								///<创建Socket发送管理线程
 			{
-				return(new MTSocketWorkThread<SendSocketManageThread>(this,max_socket_count));
+				return(new SocketManageThreadPass<SendSocketManageThread>(this,max_socket_count));
 			}
 
 			virtual void ProcError(IOSocket *sock)													///<处理错误Socket
