@@ -1,4 +1,4 @@
-#include<hgl/thread/Semaphore.h>
+﻿#include<hgl/thread/Semaphore.h>
 #include<hgl/LogInfo.h>
 #include<pthread.h>
 #include<semaphore.h>
@@ -38,6 +38,7 @@ namespace hgl
 	bool Semaphore::Release(int n)
 	{
 		if(!ptr)return(false);
+		if(n<=0)return(false);
 
 		int result=0;
 

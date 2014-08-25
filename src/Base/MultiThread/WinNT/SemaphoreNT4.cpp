@@ -29,7 +29,8 @@ namespace hgl
 	* @return 是否释放成功
 	*/
 	bool Semaphore::Release(int n)
-	{              
+	{
+		if(n<=0)return(false);
 		return(ReleaseSemaphore(ptr,n,nullptr));
 	}
 
