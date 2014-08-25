@@ -76,7 +76,19 @@ namespace hgl
 			virtual bool Join(IOSocket *);															///<增加一个Socket
 			virtual bool Unjoin(IOSocket *);														///<移除一个Socket
 
+			virtual bool Start();																	///<开始运行线程管理器
+
 			virtual bool Execute();																	///<线程刷新函数(主要处理错误socket删除)
+
+		public:
+
+			int					GetThreadCount()const{return thread_count;}							///<取得线程数量
+
+			SocketManageThread *GetRecvThread(int index)const										///<取得指定接收线程
+			{return (index<0||index>=thread_count)?nullptr:recv_manage[index];}
+
+			SocketManageThread *GetSendThread(int index)const										///<取得指定发送线程
+			{return (index<0||index>=thread_count)?nullptr:send_manage[index];}
 
 		public:
 

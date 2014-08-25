@@ -40,12 +40,22 @@ namespace hgl
 			{
 				recv_manage[i]=CreateRecvSocketManageThread();
 				send_manage[i]=CreateSendSocketManageThread();
+			}
 
+			return(true);
+		}
+
+		bool MTSocketManage::Start()
+		{
+			if(thread_count<=0)return(false);
+
+			for(int i=0;i<thread_count;i++)
+			{
 				recv_manage[i]->Start();
 				send_manage[i]->Start();
 			}
 
-			return(true);
+			return Thread::Start();
 		}
 
 		bool MTSocketManage::Join(IOSocket *s)																	///<增加一个Socket
