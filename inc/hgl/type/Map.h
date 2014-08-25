@@ -48,6 +48,7 @@ namespace hgl
 		virtual bool	Get(const F &,T &)const;													///<取得数据
 		virtual bool	Delete(const F &,T &);														///<将指定数据从列表中移除
 		virtual bool	DeleteByIndex(const F &);													///<根据索引将指定数据从列表中移除
+		virtual int		DeleteByIndex(const F *,const int);											///<根据索引将指定数据从列表中批量移除
 		virtual bool	DeleteByData(const T &);													///<根据数据将指定数据从列表中移除
 		virtual bool	DeleteBySerial(int);														///<根据序号将指定数据从列表中移除
 		virtual bool	DeleteBySerial(int,int);													///<根据序号将指定数据从列表中移除
@@ -116,7 +117,7 @@ namespace hgl
 	template<typename F,typename T> class Map:public _Map<F,T,Pair<F,T> >
 	{
 	public:
-		
+
 		Map()HGL_DEFAULT_MEMFUNC;
 		virtual ~Map()HGL_DEFAULT_MEMFUNC;
 	};//class Map

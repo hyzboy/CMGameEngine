@@ -338,6 +338,36 @@ namespace hgl
 	}
 
 	/**
+	* 根据索引将指定数据从列表中批量移除
+	* @param fp 索引列表
+	* @param count 索引数量
+	* @return 是否成功
+	*/
+	template<typename F,typename T,typename DataPair>
+	int _Map<F,T,DataPair>::DeleteByIndex(const F *fp,const int count)
+	{
+		int total=0;
+
+		for(int i=0;i<count;i++)
+		{
+			int index=Find(*fp);
+
+			if(index!=-1)
+			{
+				data_pool.Release(data_list[index]);
+				data_list.DeleteMove(index);
+
+				++total;
+			}
+
+			++fp;
+		}
+
+		return(total);
+	}
+
+
+	/**
 	* 根据数据将指定数据从列表中移除
 	* @param data 数据
 	* @return 是否成功
