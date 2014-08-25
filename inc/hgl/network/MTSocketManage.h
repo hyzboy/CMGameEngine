@@ -91,7 +91,12 @@ namespace hgl
 				return(new MTSocketWorkThread<SendSocketManageThread>(this,max_socket_count));
 			}
 
-			virtual void ProcError(IOSocket *){}													///<处理错误Socket
+			virtual void ProcError(IOSocket *sock)													///<处理错误Socket
+			{
+				if(!sock)return;
+
+				delete sock;
+			}
 		};//class MTSocketManage
 	}//namespace network
 }//namespace hgl
