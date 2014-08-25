@@ -20,7 +20,7 @@ namespace hgl
 		{
 			template<typename T> friend class MTSocketWorkThread;
 
-			virtual void ProcError(IOSocket **,const int)=0;											///<处理出错Socket列表
+			virtual void ProcError(SocketManageThread *,IOSocket **,const int)=0;					///<处理出错Socket列表
 
 		public:
 
@@ -41,7 +41,7 @@ namespace hgl
 
 			virtual void ProcError(IOSocket **sock_list,const int count)HGL_OVERRIDE
 			{
-				manage->ProcError(sock_list,count);			//将错误回传给MTSocketManage
+				manage->ProcError(this,sock_list,count);			//将错误回传给MTSocketManage
 			}
 		};//class MTSocketRecvThread
 
@@ -65,7 +65,7 @@ namespace hgl
 
 		protected:
 
-			virtual void ProcError(IOSocket **,const int);											///<处理出错Socket列表
+			virtual void ProcError(SocketManageThread *,IOSocket **,const int);						///<处理出错Socket列表
 
 		public:
 
