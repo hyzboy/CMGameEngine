@@ -7,6 +7,7 @@
 #include<hgl/type/List.h>
 #include<hgl/type/Map.h>
 #include<hgl/network/SocketEvent.h>
+#include<hgl/network/IOSocket.h>
 namespace hgl
 {
 	namespace network
@@ -26,10 +27,12 @@ namespace hgl
 
 			SocketManageBase *sock_manage;															///<Socket管理器
 
-			ThreadMutexObject<Map<int,Socket *>> sock_set;											///<Socket合集
+			ThreadMutexObject<Map<int,IOSocket *>> sock_set;											///<Socket合集
 
 			List<SocketEvent> event_list;															///<Socket事件列表
 			List<SocketEvent> error_list;															///<Socket错误列表
+
+			List<IOSocket *> error_ios_list;
 
 			Set<int> delete_list;
 
@@ -37,7 +40,7 @@ namespace hgl
 
 		protected:
 
-			SemThreadMutex<Set<Socket *>> sock_join_set;											///<Socket加入合集
+			SemThreadMutex<Set<IOSocket *>> sock_join_set;											///<Socket加入合集
 
 			virtual void ProcSocketJoin();															///<处理Socket加入
 
@@ -53,14 +56,14 @@ namespace hgl
 			virtual bool Execute()HGL_OVERRIDE;														///<本线程刷新函数
 
 			virtual bool ProcStartThread()=0;
-			virtual void ProcError(Socket *){}														///<处理错误Socket列表函数
-			virtual bool ProcEvent(Socket *)=0;														///<处理事件Socket列表函数(需使用者自行重载处理)
+			virtual void ProcError(IOSocket **,const int)=0;										///<处理错误Socket列表函数
+			virtual bool ProcEvent(IOSocket *,int)=0;												///<处理事件Socket列表函数(需使用者自行重载处理)
 
 		public:
 
-			virtual bool Join(Socket *);															///<加入一个Socket
-			virtual int Join(Socket **,const int);													///<加入一批Socket
-			virtual bool Unjoin(Socket *);															///<分离一个Socket
+			virtual bool Join(IOSocket *);															///<加入一个Socket
+			virtual int Join(IOSocket **,const int);													///<加入一批Socket
+			virtual bool Unjoin(IOSocket *);															///<分离一个Socket
 
 			virtual int GetCount()const;															///<取得Socket数量
 			virtual void Clear();																	///<清除所有Socket
@@ -84,7 +87,12 @@ namespace hgl
 				return(this->sock_manage);
 			}
 
-			virtual bool ProcEvent(Socket *)HGL_OVERRIDE=0;
+			virtual bool ProcEvent(IOSocket *sock,int size)HGL_OVERRIDE								///<处理Socket接收事件函数
+			{
+				return(sock->ProcRecv(size)>=0);
+			}
+
+			virtual void ProcError(IOSocket **,const int)HGL_OVERRIDE=0;							///<处理Socket出错事件函数
 		};//class RecvSocketManageThread
 
 		/**
@@ -105,7 +113,14 @@ namespace hgl
 				return(this->sock_manage);
 			}
 
-			virtual bool ProcEvent(Socket *)HGL_OVERRIDE=0;
+			virtual bool ProcEvent(IOSocket *sock,int size)HGL_OVERRIDE								///<处理Socket发送事件函数
+			{
+				int left_bytes;
+
+				return(sock->ProcSend(size,left_bytes)>=0);
+			}
+
+			virtual void ProcError(IOSocket **,const int)HGL_OVERRIDE=0;							///<处理Socket出错事件函数
 		};//class SendSocketManageThread
 	}//namespace network
 }//namespace hgl

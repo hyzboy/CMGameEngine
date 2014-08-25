@@ -2,7 +2,6 @@
 	Socket.cpp
 	ServerSocket.cpp
 	AcceptServer.cpp
-	SocketManageThread.cpp
 	)
 
 SET(NETWORK_UDP_SOURCE
@@ -80,6 +79,10 @@ ADD_LIBRARY(CM.Network SHARED
 	${NETWORK_TCP_COMMON_SOURCE}
 	${NETWORK_TCP_CLIENT_SOURCE}
 	${NETWORK_TCP_SERVER_SOURCE}
+
+	SocketManageThread.cpp
+	MTSocketManage.cpp
+	
 # 	SocketManageSelect.cpp
 # 	TCPSocketRBThread.cpp
 	${NETWORK_OS_SOURCE})

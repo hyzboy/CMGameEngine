@@ -18,7 +18,7 @@ namespace hgl
 			SAFE_CLEAR(sock_manage);
 		}
 
-		bool SocketManageThread::Join(Socket *s)
+		bool SocketManageThread::Join(IOSocket *s)
 		{
 			if(!s)RETURN_FALSE;
 
@@ -31,7 +31,7 @@ namespace hgl
 			return(result);
 		}
 
-		int SocketManageThread::Join(Socket **sl, const int count)
+		int SocketManageThread::Join(IOSocket **sl, const int count)
 		{
 			if(!sl||count<=0)
 				RETURN_FALSE;
@@ -48,7 +48,7 @@ namespace hgl
 		void SocketManageThread::ProcSocketJoin()
 		{
 			int count=sock_join_set->GetCount();
-			Socket **sp=sock_join_set->GetData();
+			IOSocket **sp=sock_join_set->GetData();
 
 			for(int i=0;i<count;i++)
 			{
@@ -68,7 +68,7 @@ namespace hgl
 			sock_join_set.Unlock();
 		}
 
-		bool SocketManageThread::Unjoin(Socket *s)
+		bool SocketManageThread::Unjoin(IOSocket *s)
 		{
 			if(!s)RETURN_FALSE;
 			if(s->ThisSocket==-1)RETURN_FALSE;
@@ -145,13 +145,13 @@ namespace hgl
 			{
 				const int count=event_list.GetCount();
 				SocketEvent *se_list=event_list.GetData();
-				Socket *obj;
+				IOSocket *obj;
 
 				for(int i=0;i<count;i++)
 				{
 					if(sock_set->Get(se_list->sock,obj))
 					{
-						if(!ProcEvent(obj))
+						if(!ProcEvent(obj,se_list->size))
 							delete_list.Add(se_list->sock);
 					}
 					else
@@ -167,12 +167,12 @@ namespace hgl
 			{
 				const int count=error_list.GetCount();
 				SocketEvent *se_list=error_list.GetData();
-				Socket *obj;
+				IOSocket *obj;
 
 				for(int i=0;i<count;i++)
 				{
 					if(sock_set->Get(se_list->sock,obj))
-						ProcError(obj);
+						error_ios_list.Add(obj);
 
 					delete_list.Add(se_list->sock);
 
@@ -180,6 +180,8 @@ namespace hgl
 				}
 
 				error_list.ClearData();
+
+				ProcError(error_ios_list.GetData(),error_ios_list.GetCount());
 			}
 
 			return(true);
