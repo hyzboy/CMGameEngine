@@ -61,7 +61,6 @@ namespace hgl
 		protected:
 
 			SemSwapSet<IOSocket *> error_sock_set;
-			Set<IOSocket *> proc_error_sock_set;
 
 		protected:
 
