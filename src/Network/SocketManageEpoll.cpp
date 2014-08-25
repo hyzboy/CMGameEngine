@@ -125,11 +125,11 @@ namespace hgl
 
 					for(int i=0;i<count;i++)
 					{
-						--cur_count;
 						epoll_del(*sock_list);
 						++sock_list;
 					}
 
+					cur_count-=count;
 					LOG_INFO(OS_TEXT("SocketManageEpoll::Unjoin() Socket count:")+OSString(count));
 
 					return(true);

@@ -2,7 +2,7 @@
 	Socket.cpp
 	ServerSocket.cpp
 	AcceptServer.cpp
-# 	SocketManage.cpp
+	SocketManageThread.cpp
 	)
 
 SET(NETWORK_UDP_SOURCE
