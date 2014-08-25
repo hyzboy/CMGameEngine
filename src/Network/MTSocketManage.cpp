@@ -20,11 +20,11 @@ namespace hgl
 		}
 
 		/**
-			* 初始化多线程Socket I/O管理器
-			* @param msc 最大socket数量
-			* @param tc 线程数
-			* @return 是否初始化成功
-			*/
+		* 初始化多线程Socket I/O管理器
+		* @param msc 最大socket数量
+		* @param tc 线程数
+		* @return 是否初始化成功
+		*/
 		bool MTSocketManage::Init(int msc,int tc)																///<初始化
 		{
 			if(msc<=0)return(false);
