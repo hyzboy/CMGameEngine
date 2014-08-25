@@ -79,7 +79,7 @@ namespace hgl
 					return(true);
 				}
 
-				bool Join(int *sock_list,int count)
+				bool Join(const int *sock_list,int count)
                 {
                     if(count<=0)return(false);
 
@@ -108,7 +108,29 @@ namespace hgl
 					--cur_count;
 					epoll_del(sock);
 
-					LOG_INFO(OS_TEXT("SocketManageEpoll::Unjoin() IOSocket:")+OSString(sock));
+					LOG_INFO(OS_TEXT("SocketManageEpoll::Unjoin() Socket:")+OSString(sock));
+
+					return(true);
+				}
+
+				bool Unjoin(const int *sock_list,int count)
+				{
+					if(epoll_fd==-1)
+					{
+						LOG_ERROR(OS_TEXT("SocketManageEpoll::Unjoin() epoll_fd==-1)"));
+						return(false);
+					}
+
+					if(!sock_list||count<=0)return(false);
+
+					for(int i=0;i<count;i++)
+					{
+						--cur_count;
+						epoll_del(*sock_list);
+						++sock_list;
+					}
+
+					LOG_INFO(OS_TEXT("SocketManageEpoll::Unjoin() Socket count:")+OSString(count));
 
 					return(true);
 				}
