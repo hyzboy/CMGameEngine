@@ -346,6 +346,8 @@ namespace hgl
 	template<typename F,typename T,typename DataPair>
 	int _Map<F,T,DataPair>::DeleteByIndex(const F *fp,const int count)
 	{
+		if(!fp||count<=0)return(0);
+
 		int total=0;
 
 		for(int i=0;i<count;i++)
