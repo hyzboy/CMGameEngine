@@ -29,7 +29,7 @@ namespace hgl
 			{
 				hgl::int32 size=msg->ByteSize();
 
-				if(size<=0)
+				if(size<0)
 					return(true);
 
 				hgl::int32 start=mb.length();
@@ -42,6 +42,9 @@ namespace hgl
 				++mb_int;
 				*mb_int=T::id;
 				++mb_int;
+
+				if(size==0)
+					return(true);
 
 				if(!msg->SerializeToArray(mb_int,size))
 				{
