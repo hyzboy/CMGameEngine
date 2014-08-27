@@ -2,6 +2,7 @@
 #define HGL_THREAD_MUTEX_INCLUDE
 
 #include<hgl/platform/Platform.h>
+#include<hgl/Macro.h>
 namespace hgl
 {
 	/**
