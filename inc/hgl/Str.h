@@ -485,7 +485,7 @@ namespace hgl
 	* @return 查找到的位置指针
 	*/
 	template<typename TS,typename TC>
-	TS *strrchr(TS *str,TC ch)
+	TS *strrchr(TS *str,const TC ch)
 	{
 		if(!str||!(*str))return(0);
 
@@ -493,7 +493,7 @@ namespace hgl
 
 		while(*str)
 		{
-			if(*str==ch)result=(TS *)str;
+			if(*str==ch)result=str;
 
 			++str;
 		}
@@ -873,7 +873,7 @@ namespace hgl
 	template<typename T>
 	void replace_extname(const T *old_filename,T *new_filename,const T *new_extname)
 	{
-		T *p=strrchr(old_filename,u'.');
+		const T *p=strrchr(old_filename,'.');
 
 		if(p)
 		{
@@ -885,7 +885,7 @@ namespace hgl
 			const int l=strlen(old_filename);
 
 			strcpy(new_filename,old_filename,l);
-			new_filename[l]=u'.';
+			new_filename[l]='.';
 			strcpy(new_filename+l+1,new_extname);
 		}
 	}
