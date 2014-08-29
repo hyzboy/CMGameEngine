@@ -250,16 +250,24 @@ namespace hgl
 		time_t tt;
 
 		if(cur_time<=0)
-			tt=time(nullptr);
+		{
+			struct timeval tv;
+			gettimeofday(&tv, nullptr);
+
+			tt=tv.tv_sec;
+			micro_seconds=tv.tv_usec;
+		}
 		else
-			tt=cur_time*HGL_MICRO_SEC_PER_SEC;
+		{
+			tt=cur_time;
+			micro_seconds=(cur_time-tt)*HGL_MICRO_SEC_PER_SEC;
+		}
 
 		localtime_r(&tt,&m);
 
 		hours			=m.tm_hour;
 		minutes			=m.tm_min;
 		seconds			=m.tm_sec;
-		micro_seconds	=tt%HGL_MICRO_SEC_PER_SEC;
 		week_day		=m.tm_wday;
 
 		gmt_off			=m.tm_gmtoff;
@@ -448,9 +456,16 @@ namespace hgl
 		time_t tt;
 
 		if(cur_time<=0)
-			tt=time(nullptr);
+		{
+			struct timeval tv;
+			gettimeofday(&tv, nullptr);
+
+			tt=tv.tv_sec;
+		}
 		else
-			tt=cur_time*HGL_MICRO_SEC_PER_SEC;
+		{
+			tt=cur_time;
+		}
 
 		localtime_r(&tt,&m);
 
