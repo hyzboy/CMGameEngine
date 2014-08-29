@@ -1,4 +1,4 @@
-find_package(Qt4 REQUIRED)
+﻿find_package(Qt4 REQUIRED)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR})

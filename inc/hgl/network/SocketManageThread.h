@@ -27,7 +27,7 @@ namespace hgl
 
 			SocketManageBase *sock_manage;															///<Socket管理器
 
-			ThreadMutexObject<Map<int,IOSocket *>> sock_set;											///<Socket合集
+			ThreadMutexObject<Map<int,IOSocket *>> sock_set;										///<Socket合集
 
 			List<SocketEvent> event_list;															///<Socket事件列表
 			List<SocketEvent> error_list;															///<Socket错误列表
@@ -62,8 +62,8 @@ namespace hgl
 		public:
 
 			virtual bool Join(IOSocket *);															///<加入一个Socket
-			virtual int Join(IOSocket **,const int);													///<加入一批Socket
-			virtual bool Unjoin(IOSocket *);															///<分离一个Socket
+			virtual int Join(IOSocket **,const int);												///<加入一批Socket
+			virtual bool Unjoin(IOSocket *);														///<分离一个Socket
 
 			virtual int GetCount()const;															///<取得Socket数量
 			virtual void Clear();																	///<清除所有Socket

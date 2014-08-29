@@ -1,4 +1,4 @@
-#include<hgl/Console.h>
+﻿#include<hgl/Console.h>
 #include<hgl/platform/QT4Application.h>
 #include<QtGui/QApplication>
 

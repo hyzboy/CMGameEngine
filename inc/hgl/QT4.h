@@ -1,4 +1,4 @@
-#ifndef HGL_QT4_INCLUDE
+﻿#ifndef HGL_QT4_INCLUDE
 #define HGL_QT4_INCLUDE
 
 #include<hgl.h>
@@ -23,8 +23,8 @@
 		return WCharToQString<sizeof(wchar_t)>(str,size);
 	}
 
-	inline QString ToQString(const u16char *str,int size){return QString::fromUtf16((ushort *)str,size);}
-	inline QString ToQString(const char32_t *str,int size){return QString::fromUcs4((uint *)str,size);}
+	inline QString toQString(const u16char *str,int size){return QString::fromUtf16((ushort *)str,size);}
+	inline QString toQString(const char32_t *str,int size){return QString::fromUcs4((uint *)str,size);}
 #endif//HGL_OS == HGL_OS_Windows
 
 inline QString toQString(const hgl::UTF8String &str)
