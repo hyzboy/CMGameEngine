@@ -117,22 +117,40 @@ void TextExtract(TextExtractOption *teo,hgl::FileInfo &fi)
 
 			int len=end-start+1;
 
-			if(teo->clear_english)		//将前后的英文去掉
+			if(teo->clear_symbol)		//将前后空格符号去掉
 			{
-				while(len&&*start>0&&*start<256)
+				while(len&&(*start==' '||*start=='\t'))
 				{
 					++start;
 					--len;
 				}
 
-				while(len&&*end>0&&*end<256)
+				while(len&&(*end==' '||*end=='\t'))
 				{
-					--end;
+					++end;
 					--len;
 				}
 			}
 
-			if(len>0)
+			u16char *ps=start;
+			u16char *pe=end;
+
+			if(teo->clear_english)		//计算前后的英文
+			{
+				while(len&&*ps>0&&*ps<256)
+				{
+					++ps;
+					--len;
+				}
+
+				while(len&&*pe>0&&*pe<256)
+				{
+					--pe;
+					--len;
+				}
+			}
+
+			if(len>0)		//如果不是全英文
 			{
 				fos.Write(start,(end-start+1)*sizeof(u16char));
 				fos.Write(U16_TEXT("\n"),2);
@@ -179,7 +197,7 @@ HGL_CONSOLE_MAIN_FUNC()
 		teo.clear_english=true;
 		++off;
 
-		std::cout<<"option: Clear pure english char"<<std::endl;
+		std::cout<<"option: Clear pure english string"<<std::endl;
 	}
 
 	if(args.CaseFind("-cs")!=-1)
