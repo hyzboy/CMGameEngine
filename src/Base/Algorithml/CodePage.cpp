@@ -73,42 +73,69 @@ namespace hgl
 
 		char *out;
 		T *out_str;
+		T *out_new;
 
 		size_t in_left;
 		size_t out_left;
 
-		int out_malloc_size=in_str_size*sizeof(S);
+		int out_malloc_size=in_str_size;
 		int last_left=-1;
+
+		out_str=new T[out_malloc_size+1];
+
+		in=(char *)in_str;
+		out=(char *)out_str;
+		in_left=in_str_size;
+		out_left=out_malloc_size*sizeof(T);
 
 		while(true)
 		{
-			out_str=new T[out_malloc_size+1];
+			size_t res=iconv(cd,&in,&in_left,&out,&out_left);
 
-			if(!out_str)			//分配内存出错
-				return(false);
-
-			in=(char *)in_str;
-			out=(char *)out_str;
-			in_left=in_str_size;
-			out_left=out_malloc_size;
-
-			iconv(cd,&in,&in_left,&out,&out_left);
-
-			if(in_left==0)		//转完了
+			if(res==(size_t)(-1))
 			{
-				//result=(out_malloc_size-(out_left/sizeof(T));
-				result=((T *)out)-out_str;							// 同上一行
+				if(errno==E2BIG)
+				{
+					out_new=new T[out_malloc_size*2];
 
-				out_str[result]=0;
-				iconv_close(cd);
+					if(!out_new)
+						return(false);
 
-				*out_buf=out_str;
-				return(result);
+					result=out-(char *)out_str;
+
+					memcpy(out_new,out_str,result);
+
+					out_malloc_size*=2;
+
+					delete[] out_str;
+					out_str=out_new;
+
+					out=(char *)out_str;
+					out+=result;
+
+					//in_left已经被减了，所以不用处理
+					out_left=(out_malloc_size*sizeof(T))-result;
+					continue;
+				}
+				else if(errno==EILSEQ)		//有非法字符，跳过
+				{
+					in++;
+					in_left--;
+					continue;
+				}
 			}
 
-			delete[] out_str;
-			out_malloc_size+=in_left;	//增加所分配的字节数
+			break;
 		}
+
+		//result=(out_malloc_size-(out_left/sizeof(T));
+		result=((T *)out)-out_str;							// 同上一行
+
+		out_str[result]=0;
+		iconv_close(cd);
+
+		*out_buf=out_str;
+		return(result);
 	}
 
 	int ansi_to_utf16(const CharSet &cs,u16char **ws,const char *as,const int as_size)
