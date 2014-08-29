@@ -1,4 +1,4 @@
-#include "CDBTableViewer.h"
+﻿#include "CDBTableViewer.h"
 #include <QtGui/QTableWidget>
 #include <QtGui/QTableWidgetItem>
 #include <hgl/db/CDBTable.h>
