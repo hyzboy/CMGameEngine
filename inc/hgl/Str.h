@@ -318,6 +318,58 @@ namespace hgl
 		return(0);
 	}
 
+
+	/**
+	* 在字符串str1内查找另一个字符串str2,忽略大小写
+	* @param str1 完整的字符串
+	* @param str2 要查找的字符串
+	* @return str2在str1中所在位置的指针
+	*/
+	template<typename T>
+	T *stristr(T *str1,T *str2)
+	{
+		T *cp = (T *) str1;
+		T *s1, *s2;
+
+		if ( !*str2)
+			return (T *)str1;
+
+		while (*cp)
+		{
+			s1 = cp;
+			s2 = (T *) str2;
+
+			while ( *s1 && *s2 )
+			{
+				if(*s1!=*s2)
+				{
+					if(*s1>='a'&&*s1<='z')
+					{
+						if(*s1!=*s2-('A'-'a'))
+							break;
+					}
+					else
+					if(*s1>='A'&&*s1<='Z')
+					{
+						if(*s1!=*s2+('A'-'a'))
+							break;
+					}
+					else
+						break;
+				}
+
+				s1++, s2++;
+			}
+
+			if (!*s2)
+				return(cp);
+
+			++cp;
+		}
+
+		return(0);
+	}
+
 	/**
 	* 复制一个字符到当前字符串后面
 	* @param dst 目标字符串
