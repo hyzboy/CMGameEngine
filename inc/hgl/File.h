@@ -97,13 +97,13 @@ namespace hgl
 	int EnumFile(const os_char *folder_name,const u16char *find_name,void *data,bool proc_folder,bool proc_file,bool sub_folder,void (*func)(void *,hgl::FileInfo &));
 #endif //HGL_OS == HGL_OS_Windows
 
-	inline int EnumFile(const os_char *folder_name,void *data,bool proc_folder,bool proc_file,bool sub_folder,void (*func)(void *,hgl::FileInfo &))
 #if HGL_OS == HGL_OS_Windows
+	inline int EnumFile(const os_char *folder_name,void *data,bool proc_folder,bool proc_file,bool sub_folder,void (*func)(void *,hgl::FileInfo &))
 	{
 		return EnumFile(folder_name,OS_TEXT("*.*"),data,proc_folder,proc_file,sub_folder,func);
 	}
 #else
-	;
+	int EnumFile(const os_char *folder_name,void *data,bool proc_folder,bool proc_file,bool sub_folder,void (*func)(void *,hgl::FileInfo &));
 #endif
 
 	/**
