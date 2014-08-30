@@ -132,8 +132,8 @@ void TextExtract(TextExtractOption *teo,hgl::FileInfo &fi)
 				}
 			}
 
-			u16char *ps=start;
-			u16char *pe=end;
+			const u16char *ps=start;
+			const u16char *pe=end;
 
 			if(teo->clear_english)		//计算前后的英文
 			{
