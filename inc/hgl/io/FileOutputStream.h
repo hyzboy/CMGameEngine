@@ -16,7 +16,7 @@ namespace hgl
 
 			SharedPtr<FileAccess> file;																///<文件访问指针
 
-			virtual bool Open(const OSString &,int);
+			virtual bool OpenFile(const OSString &,FileOpenMode);
 
 		public:
 
@@ -24,10 +24,11 @@ namespace hgl
 			FileOutputStream(SharedPtr<FileAccess> &);
 			virtual ~FileOutputStream();
 
-			virtual bool	Open(const OSString &fn){return Open(fn,fomOnlyWrite);}					///<打开文件
-			virtual bool	Create(const OSString &fn){return Open(fn,fomCreate);}					///<创建文件，如存在创建失败
-			virtual bool	CreateTrunc(const OSString &fn){return Open(fn,fomCreateTrunc);}		///<创建文件，如存在则抹去
-			virtual bool	OpenAppend(const OSString &fn){return Open(fn,fomAppend);}				///<打开文件，追加模式
+			virtual bool	Open(const OSString &fn,FileOpenMode mode){return OpenFile(fn,mode);}	///<打开文件，指定一个模式
+			virtual bool	Open(const OSString &fn){return OpenFile(fn,fomOnlyWrite);}				///<打开文件
+			virtual bool	Create(const OSString &fn){return OpenFile(fn,fomCreate);}				///<创建文件，如存在创建失败
+			virtual bool	CreateTrunc(const OSString &fn){return OpenFile(fn,fomCreateTrunc);}	///<创建文件，如存在则抹去
+			virtual bool	OpenAppend(const OSString &fn){return OpenFile(fn,fomAppend);}			///<打开文件，追加模式
 
 			virtual void	Close();																///<关闭文件
 
@@ -46,13 +47,22 @@ namespace hgl
 			virtual int64	Write(int64,const void *,int64);										///<在指定位置写入指定长度的数据
 		};//class FileOutputStream
 
+		/**
+		 * 打开一个文件输出流
+		 */
 		class OpenFileOutputStream
 		{
 			FileOutputStream *fos;
 
 		public:
 
-			OpenFileOutputStream(const OSString &filename)
+			/**
+			 * 打开一个文件输出流构造函数
+			 * @param filename 文件名
+			 * @param mode 打开模式，默认只写(必然可读)
+			 * @see FileOpenMode
+			 */
+			OpenFileOutputStream(const OSString &filename,FileOpenMode mode=fomOnlyWrite)
 			{
 				fos=new FileOutputStream();
 

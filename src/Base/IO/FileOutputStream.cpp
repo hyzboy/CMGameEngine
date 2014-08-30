@@ -1,4 +1,4 @@
-#include<hgl/io/FileOutputStream.h>
+﻿#include<hgl/io/FileOutputStream.h>
 namespace hgl
 {
 	namespace io
@@ -17,13 +17,13 @@ namespace hgl
 			Close();
 		}
 
-		bool FileOutputStream::Open(const OSString &filename,int mode)
+		bool FileOutputStream::OpenFile(const OSString &filename,FileOpenMode mode)
 		{
 			Close();
 
 			file=new FileAccess();
 
-			if(!file->Open(filename,(FileOpenMode)mode))
+			if(!file->Open(filename,mode))
 			{
 				file=nullptr;
 				return(false);
