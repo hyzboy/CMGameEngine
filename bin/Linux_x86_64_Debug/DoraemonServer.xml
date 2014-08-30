@@ -3,4 +3,5 @@
 	<DoraemonServer  Port="50500" TimeOunt="60"/><!--超时时间为秒-->
 	<dfs_file ip="127.0.0.1" port="6379"/>
 	<InitEnergy	energy="120"/>
+	<MaxUserNum	num="4096"/>		<!--最大用户数量,程序内部设置为4096-->
 </game>

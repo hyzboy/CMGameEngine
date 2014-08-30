@@ -1,31 +1,32 @@
 id	name	type	piece	Level	Experience	Time	Function	Price	Price_Type	image	Attribute
-10001	Ğ¡Áåîõ	active	0	99	0		ÓÎÏ·¿ªÊ¼Ç°Ôö¼ÓÒ»¸ñHP	300	coins	CloseSelected.png	1
-10002	Ê±¹âÑü´ø	active	0	99	0		ÓÎÏ·Ê±¼äÔö¼Ó10Ãë	500	coins	CloseSelected.png	10
-10003	ÍâËÍµç»°	active	0	99	0		ÓÎÏ·¿ªÊ¼Ç°Ëæ»ú»ñµÃÒ»¸öµÀ¾ß	100	coins	CloseSelected.png	1
-10004	ÖñòßòÑ	active	0	99	0		ÓÎÏ·¿ªÊ¼Ç°×Ô¶¯ÌøÔ¾10¸öÌ¨½×	100	coins	CloseSelected.png	10
-11001	Ê±¹âÑü´ø	active	0	99	0		ÓÎÏ·½áÊøÊ±£¬Ê±¼äÔö¼Ó10Ãë	500	coins	CloseSelected.png	10
-11002	´©Í¸»·	active	0	99	0		½ÇÉ«ÌåÁ¦Îª0Ê±£¬·µ»ØÉÏÒ»¸öµØµã	300	coins	CloseSelected.png	
-20001	Ñ±·şÍè×Ó	passive	0	1	0	5	Ïû³ı·¶Î§ÄÚµĞÈË			CloseSelected.png	 
-20002	±¬Õ¨ºú½·	passive	0	1	0	5	ÎŞµĞ+³å´Ì			CloseSelected.png	
-20003	·Å´óµÆ	passive	0	1	0	10	½ÇÉ«·Å´ó			CloseSelected.png	1.2
-20004	ËõĞ¡µÆ	passive	0	1	0	10	½ÇÉ«ËõĞ¡			CloseSelected.png	0.8
-20005	ÒşÉí¶·Åñ	passive	0	1	0	5	½ÇÉ«ÒşÉí			CloseSelected.png	127
-20006	¿ÕÆøÅÚ	passive	0	1	0	5	×Ô¶¯¹¥»÷·ÉĞĞÀàµĞÈË			CloseSelected.png	
-20007	Ë¤õÓ¿Í	passive	0	1	0	5	×Ô¶¯¹¥»÷ĞĞ×ßÀàµĞÈË			CloseSelected.png	
-20008	Ë¯ÒâÎüÊÕÇ¹	passive	0	1	0	5	ËùÓĞµĞÈË½øÈëË¯Ãß×´Ì¬			CloseSelected.png	
-20009	·ÉÃ«ÍÈÈéÒº	passive	0	1	0	10	ÒÆ¶¯ËÙ¶È¡Á1.5			CloseSelected.png	1.5
-20010	ÖñÂí	passive	0	1	0	10	ÌøÔ¾¾àÀë¡Á1.5			CloseSelected.png	1.5
-20011	Ìì²ÅÍ·¿ø	passive	0	1	0	10	ÏìÓ¦·¶Î§¡Á1.5			CloseSelected.png	1.5
-20012	¶¨Ê±Æ÷	passive	0	1	0	5	Ê±¼äÍ£Ö¹			CloseSelected.png	
-21001	Ñ±·şÍè×Ó	passive	1	1	0	5	Ïû³ı·¶Î§ÄÚµĞÈË			CloseSelected.png	1
-21002	±¬Õ¨ºú½·	passive	1	1	0	5	ÎŞµĞ+³å´Ì			CloseSelected.png	
-21003	·Å´óµÆ	passive	1	1	0	10	½ÇÉ«·Å´ó			CloseSelected.png	1.2
-21004	ËõĞ¡µÆ	passive	1	1	0	10	½ÇÉ«ËõĞ¡			CloseSelected.png	0.8
-21005	ÒşÉí¶·Åñ	passive	1	1	0	5	½ÇÉ«ÒşÉí			CloseSelected.png	
-21006	¿ÕÆøÅÚ	passive	1	1	0	5	×Ô¶¯¹¥»÷·ÉĞĞÀàµĞÈË			CloseSelected.png	
-21007	Ë¤õÓ¿Í	passive	1	1	0	5	×Ô¶¯¹¥»÷ĞĞ×ßÀàµĞÈË			CloseSelected.png	
-21008	Ë¯ÒâÎüÊÕÇ¹	passive	1	1	0	5	ËùÓĞµĞÈË½øÈëË¯Ãß×´Ì¬			CloseSelected.png	
-21009	·ÉÃ«ÍÈÈéÒº	passive	1	1	0	10	ÒÆ¶¯ËÙ¶È¡Á1.5			CloseSelected.png	1.5
-21010	ÖñÂí	passive	1	1	0	10	ÌøÔ¾¾àÀë¡Á1.5			CloseSelected.png	1.5
-21011	Ìì²ÅÍ·¿ø	passive	1	1	0	10	ÏìÓ¦·¶Î§¡Á1.5			CloseSelected.png	1.5
-21012	¶¨Ê±Æ÷	passive	1	1	0	5	Ê±¼äÍ£Ö¹			CloseSelected.png	
+int		char[32]	int	int		float		int	char[32]		float
+10001	å°é“ƒé“›	active	0	99	0		æ¸¸æˆå¼€å§‹å‰å¢åŠ ä¸€æ ¼HP	300	coins	CloseSelected.png	1
+10002	æ—¶å…‰è…°å¸¦	active	0	99	0		æ¸¸æˆæ—¶é—´å¢åŠ 10ç§’	500	coins	CloseSelected.png	10
+10003	å¤–é€ç”µè¯	active	0	99	0		æ¸¸æˆå¼€å§‹å‰éšæœºè·å¾—ä¸€ä¸ªé“å…·	100	coins	CloseSelected.png	1
+10004	ç«¹èœ»èœ“	active	0	99	0		æ¸¸æˆå¼€å§‹å‰è‡ªåŠ¨è·³è·ƒ10ä¸ªå°é˜¶	100	coins	CloseSelected.png	10
+11001	æ—¶å…‰è…°å¸¦	active	0	99	0		æ¸¸æˆç»“æŸæ—¶ï¼Œæ—¶é—´å¢åŠ 10ç§’	500	coins	CloseSelected.png	10
+11002	ç©¿é€ç¯	active	0	99	0		è§’è‰²ä½“åŠ›ä¸º0æ—¶ï¼Œè¿”å›ä¸Šä¸€ä¸ªåœ°ç‚¹	300	coins	CloseSelected.png	
+20001	é©¯æœä¸¸å­	passive	0	1	0	5	æ¶ˆé™¤èŒƒå›´å†…æ•Œäºº			CloseSelected.png	 
+20002	çˆ†ç‚¸èƒ¡æ¤’	passive	0	1	0	5	æ— æ•Œ+å†²åˆº			CloseSelected.png	
+20003	æ”¾å¤§ç¯	passive	0	1	0	10	è§’è‰²æ”¾å¤§			CloseSelected.png	1.2
+20004	ç¼©å°ç¯	passive	0	1	0	10	è§’è‰²ç¼©å°			CloseSelected.png	0.8
+20005	éšèº«æ–—ç¯·	passive	0	1	0	5	è§’è‰²éšèº«			CloseSelected.png	127
+20006	ç©ºæ°”ç‚®	passive	0	1	0	5	è‡ªåŠ¨æ”»å‡»é£è¡Œç±»æ•Œäºº			CloseSelected.png	
+20007	æ‘”è·¤å®¢	passive	0	1	0	5	è‡ªåŠ¨æ”»å‡»è¡Œèµ°ç±»æ•Œäºº			CloseSelected.png	
+20008	ç¡æ„å¸æ”¶æª	passive	0	1	0	5	æ‰€æœ‰æ•Œäººè¿›å…¥ç¡çœ çŠ¶æ€			CloseSelected.png	
+20009	é£æ¯›è…¿ä¹³æ¶²	passive	0	1	0	10	ç§»åŠ¨é€Ÿåº¦Ã—1.5			CloseSelected.png	1.5
+20010	ç«¹é©¬	passive	0	1	0	10	è·³è·ƒè·ç¦»Ã—1.5			CloseSelected.png	1.5
+20011	å¤©æ‰å¤´ç›”	passive	0	1	0	10	å“åº”èŒƒå›´Ã—1.5			CloseSelected.png	1.5
+20012	å®šæ—¶å™¨	passive	0	1	0	5	æ—¶é—´åœæ­¢			CloseSelected.png	
+21001	é©¯æœä¸¸å­	passive	1	1	0	5	æ¶ˆé™¤èŒƒå›´å†…æ•Œäºº			CloseSelected.png	1
+21002	çˆ†ç‚¸èƒ¡æ¤’	passive	1	1	0	5	æ— æ•Œ+å†²åˆº			CloseSelected.png	
+21003	æ”¾å¤§ç¯	passive	1	1	0	10	è§’è‰²æ”¾å¤§			CloseSelected.png	1.2
+21004	ç¼©å°ç¯	passive	1	1	0	10	è§’è‰²ç¼©å°			CloseSelected.png	0.8
+21005	éšèº«æ–—ç¯·	passive	1	1	0	5	è§’è‰²éšèº«			CloseSelected.png	
+21006	ç©ºæ°”ç‚®	passive	1	1	0	5	è‡ªåŠ¨æ”»å‡»é£è¡Œç±»æ•Œäºº			CloseSelected.png	
+21007	æ‘”è·¤å®¢	passive	1	1	0	5	è‡ªåŠ¨æ”»å‡»è¡Œèµ°ç±»æ•Œäºº			CloseSelected.png	
+21008	ç¡æ„å¸æ”¶æª	passive	1	1	0	5	æ‰€æœ‰æ•Œäººè¿›å…¥ç¡çœ çŠ¶æ€			CloseSelected.png	
+21009	é£æ¯›è…¿ä¹³æ¶²	passive	1	1	0	10	ç§»åŠ¨é€Ÿåº¦Ã—1.5			CloseSelected.png	1.5
+21010	ç«¹é©¬	passive	1	1	0	10	è·³è·ƒè·ç¦»Ã—1.5			CloseSelected.png	1.5
+21011	å¤©æ‰å¤´ç›”	passive	1	1	0	10	å“åº”èŒƒå›´Ã—1.5			CloseSelected.png	1.5
+21012	å®šæ—¶å™¨	passive	1	1	0	5	æ—¶é—´åœæ­¢			CloseSelected.png	
