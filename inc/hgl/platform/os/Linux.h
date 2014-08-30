@@ -1,5 +1,7 @@
 ﻿#ifndef HGL_OS_LINUX_INCLUDE
 #define HGL_OS_LINUX_INCLUDE
+
+#include<limits.h>
 //--------------------------------------------------------------------------------------------------
 #define u16char			char16_t
 #define os_char			char
@@ -22,7 +24,7 @@
 
 #define HGL_MEM_ALIGN			16												//内存对齐字节数
 
-#define HGL_MAX_PATH			256
+#define HGL_MAX_PATH			_POSIX_PATH_MAX
 
 #define HGL_FMT_I64				"%lld"
 #define HGL_FMT_U64				"%llu"

@@ -1,5 +1,8 @@
 ﻿#ifndef HGL_OS_WIN_INCLUDE
 #define HGL_OS_WIN_INCLUDE
+
+#include<malloc.h>
+#include<windows.h>
 //--------------------------------------------------------------------------------------------------
 #define u16char			wchar_t
 #define os_char			wchar_t
@@ -35,16 +38,13 @@
 #define HGL_LINE_END					OS_TEXT("\n\r")									//换行符
 #define HGL_LINE_END_SIZE				2												//换行符长度
 
-#define HGL_MAX_PATH					256
+#define HGL_MAX_PATH					MAX_PATH
 
 #define HGL_MEM_ALIGN					16												//内存对齐字节数
 
 #define HGL_GL_WINDOW_INCLUDE_FILE		<hgl/platform/WinOpenGL.h>						//指定OpenGL窗口引用头文件
 #define HGL_GL_WINDOW_CLASS				WinGLWindow										//指定OpenGL窗口类名称
 //--------------------------------------------------------------------------------------------------
-#include<malloc.h>
-#include<windows.h>
-
 #if HGL_COMPILER == HGL_COMPILER_Microsoft
     #define hgl_malloc(size)        _aligned_malloc(size,HGL_MEM_ALIGN)
     #define hgl_realloc(ptr,size)   _aligned_realloc(ptr,size,HGL_MEM_ALIGN)
