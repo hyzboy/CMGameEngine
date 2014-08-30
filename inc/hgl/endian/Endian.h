@@ -6,6 +6,9 @@ namespace hgl
 {
 	namespace endian
 	{
+		/**
+		 * 字节序类型枚举
+		 */
 		enum ByteOrderMask
 		{
 			bomAnsi=0,
@@ -17,12 +20,18 @@ namespace hgl
 			bomEnd
 		};
 
+		/**
+		 * 字节序文件头数据结构
+		 */
 		struct BOMFileHeader
 		{
-			int size;
-			unsigned char data[4];
+			int size;					//字节序文件头长度
+			unsigned char data[4];		//字节序数据
 		};
 
+		/**
+		 * 字节序文件头定义
+		 */
 		const BOMFileHeader BOMData[bomEnd]=
 		{
 			{0,{}},
@@ -30,10 +39,10 @@ namespace hgl
 			{2,{0xFF,0xFE}},
 			{2,{0xFE,0xFF}},
 			{4,{0xFF,0xFE,0x00,0x00}},
-			{4,{0x00,0x00,0XFE,0xFF}}
+			{4,{0x00,0x00,0xFE,0xFF}}
 		};
 
-		template<int,char> const char *GetCurCharSet();
+		template<int,char> const char *GetCurCharSet();											///<取得当前程序编码字符集
 
 		template<> inline const char *GetCurCharSet<2,HGL_LITTLE_ENDIAN	>(){return "utf-16le";}
 		template<> inline const char *GetCurCharSet<2,HGL_BIG_ENDIAN	>(){return "utf-16be";}
