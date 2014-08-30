@@ -236,5 +236,5 @@ HGL_CONSOLE_MAIN_FUNC()
 	std::cout<<"Output Path: "<<teo.save_path.c_str()<<std::endl;
 	std::cout<<"Output ExtName: "<<teo.save_ext.c_str()<<std::endl;
 
-	return EnumFile(input_path,&teo,false,true,sub_folder,(void (*)(void *,hgl::FileInfo &))&TextExtract);
+	return EnumFile(input_path,&teo,false,true,sub_folder,(EnumFileFunc)&TextExtract);
 }

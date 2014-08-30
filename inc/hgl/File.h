@@ -82,6 +82,8 @@ namespace hgl
 
 	List<FileInfo> GetlistFiles(const u16char *folder_name,bool proc_folder,bool proc_file,bool sub_folder);
 
+	using EnumFileFunc=void (*)(void *,hgl::FileInfo &);
+
 	/**
 	* 枚举一个目录内的所有文件
 	* @param folder_name 目录名称
@@ -94,16 +96,16 @@ namespace hgl
 	* @return 查找到文件数据,-1表示失败
 	*/
 #if HGL_OS == HGL_OS_Windows
-	int EnumFile(const os_char *folder_name,const u16char *find_name,void *data,bool proc_folder,bool proc_file,bool sub_folder,void (*func)(void *,hgl::FileInfo &));
+	int EnumFile(const os_char *folder_name,const u16char *find_name,void *data,bool proc_folder,bool proc_file,bool sub_folder,EnumFileFunc func);
 #endif //HGL_OS == HGL_OS_Windows
 
 #if HGL_OS == HGL_OS_Windows
-	inline int EnumFile(const os_char *folder_name,void *data,bool proc_folder,bool proc_file,bool sub_folder,void (*func)(void *,hgl::FileInfo &))
+	inline int EnumFile(const os_char *folder_name,void *data,bool proc_folder,bool proc_file,bool sub_folder,EnumFileFunc func)
 	{
 		return EnumFile(folder_name,OS_TEXT("*.*"),data,proc_folder,proc_file,sub_folder,func);
 	}
 #else
-	int EnumFile(const os_char *folder_name,void *data,bool proc_folder,bool proc_file,bool sub_folder,void (*func)(void *,hgl::FileInfo &));
+	int EnumFile(const os_char *folder_name,void *data,bool proc_folder,bool proc_file,bool sub_folder,EnumFileFunc);
 #endif
 
 	/**
@@ -115,7 +117,7 @@ namespace hgl
 	* @return 查找到文件数据,-1表示失败
 	*/
 #if HGL_OS == HGL_OS_Windows
-	int EnumFile(const os_char *folder_name,const u16char *find_name,void *data,void (*func)(void *,hgl::FileInfo &));
+	int EnumFile(const os_char *folder_name,const u16char *find_name,void *data,EnumFileFunc);
 #endif
 
 	/**

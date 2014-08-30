@@ -712,7 +712,7 @@ namespace hgl
 	* @param func 回调函数
 	* @return 查找到文件数据,-1表示失败
 	*/
-	int EnumFile(const u16char *folder_name,const u16char *find_name,void *data,bool proc_folder,bool proc_file,bool sub_folder,void (*func)(void *,hgl::FileInfo &))
+	int EnumFile(const u16char *folder_name,const u16char *find_name,void *data,bool proc_folder,bool proc_file,bool sub_folder,EnumFileFunc func)
 	{
 		u16char full_name[HGL_MAX_PATH];
 		int count=0;
@@ -837,7 +837,7 @@ namespace hgl
 	* @param func 回调函数
 	* @return 查找到文件数据,-1表示失败
 	*/
-	int EnumFile(const char *folder_name,void *data,bool proc_folder,bool proc_file,bool sub_folder,void (*func)(void *,hgl::FileInfo &))
+	int EnumFile(const char *folder_name,void *data,bool proc_folder,bool proc_file,bool sub_folder,EnumFileFunc func)
 	{
 		char fullname[HGL_MAX_PATH];
 		int count=0;
@@ -959,7 +959,7 @@ namespace hgl
 	* @return 查找到文件数据,-1表示失败
 	*/
 #if HGL_OS == HGL_OS_Windows
-	int EnumFile(const u16char *folder_name,const u16char *find_name,void *data,void (*func)(void *,hgl::FileInfo &))
+	int EnumFile(const u16char *folder_name,const u16char *find_name,void *data,EnumFileFunc func)
 	{
 		return EnumFile(folder_name,find_name,data,true,true,false,func);
 	}
