@@ -179,7 +179,8 @@ HGL_CONSOLE_MAIN_FUNC()
 		std::cout<<"\t\t-ca\tclear AsciiChar and Symbol"<<std::endl;
 		std::cout<<"\t\t-sf\tproc sub folder"<<std::endl;
 		std::cout<<std::endl;
-		std::cout<<" Example: TextExtract [-cc,-co] <shift_jis|big5|gbk> <input path> <input filename> <output path> <output file extname>"<<std::endl;
+		std::cout<<" Format: TextExtract [-cc,-ce,-cs] <shift_jis|big5|gbk|...> <input path> <input filename> <output path> <output file extname>"<<std::endl;
+		std::cout<<" Example: TextExtract -cc -ce -cs shift_jis /home/hyzboy/input_csv/ .csv /home/hyzboy/output_txt/ txt"<<std::endl;
 		return(0);
 	}
 
