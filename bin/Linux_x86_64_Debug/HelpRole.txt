@@ -1,0 +1,7 @@
+id	Type	Name	MaxLevel	MP	Image	Skill	SkillMp	Level	MpRecovery	SkillTime	ScoreAdd	Description	UnlockCost	UnlockCostType
+int	char[32]	char[32]	int	int	char[32]	char[32]	int	int	float	float	float	char[32]	int	char[32]
+201	Nobita Nobi	野比大雄	25	2500	dx.png	无视一次伤害	1440	1	32	15	0.1			
+202	Takeshi Goda	刚田武	35	2800	ph.png	自动攻击陆地敌人	1575	1	35	10	0.05		26000	coins
+203	Shizuka Minamoto	骨川小夫	35	2800	xf.png	自动攻击飞行敌人	1575	1	35	10	0.05		300	diamond
+204	Suneo Honekawa	源静香	40	3100	jx.png	无视一切攻击	1800	1	36	10	0.1		60000	coins
+205	Dorami	哆啦美	40	3500	dlm.png	无视一切攻击同时碰触到的敌人全部消灭	2655	1	45	8	0.15		3000	diamond

@@ -1,0 +1,21 @@
+Id	iap_id	Name	Num	Only	Function	Price	Price_Type	image
+int			int	int	char[32]	int	char[32]	
+90001		5000金币	5000		addcoins	60	diamond	
+90002		10080金币	10080		addcoins	120	diamond	
+90003		16800金币	16800		addcoins	200	diamond	
+90004		25800金币	25800		addcoins	300	diamond	
+90005		43800金币	43800		addcoins	500	diamond	
+90006		138000金币	138000		addcoins	1500	diamond	
+90007		268000金币	268000		addcoins	3000	diamond	
+91001		50体力	50		addenergy	50	diamond	
+91002		120体力	120		addenergy	100	diamond	
+92001		铜箱子	1		openbox	60	diamond	
+92002		银箱子	1		openbox	300	diamond	
+92003		金箱子	1		openbox	650	diamond	
+95001		128钻石	128		adddiamond	6	cash	
+95002		658钻石	658		adddiamond	30	cash	
+95003		1498钻石	1498		adddiamond	68	cash	
+95004		2198钻石	2198		adddiamond	98	cash	
+95005		3798钻石	3798		adddiamond	168	cash	
+95006		7798钻石	7798		adddiamond	328	cash	
+95007		会员（每日获得200钻石）	200		adddiamond	30	cash	

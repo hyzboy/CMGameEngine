@@ -1,0 +1,62 @@
+id	NextID	chapter	level	unlocklevel	CanvasSize	reward	property	character	energy	path
+int	int	int		int		int			int	
+1	2	1	konglong1	1	640_1100	3500	21,001,210,042,100,500,000	30001,30002,0,0	15	image/publish/Scene1-1.json
+2	3	1	konglong2	1	640_1440	3500	21001,0,0,0		15	image/publish/Scene1-2.json
+3	4	1	konglong3	1	640_1800	3500			15	image/publish/Scene1-3.json
+4	5	1	konglong4	1	640_1600	3500			15	image/publish/Scene1-4.json
+5	6	1	konglong5	1	640_1600	3500			15	image/publish/Scene1-5.json
+6	7	1	konglong6	1	640_1920	3500			15	image/publish/Scene1-6.json
+7	8	1	konglong7	1		3500			15	image/publish/Scene1-7.json
+8	9	1	konglong8	1		3500			15	image/publish/Scene1-8.json
+9	10	1	konglong9	1		3500			15	image/publish/Scene1-1.json
+10	11	1	konglong10	1		3500			15	image/publish/Scene1-10.json
+11	12	1	konglong11	1		3500			15	image/publish/Scene1-1.json
+12	13	1	konglong12	1		3500			15	image/publish/Scene1-1.json
+13	14	1	konglong13	1		3500			15	image/publish/Scene1-13.json
+14	15	1	konglong14	1		3500			15	image/publish/Scene1-1.json
+15	0	1	konglong15	1		3500			15	image/publish/Scene-temp.json
+16	17	2	nanhai1	10		4500			20	Json/publish/NewScene1.json
+17	18	2	nanhai2	10		4500			20	Json/publish/PlanetLevel1.json
+18	19	2	nanhai3	10		4500			20	Json/publish/NewScene1.json
+19	20	2	nanhai4	10		4500			20	Json/publish/PlantformLevel1.json
+20	21	2	nanhai5	10		4500			20	Json/publish/PlanetLevel6.json
+21	22	2	nanhai6	10		4500			20	Json/publish/MovePlanet.json
+22	23	2	nanhai7	10		4500			20	Json/publish/NewScene.json
+23	24	2	nanhai8	10		4500			20	Json/publish/NewScene1.json
+24	25	2	nanhai9	10		4500			20	Json/publish/PlanetLevel1.json
+25	26	2	nanhai10	10		4500			20	Json/publish/NewScene1.json
+26	27	2	nanhai11	10		4500			20	Json/publish/PlantformLevel1.json
+27	28	2	nanhai12	10		4500			20	Json/publish/PlanetLevel6.json
+28	29	2	nanhai13	10		4500			20	Json/publish/MovePlanet.json
+29	30	2	nanhai14	10		4500			20	Json/publish/NewScene.json
+30	0	2	nanhai15	10		4500			20	Json/publish/NewScene1.json
+31	32	3	yuzhou1	15		5000			25	Json/publish/PlanetLevel1.json
+32	33	3	yuzhou2	15		5000			25	Json/publish/NewScene1.json
+33	34	3	yuzhou3	15		5000			25	Json/publish/PlantformLevel1.json
+34	35	3	yuzhou4	15		5000			25	Json/publish/PlanetLevel6.json
+35	36	3	yuzhou5	15		5000			25	Json/publish/MovePlanet.json
+36	37	3	yuzhou6	15		5000			25	Json/publish/NewScene.json
+37	38	3	yuzhou7	15		5000			25	Json/publish/NewScene1.json
+38	39	3	yuzhou8	15		5000			25	Json/publish/PlanetLevel1.json
+39	40	3	yuzhou9	15		5000			25	Json/publish/NewScene1.json
+40	41	3	yuzhou10	15		5000			25	Json/publish/PlantformLevel1.json
+41	42	3	yuzhou11	15		7000			25	Json/publish/PlanetLevel6.json
+42	43	3	yuzhou12	15		7000			25	Json/publish/MovePlanet.json
+43	44	3	yuzhou13	15		7000			25	Json/publish/NewScene.json
+44	45	3	yuzhou14	15		7000			25	Json/publish/NewScene1.json
+45	0	3	yuzhou15	15		7000			25	Json/publish/PlanetLevel1.json
+46	47	4	fengshi1	20		7000			30	Json/publish/NewScene1.json
+47	48	4	fengshi2	20		7000			30	Json/publish/PlantformLevel1.json
+48	49	4	fengshi3	20		7000			30	Json/publish/PlanetLevel6.json
+49	50	4	fengshi4	20		7000			30	Json/publish/MovePlanet.json
+50	51	4	fengshi5	20		7000			30	Json/publish/NewScene.json
+51	52	4	fengshi6	20		8000			30	Json/publish/NewScene1.json
+52	53	4	fengshi7	20		8000			30	Json/publish/PlanetLevel1.json
+53	54	4	fengshi8	20		8000			30	Json/publish/NewScene1.json
+54	55	4	fengshi9	20		8000			30	Json/publish/PlantformLevel1.json
+55	56	4	fengshi10	20		8000			30	Json/publish/PlanetLevel6.json
+56	57	4	fengshi11	20		8000			30	Json/publish/MovePlanet.json
+57	58	4	fengshi12	20		8000			30	Json/publish/NewScene.json
+58	59	4	fengshi13	20		8000			30	Json/publish/NewScene1.json
+59	60	4	fengshi14	20		8000			30	Json/publish/PlanetLevel1.json
+60	0	4	fengshi15	20		8000			30	Json/publish/NewScene1.json
