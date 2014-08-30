@@ -176,11 +176,12 @@ HGL_CONSOLE_MAIN_FUNC()
 	{
 		std::cout<<" option:"<<std::endl;
 		std::cout<<"\t\t-cc\tclear C/C++ comment"<<std::endl;
-		std::cout<<"\t\t-ca\tclear AsciiChar and Symbol"<<std::endl;
+		std::cout<<"\t\t-ce\tclear pure english string"<<std::endl;
+		std::cout<<"\t\t-cs\tclear pure symbol char"<<std::endl;
 		std::cout<<"\t\t-sf\tproc sub folder"<<std::endl;
 		std::cout<<std::endl;
-		std::cout<<" Format: TextExtract [-cc,-ce,-cs] <shift_jis|big5|gbk|...> <input path> <input filename> <output path> <output file extname>"<<std::endl;
-		std::cout<<" Example: TextExtract -cc -ce -cs shift_jis /home/hyzboy/input_csv/ .csv /home/hyzboy/output_txt/ txt"<<std::endl;
+		std::cout<<" Format: TextExtract [-cc,-ce,-cs,-sf] <shift_jis|big5|gbk|...> <input path> <input filename> <output path> <output file extname>"<<std::endl;
+		std::cout<<" Example: TextExtract -cc -ce -cs -sf shift_jis /home/hyzboy/input_csv/ .csv /home/hyzboy/output_txt/ txt"<<std::endl;
 		return(0);
 	}
 
@@ -211,6 +212,14 @@ HGL_CONSOLE_MAIN_FUNC()
 		++off;
 
 		std::cout<<"option: Clear pure symbol char"<<std::endl;
+	}
+
+	if(args.CaseFind("-sf")!=-1)
+	{
+		sub_folder=true;
+		++off;
+
+		std::cout<<"option: proc sub folder"<<std::endl;
 	}
 
 	std::cout<<"CharSet: "<<args[off]<<std::endl;
