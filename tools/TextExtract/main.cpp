@@ -73,7 +73,11 @@ void TextExtract(TextExtractOption *teo,hgl::FileInfo &fi)
 
 	std::cout<<"create file OK! filename: "<<target_filename.c_str()<<std::endl;
 
-	fos.Write("\xFF\xFE",2);		//utf16le文件bom头
+	{
+		const BOMFileHeader &bfh=BOMData[bomUTF16LE];	//取utf16le BOM头数据
+
+		fos.Write(bfh.data,bfh.size);	//写入utf16le文件bom头
+	}
 
 	UTF16StringList txt_list;
 
