@@ -1,7 +1,0 @@
-﻿id	Type	Name	Max_level	HP	Image	Skill	Level	Character	Height	JumpSpeed	Speed	Response	BoneFile	BoneName	Description	UnlockCost	UnlockCostType
-int	char[32]	char[32]	int	int	char[32]	int	int	int	float	float	float	int	char[32]	char[32]	char[32]	int	char[32]
-101	DoraemonNormal	普通哆啦A梦	30	3	role/dl.png		1	1	6	5	4	0	role/role.ExportJson	1000		0	coins
-102	DoraemonDragon	恐龙哆啦A梦	35	3	role/dl.png		1	1	6	6	4	4		1001		5000	coins
-103	DoraemonPirat	海盗哆啦A梦	35	3	role/dl.png	受到伤害回复能量100点	1	1	6	7	5	4		1002		120	diamond
-104	DoraemonUniverse	宇宙哆啦A梦	40	4	role/dl.png	出场召唤宇宙飞船飞行10s，消灭所有敌人和障碍	1	1	7	8	6	8		1003		2000	diamond
-105	DoraemonWind	风使哆啦A梦	40	2	role/dl.png	自动复活一次	1	1	6	9	5	8		1004		5000	diamond
