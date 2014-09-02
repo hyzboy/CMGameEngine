@@ -28,5 +28,7 @@ int main(int,char **)
 
 	str=new_time;
 	cout<<"new_time="<<str.c_str()<<endl;
+
+	cout<<"TimeZone:"<<GetTimeZone()<<endl;
 	return(0);
 }

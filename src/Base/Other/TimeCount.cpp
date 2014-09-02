@@ -32,6 +32,34 @@ namespace hgl
 	namespace
 	{
 		uint64 program_start_time=0;
+
+		long gmt_off=0;			//windows下为long
+
+		struct TimeInit
+		{
+			TimeInit()
+			{
+				program_start_time=GetMicroTime();
+
+			#if HGL_OS == HGL_OS_Windows
+				_tzset();
+				_get_timezone(&gmt_off);
+			#else
+				tzset();
+				gmt_off=-timezone;
+			#endif//HGL_OS == HGL_OS_Windows
+			}
+		};//struct TimeInit
+
+		static TimeInit time_init;
+	}//namespace
+
+	/**
+	 * 返回时区时差
+	 */
+	int GetTimeZone()
+	{
+		return gmt_off;
 	}
 
 	/**
@@ -43,7 +71,7 @@ namespace hgl
 #if HGL_OS != HGL_OS_Windows
 		struct timeval tv;
 		gettimeofday(&tv, nullptr);
-		return (tv.tv_sec * 1000) + (tv.tv_usec/1000);
+		return ((tv.tv_sec) * 1000) + (tv.tv_usec/1000);
 #else
 		return(GetMicroTime() / 1000);
 #endif//HGL_OS != HGL_OS_Windows
@@ -58,7 +86,7 @@ namespace hgl
 #if HGL_OS != HGL_OS_Windows
 		struct timeval tv;
 		gettimeofday(&tv, nullptr);
-		return tv.tv_sec * HGL_MICRO_SEC_PER_SEC + tv.tv_usec;
+		return (tv.tv_sec) * HGL_MICRO_SEC_PER_SEC + tv.tv_usec;
 #else
 		SYSTEMTIME st;
 		FILETIME ft;
@@ -113,11 +141,6 @@ namespace hgl
 		select(0, NULL, NULL, NULL, &tv);
 	#endif
 #endif//HGL_OS == HGL_OS_Windows
-	}
-
-	void InitStartTime()
-	{
-		program_start_time=GetMicroTime();
 	}
 
 	uint64 GetMilliStartTime()

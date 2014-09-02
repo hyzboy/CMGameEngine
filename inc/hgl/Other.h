@@ -19,6 +19,8 @@ namespace hgl   //排序,查找
 
 namespace hgl   //时间
 {
+	int GetTimeZone();																				///<返回时区的时差(单位：秒)
+
 	uint64 GetMilliStartTime();																		///<取得毫秒程序启动时间(单位：1/1000秒)
 	uint64 GetMicroStartTime();																		///<取得微秒程序启动时间(单位：1/1000000秒)
 	double GetDoubleStartTime();																	///<取得秒程序启动时间(单位：秒)

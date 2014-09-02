@@ -27,9 +27,6 @@ namespace hgl
 	void InitMemoryPool();
 	void ClearMemoryPool();
 
-	//Base/Other/TimeCount.cpp
-	void InitStartTime();
-
 	//Base/BaseApplication/SystemInfo.CPP
 	void GetCMGDKPath(CMGDKPATH &);					//取得CMGDK路径
 	void SystemCheck(SystemInfo *);					//系统检测
@@ -79,8 +76,6 @@ namespace hgl
 		srand48(GetMicroTime());
 		srand(lrand48());
 #endif//
-
-		InitStartTime();			//初始化启动时间
 
 		InitMemoryPool();			//初始化内存池
 		InitPlugIn();				//初始化插件
