@@ -82,11 +82,11 @@ namespace hgl
 			 &&index==texture_index[active])						//也绑定的是这个贴图
 					return(true);
 
-/*			if(opengl_version>=4.5)
+			if(opengl_version>=4.5)
 			{
-				glBindTextureUnit(active,index);
+				glBindTextureUnit(active,index);						//注：使用数字的纹理号active，而不是GL_TEXTURE0+active
 			}
-			else*/
+			else
 			{
 				if(current_active_texture!=active)						//如果活动贴图编号不一致
 				{
