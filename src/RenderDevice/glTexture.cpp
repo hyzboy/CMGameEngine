@@ -82,25 +82,34 @@ namespace hgl
 			 &&index==texture_index[active])						//也绑定的是这个贴图
 					return(true);
 
-			if(current_active_texture!=active)						//如果活动贴图编号不一致
+/*			if(opengl_version>=4.5)
 			{
-				glActiveTexture(GL_TEXTURE0+active);				//切换活动贴图
-
-				current_active_texture=active;
+				glBindTextureUnit(active,index);
 			}
-
-			if(texture_state_format[active]!=type)					//如果格式和之前不一样
+			else*/
 			{
-				if(texture_state_format[active])					//如果之前有另一个格式
-					glDisable(texture_state_format[active]);		//解除旧的贴图格式
+				if(current_active_texture!=active)						//如果活动贴图编号不一致
+				{
+					glActiveTexture(GL_TEXTURE0+active);				//切换活动贴图
 
-				glEnable(type);										//开启新的格式
-				texture_state_format[active]=type;
+					current_active_texture=active;
+				}
+
+				if(texture_state_format[active]!=type)					//如果格式和之前不一样
+				{
+					if(texture_state_format[active])					//如果之前有另一个格式
+						glDisable(texture_state_format[active]);		//解除旧的贴图格式
+
+					glEnable(type);										//开启新的格式
+					texture_state_format[active]=type;
+				}
+
+				glBindTexture(type,index);
 			}
-
-			glBindTexture(type,index);
+			
 			texture_index[active]=index;
-
+			
+			
 			return(true);
 		}
 
