@@ -3,6 +3,31 @@
 #include<hgl/type/Smart.h>
 #include<hgl/type/Map.h>
 #include<GL/glew.h>
+/*
+In GL_EXT_direct_state_access there was a function named glVertexArrayVertexAttribOffsetEXT. I do not see an equivalent in GL_ARB_direct_state_access. I'm trying to accomplish the following using the new core DSA functions:
+
+GLuint vao = 0;
+glGenVertexArrays(1, &vao);
+glBindVertexArray(vao);
+glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[3]);
+glEnableVertexArrayAttribEXT(vao, 0);
+glEnableVertexArrayAttribEXT(vao, 1);
+glVertexArrayVertexAttribOffsetEXT(vao, buffers[0], 0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+glVertexArrayVertexAttribOffsetEXT(vao, buffers[1], 1, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+I have tried the following, but it does work:
+
+GLuint vao = 0;
+glCreateVertexArrays(1, &vao);
+glVertexArrayElementBuffer(vao, buffers[3]);
+glEnableVertexArrayAttrib(vao, 0);
+glEnableVertexArrayAttrib(vao, 1);
+glVertexArrayVertexBuffer(vao, 0, buffers[0], 0, 0);
+glVertexArrayVertexBuffer(vao, 1, buffers[1], 0, 0);
+glVertexArrayAttribFormat(vao, 0, 3, GL_FLOAT, GL_FALSE, 0);
+glVertexArrayAttribFormat(vao, 1, 2, GL_FLOAT, GL_FALSE, 0);
+*/
+
 namespace hgl
 {
 	namespace graph
