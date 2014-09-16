@@ -200,6 +200,9 @@ UNIQUE_TEST(FloatRepresentation)
 	LOGI("FLOAT_NAN as double: %f, or 0x%llX", FLOAT_NAN, ReinterpretAsU64((double)FLOAT_NAN));
 	LOGI("FLOAT_INF as double: %f, or 0x%llX", FLOAT_INF, ReinterpretAsU64((double)FLOAT_INF));
 
+	// Commented out - Valgrind does not support long double and gives a false positive if the following code is run,
+	// so just for simplicity, leave this test out.
+	/*
 #if !defined(EMSCRIPTEN)
 	LOGI("sizeof(long double): %d", (int)sizeof(long double));
 	LOGI("LDBL_DIG: %d, LDBL_MANT_DIG: %d", (int)LDBL_DIG, (int)LDBL_MANT_DIG);
@@ -209,6 +212,7 @@ UNIQUE_TEST(FloatRepresentation)
 #endif
 
 #endif
+	*/
 }
 
 TEST(IsFinite)
@@ -693,17 +697,17 @@ BENCHMARK_END;
 #define MASK_MAX_CIRCLE_ANGLE (MAX_CIRCLE_ANGLE - 1)
 #define PI 3.14159265358979323846f
 static float fast_cossin_table[MAX_CIRCLE_ANGLE];           // Declare table of fast cosinus and sinus
-class Init_fast_cossin_table
+class Init_fast_cossin_table_
 {
 public:
-	Init_fast_cossin_table()
+	Init_fast_cossin_table_()
 	{
 		// Build cossin table
 		for(int i = 0; i < MAX_CIRCLE_ANGLE; i++)
 			fast_cossin_table[i] = (float)sin((double)i * PI / HALF_MAX_CIRCLE_ANGLE);
 	}
 };
-Init_fast_cossin_table static_initializer;
+Init_fast_cossin_table_ static_sincos_initializer;
 static inline float sin_lookuptable(float n)
 {
 	int i = (int)(n * (HALF_MAX_CIRCLE_ANGLE / PI));
@@ -919,6 +923,8 @@ RANDOMIZED_TEST(Min)
 	float correctMin = std::min(a,b);
 	float mglMin = Min(a, b);
 	assert(correctMin == mglMin);
+	MARK_UNUSED(correctMin);
+	MARK_UNUSED(mglMin);
 }
 
 #ifdef max
@@ -933,9 +939,11 @@ RANDOMIZED_TEST(Max)
 	if (rng.Int(0,10) == 0) a = FLOAT_INF;
 	if (rng.Int(0,10) == 0) b = -FLOAT_INF;
 	if (rng.Int(0,10) == 0) b = FLOAT_INF;
-	float correctMin = std::min(a,b);
-	float mglMin = Min(a, b);
-	assert(correctMin == mglMin);
+	float correctMax = std::max(a,b);
+	float mglMax = Max(a, b);
+	assert(correctMax == mglMax);
+	MARK_UNUSED(correctMax);
+	MARK_UNUSED(mglMax);
 }
 
 BENCHMARK(Min, "Min")

@@ -76,7 +76,7 @@
 // If MATH_ENABLE_STL_SUPPORT is defined, MathGeoLib utilizes STL data structures. Otherwise,
 // features requiring STL are disabled (but the library can still be built).
 #ifndef MATH_ENABLE_STL_SUPPORT
-//#define MATH_ENABLE_STL_SUPPORT
+#define MATH_ENABLE_STL_SUPPORT
 #endif
 
 // If MATH_TINYXML_INTEROP is defined, MathGeoLib integrates with TinyXML to provide
@@ -109,7 +109,7 @@
 #endif
 // If MATH_USE_OPENGL is defined, the Frustum class defaults to creating Frustums with projectiveSpace = FrustumSpaceGL.
 #ifndef MATH_USE_OPENGL
-//#define MATH_USE_OPENGL
+#define MATH_USE_OPENGL
 #endif
 
 // If MATH_LEFTHANDED_CAMERA is defined, the Frustum class defaults to creating Frustums with handedness = FrustumLeftHanded.
@@ -118,7 +118,7 @@
 #endif
 // If MATH_RIGHTHANDED_CAMERA is defined, the Frustum class defaults to creating Frustums with handedness = FrustumRightHanded.
 #ifndef MATH_RIGHTHANDED_CAMERA
-//#define MATH_RIGHTHANDED_CAMERA
+#define MATH_RIGHTHANDED_CAMERA
 #endif
 
 #if defined(MATH_USE_DIRECT3D) && defined(MATH_USE_OPENGL)

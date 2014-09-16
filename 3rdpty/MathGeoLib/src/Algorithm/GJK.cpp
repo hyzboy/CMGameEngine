@@ -20,6 +20,8 @@
 #include "../Geometry/Triangle.h"
 #include "../Geometry/Plane.h"
 
+MATH_BEGIN_NAMESPACE
+
 /// This function examines the simplex defined by the array of points in s, and calculates which voronoi region
 /// of that simplex the origin is closest to. Based on that information, the function constructs a new simplex
 /// that will be used to continue the search, and returns a new search direction for the GJK algorithm.
@@ -223,7 +225,7 @@ vec UpdateSimplex(vec *s, int &n)
 		float dist = FLOAT_INF;
 		int minDistIndex = -1;
 		for(int i = 6; i < 14; ++i)
-			if (i == 6 || i == 8 || i == 9 || i == 11 || i == 12 || i == 13 || i == 14)
+			if (i == 6 || i == 8 || i == 9 || i == 11 || i == 12 || i == 13)
 				if (d[i] < dist)
 				{
 					dist = d[i];
@@ -344,3 +346,5 @@ vec UpdateSimplex(vec *s, int &n)
 		return vec::zero;
 	}
 }
+
+MATH_END_NAMESPACE

@@ -186,6 +186,12 @@ public:
 	float4 &operator /=(float scalar);
 
 #ifdef MATH_ENABLE_UNCOMMON_OPERATIONS
+	// In math textbooks, pointwise multiplication of vectors is not defined within a linear space.
+	// However, in programming it is often useful for e.g. modulating colors via pointwise multiplication.
+	// If you #define MATH_ENABLE_UNCOMMON_OPERATIONS, you'll get these operations upgraded to handy
+	// operator * and / notation and can use vec * vec and vec / vec. Otherwise, use the notation
+	// vec.Mul(vec) and vec.Div(vec) for pointwise notation. MATH_ENABLE_UNCOMMON_OPERATIONS also enables
+	// the operation scalar / vec.
 	float4 operator *(const float4 &vector) const { return this->Mul(vector); }
 	float4 operator /(const float4 &vector) const { return this->Div(vector); }
 	float4 &operator *=(const float4 &vector) { *this = this->Mul(vector); return *this; }
@@ -736,13 +742,6 @@ public:
 		well-formed 3D points or direction vectors.
 		This function is mostly used for testing and debugging purposes only. */
 	static float4 RandomGeneral(LCG &lcg, float minElem, float maxElem);
-
-#ifdef MATH_ENABLE_UNCOMMON_OPERATIONS
-	float4 operator *(const float4 &rhs) const { return this->Mul(rhs); }
-	float4 operator /(const float4 &rhs) const { return this->Div(rhs); }
-	float4 &operator *=(const float4 &rhs) { *this = this->Mul(rhs); return *this; }
-	float4 &operator /=(const float4 &rhs) { *this = this->Div(rhs); return *this; }
-#endif
 
 	/// Specifies a compile-time constant float4 with value (0, 0, 0, 0).
 	/** @note Due to static data initialization order being undefined in C++, do NOT use this

@@ -44,6 +44,10 @@ if (MINGW)
 	set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 endif()
 
+if (IOS)
+	add_definitions(-DAPPLE_IOS)
+endif()
+
 set(optFlags "-DMATH_ENABLE_INSECURE_OPTIMIZATIONS -DNDEBUG -DMATH_SILENT_ASSUME -DRELEASE -DOPTIMIZED_RELEASE")
 
 set(CMAKE_C_FLAGS_RELEASE     "${CMAKE_C_FLAGS_RELEASE} ${optFlags}")
@@ -271,6 +275,10 @@ elseif (MATH_SSE)
 	elseif (IS_GCC_LIKE)
 		add_definitions(-msse -march=pentium3 -mtune=pentium3)
 	endif()
+endif()
+
+if (MATH_ENABLE_UNCOMMON_OPERATIONS)
+	add_definitions(-DMATH_ENABLE_UNCOMMON_OPERATIONS)
 endif()
 
 if (MATH_NEON)

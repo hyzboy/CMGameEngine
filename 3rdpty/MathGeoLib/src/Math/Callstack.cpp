@@ -29,7 +29,7 @@ static std::string GetSymbolName(void *address, HANDLE hProcess)
 		{
 			// SymGetLineFromAddr64 returned success
 			char str[128];
-			sprintf(str, ":%d: ", line.LineNumber);
+			sprintf(str, ":%u: ", line.LineNumber);
 			return std::string(line.FileName) + str + pSymbol->Name;
 		}
 		else
@@ -94,14 +94,13 @@ std::string NOINLINE GetCallstack(const char *indent, const char *ignoreFilter)
 	stack.AddrStack.Offset    = context.Rsp;
 	stack.AddrFrame.Offset    = context.Rbp;
 	const DWORD machineType = IMAGE_FILE_MACHINE_AMD64;
-	const PVOID contextRecord = &context;
 #else
 	stack.AddrPC.Offset       = context.Eip;
 	stack.AddrStack.Offset    = context.Esp;
 	stack.AddrFrame.Offset    = context.Ebp;
 	const DWORD machineType = IMAGE_FILE_MACHINE_I386;
-	const PVOID contextRecord = NULL;
 #endif
+	const PVOID contextRecord = &context;
 
 	std::string callstack;
 	for(int i = 0; i < 128; ++i)
@@ -139,6 +138,7 @@ std::string NOINLINE GetCallstack(const char *indent, const char *ignoreFilter)
 
 #include <stdlib.h>
 #include <execinfo.h>
+#include <string.h>
 
 std::string NOINLINE GetCallstack(const char *indent, const char *ignoreFilter)
 {
@@ -149,9 +149,14 @@ std::string NOINLINE GetCallstack(const char *indent, const char *ignoreFilter)
 	std::string stack;
 	for(int i = 0; i < n; ++i)
 	{
-		stack += indent;
-		stack += strs[i];
-		stack += '\n';
+		if (strstr(strs[i], "_Z12GetCallstackPK") != 0)
+			continue;
+		if (!ignoreFilter || strstr(strs[i], ignoreFilter) != 0)
+		{
+			stack += indent;
+			stack += strs[i];
+			stack += '\n';
+		}
 	}
 	free(strs);
 	return stack;

@@ -117,11 +117,6 @@ float Ray::Distance(const vec &point, float &d) const
 	return ClosestPoint(point, d).Distance(point);
 }
 
-float Ray::DistanceSquared(const vec &point, float &d) const
-{
-	return ClosestPoint(point, d).DistanceSq(point);
-}
-
 float Ray::Distance(const Ray &other, float &d, float &d2) const
 {
 	vec c = ClosestPoint(other, d, d2);

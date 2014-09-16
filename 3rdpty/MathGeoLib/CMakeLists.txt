@@ -24,6 +24,10 @@ if (BUILD_FOR_GCOV OR MATH_TESTS_EXECUTABLE OR FAIL_USING_EXCEPTIONS) # TODO: Us
 	file(GLOB_RECURSE testHeaderFiles ./tests/*.h)
 	set(sourceFiles ${sourceFiles} ${testSourceFiles})
 	set(headerFiles ${headerFiles} ${testHeaderFiles})
+	if (IOS)
+		file(GLOB_RECURSE testObjCFiles ./tests/*.m)
+		set(sourceFiles ${sourceFiles} ${testObjCFiles})
+	endif()
 endif()
 
 if (MATH_TESTS_EXECUTABLE)
@@ -46,3 +50,10 @@ if (WIN8RT)
 	#    since we are not authoring any WinRT components from this code. 
 	set_target_properties(MathGeoLib PROPERTIES STATIC_LIBRARY_FLAGS "/ignore:4264")
 endif()
+
+# install lib and header files if testing is disabled
+if (NOT MATH_TESTS_EXECUTABLE)
+	install (TARGETS MathGeoLib DESTINATION "lib")
+	install (DIRECTORY "src/" DESTINATION "include/MathGeoLib" FILES_MATCHING PATTERN "*.h")
+	install (DIRECTORY "src/" DESTINATION "include/MathGeoLib" FILES_MATCHING PATTERN "*.inl")
+endif (NOT MATH_TESTS_EXECUTABLE)

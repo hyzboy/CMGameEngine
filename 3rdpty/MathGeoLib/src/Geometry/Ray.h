@@ -112,9 +112,6 @@ public:
 	float Distance(const vec &point) const { float d; return Distance(point, d); }
 	float Distance(const vec &point, float &d) const;
 
-	float DistanceSquared(const vec &point) const { float d; return DistanceSquared(point, d); }
-	float DistanceSquared(const vec &point, float &d) const;
-
 	/** @param d2 [out] If specified, receives the parametric distance along the other line that specifies the
 		closest point on that line to this ray. The value returned here can be negative. */
 	float Distance(const Ray &other) const { float d, d2; return Distance(other, d, d2); }
@@ -149,7 +146,7 @@ public:
 	vec ClosestPoint(const LineSegment &other, float &d) const { float d2; return ClosestPoint(other, d, d2); }
 	vec ClosestPoint(const LineSegment &other, float &d, float &d2) const;
 
-	/// Tests whether this ray and the given object intersect.
+	/// Tests whether this ray and the given object intersect.	
 	/** Both objects are treated as "solid", meaning that if one of the objects is fully contained inside
 		another, this function still returns true.
 		@param d [out] If specified, this parameter will receive the parametric distance of

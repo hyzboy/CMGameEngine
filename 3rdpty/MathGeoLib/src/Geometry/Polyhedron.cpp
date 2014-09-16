@@ -79,7 +79,10 @@ Polyhedron::Face Polyhedron::Face::FromString(const char *str)
 
 int Polyhedron::NumEdges() const
 {
-	return (int)EdgeIndices().size();
+	int numEdges = 0;
+	for(size_t i = 0; i < f.size(); ++i)
+		numEdges += (int)f[i].v.size();
+	return numEdges / 2;
 }
 
 vec Polyhedron::Vertex(int vertexIndex) const
@@ -1530,7 +1533,146 @@ void Polyhedron::RemoveRedundantVertices()
 
 void Polyhedron::MergeAdjacentPlanarFaces()
 {
+	///\todo
+}
 
+int CmpFaces(const Polyhedron::Face &a, const Polyhedron::Face &b)
+{
+	if (a.v.size() != b.v.size())
+		return (int)b.v.size() - (int)a.v.size();
+	for(size_t i = 0; i < a.v.size(); ++i)
+	{
+		if (a.v[i] != b.v[i])
+			return a.v[i] - b.v[i];
+	}
+	return 0;
+}
+
+void Polyhedron::CanonicalizeFaceArray()
+{
+	if (f.empty())
+		return;
+
+	for(size_t i = 0; i < f.size(); ++i)
+	{
+		Face &fc = f[i];
+		int smallestJ = 0;
+		for(size_t j = 1; j < fc.v.size(); ++j)
+		{
+			if (fc.v[j] < fc.v[smallestJ])
+				smallestJ = (int)j;
+		}
+		while(smallestJ-- > 0) // Cycle smallest to front.
+		{
+			int j = fc.v.front();
+			fc.v.erase(fc.v.begin(), fc.v.begin() + 1);
+			fc.v.push_back(j);
+		}
+	}
+
+	// Quick&dirty selection sort with custom predicate. Don't want to implement operate < for Face for std::sort.
+	for(size_t i = 0; i < f.size()-1; ++i)
+		for(size_t j = i+1; j < f.size(); ++j)
+			if (CmpFaces(f[i], f[j]) > 0)
+				Swap(f[i], f[j]);
+}
+
+bool Polyhedron::SetEquals(Polyhedron &p2)
+{
+	if (NumVertices() != p2.NumVertices() || NumFaces() != p2.NumFaces() || NumEdges() != p2.NumEdges())
+		return false;
+
+	// Match all corner vertices.
+	const float epsilonSq = 1e-4f;
+	for(int i = 0; i < (int)v.size(); ++i)
+	{
+		float dSq;
+		int j = p2.FindClosestVertex(v[i], dSq);
+		if (j < i || dSq > epsilonSq)
+			return false; // No corresponding vertex found.
+		p2.SwapVertices(i, j);
+	}
+
+	// Canonicalize face lists
+	CanonicalizeFaceArray();
+	p2.CanonicalizeFaceArray();
+
+	// Match all faces.
+	for(size_t i = 0; i < f.size(); ++i)
+		if (!p2.ContainsFace(f[i]))
+			return false;
+	return true;
+}
+
+bool Polyhedron::ContainsFace(const Face &face) const
+{
+	for(size_t i = 0; i < f.size(); ++i)
+	{
+		const Face &f2 = f[i];
+		if (f2.v.size() != face.v.size())
+			continue;
+		if (face.v.empty())
+			return true;
+		// Find presumed cyclic shift
+		int shift = -1;
+		for(size_t j = 0; j < f2.v.size(); ++j)
+		{
+			if (f2.v[j] == face.v[0])
+			{
+				shift = (int)j; // Assuming that each Face only contains each vertex once, like all good Faces do.
+				break;
+			}
+		}
+		if (shift == -1)
+			continue; // Was not found?
+
+		// Match all vertices with the found shift.
+		bool matches = true;
+		for(size_t j = 0; j < f2.v.size(); ++j)
+		{
+			if (f2.v[(j+f2.v.size()-shift) % f2.v.size()] != face.v[j])
+			{
+				matches = false;
+				break;
+			}
+		}
+		if (matches)
+			return true;
+	}
+	return false;
+}
+
+void Polyhedron::SwapVertices(int i, int j)
+{
+	if (i == j)
+		return;
+	Swap(v[i], v[j]);
+	for(size_t F = 0; F < f.size(); ++F)
+	{
+		for(size_t V = 0; V < f[F].v.size(); ++V)
+		{
+			if (f[F].v[V] == i)
+				f[F].v[V] = j;
+			else if (f[F].v[V] == j)
+				f[F].v[V] = i;
+		}
+	}
+}
+
+int Polyhedron::FindClosestVertex(const vec &pt, float &outDistanceSq) const
+{
+	outDistanceSq = FLOAT_INF;
+	int closestI = -1;
+	for(size_t i = 0; i < v.size(); ++i)
+	{
+		float distSq = pt.DistanceSq(v[i]);
+		if (distSq < outDistanceSq)
+		{
+			outDistanceSq = distSq;
+			closestI = (int)i;
+		}
+	}
+	return closestI;
 }
 
 TriangleArray Polyhedron::Triangulate() const
