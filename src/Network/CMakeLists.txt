@@ -30,7 +30,8 @@ SET(NETWORK_SCTP_SOURCE
 
 SET(NETWORK_HTTP_SOURCE
 	HTTPInputStream.cpp
-	HTTPOutputStream.cpp)
+	HTTPOutputStream.cpp
+	HTTPTools.cpp)
 
 SOURCE_GROUP("Base"						FILES ${NETWORK_BASE_SOURCE})
 SOURCE_GROUP("Transport\\UDP"			FILES ${NETWORK_UDP_SOURCE})
@@ -82,7 +83,7 @@ ADD_LIBRARY(CM.Network SHARED
 
 	SocketManageThread.cpp
 	MTSocketManage.cpp
-	
+
 # 	SocketManageSelect.cpp
 # 	TCPSocketRBThread.cpp
 	${NETWORK_OS_SOURCE})

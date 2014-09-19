@@ -15,6 +15,7 @@ struct TextExtractOption
 	bool clear_comment;
 	bool clear_english;
 	bool clear_symbol;
+	bool clear_edge;
 
 	CharSet char_set;
 
@@ -31,6 +32,7 @@ public:
 		clear_comment=false;
 		clear_english=false;
 		clear_symbol=false;
+		clear_edge=false;
 	}
 };//struct TextExtractOption
 
@@ -166,7 +168,15 @@ void TextExtract(TextExtractOption *teo,hgl::FileInfo &fi)
 
 			if(len>0)		//如果不是全英文
 			{
-				fos.Write(start,(end-start+1)*sizeof(u16char));
+				if(teo->clear_edge)		//如果要求清除首尾字符
+				{
+					fos.Write(ps,(pe-ps+1)*sizeof(u16char));
+				}
+				else
+				{
+					fos.Write(start,(end-start+1)*sizeof(u16char));
+				}
+
 				fos.Write(U16_TEXT("\n"),2);
 				++write_total;
 			}
@@ -194,10 +204,11 @@ HGL_CONSOLE_MAIN_FUNC()
 		std::cout<<"\t\t-cc\tclear C/C++ comment"<<std::endl;
 		std::cout<<"\t\t-ce\tclear pure english string"<<std::endl;
 		std::cout<<"\t\t-cs\tclear pure symbol char"<<std::endl;
+		std::cout<<"\t\t-cb\tclear broder english&symbol"<<std::endl;
 		std::cout<<"\t\t-sf\tproc sub folder"<<std::endl;
 		std::cout<<std::endl;
-		std::cout<<" Format: TextExtract [-cc,-ce,-cs,-sf] <shift_jis|big5|gbk|...> <input path> <input filename> <output path> <output file extname>"<<std::endl;
-		std::cout<<" Example: TextExtract -cc -ce -cs -sf shift_jis /home/hyzboy/input_csv/ .csv /home/hyzboy/output_txt/ txt"<<std::endl;
+		std::cout<<" Format: TextExtract [-cc,-ce,-cs,-cb,-sf] <shift_jis|big5|gbk|...> <input path> <input filename> <output path> <output file extname>"<<std::endl;
+		std::cout<<" Example: TextExtract -cc -ce -cs -cb -sf shift_jis /home/hyzboy/input_csv/ .csv /home/hyzboy/output_txt/ txt"<<std::endl;
 		return(0);
 	}
 
@@ -236,6 +247,14 @@ HGL_CONSOLE_MAIN_FUNC()
 		++off;
 
 		std::cout<<"option: Clear pure symbol char"<<std::endl;
+	}
+
+	if(args.CaseFind("-cb")!=-1)
+	{
+		teo.clear_edge=true;
+		++off;
+
+		std::cout<<"option: Clip broder english&symbol"<<std::endl;
 	}
 
 	if(args.CaseFind("-sf")!=-1)
