@@ -1,4 +1,4 @@
-#include <hgl/network/WinFireWall.h>
+﻿#include <hgl/network/WinFireWall.h>
 #include <hgl/type/BaseString.h>
 #include <netfw.h>
 
@@ -187,7 +187,7 @@ namespace hgl
 		* @param bEnable “是否被允许通信”信息保存用变量
 		* @return FW_NOERROR 检测成功
 		*/
-		FW_ERROR_CODE WinFireWall::CheckApplication( const u16char* lpszProcessImageFileName, bool& bEnable )
+		FW_ERROR_CODE WinFireWall::CheckApplication( const wchar_t* lpszProcessImageFileName, bool& bEnable )
 		{
 			FW_ERROR_CODE ret = FW_NOERROR;
 			HRESULT hr;
@@ -214,7 +214,7 @@ namespace hgl
 				//bstrFWProcessImageFileName = SysAllocString( lpszProcessImageFileName );
 				bstrFWProcessImageFileName = lpszProcessImageFileName;
 				//if( SysStringLen( bstrFWProcessImageFileName ) == 0)
-				if(bstrFWProcessImageFileName.Length==0)
+				if(bstrFWProcessImageFileName.Length()==0)
 					throw FW_ERR_SYS_ALLOC_STRING;
 
 				hr = pFWApps->Item( bstrFWProcessImageFileName.c_str(), &pFWApp);
@@ -254,7 +254,7 @@ namespace hgl
 		* @param lpszRegisterName 在Windows防火墙名单中的程序名称
 		* @return FW_NOERROR 添加成功
 		*/
-		FW_ERROR_CODE WinFireWall::AddApplication( const u16char* lpszProcessImageFileName, const u16char* lpszRegisterName )
+		FW_ERROR_CODE WinFireWall::AddApplication( const wchar_t* lpszProcessImageFileName, const wchar_t* lpszRegisterName )
 		{
 			FW_ERROR_CODE ret = FW_NOERROR;
 			HRESULT hr;
@@ -295,7 +295,7 @@ namespace hgl
 					//bstrProcessImageFileName = SysAllocString( lpszProcessImageFileName );
 					bstrProcessImageFileName = lpszProcessImageFileName;
 					//if( SysStringLen( bstrProcessImageFileName ) == 0)
-					if(bstrProcessImageFileName.Length==0)
+					if (bstrProcessImageFileName.Length() == 0)
 						throw FW_ERR_SYS_ALLOC_STRING;
 
 					// Set the process image file name
@@ -307,7 +307,7 @@ namespace hgl
 					//bstrRegisterName = SysAllocString( lpszRegisterName );
 					bstrRegisterName = lpszRegisterName;
 					//if( SysStringLen( bstrRegisterName ) == 0)
-					if(bstrRegisterName.Length==0)
+					if (bstrRegisterName.Length() == 0)
 						throw FW_ERR_SYS_ALLOC_STRING;
 					// Set a registered name of the process
 					hr = pFWApp->put_Name( bstrRegisterName.c_str() );
@@ -341,7 +341,7 @@ namespace hgl
 		* @param lpszProcessImageFileName 程序可执行文件名称(绝对路径)
 		* @return FW_NOERROR 移除成功
 		*/
-		FW_ERROR_CODE WinFireWall::RemoveApplication( const u16char* lpszProcessImageFileName )
+		FW_ERROR_CODE WinFireWall::RemoveApplication( const wchar_t* lpszProcessImageFileName )
 		{
 			FW_ERROR_CODE ret = FW_NOERROR;
 			HRESULT hr;
@@ -373,7 +373,7 @@ namespace hgl
 					//bstrProcessImageFileName = SysAllocString( lpszProcessImageFileName );
 					bstrProcessImageFileName = lpszProcessImageFileName;
 					//if( SysStringLen( bstrProcessImageFileName ) == 0)
-					if(bstrProcessImageFileName.Length==0)
+					if (bstrProcessImageFileName.Length() == 0)
 						throw FW_ERR_SYS_ALLOC_STRING;
 					hr = pFWApps->Remove( bstrProcessImageFileName.c_str() );
 					if( FAILED( hr ))
@@ -450,7 +450,7 @@ namespace hgl
 		* @param lpszRegisterName 是Windows防火墙名单中所显示的名称
 		* @return FW_NOERROR 添加成功
 		*/
-		FW_ERROR_CODE WinFireWall::OpenPort( unsigned int lPortNumber, PROTOCOL ipProtocol, const u16char* lpszRegisterName )
+		FW_ERROR_CODE WinFireWall::OpenPort( unsigned int lPortNumber, PROTOCOL ipProtocol, const wchar_t* lpszRegisterName )
 		{
 			FW_ERROR_CODE ret = FW_NOERROR;
 			INetFwOpenPort* pFWOpenPort = NULL;
@@ -494,7 +494,7 @@ namespace hgl
 					//bstrRegisterName = SysAllocString( lpszRegisterName );
 					bstrRegisterName = lpszRegisterName;
 					//if( SysStringLen( bstrRegisterName ) == 0)
-					if(bstrRegisterName.Length==0)
+					if (bstrRegisterName.Length() == 0)
 						throw FW_ERR_SYS_ALLOC_STRING;
 			
 					// Set the registered name

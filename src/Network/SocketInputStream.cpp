@@ -10,13 +10,8 @@ namespace hgl
 	{
 		bool Read(io::DataInputStream *dis,sockaddr_in &addr)
 		{
-		#if (HGL_COMPILER == HGL_COMPILER_GNU)||(HGL_COMPILER == HGL_COMPILER_LLVM)
-			if(dis->ReadUint8((uint8 *)&(addr.sin_addr.s_addr),4)!=4)return(false);
-		#else
-			#if (HGL_OS == HGL_OS_Windows)
-				if(dis->ReadUint8((uint8 *)&(addr.sin_addr.S_addr),4)!=4)return(false);
-			#endif//
-		#endif//
+			if(dis->ReadUint8((uint8 *)&(addr.sin_addr.s_addr),4)!=4)
+				return(false);
 
 			return dis->ReadUint16(addr.sin_port);
 		}
@@ -92,11 +87,16 @@ namespace hgl
 			if(sock==-1)return(-1);
 
 			bool to_first=true;
-			ssize_t result=0;
 			int err;
 			char *p=(char *)buf;
 
-			size_t left_bytes=size;
+#if HGL_OS == HGL_OS_Windows
+			int result = 0;
+			int left_bytes = size;
+#else
+			ssize_t result = 0;
+			size_t left_bytes = size;
+#endif//HGL_OS == HGL_OS_Windows
 
 // 			const double start_time=GetDoubleTime();
 

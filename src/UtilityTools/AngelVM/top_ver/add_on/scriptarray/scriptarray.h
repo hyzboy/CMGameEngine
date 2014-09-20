@@ -111,7 +111,7 @@ protected:
 
 	bool  Less(const void *a, const void *b, bool asc, asIScriptContext *ctx, SArrayCache *cache);
 	void *GetArrayItemPointer(int index);
-	void *GetDataPointer(void *buffer);
+	void *GetDataPointer(void *);
 	void  Copy(void *dst, void *src);
 	void  Precache();
 	bool  CheckMaxSize(asUINT numElements);
