@@ -13,10 +13,21 @@ namespace hgl
 				{
 					io::OutputStream *os=(io::OutputStream *)stream;
 
-					os->WriteFully(ptr,size);
+					int ss=size*number;
+
+					os->WriteFully(ptr,ss);
+
+					return ss;
 				}
 			}
 
+			/**
+			 * 执行http get指令
+			 * @param os 执行后下载到的数据输出流
+			 * @param url 要执行的网址
+			 * @return 下载下来的数据长度
+			 * @return <0 出错
+			 */
 			int get(io::OutputStream *os,const char *url)
 			{
 				CURLcode res;
@@ -26,7 +37,7 @@ namespace hgl
 				if(!curl)
 					return(-1);
 
-				auto cur=os->Tell();
+				int cur=os->Tell();
 
 				curl_easy_setopt(curl,CURLOPT_URL,url);
 				curl_easy_setopt(curl,CURLOPT_WRITEDATA,os);

@@ -11,7 +11,15 @@ namespace hgl
 		 */
 		namespace http
 		{
+			/**
+			 * 建立一个HTTP/HTTPS链接，并发送GET操作得到返回信息<br>
+			 * 注：返回信息会包含HTTP信息头，用于下载文件时，需自行将信息头去掉
+			 */
 			int get(io::OutputStream *,const char *);										///<http/https get
+
+			int get(void **ptr,const char *url)
+			{
+			}
 		}//namespace http
 	}//namespace network
 }//namespace hgl

@@ -29,8 +29,8 @@ SET(NETWORK_SCTP_SOURCE
 )
 
 SET(NETWORK_HTTP_SOURCE
-	HTTPInputStream.cpp
-	HTTPOutputStream.cpp
+# 	HTTPInputStream.cpp
+# 	HTTPOutputStream.cpp
 	HTTPTools.cpp)
 
 SOURCE_GROUP("Base"						FILES ${NETWORK_BASE_SOURCE})
@@ -80,6 +80,7 @@ ADD_LIBRARY(CM.Network SHARED
 	${NETWORK_TCP_COMMON_SOURCE}
 	${NETWORK_TCP_CLIENT_SOURCE}
 	${NETWORK_TCP_SERVER_SOURCE}
+	${NETWORK_HTTP_SOURCE}
 
 	SocketManageThread.cpp
 	MTSocketManage.cpp
