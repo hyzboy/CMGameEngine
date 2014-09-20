@@ -196,9 +196,10 @@ namespace hgl
 	/**
 	 * 取适合正巧大于当前数的2次幂值
 	 */
-	inline int power_to_2(int value)
+	template<typename T>
+	inline T power_to_2(T value)
 	{
-		int result=1;
+		T result=1;
 
 		while(result<value)
 			result<<=1;
