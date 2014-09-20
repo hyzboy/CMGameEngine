@@ -94,3 +94,5 @@ IF(WIN32)
 ELSE()
 	ADD_LIBRARY(CM.Network SHARED ${CM_NETWORK_ALL_SOURCE})
 ENDIF()
+
+target_link_libraries(CM.Network curl)

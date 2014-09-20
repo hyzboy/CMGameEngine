@@ -1,5 +1,4 @@
-#include<iostream>
-
+﻿#include<iostream>
 
 using namespace std;
 
@@ -23,7 +22,7 @@ int main(int,char **)
 	cout<<"c type"<<endl;
 
 	TEST(char);
-	TEST(u16char);
+	TEST(wchar_t);
 	TEST(short);
 	TEST(int);
 	TEST(long);
