@@ -1,4 +1,4 @@
-#include<hgl/object/MultiFlowControl.h>
+﻿#include<hgl/object/MultiFlowControl.h>
 
 namespace hgl
 {
@@ -18,7 +18,7 @@ namespace hgl
 	void MultiFlowControl::SetActiveFlow(FlowControl *fc)
 	{
 		int n=flow.Find(fc);
-		int max=flow.Count;
+		int max=flow.GetCount();
 
 		if(n==-1)return;
 
@@ -31,17 +31,17 @@ namespace hgl
 
 	void MultiFlowControl::Update()
 	{
-		int n=flow.Count;
+		int n=flow.GetCount();
 
 		while(n--)
 			if(flow[n]->Enabled)
 				flow[n]->Update();
 	}
 
-	void MultiFlowControl::Draw()
+	void MultiFlowControl::Draw(const Matrix4f *mv)
 	{
 		if(active_flow)
-			active_flow->Draw();
+			active_flow->Draw(mv);
 	}
 
 	void MultiFlowControl::SetMenuCoord(float x,float y)
@@ -74,80 +74,36 @@ namespace hgl
         return(fc);
     }
 
-	#define PROCFUNC(proc,on)	bool MultiFlowControl::proc(int x,int y,uint key)	\
-									{	\
-										if(active_flow&&active_flow->Enabled)	\
-										{	\
-											FlowObject *fo=active_flow->ActiveObject;	\
-											\
-											if(fo)	\
-												return fo->proc(x,y,key);	\
-										}	\
-										\
-										return(false);   \
-									}
-
-	PROCFUNC(Proc_CursorPos			    ,OnCursorPos		);
-
-	PROCFUNC(Proc_MouseLeftDown		    ,OnMouseLeftDown	);
-	PROCFUNC(Proc_MouseLeftUp		    ,OnMouseLeftUp		);
-	PROCFUNC(Proc_MouseLeftDoubleClick	,OnMouseLeftDoubleClick	);
-
-	PROCFUNC(Proc_MouseRightDown		,OnMouseRightDown	);
-	PROCFUNC(Proc_MouseRightUp		    ,OnMouseRightUp		);
-	PROCFUNC(Proc_MouseRightDoubleClick	,OnMouseRightDoubleClick);
-
-	PROCFUNC(Proc_MouseMidDown		    ,OnMouseMidDown		);
-	PROCFUNC(Proc_MouseMidUp		    ,OnMouseMidUp		);
-	PROCFUNC(Proc_MouseMidDoubleClick	,OnMouseMidDoubleClick	);
-
-	#undef PROCFUNC
-
-	bool MultiFlowControl::Proc_Scroll(int x,int y,int val)
-	{
-		if(active_flow&&active_flow->Enabled)
-		{
-			FlowObject *fo=active_flow->ActiveObject;
-
-			if(fo)
-				return fo->Proc_Scroll(x,y,val);
-		}
-
-		return(false);
-	}
-
-	#define PROCFUNC(proc_name,type)	bool MultiFlowControl::proc_name(type key)	\
+	#define PROC(func_name,type1,type2)	bool MultiFlowControl::func_name(type1 param1,type2 param2)	\
 										{	\
 											if(active_flow&&active_flow->Enabled)	\
 											{	\
 												FlowObject *fo=active_flow->ActiveObject;	\
 												\
 												if(fo)	\
-													return fo->proc_name(key);	\
+													return fo->func_name(param1,param2);	\
 											}	\
-										\
-											return(false);	\
+											\
+											return(false);   \
 										}
 
-	PROCFUNC(Proc_JoystickDown,	uint);
-	PROCFUNC(Proc_JoystickPress,uint);
-	PROCFUNC(Proc_JoystickUp,	uint);
+	PROC(Proc_CursorPos,		int,int);
+	PROC(Proc_Scroll,			int,int);
+	PROC(Proc_MouseButton,		int,bool);
+	PROC(Proc_JoystickButton,	int,bool);
+	PROC(Proc_Key,				int,bool);
+	PROC(Proc_Event,			int,void *);
 
-	PROCFUNC(Proc_KeyDown,	uint);
-	PROCFUNC(Proc_KeyPress,	uint);
-	PROCFUNC(Proc_KeyUp,	uint);
-	PROCFUNC(Proc_Char,		u16char);
+	#undef PROC
 
-	#undef PROCFUNC
-
-	bool MultiFlowControl::Proc_Event           (int type,void *data)
+	bool MultiFlowControl::Proc_Char(u16char ch)
 	{
-		if(active_flow&&active_flow->Enabled)
+		if (active_flow&&active_flow->Enabled)
 		{
-			FlowObject *fo=active_flow->ActiveObject;
+			FlowObject *fo = active_flow->ActiveObject;
 
-			if(fo)
-				return fo->Proc_Event(type,data);
+			if (fo)
+				return fo->Proc_Char(ch);
 		}
 
 		return(false);
