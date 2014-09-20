@@ -1,4 +1,4 @@
-#include<hgl/platform/GraphicsApplication.h>
+﻿#include<hgl/platform/GraphicsApplication.h>
 #include<hgl/platform/GraphicsSystemInitInfo.h>
 #include<hgl/object/FlowControl.h>
 #include<hgl/graph/Render.h>

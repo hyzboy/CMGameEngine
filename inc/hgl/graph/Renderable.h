@@ -1,4 +1,4 @@
-#ifndef HGL_GRAPH_RENDERABLE_INCLUDE
+﻿#ifndef HGL_GRAPH_RENDERABLE_INCLUDE
 #define HGL_GRAPH_RENDERABLE_INCLUDE
 
 #include<hgl/graph/Shader.h>

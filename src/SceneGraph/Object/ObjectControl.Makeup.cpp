@@ -28,9 +28,9 @@ namespace hgl
 				for(int n=0;n<max;n++)
 				{
 					#ifdef _DEBUG
-						VisualObject *obj=(VisualObject *)(clas_object[ocVisual][n]);
+						VisualObject *vo=(VisualObject *)(clas_object[ocVisual][n]);
 
-						if(obj->TopMost==false)
+						if(vo->TopMost==false)
 					#else
 						if(((VisualObject *)(clas_object[ocVisual][n]))->TopMost==false)       //找到不需要置顶的对象
 					#endif//_DEBUG

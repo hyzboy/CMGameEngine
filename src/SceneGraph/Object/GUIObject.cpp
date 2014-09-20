@@ -1,4 +1,4 @@
-#include<hgl/gui/GuiObject.h>
+﻿#include<hgl/gui/GuiObject.h>
 #include<hgl/gui/ObjectControl.h>
 #include<hgl/graph/TileFont.h>
 #include<hgl/graph/Render.h>
@@ -37,7 +37,7 @@ namespace hgl
 
 // 				hglSetPropertyString(Hint,hint,	this,GUIObject,GetHint,	SetHint	);
 
-				Name=u"GuiObject";
+				Name=U16_TEXT("GuiObject");
 
 // 				DrawFont=(TileFont *)GetPointer(hfpFont);
 				DrawFont=nullptr;
@@ -171,7 +171,7 @@ namespace hgl
 			{
 				bool result=false;
 
-				mouse_coord.set(x,y);
+				mouse_coord.Set(x,y);
 
 				if(move&&mouse_down[mbLeft])		//可以拖动
 				{
