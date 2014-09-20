@@ -18,18 +18,16 @@ SET(GRAPHICS_APPLICATION_SOURCE
 		
 SOURCE_GROUP("Application" FILES ${GRAPHICS_APPLICATION_SOURCE})
 								
-add_library(CM.SceneGraph SHARED
+SET(CM_SCENE_GRAPH_ALL_SOURCE Camera.cpp WalkerCamera.cpp)
 
-# 	AABox.cpp
-# 	Frustum.cpp
-# 	Plane.cpp
-# 	Ray.cpp
-	Camera.cpp
-	WalkerCamera.cpp
-)
+IF(WIN32)
+	add_library(CM.SceneGraph STATIC ${CM_SCENE_GRAPH_ALL_SOURCE})
+ELSE()
+	add_library(CM.SceneGraph SHARED ${CM_SCENE_GRAPH_ALL_SOURCE})
+ENDIF()
 
 IF(BUILD_OPENGL_LIB)
-	add_library(CM.SceneGraphRender SHARED
+	SET(CM_SCENE_GRAPH_RENDER_ALL_SOURCE
 		${BASE_GRAPH_OBJECT_SOURCE}
 		${GRAPHICS_APPLICATION_SOURCE}
 	# 	HeightMapTerrain.cpp
@@ -49,4 +47,10 @@ IF(BUILD_OPENGL_LIB)
 		Transform.cpp
 		VertexBuffer.cpp
 	)
+	
+IF(WIN32)
+	add_library(CM.SceneGraphRender STATIC ${CM_SCENE_GRAPH_RENDER_ALL_SOURCE})
+ELSE()
+	add_library(CM.SceneGraphRender SHARED ${CM_SCENE_GRAPH_RENDER_ALL_SOURCE})
+ENDIF()
 ENDIF(BUILD_OPENGL_LIB)
