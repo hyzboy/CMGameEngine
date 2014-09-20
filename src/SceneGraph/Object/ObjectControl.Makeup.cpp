@@ -1,4 +1,4 @@
-#include<hgl/gui/ObjectControl.h>
+﻿#include<hgl/gui/ObjectControl.h>
 #include<hgl/type/RectScope.h>
 
 namespace hgl

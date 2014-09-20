@@ -1,4 +1,4 @@
-#include<hgl/gui/ObjectControl.h>
+﻿#include<hgl/gui/ObjectControl.h>
 #include<hgl/gui/RadioObject.h>
 #include<hgl/graph/Render.h>
 #include<hgl/LogInfo.h>
