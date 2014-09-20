@@ -1,4 +1,4 @@
-#include<hgl/network/TCPClient.h>
+﻿#include<hgl/network/TCPClient.h>
 #include<hgl/LogInfo.h>
 #include<hgl/network/SocketInputStream.h>
 #include<hgl/network/SocketOutputStream.h>
