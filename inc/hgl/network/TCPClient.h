@@ -1,4 +1,4 @@
-#ifndef HGL_TCP_CLIENT_INCLUDE
+﻿#ifndef HGL_TCP_CLIENT_INCLUDE
 #define HGL_TCP_CLIENT_INCLUDE
 
 #include<hgl/network/TCPSocket.h>

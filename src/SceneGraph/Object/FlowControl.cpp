@@ -374,33 +374,20 @@ namespace hgl
 
 namespace hgl
 {
-	bool FlowControl::Proc_CursorPos(int x,int y)
-	{
-		if(active_object)
-			return active_object->Proc_CursorPos(x,y);
-		else
-			return(false);
-	}
+	#define PROC(func_name,type1,type2)	bool FlowControl::func_name(type1 param1,type2 param2)	\
+										{	\
+											if(active_object)	\
+												return active_object->func_name(param1,param2);	\
+											else	\
+												return(false);	\
+										}
 
-	bool FlowControl::Proc_Scroll(int x,int y)
-	{
-		if(active_object)
-			return active_object->Proc_Scroll(x,y);
-		else
-			return(false);
-	}
-
-	#define PROC(func_name,type)	bool FlowControl::func_name(type key,bool press)	\
-	{	\
-		if(active_object)	\
-			return active_object->func_name(key,press);	\
-		else	\
-			return(false);	\
-	}
-
-	PROC(Proc_MouseButton	,int);
-	PROC(Proc_JoystickButton,int);
-	PROC(Proc_Key			,int);
+	PROC(Proc_CursorPos,		int,int);
+	PROC(Proc_Scroll,			int,int);
+	PROC(Proc_MouseButton,		int,bool);
+	PROC(Proc_JoystickButton,	int,bool);
+	PROC(Proc_Key,				int,bool);
+	PROC(Proc_Event,			int,void *);
 
 	#undef PROC
 
@@ -408,14 +395,6 @@ namespace hgl
 	{
 		if(active_object)
 			return active_object->Proc_Char(ch);
-		else
-			return(false);
-	}
-
-	bool FlowControl::Proc_Event            (int id,void *event_id)
-	{
-		if(active_object)
-			return active_object->Proc_Event(id,event_id);
 		else
 			return(false);
 	}

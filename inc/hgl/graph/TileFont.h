@@ -7,14 +7,12 @@
 #include<hgl/graph/TileData.h>
 #include<hgl/graph/FontSource.h>
 #include<hgl/graph/Makeup.h>
+#include<hgl/graph/VertexBuffer.h>
 namespace hgl
 {
 	namespace graph
 	{
 		struct Font;
-		template<typename T> class VertexBuffer2;
-//		template<typename T> class VertexBuffer3;
-//		template<typename T> class VertexBuffer4;
 		class Renderable;
 		class Material;
 

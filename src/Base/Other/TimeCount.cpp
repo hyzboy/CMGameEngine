@@ -42,8 +42,20 @@ namespace hgl
 				program_start_time=GetMicroTime();
 
 			#if HGL_OS == HGL_OS_Windows
-				_tzset();
-				_get_timezone(&gmt_off);
+				SYSTEMTIME st;
+				FILETIME ft;
+				uint64 local_time;
+				uint64 utc_time;
+
+				GetLocalTime(&st);
+				SystemTimeToFileTime(&st, &ft);
+				FileTimeToMicroTime(&local_time, &ft);
+
+				GetSystemTime(&st);
+				SystemTimeToFileTime(&st, &ft);
+				FileTimeToMicroTime(&utc_time, &ft);
+
+				gmt_off = utc_time - local_time;
 			#else
 				tzset();
 				gmt_off=-timezone;

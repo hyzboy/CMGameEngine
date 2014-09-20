@@ -21,7 +21,7 @@ namespace hgl
 
 	protected:
 	
-		FlowControl *GetFlow(int n){return (n<0||n>=flow.Count)?NULL:flow[n];}
+		FlowControl *GetFlow(int n){return (n<0||n>=flow.GetCount())?NULL:flow[n];}
 
 		FlowControl *GetActiveFlow(){return active_flow;}
 		void SetActiveFlow(FlowControl *);
@@ -37,7 +37,7 @@ namespace hgl
 
 		virtual void Update();
 
-		virtual void Draw();
+		virtual void Draw(const Matrix4f *);
 
 		virtual void SetMenuCoord(float,float);
 

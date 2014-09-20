@@ -1,4 +1,4 @@
-#include<hgl/gui/ObjectControl.h>
+﻿#include<hgl/gui/ObjectControl.h>
 #include<hgl/gui/RadioObject.h>
 #include<hgl/graph/Render.h>
 #include<hgl/LogInfo.h>
@@ -10,7 +10,7 @@ namespace hgl
 	{
 		void ObjectControl::InitPrivate()
 		{
-			Name=u"ObjectControl";
+			Name=U16_TEXT("ObjectControl");
 
 			object_attrib|=oaControl;
 
@@ -206,7 +206,7 @@ namespace hgl
 			if(!obj)
 			{
 				#ifdef _DEBUG
-					PutError(u"添加了一个空的对象到控制器中！");
+				LOG_ERROR(U16_TEXT("添加了一个空的对象到控制器中！"));
 				#endif//_DEBUG
 
 				return;
@@ -555,7 +555,7 @@ namespace hgl
 					if(active_obj!=obj)
 					{
 						//正常不可能到这里
-						PutError(u"错误:一个非活动对像被要求设为非活动状态!");
+						LOG_ERROR(U16_TEXT("错误:一个非活动对像被要求设为非活动状态!"));
 					}
 				}
 				#endif//_DEBUG
@@ -578,7 +578,7 @@ namespace hgl
 			#ifdef _DEBUG
 				if(all_object.Find((Object *)obj)==-1)
 				{
-					ErrorHint(u"一个对象要被设置对齐属性，但它不在这个对象控制器里。");
+					LOG_HINT(U16_TEXT("一个对象要被设置对齐属性，但它不在这个对象控制器里。"));
 					return;
 				}
 			#endif//_DEBUG
@@ -659,26 +659,24 @@ namespace hgl
 
 				str=forstr;
 
-				if(n)str.Strcat(u"├");
-				else str.Strcat(u"└");
+				if (n)str.Strcat(U16_TEXT("├"));
+				 else str.Strcat(U16_TEXT("└"));
 
 				if(obj->is_gui())
 				{
 					GUIObject *go=(GUIObject *)obj;
 
-					PutInfo(u"%s %p,%s,Left=%d,Top=%d,Width=%d,Height=%d,Name=%s",
-						str.wc_str(),
-						obj,
-						go->mouse_focus?L"●":u"○",
-						go->view_scope.Left,
-						go->view_scope.Top,
-						go->view_scope.Width,
-						go->view_scope.Height,
-						obj->Name.wc_str());
+					LOG_INFO(str 
+						+(go->mouse_focus ? U16_TEXT("●") : U16_TEXT("○"))
+						+UTF16String(go->view_scope.Left)
+						+UTF16String(go->view_scope.Top)
+						+UTF16String(go->view_scope.Width)
+						+UTF16String(go->view_scope.Height)
+						+UTF16String(obj->Name));
 				}
 				else
 				{
-					PutInfo(u"%s %p,Name:%s",str.wc_str(),obj,obj->Name.wc_str());
+					LOG_INFO(str + U16_TEXT(",Name:") + obj->Name);
 				}
 
 				if(!obj->is_control())continue;
@@ -689,8 +687,8 @@ namespace hgl
 
 				str=forstr;
 
-				if(n)str.Strcat(u"│");
-				else str.Strcat(u"　");
+				if(n)str.Strcat(U16_TEXT("│"));
+				else str.Strcat(U16_TEXT("　"));
 
 				oc->PutDebugInfo(str);
 			}

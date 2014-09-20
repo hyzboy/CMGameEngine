@@ -1,4 +1,4 @@
-#ifndef HGL_GRAPH_SHADER_INCLUDE
+﻿#ifndef HGL_GRAPH_SHADER_INCLUDE
 #define HGL_GRAPH_SHADER_INCLUDE
 
 #include<hgl/type/BaseString.h>

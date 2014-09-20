@@ -90,24 +90,27 @@ namespace hgl
 				End.Set(0,0,0,0);
 			}
 
-			void SetColor(float r,float g,float b,float a)
+			void SetColor(uint32 color)
 			{
-				int n=MakeupString.GetCount();
+				int n = MakeupString.GetCount();
 
-				CharMakeup *cm=MakeupString.GetData();
-
-				uint32 color=Color4f(r,g,b,a).ToU32();
-
-				while(n--)
+				CharMakeup *cm = MakeupString.GetData();
+				
+				while (n--)
 				{
-					cm->color=color;
+					cm->color = color;
 					++cm;
 				}
 			}
 
+			void SetColor(float r,float g,float b,float a)
+			{
+				SetColor(HGL_FLOAT_TO_RGBA8(r, g, b, a));
+			}
+
 			void SetColor(const Color4f &c)
 			{
-        		SetColor(c.r,c.g,c.b,c.a);
+        		SetColor(c.ToRGBA8());
 			}
 
 			void SetColor(int index,const Color4f &c)
@@ -120,7 +123,7 @@ namespace hgl
 				
 				CharMakeup *cm=MakeupString.GetData();
 
-				cm[index].color=c.ToU32();
+				cm[index].color = c.ToRGBA8();
 			}
 
 			void SetColor(int start,int num,const Color4f &c)
@@ -138,7 +141,7 @@ namespace hgl
 
 				cm+=start;
 
-				uint32 c32=c.ToU32();
+				uint32 c32 = c.ToRGBA8();
 
 				for(int i=0;i<num;i++)
 				{

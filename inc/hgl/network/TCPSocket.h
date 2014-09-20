@@ -1,4 +1,4 @@
-#ifndef HGL_TCP_SOCKET_INCLUDE
+﻿#ifndef HGL_TCP_SOCKET_INCLUDE
 #define HGL_TCP_SOCKET_INCLUDE
 
 #include<hgl/network/IOSocket.h>

@@ -4,6 +4,17 @@
 #include<hgl/type/Color3f.h>
 namespace hgl
 {
+	#define HGL_FLOAT_TO_U32(c1,c2,c3,c4)	uint32(	\
+													(uint8(c1 * 255) << 24	)	|	\
+													(uint8(c2 * 255) << 16	)	|	\
+													(uint8(c3 * 255) << 8	)	|	\
+													(uint8(c4 * 255)		)	)
+
+	#define HGL_FLOAT_TO_RGBA8(r,g,b,a)	HGL_FLOAT_TO_U32(r,g,b,a)
+	#define HGL_FLOAT_TO_BGRA8(r,g,b,a)	HGL_FLOAT_TO_U32(b,g,r,a)
+	#define HGL_FLOAT_TO_ARGB8(r,g,b,a)	HGL_FLOAT_TO_U32(a,r,g,b)
+	#define HGL_FLOAT_TO_ABGR8(r,g,b,a)	HGL_FLOAT_TO_U32(a,b,g,r)
+
 	/**
 	* r,g,b,a四原色类
 	*/
@@ -41,6 +52,11 @@ namespace hgl
 		void To(float,float,float,float);                                                           ///<转换到另一颜色
 		void To(const Color4f &c,float v){To(c.r,c.g,c.b,v);}                                       ///<转换到另一颜色
 		void To(const Color3f &c,float v){To(c.r,c.g,c.b,v);}                                       ///<转换到另一颜色
+
+		uint32 ToRGBA8()const{ return HGL_FLOAT_TO_RGBA8(r, g, b, a); }								///<输出一个rgba8格式的颜色数据
+		uint32 ToBGRA8()const{ return HGL_FLOAT_TO_BGRA8(r, g, b, a); }								///<输出一个bgra8格式的颜色数据
+		uint32 ToARGB8()const{ return HGL_FLOAT_TO_ARGB8(r, g, b, a); }								///<输出一个argb8格式的颜色数据
+		uint32 ToABGR8()const{ return HGL_FLOAT_TO_ABGR8(r, g, b, a); }								///<输出一个abgr8格式的颜色数据
 
 		void Grey();																			    ///<将当前色彩变成灰色
 

@@ -1,4 +1,4 @@
-#ifndef HGL_GRAPH_SCENE_ORIENT_INCLUDE
+﻿#ifndef HGL_GRAPH_SCENE_ORIENT_INCLUDE
 #define HGL_GRAPH_SCENE_ORIENT_INCLUDE
 
 //#include<hgl/type/List.h>

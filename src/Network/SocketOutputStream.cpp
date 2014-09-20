@@ -61,13 +61,18 @@ namespace hgl
 		{
 			if(sock==-1)return(-1);
 
-			ssize_t result=0;
 			int err;
 			char *p=(char *)buf;
 
 // 			const double start_time=GetDoubleTime();
 
-			size_t left_bytes=size;
+#if HGL_OS == HGL_OS_Windows
+			int result = 0;
+			int left_bytes = size;
+#else
+			ssize_t result = 0;
+			size_t left_bytes = size;
+#endif//HGL_OS == HGL_OS_Windows
 
 			while(left_bytes>0)
 			{

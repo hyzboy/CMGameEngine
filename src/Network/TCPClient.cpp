@@ -1,4 +1,4 @@
-#include<hgl/network/TCPClient.h>
+﻿#include<hgl/network/TCPClient.h>
 #include<hgl/LogInfo.h>
 #include<hgl/network/SocketInputStream.h>
 #include<hgl/network/SocketOutputStream.h>
@@ -100,7 +100,7 @@ namespace hgl
 
 			if(FillAddr(&addr,host,port)==false)
 			{
-				LOG_HINT(OS_TEXT("TCPClient::Connect FillAddr error in ")+OSString(host)+OS_TEXT(":")+OSString(port));
+				LOG_HINT(U8_TEXT("TCPClient::Connect FillAddr error in ")+UTF8String(host)+U8_TEXT(":")+UTF8String(port));
 				CloseSocket();
 				return(false);
 			}

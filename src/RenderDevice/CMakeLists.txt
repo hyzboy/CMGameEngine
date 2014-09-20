@@ -1,7 +1,6 @@
 add_definitions("-DGLEW_STATIC")
 
-add_library(CM.RenderDevice SHARED
-			${GLEW_SOURCE}
+set(CM_RENDER_DEVICE_SOURCE
 # 			Debugger_ATI_GPU_Perf.cpp
 			GenFragmentShader.cpp
 			GenGeometryShader.cpp
@@ -20,3 +19,9 @@ add_library(CM.RenderDevice SHARED
 # 			ScreenShot.cpp
 			ShaderStringList.cpp
 			UBO.cpp)
+
+IF(WIN32)
+	add_library(CM.RenderDevice STATIC ${CM_RENDER_DEVICE_SOURCE} glew.c)
+ELSE()
+	add_library(CM.RenderDevice SHARED ${CM_RENDER_DEVICE_SOURCE})
+ENDIF()

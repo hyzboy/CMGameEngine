@@ -1,4 +1,4 @@
-#include<hgl/gui/ObjectControl.h>
+﻿#include<hgl/gui/ObjectControl.h>
 
 namespace hgl
 {
@@ -107,7 +107,7 @@ namespace hgl
 
 				if(comp_obj==center)continue;
 
-				comp_point.set(comp_obj->view_scope.GetCenterX(),comp_obj->view_scope.GetCenterY());
+				comp_point.Set(comp_obj->view_scope.GetCenterX(),comp_obj->view_scope.GetCenterY());
 
 				//comp_ang=center_point.Angle(comp_point);
 				offset=comp_point-comp_point;

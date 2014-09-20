@@ -1,4 +1,4 @@
-#ifndef HGL_OBJECT_CONTROL_INCLUDE
+﻿#ifndef HGL_OBJECT_CONTROL_INCLUDE
 #define HGL_OBJECT_CONTROL_INCLUDE
 
 #include<hgl/gui/GuiObject.h>
