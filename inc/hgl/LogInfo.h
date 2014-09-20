@@ -20,20 +20,12 @@ namespace hgl
 
 		inline	void DebugLog(LogLevel ll,const UTF16String &str,const char *filename,int line)
 		{
-		#if HGL_COMPILER == HGL_COMPILER_Microsoft
-			Log(ll,str+L" in \""+to_u16(filename)+L"\", "+UTF16String(line)+L" line.");
-		#else
-			Log(ll,str+u" in \""+to_u16(filename)+u"\", "+UTF16String(line)+u" line.");
-		#endif//HGL_COMPILER == HGL_COMPILER_Microsoft
+			Log(ll,str+U16_TEXT(" in \"")+to_u16(filename)+U16_TEXT("\", ")+UTF16String(line)+U16_TEXT(" line."));
 		}
 
 		inline	void DebugLog(LogLevel ll,const UTF8String &str,const char *filename,int line)
 		{
-			#if HGL_COMPILER == HGL_COMPILER_Microsoft	//VC2012SP2不支持u8 ?
-			Log(ll,str+" in \""+UTF8String(filename)+"\", "+UTF8String(line)+" line.");
-			#else
-			Log(ll,str+u8" in \""+UTF8String(filename)+u8"\", "+UTF8String(line)+u8" line.");
-			#endif//HGL_COMPILER == HGL_COMPILER_Microsoft
+			Log(ll,str+U8_TEXT(" in \"")+UTF8String(filename)+U8_TEXT("\", ")+UTF8String(line)+U8_TEXT(" line."));
 		}
 
 		#ifdef LOG_INFO_SOURCE
