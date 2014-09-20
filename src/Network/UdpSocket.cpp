@@ -1,5 +1,5 @@
-//--------------------------------------------------------------------------------------------------
-//¡¶¹ÅÔÂÓÎÏ·¿ª·¢¿âv18¡·UDPÍ¨ĞÅ×é¼şÀàÔ´³ÌĞòÎÄ¼ş UDPSocket.CPP
+ï»¿//--------------------------------------------------------------------------------------------------
+//ã€Šå¤æœˆæ¸¸æˆå¼€å‘åº“v18ã€‹UDPé€šä¿¡ç»„ä»¶ç±»æºç¨‹åºæ–‡ä»¶ UDPSocket.CPP
 //--------------------------------------------------------------------------------------------------
 #include <hgl/LogInfo.h>
 #include <hgl/network/UdpSocket.h>
@@ -14,7 +14,7 @@ namespace hgl
 	namespace network
 	{
 		/**
-		* ±¾Àà¹¹Ôìº¯Êı
+		* æœ¬ç±»æ„é€ å‡½æ•°
 		*/
 		UDPSocket::UDPSocket()
 		{
@@ -24,7 +24,7 @@ namespace hgl
 		}
 
 		/**
-		* ±¾ÀàÎö¹¹º¯Êı
+		* æœ¬ç±»ææ„å‡½æ•°
 		*/
 		UDPSocket::~UDPSocket()
 		{
@@ -34,11 +34,11 @@ namespace hgl
 		}
 
 		/**
-		* ´´½¨Ò»¸öUDPÁ¬½Ó£¬Ê¹ÓÃÖ¸¶¨µÄIPµØÖ·ºÍ¶Ë¿Ú
-		* @param host ·şÎñÆ÷ËùÊ¹ÓÃµÄIPµØÖ·,Èç¹ûhost==nullptrÔò±íÊ¾Ê¹ÓÃ±¾»úµÄËùÓĞµØÖ·
-		* @param port ·şÎñÆ÷ËùĞè¼àÌıµÄ¶Ë¿Ú
-		* @return true ´´½¨·şÎñÆ÷³É¹¦
-		* @return false ´´½¨·şÎñÆ÷Ê§°Ü
+		* åˆ›å»ºä¸€ä¸ªUDPè¿æ¥ï¼Œä½¿ç”¨æŒ‡å®šçš„IPåœ°å€å’Œç«¯å£
+		* @param host æœåŠ¡å™¨æ‰€ä½¿ç”¨çš„IPåœ°å€,å¦‚æœhost==nullptråˆ™è¡¨ç¤ºä½¿ç”¨æœ¬æœºçš„æ‰€æœ‰åœ°å€
+		* @param port æœåŠ¡å™¨æ‰€éœ€ç›‘å¬çš„ç«¯å£
+		* @return true åˆ›å»ºæœåŠ¡å™¨æˆåŠŸ
+		* @return false åˆ›å»ºæœåŠ¡å™¨å¤±è´¥
 		*/
 		bool UDPSocket::Create(const char *host,const uint port)
 		{
@@ -60,13 +60,13 @@ namespace hgl
 		}
 
 		/**
-		* ´´½¨Ò»¸öUDPÁ¬½Ó
+		* åˆ›å»ºä¸€ä¸ªUDPè¿æ¥
 		*/
 		bool UDPSocket::Create()
 		{
 			if((ThisSocket=socket(AF_INET,SOCK_DGRAM,IPPROTO_UDP))<0)
 			{
-				LOG_ERROR(U16_TEXT("´´½¨SocketÊ§°Ü£¡errno:")+UTF16String(GetLastSocketError()));
+				LOG_ERROR(U16_TEXT("åˆ›å»ºSocketå¤±è´¥ï¼errno:")+UTF16String(GetLastSocketError()));
 				return(false);
 			}
 
@@ -77,9 +77,9 @@ namespace hgl
 		}
 
 		/**
-		* Éè¶¨·¢ËÍÊı¾İÊ±£¬½ÓÊÕÊı¾İ·½µÄIPµØÖ·ºÍ¶Ë¿ÚºÅ
-		* @param host ½ÓÊÕ·½µÄÖ÷»ú»òIPµØÖ·
-		* @param port ½ÓÊÕ·½µÄ¶Ë¿ÚºÅ
+		* è®¾å®šå‘é€æ•°æ®æ—¶ï¼Œæ¥æ”¶æ•°æ®æ–¹çš„IPåœ°å€å’Œç«¯å£å·
+		* @param host æ¥æ”¶æ–¹çš„ä¸»æœºæˆ–IPåœ°å€
+		* @param port æ¥æ”¶æ–¹çš„ç«¯å£å·
 		*/
 		void UDPSocket::SetSendAddr(const char *host,const uint port)
 		{
@@ -87,8 +87,8 @@ namespace hgl
 		}
 
 		/**
-		* Éè¶¨·¢ËÍÊı¾İÊ±£¬½ÓÊÕÊı¾İ·½µÄµØÖ·
-		* @param addr ½ÓÊÕ·½µÄµØÖ·
+		* è®¾å®šå‘é€æ•°æ®æ—¶ï¼Œæ¥æ”¶æ•°æ®æ–¹çš„åœ°å€
+		* @param addr æ¥æ”¶æ–¹çš„åœ°å€
 		*/
 		void UDPSocket::SetSendAddr(sockaddr_in &addr)
 		{
@@ -96,17 +96,17 @@ namespace hgl
 		}
 
 		/**
-		* ÏòÒÑÖ¸¶¨µÄµØÖ·ºÍ¶Ë¿Ú·¢ËÍÊı¾İ°ü
-		* @param data Êı¾İÖ¸Õë
-		* @param size Êı¾İ³¤¶È
-		* @return ÒÑ·¢ËÍµÄÊı¾İ×Ö½ÚÊı
+		* å‘å·²æŒ‡å®šçš„åœ°å€å’Œç«¯å£å‘é€æ•°æ®åŒ…
+		* @param data æ•°æ®æŒ‡é’ˆ
+		* @param size æ•°æ®é•¿åº¦
+		* @return å·²å‘é€çš„æ•°æ®å­—èŠ‚æ•°
 		*/
 		int UDPSocket::SendPacket(const void *data,int size)
 		{
 	#ifdef _DEBUG
 			if(ThisSocket==-1)
 			{
-				LOG_HINT(U16_TEXT("UDPSocketÃ»ÓĞµ÷ÓÃCreate"));
+				LOG_HINT(U16_TEXT("UDPSocketæ²¡æœ‰è°ƒç”¨Create"));
 				return(-1);
 			}
 	#endif//
@@ -114,18 +114,18 @@ namespace hgl
 		}
 
 		/**
-		* ÏòÖ¸¶¨µØÖ··¢ËÍÊı¾İ°ü
-		* @param addr ½ÓÊÕÊı¾İ·½µÄµØÖ·
-		* @param data Êı¾İÖ¸Õë
-		* @param size Êı¾İ³¤¶È
-		* @return ÒÑ·¢ËÍµÄÊı¾İ×Ö½ÚÊı
+		* å‘æŒ‡å®šåœ°å€å‘é€æ•°æ®åŒ…
+		* @param addr æ¥æ”¶æ•°æ®æ–¹çš„åœ°å€
+		* @param data æ•°æ®æŒ‡é’ˆ
+		* @param size æ•°æ®é•¿åº¦
+		* @return å·²å‘é€çš„æ•°æ®å­—èŠ‚æ•°
 		*/
 		int UDPSocket::SendPacket(sockaddr_in &addr,const void *data,int size)
 		{
 	#ifdef _DEBUG
 			if(ThisSocket==-1)
 			{
-				LOG_HINT(U16_TEXT("UDPSocketÃ»ÓĞµ÷ÓÃCreate"));
+				LOG_HINT(U16_TEXT("UDPSocketæ²¡æœ‰è°ƒç”¨Create"));
 				return(-1);
 			}
 	#endif//
@@ -133,18 +133,18 @@ namespace hgl
 		}
 
 		/**
-		* ½ÓÊÕÓÉÍâ²¿·¢À´µÄÊı¾İ°ü
-		* @param buf ½ÓÊÕÓÃµÄÊı¾İ»º³åÇøÖ¸Õë
-		* @param size »º³åÇø³¤¶È
-		* @param remote_addr ·¢ËÍ·½µÄµØÖ·
-		* @return ½ÓÊÕµ½µÄÊı¾İ³¤¶È
+		* æ¥æ”¶ç”±å¤–éƒ¨å‘æ¥çš„æ•°æ®åŒ…
+		* @param buf æ¥æ”¶ç”¨çš„æ•°æ®ç¼“å†²åŒºæŒ‡é’ˆ
+		* @param size ç¼“å†²åŒºé•¿åº¦
+		* @param remote_addr å‘é€æ–¹çš„åœ°å€
+		* @return æ¥æ”¶åˆ°çš„æ•°æ®é•¿åº¦
 		*/
 		int UDPSocket::RecvPacket(void *buf,int size,sockaddr_in *remote_addr)
 		{
 	#ifdef _DEBUG
 			if(ThisSocket==-1)
 			{
-				LOG_HINT(U16_TEXT("UDPSocketÃ»ÓĞµ÷ÓÃCreate"));
+				LOG_HINT(U16_TEXT("UDPSocketæ²¡æœ‰è°ƒç”¨Create"));
 				return(-1);
 			}
 	#endif//
