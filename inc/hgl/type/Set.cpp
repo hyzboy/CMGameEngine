@@ -125,7 +125,7 @@ namespace hgl
 			}
 		}
 
-		return(-1);
+		return(false);
 	}
 
 	/**
