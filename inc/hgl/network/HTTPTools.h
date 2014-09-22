@@ -1,6 +1,7 @@
 ﻿#ifndef HGL_NETWORK_HTTP_TOOLS_INCLUDE
 #define HGL_NETWORK_HTTP_TOOLS_INCLUDE
 
+#include<hgl/type/BaseString.h>
 #include<hgl/io/OutputStream.h>
 namespace hgl
 {
@@ -17,9 +18,14 @@ namespace hgl
 			 */
 			int get(io::OutputStream *,const char *);										///<http/https get
 
-			int get(void **ptr,const char *url)
-			{
-			}
+			/**
+			 * 通过http/https get下载一个文件
+			 * @param filename 要保存的文件名称
+			 * @param url 要下载的网址
+			 * @return >=0 文件长度
+			 * @return <0 失败
+			 */
+			int get_to_file(const OSString &filename,const char *url);
 		}//namespace http
 	}//namespace network
 }//namespace hgl

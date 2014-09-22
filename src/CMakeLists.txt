@@ -1,10 +1,11 @@
-IF(BUILD_BASE_LIB)
+﻿IF(BUILD_BASE_LIB)
 	add_subdirectory(Base)
 	add_subdirectory(UtilityTools)
 ENDIF(BUILD_BASE_LIB)
 
 IF(BUILD_NETWORK_LIB)
 	add_subdirectory(Network)
+	add_subdirectory(WebAPI)
 ENDIF(BUILD_NETWORK_LIB)
 
 add_subdirectory(SceneGraph)
