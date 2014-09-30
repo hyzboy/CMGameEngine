@@ -1,4 +1,6 @@
-#include<hgl/type/DataType.h>
+﻿#include<hgl/type/DataType.h>
+
+using namespace hgl;
 //--------------------------------------------------------------------------------------------------
 struct aes_context
 {
