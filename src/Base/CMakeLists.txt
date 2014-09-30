@@ -21,19 +21,15 @@ SET(BASE_OTHER_SOURCE
 	Other/MemoryPool.cpp
 	Other/TimeCount.cpp
 	Other/DateTime.cpp
-	Other/PseudoRandom.cpp)
+	Other/PseudoRandom.cpp
+	Other/CodePage.cpp
+	Other/LSinCos.cpp)
 
 IF(UNIX)
 	SET(BASE_OTHER_SOURCE ${BASE_OTHER_SOURCE} Other/TimePOSIX.cpp)
 ENDIF(UNIX)
 
-SET(BASE_OTHER_ALGORITHML_SOURCE
-	Algorithml/Overflow.cpp
-	Algorithml/CodePage.cpp
-	Algorithml/LSinCos.cpp)
-
 SOURCE_GROUP("Other"				FILES ${BASE_OTHER_SOURCE})
-SOURCE_GROUP("Other\\Algorithml"	FILES ${BASE_OTHER_ALGORITHML_SOURCE})
 
 SET(BASE_LOG_SOURCE
 	LogInfo/Loginfo.cpp
@@ -152,7 +148,6 @@ SOURCE_GROUP("MultiProcess"	FILES ${BASE_MULTI_PROCESS_SOURCE})
 SET(CM_BASE_ALL_SOURCE	${BASE_COMMON_SOURCE}
 						${BASE_OBJECT_SOURCE}
 						${BASE_OTHER_SOURCE}
-						${BASE_OTHER_ALGORITHML_SOURCE}
 						${BASE_LOG_SOURCE}
 						${BASE_OS_LOG_SOURCE}
 						${BASE_APPLICATION_SOURCE}
