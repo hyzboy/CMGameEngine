@@ -149,7 +149,10 @@ ADD_DEFINITIONS("-DAS_USE_NAMESPACE -DANGELSCRIPT_EXPORT")
 
 SET(CRYPT_SOURCE_FILES	Crypt/aes.cpp
 						Crypt/Overflow.cpp
-						Crypt/rc4.cpp)
+						Crypt/rc4.cpp
+						Crypt/uECC.c)
+
+SOURCE_GROUP("Crypt" FILES ${CRYPT_SOURCE_FILES})
 
 SOURCE_GROUP("AngelVM" FILES ${ANGEL_VM_SOURCE})
 SOURCE_GROUP("AngelVM\\AngelScript" FILES ${ANGELSCRIPT_SOURCE})
