@@ -8,9 +8,9 @@ namespace hgl
 	{
 		namespace google
 		{
-			int PurchasesProductsGet(const UTF8String &packageName,const UTF8String &productId,const UTF8String &token)
+			int PurchasesProductsGet(const UTF8String &packageName,const UTF8String &productId,const UTF8String &token,const UTF8String &api_key)
 			{
-				UTF8String url=U8_TEXT("https://www.googleapis.com/androidpublisher/v2/applications/")+packageName+U8_TEXT("/purchases/products/")+productId+U8_TEXT("/tokens/")+token;
+				UTF8String url=U8_TEXT("https://www.googleapis.com/androidpublisher/v2/applications/")+packageName+U8_TEXT("/purchases/products/")+productId+U8_TEXT("/tokens/")+token+U8_TEXT("?key=")+api_key;
 
 				static int count=1;
 
