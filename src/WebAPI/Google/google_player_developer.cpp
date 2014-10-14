@@ -11,17 +11,24 @@ namespace hgl
 		{
 			int PurchasesProductsGet(const UTF8String &packageName,const UTF8String &productId,const UTF8String &token,const UTF8String &api_key)
 			{
+				LOG_INFO(U8_TEXT("Token:")+token);
+				LOG_INFO(U8_TEXT("API KEY:")+api_key);
+			
 				UTF8String url=U8_TEXT("https://www.googleapis.com/androidpublisher/v2/applications/")+packageName+U8_TEXT("/purchases/products/")+productId+U8_TEXT("/tokens/")+token+U8_TEXT("?key=")+api_key;
 
 				static int count=1;
 
 				io::FileOutputStream fos;
+				
+				++count;
 
-				if(!fos.CreateTrunc(OS_TEXT("/home/showhand/log/purchases.products.get.")+OSString(++count)+OS_TEXT(".txt")))
+				UTF8String filename=OS_TEXT("/home/showhand/log/purchases.products.get.")+OSString(count)+OS_TEXT(".txt");
+
+				if(!fos.CreateTrunc(filename))
 				{
 					LOG_ERROR("Create WebAPI Google purchases.products.get file error!");
 					//return(-1);
-					return(-1);
+					return(1);
 				}
 				
 				fos.WriteFully(url.c_str(),url.Length());
