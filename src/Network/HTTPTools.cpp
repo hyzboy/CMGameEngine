@@ -30,6 +30,8 @@ namespace hgl
 			 */
 			int get(io::OutputStream *os,const char *url)
 			{
+				LOG_INFO(U8_TEXT("http get,url:")+UTF8String(url));
+			
 				CURLcode res;
 
 				CURL *curl=curl_easy_init();
