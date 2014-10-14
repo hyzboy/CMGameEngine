@@ -1,6 +1,7 @@
 ﻿#include<hgl/webapi/google/google_player_developer.h>
 #include<hgl/network/HTTPTools.h>
 #include<hgl/io/FileOutputStream.h>
+#include<hgl/LogInfo.h>
 
 namespace hgl
 {
