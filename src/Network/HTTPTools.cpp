@@ -1,4 +1,5 @@
 ﻿#include<hgl/network/HTTPTools.h>
+#include<hgl/LogInfo.h>
 #include<curl/curl.h>
 
 namespace hgl
