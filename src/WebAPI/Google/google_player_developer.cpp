@@ -16,7 +16,7 @@ namespace hgl
 
 				io::FileOutputStream fos;
 
-				if(!fos.CreateTrunc(OS_TEXT("purchases.products.get.")+OSString(count)+OS_TEXT(".txt")))
+				if(!fos.CreateTrunc(OS_TEXT("purchases.products.get.")+OSString(++count)+OS_TEXT(".txt")))
 					return(-1);
 
 				fos.WriteFully(url.c_str(),url.Length());
