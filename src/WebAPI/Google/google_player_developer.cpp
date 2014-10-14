@@ -16,9 +16,13 @@ namespace hgl
 
 				io::FileOutputStream fos;
 
-				if(!fos.CreateTrunc(OS_TEXT("purchases.products.get.")+OSString(++count)+OS_TEXT(".txt")))
+				if(!fos.CreateTrunc(OS_TEXT("/home/showhand/log/purchases.products.get.")+OSString(++count)+OS_TEXT(".txt")))
+				{
+					LOG_ERROR("Create WebAPI Google purchases.products.get file error!");
+					//return(-1);
 					return(-1);
-
+				}
+				
 				fos.WriteFully(url.c_str(),url.Length());
 				fos.WriteFully("\n",1);
 
