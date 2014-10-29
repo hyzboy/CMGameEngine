@@ -51,7 +51,8 @@ namespace hgl
 		class MTSocketManage:public MTSocketManageBase,public Thread
 		{
 			int max_socket_count;																	///<最大socket数
-			int thread_count;																		///<线程数量
+			int recv_thread_count;																	///<接收线程数量
+			int send_thread_count;																	///<发送线程数量
 
 			ThreadMutexObject<Set<IOSocket *>> sock_set;											///<Socket合集
 
@@ -71,24 +72,34 @@ namespace hgl
 			MTSocketManage();
 			virtual ~MTSocketManage();
 
-			virtual bool Init(int _max_socket_count,int _thread_count);								///<初始化
+			virtual bool Init(int _max_socket_count,int _recv_thread_num,int _send_thread_num=-1);	///<初始化
 
 			virtual bool Join(IOSocket *);															///<增加一个Socket
 			virtual bool Unjoin(IOSocket *);														///<移除一个Socket
 
-			virtual bool Start();																	///<开始运行线程管理器
+			virtual bool StartRecvThread();															///<仅启动Socket接收线程
+			virtual bool StartSendThread();															///<仅启动Socket发送线程
+
+			virtual bool Start()																	///<开始运行当前Socket管理器所有线程
+			{
+				if(!StartRecvThread())return(false);
+				if(!StartSendThread())return(false);
+
+				return Thread::Start();
+			}
 
 			virtual bool Execute();																	///<线程刷新函数(主要处理错误socket删除)
 
 		public:
 
-			int					GetThreadCount()const{return thread_count;}							///<取得线程数量
+			const int			GetRecvThreadCount()const{return recv_thread_count;}				///<取得接收线程数量
+			const int			GetSendThreadCount()const{return send_thread_count;}				///<取得发送线程数量
 
 			SocketManageThread *GetRecvThread(int index)const										///<取得指定接收线程
-			{return (index<0||index>=thread_count)?nullptr:recv_manage[index];}
+			{return (index<0||index>=recv_thread_count)?nullptr:recv_manage[index];}
 
 			SocketManageThread *GetSendThread(int index)const										///<取得指定发送线程
-			{return (index<0||index>=thread_count)?nullptr:send_manage[index];}
+			{return (index<0||index>=send_thread_count)?nullptr:send_manage[index];}
 
 		public:
 
