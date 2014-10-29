@@ -7,6 +7,9 @@
 #include<hgl/type/Set.h>
 namespace hgl
 {
+	/**
+	 * 数据交换合集
+	 */
 	template<typename T,typename S> class SwapColl
 	{
 	protected:
@@ -20,6 +23,9 @@ namespace hgl
 
 		virtual ~SwapColl(){}
 
+		/**
+		 * 加入一个数据到合集中
+		 */
 		bool Add(T &item)
 		{
 			lock.Lock();
@@ -29,6 +35,9 @@ namespace hgl
 			return(result!=-1);
 		}
 
+		/**
+		 * 增加一批数据到合集中
+		 */
 		int Add(T *item_list,const int count)
 		{
 			lock.Lock();
@@ -38,6 +47,9 @@ namespace hgl
 			return result;
 		}
 
+		/**
+		 * 取得可以使用的列表
+		 */
 		S &GetProcList()
 		{
 			lock.Lock();
@@ -53,8 +65,11 @@ namespace hgl
 	};//template<typename T> class SwapColl
 
 	template<typename T> using SwapList=SwapColl<T,List<T>>;		///<安全交换列表
-	template<typename T> using SwapSet=SwapColl<T,Set<T>>;			///<安全交换合集
+	template<typename T> using SwapSet=SwapColl<T,Set<T>>;			///<安全交换集合
 
+	/**
+	 * 信号安全交换合集
+	 */
 	template<typename T,typename S> class SemSwapColl
 	{
 	protected:
@@ -69,6 +84,9 @@ namespace hgl
 
 		virtual ~SemSwapColl(){}
 
+		/**
+		 * 增加一个数据到合集中
+		 */
 		bool Add(T &item)
 		{
 			lock.Lock();
@@ -81,6 +99,9 @@ namespace hgl
 			return(result!=-1);
 		}
 
+		/**
+		 * 增加一批数据到合集中
+		 */
 		int Add(T *item_list,const int count)
 		{
 			lock.Lock();
@@ -93,6 +114,9 @@ namespace hgl
 			return result;
 		}
 
+		/**
+		 * 等待信号
+		 */
 		bool WaitProc(const double time_out=HGL_TIME_ONE_MINUTE)
 		{
 			if(sem.Acquire(time_out))
@@ -111,6 +135,6 @@ namespace hgl
 	};//template<typename T> class SemSwapColl
 
 	template<typename T> using SemSwapList=SemSwapColl<T,List<T>>;		///<安全信号交换列表
-	template<typename T> using SemSwapSet=SemSwapColl<T,Set<T>>;		///<安全信号交换合集
+	template<typename T> using SemSwapSet=SemSwapColl<T,Set<T>>;		///<安全信号交换集合
 }//namespace hgl
 #endif//HGL_THREAD_SWAP_LIST_INCLUDE
