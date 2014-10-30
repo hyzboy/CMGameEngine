@@ -22,10 +22,10 @@ namespace hgl
 		{
 			if(!s)RETURN_FALSE;
 
-			int result;
+			bool result;
 
 			sock_join_set.Lock();
-			result=(sock_join_set->Add(s)!=-1)?1:0;
+			result=(sock_join_set->Add(s)!=-1);
 			sock_join_set.SemUnlock(result);
 
 			return(result);
