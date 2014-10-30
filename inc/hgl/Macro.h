@@ -2,6 +2,8 @@
 #define HGL_MACRO_INCLUDE
 namespace hgl
 {
+	#define RETURN_OBJECT_OF_ARRAY(array,index,max_count)	return (index<0||index>=max_count)?nullptr:array[index];
+
 	#define NEW_NULL_ARRAY(name,type,count)	{	\
 												name=new type[count];	\
 												\
