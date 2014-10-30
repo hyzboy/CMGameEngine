@@ -10,12 +10,12 @@ namespace hgl
 	/**
 	 * 数据交换合集
 	 */
-	template<typename T,typename S> class SwapColl
+	template<typename T,template<typename> class S> class SwapColl
 	{
 	protected:
 
-		S join_list;
-		S proc_list;
+		S<T> join_list;
+		S<T> proc_list;
 
 		ThreadMutex lock;
 
@@ -50,7 +50,7 @@ namespace hgl
 		/**
 		 * 取得可以使用的列表
 		 */
-		S &GetProcList()
+		S<T> &GetProcList()
 		{
 			lock.Lock();
 				proc_list.Add(join_list);
@@ -60,22 +60,22 @@ namespace hgl
 			return proc_list;
 		}
 
-		S *operator ->(){return &proc_list;}
-		operator S &(){return proc_list;}
+		S<T> *operator ->(){return &proc_list;}
+		operator S<T> &(){return proc_list;}
 	};//template<typename T> class SwapColl
 
-	template<typename T> using SwapList=SwapColl<T,List<T>>;		///<安全交换列表
-	template<typename T> using SwapSet=SwapColl<T,Set<T>>;			///<安全交换集合
+	template<typename T> using SwapList=SwapColl<T,List>;		///<安全交换列表
+	template<typename T> using SwapSet=SwapColl<T,Set>;			///<安全交换集合
 
 	/**
 	 * 信号安全交换合集
 	 */
-	template<typename T,typename S> class SemSwapColl
+	template<typename T,template<typename> class S> class SemSwapColl
 	{
 	protected:
 
-		S join_list;
-		S proc_list;
+		S<T> join_list;
+		S<T> proc_list;
 
 		ThreadMutex lock;
 		Semaphore sem;
@@ -130,11 +130,11 @@ namespace hgl
 			return(true);
 		}
 
-		S *operator ->(){return &proc_list;}
-		operator S &(){return proc_list;}
+		S<T> *operator ->(){return &proc_list;}
+		operator S<T> &(){return proc_list;}
 	};//template<typename T> class SemSwapColl
 
-	template<typename T> using SemSwapList=SemSwapColl<T,List<T>>;		///<安全信号交换列表
-	template<typename T> using SemSwapSet=SemSwapColl<T,Set<T>>;		///<安全信号交换集合
+	template<typename T> using SemSwapList=SemSwapColl<T,List>;		///<安全信号交换列表
+	template<typename T> using SemSwapSet=SemSwapColl<T,Set>;		///<安全信号交换集合
 }//namespace hgl
 #endif//HGL_THREAD_SWAP_LIST_INCLUDE
