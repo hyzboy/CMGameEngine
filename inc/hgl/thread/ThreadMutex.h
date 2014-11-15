@@ -102,7 +102,7 @@ namespace hgl
 			}
 		}
 
-		virtual ~ThreadMutextObjectArray()
+		virtual ~ThreadMutexObjectArray()
 		{
 			delete[] items;		//delete nullptr不是个错误
 		}
@@ -113,6 +113,9 @@ namespace hgl
 		}
 	};//class ThreadMutexObjectArray
 
+	/**
+	 * 智能自释放线程排斥锁
+	 */
 	class ThreadMutexLock
 	{
  		ThreadMutex *tm;
