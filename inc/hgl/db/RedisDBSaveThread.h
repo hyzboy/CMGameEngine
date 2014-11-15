@@ -74,18 +74,21 @@ namespace hgl
 
 				tm.Unlock();
 
-				if(result>=max_count)		//强制提交一回
+				if(result>=max_count)				//强制提交一回
 					cv.Signal();
 			}
 
 			bool Execute()
 			{
 				if(!cv.Wait(&tm,time_out))
-					return(true);
+					tm.Lock();						//如果没有等到信号，则自行锁定
 
-				rdb->Exec();
-				rdb->Multi();
-				count=0;
+				if(count>0)
+				{
+					rdb->Exec();
+					rdb->Multi();
+					count=0;
+				}
 
 				tm.Unlock();
 				return(true);
