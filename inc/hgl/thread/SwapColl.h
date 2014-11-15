@@ -82,7 +82,7 @@ namespace hgl
 
 	public:
 
-		virtual ~SemSwapColl(){}
+		virtual ~SemSwapColl()HGL_DEFAULT_MEMFUNC;
 
 		/**
 		 * 增加一个数据到合集中
