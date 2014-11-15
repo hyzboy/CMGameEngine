@@ -52,6 +52,9 @@ namespace hgl
 
 		void operator = (T *t)
 		{
+			if(data)
+				delete data;
+
 			data=t;
 		}
 
@@ -70,6 +73,45 @@ namespace hgl
 			return !data;
 		}
 	};//class ThreadMutexObject
+
+	/**
+	 * 线程排斥对像阵列
+	 */
+	template<typename T> class ThreadMutexObjectArray
+	{
+	protected:
+
+		ThreadMutexObject<T> *items;
+
+	public:
+
+		ThreadMutexObjectArray()
+		{
+			items=nullptr;
+		}
+
+		ThreadMutexObjectArray(int count)
+		{
+			if(count<=0)
+			{
+				items=nullptr;
+			}
+			else
+			{
+				items=new ThreadMutexObject<T>[count];
+			}
+		}
+
+		virtual ~ThreadMutextObjectArray()
+		{
+			delete[] items;		//delete nullptr不是个错误
+		}
+
+		ThreadMutexObject<T> &operator [](int index)
+		{
+			return items[index];
+		}
+	};//class ThreadMutexObjectArray
 
 	class ThreadMutexLock
 	{
