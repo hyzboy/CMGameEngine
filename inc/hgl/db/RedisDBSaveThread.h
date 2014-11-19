@@ -16,7 +16,8 @@ namespace hgl
 		class RedisDBSaveThread:public Thread
 		{
 			ThreadMutex tm;
-			CondVar cv;
+			//CondVar cv;
+			Semaphore sem;
 
 			RedisDB *rdb;
 
@@ -75,13 +76,16 @@ namespace hgl
 				tm.Unlock();
 
 				if(result>=max_count)				//强制提交一回
-					cv.Signal();
+					//cv.Signal();
+					sem.Release();
 			}
 
 			bool Execute()
 			{
-				if(!cv.Wait(&tm,time_out))
-					tm.Lock();						//如果没有等到信号，则自行锁定
+				//if(!cv.Wait(&tm,time_out))
+				sem.Acquire(time_out);
+
+				tm.Lock();						//如果没有等到信号，则自行锁定
 
 				if(count>0)
 				{
