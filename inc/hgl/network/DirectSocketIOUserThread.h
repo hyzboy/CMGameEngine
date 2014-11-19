@@ -80,6 +80,7 @@ namespace hgl
 			}
 
 			virtual bool Update()=0;
+			virtual bool IdleUpdate(){return(true);}
 
 			virtual bool Execute()
 			{
@@ -87,7 +88,8 @@ namespace hgl
 
 				if(wr<0)return(false);
 
-				if(wr==0)return(true);
+				if(wr==0)
+					return IdleUpdate();
 
 				return Update();
 			}
