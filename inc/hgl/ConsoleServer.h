@@ -7,7 +7,7 @@
 
 namespace hgl
 {
-	#define HGL_CONSOLE_SERVER_APPLICATION(name,code,init_func,server_class,thread_class,ip,port)	using namespace hgl;	\
+	#define HGL_CONSOLE_SERVER_APPLICATION(name,code,server_class,init_func,thread_class,ip,port)	using namespace hgl;	\
 																									\
 																									HGL_CONSOLE_MAIN_FUNC()\
 																									{	\

@@ -1,15 +1,15 @@
 ﻿#include<hgl/ConsoleServer.h>
+#include<hgl/File.h>
 
 using namespace hgl;
 using namespace hgl::network;
 
+static char *file_data=nullptr;
+static size_t file_size=0;
+
 class WorkThread:public Thread
 {
 	int sock;
-
-	char buf[1024];
-	int buf_size;
-	int cur_size;
 
 public:
 
@@ -25,21 +25,18 @@ public:
 
 	bool Execute()// HGL_OVERRIDE
 	{
-		buf_size=recv(sock,buf,1024,0);
+		int pos=0;
+		int result;
 
-		if(buf_size<=0)
+		while(pos<file_size)
 		{
-			LOG_HINT(OS_TEXT("Recv size:")+OSString(buf_size));
-			return(false);
+			result=send(sock,file_data+pos,file_size-pos,0);
+
+			if(result<=0)
+				return(false);
+
+			pos+=result;
 		}
-
-		{
-			buf[buf_size]=0;
-
-			LOG_HINT(U8_TEXT("Recv message:")+buf);
-		}
-
-
 
 		return(false);
 	}
@@ -47,14 +44,22 @@ public:
 
 bool Init843Server(const hgl::OSStringList &args)
 {
-	if(args.Count()<3)
+	if(args.GetCount()<2)
 	{
-		std::cout<<"Example:
+		std::cout<<"Example: Unity3D843Server ifconfig.xml"<<std::endl;
+		return(false);
 	}
+
+	file_size=LoadFileToMemory(OS_TEXT("crossdomain.xml"),(void **)&file_data);
+
+	if(file_size<=0)
+		return(false);
+
+	return(true);
 }
 
-HGL_CONSOLE_TCP_SERVER_APPLICATION("纯文件下载HTTP服务器",
-								   "DownloadHTTPServer",
+HGL_CONSOLE_TCP_SERVER_APPLICATION("Unity3DWebPlayer专用843端口HTTP服务器",
+								   "Unity3D843Server",
 								   Init843Server,			//全局初始化函数
 								   WorkThread,				//工作线程
 								   "0.0.0.0",				//监听IP

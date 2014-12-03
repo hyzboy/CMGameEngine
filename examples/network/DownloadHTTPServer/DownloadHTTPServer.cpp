@@ -39,7 +39,7 @@ public:
 			LOG_HINT(U8_TEXT("Recv message:")+buf);
 		}
 
-
+		
 
 		return(false);
 	}
@@ -49,8 +49,11 @@ bool InitHTTPServer(const hgl::OSStringList &args)
 {
 	if(args.Count()<3)
 	{
-		std::cout<<"Example:
+		std::cout<<"Example: DownloadHTTPServer 0.0.0.0 80"<<std::endl;
+		return(false);
 	}
+
+	return(true);
 }
 
 HGL_CONSOLE_TCP_SERVER_APPLICATION("纯文件下载HTTP服务器",
