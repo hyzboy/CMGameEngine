@@ -42,14 +42,8 @@ public:
 	}
 };//class WorkThread
 
-bool Init843Server(const hgl::OSStringList &args)
+bool Init843Server(const hgl::OSStringList &)
 {
-	if(args.GetCount()<2)
-	{
-		std::cout<<"Example: Unity3D843Server ifconfig.xml"<<std::endl;
-		return(false);
-	}
-
 	file_size=LoadFileToMemory(OS_TEXT("crossdomain.xml"),(void **)&file_data);
 
 	if(file_size<=0)
@@ -58,7 +52,7 @@ bool Init843Server(const hgl::OSStringList &args)
 	return(true);
 }
 
-HGL_CONSOLE_TCP_SERVER_APPLICATION("Unity3DWebPlayer专用843端口HTTP服务器",
+HGL_CONSOLE_TCP_SERVER_APPLICATION("Unity3DWebPlayer专用843端口服务器",
 								   "Unity3D843Server",
 								   Init843Server,			//全局初始化函数
 								   WorkThread,				//工作线程
