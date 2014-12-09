@@ -97,16 +97,16 @@ namespace hgl
 			{
 				"ZINCRBY",
 				set.c_str(),
-				member.c_str(),
-				value.c_str()
+				value.c_str(),
+				member.c_str()
 			};
 
 			const size_t argvlen[]=
 			{
 				7,
 				(size_t)set.Length(),
-				(size_t)member.Length(),
-				(size_t)value.Length()
+				(size_t)value.Length(),
+				(size_t)member.Length()
 			};
 
 			REPLY r(con,4,argv,argvlen);
