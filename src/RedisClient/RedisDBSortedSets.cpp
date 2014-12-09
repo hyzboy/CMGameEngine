@@ -45,11 +45,25 @@ namespace hgl
 			return_integer;
 		}
 
-		bool RedisDB::ZRem(const char *set,const char *member)
+		bool RedisDB::ZRem(const redis_string &set,const redis_string &member)
 		{
-			if(!set||!(*set)||!member||!(*member))return(-1);
+			if(set.IsEmpty()||member.IsEmpty())return(false);
 
-			REPLY r(con,"ZREM %s %s",set,member);
+			const char *argv[]=
+			{
+				"ZREM",
+				set.c_str(),
+				member.c_str()
+			};
+
+			const size_t argvlen[]=
+			{
+				4,
+				(size_t)set.Length(),
+				(size_t)member.Length()
+			};
+
+			REPLY r(con,3,argv,argvlen);
 
 			return_integer;
 		}
@@ -101,9 +115,23 @@ namespace hgl
 			return(true);
 		}
 
-		int RedisDB::ZCard(const char *set)
+		int RedisDB::ZCard(const redis_string &set)
 		{
-			REPLY r(con,"ZCARD %s",set);
+			if(set.IsEmpty())return(false);
+
+			const char *argv[]=
+			{
+				"ZCARD",
+				set.c_str(),
+			};
+
+			const size_t argvlen[]=
+			{
+				5,
+				(size_t)set.Length(),
+			};
+
+			REPLY r(con,2,argv,argvlen);
 
 			return_integer;
 		}

@@ -213,14 +213,14 @@ namespace hgl
 
 			bool ZAdd(const char *,int64,const char *);												///<添加一个元素到有序集合
 			bool ZAdd(const char *,int,int64 *,const char **);										///<添加多个元素到有序集合
-			bool ZRem(const char *,const char *);													///<从集合中删除一个元素
+			bool ZRem(const redis_string &,const redis_string &);									///<从集合中删除一个元素
 			bool ZRem(const redis_string &,int,const char **);										///<从集合中删除多个元素
 			bool ZRemRangeByRank(const char *,int64,int64);											///<从集合中删除指定排名的元素
 			bool ZRemRangeByScore(const char *,int64,int64);										///<从集合中删除指定分数的元素
 
 			bool ZInc(const redis_string &,const redis_string &,const redis_string &,redis_string &);///<为集合中的一个元素增加指定的值
 
-			int ZCard(const char *);																///<取得集合里的元素数量
+			int ZCard(const redis_string &);																///<取得集合里的元素数量
 			int ZCount(const char *,int64,int64);													///<取得集合中指定分数范围的元素个数
 
 			int ZRange(const char *,int64,int64,redis_string_list &);								///<取得指定排名间的成员列表
