@@ -171,9 +171,25 @@ namespace hgl
 			return_str_array_first(r,str);
 		}
 
-		bool RedisDB::ZScore(const char *set,const char *member,int64 &score)
+		bool RedisDB::ZScore(const redis_string &set,const redis_string &member,int64 &score)
 		{
-			REPLY r(con,"ZSCORE %s %s",set,member);
+			if(set.IsEmpty()||member.IsEmpty())return(false);
+
+			const char *argv[]=
+			{
+				"ZSCORE",
+				set.c_str(),
+				member.c_str()
+			};
+
+			const size_t argvlen[]=
+			{
+				6,
+				(size_t)set.Length(),
+				(size_t)member.Length()
+			};
+
+			REPLY r(con,3,argv,argvlen);
 
 			if(!r)return(false);
 			if(r->type!=REDIS_REPLY_STRING)return(false);
@@ -182,9 +198,25 @@ namespace hgl
 			return(true);
 		}
 
-		bool RedisDB::ZRank(const char *set,const char *member,int64 &rank)
+		bool RedisDB::ZRank(const redis_string &set,const redis_string &member,int64 &rank)
 		{
-			REPLY r(con,"ZRANK %s %s",set,member);
+			if(set.IsEmpty()||member.IsEmpty())return(false);
+
+			const char *argv[]=
+			{
+				"ZRANK",
+				set.c_str(),
+				member.c_str()
+			};
+
+			const size_t argvlen[]=
+			{
+				5,
+				(size_t)set.Length(),
+				(size_t)member.Length()
+			};
+
+			REPLY r(con,3,argv,argvlen);
 
 			if(!r)return(false);
 			if(r->type!=REDIS_REPLY_INTEGER)return(false);

@@ -231,8 +231,8 @@ namespace hgl
 
 			bool ZAllMember(const char *zname,redis_string_list &sl){return ZRange(zname,0,-1,sl);}	///<所得集合所有元素
 
-			bool ZScore(const char *,const char *,int64 &);											///<取得指定成员的分数
-			bool ZRank(const char *,const char *,int64 &);											///<取得指定成员的排名
+			bool ZScore(const redis_string &,const redis_string &,int64 &);											///<取得指定成员的分数
+			bool ZRank(const redis_string &,const redis_string &,int64 &);											///<取得指定成员的排名
 
 		public:	//哈希
 
