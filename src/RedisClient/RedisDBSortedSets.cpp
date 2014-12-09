@@ -75,6 +75,32 @@ namespace hgl
 			return_integer;
 		}
 
+		bool RedisDB::ZInc(const UTF8String &set,const UTF8String &member,const UTF8String &value,UTF8String &result)
+		{
+			if(set.IsEmpty()||member.IsEmpty()||value==0)return(false);
+
+			const char *argv[]=
+			{
+				"ZINCRBY",
+				set.c_str(),
+				member.c_str(),
+				value.c_str()
+			};
+
+			const size_t argvlen[]=
+			{
+				7,
+				(size_t)set.Length(),
+				(size_t)member.Length(),
+				(size_t)value.Length()
+			};
+
+			REPLY r(con,4,argv,argvlen);
+
+			result=r->str;
+			return(true);
+		}
+
 		int RedisDB::ZCard(const char *set)
 		{
 			REPLY r(con,"ZCARD %s",set);

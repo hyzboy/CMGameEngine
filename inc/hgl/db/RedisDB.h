@@ -218,6 +218,8 @@ namespace hgl
 			bool ZRemRangeByRank(const char *,int64,int64);											///<从集合中删除指定排名的元素
 			bool ZRemRangeByScore(const char *,int64,int64);										///<从集合中删除指定分数的元素
 
+			bool ZInc(const redis_string &,const redis_string &,const redis_string &,redis_string &);///<为集合中的一个元素增加指定的值
+
 			int ZCard(const char *);																///<取得集合里的元素数量
 			int ZCount(const char *,int64,int64);													///<取得集合中指定分数范围的元素个数
 
@@ -226,6 +228,8 @@ namespace hgl
 
 			bool ZRange(const char *,int64,redis_string &);											///<取得指定排名间的成员列表
 			bool ZRangeByScore(const char *,int64,redis_string &);									///<取得指定分数间的成员列表
+
+			bool ZAllMember(const char *zname,redis_string_list &sl){return ZRange(zname,0,-1,sl);}	///<所得集合所有元素
 
 			bool ZScore(const char *,const char *,int64 &);											///<取得指定成员的分数
 			bool ZRank(const char *,const char *,int64 &);											///<取得指定成员的排名
