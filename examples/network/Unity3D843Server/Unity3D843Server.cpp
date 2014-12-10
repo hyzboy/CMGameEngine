@@ -20,7 +20,8 @@ public:
 
 	~WorkThread()
 	{
-		close(sock);
+		SetSocketLinger(sock,30);
+		CloseSocket(sock);
 	}
 
 	bool Execute()// HGL_OVERRIDE

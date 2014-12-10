@@ -116,7 +116,7 @@ namespace hgl
 		#define HGL_PACKET_SIZE_BYTES		sizeof(HGL_PACKET_SIZE)									///<包长度数据类型字节数
 		#define HGL_PACKET_TYPE_BYTES		sizeof(HGL_PACKET_TYPE)									///<包类型数据类型字节数
 		#define HGL_PACKET_HEADER_BYTES		(HGL_PACKET_SIZE_BYTES+HGL_PACKET_TYPE_BYTES)			///<包头数据类型字节数
-		
+
 		class Socket;
 		class IOSocket;
 	}//namespace network
@@ -131,6 +131,8 @@ namespace hgl
 		void CloseSocket(int);																		///<关闭socket
 		void SetSocketBlock(int ThisSocket,bool block,double send_time_out=HGL_NETWORK_TIME_OUT,
 													double recv_time_out=HGL_NETWORK_TIME_OUT);		///<设置socket是否使用阻塞方式
+
+		void SetSocketLinger(int ThisSocket,int time_out);											///<设置Socket关闭时的确认数据发送成功超时时间
 
 		const os_char *GetSocketString(int);
 

@@ -562,5 +562,22 @@ namespace hgl
  				setsockopt(ThisSocket,SOL_SOCKET,SO_SNDTIMEO,(char *)&stv,sizeof(timeval));
 			#endif//HGL_OS == HGL_OS_Windows
 		}
+
+		void SetSocketLinger(int ThisSocket,int time_out)
+		{
+			struct linger so_linger;
+
+			if(time_out>0)
+			{
+				so_linger.l_onoff=true;
+				so_linger.l_linger=time_out;
+			}
+			else
+			{
+				so_linger.l_onoff=false;
+			}
+
+			setsockopt(ThisSocket,SOL_SOCKET,SO_LINGER,&so_linger,sizeof(linger));
+		}
 	}//namespace network
 }//namespace hgl
