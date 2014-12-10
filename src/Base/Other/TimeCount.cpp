@@ -129,6 +129,11 @@ namespace hgl
 #endif//HGL_OS != HGL_OS_Windows
 	}
 
+	double GetLocalDoubleTime()
+	{
+		return GetDoubleTime()+GetTimeZone();
+	}
+
 	/**
 	* 等待指定时间
 	* @param time 时间(单位：秒)

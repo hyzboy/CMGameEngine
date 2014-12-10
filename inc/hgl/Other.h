@@ -29,6 +29,8 @@ namespace hgl   //时间
 	uint64 GetMicroTime();																			///<取得当前时间(单位：1/1000000秒)
 	double GetDoubleTime();																			///<取得当前时间(单位：秒)
 
+	double GetLocalDoubleTime();
+
 	void WaitTime(double);																			///<等待一定时间(单位：秒)
 }//namespace hgl
 
