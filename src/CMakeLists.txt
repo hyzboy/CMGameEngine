@@ -21,10 +21,10 @@ ENDIF(BUILD_OPENAL_LIB)
 add_subdirectory(DFS)
 
 IF(UNIX)
-	add_subdirectory(OS/UNIX)
+	add_subdirectory(Platform/UNIX)
 ENDIF(UNIX)
 
-add_subdirectory(OS)
+add_subdirectory(Platform)
 
 add_subdirectory(PlugIn)
 
