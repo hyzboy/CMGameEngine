@@ -7,3 +7,6 @@ add_subdirectory(TCPPBServer)
 
 add_subdirectory(DownloadHTTPServer)
 add_subdirectory(Unity3D843Server)
+
+add_subdirectory(WorkServer)
+
