@@ -1,14 +1,14 @@
-﻿#ifndef HGL_QT4_INCLUDE
-#define HGL_QT4_INCLUDE
+﻿#ifndef HGL_QT5_INCLUDE
+#define HGL_QT5_INCLUDE
 
 #include<hgl.h>
 #include<hgl/platform/ConsoleSystemInitInfo.h>
-#include<hgl/platform/QT4Application.h>
+#include<hgl/platform/QT5Application.h>
 #include<hgl/type/QTString.h>
 
 #define QTConnect(obj,event,class_pointer,slot_func)    connect(obj,SIGNAL(event()),class_pointer,SLOT(slot_func()))
 
-#define HGL_QT_MAIN(sii_name,app_name,arg_name)	extern "C" int QT4AppMain(hgl::ConsoleSystemInitInfo &sii_name,hgl::QT4GuiApplication &app_name,const hgl::StringList<hgl::OSString> &arg_name)
+#define HGL_QT_MAIN(sii_name,app_name,arg_name)	extern "C" int QT5AppMain(hgl::ConsoleSystemInitInfo &sii_name,hgl::QT5GuiApplication &app_name,const hgl::StringList<hgl::OSString> &arg_name)
 
 #define HGL_QT_MAIN_FUNC()							HGL_QT_MAIN(sii,app,args)
 
@@ -26,4 +26,4 @@
 														\
 														return app.Run();	\
 													}
-#endif//#ifndef HGL_QT4_INCLUDE
+#endif//#ifndef HGL_QT5_INCLUDE
