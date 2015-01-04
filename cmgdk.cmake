@@ -271,7 +271,7 @@ IF(BUILD_QT4_SUPPORT_LIB)
 ENDIF()
 
 IF(BUILD_QT5_SUPPORT_LIB)
-	find_package(Qt5 REQUIRED)
+	find_package(Qt5Widgets REQUIRED)
 
 	IF(WIN32)
 		SET(HGL_QT_MAIN_SOURCE ${CMGDK_PATH}/src/Platform/QT/PlatformQT5WinUTF16.cpp)
