@@ -89,9 +89,9 @@ void Plane::Set(const vec &v1, const vec &v2, const vec &v3)
 {
 	normal = (v2-v1).Cross(v3-v1);
 	float len = normal.Length();
-	assume(len > 1e-10f);
+	assume1(len > 1e-10f, len);
 	normal /= len;
-	assume(normal.IsNormalized());
+	assume2(normal.IsNormalized(), normal, normal.LengthSq());
 	d = normal.Dot(v1);
 }
 
@@ -124,12 +124,16 @@ vec Plane::PointOnPlane() const
 
 vec Plane::Point(float u, float v) const
 {
-	return PointOnPlane() + u * normal.Perpendicular() + v * normal.AnotherPerpendicular();
+	vec b1, b2;
+	normal.PerpendicularBasis(b1, b2);
+	return PointOnPlane() + u * b1 + v * b2;
 }
 
 vec Plane::Point(float u, float v, const vec &referenceOrigin) const
 {
-	return Project(referenceOrigin) + u * normal.Perpendicular() + v * normal.AnotherPerpendicular();
+	vec b1, b2;
+	normal.PerpendicularBasis(b1, b2);
+	return Project(referenceOrigin) + u * b1 + v * b2;
 }
 
 void Plane::Translate(const vec &offset)
@@ -919,7 +923,12 @@ std::string Plane::ToString() const
 std::string Plane::SerializeToString() const
 {
 	char str[256];
-	sprintf(str, "%.9g,%.9g,%.9g,%.9g", normal.x, normal.y, normal.z, d);
+	char *s = SerializeFloat(normal.x, str); *s = ','; ++s;
+	s = SerializeFloat(normal.y, s); *s = ','; ++s;
+	s = SerializeFloat(normal.z, s); *s = ','; ++s;
+	s = SerializeFloat(d, s);
+	assert(s+1 - str < 256);
+	MARK_UNUSED(s);
 	return str;
 }
 

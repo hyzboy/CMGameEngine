@@ -29,10 +29,8 @@
 #include "Reinterpret.h"
 #include "SSEMath.h"
 
-#ifdef WIN32
-#define Polygon Polygon_unused
-#include <Windows.h> // For DebugBreak();
-#undef Polygon
+#ifdef MATH_NEON
+#include <arm_neon.h>
 #endif
 
 #include "assume.h"
@@ -282,7 +280,11 @@ float Frac(float x);
 /// Returns the square root of x.
 FORCE_INLINE float Sqrt(float x)
 {
-#ifdef MATH_SSE
+#ifdef MATH_NEON
+	float result;
+	asm("vsqrt.f32 %0, %1" : "=w"(result) : "w"(x));
+	return result;
+#elif defined(MATH_SSE)
 	return s4f_x(_mm_sqrt_ss(setx_ps(x)));
 #else
 	return sqrtf(x);
@@ -292,8 +294,12 @@ FORCE_INLINE float Sqrt(float x)
 /// Computes a fast approximation of the square root of x.
 FORCE_INLINE float SqrtFast(float x)
 {
-#ifdef MATH_SSE
-	__m128 X = setx_ps(x);
+#ifdef MATH_NEON
+	float result;
+	asm("vsqrt.f32 %0, %1" : "=w"(result) : "w"(x));
+	return result;
+#elif defined(MATH_SSE)
+	simd4f X = setx_ps(x);
 	return s4f_x(_mm_mul_ss(X, _mm_rsqrt_ss(X)));
 #else
 	return sqrtf(x);
@@ -303,14 +309,21 @@ FORCE_INLINE float SqrtFast(float x)
 /// Returns 1/Sqrt(x). (The reciprocal of the square root of x)
 FORCE_INLINE float RSqrt(float x)
 {
-#ifdef MATH_SSE
-	__m128 X = setx_ps(x);
-	__m128 e = _mm_rsqrt_ss(X);
+#ifdef MATH_NEON
+	// Note: This is a two-wide operation - there is no scalar reciprocal sqrt instruction in ARM/VFP/NEON.
+	float32x2_t X = vdup_n_f32(x);
+	float32x2_t e = vrsqrte_f32(X);
+	e = vmul_f32(e, vrsqrts_f32(X, vmul_f32(e, e)));
+	e = vmul_f32(e, vrsqrts_f32(X, vmul_f32(e, e)));
+	return vget_lane_f32(e, 0);
+#elif defined(MATH_SSE)
+	simd4f X = setx_ps(x);
+	simd4f e = _mm_rsqrt_ss(X);
 
 	// Do one iteration of Newton-Rhapson:
 	// e_n = e + 0.5 * (e - x * e^3)
-	__m128 e3 = _mm_mul_ss(_mm_mul_ss(e,e), e);
-	__m128 half = _mm_set_ss(0.5f);
+	simd4f e3 = _mm_mul_ss(_mm_mul_ss(e,e), e);
+	simd4f half = _mm_set_ss(0.5f);
 	
 	return s4f_x(_mm_add_ss(e, _mm_mul_ss(half, _mm_sub_ss(e, _mm_mul_ss(X, e3)))));
 #else
@@ -321,7 +334,11 @@ FORCE_INLINE float RSqrt(float x)
 /// SSE implementation of reciprocal square root.
 FORCE_INLINE float RSqrtFast(float x)
 {
-#ifdef MATH_SSE
+#ifdef MATH_NEON
+	// Note: This is a two-wide operation, but perhaps it needn't be?
+	float32x2_t X = vdup_n_f32(x);
+	return vget_lane_f32(vrsqrte_f32(X), 0);
+#elif defined(MATH_SSE)
 	return s4f_x(_mm_rsqrt_ss(setx_ps(x)));
 #else
 	return 1.f / sqrtf(x);
@@ -331,12 +348,19 @@ FORCE_INLINE float RSqrtFast(float x)
 /// Returns 1/x, the reciprocal of x.
 FORCE_INLINE float Recip(float x)
 {
-#ifdef MATH_SSE
-	__m128 X = setx_ps(x);
-	__m128 e = _mm_rcp_ss(X);
+#ifdef MATH_NEON
+	// Note: This is a two-wide operation - there is no scalar reciprocal instruction in ARM/VFP/NEON.
+	float32x2_t X = vdup_n_f32(x);
+	float32x2_t e = vrecpe_f32(X);
+	e = vmul_f32(e, vrecps_f32(X, e));
+	e = vmul_f32(e, vrecps_f32(X, e));
+	return vget_lane_f32(e, 0);
+#elif defined(MATH_SSE)
+	simd4f X = setx_ps(x);
+	simd4f e = _mm_rcp_ss(X);
 	// Do one iteration of Newton-Rhapson:
 	// e_n = 2*e - x*e^2
-	__m128 e2 = _mm_mul_ss(e,e);
+	simd4f e2 = _mm_mul_ss(e,e);
 	return s4f_x(_mm_sub_ss(_mm_add_ss(e, e), _mm_mul_ss(X, e2)));
 #else
 	return 1.f / x;
@@ -346,7 +370,10 @@ FORCE_INLINE float Recip(float x)
 /// Returns 1/x, the reciprocal of x, using a fast approximation (SSE rcp instruction).
 FORCE_INLINE float RecipFast(float x)
 {
-#ifdef MATH_SSE
+#ifdef MATH_NEON
+	// Note: This is a two-wide operation, but perhaps it needn't be?
+	return vget_lane_f32(vrecpe_f32(vdup_n_f32(x)), 0);
+#elif defined(MATH_SIMD)
 	return s4f_x(_mm_rcp_ss(setx_ps(x)));
 #else
 	return 1.f / x;
@@ -381,7 +408,7 @@ inline T Clamp01(const T &val) { return Clamp(val, T(0), T(1)); }
 /// Computes the smaller of two values.
 /** @see Clamp(), Clamp01(), Max(). */
 template<typename T>
-T Min(const T &a, const T &b)
+inline T Min(const T &a, const T &b)
 {
 	return a <= b ? a : b;
 }
@@ -389,7 +416,7 @@ T Min(const T &a, const T &b)
 /// Computes the larger of two values.
 /** @see Clamp(), Clamp01(), Min(). */
 template<typename T>
-T Max(const T &a, const T &b)
+inline T Max(const T &a, const T &b)
 {
 	return a >= b ? a : b;
 }
@@ -407,7 +434,7 @@ inline float Max(const float &a, const float &b)
 /// Computes the smallest of three values.
 /** @see Clamp(), Clamp01(), Max(). */
 template<typename T>
-T Min(const T &a, const T &b, const T &c)
+inline T Min(const T &a, const T &b, const T &c)
 {
 	return Min(Min(a, b), c);
 }
@@ -425,7 +452,7 @@ inline float Min(const float &a, const float &b)
 /// Computes the largest of three values.
 /** @see Clamp(), Clamp01(), Min(). */
 template<typename T>
-T Max(const T &a, const T &b, const T &c)
+inline T Max(const T &a, const T &b, const T &c)
 {
 	return Max(Max(a, b), c);
 }
@@ -433,7 +460,7 @@ T Max(const T &a, const T &b, const T &c)
 /// Computes the smallest of four values.
 /** @see Clamp(), Clamp01(), Max(). */
 template<typename T>
-T Min(const T &a, const T &b, const T &c, const T &d)
+inline T Min(const T &a, const T &b, const T &c, const T &d)
 {
 	return Min(Min(a, b), Min(c, d));
 }
@@ -441,14 +468,14 @@ T Min(const T &a, const T &b, const T &c, const T &d)
 /// Computes the largest of four values.
 /** @see Clamp(), Clamp01(), Min(). */
 template<typename T>
-T Max(const T &a, const T &b, const T &c, const T &d)
+inline T Max(const T &a, const T &b, const T &c, const T &d)
 {
 	return Max(Max(a, b), Max(c, d));
 }
 
 /// Swaps the two values.
 template<typename T>
-void Swap(T &a, T &b)
+inline void Swap(T &a, T &b)
 {
 	T temp = a;
 	a = b;
@@ -457,28 +484,38 @@ void Swap(T &a, T &b)
 
 /** @return True if a > b. */
 template<typename T>
-bool GreaterThan(const T &a, const T &b)
+inline bool GreaterThan(const T &a, const T &b)
 {
 	return a > b;
 }
 
 /** @return True if a < b. */
 template<typename T>
-bool LessThan(const T &a, const T &b)
+inline bool LessThan(const T &a, const T &b)
 {
 	return a < b;
 }
 
 /** @return The absolute value of a. */
 template<typename T>
-const T Abs(const T &a)
+inline T Abs(const T &a)
 {
 	return a >= 0 ? a : -a;
 }
 
+template<>
+inline float Abs(const float &a)
+{
+#ifdef MATH_SSE
+	return s4f_x(abs_ps(setx_ps(a)));
+#else
+	return a >= 0 ? a : -a;
+#endif
+}
+
 /// @return True if a and b are equal, using operator ==().
 template<typename T>
-bool Equal(const T &a, const T &b)
+FORCE_INLINE bool Equal(const T &a, const T &b)
 {
 	return a == b;
 }
@@ -541,7 +578,14 @@ char *SerializeFloat(float f, char *dstStr);
 		to advance to reading a next element in a sequence of multiple serialized entries. */
 float DeserializeFloat(const char *str, const char **outEndStr = 0);
 
+/// Deserializes a double from the given string.
+/** @param str The source string buffer to deserialize. If this is a null pointer or an empty string, then NaN is returned.
+	@param outEndStr [out] Optional. If present, a pointer to the string position where reading ended is outputted. You can use this pointer
+		to advance to reading a next element in a sequence of multiple serialized entries. */
+double DeserializeDouble(const char *str, const char **outEndStr = 0);
+
 // A deserialization helper.
 #define MATH_SKIP_WORD(str, word) if (!strncmp(str, word, strlen(word))) str += strlen(word);
 #define MATH_NEXT_WORD_IS(str, word) !strncmp(str, word, strlen(word))
+
 MATH_END_NAMESPACE

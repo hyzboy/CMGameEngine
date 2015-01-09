@@ -57,16 +57,6 @@ float2::float2(const float *data)
 	y = data[1];
 }
 
-float *float2::ptr()
-{
-	return &x;
-}
-
-const float *float2::ptr() const
-{
-	return &x;
-}
-
 CONST_WIN32 float float2::At(int index) const
 {
 	assume(index >= 0);
@@ -254,10 +244,12 @@ std::string float2::ToString() const
 
 std::string float2::SerializeToString() const
 {
-	assert(IsNeutralCLocale());
 	char str[256];
-	sprintf(str, "%.9g,%.9g", x, y);
-	return std::string(str);
+	char *s = SerializeFloat(x, str); *s = ','; ++s;
+	s = SerializeFloat(y, s);
+	assert(s+1 - str < 256);
+	MARK_UNUSED(s);
+	return str;
 }
 
 std::string float2::SerializeToCodeString() const
@@ -537,7 +529,7 @@ public:
 	{
 		float2 A = a - perspective;
 		float2 B = b - perspective;
-		return A.x*B.y < B.x*A.y;
+		return B.x*A.y < A.x*B.y;
 	}
 };
 
@@ -558,133 +550,205 @@ void float2::ConvexHull(const float2 *pointArray, int numPoints, std::vector<flo
 	a 2D point set. The running time is O(nlogn). For details, see
 	"Introduction to Algorithms, 2nd ed.", by Cormen, Leiserson, Rivest, p.824, or
 	a lecture by Shai Simonson: http://www.aduni.org/courses/algorithms/index.php?view=cw , lecture 02-13-01. */
-int float2::ConvexHullInPlace(float2 *points, int nPoints)
+int float2::ConvexHullInPlace(float2 *p, int n)
 {
-	if (nPoints <= 3)
-		return nPoints;
+	if (n <= 2)
+		return n;
+
+	if (n >= 50)
+	{
+		/* Perform Akl–Toussaint heuristic. The limit n=50 is arbitrary and based on quick profiling:
+		 Without heuristic:
+		   n=10: 1143 ticks
+		   n=50: 8657 ticks
+		   n=100: 19533 ticks
+		 With heuristic:
+		   n=10: 1322 ticks
+		   n=50: 6759 ticks
+		   n=100: 14448 ticks
+		*/
+		int minX = 0, minY = 0, maxX = 0, maxY = 0;
+		for(int i = 1; i < n; ++i)
+		{
+			if (p[i].x < p[minX].x) minX = i;
+			else if (p[i].x > p[maxX].x) maxX = i;
+			if (p[i].y < p[minY].y) minY = i;
+			else if (p[i].y > p[maxY].y) maxY = i;
+		}
+		// Direction vectors which point inside the convex hull.
+		float2 e0 = (p[maxX] - p[minY]).Rotated90CCW();
+		float2 e1 = (p[maxY] - p[maxX]).Rotated90CCW();
+		float2 e2 = (p[minX] - p[maxY]).Rotated90CCW();
+		float2 e3 = (p[minY] - p[minX]).Rotated90CCW();
+
+		// Add a small epsilon so that the four extreme points on the convex hull will not get pruned
+		// due to floating point imprecision.
+		const float eps = 1e-6f;
+		float e0_d = e0.Dot(p[minY]) + eps;
+		float e1_d = e1.Dot(p[maxX]) + eps;
+		float e2_d = e2.Dot(p[maxY]) + eps;
+		float e3_d = e3.Dot(p[minX]) + eps;
+
+		for(int i = 0; i < n; ++i)
+			if (e0.Dot(p[i]) > e0_d && e1.Dot(p[i]) > e1_d && e2.Dot(p[i]) > e2_d && e3.Dot(p[i]) > e3_d)
+				Swap(p[i--], p[--n]);
+	}
+
 	// Find the lowest point of the set.
-	float2 *lowest = &points[0];
-	for(int i = 1; i < nPoints; ++i)
-		if (points[i].y < lowest->y)
-			lowest = &points[i];
-	Swap(*lowest, points[0]);
 	SortByPolarAngle pred;
-	pred.perspective = points[0];
-	std::sort(&points[1], &points[nPoints], pred);
-	int nPointsInHull = 2; // Two first points are in the hull without checking.
-	for(int i = 2; i < nPoints; ++i)
+	pred.perspective = p[0];
+	int smallestY = 0;
+	for(int i = 1; i < n; ++i)
+		if (p[i].y < pred.perspective.y || (p[i].y == pred.perspective.y && p[i].x < pred.perspective.x))
+		{
+			pred.perspective = p[i];
+			smallestY = i;
+		}
+	Swap(p[0], p[smallestY]);
+
+	// For robustness, remove duplicates of the perspective pivot points.
+	// This is because duplicates on that element will cause the sorting to be nontransitive and break
+	// the whole sort.
+	int d = 0;
+	for(int i = 1; i < n; ++i)
+		if (!p[i].Equals(p[0]))
+			p[++d] = p[i];
+	n = d+1;
+
+	std::sort(&p[1], &p[n], pred);
+
+	// For robustness, remove duplicate input values.
+	d = 0;
+	for(int i = 1; i < n; ++i)
+		if (!p[i].Equals(p[d]))
+			p[++d] = p[i];
+	n = d+1;
+
+	int h = 1; // Points to the index of the last point added to the hull so far. The first two points are in the hull to start.
+
+	float2 a = p[h] - p[h-1];
+	const float epsilon = 1e-5f;
+	for(int i = 2; i < n; ++i)
 	{
 		// The last two added points determine a line, check which side of that line the next point to be added lies in.
-		float2 lineA = points[nPointsInHull-1] - points[nPointsInHull-2];
-		float2 lineB = points[i] - points[nPointsInHull-2];
-		float lineALen = lineA.LengthSq();
-		float lineBLen = lineB.LengthSq();
-		bool dropLastPointFromHull = false;
-		if (lineALen >= 1e-5f)
-			lineA /= Sqrt(lineALen);
-		else
-			dropLastPointFromHull = true;
-		if (lineBLen >= 1e-5f)
-			lineB /= Sqrt(lineBLen);
-		float2 normal = float2(-lineA.y, lineA.x);
-		if (dropLastPointFromHull ||  MATH_NS::Dot(normal, lineB) > 0.f || (MATH_NS::Dot(normal,lineB) > -1e-4f && lineBLen >= lineALen))// || (Length2(points[i] - points[nPointsInHull-1]) <= 1e-5f)) // lineB is to the left of lineA?
+		float2 d = p[i] - p[h-1];
+		float dir = d.x*a.y - d.y*a.x;
+		// Remove previous points from the convex hull until we have a left turn. Also for numerical stability,
+		// in the case of three collinear points, remove the middle point.
+		while(dir > epsilon || (dir > -epsilon && d.Dot(d) >= a.Dot(a)))
 		{
-			// Points[n-1] is not part of the convex hull. Drop that point and decrement i to reprocess the current point.
-			// (It may be that the current point will cause lots of points to drop out of the convex hull.
-			if (nPointsInHull > 2)
+			--h;
+			if (h >= 1)
 			{
-				--nPointsInHull;
-				--i;
+				a = p[h] - p[h-1];
+				d = p[i] - p[h-1];
+				dir = d.x*a.y - d.y*a.x;
 			}
 			else
-				points[nPointsInHull-1] = points[i];
+				break;
 		}
-		else
-			points[nPointsInHull++] = points[i];
+		p[++h] = p[i];
+		a = p[i] - p[h-1];
 	}
 
-	// The array points now stores the convex hull. For robustness,
-	// prune all duplicate and redundant points from the hull (due to floating point imprecisions).
-	for(int i = 0; i < nPointsInHull && nPointsInHull > 3; ++i)
-	{
-		// Remove any adjacent points that are too close.
-		if (points[i].Equals(points[(i+1)%nPointsInHull]))
-		{
-			for(int j = i; j+1 < nPointsInHull; ++j)
-				points[j] = points[j+1];
-			--nPointsInHull;
-			--i;
-			continue;
-		}
-
-		// Remove any adjacent points that are on the same line.
-		float2 dirA = points[(i+1)%nPointsInHull] - points[i];
-		dirA.Normalize();
-		float2 dirB = points[i] - points[(i+nPointsInHull-1)%nPointsInHull];
-		dirB.Normalize();
-		if (MATH_NS::Dot(dirA, dirB) >= 1.f - 1e-3f)
-		{
-			for(int j = i; j+1 < nPointsInHull; ++j)
-				points[j] = points[j+1];
-			--nPointsInHull;
-			--i;
-			continue;
-		}
-	}
-
-	return nPointsInHull;
+	// Return the number of points on the new hull.
+	return h+1;
 }
+
+bool float2::ConvexHullContains(const float2 *convexHull, int numPointsInConvexHull, const float2 &point)
+{
+	int j = numPointsInConvexHull-1;
+	for(int i = 0; i < numPointsInConvexHull; ++i)
+	{
+		float2 d = (convexHull[i] - convexHull[j]).Rotated90CCW(); // Points inwards the convex hull.
+		float2 n = point - convexHull[j];
+		if (n.IsZero()) return true;
+		if (n.Dot(d) < 0.f)
+			return false;
+		j = i;
+	}
+	return true;
+}
+
 #endif
 
-float float2::MinAreaRect(const float2 *pts, int numPoints, float2 &center, float2 &uDir, float2 &vDir, float &minU, float &maxU, float &minV, float &maxV)
+#define NEXT_P(ptr) ((ptr)+1 < (pEnd) ? (ptr)+1 : (p))
+
+float float2::MinAreaRectInPlace(float2 *p, int n, float2 &center, float2 &uDir, float2 &vDir, float &minU, float &maxU, float &minV, float &maxV)
 {
-	assume(pts || numPoints == 0);
-	if (!pts)
+	assume(p || n == 0);
+	if (!p)
 		return 0.f;
-	float minArea = FLT_MAX;
 
-	// Loop through all edges formed by pairs of points.
-	for(int i = 0, j = numPoints -1; i < numPoints; j = i, ++i)
+	// As a preparation, need to compute the convex hull so that points are CCW-oriented,
+	// and this also greatly reduces the number of points for performance.
+	n = float2::ConvexHullInPlace(p, n);
+
+	// e[i] point to the antipodal point pairs: e[0] and e[2] are pairs, so are e[1] and e[3].
+	float2 *e[4] = { p, p, p, p };
+
+	// Compute the initial AABB rectangle antipodal points for the rotating calipers method.
+	// Order the initial vertices minX -> minY -> maxX -> maxY to establish
+	// a counter-clockwise orientation.
+	for(int i = 1; i < n; ++i)
 	{
-		// The edge formed by these two points.
-		float2 e0 = pts[i] - pts[j];
-		float len = e0.Normalize();
-		if (len == 0)
-			continue; // the points are duplicate, skip this axis.
+		if (p[i].x < e[0]->x) e[0] = &p[i];
+		else if (p[i].x > e[2]->x) e[2] = &p[i];
+		if (p[i].y < e[1]->y) e[1] = &p[i];
+		else if (p[i].y > e[3]->y) e[3] = &p[i];
+	}
 
-		float2 e1 = e0.Rotated90CCW();
+	// Direction vector of the edge that the currently tested rectangle is in contact with.
+	// This specifies the reference frame for the rectangle, and this is the direction the
+	// convex hull points toward at the antipodal point e[0].
+	float2 ed = -float2::unitY;
+	float minArea = FLOAT_INF; // Track the area of the best rectangle seen so far.
+	const float2 * const pEnd = p + n; // For wraparound testing in NEXT_P().
 
-		// Find the most extreme points along the coordinate frame { e0, e1 }.
+	// These track directions the convex hull is pointing towards at each antipodal point.
+	float2 d[4];
+	d[0] = (*NEXT_P(e[0]) - *e[0]).Normalized();
+	d[1] = (*NEXT_P(e[1]) - *e[1]).Normalized();
+	d[2] = (*NEXT_P(e[2]) - *e[2]).Normalized();
+	d[3] = (*NEXT_P(e[3]) - *e[3]).Normalized();
 
-		///@todo Examine. A bug in the book? All the following are initialized to 0!.
-		float min0 = FLOAT_INF;
-		float min1 = FLOAT_INF;
-		float max0 = -FLOAT_INF;
-		float max1 = -FLOAT_INF;
-		for(int k = 0; k < numPoints; ++k)
-		{
-			float2 d = pts[k] - pts[j];
-			float dot =  MATH_NS::Dot(d, e0);
-			if (dot < min0) min0 = dot;
-			if (dot > max0) max0 = dot;
-			dot =  MATH_NS::Dot(d, e1);
-			if (dot < min1) min1 = dot;
-			if (dot > max1) max1 = dot;
-		}
-		float area = (max0 - min0) * (max1 - min1);
+	// Rotate the calipers 90 degrees to see through each possible edge that might support
+	// the bounding rectangle.
+	while(ed.y <= 0.f)
+	{
+		// Compute how much each edge can at most rotate before hitting the next vertex in the convex hull.
+		float cosA0 =  ed.Dot(d[0]);
+		float cosA1 =  ed.PerpDot(d[1]);
+		float cosA2 = -ed.Dot(d[2]);
+		float cosA3 = -ed.PerpDot(d[3]);
 
+		float maxCos = MATH_NS::Max(MATH_NS::Max(cosA0, cosA1), MATH_NS::Max(cosA2, cosA3));
+		// Pick the smallest angle (largest cosine of that angle) and increment the antipodal point index to travel the edge.
+		if (cosA0 >= maxCos)      { ed = d[0];                e[0] = NEXT_P(e[0]); d[0] = (*NEXT_P(e[0]) - *e[0]).Normalized(); }
+		else if (cosA1 >= maxCos) { ed = d[1].Rotated90CW();  e[1] = NEXT_P(e[1]); d[1] = (*NEXT_P(e[1]) - *e[1]).Normalized(); }
+		else if (cosA2 >= maxCos) { ed = -d[2];               e[2] = NEXT_P(e[2]); d[2] = (*NEXT_P(e[2]) - *e[2]).Normalized(); }
+		else                      { ed = d[3].Rotated90CCW(); e[3] = NEXT_P(e[3]); d[3] = (*NEXT_P(e[3]) - *e[3]).Normalized(); }
+
+		// Check if the area of the new rectangle is smaller than anything seen so far.
+		float minu = ed.PerpDot(*e[0]);
+		float maxu = ed.PerpDot(*e[2]);
+		float minv = ed.Dot(*e[1]);
+		float maxv = ed.Dot(*e[3]);
+
+		float area = MATH_NS::Abs((maxu-minu) * (maxv-minv));
 		if (area < minArea)
 		{
+			vDir = ed;
 			minArea = area;
-			center = pts[j] + 0.5f * ((min0 + max0) * e0 + (min1 + max1) * e1);
-			uDir = e0;
-			vDir = e1;
-			minU = min0;
-			maxU = max0;
-			minV = min1;
-			maxV = max1;
+			minU = MATH_NS::Min(minu, maxu);
+			maxU = MATH_NS::Max(minu, maxu);
+			minV = MATH_NS::Min(minv, maxv);
+			maxV = MATH_NS::Max(minv, maxv);
 		}
 	}
+	uDir = vDir.Rotated90CCW();
+	center = 0.5f * (uDir * (minU+maxU) + vDir * (minV+maxV));
+
 	return minArea;
 }
 

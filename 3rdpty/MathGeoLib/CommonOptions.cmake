@@ -17,18 +17,11 @@ if (EMSCRIPTEN OR NACL OR ANDROID OR FLASCC)
 	SET(WIN32)
 endif()
 
-#if (MATH_TESTS_EXECUTABLE)
-#	SET(GENERATE_ASM_LISTING FALSE)
-#endif()
-#SET(GENERATE_ASM_LISTING TRUE)
+option(GENERATE_ASM_LISTING "Generate assembly listing of all compiled code" FALSE)
 
 if ("${CMAKE_SYSTEM_NAME}" MATCHES "Linux" AND NOT EMSCRIPTEN AND NOT NACL AND NOT ANDROID AND NOT FLASCC)
 	set(LINUX TRUE)
 endif()
-
-# If true, output assembly source code (.asm) for examination.
-# Set this in calling code
-# SET(GENERATE_ASM_LISTING TRUE)
 
 if (WIN32 AND IS_GCC_LIKE)
 	add_definitions(-DWIN32)
@@ -177,7 +170,7 @@ if (EMSCRIPTEN)
 	add_definitions(-Wno-warn-absolute-paths)
 
 	SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s PRECISE_F32=2")
-	SET(CMAKE_EXE_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -s ASSERTIONS=2 -s WARN_UNALIGNED=1 -s SAFE_HEAP=1 -s GL_ASSERTIONS=1")
+	SET(CMAKE_EXE_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -s ASSERTIONS=2 -s SAFE_HEAP=1 -s GL_ASSERTIONS=1")
 endif()
 
 if (FLASCC)
@@ -272,7 +265,8 @@ elseif (MATH_SSE)
 	add_definitions(-DMATH_SSE)
 	if (MSVC)
 		add_definitions(/arch:SSE)
-	elseif (IS_GCC_LIKE)
+	elseif (IS_GCC_LIKE AND NOT EMSCRIPTEN)
+		# TODO: For Emscripten, consider whether to add support for -msse and -march and -mtune?
 		add_definitions(-msse -march=pentium3 -mtune=pentium3)
 	endif()
 endif()
@@ -283,7 +277,7 @@ endif()
 
 if (MATH_NEON)
 	add_definitions(-DMATH_NEON)
-	if (NOT MSVC)
+	if (IS_GCC_LIKE)
 		add_definitions(-mfpu=neon)
 	endif()
 endif()

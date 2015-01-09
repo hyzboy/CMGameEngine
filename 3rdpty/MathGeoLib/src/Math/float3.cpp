@@ -37,6 +37,10 @@
 #include "../Geometry/Capsule.h"
 #include "MathFunc.h"
 
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+#include "float4_sse.h"
+#endif
+
 MATH_BEGIN_NAMESPACE
 
 using namespace std;
@@ -66,16 +70,6 @@ float3::float3(const float *data)
 	x = data[0];
 	y = data[1];
 	z = data[2];
-}
-
-float *float3::ptr()
-{
-	return &x;
-}
-
-const float *float3::ptr() const
-{
-	return &x;
 }
 
 CONST_WIN32 float float3::At(int index) const
@@ -224,10 +218,13 @@ std::string float3::ToString() const
 
 std::string float3::SerializeToString() const
 {
-	assert(IsNeutralCLocale());
 	char str[256];
-	sprintf(str, "%.9g,%.9g,%.9g", x, y, z);
-	return std::string(str);
+	char *s = SerializeFloat(x, str); *s = ','; ++s;
+	s = SerializeFloat(y, s); *s = ','; ++s;
+	s = SerializeFloat(z, s);
+	assert(s+1 - str < 256);
+	MARK_UNUSED(s);
+	return str;
 }
 
 std::string float3::SerializeToCodeString() const
@@ -519,6 +516,31 @@ float3 float3::AnotherPerpendicular(const float3 &hint, const float3 &hint2) con
 	float3 firstPerpendicular = Perpendicular(hint, hint2);
 	float3 v = this->Cross(firstPerpendicular);
 	return v.Normalized();
+}
+
+void float3::PerpendicularBasis(float3 &outB, float3 &outC) const
+{
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+	simd4f v = load_vec3(&x, 0.f);
+	simd4f out1, out2;
+	basis_ps(v, &out1, &out2);
+	store_vec3(&outB.x, out1);
+	store_vec3(&outC.x, out2);
+#else
+	float3 a = this->Abs();
+	// Choose from (1,0,0), (0,1,0), and (0,0,1) the one that's most perpendicular to this vector.
+	float3 q;
+	if (a.x <= a.y)
+	{
+		if (a.x <= a.z) q = float3(1,0,0);
+		else q = float3(0,0,1);
+	}
+	else if (a.y <= a.z) q = float3(0,1,0);
+	else q = float3(0,0,1);
+
+	outB = this->Cross(q).Normalized();
+	outC = this->Cross(outB).Normalized();
+#endif
 }
 
 float3 float3::RandomPerpendicular(LCG &rng) const

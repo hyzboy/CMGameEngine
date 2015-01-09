@@ -31,9 +31,11 @@
 #ifdef MATH_QT_INTEROP
 #include <QVector4D>
 #endif
-
 #ifdef MATH_OGRE_INTEROP
 #include <OgreVector4.h>
+#endif
+#ifdef MATH_URHO3D_INTEROP
+#include <Urho3D/Math/Vector4.h>
 #endif
 
 MATH_BEGIN_NAMESPACE
@@ -92,7 +94,9 @@ public:
 #endif
 
 	/// Constructs a new float4 with the value (x, y, z, w).
-	/** @see x, y, z, w. */
+	/** @note If you are constructing a float4 from an array of consecutive values, always prefer calling "float4(ptr);" instead of "float4(ptr[0], ptr[1], ptr[2], ptr[3]);"
+			because there is a considerable SIMD performance benefit in the first form.
+		@see x, y, z, w. */
 	float4(float x, float y, float z, float w);
 
 	/// Constructs a new float3 with the value (xyz.x, xyz.y, xyz.z, w).
@@ -123,8 +127,8 @@ public:
 			class to access the elements of this vector by index.
 		@return A pointer to the first float element of this class. The data is contiguous in memory.
 		@see operator [](). */
-	float *ptr();
-	const float *ptr() const;
+	FORCE_INLINE float *ptr() { return &x; }
+	FORCE_INLINE const float *ptr() const { return &x; }
 
 	/// Accesses an element of this vector using array notation.
 	/** @param index The element to get. Pass in 0 for x, 1 for y, 2 for z and 3 for w.
@@ -274,6 +278,14 @@ public:
 	float3 Swizzled(int i, int j, int k) const;
 	float2 Swizzled(int i, int j) const;
 
+	float4 xxxx() const;
+	float4 xxxw() const;
+	float4 yyyy() const;
+	float4 yyyw() const;
+	float4 zzzz() const;
+	float4 zzzw() const;
+	float4 wwww() const;
+
 	/// Returns float4(scalar, scalar, scalar, scalar).
 	/** @see float4::float4(float scalar), SetFromScalar(). */
 	static float4 FromScalar(float scalar);
@@ -394,7 +406,7 @@ public:
 			If the normalization fails, an error message is printed and the vector (1, 0, 0, oldW) is returned.
 		@see Length3(), Length4(), Normalize3(), Normalize4(), Normalized3(). */
 	float4 Normalized4() const;
-	inline float4 Normalized() { return Normalized4(); }
+	inline float4 Normalized() const { return Normalized4(); }
 
 	/// Divides each element by w to produce a float4 of form (x, y, z, 1).
 	/** This function performs the <b>perspective divide</b> or the <b>homogeneous divide</b> on this vector, which is the
@@ -660,6 +672,14 @@ public:
 	float4 AnotherPerpendicular3(const float3 &hint = float3(0,1,0), const float3 &hint2 = float3(0,0,1)) const;
 	float4 AnotherPerpendicular(const float4 &hint = float4(0,1,0,0), const float4 &hint2 = float4(0,0,1,0)) const;
 
+	// Completes this vector to generate a perpendicular basis.
+	/** This function computes two new vectors b and c which are both orthogonal to this vector and to each other.
+		That is, the set { this, b, c} is an orthogonal set. The vectors b and c that are outputted are also normalized.
+		@param outB [out] Receives vector b.
+		@param outC [out] Receives vector c.
+		@note When calling this function, this vector should not be zero! */
+	void PerpendicularBasis(float4 &outB, float4 &outC) const;
+
 	/// Generates a random vector that is perpendicular to this vector.
 	/** The distribution is uniformly random. */
 	float4 RandomPerpendicular(LCG &rng) const;
@@ -805,29 +825,29 @@ public:
 	float4(const btVector3 &other):x(other.x()), y(other.y()), z(other.z()), w(other.w()) {}
 	operator btVector3() const { btVector3 v(x, y, z); v.setW(w); return v; }
 #endif
+#ifdef MATH_URHO3D_INTEROP
+	float4(const Urho3D::Vector4 &other) : x(other.x_), y(other.y_), z(other.z_), w(other.w_) {}
+	operator Urho3D::Vector4() const { return Urho3D::Vector4(x, y, z, w); }
+#endif
 
-#ifdef MATH_SSE
-	float4(__m128 vec):v(vec) {}
+#ifdef MATH_SIMD
+	float4(simd4f vec):v(vec) {}
 
 	///\todo All the _SSE() functions will be deleted in favor of C SSE API.
-	__m128 Swizzled_SSE(int i, int j, int k, int l) const;
-	__m128 LengthSq3_SSE() const;
-	__m128 Length3_SSE() const;
-	__m128 LengthSq4_SSE() const;
-	__m128 Length4_SSE() const;
-	__m128 Normalize4_SSE();
+	simd4f Swizzled_SSE(int i, int j, int k, int l) const;
+	simd4f LengthSq3_SSE() const;
+	simd4f Length3_SSE() const;
+	simd4f LengthSq4_SSE() const;
+	simd4f Length4_SSE() const;
+	simd4f Normalize4_SSE();
 	void Normalize3_Fast_SSE();
 	void Normalize4_Fast_SSE();
 	void NormalizeW_SSE();
-	__m128 SumOfElements_SSE() const;
+	simd4f SumOfElements_SSE() const;
 
-	inline float4 &operator =(__m128 vec) { v = vec; return *this; }
+	inline float4 &operator =(simd4f vec) { v = vec; return *this; }
 
-	inline operator __m128() const { return v; }
-#elif defined(MATH_NEON)
-	float4(float32x4_t vec):v(vec) {}
-	inline float4 &operator =(float32x4_t vec) { v = vec; return *this; }
-	inline operator float32x4_t() const { return v; }
+	inline operator simd4f() const { return v; }
 #endif
 };
 

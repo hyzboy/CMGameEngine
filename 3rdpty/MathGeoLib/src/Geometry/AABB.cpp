@@ -31,6 +31,7 @@
 #include "Polygon.h"
 #include "Polyhedron.h"
 #include "Sphere.h"
+#include "PBVolume.h"
 #include "../Math/float2.h"
 #include "../Math/float3x3.h"
 #include "../Math/float3x4.h"
@@ -84,7 +85,7 @@ void AABB::SetFrom(const OBB &obb)
 
 void AABB::SetFrom(const Sphere &s)
 {
-	vec d = DIR_VEC(float3::FromScalar(s.r));
+	vec d = DIR_VEC_SCALAR(s.r);
 	minPoint = s.pos - d;
 	maxPoint = s.pos + d;
 }
@@ -97,6 +98,15 @@ void AABB::SetFrom(const vec *pointArray, int numPoints)
 		return;
 	for(int i = 0; i < numPoints; ++i)
 		Enclose(pointArray[i]);
+}
+
+PBVolume<6> AABB::ToPBVolume() const
+{
+	PBVolume<6> pbVolume;
+	for(int i = 0; i < 6; ++i)
+		pbVolume.p[i] = FacePlane(i);
+
+	return pbVolume;
 }
 
 Polyhedron AABB::ToPolyhedron() const
@@ -181,7 +191,7 @@ vec AABB::PointInside(float x, float y, float z) const
 	assume(0.f <= z && z <= 1.f);
 
 	vec d = maxPoint - minPoint;
-	return minPoint + d.Mul(POINT_VEC(float3(x, y, z)));
+	return minPoint + d.Mul(POINT_VEC(x, y, z));
 }
 
 LineSegment AABB::Edge(int edgeIndex) const
@@ -205,18 +215,18 @@ LineSegment AABB::Edge(int edgeIndex) const
 		case 11: return LineSegment(CornerPoint(6), CornerPoint(7));
 		*/
 		// Force-optimize to avoid calling to CornerPoint for another switch-case statement.
-		case 0: return LineSegment(POINT_VEC(minPoint.x, minPoint.y, minPoint.z), POINT_VEC(minPoint.x, minPoint.y, maxPoint.z));
-		case 1: return LineSegment(POINT_VEC(minPoint.x, minPoint.y, minPoint.z), POINT_VEC(minPoint.x, maxPoint.y, minPoint.z));
-		case 2: return LineSegment(POINT_VEC(minPoint.x, minPoint.y, minPoint.z), POINT_VEC(maxPoint.x, minPoint.y, minPoint.z));
+		case 0: return LineSegment(minPoint, POINT_VEC(minPoint.x, minPoint.y, maxPoint.z));
+		case 1: return LineSegment(minPoint, POINT_VEC(minPoint.x, maxPoint.y, minPoint.z));
+		case 2: return LineSegment(minPoint, POINT_VEC(maxPoint.x, minPoint.y, minPoint.z));
 		case 3: return LineSegment(POINT_VEC(minPoint.x, minPoint.y, maxPoint.z), POINT_VEC(minPoint.x, maxPoint.y, maxPoint.z));
 		case 4: return LineSegment(POINT_VEC(minPoint.x, minPoint.y, maxPoint.z), POINT_VEC(maxPoint.x, minPoint.y, maxPoint.z));
 		case 5: return LineSegment(POINT_VEC(minPoint.x, maxPoint.y, minPoint.z), POINT_VEC(minPoint.x, maxPoint.y, maxPoint.z));
 		case 6: return LineSegment(POINT_VEC(minPoint.x, maxPoint.y, minPoint.z), POINT_VEC(maxPoint.x, maxPoint.y, minPoint.z));
-		case 7: return LineSegment(POINT_VEC(minPoint.x, maxPoint.y, maxPoint.z), POINT_VEC(maxPoint.x, maxPoint.y, maxPoint.z));
+		case 7: return LineSegment(POINT_VEC(minPoint.x, maxPoint.y, maxPoint.z), maxPoint);
 		case 8: return LineSegment(POINT_VEC(maxPoint.x, minPoint.y, minPoint.z), POINT_VEC(maxPoint.x, minPoint.y, maxPoint.z));
 		case 9: return LineSegment(POINT_VEC(maxPoint.x, minPoint.y, minPoint.z), POINT_VEC(maxPoint.x, maxPoint.y, minPoint.z));
-		case 10: return LineSegment(POINT_VEC(maxPoint.x, minPoint.y, maxPoint.z), POINT_VEC(maxPoint.x, maxPoint.y, maxPoint.z));
-		case 11: return LineSegment(POINT_VEC(maxPoint.x, maxPoint.y, minPoint.z), POINT_VEC(maxPoint.x, maxPoint.y, maxPoint.z));
+		case 10: return LineSegment(POINT_VEC(maxPoint.x, minPoint.y, maxPoint.z), maxPoint);
+		case 11: return LineSegment(POINT_VEC(maxPoint.x, maxPoint.y, minPoint.z), maxPoint);
 	}
 }
 
@@ -226,24 +236,22 @@ vec AABB::CornerPoint(int cornerIndex) const
 	switch(cornerIndex)
 	{
 		default: // For release builds where assume() is disabled, return always the first option if out-of-bounds.
-		case 0: return POINT_VEC(float3(minPoint.x, minPoint.y, minPoint.z));
-		case 1: return POINT_VEC(float3(minPoint.x, minPoint.y, maxPoint.z));
-		case 2: return POINT_VEC(float3(minPoint.x, maxPoint.y, minPoint.z));
-		case 3: return POINT_VEC(float3(minPoint.x, maxPoint.y, maxPoint.z));
-		case 4: return POINT_VEC(float3(maxPoint.x, minPoint.y, minPoint.z));
-		case 5: return POINT_VEC(float3(maxPoint.x, minPoint.y, maxPoint.z));
-		case 6: return POINT_VEC(float3(maxPoint.x, maxPoint.y, minPoint.z));
-		case 7: return POINT_VEC(float3(maxPoint.x, maxPoint.y, maxPoint.z));
+		case 0: return minPoint;
+		case 1: return POINT_VEC(minPoint.x, minPoint.y, maxPoint.z);
+		case 2: return POINT_VEC(minPoint.x, maxPoint.y, minPoint.z);
+		case 3: return POINT_VEC(minPoint.x, maxPoint.y, maxPoint.z);
+		case 4: return POINT_VEC(maxPoint.x, minPoint.y, minPoint.z);
+		case 5: return POINT_VEC(maxPoint.x, minPoint.y, maxPoint.z);
+		case 6: return POINT_VEC(maxPoint.x, maxPoint.y, minPoint.z);
+		case 7: return maxPoint;
 	}
 }
 
 vec AABB::ExtremePoint(const vec &direction) const
 {
-	float3 pt;
-	pt.x = (direction.x >= 0.f ? maxPoint.x : minPoint.x);
-	pt.y = (direction.y >= 0.f ? maxPoint.y : minPoint.y);
-	pt.z = (direction.z >= 0.f ? maxPoint.z : minPoint.z);
-	return POINT_VEC(pt);
+	return POINT_VEC((direction.x >= 0.f ? maxPoint.x : minPoint.x),
+	                 (direction.y >= 0.f ? maxPoint.y : minPoint.y),
+	                 (direction.z >= 0.f ? maxPoint.z : minPoint.z));
 }
 
 vec AABB::ExtremePoint(const vec &direction, float &projectionDistance) const
@@ -262,20 +270,20 @@ vec AABB::PointOnEdge(int edgeIndex, float u) const
 	switch(edgeIndex)
 	{
 	default: // For release builds where assume() is disabled, return always the first option if out-of-bounds.
-	case 0: return POINT_VEC(float3(minPoint.x, minPoint.y, minPoint.z + u * d.z));
-	case 1: return POINT_VEC(float3(minPoint.x, maxPoint.y, minPoint.z + u * d.z));
-	case 2: return POINT_VEC(float3(maxPoint.x, minPoint.y, minPoint.z + u * d.z));
-	case 3: return POINT_VEC(float3(maxPoint.x, maxPoint.y, minPoint.z + u * d.z));
+	case 0: return POINT_VEC(minPoint.x, minPoint.y, minPoint.z + u * d.z);
+	case 1: return POINT_VEC(minPoint.x, maxPoint.y, minPoint.z + u * d.z);
+	case 2: return POINT_VEC(maxPoint.x, minPoint.y, minPoint.z + u * d.z);
+	case 3: return POINT_VEC(maxPoint.x, maxPoint.y, minPoint.z + u * d.z);
 
-	case 4: return POINT_VEC(float3(minPoint.x, minPoint.y + u * d.y, minPoint.z));
-	case 5: return POINT_VEC(float3(maxPoint.x, minPoint.y + u * d.y, minPoint.z));
-	case 6: return POINT_VEC(float3(minPoint.x, minPoint.y + u * d.y, maxPoint.z));
-	case 7: return POINT_VEC(float3(maxPoint.x, minPoint.y + u * d.y, maxPoint.z));
+	case 4: return POINT_VEC(minPoint.x, minPoint.y + u * d.y, minPoint.z);
+	case 5: return POINT_VEC(maxPoint.x, minPoint.y + u * d.y, minPoint.z);
+	case 6: return POINT_VEC(minPoint.x, minPoint.y + u * d.y, maxPoint.z);
+	case 7: return POINT_VEC(maxPoint.x, minPoint.y + u * d.y, maxPoint.z);
 
-	case 8: return POINT_VEC(float3(minPoint.x + u * d.x, minPoint.y, minPoint.z));
-	case 9: return POINT_VEC(float3(minPoint.x + u * d.x, minPoint.y, maxPoint.z));
-	case 10: return POINT_VEC(float3(minPoint.x + u * d.x, maxPoint.y, minPoint.z));
-	case 11: return POINT_VEC(float3(minPoint.x + u * d.x, maxPoint.y, maxPoint.z));
+	case 8: return POINT_VEC(minPoint.x + u * d.x, minPoint.y, minPoint.z);
+	case 9: return POINT_VEC(minPoint.x + u * d.x, minPoint.y, maxPoint.z);
+	case 10: return POINT_VEC(minPoint.x + u * d.x, maxPoint.y, minPoint.z);
+	case 11: return POINT_VEC(minPoint.x + u * d.x, maxPoint.y, maxPoint.z);
 	}
 }
 
@@ -287,12 +295,12 @@ vec AABB::FaceCenterPoint(int faceIndex) const
 	switch(faceIndex)
 	{
 	default: // For release builds where assume() is disabled, return always the first option if out-of-bounds.
-	case 0: return POINT_VEC(float3(minPoint.x, center.y, center.z));
-	case 1: return POINT_VEC(float3(maxPoint.x, center.y, center.z));
-	case 2: return POINT_VEC(float3(center.x, minPoint.y, center.z));
-	case 3: return POINT_VEC(float3(center.x, maxPoint.y, center.z));
-	case 4: return POINT_VEC(float3(center.x, center.y, minPoint.z));
-	case 5: return POINT_VEC(float3(center.x, center.y, maxPoint.z));
+	case 0: return POINT_VEC(minPoint.x, center.y, center.z);
+	case 1: return POINT_VEC(maxPoint.x, center.y, center.z);
+	case 2: return POINT_VEC(center.x, minPoint.y, center.z);
+	case 3: return POINT_VEC(center.x, maxPoint.y, center.z);
+	case 4: return POINT_VEC(center.x, center.y, minPoint.z);
+	case 5: return POINT_VEC(center.x, center.y, maxPoint.z);
 	}
 }
 
@@ -306,12 +314,12 @@ vec AABB::FacePoint(int faceIndex, float u, float v) const
 	switch(faceIndex)
 	{
 	default: // For release builds where assume() is disabled, return always the first option if out-of-bounds.
-	case 0: return POINT_VEC(float3(minPoint.x, minPoint.y + u * d.y, minPoint.z + v * d.z));
-	case 1: return POINT_VEC(float3(maxPoint.x, minPoint.y + u * d.y, minPoint.z + v * d.z));
-	case 2: return POINT_VEC(float3(minPoint.x + u * d.x, minPoint.y, minPoint.z + v * d.z));
-	case 3: return POINT_VEC(float3(minPoint.x + u * d.x, maxPoint.y, minPoint.z + v * d.z));
-	case 4: return POINT_VEC(float3(minPoint.x + u * d.x, minPoint.y + v * d.y, minPoint.z));
-	case 5: return POINT_VEC(float3(minPoint.x + u * d.x, minPoint.y + v * d.y, maxPoint.z));
+	case 0: return POINT_VEC(minPoint.x, minPoint.y + u * d.y, minPoint.z + v * d.z);
+	case 1: return POINT_VEC(maxPoint.x, minPoint.y + u * d.y, minPoint.z + v * d.z);
+	case 2: return POINT_VEC(minPoint.x + u * d.x, minPoint.y, minPoint.z + v * d.z);
+	case 3: return POINT_VEC(minPoint.x + u * d.x, maxPoint.y, minPoint.z + v * d.z);
+	case 4: return POINT_VEC(minPoint.x + u * d.x, minPoint.y + v * d.y, minPoint.z);
+	case 5: return POINT_VEC(minPoint.x + u * d.x, minPoint.y + v * d.y, maxPoint.z);
 	}
 }
 
@@ -321,12 +329,12 @@ vec AABB::FaceNormal(int faceIndex) const
 	switch(faceIndex)
 	{
 	default: // For release builds where assume() is disabled, return always the first option if out-of-bounds.
-	case 0: return DIR_VEC(float3(-1,  0,  0));
-	case 1: return DIR_VEC(float3( 1,  0,  0));
-	case 2: return DIR_VEC(float3( 0, -1,  0));
-	case 3: return DIR_VEC(float3( 0,  1,  0));
-	case 4: return DIR_VEC(float3( 0,  0, -1));
-	case 5: return DIR_VEC(float3( 0,  0,  1));
+	case 0: return DIR_VEC(-1,  0,  0);
+	case 1: return DIR_VEC( 1,  0,  0);
+	case 2: return DIR_VEC( 0, -1,  0);
+	case 3: return DIR_VEC( 0,  1,  0);
+	case 4: return DIR_VEC( 0,  0, -1);
+	case 5: return DIR_VEC( 0,  0,  1);
 	}
 }
 
@@ -467,30 +475,30 @@ void AABBTransformAsAABB(AABB &aabb, Matrix &m)
 	vec newCenter = m.MulPos(centerPoint);
 
 	// The following is equal to taking the absolute value of the whole matrix m.
-	vec newDir = DIR_VEC(float3(ABSDOT3(m[0], halfSize), ABSDOT3(m[1], halfSize), ABSDOT3(m[2], halfSize)));
+	vec newDir = DIR_VEC(ABSDOT3(m[0], halfSize), ABSDOT3(m[1], halfSize), ABSDOT3(m[2], halfSize));
 	aabb.minPoint = newCenter - newDir;
 	aabb.maxPoint = newCenter + newDir;
 }
 
-#ifdef MATH_SSE
+#ifdef MATH_SIMD
 void AABBTransformAsAABB_SIMD(AABB &aabb, const float4x4 &m)
 {
-	simd4f minPt = aabb.MinPoint_SSE();
-	simd4f maxPt = aabb.MaxPoint_SSE();
-	simd4f centerPoint = _mm_mul_ps(_mm_add_ps(minPt, maxPt), _mm_set1_ps(0.5f));
-	simd4f halfSize = _mm_sub_ps(centerPoint, minPt);
+	simd4f minPt = aabb.minPoint;
+	simd4f maxPt = aabb.maxPoint;
+	simd4f centerPoint = mul_ps(add_ps(minPt, maxPt), set1_ps(0.5f));
+	simd4f halfSize = sub_ps(centerPoint, minPt);
 	simd4f newCenter = mat4x4_mul_vec4(m.row, centerPoint);
 
-	simd4f x = abs_ps(_mm_mul_ps(m.row[0], halfSize));
-	simd4f y = abs_ps(_mm_mul_ps(m.row[1], halfSize));
-	simd4f z = abs_ps(_mm_mul_ps(m.row[2], halfSize));
-	simd4f w = _mm_setzero_ps();
+	simd4f x = abs_ps(mul_ps(m.row[0], halfSize));
+	simd4f y = abs_ps(mul_ps(m.row[1], halfSize));
+	simd4f z = abs_ps(mul_ps(m.row[2], halfSize));
+	simd4f w = zero_ps();
 	_MM_TRANSPOSE4_PS(x, y, z, w); // Contains 2x unpacklo's, 2x unpackhi's, 2x movelh's and 2x movehl's. (or 8 shuffles, depending on the compiler)
 
-	simd4f newDir = _mm_add_ps(_mm_add_ps(x, y), _mm_add_ps(z, w));
+	simd4f newDir = add_ps(add_ps(x, y), add_ps(z, w));
 
-	aabb.MinPoint_SSE() = _mm_sub_ps(newCenter, newDir);
-	aabb.MaxPoint_SSE() = _mm_add_ps(newCenter, newDir);
+	aabb.minPoint = sub_ps(newCenter, newDir);
+	aabb.maxPoint = add_ps(newCenter, newDir);
 }
 #endif
 
@@ -583,19 +591,53 @@ float AABB::Distance(const Sphere &sphere) const
 
 bool AABB::Contains(const vec &point) const
 {
+// Benchmarking this code is very difficult, since branch prediction makes the scalar version
+// look very good. In isolation the scalar version might be better, however when joined with
+// other SSE computation, the SIMD variants are probably more efficient because the data is
+// already "hot" in the registers. Therefore favoring the SSE version over the scalar version
+// when possible.
+
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+	// Benchmark 'AABBContains_positive': AABB::Contains(point) positive
+	//    Best: 2.048 nsecs / 3.5128 ticks, Avg: 2.241 nsecs, Worst: 4.277 nsecs
+	// Benchmark 'AABBContains_negative': AABB::Contains(point) negative
+	//    Best: 2.048 nsecs / 3.467 ticks, Avg: 2.115 nsecs, Worst: 4.156 nsecs
+	// Benchmark 'AABBContains_unpredictable': AABB::Contains(point) unpredictable
+	//    Best: 2.590 nsecs / 4.4106 ticks, Avg: 2.978 nsecs, Worst: 6.084 nsecs
+	simd4f a = cmplt_ps(point, minPoint);
+	simd4f b = cmpgt_ps(point, maxPoint);
+	a = or_ps(a, b);
+	return allzero_ps(a) != 0;
+#else
+	// Benchmark 'AABBContains_positive': AABB::Contains(point) positive
+	//    Best: 2.108 nsecs / 3.6022 ticks, Avg: 2.232 nsecs, Worst: 4.638 nsecs
+	// Benchmark 'AABBContains_negative': AABB::Contains(point) negative
+	//    Best: 1.988 nsecs / 3.361 ticks, Avg: 2.148 nsecs, Worst: 4.457 nsecs
+	// Benchmark 'AABBContains_unpredictable': AABB::Contains(point) unpredictable
+	//    Best: 3.554 nsecs / 6.0764 ticks, Avg: 3.803 nsecs, Worst: 6.264 nsecs
 	return minPoint.x <= point.x && point.x <= maxPoint.x &&
-		   minPoint.y <= point.y && point.y <= maxPoint.y &&
-		   minPoint.z <= point.z && point.z <= maxPoint.z;
+	       minPoint.y <= point.y && point.y <= maxPoint.y &&
+	       minPoint.z <= point.z && point.z <= maxPoint.z;
+#endif
 }
 
 bool AABB::Contains(const LineSegment &lineSegment) const
 {
-	return Contains(lineSegment.a) && Contains(lineSegment.b);
+	return Contains(Min(lineSegment.a, lineSegment.b), Max(lineSegment.a, lineSegment.b));
 }
 
-bool AABB::Contains(const AABB &aabb) const
+bool AABB::Contains(const vec &aabbMinPoint, const vec &aabbMaxPoint) const
 {
-	return Contains(aabb.minPoint) && Contains(aabb.maxPoint);
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+	simd4f a = cmplt_ps(aabbMinPoint, minPoint);
+	simd4f b = cmpgt_ps(aabbMaxPoint, maxPoint);
+	a = or_ps(a, b);
+	return allzero_ps(a) != 0;
+#else
+	return minPoint.x <= aabbMinPoint.x && maxPoint.x >= aabbMaxPoint.x &&
+	       minPoint.y <= aabbMinPoint.y && maxPoint.y >= aabbMaxPoint.y &&
+	       minPoint.z <= aabbMinPoint.z && maxPoint.z >= aabbMaxPoint.z;
+#endif
 }
 
 bool AABB::Contains(const OBB &obb) const
@@ -605,8 +647,7 @@ bool AABB::Contains(const OBB &obb) const
 
 bool AABB::Contains(const Sphere &sphere) const
 {
-	///@todo Optimize.
-	return Contains(sphere.MinimalEnclosingAABB());
+	return Contains(sphere.pos - DIR_VEC_SCALAR(sphere.r), sphere.pos + DIR_VEC_SCALAR(sphere.r));
 }
 
 bool AABB::Contains(const Capsule &capsule) const
@@ -616,7 +657,7 @@ bool AABB::Contains(const Capsule &capsule) const
 
 bool AABB::Contains(const Triangle &triangle) const
 {
-	return Contains(triangle.a) && Contains(triangle.b) && Contains(triangle.c);
+	return Contains(triangle.BoundingAABB());
 }
 
 bool AABB::Contains(const Polygon &polygon) const
@@ -794,27 +835,27 @@ bool AABB::IntersectLineAABB_SSE(const float4 &rayPos, const float4 &rayDir, flo
 	return tNear < tFar;
 	*/
 
-	__m128 recipDir = _mm_rcp_ps(rayDir.v);
+	simd4f recipDir = rcp_ps(rayDir.v);
 	// Note: The above performs an approximate reciprocal (11 bits of precision).
 	// For a full precision reciprocal, perform a div:
-//	__m128 recipDir = _mm_div_ps(_mm_set1_ps(1.f), rayDir.v);
+//	simd4f recipDir = div_ps(set1_ps(1.f), rayDir.v);
 
-	__m128 t1 = _mm_mul_ps(_mm_sub_ps(MinPoint_SSE(), rayPos.v), recipDir);
-	__m128 t2 = _mm_mul_ps(_mm_sub_ps(MaxPoint_SSE(), rayPos.v), recipDir);
+	simd4f t1 = mul_ps(sub_ps(minPoint, rayPos.v), recipDir);
+	simd4f t2 = mul_ps(sub_ps(maxPoint, rayPos.v), recipDir);
 
-	__m128 nearD = _mm_min_ps(t1, t2); // [0 n3 n2 n1]
-	__m128 farD = _mm_max_ps(t1, t2);  // [0 f3 f2 f1]
+	simd4f nearD = min_ps(t1, t2); // [0 n3 n2 n1]
+	simd4f farD = max_ps(t1, t2);  // [0 f3 f2 f1]
 
 	// Check if the ray direction is parallel to any of the cardinal axes, and if so,
 	// mask those [near, far] ranges away from the hit test computations.
-	__m128 rayDirAbs = abs_ps(rayDir.v);
+	simd4f rayDirAbs = abs_ps(rayDir.v);
 
-	const __m128 epsilon = _mm_set1_ps(1e-4f);
+	const simd4f epsilon = set1_ps(1e-4f);
 	// zeroDirections[i] will be nonzero for each axis i the ray is parallel to.
-	__m128 zeroDirections = _mm_cmple_ps(rayDirAbs, epsilon);
+	simd4f zeroDirections = cmple_ps(rayDirAbs, epsilon);
 
-	const __m128 floatInf = _mm_set1_ps(FLOAT_INF);
-	const __m128 floatNegInf = _mm_set1_ps(-FLOAT_INF);
+	const simd4f floatInf = set1_ps(FLOAT_INF);
+	const simd4f floatNegInf = set1_ps(-FLOAT_INF);
 
 	// If the ray is parallel to one of the axes, replace the slab range for that axis
 	// with [-inf, inf] range instead. (which is a no-op in the comparisons below)
@@ -823,17 +864,17 @@ bool AABB::IntersectLineAABB_SSE(const float4 &rayPos, const float4 &rayDir, flo
 
 	// Next, we need to compute horizontally max(nearD[0], nearD[1], nearD[2]) and min(farD[0], farD[1], farD[2])
 	// to see if there is an overlap in the hit ranges.
-	__m128 v1 = _mm_shuffle_ps(nearD, farD, _MM_SHUFFLE(0, 0, 0, 0)); // [f1 f1 n1 n1]
-	__m128 v2 = _mm_shuffle_ps(nearD, farD, _MM_SHUFFLE(1, 1, 1, 1)); // [f2 f2 n2 n2]
-	__m128 v3 = _mm_shuffle_ps(nearD, farD, _MM_SHUFFLE(2, 2, 2, 2)); // [f3 f3 n3 n3]
-	nearD = _mm_max_ps(v1, _mm_max_ps(v2, v3));
-	farD = _mm_min_ps(v1, _mm_min_ps(v2, v3));
-	farD = _mm_shuffle_ps(farD, farD, _MM_SHUFFLE(3, 3, 3, 3)); // Unpack the result from high offset in the register.
-	nearD = _mm_max_ps(nearD, _mm_set_ss(tNear));
-	farD = _mm_min_ps(farD, _mm_set_ss(tFar));
+	simd4f v1 = _mm_shuffle_ps(nearD, farD, _MM_SHUFFLE(0, 0, 0, 0)); // [f1 f1 n1 n1]
+	simd4f v2 = _mm_shuffle_ps(nearD, farD, _MM_SHUFFLE(1, 1, 1, 1)); // [f2 f2 n2 n2]
+	simd4f v3 = _mm_shuffle_ps(nearD, farD, _MM_SHUFFLE(2, 2, 2, 2)); // [f3 f3 n3 n3]
+	nearD = max_ps(v1, max_ps(v2, v3));
+	farD = min_ps(v1, min_ps(v2, v3));
+	farD = wwww_ps(farD); // Unpack the result from high offset in the register.
+	nearD = max_ps(nearD, setx_ps(tNear));
+	farD = min_ps(farD, setx_ps(tFar));
 
 	// Finally, test if the ranges overlap.
-	__m128 rangeIntersects = _mm_cmple_ss(nearD, farD);
+	simd4f rangeIntersects = _mm_cmple_ss(nearD, farD);
 
 	// To store out out the interval of intersection, uncomment the following:
 	// These are disabled, since without these, the whole function runs without a single memory store,
@@ -844,19 +885,19 @@ bool AABB::IntersectLineAABB_SSE(const float4 &rayPos, const float4 &rayDir, flo
 
 	// To avoid false positives, need to have an additional rejection test for each cardinal axis the ray direction
 	// is parallel to.
-	__m128 out2 = _mm_cmplt_ps(rayPos.v, MinPoint_SSE());
-	__m128 out3 = _mm_cmpgt_ps(rayPos.v, MaxPoint_SSE());
-	out2 = _mm_or_ps(out2, out3);
-	zeroDirections = _mm_and_ps(zeroDirections, out2);
+	simd4f out2 = cmplt_ps(rayPos.v, minPoint);
+	simd4f out3 = cmpgt_ps(rayPos.v, maxPoint);
+	out2 = or_ps(out2, out3);
+	zeroDirections = and_ps(zeroDirections, out2);
 
-	__m128 yOut = _mm_shuffle_ps(zeroDirections, zeroDirections, _MM_SHUFFLE(1,1,1,1));
-	__m128 zOut = _mm_shuffle_ps(zeroDirections, zeroDirections, _MM_SHUFFLE(2,2,2,2));
+	simd4f yOut = yyyy_ps(zeroDirections);
+	simd4f zOut = zzzz_ps(zeroDirections);
 
-	zeroDirections = _mm_or_ps(_mm_or_ps(zeroDirections, yOut), zOut);
+	zeroDirections = or_ps(or_ps(zeroDirections, yOut), zOut);
 	// Intersection occurs if the slab ranges had positive overlap and if the test was not rejected by the ray being
 	// parallel to some cardinal axis.
-	__m128 intersects = _mm_andnot_ps(zeroDirections, rangeIntersects);
-	__m128 epsilonMasked = _mm_and_ps(epsilon, intersects);
+	simd4f intersects = andnot_ps(zeroDirections, rangeIntersects);
+	simd4f epsilonMasked = and_ps(epsilon, intersects);
 	return _mm_comieq_ss(epsilon, epsilonMasked) != 0;
 }
 #endif
@@ -902,6 +943,23 @@ bool AABB::Intersects(const Plane &plane) const
 
 bool AABB::Intersects(const AABB &aabb) const
 {
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE41)
+	// Benchmark 'AABBIntersectsAABB_positive': AABB::Intersects(AABB) positive
+	//    Best: 2.229 nsecs / 3.848 ticks, Avg: 2.409 nsecs, Worst: 4.457 nsecs
+	// Benchmark 'AABBIntersectsAABB_random': AABB::Intersects(AABB) random
+	//    Best: 3.072 nsecs / 5.2904 ticks, Avg: 3.262 nsecs, Worst: 5.301 nsecs
+
+	simd4f a = cmpge_ps(minPoint.v, aabb.maxPoint.v);
+	simd4f b = cmpge_ps(aabb.minPoint.v, maxPoint.v);
+	a = or_ps(a, b);
+	a = and_ps(a, set_ps_hex(0, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF)); // Mask off results from the W channel.
+	return _mm_testz_si128(_mm_castps_si128(a), _mm_castps_si128(a)) != 0;
+#else
+	// Benchmark 'AABBIntersectsAABB_positive': AABB::Intersects(AABB) positive
+	//    Best: 2.108 nsecs / 3.588 ticks, Avg: 2.310 nsecs, Worst: 5.481 nsecs
+	// Benchmark 'AABBIntersectsAABB_random': AABB::Intersects(AABB) random
+	//    Best: 7.529 nsecs / 12.8282 ticks, Avg: 8.892 nsecs, Worst: 16.323 nsecs
+
 	// If any of the cardinal X,Y,Z axes is a separating axis, then
 	// there is no intersection.
 	return minPoint.x < aabb.maxPoint.x &&
@@ -910,6 +968,7 @@ bool AABB::Intersects(const AABB &aabb) const
 	       aabb.minPoint.x < maxPoint.x &&
 	       aabb.minPoint.y < maxPoint.y &&
 	       aabb.minPoint.z < maxPoint.z;
+#endif
 }
 
 bool AABB::Intersects(const OBB &obb) const
@@ -956,11 +1015,16 @@ bool AABB::Intersects(const Polyhedron &polyhedron) const
 
 void AABB::ProjectToAxis(const vec &axis, float &dMin, float &dMax) const
 {
-	vec c = CenterPoint();
-	vec e = HalfDiagonal();
+	vec c = (minPoint + maxPoint) * 0.5f;
+	vec e = maxPoint - c;
 
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+	vec absAxis = axis.Abs();
+	float r = Abs(e.Dot(absAxis));
+#else
 	// Compute the projection interval radius of the AABB onto L(t) = aabb.center + t * plane.normal;
 	float r = Abs(e[0]*Abs(axis[0]) + e[1]*Abs(axis[1]) + e[2]*Abs(axis[2]));
+#endif
 	// Compute the distance of the box center from plane.
 	float s = axis.Dot(c);
 	dMin = s - r;
@@ -991,61 +1055,55 @@ void AABB::Enclose(const vec &point)
 
 void AABB::Enclose(const LineSegment &lineSegment)
 {
-	Enclose(lineSegment.a);
-	Enclose(lineSegment.b);
+	Enclose(Min(lineSegment.a, lineSegment.b), Max(lineSegment.a, lineSegment.b));
 }
 
-void AABB::Enclose(const AABB &aabb)
+void AABB::Enclose(const vec &aabbMinPoint, const vec &aabbMaxPoint)
 {
-	minPoint = Min(minPoint, aabb.minPoint);
-	maxPoint = Max(maxPoint, aabb.maxPoint);
+	minPoint = Min(minPoint, aabbMinPoint);
+	maxPoint = Max(maxPoint, aabbMaxPoint);
 }
 
 void AABB::Enclose(const OBB &obb)
 {
-	for(int i = 0; i < 8; ++i)
-		Enclose(obb.CornerPoint(i));
+	vec absAxis0 = obb.axis[0].Abs();
+	vec absAxis1 = obb.axis[1].Abs();
+	vec absAxis2 = obb.axis[2].Abs();
+	vec d = obb.r.x * absAxis0 + obb.r.y * absAxis1 + obb.r.z * absAxis2;
+	Enclose(obb.pos - d, obb.pos + d);
 }
 
 void AABB::Enclose(const Sphere &sphere)
 {
-	vec d = POINT_VEC_SCALAR(sphere.r);
-	Enclose(sphere.pos - d);
-	Enclose(sphere.pos + d);
+	vec d = DIR_VEC_SCALAR(sphere.r);
+	Enclose(sphere.pos - d, sphere.pos + d);
 }
 
 void AABB::Enclose(const Triangle &triangle)
 {
-	Enclose(triangle.a);
-	Enclose(triangle.b);
-	Enclose(triangle.c);
+	Enclose(Min(triangle.a, triangle.b, triangle.c), Max(triangle.a, triangle.b, triangle.c));
 }
 
 void AABB::Enclose(const Capsule &capsule)
 {
-	vec d = POINT_VEC_SCALAR(capsule.r);
-	Enclose(capsule.l.a - d);
-	Enclose(capsule.l.a + d);
-	Enclose(capsule.l.b - d);
-	Enclose(capsule.l.b + d);
+	vec d = DIR_VEC_SCALAR(capsule.r);
+	minPoint = Min(minPoint, Min(capsule.l.a, capsule.l.b) - d);
+	maxPoint = Max(maxPoint, Max(capsule.l.a, capsule.l.b) + d);
 }
 
 void AABB::Enclose(const Frustum &frustum)
 {
-	for(int i = 0; i < 8; ++i)
-		Enclose(frustum.CornerPoint(i));
+	Enclose(frustum.MinimalEnclosingAABB());
 }
 
 void AABB::Enclose(const Polygon &polygon)
 {
-	for(int i = 0; i < polygon.NumVertices(); ++i)
-		Enclose(polygon.Vertex(i));
+	Enclose(polygon.MinimalEnclosingAABB());
 }
 
 void AABB::Enclose(const Polyhedron &polyhedron)
 {
-	for(int i = 0; i < polyhedron.NumVertices(); ++i)
-		Enclose(polyhedron.Vertex(i));
+	Enclose(polyhedron.MinimalEnclosingAABB());
 }
 
 void AABB::Enclose(const vec *pointArray, int numPoints)

@@ -592,16 +592,6 @@ float3 float3x4::WorldZ() const
 	return Col(2);
 }
 
-float *float3x4::ptr()
-{
-	return &v[0][0];
-}
-
-const float *float3x4::ptr() const
-{
-	return &v[0][0];
-}
-
 void float3x4::SetRow(int row, float m_r0, float m_r1, float m_r2, float m_r3)
 {
 	assume(row >= 0);
@@ -652,13 +642,13 @@ void float3x4::SetRow(int row, const float *data)
 		return;
 #endif
 
-#ifdef MATH_SSE
+#ifdef MATH_SIMD
 
 #ifndef MATH_ENABLE_INSECURE_OPTIMIZATIONS
 	if (row < 0 || row >= Rows)
 		return; // Benign failure
 #endif
-	this->row[row] = _mm_loadu_ps(data); // Assume unaligned load, since we don't know if data is 16-byte-aligned.
+	this->row[row] = loadu_ps(data); // Assume unaligned load, since we don't know if data is 16-byte-aligned.
 #else
 	SetRow(row, data[0], data[1], data[2], data[3]);
 #endif
@@ -916,26 +906,35 @@ float float3x4::Determinant() const
 
 bool float3x4::Inverse(float epsilon)
 {
-	///\todo SSE.
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+	MARK_UNUSED(epsilon);
+	float det = mat3x4_inverse(row, row);
+	return MATH_NS::Abs(det) > 1e-5f;
+#else
 	float4x4 temp(*this); ///@todo It is possible optimize to avoid copying here by writing the inverse function specifically for float3x4.
 	bool success = temp.Inverse(epsilon);
 	*this = temp.Float3x4Part();
 	return success;
+#endif
 }
 
 float3x4 float3x4::Inverted() const
 {
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+	float3x4 copy;
+	mat4x4_inverse(row, copy.row);
+#else
 	float3x4 copy = *this;
 	copy.Inverse();
+#endif
 	return copy;
 }
 
 bool float3x4::InverseColOrthogonal()
 {
-	///\todo SSE.
-#ifdef MATH_ASSERT_CORRECTNESS
-	float3x4 orig = *this;
-#endif
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+	mat3x4_inverse_colorthogonal(row, row);
+#else
 	assume(IsColOrthogonal());
 	float s1 = float3(v[0][0], v[1][0], v[2][0]).LengthSq();
 	float s2 = float3(v[0][1], v[1][1], v[2][1]).LengthSq();
@@ -954,16 +953,17 @@ bool float3x4::InverseColOrthogonal()
 	v[2][0] *= s3; v[2][1] *= s3; v[2][2] *= s3;
 
 	SetTranslatePart(TransformDir(-v[0][3], -v[1][3], -v[2][3]));
-
-	mathassert(!orig.IsInvertible()|| (orig * *this).IsIdentity());
 	mathassert(IsRowOrthogonal());
-
+#endif
 	return true;
 }
 
 bool float3x4::InverseOrthogonalUniformScale()
 {
-	///\todo SSE.
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+	mat3x4_inverse_orthogonal_uniformscale(row, row);
+	return true; ///\todo The return value is difficult here with SSE, figure out how to treat that.
+#else
 	assume(IsColOrthogonal(1e-3f));
 	assume(HasUniformScale());
 	Swap(v[0][1], v[1][0]);
@@ -981,6 +981,7 @@ bool float3x4::InverseOrthogonalUniformScale()
 	SetTranslatePart(TransformDir(-v[0][3], -v[1][3], -v[2][3]));
 
 	return true;
+#endif
 }
 
 void float3x4::InverseOrthonormal()
@@ -1103,7 +1104,7 @@ void float3x4::RemoveScale()
 float3 float3x4::TransformPos(const float3 &pointVector) const
 {
 #ifdef MATH_SSE
-	return mat3x4_mul_vec(row, _mm_set_ps(1.f, pointVector.z, pointVector.y, pointVector.x));
+	return mat3x4_mul_vec(row, set_ps(1.f, pointVector.z, pointVector.y, pointVector.x));
 #else
 	return TransformPos(pointVector.x, pointVector.y, pointVector.z);
 #endif
@@ -1112,7 +1113,7 @@ float3 float3x4::TransformPos(const float3 &pointVector) const
 float3 float3x4::TransformPos(float x, float y, float z) const
 {
 #ifdef MATH_SSE
-	return mat3x4_mul_vec(row, _mm_set_ps(1, z, y, x));
+	return mat3x4_mul_vec(row, set_ps(1, z, y, x));
 #else
 	return float3(DOT3_xyz(v[0], x,y,z) + v[0][3],
 				  DOT3_xyz(v[1], x,y,z) + v[1][3],
@@ -1123,7 +1124,7 @@ float3 float3x4::TransformPos(float x, float y, float z) const
 float3 float3x4::TransformDir(const float3 &directionVector) const
 {
 #ifdef MATH_SSE
-	return mat3x4_mul_vec(row, _mm_set_ps(0.f, directionVector.z, directionVector.y, directionVector.x));
+	return mat3x4_mul_vec(row, set_ps(0.f, directionVector.z, directionVector.y, directionVector.x));
 #else
 	return TransformDir(directionVector.x, directionVector.y, directionVector.z);
 #endif
@@ -1132,7 +1133,7 @@ float3 float3x4::TransformDir(const float3 &directionVector) const
 float3 float3x4::TransformDir(float x, float y, float z) const
 {
 #ifdef MATH_SSE
-	return mat3x4_mul_vec(row, _mm_set_ps(0, z, y, x));
+	return mat3x4_mul_vec(row, set_ps(0, z, y, x));
 #else
 	return float3(DOT3_xyz(v[0], x,y,z),
 				  DOT3_xyz(v[1], x,y,z),
@@ -1580,10 +1581,22 @@ std::string float3x4::ToString() const
 
 std::string float3x4::SerializeToString() const
 {
-	char str[256];
-	sprintf(str, "%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g", v[0][0], v[0][1], v[0][2], v[0][3],
-		v[1][0], v[1][1], v[1][2], v[1][3], v[2][0], v[2][1], v[2][2], v[2][3]);
-	return std::string(str);
+	char str[512];
+	char *s = SerializeFloat(v[0][0], str); *s = ','; ++s;
+	s = SerializeFloat(v[0][1], s); *s = ','; ++s;
+	s = SerializeFloat(v[0][2], s); *s = ','; ++s;
+	s = SerializeFloat(v[0][3], s); *s = ','; ++s;
+	s = SerializeFloat(v[1][0], s); *s = ','; ++s;
+	s = SerializeFloat(v[1][1], s); *s = ','; ++s;
+	s = SerializeFloat(v[1][2], s); *s = ','; ++s;
+	s = SerializeFloat(v[1][3], s); *s = ','; ++s;
+	s = SerializeFloat(v[2][0], s); *s = ','; ++s;
+	s = SerializeFloat(v[2][1], s); *s = ','; ++s;
+	s = SerializeFloat(v[2][2], s); *s = ','; ++s;
+	s = SerializeFloat(v[2][3], s);
+	assert(s+1 - str < 512);
+	MARK_UNUSED(s);
+	return str;
 }
 
 std::string float3x4::ToString2() const

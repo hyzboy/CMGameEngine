@@ -41,71 +41,81 @@
 MATH_BEGIN_NAMESPACE
 
 Quat::Quat(const float *data)
-:x(data[0]),
-y(data[1]),
-z(data[2]),
-w(data[3])
 {
-}
-
-Quat::Quat(const float3x3 &rotationMatrix)
-{
-	Set(rotationMatrix);
-}
-
-Quat::Quat(const float3x4 &rotationMatrix)
-{
-	Set(rotationMatrix);
-}
-
-Quat::Quat(const float4x4 &rotationMatrix)
-{
-	Set(rotationMatrix);
+	assume(data);
+#ifndef MATH_ENABLE_INSECURE_OPTIMIZATIONS
+	if (!data)
+		return;
+#endif
+#if defined(MATH_AUTOMATIC_SSE)
+	q = loadu_ps(data);
+#else
+	x = data[0];
+	y = data[1];
+	z = data[2];
+	w = data[3];
+#endif
 }
 
 Quat::Quat(float x_, float y_, float z_, float w_)
+#if !defined(MATH_AUTOMATIC_SSE)
 :x(x_), y(y_), z(z_), w(w_)
+#endif
 {
-}
-
-Quat::Quat(const float3 &rotationAxis, float rotationAngle)
-{
-	SetFromAxisAngle(rotationAxis, rotationAngle);
-}
-
-float3 Quat::WorldX() const
-{
-#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
-	return float4(quat_transform_vec4(q, float4::unitX)).xyz();
-#else
-	return this->Transform(1.f, 0.f, 0.f);
+#if defined(MATH_AUTOMATIC_SSE)
+	q = set_ps(w_, z_, y_, x_);
 #endif
 }
 
-float3 Quat::WorldY() const
+vec Quat::WorldX() const
 {
 #if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
-	return float4(quat_transform_vec4(q, float4::unitY)).xyz();
+	return FLOAT4_TO_DIR(quat_transform_vec4(q, float4::unitX));
 #else
-	return this->Transform(0.f, 1.f, 0.f);
+	return DIR_VEC(this->Transform(1.f, 0.f, 0.f));
 #endif
 }
 
-float3 Quat::WorldZ() const
+vec Quat::WorldY() const
 {
 #if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
-	return float4(quat_transform_vec4(q, float4::unitZ)).xyz();
+	return FLOAT4_TO_DIR(quat_transform_vec4(q, float4::unitY));
 #else
-	return this->Transform(0.f, 0.f, 1.f);
+	return DIR_VEC(this->Transform(0.f, 1.f, 0.f));
 #endif
 }
 
-float3 Quat::Axis() const
+vec Quat::WorldZ() const
 {
-	float3 axis;
-	float angle;
-	ToAxisAngle(axis, angle);
-	return axis;
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+	return FLOAT4_TO_DIR(quat_transform_vec4(q, float4::unitZ));
+#else
+	return DIR_VEC(this->Transform(0.f, 0.f, 1.f));
+#endif
+}
+
+vec Quat::Axis() const
+{
+	assume2(this->IsNormalized(), *this, this->Length());
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+	// Best: 6.145 nsecs / 16.88 ticks, Avg: 6.367 nsecs, Worst: 6.529 nsecs
+	assume2(this->IsNormalized(), *this, this->Length());
+	simd4f cosAngle = wwww_ps(q);
+	simd4f rcpSinAngle = rsqrt_ps(sub_ps(set1_ps(1.f), mul_ps(cosAngle, cosAngle)));
+	simd4f a = mul_ps(q, rcpSinAngle);
+
+	// Set the w component to zero.
+	simd4f highPart = _mm_unpackhi_ps(a, zero_ps()); // [_ _ 0 z]
+	a = _mm_movelh_ps(a, highPart); // [0 z y x]
+	return FLOAT4_TO_DIR(a);
+#else
+	// Best: 6.529 nsecs / 18.152 ticks, Avg: 6.851 nsecs, Worst: 8.065 nsecs
+
+	// Convert cos to sin via the identity sin^2 + cos^2 = 1, and fuse reciprocal and square root to the same instruction,
+	// since we are about to divide by it.
+	float rcpSinAngle = RSqrt(1.f - w*w);
+	return DIR_VEC(x, y, z) * rcpSinAngle;
+#endif
 }
 
 float Quat::Angle() const
@@ -145,7 +155,7 @@ float Quat::Normalize()
 #ifdef MATH_AUTOMATIC_SSE
 	simd4f lenSq = vec4_length_sq_ps(q);
 	simd4f len = vec4_rsqrt(lenSq);
-	simd4f isZero = _mm_cmplt_ps(lenSq, simd4fEpsilon); // Was the length zero?
+	simd4f isZero = cmplt_ps(lenSq, simd4fEpsilon); // Was the length zero?
 	simd4f normalized = mul_ps(q, len); // Normalize.
 	q = cmov_ps(normalized, float4::unitX.v, isZero); // If length == 0, output the vector (1,0,0,0).
 	return s4f_x(len);
@@ -203,16 +213,6 @@ bool Quat::BitEquals(const Quat &other) const
 		ReinterpretAsU32(w) == ReinterpretAsU32(other.w);
 }
 
-float *Quat::ptr()
-{
-	return &x;
-}
-
-const float *Quat::ptr() const
-{
-	return &x;
-}
-
 void Quat::Inverse()
 {
 	assume(IsNormalized());
@@ -255,10 +255,9 @@ Quat MUST_USE_RESULT Quat::Conjugated() const
 
 float3 MUST_USE_RESULT Quat::Transform(const float3 &vec) const
 {
-	assume(this->IsNormalized());
+	assume2(this->IsNormalized(), *this, this->LengthSq());
 #if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
-	///\todo Check the generation of temporaries here!
-	return float4(quat_transform_vec4(q, float4(vec,0.f).v)).xyz();
+	return float4(quat_transform_vec4(q, load_vec3(vec.ptr(), 0.f))).xyz();
 #else
 	///\todo Optimize/benchmark the scalar path not to generate a matrix!
 	float3x3 mat = this->ToFloat3x3();
@@ -269,8 +268,7 @@ float3 MUST_USE_RESULT Quat::Transform(const float3 &vec) const
 float3 MUST_USE_RESULT Quat::Transform(float x, float y, float z) const
 {
 #if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
-	///\todo Check the generation of temporaries here!
-	return float4(quat_transform_vec4(q, float4(x,y,z,0.f).v)).xyz();
+	return float4(quat_transform_vec4(q, set_ps(0.f, z, y, x))).xyz();
 #else
 	return Transform(float3(x, y, z));
 #endif
@@ -298,11 +296,6 @@ Quat MUST_USE_RESULT Quat::Lerp(const Quat &b, float t) const
 #endif
 }
 
-Quat MUST_USE_RESULT Quat::Lerp(const Quat &a, const Quat &b, float t)
-{
-	return a.Lerp(b, t);
-}
-
 /** Implementation based on the math in the book Watt, Policarpo. 3D Games: Real-time rendering and Software Technology, pp. 383-386. */
 Quat MUST_USE_RESULT Quat::Slerp(const Quat &q2, float t) const
 {
@@ -327,11 +320,11 @@ Quat MUST_USE_RESULT Quat::Slerp(const Quat &q2, float t) const
 
 		float angleT = t*angle;
 
-#ifdef MATH_AUTOMATIC_SSE
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE2)
 		// Compute three sines in one go with SSE.
 		simd4f s = set_ps(0.f, angleT, angle - angleT, angle);
 		s = sin_ps(s);
-		simd4f denom = shuffle1_ps(s, _MM_SHUFFLE(0, 0, 0, 0));
+		simd4f denom = xxxx_ps(s);
 		s = div_ps(s, denom);
 		a = s4f_y(s);
 		b = s4f_z(s);
@@ -349,21 +342,6 @@ Quat MUST_USE_RESULT Quat::Slerp(const Quat &q2, float t) const
 	}
 	
 	return (*this * (a * sign) + q2 * b).Normalized();
-}
-
-Quat MUST_USE_RESULT Quat::Slerp(const Quat &a, const Quat &b, float t)
-{
-	return a.Slerp(b, t);
-}
-
-Quat Lerp(const Quat &a, const Quat &b, float t)
-{
-	return a.Lerp(b, t);
-}
-
-Quat Slerp(const Quat &a, const Quat &b, float t)
-{
-	return a.Slerp(b, t);
 }
 
 float3 MUST_USE_RESULT Quat::SlerpVector(const float3 &from, const float3 &to, float t)
@@ -398,7 +376,7 @@ float MUST_USE_RESULT Quat::AngleBetween(const Quat &target) const
 	return q.Angle();
 }
 
-float3 MUST_USE_RESULT Quat::AxisFromTo(const Quat &target) const
+vec MUST_USE_RESULT Quat::AxisFromTo(const Quat &target) const
 {
 	assume(this->IsInvertible());
 	Quat q = target / *this;
@@ -407,32 +385,75 @@ float3 MUST_USE_RESULT Quat::AxisFromTo(const Quat &target) const
 
 void Quat::ToAxisAngle(float3 &axis, float &angle) const
 {
-	angle = Acos(w) * 2.f;
-	float sinz = Sin(angle * 0.5f);
-	if (MATH_NS::Abs(sinz) > 1e-4f)
-	{
-		sinz = 1.f / sinz;
-		axis = float3(x * sinz, y * sinz, z * sinz);
-	}
-	else
-	{
-		// The quaternion does not produce any rotation. Still, explicitly
-		// set the axis so that the user gets a valid normalized vector back.
-		angle = 0.f;
-		axis = float3(1.f, 0.f, 0.f);
-	}
+	// Best: 36.868 nsecs / 98.752 ticks, Avg: 37.095 nsecs, Worst: 37.636 nsecs
+	assume2(this->IsNormalized(), *this, this->Length());
+	float halfAngle = Acos(w);
+	angle = halfAngle * 2.f;
+	// Convert cos to sin via the identity sin^2 + cos^2 = 1, and fuse reciprocal and square root to the same instruction,
+	// since we are about to divide by it.
+	float rcpSinAngle = RSqrt(1.f - w*w);
+	axis.x = x * rcpSinAngle;
+	axis.y = y * rcpSinAngle;
+	axis.z = z * rcpSinAngle;
+}
+
+void Quat::ToAxisAngle(float4 &axis, float &angle) const
+{
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+	// Best: 35.332 nsecs / 94.328 ticks, Avg: 35.870 nsecs, Worst: 57.607 nsecs
+	assume2(this->IsNormalized(), *this, this->Length());
+	simd4f cosAngle = wwww_ps(q);
+	simd4f rcpSinAngle = rsqrt_ps(sub_ps(set1_ps(1.f), mul_ps(cosAngle, cosAngle)));
+	angle = Acos(s4f_x(cosAngle)) * 2.f;
+	simd4f a = mul_ps(q, rcpSinAngle);
+
+	// Set the w component to zero.
+	simd4f highPart = _mm_unpackhi_ps(a, zero_ps()); // [_ _ 0 z]
+	axis.v = _mm_movelh_ps(a, highPart); // [0 z y x]
+#else
+	// Best: 85.258 nsecs / 227.656 ticks, Avg: 85.492 nsecs, Worst: 86.410 nsecs
+	ToAxisAngle(reinterpret_cast<float3&>(axis), angle);
+	axis.w = 0.f;
+#endif
 }
 
 void Quat::SetFromAxisAngle(const float3 &axis, float angle)
 {
-	assume(axis.IsNormalized());
-	assume(MATH_NS::IsFinite(angle));
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+	SetFromAxisAngle(load_vec3(axis.ptr(), 0.f), angle);
+#else
+	assume1(axis.IsNormalized(), axis);
+	assume1(MATH_NS::IsFinite(angle), angle);
 	float sinz, cosz;
 	SinCos(angle*0.5f, sinz, cosz);
 	x = axis.x * sinz;
 	y = axis.y * sinz;
 	z = axis.z * sinz;
 	w = cosz;
+#endif
+}
+
+void Quat::SetFromAxisAngle(const float4 &axis, float angle)
+{
+	assume1(EqualAbs(axis.w, 0.f), axis);
+	assume2(axis.IsNormalized(1e-4f), axis, axis.Length4());
+	assume1(MATH_NS::IsFinite(angle), angle);
+
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE2)
+	// Best: 26.499 nsecs / 71.024 ticks, Avg: 26.856 nsecs, Worst: 27.651 nsecs
+	simd4f half = set1_ps(0.5f);
+	simd4f halfAngle = mul_ps(set1_ps(angle), half);
+	simd4f sinAngle, cosAngle;
+	sincos_ps(halfAngle, &sinAngle, &cosAngle);
+	simd4f quat = mul_ps(axis, sinAngle);
+
+	// Set the w component to cosAngle.
+	simd4f highPart = _mm_unpackhi_ps(quat, cosAngle); // [_ _ 1 z]
+	q = _mm_movelh_ps(quat, highPart); // [1 z y x]
+#else
+	// Best: 36.868 nsecs / 98.312 ticks, Avg: 36.980 nsecs, Worst: 41.477 nsecs
+	SetFromAxisAngle(axis.xyz(), angle);
+#endif
 }
 
 /// See Schneider, Eberly. Geometric Tools for Computer Graphics, p. 861.
@@ -525,10 +546,14 @@ void Quat::Set(const float4x4 &m)
 
 void Quat::Set(float x_, float y_, float z_, float w_)
 {
+#ifdef MATH_AUTOMATIC_SSE
+	q = set_ps(w_, z_, y_, x_);
+#else
 	x = x_;
 	y = y_;
 	z = z_;
 	w = w_;
+#endif
 }
 
 Quat MUST_USE_RESULT Quat::LookAt(const float3 &localForward, const float3 &targetDirection, const float3 &localUp, const float3 &worldUp)
@@ -560,14 +585,47 @@ Quat MUST_USE_RESULT Quat::RotateFromTo(const float3 &sourceDirection, const flo
 {
 	assume(sourceDirection.IsNormalized());
 	assume(targetDirection.IsNormalized());
-	float angle = sourceDirection.AngleBetweenNorm(targetDirection);
-	assume(angle >= 0.f);
 	// If sourceDirection == targetDirection, the cross product comes out zero, and normalization would fail. In that case, pick an arbitrary axis.
 	float3 axis = sourceDirection.Cross(targetDirection);
 	float oldLength = axis.Normalize();
-	if (oldLength == 0)
-		axis = float3(1, 0, 0);
-	return Quat(axis, angle);
+	if (oldLength != 0.f)
+	{
+		float halfCosAngle = 0.5f*sourceDirection.Dot(targetDirection);
+		float cosHalfAngle = Sqrt(0.5f + halfCosAngle);
+		float sinHalfAngle = Sqrt(0.5f - halfCosAngle);
+		return Quat(axis.x * sinHalfAngle, axis.y * sinHalfAngle, axis.z * sinHalfAngle, cosHalfAngle);
+	}
+	else
+		return Quat(1.f, 0.f, 0.f, 0.f);
+
+}
+
+Quat MUST_USE_RESULT Quat::RotateFromTo(const float4 &sourceDirection, const float4 &targetDirection)
+{
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+	// Best: 12.289 nsecs / 33.144 ticks, Avg: 12.489 nsecs, Worst: 14.210 nsecs
+	simd4f cosAngle = dot4_ps(sourceDirection.v, targetDirection.v);
+	cosAngle = negate3_ps(cosAngle); // [+ - - -]
+	// XYZ channels use the trigonometric formula sin(x/2) = +/-sqrt(0.5-0.5*cosx))
+	// The W channel uses the trigonometric formula cos(x/2) = +/-sqrt(0.5+0.5*cosx))
+	simd4f half = set1_ps(0.5f);
+	simd4f cosSinHalfAngle = sqrt_ps(add_ps(half, mul_ps(half, cosAngle))); // [cos(x/2), sin(x/2), sin(x/2), sin(x/2)]
+	simd4f axis = cross_ps(sourceDirection.v, targetDirection.v);
+	simd4f recipLen = rsqrt_ps(dot4_ps(axis, axis));
+	axis = mul_ps(axis, recipLen); // [0 z y x]
+	// Set the w component to one.
+	simd4f one = add_ps(half, half); // [1 1 1 1]
+	simd4f highPart = _mm_unpackhi_ps(axis, one); // [_ _ 1 z]
+	axis = _mm_movelh_ps(axis, highPart); // [1 z y x]
+	Quat q;
+	q.q = mul_ps(axis, cosSinHalfAngle);
+	return q;
+#else
+	// Best: 19.970 nsecs / 53.632 ticks, Avg: 20.197 nsecs, Worst: 21.122 nsecs
+	assume(EqualAbs(sourceDirection.w, 0.f));
+	assume(EqualAbs(targetDirection.w, 0.f));
+	return Quat::RotateFromTo(sourceDirection.xyz(), targetDirection.xyz());
+#endif
 }
 
 Quat MUST_USE_RESULT Quat::RotateFromTo(const float3 &sourceDirection, const float3 &targetDirection,
@@ -692,10 +750,14 @@ std::string MUST_USE_RESULT Quat::ToString2() const
 
 std::string MUST_USE_RESULT Quat::SerializeToString() const
 {
-	assert(IsNeutralCLocale());
 	char str[256];
-	sprintf(str, "%.9g,%.9g,%.9g,%.9g", x, y, z, w);
-	return std::string(str);
+	char *s = SerializeFloat(x, str); *s = ','; ++s;
+	s = SerializeFloat(y, s); *s = ','; ++s;
+	s = SerializeFloat(z, s); *s = ','; ++s;
+	s = SerializeFloat(w, s);
+	assert(s+1 - str < 256);
+	MARK_UNUSED(s);
+	return str;
 }
 
 std::string Quat::SerializeToCodeString() const
@@ -794,8 +856,10 @@ Quat Quat::operator /(float scalar) const
 Quat Quat::operator *(const Quat &r) const
 {
 #if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+	// Best: 3.456 nsecs / 9.752 ticks, Avg: 3.721 nsecs, Worst: 3.840 nsecs
 	return quat_mul_quat(q, r.q);
 #else
+	// Best: 12.289 nsecs / 33.216 ticks, Avg: 12.585 nsecs, Worst: 13.442 nsecs
 	return Quat(x*r.w + y*r.z - z*r.y + w*r.x,
 	           -x*r.z + y*r.w + z*r.x + w*r.y,
 	            x*r.y - y*r.x + z*r.w + w*r.z,

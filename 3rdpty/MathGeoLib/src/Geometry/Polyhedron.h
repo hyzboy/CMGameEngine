@@ -162,18 +162,25 @@ public:
 		@param outMax [out] Returns the maximum extent of this object along the projection axis. */
 	void ProjectToAxis(const vec &direction, float &outMin, float &outMax) const;
 
-	/// Returns the arithmetic mean of all the corner vertices.
-	/** @bug This is not the proper centroid of the polyhedron! */
-	/** @see SurfaceArea(), Volume(). */
-	vec Centroid() const;
+	/// Returns the exact center of mass of the convex hull of this polyhedron.
+	/** @see SurfaceArea(), Volume(), ApproximateConvexCentroid(). */
+	vec ConvexCentroid() const;
+
+	// Computes the average of all vertices of this Polyhedron.
+	/** If this Polyhedron is a tetrahedron, this is the center of mass for the Polyhedron. Otherwise it
+		is a kind of an approximate enter of mass, biased towards the direction where there are lots of
+		vertices in the Polyhedron.
+		@note This function is considerably faster than ConvexCentroid().
+		@see SurfaceArea(), Volume(), ConvexCentroid(). */
+	vec ApproximateConvexCentroid() const;
 
 	/// Computes the total surface area of the faces of this polyhedron.
 	/** @note When you call this function, none of the faces of this polyhedron may be self-intersecting.
-		@see Centroid(), Volume(). */
+		@see ConvexCentroid(), Volume(). */
 	float SurfaceArea() const;
 
 	/// Computes the internal volume of this polyhedron.
-	/** @see Centroid(), SurfaceArea(). */
+	/** @see ConvexCentroid(), SurfaceArea(). */
 	float Volume() const;
 
 	/// Returns the smallest AABB that encloses this polyhedron.
@@ -254,6 +261,10 @@ public:
 		@see FLOAT_INF. */
 	bool ClipLineSegmentToConvexPolyhedron(const vec &ptA, const vec &dir, float &tFirst, float &tLast) const;
 
+	/// Returns the index of the nearest vertex to the given point.
+	/** @note In the degenerate case when this Polyhedron is null and does not contain any vertices, this function returns -1. */
+	int NearestVertex(const vec &point) const;
+
 	/// Tests if the given object is fully contained inside this closed polyhedron.
 	/** This function treats this polyhedron as a non-convex object. If you know this polyhedron
 		to be convex, you can use the faster ContainsConvex() function.
@@ -284,7 +295,7 @@ public:
 		@note This function assumes that this polyhedron is closed and its edges are not self-intersecting.
 		@see Contains(), ClosestPoint(), ClosestPointConvex(), Distance(), Intersects(), IntersectsConvex().
 		@todo Add ContainsConvex(Polygon/AABB/OBB/Frustum/Polyhedron/Circle/Disc/Sphere/Capsule). */
-	bool ContainsConvex(const vec &point) const;
+	bool ContainsConvex(const vec &point, float epsilon = 1e-4f) const;
 	bool ContainsConvex(const LineSegment &lineSegment) const;
 	bool ContainsConvex(const Triangle &triangle) const;
 

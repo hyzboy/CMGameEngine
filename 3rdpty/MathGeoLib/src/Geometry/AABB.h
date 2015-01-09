@@ -28,6 +28,9 @@
 #ifdef MATH_OGRE_INTEROP
 #include <OgreAxisAlignedBox.h>
 #endif
+#ifdef MATH_URHO3D_INTEROP
+#include <Urho3D/Math/BoundingBox.h>
+#endif
 
 MATH_BEGIN_NAMESPACE
 
@@ -125,14 +128,20 @@ public:
 
 	/// Converts this AABB to a polyhedron.
 	/** This function returns a polyhedron representation of this AABB. This conversion is exact, meaning that the returned
-		polyhedron represents the same set of points than this AABB.
-		@see class Polyhedron. */
+		polyhedron represents the same set of points that this AABB does.
+		@see class Polyhedron, ToPBVolume(), ToOBB(). */
 	Polyhedron ToPolyhedron() const;
+
+	/// Converts this AABB to a PBVolume.
+	/** This function returns a plane-bounded volume representation of this AABB. The conversion is exact, meaning that the
+		returned PBVolume<6> represents exactly the same set of points that this AABB does.
+		@see ToPolyhedron(), ToOBB(). */
+	PBVolume<6> ToPBVolume() const;
 
 	/// Converts this AABB to an OBB.
 	/** This function returns an OBB representation of this AABB. This conversion is exact, meaning that the returned
 		OBB represents the same set of points than this AABB.
-		@see class OBB. */
+		@see class OBB, ToPolyhedron(), ToPBVolume(). */
 	OBB ToOBB() const;
 
 	/// Returns the smallest sphere that contains this AABB.
@@ -380,7 +389,8 @@ public:
 		@see Distance(), Intersects(), ClosestPoint(). */
 	bool Contains(const vec &point) const;
 	bool Contains(const LineSegment &lineSegment) const;
-	bool Contains(const AABB &aabb) const;
+	bool Contains(const vec &aabbMinPoint, const vec &aabbMaxPoint) const;
+	bool Contains(const AABB &aabb) const { return Contains(aabb.minPoint, aabb.maxPoint); }
 	bool Contains(const OBB &obb) const;
 	bool Contains(const Sphere &sphere) const;
 	bool Contains(const Triangle &triangle) const;
@@ -436,8 +446,9 @@ public:
 		AABB into this.
 		@note The generated AABB is not necessarily the optimal enclosing AABB for this AABB and the given object. */
 	void Enclose(const vec &point);
+	void Enclose(const vec &aabbMinPoint, const vec &aabbMaxPoint);
 	void Enclose(const LineSegment &lineSegment);
-	void Enclose(const AABB &aabb);
+	void Enclose(const AABB &aabb) { Enclose(aabb.minPoint, aabb.maxPoint); }
 	void Enclose(const OBB &obb);
 	void Enclose(const Sphere &sphere);
 	void Enclose(const Triangle &triangle);
@@ -543,21 +554,19 @@ public:
 	bool IntersectLineAABB_CPP(const vec &linePos, const vec &lineDir, float &tNear, float &tFar) const;
 #ifdef MATH_SSE
 	bool IntersectLineAABB_SSE(const float4 &linePos, const float4 &lineDir, float tNear, float tFar) const;
-
-	__m128 &MinPoint_SSE() { return *(__m128*)minPoint.ptr(); }
-	__m128 &MaxPoint_SSE() { return *(__m128*)maxPoint.ptr(); }
-	const __m128 &MinPoint_SSE() const { return *(__m128*)minPoint.ptr(); }
-	const __m128 &MaxPoint_SSE() const { return *(__m128*)maxPoint.ptr(); }
 #endif
 
 #ifdef MATH_OGRE_INTEROP
 	AABB(const Ogre::AxisAlignedBox &other):minPoint(other.getMinimum()), maxPoint(other.getMaximum()) {}
 	operator Ogre::AxisAlignedBox() const { return Ogre::AxisAlignedBox(minPoint, maxPoint); }
 #endif
-
 #ifdef MATH_GRAPHICSENGINE_INTEROP
 	void Triangulate(VertexBuffer &vb, int numFacesX, int numFacesY, int numFacesZ, bool ccwIsFrontFacing) const;
 	void ToLineList(VertexBuffer &vb) const;
+#endif
+#ifdef MATH_URHO3D_INTEROP
+	AABB(const Urho3D::BoundingBox&other) : minPoint(other.min_), maxPoint(other.max_) {}
+	operator Urho3D::BoundingBox() const { return Urho3D::BoundingBox(minPoint, maxPoint); }
 #endif
 
 	bool Equals(const AABB &rhs, float epsilon = 1e-3f) const { return minPoint.Equals(rhs.minPoint, epsilon) && maxPoint.Equals(rhs.maxPoint, epsilon); }
@@ -581,7 +590,7 @@ Q_DECLARE_METATYPE(AABB*)
 std::ostream &operator <<(std::ostream &o, const AABB &aabb);
 #endif
 
-#ifdef MATH_SSE
+#ifdef MATH_SIMD
 void AABBTransformAsAABB_SIMD(AABB &aabb, const float4x4 &m);
 #endif
 

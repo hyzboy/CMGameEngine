@@ -24,9 +24,10 @@
 
 #include "myassert.h"
 #include "float2.h"
+#include "grisu3.h"
 
 #ifdef WIN32
-#include <Windows.h>
+#include "../Math/InclWindows.h"
 #endif
 
 #ifdef MATH_SSE2
@@ -532,7 +533,7 @@ char *SerializeFloat(float f, char *dstStr)
 {
 	if (!IsNan(f))
 	{
-		int numChars = sprintf(dstStr, "%.9g", f);
+		int numChars = dtoa_grisu3((double)f, dstStr);
 		return dstStr + numChars;
 	}
 	else
@@ -571,7 +572,79 @@ float DeserializeFloat(const char *str, const char **outEndStr)
 			*outEndStr = str;
 		return ReinterpretAsFloat(x);
 	}
-	float f = (float)strtod(str, const_cast<char**>(&str));
+	float f;
+
+	if (!strncmp(str, "-inf", 4)) { f = -FLOAT_INF; str += 4; }
+	else if (!strncmp(str, "inf", 3)) { f = FLOAT_INF; str += 3; }
+	else f = (float)strtod(str, const_cast<char**>(&str));
+
+	while(*str > 0 && *str <= ' ')
+		++str;
+	if (*str == ',' || *str == ';')
+		++str;
+	while(*str > 0 && *str <= ' ')
+		++str;
+	if (outEndStr)
+		*outEndStr = str;
+	return f;
+}
+
+int hexstr_to_u64(const char *str, uint64_t *u)
+{
+	assert(u);
+	*u = 0;
+	const char *s = str;
+	for(int i = 0; i <= 16; ++i)
+	{
+		char ch = *s;
+		if (ch >= '0' && ch <= '9')
+			*u = 16 * *u + ch - '0';
+		else if (ch >= 'a' && ch <= 'f')
+			*u = 16 * *u + 10 + ch - 'a';
+		else if (ch >= 'A' && ch <= 'F')
+			*u = 16 * *u + 10 + ch - 'A';
+		else
+			break;
+		++s;
+	}
+	return (int)(s - str);
+}
+
+double DeserializeDouble(const char *str, const char **outEndStr)
+{
+	if (!str)
+		return (double)FLOAT_NAN;
+	while(*str > 0 && *str <= ' ')
+		++str;
+	if (*str == 0)
+		return (double)FLOAT_NAN;
+	if (MATH_NEXT_WORD_IS(str, "NaN("))
+	{
+		str += strlen("NaN("); //MATH_SKIP_WORD(str, "NaN(");
+
+		// Read 64-bit unsigned hex representation of the NaN. TODO: Make this more efficient without using sscanf.
+		uint64_t u;
+		int nChars = hexstr_to_u64(str, &u);
+		str += nChars;
+		while(*str != 0)
+		{
+			++str;
+			if (*str == ')')
+			{
+				++str;
+				break;
+			}
+		}
+		if (outEndStr)
+			*outEndStr = str;
+		return ReinterpretAsDouble(u);
+	}
+	double f;
+	
+	if (!strncmp(str, "-inf", 4)) { f = (double)-FLOAT_INF; str += 4; }
+	else if (!strncmp(str, "inf", 3)) { f = (double)FLOAT_INF; str += 3; }
+	else f = strtod(str, const_cast<char**>(&str));
+
 	while(*str > 0 && *str <= ' ')
 		++str;
 	if (*str == ',' || *str == ';')

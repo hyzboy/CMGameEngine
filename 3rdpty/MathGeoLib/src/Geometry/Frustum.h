@@ -20,6 +20,8 @@
 #include "../MathGeoLibFwd.h"
 #include "../Math/float2.h"
 #include "../Math/float3.h"
+#include "../Math/float3x4.h"
+#include "../Math/float4x4.h"
 #include "Ray.h"
 
 #ifdef MATH_TINYXML_INTEROP
@@ -95,7 +97,7 @@ enum FrustumHandedness
 /// Represents either an orthographic or a perspective viewing frustum.
 class Frustum
 {
-public:
+private:
 	/// Specifies whether this frustum is a perspective or an orthographic frustum.
 	/** [noscript] @todo Remove the noscript attribute. */
 	FrustumType type;
@@ -114,10 +116,10 @@ public:
 	/** This vector is specified in world (global) space. This vector is always normalized.
 		If you assign to this member directly, be sure to only assign normalized vectors.
 		@note The vectors front and up must always be perpendicular to each other. This means that this up vector is not
-			a static/constant up vector, e.g. (0,1,0), but changes according to when the camera pitches up and down to
-			preserve the condition that front and up are always perpendicular.
+		a static/constant up vector, e.g. (0,1,0), but changes according to when the camera pitches up and down to
+		preserve the condition that front and up are always perpendicular.
 		@note In the _local_ space of the Frustum, the direction +Y is _always_ the up direction and cannot be changed. This
-			coincides to how Direct3D and OpenGL view and projection matrices are constructed. */
+		coincides to how Direct3D and OpenGL view and projection matrices are constructed. */
 	vec up;
 	/// Distance from the eye point to the front plane.
 	/** This parameter must be positive. If perspective projection is used, this parameter must be strictly positive
@@ -152,13 +154,128 @@ public:
 		float orthographicHeight;
 	};
 
-	/// The default constructor creates a Frustum with undefined values.
+	void WorldMatrixChanged();
+	void ProjectionMatrixChanged();
+
+	// Frustums are typically used in batch culling operations. Therefore the matrices associated with a Frustum are cached
+	// for immediate access.
+	float3x4 worldMatrix;
+	float4x4 projectionMatrix;
+	float4x4 viewProjMatrix;
+
+public:
+	/// The default constructor creates an uninitialized Frustum object.
 	/** This means that the values of the members type, projectiveSpace, handedness, pos, front, up, nearPlaneDistance, farPlaneDistance, horizontalFov/orthographicWidth and
-		verticalFov/orthographicHeight are all undefined after creating a new Frustum using this
-		default constructor. Remember to assign to them before use. [opaque-qtscript] @todo remove the opaque-qtscript attribute.
+		verticalFov/orthographicHeight are all NaN after creating a new Frustum using this
+		default constructor. Remember to assign to them before use.
+		@note As an exception to other classes in MathGeoLib, this class initializes its members to NaNs, whereas the other classes leave the members uninitialized. This difference
+			is because the Frustum class implements a caching mechanism where world, projection and viewProj matrices are recomputed on demand, which does not work nicely together
+			if the defaults were uninitialized.
+		[opaque-qtscript] @todo remove the opaque-qtscript attribute.
 		@see type, pos, front, up, nearPlaneDistance, projectiveSpace, handedness, farPlaneDistance, horizontalFov, verticalFov, orthographicWidth, orthographicHeight. */
 	Frustum();
 
+	/// Sets the type of this Frustum.
+	/** @note Calling this function recomputes the cached view and projection matrices of this Frustum.
+		@see SetViewPlaneDistances(), SetFrame(), SetPos(), SetFront(), SetUp(), SetPerspective(), SetOrthographic(), ProjectiveSpace(), Handedness(). */
+	void SetKind(FrustumProjectiveSpace projectiveSpace, FrustumHandedness handedness);
+
+	/// Sets the depth clip distances of this Frustum.
+	/** @param nearPlaneDistance The z distance from the eye point to the position of the Frustum near clip plane. Always pass a positive value here.
+		@param farPlaneDistance The z distance from the eye point to the position of the Frustum far clip plane. Always pass a value that is larger than nearClipDistance.
+		@note Calling this function recomputes the cached projection matrix of this Frustum.
+		@see SetKind(), SetFrame(), SetPos(), SetFront(), SetUp(), SetPerspective(), SetOrthographic(), NearPlaneDistance(), FarPlaneDistance(). */
+	void SetViewPlaneDistances(float nearPlaneDistance, float farPlaneDistance);
+
+	/// Specifies the full coordinate space of this Frustum in one call.
+	/** @note Calling this function recomputes the cached world matrix of this Frustum.
+		@note As a micro-optimization, prefer this function over the individual SetPos/SetFront/SetUp functions if you need to do a batch of two or more changes, to avoid
+		redundant recomputation of the world matrix.
+		@see SetKind(), SetViewPlaneDistances(), SetPos(), SetFront(), SetUp(), SetPerspective(), SetOrthographic(), Pos(), Front(), Up(). */
+	void SetFrame(const vec &pos, const vec &front, const vec &up);
+
+	/// Sets the world-space position of this Frustum.
+	/** @note Calling this function recomputes the cached world matrix of this Frustum.
+		@see SetKind(), SetViewPlaneDistances(), SetFrame(), SetFront(), SetUp(), SetPerspective(), SetOrthographic(), Pos(). */
+	void SetPos(const vec &pos);
+
+	/// Sets the world-space direction the Frustum eye is looking towards.
+	/** @note Calling this function recomputes the cached world matrix of this Frustum.
+		@see SetKind(), SetViewPlaneDistances(), SetFrame(), SetPos(), SetUp(), SetPerspective(), SetOrthographic(), Front(). */
+	void SetFront(const vec &front);
+
+	/// Sets the world-space camera up direction vector of this Frustum.
+	/** @note Calling this function recomputes the cached world matrix of this Frustum.
+		@see SetKind(), SetViewPlaneDistances(), SetFrame(), SetPos(), SetFront(), SetPerspective(), SetOrthographic(), Up(). */
+	void SetUp(const vec &up);
+
+	/// Makes this Frustum use a perspective projection formula with the given FOV parameters.
+	/** A Frustum that uses the perspective projection is shaped like a pyramid that is cut from the top, and has a
+		base with a rectangular area.
+		@note Calling this function recomputes the cached projection matrix of this Frustum.
+		@see SetKind(), SetViewPlaneDistances(), SetFrame(), SetPos(), SetFront(), SetUp(), SetOrthographic(), HorizontalFov(), VerticalFov(), SetHorizontalFovAndAspectRatio(), SetVerticalFovAndAspectRatio(). */
+	void SetPerspective(float horizontalFov, float verticalFov);
+
+	/// Makes this Frustum use an orthographic projection formula with the given FOV parameters.
+	/** A Frustum that uses the orthographic projection is shaded like a cube (an OBB).
+		@note Calling this function recomputes the cached projection matrix of this Frustum.
+		@see SetKind(), SetViewPlaneDistances(), SetFrame(), SetPos(), SetFront(), SetUp(), SetOrthographic(), OrthographicWidth(), OrthographicHeight(). */
+	void SetOrthographic(float orthographicWidth, float orthographicHeight);
+
+	/// Returns the handedness of the projection formula used by this Frustum.
+	/** @see SetKind(), FrustumHandedness. */
+	FrustumHandedness Handedness() const { return handedness; }
+
+	/// Returns the type of the projection formula used by this Frustum.
+	/** @see SetPerspective(), SetOrthographic(), FrustumType. */
+	FrustumType Type() const { return type; }
+
+	/// Returns the convention of the post-projective space used by this Frustum.
+	/** @see SetKind(), FrustumProjectiveSpace. */
+	FrustumProjectiveSpace ProjectiveSpace() const { return projectiveSpace; }
+
+	/// Returns the world-space position of this Frustum.
+	/** @see SetPos(), Front(), Up(). */
+	const vec &Pos() const { return pos; }
+
+	/// Returns the world-space camera look-at direction of this Frustum.
+	/** @see Pos(), SetFront(), Up(). */
+	const vec &Front() const { return front; }
+
+	/// Returns the world-space camera up direction of this Frustum.
+	/** @see Pos(), Front(), SetUp(). */
+	const vec &Up() const { return up; }
+
+	/// Returns the distance from the Frustum eye to the near clip plane.
+	/** @see SetViewPlaneDistances(), FarPlaneDistance(). */
+	float NearPlaneDistance() const { return nearPlaneDistance; }
+
+	/// Returns the distance from the Frustum eye to the far clip plane.
+	/** @see SetViewPlaneDistances(), NearPlaneDistance(). */
+	float FarPlaneDistance() const { return farPlaneDistance; }
+
+	/// Returns the horizontal field-of-view used by this Frustum, in radians.
+	/** @note Calling this function when the Frustum is not set to use perspective projection will return values that are meaningless.
+		@see SetPerspective(), Type(), VerticalFov(). */
+	float HorizontalFov() const { return horizontalFov; }
+
+	/// Returns the vertical field-of-view used by this Frustum, in radians.
+	/** @note Calling this function when the Frustum is not set to use perspective projection will return values that are meaningless.
+		@see SetPerspective(), Type(), HorizontalFov(). */
+	float VerticalFov() const { return verticalFov; }
+
+	/// Returns the world-space width of this Frustum.
+	/** @note Calling this function when the Frustum is not set to use orthographic projection will return values that are meaningless.
+		@see SetOrthographic(), Type(), OrthographicHeight(). */
+	float OrthographicWidth() const { return orthographicWidth; }
+
+	/// Returns the world-space height of this Frustum.
+	/** @note Calling this function when the Frustum is not set to use orthographic projection will return values that are meaningless.
+		@see SetOrthographic(), Type(), OrthographicWidth(). */
+	float OrthographicHeight() const { return orthographicHeight; }
+
+	/// Returns the number of line segment edges that this Frustum is made up of, which is always 12.
+	/** This function is used in template-based algorithms to provide an unified API for iterating over the features of a Polyhedron. */
 	int NumEdges() const { return 12; }
 
 	/// Returns the aspect ratio of the view rectangle on the near plane.
@@ -168,12 +285,18 @@ public:
 		@see horizontalFov, verticalFov. */
 	float AspectRatio() const;
 
-	/// Specifies the horizontal and vertical field-of-view values for this Frustum based on the given horizontal FOV
-	/// and the screen size aspect ratio.
+	/// Makes this Frustum use a perspective projection formula with the given horizontal FOV parameter and aspect ratio.
+	/** Specifies the horizontal and vertical field-of-view values for this Frustum based on the given horizontal FOV
+		and the screen size aspect ratio.
+		@note Calling this function recomputes the cached projection matrix of this Frustum.
+		@see SetPerspective(), SetVerticalFovAndAspectRatio(). */
 	void SetHorizontalFovAndAspectRatio(float horizontalFov, float aspectRatio);
 
-	/// Specifies the horizontal and vertical field-of-view values for this Frustum based on the given vertical FOV
-	/// and the screen size aspect ratio.
+	/// Makes this Frustum use a perspective projection formula with the given vertical FOV parameter and aspect ratio.
+	/** Specifies the horizontal and vertical field-of-view values for this Frustum based on the given vertical FOV
+		and the screen size aspect ratio.
+		@note Calling this function recomputes the cached projection matrix of this Frustum.
+		@see SetPerspective(), SetHorizontalFovAndAspectRatio(). */
 	void SetVerticalFovAndAspectRatio(float verticalFov, float aspectRatio);
 
 	/// Computes the direction vector that points logically to the right-hand side of the Frustum.
@@ -283,7 +406,8 @@ public:
 			matrix is built to use the convention Matrix * vector to map a point between these spaces.
 			(as opposed to the convention v*M).
 		@see ViewMatrix(), ProjectionMatrix(), ViewProjMatrix(). */
-	float3x4 WorldMatrix() const;
+	float3x4 WorldMatrix() const { return worldMatrix;  }
+	float3x4 ComputeWorldMatrix() const;
 
 	/// Computes the matrix that transforms from the world (global) space to the view space of this Frustum.
 	/** @note The returned matrix is the inverse of the matrix returned by WorldMatrix().
@@ -291,14 +415,16 @@ public:
 			matrix is built to use the convention Matrix * vector to map a point between these spaces.
 			(as opposed to the convention v*M).
 		@see WorldMatrix(), ProjectionMatrix(), ViewProjMatrix(). */
-	float3x4 ViewMatrix() const;
+	float3x4 ViewMatrix() const { float3x4 m = worldMatrix; m.InverseOrthonormal(); return m; }
+	float3x4 ComputeViewMatrix() const;
 
 	/// Computes the matrix that projects from the view space to the projection space of this Frustum.
 	/** @return A projection matrix that performs the view->proj transformation. This matrix is neither
 			invertible or orthonormal. The returned matrix is built to use the convention Matrix * vector
 			to map a point between these spaces. (as opposed to the convention v*M).
 		@see WorldMatrix(), ViewMatrix(), ViewProjMatrix(). */
-	float4x4 ProjectionMatrix() const;
+	float4x4 ProjectionMatrix() const { return projectionMatrix; }
+	float4x4 ComputeProjectionMatrix() const;
 
 	/// Computes the matrix that transforms from the world (global) space to the projection space of this Frustum.
 	/** The matrix computed by this function is simply the concatenation ProjectionMatrix()*ViewMatrix(). This order
@@ -308,7 +434,8 @@ public:
 			orthonormal. The returned matrix is built to use the convention Matrix * vector
 			to map a point between these spaces. (as opposed to the convention v*M).
 		@see WorldMatrix(), ViewMatrix(), ProjectionMatrix(). */
-	float4x4 ViewProjMatrix() const;
+	float4x4 ViewProjMatrix() const { return viewProjMatrix; }
+	float4x4 ComputeViewProjMatrix() const;
 
 	/// Finds a ray in world space that originates at the eye point and looks in the given direction inside the frustum.
 	/** The (x,y) coordinate specifies the normalized viewport coordinate through which the ray passes.
@@ -438,9 +565,15 @@ public:
 
 	/// Converts this Frustum to a Polyhedron.
 	/** This function returns a Polyhedron representation of this Frustum. This conversion is exact, meaning that the returned
-		Polyhedron represents exactly the same set of points than this Frustum.
+		Polyhedron represents exactly the same set of points that this Frustum does.
 		@see MinimalEnclosingAABB(), MinimalEnclosingOBB(). */
 	Polyhedron ToPolyhedron() const;
+
+	/// Converts this Frustum to a PBVolume.
+	/** This function returns a plane-bounded volume representation of this Frustum. The conversion is exact, meaning that the
+		returned PBVolume<6> represents exactly the same set of points that this Frustum does.
+		@see ToPolyhedron(). */
+	PBVolume<6> ToPBVolume() const;
 
 	/// Tests if the given object is fully contained inside this Frustum.
 	/** This function returns true if the given object lies inside this Frustum, and false otherwise.

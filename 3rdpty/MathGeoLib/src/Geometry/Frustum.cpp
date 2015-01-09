@@ -29,6 +29,7 @@
 #include "Capsule.h"
 #include "Triangle.h"
 #include "LineSegment.h"
+#include "PBVolume.h"
 #include "../Math/float2.h"
 #include "../Math/float3x3.h"
 #include "../Math/float3x4.h"
@@ -46,9 +47,21 @@
 #include "Container/UString.h"
 #endif
 
+#if defined(MATH_SSE) && defined(MATH_AUTOMATIC_SSE)
+#include "../Math/float4_sse.h"
+#endif
+
 MATH_BEGIN_NAMESPACE
 
 Frustum::Frustum()
+:type(InvalidFrustum),
+pos(vec::nan),
+front(vec::nan),
+up(vec::nan),
+nearPlaneDistance(FLOAT_NAN),
+farPlaneDistance(FLOAT_NAN),
+worldMatrix(float3x4::nan),
+viewProjMatrix(float4x4::nan)
 {
 	// For conveniency, allow automatic initialization of the graphics API and handedness in use.
 	// If neither of the #defines are set, user must specify per-instance.
@@ -57,13 +70,94 @@ Frustum::Frustum()
 	projectiveSpace = FrustumSpaceD3D;
 #elif defined(MATH_USE_OPENGL)
 	projectiveSpace = FrustumSpaceGL;
+#else
+	projectiveSpace = FrustumSpaceInvalid;
 #endif
 
 #ifdef MATH_LEFTHANDED_CAMERA
 	handedness = FrustumLeftHanded;
 #elif defined(MATH_RIGHTHANDED_CAMERA)
 	handedness = FrustumRightHanded;
+#else
+	handedness = FrustumHandednessInvalid;
 #endif
+}
+
+void Frustum::SetKind(FrustumProjectiveSpace p, FrustumHandedness h)
+{
+	projectiveSpace = p;
+	handedness = h;
+	if (up.IsFinite())
+		WorldMatrixChanged(); // Setting handedness affects world matrix.
+	ProjectionMatrixChanged();
+}
+
+void Frustum::SetViewPlaneDistances(float n, float f)
+{
+	nearPlaneDistance = n;
+	farPlaneDistance = f;
+	ProjectionMatrixChanged();
+}
+
+void Frustum::SetFrame(const vec &p, const vec &f, const vec &u)
+{
+	pos = p;
+	front = f;
+	up = u;
+	WorldMatrixChanged();
+}
+
+void Frustum::SetPos(const vec &p)
+{
+	pos = p;
+	WorldMatrixChanged();
+}
+
+void Frustum::SetFront(const vec &f)
+{
+	front = f;
+	WorldMatrixChanged();
+}
+
+void Frustum::SetUp(const vec &u)
+{
+	up = u;
+	WorldMatrixChanged();
+}
+
+void Frustum::SetPerspective(float h, float v)
+{
+	type = PerspectiveFrustum;
+	horizontalFov = h;
+	verticalFov = v;
+	ProjectionMatrixChanged();
+}
+
+void Frustum::SetOrthographic(float w, float h)
+{
+	type = OrthographicFrustum;
+	orthographicWidth = w;
+	orthographicHeight = h;
+	ProjectionMatrixChanged();
+}
+
+void Frustum::WorldMatrixChanged()
+{
+	worldMatrix = ComputeWorldMatrix();
+	float3x4 viewMatrix = worldMatrix;
+	viewMatrix.InverseOrthonormal();
+	viewProjMatrix = projectionMatrix * viewMatrix;
+}
+
+void Frustum::ProjectionMatrixChanged()
+{
+	projectionMatrix = ComputeProjectionMatrix();
+	if (!IsNan(worldMatrix[0][0]))
+	{
+		float3x4 viewMatrix = worldMatrix;
+		viewMatrix.InverseOrthonormal();
+		viewProjMatrix = projectionMatrix * viewMatrix;
+	}
 }
 
 float Frustum::AspectRatio() const
@@ -73,14 +167,18 @@ float Frustum::AspectRatio() const
 
 void Frustum::SetHorizontalFovAndAspectRatio(float hFov, float aspectRatio)
 {
+	type = PerspectiveFrustum;
 	horizontalFov = hFov;
 	verticalFov = 2.f * Atan(Tan(hFov*0.5f)/aspectRatio);
+	ProjectionMatrixChanged();
 }
 
 void Frustum::SetVerticalFovAndAspectRatio(float vFov, float aspectRatio)
 {
+	type = PerspectiveFrustum;
 	verticalFov = vFov;
 	horizontalFov = 2.f * Atan(Tan(vFov*0.5f)*aspectRatio);
+	ProjectionMatrixChanged();
 }
 
 vec Frustum::WorldRight() const
@@ -189,17 +287,23 @@ void Frustum::SetWorldMatrix(const float3x4 &worldTransform)
 	else
 		front = DIR_VEC(worldTransform.Col(2)); // The camera looks towards +Z axis of the given transform.
 	up = DIR_VEC(worldTransform.Col(1)); // The camera up points towards +Y of the given transform.
-	assume(pos.IsFinite());
-	assume(front.IsNormalized());
-	assume(up.IsNormalized());
+	assume1(pos.IsFinite(), pos);
+	assume2(up.IsNormalized(1e-3f), up, up.Length());
+	assume2(front.IsNormalized(1e-3f), front, front.Length());
+	assume3(up.IsPerpendicular(front), up, front, up.Dot(front));
 	assume(worldTransform.IsColOrthogonal3()); // Front and up must be orthogonal to each other.
 	assume(EqualAbs(worldTransform.Determinant(), 1.f)); // The matrix cannot contain mirroring.
+
+	// Finally store the passed world matrix as the cached matrix.
+	worldMatrix = worldTransform;
 }
 
-float3x4 Frustum::WorldMatrix() const
+float3x4 Frustum::ComputeWorldMatrix() const
 {
-	assume(up.IsNormalized());
-	assume(front.IsNormalized());
+	assume1(pos.IsFinite(), pos);
+	assume2(up.IsNormalized(1e-3f), up, up.Length());
+	assume2(front.IsNormalized(1e-3f), front, front.Length());
+	assume3(up.IsPerpendicular(front), up, front, up.Dot(front));
 	float3x4 m;
 	m.SetCol(0, DIR_TO_FLOAT3(WorldRight().Normalized()));
 	m.SetCol(1, DIR_TO_FLOAT3(up));
@@ -212,20 +316,22 @@ float3x4 Frustum::WorldMatrix() const
 	return m;
 }
 
-float3x4 Frustum::ViewMatrix() const
+float3x4 Frustum::ComputeViewMatrix() const
 {
-	float3x4 world = WorldMatrix();
+	float3x4 world = ComputeWorldMatrix();
 	world.InverseOrthonormal();
 	return world;
 }
 
-float4x4 Frustum::ViewProjMatrix() const
+float4x4 Frustum::ComputeViewProjMatrix() const
 {
-	return ProjectionMatrix() * ViewMatrix();
+	return ComputeProjectionMatrix() * ComputeViewMatrix();
 }
 
-float4x4 Frustum::ProjectionMatrix() const
+float4x4 Frustum::ComputeProjectionMatrix() const
 {
+	if (type == InvalidFrustum || projectiveSpace == FrustumSpaceInvalid)
+		return float4x4::nan;
 	assume(type == PerspectiveFrustum || type == OrthographicFrustum);
 	assume(projectiveSpace == FrustumSpaceGL || projectiveSpace == FrustumSpaceD3D);
 	assume(handedness == FrustumLeftHanded || handedness == FrustumRightHanded);
@@ -380,27 +486,40 @@ vec Frustum::PointInside(float x, float y, float z) const
 vec Frustum::Project(const vec &point) const
 {
 	float4 projectedPoint = ViewProjMatrix().Mul(POINT_TO_FLOAT4(point));
-	projectedPoint /= projectedPoint.w; // Post-projective perspective divide.
+	projectedPoint.NormalizeW(); // Post-projective perspective divide.
 	return FLOAT4_TO_POINT(projectedPoint);
 }
 
 bool Frustum::Contains(const vec &point) const
 {
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+	// SSE 4.1 32-bit: Best: 6.913 nsecs / 18.52 ticks, Avg: 6.978 nsecs, Worst: 7.297 nsecs
+	vec projected = Project(point);
+	simd4f a = abs_ps(projected);
+	simd4f y = yyyy_ps(a);
+	a = max_ps(a, y);
+	y = zzzz_ps(a);
+	a = max_ps(a, y);
+	const float eps = 1e-3f;
+	return _mm_cvtss_f32(a) <= 1.f + eps &&
+		(projectiveSpace == FrustumSpaceGL || s4f_z(projected) >= -eps);
+#else
+	// SSE 4.1 32-bit: Best: 7.681 nsecs / 21.096 ticks, Avg : 7.954 nsecs, Worst : 9.217 nsecs
 	const float eps = 1e-3f;
 	const float pos = 1.f + eps;
 	const float neg = -pos;
 	vec projected = Project(point);
 	if (projectiveSpace == FrustumSpaceD3D)
 	{
-		return projected.x >= neg && projected.x <= pos &&
-			projected.y >= neg && projected.y <= pos &&
-			projected.z >= -eps && projected.z <= pos;
+		return neg <= projected.x && projected.x <= pos &&
+			neg <= projected.y && projected.y <= pos &&
+			-eps <= projected.z && projected.z <= pos;
 	}
 	else if (projectiveSpace == FrustumSpaceGL)
 	{
-		return projected.x >= neg && projected.x <= pos &&
-			projected.y >= neg && projected.y <= pos &&
-			projected.z >= neg && projected.z <= pos;
+		return neg <= projected.x && projected.x <= pos &&
+			neg <= projected.y && projected.y <= pos &&
+			neg <= projected.z && projected.z <= pos;
 	}
 	else
 	{
@@ -410,16 +529,54 @@ bool Frustum::Contains(const vec &point) const
 #endif
 		return false;
 	}
+#endif
 }
 
 bool Frustum::Contains(const LineSegment &lineSegment) const
 {
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+	// SSE 4.1: Best: 15.746 nsecs / 42.152 ticks, Avg: 15.842 nsecs, Worst: 16.130 nsecs
+	vec pa = Project(lineSegment.a);
+	simd4f a = abs_ps(pa);
+	vec pb = Project(lineSegment.b);
+	simd4f b = abs_ps(pb);
+	a = max_ps(a, b);
+	simd4f y = yyyy_ps(a);
+	a = max_ps(a, y);
+	y = zzzz_ps(a);
+	a = max_ps(a, y);
+	const float eps = 1e-3f;
+	return _mm_cvtss_f32(a) <= 1.f + eps &&
+		(projectiveSpace == FrustumSpaceGL || s4f_z(min_ps(pa, pb)) >= -eps);
+#else
+	// SSE 4.1: 16.514 nsecs / 44.784 ticks, Avg: 16.825 nsecs, Worst: 16.898 nsecs
 	return Contains(lineSegment.a) && Contains(lineSegment.b);
+#endif
 }
 
 bool Frustum::Contains(const Triangle &triangle) const
 {
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+	// Best: 21.206 nsecs / 55.496 ticks, Avg: 21.702 nsecs, Worst: 21.891 nsecs
+	vec pa = Project(triangle.a);
+	simd4f a = abs_ps(pa);
+	vec pb = Project(triangle.b);
+	simd4f b = abs_ps(pb);
+	a = max_ps(a, b);
+	vec pc = Project(triangle.c);
+	simd4f c = abs_ps(pc);
+	a = max_ps(a, c);
+	simd4f y = yyyy_ps(a);
+	a = max_ps(a, y);
+	y = zzzz_ps(a);
+	a = max_ps(a, y);
+	const float eps = 1e-3f;
+	return _mm_cvtss_f32(a) <= 1.f + eps &&
+		(projectiveSpace == FrustumSpaceGL || s4f_z(min_ps(min_ps(pa, pb), pc)) >= -eps);
+#else
+	// Best: 21.122 nsecs / 56.512 ticks, Avg: 21.226 nsecs, Worst: 21.506 nsecs
 	return Contains(triangle.a) && Contains(triangle.b) && Contains(triangle.c);
+#endif
 }
 
 bool Frustum::Contains(const Polygon &polygon) const
@@ -469,7 +626,37 @@ bool Frustum::Contains(const Polyhedron &polyhedron) const
 
 vec Frustum::ClosestPoint(const vec &point) const
 {
-	return ToPolyhedron().ClosestPoint(point);
+	if (type == OrthographicFrustum)
+	{
+		float frontHalfSize = (farPlaneDistance - nearPlaneDistance) * 0.5f;
+		float halfWidth = orthographicWidth * 0.5f;
+		float halfHeight = orthographicHeight * 0.5f;
+		vec frustumCenter = pos + (frontHalfSize + nearPlaneDistance) * front;
+		vec right = Cross(front, up);
+		assert(right.IsNormalized());
+		vec d = point - frustumCenter;
+		vec closestPoint = frustumCenter;
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+		// Best: 21.506 nsecs / 57.224 ticks, Avg: 21.683 nsecs, Worst: 22.659 nsecs
+		simd4f z = set1_ps(frontHalfSize);
+		closestPoint = add_ps(closestPoint, mul_ps(max_ps(min_ps(dot4_ps(d.v, front.v), z), negate_ps(z)), front.v));
+		simd4f y = set1_ps(halfHeight);
+		closestPoint = add_ps(closestPoint, mul_ps(max_ps(min_ps(dot4_ps(d.v, up.v), y), negate_ps(y)), up.v));
+		simd4f x = set1_ps(halfWidth);
+		closestPoint = add_ps(closestPoint, mul_ps(max_ps(min_ps(dot4_ps(d.v, right.v), x), negate_ps(x)), right.v));
+#else
+		// Best: 30.724 nsecs / 82.192 ticks, Avg: 31.069 nsecs, Worst: 39.172 nsecs
+		closestPoint += Clamp(Dot(d, front), -frontHalfSize, frontHalfSize) * front;
+		closestPoint += Clamp(Dot(d, right), -halfWidth, halfWidth) * right;
+		closestPoint += Clamp(Dot(d, up), -halfHeight, halfHeight) * up;
+#endif
+		return closestPoint;
+	}
+	else
+	{
+		// Best: 12.339 usecs / 32900.7 ticks, Avg: 12.521 usecs, Worst: 13.308 usecs
+		return ToPolyhedron().ClosestPoint(point);
+	}
 
 ///\todo Improve numerical stability enough to do effectively this - but do so without temporary memory allocations.
 //	return ToPolyhedron().ClosestPointConvex(point);
@@ -833,6 +1020,19 @@ Polyhedron Frustum::ToPolyhedron() const
 	}
 
 	return p;
+}
+
+PBVolume<6> Frustum::ToPBVolume() const
+{
+	PBVolume<6> frustumVolume;
+	frustumVolume.p[0] = NearPlane();
+	frustumVolume.p[1] = LeftPlane();
+	frustumVolume.p[2] = RightPlane();
+	frustumVolume.p[3] = TopPlane();
+	frustumVolume.p[4] = BottomPlane();
+	frustumVolume.p[5] = FarPlane();
+
+	return frustumVolume;
 }
 
 bool Frustum::Intersects(const Ray &ray) const

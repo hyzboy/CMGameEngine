@@ -28,17 +28,17 @@
 #ifdef MATH_QT_INTEROP
 #include <QVector3D>
 #endif
-/*
-#ifdef MATH_IRRLICHT_INTEROP
-#include "float3.h"
-#endif
-*/
 #ifdef MATH_OGRE_INTEROP
 #include <OgreVector3.h>
 #endif
-
 #ifdef MATH_BULLET_INTEROP
-#include "LinearMath/btVector3.h"
+#include <LinearMath/btVector3.h>
+#endif
+#ifdef MATH_URHO3D_INTEROP
+#include <Urho3D/Math/Vector3.h>
+#endif
+#ifdef MATH_IRRKLANG_INTEROP
+#include <ik_vec3d.h>
 #endif
 
 MATH_BEGIN_NAMESPACE
@@ -101,8 +101,8 @@ public:
 			the At() function to access the elements of this vector by index.
 		@return A pointer to the first float element of this class. The data is contiguous in memory.
 		@see operator [](), At(). */
-	float *ptr();
-	const float *ptr() const;
+	FORCE_INLINE float *ptr() { return &x; }
+	FORCE_INLINE const float *ptr() const { return &x; }
 
 	/// Accesses an element of this vector using array notation.
 	/** @param index The element to get. Pass in 0 for x, 1 for y and 2 for z.
@@ -541,6 +541,14 @@ public:
 		@see Perpendicular(), Cross(). */
 	float3 AnotherPerpendicular(const float3 &hint = float3(0,1,0), const float3 &hint2 = float3(0,0,1)) const;
 
+	// Completes this vector to generate a perpendicular basis.
+	/** This function computes two new vectors b and c which are both orthogonal to this vector and to each other.
+		That is, the set { this, b, c} is an orthogonal set. The vectors b and c that are outputted are also normalized.
+		@param outB [out] Receives vector b.
+		@param outC [out] Receives vector c.
+		@note When calling this function, this vector should not be zero! */
+	void PerpendicularBasis(float3 &outB, float3 &outC) const;
+
 	/// Generates a random vector that is perpendicular to this vector.
 	/** The distribution is uniformly random. */
 	float3 RandomPerpendicular(LCG &rng) const;
@@ -649,6 +657,9 @@ public:
 	/// Returns a random float3 with each entry randomized between the range [minElem, maxElem].
 	static MUST_USE_RESULT float3 RandomBox(LCG &lcg, float minElem, float maxElem);
 
+	// Identical to RandomBox, but provided for generic API between float3 and float4 in templates.
+	static inline float3 RandomGeneral(LCG &lcg, float minElem, float maxElem) { return RandomBox(lcg, minElem, maxElem); }
+
 	/// Specifies a compile-time constant float3 with value (0, 0, 0).
 	/** @note Due to static data initialization order being undefined in C++, do NOT use this
 			member to initialize other static data in other compilation units! */
@@ -685,12 +696,6 @@ public:
 	float3(const Ogre::Vector3 &other):x(other.x), y(other.y), z(other.z) {}
 	operator Ogre::Vector3() const { return Ogre::Vector3(x, y, z); }
 #endif
-/*
-#ifdef MATH_IRRLICHT_INTEROP
-	float3(const Vector3df &other) { x = other.x; y = other.y; z = other.z; }
-	operator Vector3df() const { return Vector3df(x, y, z); }
-#endif
-*/
 #ifdef MATH_QT_INTEROP
 	float3(const QVector3D &other):x(other.x()), y(other.y()), z(other.z()) {}
 	operator QVector3D() const { return QVector3D(x, y, z); }
@@ -703,6 +708,14 @@ public:
 #ifdef MATH_BULLET_INTEROP
 	float3(const btVector3 &other):x(other.x()), y(other.y()), z(other.z()) {}
 	operator btVector3() const { return btVector3(x, y, z); }
+#endif
+#ifdef MATH_URHO3D_INTEROP
+	float3(const Urho3D::Vector3 &other) : x(other.x_), y(other.y_), z(other.z_) {}
+	operator Urho3D::Vector3() const { return Urho3D::Vector3(x, y, z); }
+#endif
+#ifdef MATH_IRRKLANG_INTEROP
+    float3(const irrklang::vec3df &other) : x(other.X), y(other.Y), z(other.Z) {}
+    operator irrklang::vec3df() const { return irrklang::vec3df(x, y, z); }
 #endif
 };
 
@@ -743,15 +756,12 @@ MATH_BEGIN_NAMESPACE
 
 #ifdef MATH_AUTOMATIC_SSE
 bool EqualAbs(float a, float b, float epsilon);
-#define MATH_VEC_IS_FLOAT4
-typedef float4 vec;
-typedef float4_storage vec_storage;
 
 #define POINT_VEC(...) float4(__VA_ARGS__, 1.f)
 #define DIR_VEC(...) float4(__VA_ARGS__, 0.f)
 
-#define POINT_VEC_SCALAR(s) pos_from_scalar_ps(s)
-#define DIR_VEC_SCALAR(s) dir_from_scalar_ps(s)
+#define POINT_VEC_SCALAR(s) float4(pos_from_scalar_ps(s))
+#define DIR_VEC_SCALAR(s) float4(dir_from_scalar_ps(s))
 
 #define POINT_TO_FLOAT3(v) (v).xyz()
 #define DIR_TO_FLOAT3(v) (v).xyz()
@@ -775,8 +785,6 @@ inline float3 DIR_TO_FLOAT3(const vec &v)
 }
 */
 #else
-typedef float3 vec;
-typedef float3 vec_storage;
 #define POINT_VEC(...) float3(__VA_ARGS__)
 #define DIR_VEC(...) float3(__VA_ARGS__)
 #define POINT_TO_FLOAT3(x) x

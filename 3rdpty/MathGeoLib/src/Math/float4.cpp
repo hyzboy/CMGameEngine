@@ -40,38 +40,77 @@ MATH_BEGIN_NAMESPACE
 using namespace std;
 
 float4::float4(float x_, float y_, float z_, float w_)
+#if !defined(MATH_AUTOMATIC_SSE)
+	// Best: 8.449 nsecs / 23.376 ticks, Avg: 8.837 nsecs, Worst: 9.601 nsecs
 :x(x_), y(y_), z(z_), w(w_)
+#endif
 {
+#if defined(MATH_AUTOMATIC_SSE)
+	// Best: 1.536 nsecs / 4.2 ticks, Avg: 1.609 nsecs, Worst: 1.920 nsecs
+	v = set_ps(w_, z_, y_, x_);
+#endif
 }
 
 float4::float4(const float3 &xyz, float w_)
+#if !defined(MATH_AUTOMATIC_SSE) || !defined(MATH_SSE)
+// Best: 5.761 nsecs / 15.872 ticks, Avg: 6.237 nsecs, Worst: 7.681 nsecs
 :x(xyz.x), y(xyz.y), z(xyz.z), w(w_)
+#endif
 {
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+	// Best: 1.536 nsecs / 4.032 ticks, Avg: 1.540 nsecs, Worst: 1.920 nsecs
+	v = load_vec3(xyz.ptr(), w_);
+#endif
 }
 
 float4::float4(float x_, float y_, const float2 &zw)
+#if !defined(MATH_AUTOMATIC_SSE)
 :x(x_), y(y_), z(zw.x), w(zw.y)
+#endif
 {
+#if defined(MATH_AUTOMATIC_SSE)
+	v = set_ps(zw.y, zw.x, y_, x_);
+#endif
 }
 
 float4::float4(float x_, const float2 &yz, float w_)
+#if !defined(MATH_AUTOMATIC_SSE)
 :x(x_), y(yz.x), z(yz.y), w(w_)
+#endif
 {
+#if defined(MATH_AUTOMATIC_SSE)
+	v = set_ps(w_, yz.y, yz.x, x_);
+#endif
 }
 
 float4::float4(float x_, const float3 &yzw)
+#if !defined(MATH_AUTOMATIC_SSE)
 :x(x_), y(yzw.x), z(yzw.y), w(yzw.z)
+#endif
 {
+#if defined(MATH_AUTOMATIC_SSE)
+	v = set_ps(yzw.z, yzw.y, yzw.x, x_);
+#endif
 }
 
 float4::float4(const float2 &xy, float z_, float w_)
+#if !defined(MATH_AUTOMATIC_SSE)
 :x(xy.x), y(xy.y), z(z_), w(w_)
+#endif
 {
+#if defined(MATH_AUTOMATIC_SSE)
+	v = set_ps(w_, z_, xy.y, xy.x);
+#endif
 }
 
 float4::float4(const float2 &xy, const float2 &zw)
+#if !defined(MATH_AUTOMATIC_SSE)
 :x(xy.x), y(xy.y), z(zw.x), w(zw.y)
+#endif
 {
+#if defined(MATH_AUTOMATIC_SSE)
+	v = set_ps(zw.y, zw.x, xy.y, xy.x);
+#endif
 }
 
 float4::float4(const float *data)
@@ -81,20 +120,14 @@ float4::float4(const float *data)
 	if (!data)
 		return;
 #endif
+#if defined(MATH_AUTOMATIC_SSE)
+	v = loadu_ps(data);
+#else
 	x = data[0];
 	y = data[1];
 	z = data[2];
 	w = data[3];
-}
-
-float *float4::ptr()
-{
-	return &x;
-}
-
-const float *float4::ptr() const
-{
-	return &x;
+#endif
 }
 
 CONST_WIN32 float float4::At(int index) const
@@ -151,7 +184,70 @@ float4 float4::Swizzled(int i, int j, int k, int l) const
 #endif
 }
 
-#ifdef MATH_SSE
+float4 float4::xxxx() const
+{
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+	return xxxx_ps(v);
+#else
+	return float4::FromScalar(x);
+#endif
+}
+
+float4 float4::yyyy() const
+{
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+	return yyyy_ps(v);
+#else
+	return float4::FromScalar(x);
+#endif
+}
+
+float4 float4::zzzz() const
+{
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+	return zzzz_ps(v);
+#else
+	return float4::FromScalar(x);
+#endif
+}
+
+float4 float4::xxxw() const
+{
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+	return shuffle1_ps(v, _MM_SHUFFLE(3, 0, 0, 0));
+#else
+	return float4(x, x, x, w);
+#endif
+}
+
+float4 float4::yyyw() const
+{
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+	return shuffle1_ps(v, _MM_SHUFFLE(3, 1, 1, 1));
+#else
+	return float4(y, y, y, w);
+#endif
+}
+
+float4 float4::zzzw() const
+{
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+	return shuffle1_ps(v, _MM_SHUFFLE(3, 2, 2, 2));
+#else
+	return float4(z, z, z, w);
+#endif
+}
+
+float4 float4::wwww() const
+{
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+	return wwww_ps(v);
+#else
+	return float4::FromScalar(x);
+#endif
+}
+
+#ifdef MATH_SIMD
 
 /// The returned vector contains the squared length of the float3 part in the lowest channel of the vector.
 ///\todo Delete this function.
@@ -160,11 +256,11 @@ simd4f float4::LengthSq3_SSE() const
 	return dot3_ps3(v, v);
 }
 
-/// The returned vector contains the length of the float3 part in eacj channel of the vector.
+/// The returned vector contains the length of the float3 part in each channel of the vector.
 ///\todo Delete this function.
 simd4f float4::Length3_SSE() const
 {
-	return _mm_sqrt_ps(dot3_ps(v, v));
+	return sqrt_ps(dot3_ps(v, v));
 }
 
 /// The returned vector contains the squared length of the float4 in each channel of the vector.
@@ -176,35 +272,39 @@ simd4f float4::LengthSq4_SSE() const
 /// The returned vector contains the length of the float4 in each channel of the vector.
 simd4f float4::Length4_SSE() const
 {
-	return _mm_sqrt_ps(dot4_ps(v, v));
+	return sqrt_ps(dot4_ps(v, v));
 }
 
 void float4::Normalize3_Fast_SSE()
 {
 	simd4f len = Length3_SSE();
-	simd4f normalized = _mm_div_ps(v, len); // Normalize.
+	simd4f normalized = div_ps(v, len); // Normalize.
 	v = cmov_ps(v, normalized, sseMaskXYZ); // Return the original .w component to the vector (this function is supposed to preserve original .w).
 }
 
 simd4f float4::Normalize4_SSE()
 {
 	simd4f len = Length4_SSE();
-	simd4f isZero = _mm_cmplt_ps(len, simd4fEpsilon); // Was the length zero?
-	simd4f normalized = _mm_div_ps(v, len); // Normalize.
+	simd4f isZero = cmplt_ps(len, simd4fEpsilon); // Was the length zero?
+	simd4f normalized = div_ps(v, len); // Normalize.
 	v = cmov_ps(normalized, float4::unitX.v, isZero); // If length == 0, output the vector (1,0,0,0).
 	return len;
 }
 
 void float4::Normalize4_Fast_SSE()
 {
-	simd4f recipLen = _mm_rsqrt_ps(dot4_ps(v, v));
-	v = _mm_mul_ps(v, recipLen);
+	simd4f recipLen = rsqrt_ps(dot4_ps(v, v));
+	v = mul_ps(v, recipLen);
 }
 
 void float4::NormalizeW_SSE()
 {
-	simd4f div = shuffle1_ps(v, _MM_SHUFFLE(3,3,3,3));
-	v = _mm_div_ps(v, div);
+#ifdef MATH_SSE
+	simd4f div = wwww_ps(v);
+	v = div_ps(v, div);
+#elif defined(MATH_NEON)
+	v = div_ps(v, vdupq_n_f32(vgetq_lane_f32(v, 3)));
+#endif
 }
 
 #endif
@@ -440,10 +540,14 @@ std::string float4::ToString() const
 
 std::string float4::SerializeToString() const
 {
-	assert(IsNeutralCLocale());
 	char str[256];
-	sprintf(str, "%.9g,%.9g,%.9g,%.9g", x, y, z, w);
-	return std::string(str);
+	char *s = SerializeFloat(x, str); *s = ','; ++s;
+	s = SerializeFloat(y, s); *s = ','; ++s;
+	s = SerializeFloat(z, s); *s = ','; ++s;
+	s = SerializeFloat(w, s);
+	assert(s+1 - str < 256);
+	MARK_UNUSED(s);
+	return str;
 }
 
 std::string float4::SerializeToCodeString() const
@@ -760,7 +864,7 @@ i x j == -(j x i) == k,
 float4 float4::Cross3(const float3 &rhs) const
 {
 #if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
-	return float4(cross_ps(v, float4(rhs, 0.f).v));
+	return float4(cross_ps(v, load_vec3(rhs.ptr(), 0.f)));
 #else
 	float4 dst;
 	dst.x = y * rhs.z - z * rhs.y;
@@ -832,6 +936,31 @@ float4 float4::AnotherPerpendicular(const float4 &hint, const float4 &hint2) con
 	float4 firstPerpendicular = Perpendicular(hint, hint2);
 	float4 v = this->Cross(firstPerpendicular);
 	return v.Normalized();
+}
+
+void float4::PerpendicularBasis(float4 &outB, float4 &outC) const
+{
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+	// Benchmark 'float4_PerpendicularBasis': float4::PerpendicularBasis
+	//   Best: 17.468 nsecs / 29.418 ticks, Avg: 17.703 nsecs, Worst: 19.275 nsecs
+	basis_ps(this->v, &outB.v, &outC.v);
+#else
+	// Benchmark 'float4_PerpendicularBasis': float4::PerpendicularBasis
+	//   Best: 33.731 nsecs / 57.715 ticks, Avg: 35.080 nsecs, Worst: 39.152 nsecs
+	float4 a = this->Abs();
+	// Choose from (1,0,0), (0,1,0), and (0,0,1) the one that's most perpendicular to this vector.
+	float4 q;
+	if (a.x <= a.y)
+	{
+		if (a.x <= a.z) q = float4(1,0,0,0);
+		else q = float4(0,0,1,0);
+	}
+	else if (a.y <= a.z) q = float4(0,1,0,0);
+	else q = float4(0,0,1,0);
+
+	outB = this->Cross(q).Normalized();
+	outC = this->Cross(outB).Normalized();
+#endif
 }
 
 float4 float4::RandomPerpendicular(LCG &rng) const
@@ -1001,12 +1130,22 @@ bool MUST_USE_RESULT float4::AreOrthonormal(const float4 &a, const float4 &b, co
 
 float4 float4::FromScalar(float scalar)
 {
+#ifdef MATH_AUTOMATIC_SSE
+	return set1_ps(scalar);
+#else
 	return float4(scalar, scalar, scalar, scalar);
+#endif
 }
 
-float4 float4::FromScalar(float scalar, float w)
+float4 float4::FromScalar(float scalar, float w_)
 {
-	return float4(scalar, scalar, scalar, w);
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+	simd4f s = set1_ps(scalar);
+	simd4f highPart = _mm_unpacklo_ps(s, _mm_set_ss(w_)); // [_ _ w s]
+	return _mm_movelh_ps(s, highPart); // [w s s s]
+#else
+	return float4(scalar, scalar, scalar, w_);
+#endif
 }
 
 void float4::SetFromScalar(float scalar)
@@ -1036,7 +1175,13 @@ void float4::Set(float x_, float y_, float z_, float w_)
 void float4::SetFromScalar(float scalar, float w_)
 {
 #ifdef MATH_AUTOMATIC_SSE
+#ifdef MATH_SSE
+	simd4f s = set1_ps(scalar);
+	simd4f highPart = _mm_unpacklo_ps(s, _mm_set_ss(w_)); // [_ _ w s]
+	v = _mm_movelh_ps(s, highPart); // [w s s s]
+#else
 	v = set_ps(w_, scalar, scalar, scalar);
+#endif
 #else
 	x = scalar;
 	y = scalar;

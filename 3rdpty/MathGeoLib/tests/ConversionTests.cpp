@@ -48,7 +48,7 @@ int U32ToString(u32 val, char *str)
 	return (int)(s - str);
 }
 
-#ifdef MATH_SSE
+#ifdef MATH_SSE2
 
 FORCE_INLINE __m128i INT_TO_M128(int i)
 {
@@ -88,6 +88,10 @@ static const __m128i hundred = _mm_set1_epi16(100);
 static const __m128i one_tenth = _mm_set1_epi16((short)(unsigned short)52429 /* == 8 * 6553.6 */);
 static const __m128i ten = _mm_set1_epi16(10);
 static const __m128i zerochar = _mm_set1_epi8('0');
+
+#ifdef _MSC_VER
+#pragma intrinsic(_BitScanForward)
+#endif
 
 // Warning: This is about 5 times slower than the C version! Better to just use the C version.
 int U32ToString_SSE(u32 i, char *str)
@@ -132,7 +136,10 @@ int U32ToString_SSE(u32 i, char *str)
 	unsigned int onesBits = (unsigned int)_mm_movemask_epi8(ones);
 	unsigned long shift;
 #ifdef _MSC_VER
-	_BitScanForward(&shift, onesBits);
+	if (onesBits != 0)
+		_BitScanForward(&shift, onesBits);
+	else
+		shift = 0;
 #else
 	shift = (onesBits != 0) ? __builtin_ctz(onesBits) : 0;
 #endif
@@ -153,7 +160,7 @@ RANDOMIZED_TEST(U32ToString_SSE)
 		u32 n = rng.Int();
 		U32ToString_SSE(n+m, str);
 		U32ToString(n+m, str2);
-		assert(!strcmp(str, str2));
+		assert2(!strcmp(str, str2), std::string(str), std::string(str2));
 	}
 }
 

@@ -1,6 +1,7 @@
 #include "../src/MathGeoLib.h"
 #include "TestRunner.h"
 #include "../src/Math/SSEMath.h"
+#include "ObjectGenerators.h"
 
 MATH_BEGIN_NAMESPACE
 
@@ -73,6 +74,39 @@ AABB *AABBArray()
 		{
 			arr[i].minPoint = POINT_VEC(float3::RandomBox(lcg, -100.f, 100.f));
 			arr[i].maxPoint = arr[i].minPoint + POINT_VEC(float3::RandomBox(lcg, 0, 100.f));
+		}
+	}
+	return arr;
+}
+
+OBB *OBBArray()
+{
+	LCG lcg;
+	static OBB *arr;
+	if (!arr)
+	{
+		arr = AlignedNew<OBB>(testrunner_numItersPerTest + UNROLL_LOOP_PADDING);
+		for (int i = 0; i < testrunner_numItersPerTest + UNROLL_LOOP_PADDING; ++i)
+		{
+			AABB a;
+			a.minPoint = POINT_VEC(float3::RandomBox(lcg, -100.f, 100.f));
+			a.maxPoint = a.minPoint + POINT_VEC(float3::RandomBox(lcg, 0, 100.f));
+			arr[i] = a.Transform(Quat::RandomRotation(lcg));
+		}
+	}
+	return arr;
+}
+
+Frustum *FrustumArray()
+{
+	LCG lcg(Clock::TickU32());
+	static Frustum *arr;
+	if (!arr)
+	{
+		arr = AlignedNew<Frustum>(testrunner_numItersPerTest + UNROLL_LOOP_PADDING);
+		for (int i = 0; i < testrunner_numItersPerTest + UNROLL_LOOP_PADDING; ++i)
+		{
+			arr[i] = RandomFrustumContainingPoint(lcg, POINT_VEC_SCALAR(0.f));
 		}
 	}
 	return arr;
@@ -208,6 +242,19 @@ float4 *VectorArray()
 	return arr;
 }
 
+vec *VecArray2()
+{
+	LCG lcg;
+	static vec *arr;
+	if (!arr)
+	{
+		arr = AlignedNew<vec>(testrunner_numItersPerTest + UNROLL_LOOP_PADDING);
+		for (int i = 0; i < testrunner_numItersPerTest + UNROLL_LOOP_PADDING; ++i)
+			arr[i] = vec::RandomGeneral(lcg, -10.f, 10.f);
+	}
+	return arr;
+}
+
 float4 *VectorArray2()
 {
 	LCG lcg;
@@ -258,6 +305,56 @@ float3x4 uninitializedFloat3x4;
 float4x4 uninitializedFloat4x4;
 Quat uninitializedQuat;
 
+int dummyResultInt = 0;
+vec dummyResultVec = vec::zero;
+
+float *f = 0;
+float *pf = 0;
+float *uf = 0;
+float4x4 *m = 0;
+float4x4 *m2 = 0;
+const float4x4 *om = 0;
+const float4x4 *ogm = 0;
+float4x4 *tpm = 0;
+float2 *fl_2 = 0;
+const float4 *nv = 0;
+const float4 *nv2 = 0;
+float4 *v = 0;
+float4 *v2 = 0;
+float4 *v3 = 0;
+float4 *v01 = 0;
+vec *ve = 0;
+Quat *q = 0;
+Quat *q2 = 0;
+AABB *aabb = 0;
+OBB *obb = 0;
+Frustum *frustum = 0;
+
+void InitTestData()
+{
+	f = FloatArray();
+	pf = PosFloatArray(); // > 0
+	uf = UnitFloatArray(); // [0,1]
+	m = MatrixArray();
+	m2 = MatrixArray2();
+	om = OrthonormalMatrixArray();
+	ogm = OrthogonalMatrixArray();
+	tpm = TransposedMatrixArray();
+	fl_2 = Float2Array();
+	nv = NormalizedVectorArray();
+	nv2 = NormalizedVectorArray2();
+	v = VectorArray();
+	v2 = VectorArray2();
+	v3 = VectorArray3();
+	v01 = VectorArrayWithW0Or1();
+	ve = VecArray2();
+	q = QuatArray();
+	q2 = QuatArray2();
+	aabb = AABBArray();
+	obb = OBBArray();
+	frustum = FrustumArray();
+}
+
 class FreeTestData
 {
 public:
@@ -281,9 +378,11 @@ public:
 		AlignedFree(QuatArray2());
 		AlignedFree(VectorArrayWithW0Or1());
 		AlignedFree(AABBArray());
+		AlignedFree(OBBArray());
+		AlignedFree(FrustumArray());
+		AlignedFree(VecArray2());
 	}
 };
-
 // At app exit time, this causes all test data arrays to be freed.
 FreeTestData testDataDeleter;
 

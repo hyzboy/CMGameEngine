@@ -109,7 +109,7 @@
 #endif
 // If MATH_USE_OPENGL is defined, the Frustum class defaults to creating Frustums with projectiveSpace = FrustumSpaceGL.
 #ifndef MATH_USE_OPENGL
-#define MATH_USE_OPENGL
+//#define MATH_USE_OPENGL
 #endif
 
 // If MATH_LEFTHANDED_CAMERA is defined, the Frustum class defaults to creating Frustums with handedness = FrustumLeftHanded.
@@ -118,7 +118,7 @@
 #endif
 // If MATH_RIGHTHANDED_CAMERA is defined, the Frustum class defaults to creating Frustums with handedness = FrustumRightHanded.
 #ifndef MATH_RIGHTHANDED_CAMERA
-#define MATH_RIGHTHANDED_CAMERA
+//#define MATH_RIGHTHANDED_CAMERA
 #endif
 
 #if defined(MATH_USE_DIRECT3D) && defined(MATH_USE_OPENGL)
@@ -134,7 +134,7 @@
 //#define MATH_SSE41
 //#define MATH_SSE3
 #define MATH_SSE2
-#define MATH_SSE // SSE1.
+//#define MATH_SSE // SSE1.
 
 ///\todo Test iOS support.
 ///\todo Enable NEON only on ARMv7, not older.

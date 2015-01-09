@@ -317,33 +317,33 @@ float NewtonRhapsonSqrt(float x)
 #ifdef MATH_SSE
 float NewtonRhapsonSSESqrt(float x)
 {
-	__m128 X = setx_ps(x);
-	__m128 estimate = _mm_rcp_ss(_mm_rsqrt_ss(X));
-	__m128 e2 = _mm_mul_ss(estimate,estimate);
-	__m128 half = _mm_set_ss(0.5f);
-	__m128 recipEst = _mm_rcp_ss(estimate);
+	simd4f X = setx_ps(x);
+	simd4f estimate = _mm_rcp_ss(_mm_rsqrt_ss(X));
+	simd4f e2 = _mm_mul_ss(estimate,estimate);
+	simd4f half = _mm_set_ss(0.5f);
+	simd4f recipEst = _mm_rcp_ss(estimate);
 
 	return s4f_x(_mm_sub_ss(estimate, _mm_mul_ss(_mm_mul_ss((_mm_sub_ss(e2, X)), half), recipEst)));
 }
 
 float NewtonRhapsonSSESqrt2(float x)
 {
-	__m128 X = setx_ps(x);
-	__m128 estimate = _mm_rsqrt_ss(_mm_rcp_ss(X));
-	__m128 e2 = _mm_mul_ss(estimate,estimate);
-	__m128 half = _mm_set_ss(0.5f);
-	__m128 recipEst = _mm_rcp_ss(estimate);
+	simd4f X = setx_ps(x);
+	simd4f estimate = _mm_rsqrt_ss(_mm_rcp_ss(X));
+	simd4f e2 = _mm_mul_ss(estimate,estimate);
+	simd4f half = _mm_set_ss(0.5f);
+	simd4f recipEst = _mm_rcp_ss(estimate);
 
 	return s4f_x(_mm_sub_ss(estimate, _mm_mul_ss(_mm_mul_ss((_mm_sub_ss(e2, X)), half), recipEst)));
 }
 
 float NewtonRhapsonSSESqrt3(float x)
 {
-	__m128 X = setx_ps(x);
-	__m128 estimate = _mm_mul_ss(X, _mm_rsqrt_ss(X));
-	__m128 e2 = _mm_mul_ss(estimate,estimate);
-	__m128 half = _mm_set_ss(0.5f);
-	__m128 recipEst = _mm_rcp_ss(estimate);
+	simd4f X = setx_ps(x);
+	simd4f estimate = _mm_mul_ss(X, _mm_rsqrt_ss(X));
+	simd4f e2 = _mm_mul_ss(estimate,estimate);
+	simd4f half = _mm_set_ss(0.5f);
+	simd4f recipEst = _mm_rcp_ss(estimate);
 
 	return s4f_x(_mm_sub_ss(estimate, _mm_mul_ss(_mm_mul_ss((_mm_sub_ss(e2, X)), half), recipEst)));
 }
@@ -357,7 +357,7 @@ float Sqrt_Via_Rcp_RSqrt(float x)
 
 UNIQUE_TEST(sqrt_precision)
 {
-	const int C = 7;
+	const int C = 8;
 	float maxRelError[C] = {};
 	float X[C] = {};
 
@@ -374,6 +374,9 @@ UNIQUE_TEST(sqrt_precision)
 		X[4] = NewtonRhapsonSSESqrt2(f);
 		X[5] = NewtonRhapsonSSESqrt3(f);
 		X[6] = Sqrt_Via_Rcp_RSqrt(f);
+#endif
+#ifdef MATH_SIMD
+		X[7] = s4f_x(sqrt_ps(set1_ps(f)));
 #endif
 
 		for(int j = 0; j < C; ++j)
@@ -398,6 +401,10 @@ UNIQUE_TEST(sqrt_precision)
 
 	LOGI("Max relative error with Sqrt_Via_Rcp_RSqrt: %e", maxRelError[6]);
 	assert(maxRelError[6] < 1e-3f);
+#endif
+#ifdef MATH_SIMD
+	LOGI("Max relative error with sqrt_ps: %e", maxRelError[7]);
+	assert(maxRelError[7] < 1e-6f);
 #endif
 }
 
@@ -481,9 +488,9 @@ UNIQUE_TEST(sqrt_rsqrt_precision)
 	float maxRelError[C] = {};
 	float X[C] = {};
 
-	for(int i = 0; i < 1000000; ++i)
+	for(int i = 0; i < 10; ++i)
 	{
-		float f = rng.Float(1e-5f, 1e20f);
+		float f = rng.Float(1e-6f, 1e20f);
 		float x = (float)(1.0 / sqrt((double)f)); // best precision of the rsqrt.
 
 		X[0] = RSqrt(f);
@@ -491,11 +498,12 @@ UNIQUE_TEST(sqrt_rsqrt_precision)
 		X[2] = sqrtf_recip(f);
 		X[3] = QuakeInvSqrt(f);
 		X[4] = RSqrtFast(f);
-
+#ifdef MATH_SIMD
+		X[5] = s4f_x(rsqrt_ps(set1_ps(f)));
+#endif
 		for(int j = 0; j < C; ++j)
 			maxRelError[j] = Max(RelativeError(x, X[j]), maxRelError[j]);
 	}
-
 	LOGI("Max relative error with RSqrt: %e", maxRelError[0]);
 	assert(maxRelError[0] < 1e-6f);
 	LOGI("Max relative error with 1.f/sqrtf: %e", maxRelError[1]);
@@ -505,7 +513,11 @@ UNIQUE_TEST(sqrt_rsqrt_precision)
 	LOGI("Max relative error with Quake InvSqrt: %e", maxRelError[3]);
 	assert(maxRelError[3] < 1e-2f);
 	LOGI("Max relative error with RSqrtFast: %e", maxRelError[4]);
-	assert(maxRelError[4] < 1e-3f);
+	assert(maxRelError[4] < 5e-3f);
+#ifdef MATH_SIMD
+	LOGI("Max relative error with rsqrt_ps: %e", maxRelError[5]);
+	assert(maxRelError[5] < 1e-6f);
+#endif
 }
 
 BENCHMARK(RSqrt, "RSqrt")
@@ -546,8 +558,8 @@ float OneOverX(float x)
 #ifdef MATH_SSE
 float NewtonRhapsonRecip(float x)
 {
-	__m128 X = setx_ps(x);
-	__m128 e = _mm_rcp_ss(X);
+	simd4f X = setx_ps(x);
+	simd4f e = _mm_rcp_ss(X);
 	// 1/x = D
 	// f(e) = e^-1 - x
 	// f'(e) = -e^-2
@@ -557,15 +569,15 @@ float NewtonRhapsonRecip(float x)
 	// e_n = 2*e - x*e^2
 
 	// Do one iteration of Newton-Rhapson:
-	__m128 e2 = _mm_mul_ss(e,e);
+	simd4f e2 = _mm_mul_ss(e,e);
 	
 	return s4f_x(_mm_sub_ss(_mm_add_ss(e, e), _mm_mul_ss(X, e2)));
 }
 
 float NewtonRhapsonRecip2(float x)
 {
-	__m128 X = setx_ps(x);
-	__m128 e = _mm_rcp_ss(X);
+	simd4f X = setx_ps(x);
+	simd4f e = _mm_rcp_ss(X);
 	// 1/x = D
 	// f(e) = e^-1 - x
 	// f'(e) = -e^-2
@@ -581,6 +593,21 @@ float NewtonRhapsonRecip2(float x)
 	e2 = _mm_mul_ss(e,e);
 	return s4f_x(_mm_sub_ss(_mm_add_ss(e, e), _mm_mul_ss(X, e2)));
 }
+
+#ifdef MATH_SSE2
+static inline double rcp_double(float x)
+{
+	__m128d X = _mm_cvtps_pd(_mm_set1_ps(x));
+	__m128d e = _mm_cvtps_pd(_mm_rcp_ps(_mm_set1_ps(x)));
+	e = _mm_sub_sd(_mm_add_sd(e,e), _mm_mul_sd(X, _mm_mul_sd(e,e)));
+	e = _mm_sub_sd(_mm_add_sd(e,e), _mm_mul_sd(X, _mm_mul_sd(e,e)));
+	e = _mm_sub_sd(_mm_add_sd(e,e), _mm_mul_sd(X, _mm_mul_sd(e,e)));
+	e = _mm_sub_sd(_mm_add_sd(e,e), _mm_mul_sd(X, _mm_mul_sd(e,e)));
+	e = _mm_sub_sd(_mm_add_sd(e,e), _mm_mul_sd(X, _mm_mul_sd(e,e)));
+	return _mm_cvtsd_f64(_mm_sub_sd(_mm_add_sd(e,e), _mm_mul_sd(X, _mm_mul_sd(e,e))));
+}
+#endif
+
 #endif
 
 UNIQUE_TEST(sqrt_recip_precision)
@@ -601,6 +628,12 @@ UNIQUE_TEST(sqrt_recip_precision)
 		X[3] = NewtonRhapsonRecip2(f);
 #endif
 		X[4] = OneOverX(f);
+#ifdef MATH_SIMD
+		X[5] = s4f_x(rcp_ps(set1_ps(f)));
+#endif
+#ifdef MATH_SSE2
+		X[6] = (float)rcp_double(f);
+#endif
 
 		for(int j = 0; j < C; ++j)
 			maxRelError[j] = Max(RelativeError(x, X[j]), maxRelError[j]);
@@ -609,7 +642,7 @@ UNIQUE_TEST(sqrt_recip_precision)
 	LOGI("Max relative error with Recip: %e", maxRelError[0]);
 	assert(maxRelError[0] < 1e-5f);
 	LOGI("Max relative error with RecipFast: %e", maxRelError[1]);
-	assert(maxRelError[1] < 1e-3f);
+	assert(maxRelError[1] < 5e-3f);
 #ifdef MATH_SSE
 	LOGI("Max relative error with NewtonRhapsonRecip: %e", maxRelError[2]);
 	assert(maxRelError[2] < 1e-5f);
@@ -618,6 +651,14 @@ UNIQUE_TEST(sqrt_recip_precision)
 #endif
 	LOGI("Max relative error with 1.f/x: %e", maxRelError[4]);
 	assert(maxRelError[4] < 1e-6f);
+#ifdef MATH_SIMD
+	LOGI("Max relative error with rcp_ps: %e", maxRelError[5]);
+	assert(maxRelError[5] < 1e-5f);
+#endif
+#ifdef MATH_SSE2
+	LOGI("Max relative error with rcp_double: %e", maxRelError[6]);
+	assert(maxRelError[6] < 1e-5f);
+#endif
 }
 
 BENCHMARK(Recip, "Recip")

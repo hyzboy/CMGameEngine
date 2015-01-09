@@ -804,16 +804,6 @@ float3 float4x4::WorldZ() const
 	return Col3(2);
 }
 
-float *float4x4::ptr()
-{
-	return reinterpret_cast<float *>(v);
-}
-
-const float *float4x4::ptr() const
-{
-	return reinterpret_cast<const float *>(v);
-}
-
 void float4x4::SetRow3(int row, const float3 &rowVector)
 {
 	SetRow3(row, rowVector.x, rowVector.y, rowVector.z);
@@ -1366,7 +1356,7 @@ bool float4x4::Inverse(float epsilon)
 #if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
 	MARK_UNUSED(epsilon);
 	float det = mat4x4_inverse(row, row);
-	return det > 1e-5f;
+	return MATH_NS::Abs(det) > 1e-5f;
 #else
 	return InverseMatrix(*this, epsilon);
 #endif
@@ -1520,7 +1510,7 @@ void float4x4::Pivot()
 
 		// find the row k with k >= 1 for which Mkj has the largest absolute value.
 		for(int i = row; i < Rows; ++i)
-			if (Abs(v[i][col]) > Abs(v[greatest][col]))
+			if (MATH_NS::Abs(v[i][col]) > MATH_NS::Abs(v[greatest][col]))
 				greatest = i;
 
 		if (!EqualAbs(v[greatest][col], 0))
@@ -1543,7 +1533,7 @@ float3 float4x4::TransformPos(const float3 &pointVector) const
 {
 	assume(!this->ContainsProjection()); // This function does not divide by w or output it, so cannot have projection.
 #if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
-	return mat3x4_mul_vec(row, _mm_set_ps(1.f, pointVector.z, pointVector.y, pointVector.x));
+	return mat3x4_mul_vec(row, set_ps(1.f, pointVector.z, pointVector.y, pointVector.x));
 #else
 	return TransformPos(pointVector.x, pointVector.y, pointVector.z);
 #endif
@@ -1553,7 +1543,7 @@ float3 float4x4::TransformPos(float x, float y, float z) const
 {
 	assume(!this->ContainsProjection()); // This function does not divide by w or output it, so cannot have projection.
 #if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
-	return mat3x4_mul_vec(row, _mm_set_ps(1.f, z, y, x));
+	return mat3x4_mul_vec(row, set_ps(1.f, z, y, x));
 #else
 	return float3(DOT4POS_xyz(Row(0), x,y,z),
 				  DOT4POS_xyz(Row(1), x,y,z),
@@ -1565,7 +1555,7 @@ float3 float4x4::TransformDir(const float3 &directionVector) const
 {
 	assume(!this->ContainsProjection()); // This function does not divide by w or output it, so cannot have projection.
 #if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
-	return mat3x4_mul_vec(row, _mm_set_ps(0.f, directionVector.z, directionVector.y, directionVector.x));
+	return mat3x4_mul_vec(row, set_ps(0.f, directionVector.z, directionVector.y, directionVector.x));
 #else
 	return TransformDir(directionVector.x, directionVector.y, directionVector.z);
 #endif
@@ -1575,7 +1565,7 @@ float3 float4x4::TransformDir(float x, float y, float z) const
 {
 	assume(!this->ContainsProjection()); // This function does not divide by w or output it, so cannot have projection.
 #if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
-	return mat3x4_mul_vec(row, _mm_set_ps(0.f, z, y, x));
+	return mat3x4_mul_vec(row, set_ps(0.f, z, y, x));
 #else
 	return float3(DOT4DIR_xyz(Row(0), x,y,z),
 	              DOT4DIR_xyz(Row(1), x,y,z),
@@ -1684,8 +1674,10 @@ void float4x4::Transform(float4 *vectorArray, int numVectors, int strideBytes) c
 
 float4x4 float4x4::operator *(const float3x3 &rhs) const
 {
-	///\todo SSE.
 	float4x4 r;
+#ifdef MATH_AUTOMATIC_SSE
+	mat4x4_mul_mat3x3_sse(r.row, this->row, rhs.ptr());
+#else
 	const float *c0 = rhs.ptr();
 	const float *c1 = rhs.ptr() + 1;
 	const float *c2 = rhs.ptr() + 2;
@@ -1708,14 +1700,16 @@ float4x4 float4x4::operator *(const float3x3 &rhs) const
 	r[3][1] = DOT3STRIDED(v[3], c1, 3);
 	r[3][2] = DOT3STRIDED(v[3], c2, 3);
 	r[3][3] = v[3][3];
-
+#endif
 	return r;
 }
 
 float4x4 float4x4::operator *(const float3x4 &rhs) const
 {
-	///\todo SSE.
 	float4x4 r;
+#ifdef MATH_AUTOMATIC_SSE
+	mat4x4_mul_mat3x4_sse(r.row, this->row, rhs.row);
+#else
 	const float *c0 = rhs.ptr();
 	const float *c1 = rhs.ptr() + 1;
 	const float *c2 = rhs.ptr() + 2;
@@ -1739,7 +1733,7 @@ float4x4 float4x4::operator *(const float3x4 &rhs) const
 	r[3][1] = DOT3STRIDED(v[3], c1, 4);
 	r[3][2] = DOT3STRIDED(v[3], c2, 4);
 	r[3][3] = DOT3STRIDED(v[3], c3, 4) + v[3][3];
-
+#endif
 	return r;
 }
 
@@ -1779,7 +1773,7 @@ float4x4 float4x4::operator *(const float4x4 &rhs) const
 
 float4x4 float4x4::operator *(const Quat &rhs) const
 {
-#ifdef MATH_SSE
+#ifdef MATH_SIMD
 	float4x4 rot(rhs);
 	return *this * rot;
 #else
@@ -2038,10 +2032,26 @@ std::string float4x4::ToString() const
 
 std::string float4x4::SerializeToString() const
 {
-	char str[256];
-	sprintf(str, "%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g", v[0][0], v[0][1], v[0][2], v[0][3],
-		v[1][0], v[1][1], v[1][2], v[1][3], v[2][0], v[2][1], v[2][2], v[2][3], v[3][0], v[3][1], v[3][2], v[3][3]);
-	return std::string(str);
+	char str[512];
+	char *s = SerializeFloat(v[0][0], str); *s = ','; ++s;
+	s = SerializeFloat(v[0][1], s); *s = ','; ++s;
+	s = SerializeFloat(v[0][2], s); *s = ','; ++s;
+	s = SerializeFloat(v[0][3], s); *s = ','; ++s;
+	s = SerializeFloat(v[1][0], s); *s = ','; ++s;
+	s = SerializeFloat(v[1][1], s); *s = ','; ++s;
+	s = SerializeFloat(v[1][2], s); *s = ','; ++s;
+	s = SerializeFloat(v[1][3], s); *s = ','; ++s;
+	s = SerializeFloat(v[2][0], s); *s = ','; ++s;
+	s = SerializeFloat(v[2][1], s); *s = ','; ++s;
+	s = SerializeFloat(v[2][2], s); *s = ','; ++s;
+	s = SerializeFloat(v[2][3], s); *s = ','; ++s;
+	s = SerializeFloat(v[3][0], s); *s = ','; ++s;
+	s = SerializeFloat(v[3][1], s); *s = ','; ++s;
+	s = SerializeFloat(v[3][2], s); *s = ','; ++s;
+	s = SerializeFloat(v[3][3], s);
+	assert(s+1 - str < 512);
+	MARK_UNUSED(s);
+	return str;
 }
 
 std::string float4x4::ToString2() const
@@ -2125,6 +2135,22 @@ void float4x4::Decompose(float3 &translate, float4x4 &rotate, float3 &scale) con
 	assume(float4x4::FromTRS(translate, rotate, scale).Equals(*this, 0.1f));
 }
 
+float4x4 float4x4::Abs() const
+{
+	float4x4 ret;
+#ifdef MATH_AUTOMATIC_SSE
+	ret.row[0] = abs_ps(row[0]);
+	ret.row[1] = abs_ps(row[1]);
+	ret.row[2] = abs_ps(row[2]);
+	ret.row[3] = abs_ps(row[3]);
+#else
+	for(int y = 0; y < 4; ++y)
+		for(int x = 0; x < 4; ++x)
+			ret.v[y][x] = MATH_NS::Abs(v[y][x]);
+#endif
+	return ret;
+}
+
 #ifdef MATH_ENABLE_STL_SUPPORT
 std::ostream &operator <<(std::ostream &out, const float4x4 &rhs)
 {
@@ -2141,9 +2167,10 @@ float4x4 operator *(const Quat &lhs, const float4x4 &rhs)
 
 float4x4 operator *(const float3x3 &lhs, const float4x4 &rhs)
 {
-	///\todo SSE.
 	float4x4 r;
-
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+	mat3x3_mul_mat4x4_sse(r.row, lhs.ptr(), rhs.row);
+#else
 	const float *c0 = rhs.ptr();
 	const float *c1 = rhs.ptr() + 1;
 	const float *c2 = rhs.ptr() + 2;
@@ -2167,14 +2194,16 @@ float4x4 operator *(const float3x3 &lhs, const float4x4 &rhs)
 	r[3][1] = rhs[3][1];
 	r[3][2] = rhs[3][2];
 	r[3][3] = rhs[3][3];
-
+#endif
 	return r;
 }
 
 float4x4 operator *(const float3x4 &lhs, const float4x4 &rhs)
 {
-	///\todo SSE.
 	float4x4 r;
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+	mat3x4_mul_mat4x4_sse(r.row, lhs.row, rhs.row);
+#else
 	const float *c0 = rhs.ptr();
 	const float *c1 = rhs.ptr() + 1;
 	const float *c2 = rhs.ptr() + 2;
@@ -2198,7 +2227,7 @@ float4x4 operator *(const float3x4 &lhs, const float4x4 &rhs)
 	r[3][1] = rhs[3][1];
 	r[3][2] = rhs[3][2];
 	r[3][3] = rhs[3][3];
-
+#endif
 	return r;
 }
 

@@ -36,8 +36,10 @@
 #include "../Math/float4.h"
 #include "../Math/float4x4.h"
 #include "../Math/Quat.h"
+#include "PBVolume.h"
 #include "Ray.h"
 #include "Triangle.h"
+#include <stdlib.h>
 
 #ifdef MATH_CONTAINERLIB_SUPPORT
 #include "Algorithm/Sort/Sort.h"
@@ -45,6 +47,11 @@
 
 #ifdef MATH_GRAPHICSENGINE_INTEROP
 #include "VertexBuffer.h"
+#endif
+
+#if defined(MATH_SSE) && defined(MATH_AUTOMATIC_SSE)
+#include "../Math/float4_sse.h"
+#include "../Math/float4x4_sse.h"
 #endif
 
 MATH_BEGIN_NAMESPACE
@@ -190,6 +197,15 @@ Polyhedron OBB::ToPolyhedron() const
 	}
 
 	return p;
+}
+
+PBVolume<6> OBB::ToPBVolume() const
+{
+	PBVolume<6> pbVolume;
+	for(int i = 0; i < 6; ++i)
+		pbVolume.p[i] = FacePlane(i);
+
+	return pbVolume;
 }
 
 AABB OBB::MinimalEnclosingAABB() const
@@ -480,18 +496,20 @@ OBB OBB::PCAEnclosingOBB(const vec * /*pointArray*/, int /*numPoints*/)
 }
 #endif
 
-#ifdef MATH_CONTAINERLIB_SUPPORT
+#define LEX_ORDER(x, y) if ((x) < (y)) return -1; else if ((x) > (y)) return 1;
 int LexFloat3Cmp(const vec &a, const vec &b)
 {
-	LEXCMP(a.x, b.x);
-	LEXCMP(a.y, b.y);
-	LEXCMP(a.z, b.z);
+	LEX_ORDER(a.x, b.x);
 	return 0;
 }
+int LexFloat3CmpV(const void *a, const void *b) { return LexFloat3Cmp(*(const vec*)a, *(const vec*)b); }
 
 OBB OBB::OptimalEnclosingOBB(const vec *pointArray, int numPoints)
 {
 	OBB minOBB;
+#ifdef MATH_VEC_IS_FLOAT4
+	minOBB.r.w = 0.f;
+#endif
 	float minVolume = FLOAT_INF;
 
 	std::vector<float2> pts;
@@ -511,66 +529,78 @@ OBB OBB::OptimalEnclosingOBB(const vec *pointArray, int numPoints)
 				dirs.push_back(edge);
 		}
 
-	LOGI("Got %d directions.", (int)dirs.size());
+//	LOGI("Got %d directions.", (int)dirs.size());
+#ifdef MATH_CONTAINERLIB_SUPPORT
 	sort::QuickSort(&dirs[0], (int)dirs.size(), LexFloat3Cmp);
-	for(int i = (int)dirs.size()-1; i >= 0; --i)
-		for(int j = i-1; j >= 0; --j)
+#else
+	qsort(&dirs[0], dirs.size(), sizeof(VecArray::value_type), LexFloat3CmpV);
+#endif
+	size_t nDistinct = 1;
+	for(size_t i = 1; i < dirs.size(); ++i)
+	{
+		vec d = dirs[i];
+		bool removed = false;
+		for(size_t j = 0; j < nDistinct; ++j)
 		{
-			float distX = dirs[i].x - dirs[j].x;
-			if (distX > 1e-1f)
+			float distX = d.x - dirs[j].x;
+			if (distX > 1e-3f)
 				break;
-			if (vec(dirs[i]).DistanceSq(dirs[j]) < 1e-3f)
+			if (d.DistanceSq(dirs[j]) < 1e-3f)
 			{
-				dirs.erase(dirs.begin() + j);
-				--i;
+				removed = true;
+				break;
 			}
 		}
-	LOGI("Pruned to %d directions.", (int)dirs.size());
-
-//	int incr = 1;//Max(1, numPoints / 10);
-//	for(int i = 0; i < numPoints; ++i)
+		if (!removed)
+			dirs[nDistinct++] = dirs[i];
+	}
+	if (nDistinct != dirs.size())
 	{
-		//for(int j = i+1; j < numPoints; ++j)
-		for(size_t i = 0; i < dirs.size(); ++i)
+		dirs.erase(dirs.begin() + nDistinct, dirs.end());
+//		LOGI("Pruned %d directions (was %d to %d).", nDistinct, (int)dirs.size()+nDistinct, (int)dirs.size());
+	}
+
+	for(size_t i = 0; i < dirs.size(); ++i)
+	{
+		vec edge = dirs[i];
+
+		int e1, e2;
+		ExtremePointsAlongDirection(edge, pointArray, numPoints, e1, e2);
+		float edgeLength = Abs(Dot(pointArray[e1] - pointArray[e2], edge));
+
+		vec u, v;
+		edge.PerpendicularBasis(u, v);
+		for(int k = 0; k < numPoints; ++k)
+			pts[k] = float2(pointArray[k].Dot(u), pointArray[k].Dot(v));
+
+		float2 rectCenter;
+		float2 uDir;
+		float2 vDir;
+		float minU, maxU, minV, maxV;
+		float rectArea = float2::MinAreaRectInPlace(&pts[0], (int)pts.size(), rectCenter, uDir, vDir, minU, maxU, minV, maxV);
+		float volume = rectArea * edgeLength;
+
+		if (volume < minVolume)
 		{
-			vec edge = dirs[i];//(pointArray[i]-pointArray[j]).Normalized();
-
-			int e1, e2;
-			ExtremePointsAlongDirection(edge, pointArray, numPoints, e1, e2);
-			float edgeLength = Abs(Dot(pointArray[e1], edge) - Dot(pointArray[e2], edge));
-
-			vec u = edge.Perpendicular();
-			vec v = edge.AnotherPerpendicular();
-			for(int k = 0; k < numPoints; ++k)
-				pts[k] = float2(pointArray[k].Dot(u), pointArray[k].Dot(v));
-
-			float2 rectCenter;
-			float2 rectU;
-			float2 rectV;
-			float minU, maxU, minV, maxV;
-			float rectArea = float2::MinAreaRect(&pts[0], (int)pts.size(), rectCenter, rectU, rectV, minU, maxU, minV, maxV);
-			vec rectCenterPos = u * rectCenter.x + v * rectCenter.y;
-			
-			float volume = rectArea * edgeLength;
-			if (volume < minVolume)
-			{
-				minOBB.axis[0] = edge;
-				minOBB.axis[1] = rectU.x * u + rectU.y * v;
-				minOBB.axis[2] = rectV.x * u + rectV.y * v;
-				minOBB.pos = (Dot(pointArray[e1], edge) + Dot(pointArray[e2], edge)) * 0.5f * edge + rectCenterPos;
-				minOBB.r[0] = edgeLength * 0.5f;
-				minOBB.r[1] = (maxU - minU) * 0.5f;
-				minOBB.r[2] = (maxV - minV) * 0.5f;
-				minVolume = volume;
-			}
-			if (i % 100 == 0)
-				LOGI("%d/%d.", (int)i, (int)dirs.size());
+			float2 c10 = (maxV - minV) * vDir;
+			float2 c20 = (maxU - minU) * uDir;
+			float2 center = 0.5f * (uDir * (minU+maxU) + vDir * (minV+maxV));
+			vec C1 = c10.x*u + c10.y*v;
+			vec C2 = c20.x*u + c20.y*v;
+			minOBB.axis[0] = edge;
+			vec rectCenterPos = vec(POINT_VEC_SCALAR(0.f)) + center.x*u + center.y*v;
+			minOBB.pos = Dot(pointArray[e1]+pointArray[e2], edge) * 0.5f * edge + rectCenterPos;
+			minOBB.r[0] = edgeLength * 0.5f;
+			minOBB.r[1] = C1.Normalize()*0.5f;
+			minOBB.r[2] = C2.Normalize()*0.5f;
+			minOBB.axis[1] = C1;
+			minOBB.axis[2] = C2;
+			minVolume = volume;
 		}
 	}
 
 	return minOBB;
 }
-#endif
 
 vec OBB::Size() const
 {
@@ -630,12 +660,26 @@ float3x4 OBB::LocalToWorld() const
 /// The implementation of this function is from Christer Ericson's Real-Time Collision Detection, p.133.
 vec OBB::ClosestPoint(const vec &targetPoint) const
 {
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+	// Best: 8.833 nsecs / 24 ticks, Avg: 9.044 nsecs, Worst: 9.217 nsecs
+	simd4f d = sub_ps(targetPoint.v, pos.v);
+	simd4f x = xxxx_ps(r.v);
+	simd4f closestPoint = pos.v;
+	closestPoint = add_ps(closestPoint, mul_ps(max_ps(min_ps(dot4_ps(d, axis[0].v), x), negate_ps(x)), axis[0].v));
+	simd4f y = yyyy_ps(r.v);
+	closestPoint = add_ps(closestPoint, mul_ps(max_ps(min_ps(dot4_ps(d, axis[1].v), y), negate_ps(y)), axis[1].v));
+	simd4f z = zzzz_ps(r.v);
+	closestPoint = add_ps(closestPoint, mul_ps(max_ps(min_ps(dot4_ps(d, axis[2].v), z), negate_ps(z)), axis[2].v));
+	return closestPoint;
+#else
+	// Best: 33.412 nsecs / 89.952 ticks, Avg: 33.804 nsecs, Worst: 34.180 nsecs
 	vec d = targetPoint - pos;
 	vec closestPoint = pos; // Start at the center point of the OBB.
 	for(int i = 0; i < 3; ++i) // Project the target onto the OBB axes and walk towards that point.
 		closestPoint += Clamp(Dot(d, axis[i]), -r[i], r[i]) * axis[i];
 
 	return closestPoint;
+#endif
 }
 
 float OBB::Volume() const
@@ -744,10 +788,29 @@ float OBB::Distance(const Sphere &sphere) const
 
 bool OBB::Contains(const vec &point) const
 {
+#if defined(MATH_SSE) && defined(MATH_AUTOMATIC_SSE)
+// Best: 9.985 nsecs / 26.816 ticks, Avg: 10.112 nsecs, Worst: 11.137 nsecs
+	simd4f pt = sub_ps(point.v, pos.v);
+	simd4f s1 = mul_ps(pt, axis[0].v);
+	simd4f s2 = mul_ps(pt, axis[1].v);
+	simd4f s3 = mul_ps(pt, axis[2].v);
+	s1 = abs_ps(sum_xyzw_ps(s1));
+	s2 = abs_ps(sum_xyzw_ps(s2));
+	s3 = abs_ps(sum_xyzw_ps(s3));
+
+	s1 = _mm_sub_ss(s1, r.v);
+	s2 = _mm_sub_ss(s2, yyyy_ps(r.v));
+	simd4f s12 = _mm_max_ss(s1, s2);
+	s3 = _mm_sub_ss(s3, zzzz_ps(r.v));
+	s3 = _mm_max_ss(s12, s3);
+	return _mm_cvtss_f32(s3) <= 0.f; // Note: This might be micro-optimized further out by switching to a signature "float OBB::SignedDistance(point)" instead.
+#else
+// Best: 14.978 nsecs / 39.944 ticks, Avg: 15.350 nsecs, Worst: 39.941 nsecs
 	vec pt = point - pos;
 	return Abs(Dot(pt, axis[0])) <= r[0] &&
 	       Abs(Dot(pt, axis[1])) <= r[1] &&
 	       Abs(Dot(pt, axis[2])) <= r[2];
+#endif
 }
 
 bool OBB::Contains(const LineSegment &lineSegment) const
@@ -817,7 +880,7 @@ void OBB::Enclose(const vec &point)
 	vec p = point - pos;
 	for(int i = 0; i < 3; ++i)
 	{
-		assert(EqualAbs(axis[i].Length(), 1.f));
+		assume2(EqualAbs(axis[i].Length(), 1.f), axis[i], axis[i].Length());
 		float dist = p.Dot(axis[i]);
 		float distanceFromOBB = Abs(dist) - r[i];
 		if (distanceFromOBB > 0.f)
@@ -834,7 +897,7 @@ void OBB::Enclose(const vec &point)
 		}
 	}
 	// Should now contain the point.
-	assume(Distance(point) <= 1e-3f);
+	assume2(Distance(point) <= 1e-3f, point, Distance(point));
 }
 
 void OBB::Triangulate(int x, int y, int z, vec *outPos, vec *outNormal, float2 *outUV, bool ccwIsFrontFacing) const
@@ -866,6 +929,89 @@ bool OBB::Intersects(const OBB &b, float epsilon) const
 	assume(b.pos.IsFinite());
 	assume(vec::AreOrthogonal(axis[0], axis[1], axis[2]));
 	assume(vec::AreOrthogonal(b.axis[0], b.axis[1], b.axis[2]));
+
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+	// SSE4.1:
+	// Benchmark 'OBBIntersectsOBB_Random': OBB::Intersects(OBB) Random
+	//    Best: 23.913 nsecs / 40.645 ticks, Avg: 26.490 nsecs, Worst: 43.729 nsecs
+	// Benchmark 'OBBIntersectsOBB_Positive': OBB::Intersects(OBB) Positive
+	//    Best: 42.585 nsecs / 72.413 ticks, Avg: 44.373 nsecs, Worst: 70.774 nsecs
+
+	simd4f bLocalToWorld[3];
+	mat3x4_transpose((const simd4f*)b.axis, bLocalToWorld);
+
+	// Generate a rotation matrix that transforms from world space to this OBB's coordinate space.
+	simd4f R[3];
+	mat3x4_mul_sse(R, (const simd4f*)axis, bLocalToWorld);
+
+	// Express the translation vector in a's coordinate frame.
+	simd4f t = mat3x4_mul_sse((const simd4f*)axis, sub_ps(b.pos, pos));
+
+	// This trashes the w component, which should technically be zero, but this does not matter since
+	// AbsR will only be used with direction vectors.
+	const vec epsilonxyz = set1_ps(epsilon);
+	simd4f AbsR[3];
+	AbsR[0] = add_ps(abs_ps(R[0]), epsilonxyz);
+	AbsR[1] = add_ps(abs_ps(R[1]), epsilonxyz);
+	AbsR[2] = add_ps(abs_ps(R[2]), epsilonxyz);
+
+	// Test the three major axes of this OBB.
+	simd4f res = cmpgt_ps(abs_ps(t), add_ps(r, mat3x4_mul_sse(AbsR, b.r)));
+	if (!allzero_ps(res)) return false;
+
+	// Test the three major axes of the OBB b.
+	simd4f transpR[3];
+	mat3x4_transpose(R, transpR);
+	vec l = abs_ps(mat3x4_mul_sse(transpR, r));
+	simd4f transpAbsR[3];
+	mat3x4_transpose(AbsR, transpAbsR);
+	vec s = mat3x4_mul_sse(transpAbsR, r);
+	res = cmpgt_ps(l, add_ps(s, b.r));
+	if (!allzero_ps(res)) return false;
+
+	// Test the 9 different cross-axes.
+
+	// A.x <cross> B.x
+	// A.x <cross> B.y
+	// A.x <cross> B.z
+	simd4f ra = mul_ps(shuffle1_ps(r, _MM_SHUFFLE(3,1,1,1)), AbsR[2]);
+	ra = add_ps(ra, mul_ps(shuffle1_ps(r, _MM_SHUFFLE(3,2,2,2)), AbsR[1]));
+	simd4f rb = mul_ps(shuffle1_ps(b.r, _MM_SHUFFLE(3,0,0,1)), shuffle1_ps(AbsR[0], _MM_SHUFFLE(3,1,2,2)));
+	rb = add_ps(rb, mul_ps(shuffle1_ps(b.r, _MM_SHUFFLE(3,1,2,2)), shuffle1_ps(AbsR[0], _MM_SHUFFLE(3,0,0,1))));
+	simd4f lhs = mul_ps(shuffle1_ps(t, _MM_SHUFFLE(3,2,2,2)), R[1]);
+	lhs = sub_ps(lhs, mul_ps(shuffle1_ps(t, _MM_SHUFFLE(3,1,1,1)), R[2]));
+	res = cmpgt_ps(abs_ps(lhs), add_ps(ra, rb));
+	if (!allzero_ps(res)) return false;
+
+	// A.y <cross> B.x
+	// A.y <cross> B.y
+	// A.y <cross> B.z
+	ra = mul_ps(shuffle1_ps(r, _MM_SHUFFLE(3,0,0,0)), AbsR[2]);
+	ra = add_ps(ra, mul_ps(shuffle1_ps(r, _MM_SHUFFLE(3,2,2,2)), AbsR[0]));
+	rb = mul_ps(shuffle1_ps(b.r, _MM_SHUFFLE(3,0,0,1)), shuffle1_ps(AbsR[1], _MM_SHUFFLE(3,1,2,2)));
+	rb = add_ps(rb, mul_ps(shuffle1_ps(b.r, _MM_SHUFFLE(3,1,2,2)), shuffle1_ps(AbsR[1], _MM_SHUFFLE(3,0,0,1))));
+	lhs = mul_ps(shuffle1_ps(t, _MM_SHUFFLE(3,0,0,0)), R[2]);
+	lhs = sub_ps(lhs, mul_ps(shuffle1_ps(t, _MM_SHUFFLE(3,2,2,2)), R[0]));
+	res = cmpgt_ps(abs_ps(lhs), add_ps(ra, rb));
+	if (!allzero_ps(res)) return false;
+
+	// A.z <cross> B.x
+	// A.z <cross> B.y
+	// A.z <cross> B.z
+	ra = mul_ps(shuffle1_ps(r, _MM_SHUFFLE(3,0,0,0)), AbsR[1]);
+	ra = add_ps(ra, mul_ps(shuffle1_ps(r, _MM_SHUFFLE(3,1,1,1)), AbsR[0]));
+	rb = mul_ps(shuffle1_ps(b.r, _MM_SHUFFLE(3,0,0,1)), shuffle1_ps(AbsR[2], _MM_SHUFFLE(3,1,2,2)));
+	rb = add_ps(rb, mul_ps(shuffle1_ps(b.r, _MM_SHUFFLE(3,1,2,2)), shuffle1_ps(AbsR[2], _MM_SHUFFLE(3,0,0,1))));
+	lhs = mul_ps(shuffle1_ps(t, _MM_SHUFFLE(3,1,1,1)), R[0]);
+	lhs = sub_ps(lhs, mul_ps(shuffle1_ps(t, _MM_SHUFFLE(3,0,0,0)), R[1]));
+	res = cmpgt_ps(abs_ps(lhs), add_ps(ra, rb));
+	return allzero_ps(res) != 0;
+
+#else
+	// Benchmark 'OBBIntersectsOBB_Random': OBB::Intersects(OBB) Random
+	//    Best: 100.830 nsecs / 171.37 ticks, Avg: 110.533 nsecs, Worst: 155.582 nsecs
+	// Benchmark 'OBBIntersectsOBB_Positive': OBB::Intersects(OBB) Positive
+	//    Best: 95.771 nsecs / 162.739 ticks, Avg: 107.935 nsecs, Worst: 173.110 nsecs
 
 	// Generate a rotation matrix that transforms from world space to this OBB's coordinate space.
 	float3x3 R;
@@ -958,6 +1104,7 @@ bool OBB::Intersects(const OBB &b, float epsilon) const
 
 	// No separating axis exists, so the two OBB don't intersect.
 	return true;
+#endif
 }
 
 /// The implementation of OBB-Plane intersection test follows Christer Ericson's Real-Time Collision Detection, p. 163. [groupSyntax]

@@ -12,7 +12,7 @@ MATH_IGNORE_UNUSED_VARS_WARNING
 RANDOMIZED_TEST(AABBPBVolumeIntersect)
 {
 	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Frustum b = RandomFrustumContainingPoint(pt);
+	Frustum b = RandomFrustumContainingPoint(rng, pt);
 	AABB a = RandomAABBContainingPoint(pt, 10.f);
 	assert(a.Intersects(b));
 	assert(b.Intersects(a));
@@ -21,7 +21,7 @@ RANDOMIZED_TEST(AABBPBVolumeIntersect)
 
 	assert(b.Contains(b.CenterPoint()));
 
-	PBVolume<6> pbVolume = ToPBVolume(b);
+	PBVolume<6> pbVolume = b.ToPBVolume();
 	assert(pbVolume.Contains(b.CenterPoint()));
 	CullTestResult r = pbVolume.InsideOrIntersects(a);
 	assert(r == TestInside || r == TestNotContained);
@@ -39,7 +39,7 @@ RANDOMIZED_TEST(AABBPBVolumeNoIntersect)
 	assert2(!a.Intersects(b), a, b);
 	assert(!b.Intersects(a));
 
-	PBVolume<6> pbVolume = ToPBVolume(b);
+	PBVolume<6> pbVolume = b.ToPBVolume();
 	assert(pbVolume.Contains(b.CenterPoint()));
 	CullTestResult r = pbVolume.InsideOrIntersects(a);
 	MARK_UNUSED(r);
@@ -50,7 +50,7 @@ RANDOMIZED_TEST(SpherePBVolumeIntersect)
 {
 	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
 	Sphere a = RandomSphereContainingPoint(pt, 10.f);
-	Frustum b = RandomFrustumContainingPoint(pt);
+	Frustum b = RandomFrustumContainingPoint(rng, pt);
 	assert(a.Intersects(b));
 	assert(b.Intersects(a));
 
@@ -58,7 +58,7 @@ RANDOMIZED_TEST(SpherePBVolumeIntersect)
 
 	assert(b.Contains(b.CenterPoint()));
 
-	PBVolume<6> pbVolume = ToPBVolume(b);
+	PBVolume<6> pbVolume = b.ToPBVolume();
 	assert(pbVolume.Contains(b.CenterPoint()));
 	CullTestResult r = pbVolume.InsideOrIntersects(a);
 	MARK_UNUSED(r);
@@ -76,7 +76,7 @@ RANDOMIZED_TEST(SpherePBVolumeNoIntersect)
 	assert2(!a.Intersects(b), a, b);
 	assert(!b.Intersects(a));
 
-	PBVolume<6> pbVolume = ToPBVolume(b);
+	PBVolume<6> pbVolume = b.ToPBVolume();
 	assert(pbVolume.Contains(b.CenterPoint()));
 	CullTestResult r = pbVolume.InsideOrIntersects(a);
 	MARK_UNUSED(r);
