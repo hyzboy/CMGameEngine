@@ -3,7 +3,7 @@
 #include<hgl/object/FlowControl.h>
 #include<hgl/graph/Render.h>
 #include<hgl/graph/TileFont.h>
-#include<GL/glew.h>
+#include<glew/include/GL/glew.h>
 #include<glfw3.h>
 
 extern "C"
@@ -105,15 +105,8 @@ namespace hgl
 				return(false);
 			}
 
-			if(!_sii)
-			{
-				LOG_ERROR(OS_TEXT("sii为空!"));
+			if(!BaseApplication::Init(_sii))
 				return(false);
-			}
-
-			sii=_sii;
-
-			sii->ProcBlankValue();				//处理未填写的值
 
 	// 		hgl::SetPointer(hfpSII,sii);
 
@@ -150,9 +143,9 @@ namespace hgl
 
 			glfwWindowHint(GLFW_VISIBLE,				true);								//是否显示
 
-			glfwWindowHint(GLFW_ALPHA_BITS	,_sii->graphics.gl.AlphaBits);
-			glfwWindowHint(GLFW_DEPTH_BITS	,_sii->graphics.gl.DepthBits);
-			glfwWindowHint(GLFW_STENCIL_BITS,_sii->graphics.gl.StencilBits);
+			if(_sii->graphics.gl.AlphaBits	>0)glfwWindowHint(GLFW_ALPHA_BITS	,_sii->graphics.gl.AlphaBits	);
+			if(_sii->graphics.gl.DepthBits	>0)glfwWindowHint(GLFW_DEPTH_BITS	,_sii->graphics.gl.DepthBits	);
+			if(_sii->graphics.gl.StencilBits>0)glfwWindowHint(GLFW_STENCIL_BITS	,_sii->graphics.gl.StencilBits	);
 
 			glfw_win=glfwCreateWindow(	_sii->graphics.Width,
 										_sii->graphics.Height,
@@ -162,7 +155,7 @@ namespace hgl
 
 			if(!glfw_win)
 			{
-				LOG_ERROR(OS_TEXT("创建窗口失败！另一种可能是您的显卡或驱动不支持OpenGL Core"));
+				LOG_ERROR(OS_TEXT("创建窗口失败！另一种可能是您的显卡或驱动不支持OpenGL Core ")+OSString(_sii->graphics.gl.major)+OS_TEXT(".")+OSString(_sii->graphics.gl.minor));
 				return(false);
 			}
 
@@ -170,8 +163,8 @@ namespace hgl
 
 			glfwMakeContextCurrent(glfw_win);
 
-			InitOpenGLCoreExtensions();						//初始化OpenGL Core扩展管理
-
+			InitOpenGLCoreExtensions();		//初始化OpenGL Core扩展管理
+											//GLEW(至少1.11版本还是)在OpenGL Core模式下的扩展检测是不可用的，所以不要使用原始的glew代码，并一定在glew初始化之前调用InitOpenGLCoreExtensions
 			if(glewInit()!=GLEW_OK)
 			{
 				LOG_ERROR(OS_TEXT("GLEW初始化失败！"));

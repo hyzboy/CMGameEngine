@@ -37,9 +37,9 @@ namespace hgl
 			}
 
 			{
-				graphics.gl.AlphaBits=8;
-				graphics.gl.DepthBits=24;
-				graphics.gl.StencilBits=8;
+				graphics.gl.AlphaBits=0;
+				graphics.gl.DepthBits=0;
+				graphics.gl.StencilBits=0;
 				graphics.gl.AccumBits=0;
 				graphics.gl.MultiSample=0;
 
@@ -53,8 +53,13 @@ namespace hgl
 				graphics.gl.glsl=true;
 				graphics.gl.multi_texture=true;
 
+#ifdef HGL_USE_OPENGL_CORE_45
+				graphics.gl.major=4;
+				graphics.gl.minor=5;
+#else
 				graphics.gl.major=3;
 				graphics.gl.minor=3;
+#endif//HGL_USE_OPENGL_CORE_45
 
 				graphics.gl.debug=false;
 				graphics.gl.opengl_es=false;

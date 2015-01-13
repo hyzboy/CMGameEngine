@@ -1,5 +1,5 @@
 #include<hgl/graph/VertexBuffer.h>
-#include<GL/glew.h>
+#include<glew/include/GL/glew.h>
 
 namespace hgl
 {

@@ -1,5 +1,5 @@
 ﻿#include"OpenGLTexture.h"
-#include<GL/glew.h>
+#include<glew/include/GL/glew.h>
 #include<hgl/graph/Render.h>
 
 namespace hgl

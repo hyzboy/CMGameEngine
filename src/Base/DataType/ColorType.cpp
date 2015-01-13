@@ -1,4 +1,4 @@
-#include<GL/glew.h>
+#include<glew/include/GL/glew.h>
 #include<hgl/type/ColorType.h>
 #include<hgl/Other.h>
 

@@ -1,4 +1,4 @@
-#include<GL/glew.h>
+﻿#include<glew/include/GL/glew.h>
 #include<glfw3.h>
 #include<hgl/LogInfo.h>
 #include<string.h>
@@ -86,7 +86,7 @@ namespace hgl
 
 			glfwGetVersion(&major,&minor,&rev);
 
-			LOG_INFO(OSString("GLFW Version: ")+OSString(major)+OS_TEXT(".")+OSString(minor)+OS_TEXT(".")+OSString(rev));
+			LOG_INFO(OSString("  GLFW Version: ")+OSString(major)+OS_TEXT(".")+OSString(minor)+OS_TEXT(".")+OSString(rev));
 		}
 
 		namespace OpenGLCore

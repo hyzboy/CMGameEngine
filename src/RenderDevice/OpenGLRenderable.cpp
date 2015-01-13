@@ -1,8 +1,8 @@
-#include"OpenGLRenderable.h"
+﻿#include"OpenGLRenderable.h"
 #include"GLSL.h"
 #include<hgl/type/Smart.h>
 #include<hgl/type/Map.h>
-#include<GL/glew.h>
+#include<glew/include/GL/glew.h>
 /*
 In GL_EXT_direct_state_access there was a function named glVertexArrayVertexAttribOffsetEXT. I do not see an equivalent in GL_ARB_direct_state_access. I'm trying to accomplish the following using the new core DSA functions:
 

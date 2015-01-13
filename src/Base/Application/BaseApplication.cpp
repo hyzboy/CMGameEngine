@@ -39,9 +39,15 @@ namespace hgl
 		cur_time	=GetDoubleTime();
 	}
 
-	bool BaseApplication::Init(ConsoleSystemInitInfo *sii)
+	bool BaseApplication::Init(ConsoleSystemInitInfo *_sii)
 	{
-		if(!sii)return(false);
+		if(!_sii)
+		{
+			LOG_ERROR(OS_TEXT("sii为空!"));
+			return(false);
+		}
+
+		sii=_sii;
 
 		sii->ProcBlankValue();				//处理未填写的值
 

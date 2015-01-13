@@ -1,4 +1,4 @@
-﻿#ifndef HGL_VERTEX_BUFFER_OBJECT_INCLUDE
+#ifndef HGL_VERTEX_BUFFER_OBJECT_INCLUDE
 #define HGL_VERTEX_BUFFER_OBJECT_INCLUDE
 
 #include<hgl/type/DataType.h>
@@ -6,7 +6,7 @@
 #include<hgl/type/Color4f.h>
 #include<hgl/Other.h>
 #include<hgl/VectorMath.h>
-#include<GL/glew.h>
+#include<glew/include/GL/glew.h>
 namespace hgl
 {
 	namespace graph

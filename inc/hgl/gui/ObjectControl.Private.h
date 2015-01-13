@@ -1,4 +1,4 @@
-private:
+﻿private:
 
 	bool CheckObjectAttrib(Object *,int);
 

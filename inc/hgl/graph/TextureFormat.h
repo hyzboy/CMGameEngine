@@ -1,8 +1,8 @@
-﻿#ifndef HGL_GRAPH_TEXTURE_FORMAT_INCLUDE
+#ifndef HGL_GRAPH_TEXTURE_FORMAT_INCLUDE
 #define HGL_GRAPH_TEXTURE_FORMAT_INCLUDE
 
 #include<hgl/type/DataType.h>
-#include<GL/glew.h>
+#include<glew/include/GL/glew.h>
 namespace hgl
 {
 	namespace graph

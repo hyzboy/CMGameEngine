@@ -1,4 +1,4 @@
-#include<GL/glew.h>
+#include<glew/include/GL/glew.h>
 #include<hgl/graph/Render.h>
 #include<hgl/stream/FileStream.h>
 #include<hgl/type/DateTime.h>

@@ -1,6 +1,6 @@
-﻿#include<hgl/graph/Render.h>
+#include<hgl/graph/Render.h>
 #include<hgl/graph/Texture.h>
-#include<GL/glew.h>
+#include<glew/include/GL/glew.h>
 
 namespace hgl
 {

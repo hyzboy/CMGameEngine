@@ -1,4 +1,4 @@
-﻿#ifndef HGL_GRAPH_MATERIAL_INCLUDE
+#ifndef HGL_GRAPH_MATERIAL_INCLUDE
 #define HGL_GRAPH_MATERIAL_INCLUDE
 
 #include<hgl/VectorMath.h>
@@ -6,7 +6,7 @@
 #include<hgl/type/Color4f.h>
 #include<hgl/graph/Texture.h>
 #include<hgl/graph/SceneOrient.h>
-#include<GL/glew.h>
+#include<glew/include/GL/glew.h>
 namespace hgl
 {
 	namespace graph

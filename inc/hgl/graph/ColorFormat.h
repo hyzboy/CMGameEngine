@@ -1,7 +1,7 @@
-﻿#ifndef HGL_GRAPH_COLOR_FORMAT_INCLUDE
+#ifndef HGL_GRAPH_COLOR_FORMAT_INCLUDE
 #define HGL_GRAPH_COLOR_FORMAT_INCLUDE
 
-#include<GL/glew.h>
+#include<glew/include/GL/glew.h>
 namespace hgl
 {
 	namespace graph
