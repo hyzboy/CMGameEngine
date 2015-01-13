@@ -1,4 +1,4 @@
-#include"OpenGLTexture.h"
+﻿#include"OpenGLTexture.h"
 #include<GL/glew.h>
 #include<hgl/graph/Render.h>
 
@@ -163,9 +163,6 @@ namespace hgl
 			if(vf==0)
 				vf=tf_list[sf].internalFormat;
 
-			if(opengl_version<4.5)
-			BindTexture(0,GL_TEXTURE_2D,index);				//4.5之后提交纹理不用bind
-
 			const bool gen_mip=ltp&ltGenMipmaps;			//取得是否创建mipmaps
 
 			min_filter=gen_mip?GL_LINEAR_MIPMAP_LINEAR:GL_LINEAR;
@@ -175,30 +172,42 @@ namespace hgl
 			wrap_t=GL_REPEAT;
 
 			//未来使用Sampler Object，则不再需要以下部分
+#ifdef HGL_USE_OPENGL_CORE_45
+			glTextureParameteri(index,GL_TEXTURE_MIN_FILTER,min_filter);
+			glTextureParameteri(index,GL_TEXTURE_MAG_FILTER,mag_filter);
+			//glTextureParameteri(index,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
+			//glTextureParameteri(index,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
+			glTextureParameteri(index,GL_TEXTURE_WRAP_S,GL_REPEAT);
+			glTextureParameteri(index,GL_TEXTURE_WRAP_T,GL_REPEAT);
+#else
+			BindTexture(0,GL_TEXTURE_2D,index);				//4.5之后提交纹理不用bind
+
 			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,min_filter);
 			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,mag_filter);
 			//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
 			//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
 			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
 			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
+#endif//HGL_USE_OPENGL_CORE_45
 
 			glGetError();			//清除错误
 
 			if(sfmt->compress)		//原本就是压缩格式
 			{
+			#ifdef HGL_USE_OPENGL_CORE_45
+				glCompressedTextureSubImage2D(index,0,0,0,w,h,vf,image_size,data);
+			#else
 				glCompressedTexImage2D(GL_TEXTURE_2D,0,vf,w,h,0,image_size,data);
+			#endif//HGL_USE_OPENGL_CORE_45
 			}
 			else					//正常非压缩格式
 			{
-				if(opengl_version>=4.5)
-				{
-					glTextureStorage2D(index,mipmap_level,vf,w,h);
-					glTextureSubImage2D(index,0,0,0,w,h,sfmt->format,sfmt->type,data);
-				}
-				else
-				{
-					glTexImage2D(GL_TEXTURE_2D,0,vf,w,h,0,sfmt->format,sfmt->type,data);
-				}
+			#ifdef HGL_USE_OPENGL_CORE_45
+				glTextureStorage2D(index,0,vf,w,h);
+				glTextureSubImage2D(index,0,0,0,w,h,sfmt->format,sfmt->type,data);
+			#else
+				glTexImage2D(GL_TEXTURE_2D,0,vf,w,h,0,sfmt->format,sfmt->type,data);
+			#endif//HGL_USE_OPENGL_CORE_45
 			}
 
 			const GLenum gl_error=glGetError();
@@ -210,11 +219,12 @@ namespace hgl
 
 			if(gen_mip)
 			{
-				if(opengl_version>=4.5)				
+				#ifdef HGL_USE_OPENGL_CORE_45
 					glGenerateTextureMipmap(index);
-				else
-					glGenerateMipmap(GL_TEXTURE_2D);				
-				
+				#else
+					glGenerateMipmap(GL_TEXTURE_2D);
+				#endif//HGL_USE_OPENGL_CORE_45
+
 //					glTexEnvf(GL_TEXTURE_FILTER_CONTROL,GL_TEXTURE_LOD_BIAS,-1.5f);		//设置LOD偏向,负是更精细，正是更模糊
 			}
 
@@ -223,18 +233,15 @@ namespace hgl
 
 		void glTexture2D::GetMipmapLevel(int &base_level,int &max_level)
 		{
-			if(opengl_version>=4.5)
-			{
+			#ifdef HGL_USE_OPENGL_CORE_45
 				glGetTextureParameteriv(index,GL_TEXTURE_BASE_LEVEL,&base_level);
-				glGetTextureParameteriv(index,GL_TEXTURE_MAX_LEVEL,&max_level);				
-			}
-			else			
-			{
+				glGetTextureParameteriv(index,GL_TEXTURE_MAX_LEVEL,&max_level);
+			#else
 				BindTexture(0,GL_TEXTURE_2D,index);
 
 				glGetTexParameteriv(GL_TEXTURE_2D,GL_TEXTURE_BASE_LEVEL,&base_level);
 				glGetTexParameteriv(GL_TEXTURE_2D,GL_TEXTURE_MAX_LEVEL,&max_level);
-			}
+			#endif//HGL_USE_OPENGL_CORE_45
 		}
 
 		int glTexture2D::GetImage(void *data_pointer,TSF fmt,int level)
@@ -254,16 +261,15 @@ namespace hgl
 
 			const OpenGLCoreTextureFormat *tsf=tf_list+fmt;
 
-			if(opengl_version>=4.5)
-			{
+			#ifdef HGL_USE_OPENGL_CORE_45
 				glGetTextureLevelParameteriv(index,level,GL_TEXTURE_COMPRESSED,&compress);
-				
+
 				if(compress)
 				{
 					glGetTextureLevelParameteriv(index,level,GL_TEXTURE_COMPRESSED_IMAGE_SIZE,&bytes);
-					
+
 					if(data_pointer)
-						glGetCompressedTextureImage(index,level,data_pointer);
+						glGetCompressedTextureImage(index,level,bytes,data_pointer);
 				}
 				else
 				{
@@ -272,15 +278,13 @@ namespace hgl
 					bytes=width*height*tsf->video_bytes;
 
 					if(data_pointer)
-						glGetTextureImage(index,level,tsf->format,tsf->type,data_pointer);
+						glGetTextureImage(index,level,tsf->format,tsf->type,bytes,data_pointer);
 				}
-			}
-			else
-			{			
+			#else
 				BindTexture(0,GL_TEXTURE_2D,index);
 
 				glGetTexLevelParameteriv(GL_TEXTURE_2D,level,GL_TEXTURE_COMPRESSED,&compress);
-				
+
 				if(compress)
 				{
 					glGetTexLevelParameteriv(GL_TEXTURE_2D,level,GL_TEXTURE_COMPRESSED_IMAGE_SIZE,&bytes);
@@ -297,7 +301,7 @@ namespace hgl
 					if(data_pointer)
 						glGetTexImage(GL_TEXTURE_2D,level,tsf->format,tsf->type,data_pointer);
 				}
-			}
+			#endif//HGL_USE_OPENGL_CORE_45
 
 			return(bytes);
 		}
@@ -317,23 +321,20 @@ namespace hgl
 
 			const OpenGLCoreTextureFormat *sfmt=tf_list+sf;		//原始数据格式
 
-			if(opengl_version>=4.5)
-			{
+			#ifdef HGL_USE_OPENGL_CORE_45
 				if(sfmt->compress)
 					glCompressedTextureSubImage2D(index,0,l,t,w,h,sfmt->internalFormat,bytes,data);
 				else
 					glTextureSubImage2D(index,0,l,t,w,h,sfmt->format,sfmt->type,data);
-			}
-			else
-			{
+			#else
 				BindTexture(0,GL_TEXTURE_2D,index);
 
 				if(sfmt->compress)
 					glCompressedTexSubImage2D(GL_TEXTURE_2D,0,l,t,w,h,sfmt->internalFormat,bytes,data);
 				else
 					glTexSubImage2D(GL_TEXTURE_2D,0,l,t,w,h,sfmt->format,sfmt->type,data);
-			}
-			
+			#endif//HGL_USE_OPENGL_CORE_45
+
 			return(true);
 		}
 
@@ -343,16 +344,13 @@ namespace hgl
 
 			min_filter=mf;
 
-			if(opengl_version>=4.5)
-			{
+			#ifdef HGL_USE_OPENGL_CORE_45
 				glTextureParameteri(index,GL_TEXTURE_MIN_FILTER,min_filter);
-			}
-			else
-			{
+			#else
 				BindTexture(0,GL_TEXTURE_2D,index);
 
 				glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,min_filter);
-			}
+			#endif//HGL_USE_OPENGL_CORE_45
 		}
 
 		void glTexture2D::SetMagFilter(uint mf)
@@ -360,17 +358,14 @@ namespace hgl
 			if(mag_filter==mf)return;
 
 			mag_filter=mf;
-			
-			if(opengl_version>=4.5)
-			{
+
+			#ifdef HGL_USE_OPENGL_CORE_45
 				glTextureParameteri(index,GL_TEXTURE_MAG_FILTER,mag_filter);
-			}
-			else
-			{
+			#else
 				BindTexture(0,GL_TEXTURE_2D,index);
 
 				glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,mag_filter);
-			}
+			#endif//HGL_USE_OPENGL_CORE_45
 		}
 
 		void glTexture2D::SetWrapS(uint wrap)
@@ -379,17 +374,14 @@ namespace hgl
 
 			wrap_s=wrap;
 
-			if(opengl_version>=4.5)
-			{
+			#ifdef HGL_USE_OPENGL_CORE_45
 				glTextureParameteri(index,GL_TEXTURE_WRAP_S,wrap_s);
-			}
-			else
-			{
+			#else
 				BindTexture(0,GL_TEXTURE_2D,index);
 
 				glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,wrap_s);
-			}
-		}		
+			#endif//HGL_USE_OPENGL_CORE_45
+		}
 
 		void glTexture2D::SetWrapT(uint wrap)
 		{
@@ -397,16 +389,13 @@ namespace hgl
 
 			wrap_t=wrap;
 
-			if(opengl_version>=4.5)
-			{
+			#ifdef HGL_USE_OPENGL_CORE_45
 				glTextureParameteri(index,GL_TEXTURE_WRAP_T,wrap_t);
-			}
-			else
-			{
+			#else
 				BindTexture(0,GL_TEXTURE_2D,index);
 
 				glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,wrap_t);
-			}
+			#endif//HGL_USE_OPENGL_CORE_45
 		}
 
 		Texture2D *CreateTexture2D()

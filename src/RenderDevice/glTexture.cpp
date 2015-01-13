@@ -1,4 +1,4 @@
-#include<hgl/graph/Render.h>
+﻿#include<hgl/graph/Render.h>
 #include<hgl/graph/Texture.h>
 #include<GL/glew.h>
 
@@ -82,12 +82,9 @@ namespace hgl
 			 &&index==texture_index[active])						//也绑定的是这个贴图
 					return(true);
 
-			if(opengl_version>=4.5)
-			{
+#ifdef HGL_USE_OPENGL_CORE_45
 				glBindTextureUnit(active,index);						//注：使用数字的纹理号active，而不是GL_TEXTURE0+active
-			}
-			else
-			{
+#else
 				if(current_active_texture!=active)						//如果活动贴图编号不一致
 				{
 					glActiveTexture(GL_TEXTURE0+active);				//切换活动贴图
@@ -105,11 +102,10 @@ namespace hgl
 				}
 
 				glBindTexture(type,index);
-			}
-			
+#endif//HGL_USE_OPENGL_CORE_45
+
 			texture_index[active]=index;
-			
-			
+
 			return(true);
 		}
 
