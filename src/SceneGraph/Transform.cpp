@@ -1,4 +1,4 @@
-#include<hgl/graph/Transform.h>
+﻿#include<hgl/graph/Transform.h>
 
 namespace hgl
 {
@@ -6,7 +6,7 @@ namespace hgl
 	{
 		void TransformTranslate::UpdateToMatrix(Matrix4f &mat)const
 		{
-			mat*=translate(x,y,z);
+			mat=mat*translate(x,y,z);
 		}
 
 		void TransformRotate::UpdateToMatrix(Matrix4f &mat)const
@@ -16,12 +16,12 @@ namespace hgl
 
 		void TransformScale::UpdateToMatrix(Matrix4f &mat)const
 		{
-			mat*=scale(x,y,z);
+			mat=mat*scale(x,y,z);
 		}
 
 		void TransformMatrix::UpdateToMatrix(Matrix4f &mat)const
 		{
-			mat*=m;
+			mat=mat*m;
 		}
 	}//namespace graph
 }//namespace hgl

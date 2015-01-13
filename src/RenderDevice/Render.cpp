@@ -1,4 +1,4 @@
-#include<GL/glew.h>
+﻿#include<GL/glew.h>
 #include"GLSL.h"
 #include<hgl/graph/Render.h>
 #include<hgl/graph/Texture.h>
@@ -176,7 +176,7 @@ namespace hgl
 			//灯光
 			if(state->lighting)
 			{
-				glsl->Shader::SetUniform3fv(HGL_VS_LIGHT_POSITION,mat->GetLightPosition().data());
+				glsl->Shader::SetUniform3fv(HGL_VS_LIGHT_POSITION,mat->GetLightPosition());
 				glsl->Shader::SetUniform1f(HGL_VS_GLOBAL_LIGHT_INTENSITY,mat->GetGlobalLightIntensity());
 			}
 
@@ -228,12 +228,12 @@ namespace hgl
 			{
 				const Matrix4f mvp=(*projection)*(*modelview);
 
-				if(!glsl->Shader::SetUniformMatrix4fv(HGL_VS_MVP_MATRIX,mvp.data()))
+				if(!glsl->Shader::SetUniformMatrix4fv(HGL_VS_MVP_MATRIX,mvp))
 					return(false);
 			}
 			else	//没modelview时将projection传为mvp
 			{
-				if(!glsl->Shader::SetUniformMatrix4fv(HGL_VS_MVP_MATRIX,projection->data()))
+				if(!glsl->Shader::SetUniformMatrix4fv(HGL_VS_MVP_MATRIX,*projection))
 					return(false);
 			}
 

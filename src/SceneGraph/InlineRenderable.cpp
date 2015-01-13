@@ -1,4 +1,4 @@
-#include<hgl/graph/VertexBuffer.h>
+﻿#include<hgl/graph/VertexBuffer.h>
 #include<hgl/graph/Renderable.h>
 #include<hgl/graph/Material.h>
 #include<hgl/graph/Render.h>
@@ -326,7 +326,7 @@ namespace hgl
 			{
 				const Vector4f pos=start*rotate(float(i)/float(edge)*360.0,axis);
 
-				vertex->Write(pos.data());
+				vertex->Write((const float *)&pos);
 			}
 
 			vertex->End();
@@ -363,7 +363,7 @@ namespace hgl
 			{
 				const Vector4f pos=start*rotate(float(i)/float(edge)*360.0,axis);
 
-				vertex->Write(pos.data());
+				vertex->Write((const float *)&pos);
 			}
 
 			vertex->End();

@@ -1,4 +1,4 @@
-#include<hgl/graph/Material.h>
+﻿#include<hgl/graph/Material.h>
 #include<hgl/type/BaseString.h>
 #include<hgl/LogInfo.h>
 
@@ -56,8 +56,7 @@ namespace hgl
 			color_material=true;
 
 			Light=false;
-			LightPosition.set(0,0,0);
-			GlobalLightIntensity=0;
+			LightPosition=Vector3f(0,0,0);
 
 			Emission.Set(0.0f,0.0f,0.0f,1.0f);
 			Ambient.Set(0.25f,0.25f,0.25f,1.0f);
