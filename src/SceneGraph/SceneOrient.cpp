@@ -4,7 +4,6 @@ namespace hgl
 	namespace graph
 	{
 		Matrix4f Ortho2DMatrix;														///<全局2D视图矩阵
-		Matrix4f ViewportMatrix;													///<全局视口矩阵
 
 		SceneOrient::SceneOrient()
 		{

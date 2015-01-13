@@ -305,8 +305,6 @@ namespace hgl
 
 			graph::Ortho2DMatrix=ortho2(w,h);
 
-			cml::matrix_viewport(graph::ViewportMatrix,0.0f,float(w),float(h),0.0f,cml::z_clip_neg_one);
-
 			SafeCallEvent(OnResize,(w,h));
 
 			flow->Proc_Resize(w,h);

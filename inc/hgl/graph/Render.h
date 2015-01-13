@@ -1,4 +1,4 @@
-#ifndef HGL_GRAPH_RENDER_INCLUDE
+﻿#ifndef HGL_GRAPH_RENDER_INCLUDE
 #define HGL_GRAPH_RENDER_INCLUDE
 
 #include<hgl/type/List.h>
@@ -187,7 +187,6 @@ namespace hgl
 	{
 		//位于SceneOrient.CPP中
 		extern Matrix4f Ortho2DMatrix;																///<全局2D视图矩阵
-		extern Matrix4f ViewportMatrix;																///<视口矩阵
 
 		//位于InlineRenderable.CPP中
 
