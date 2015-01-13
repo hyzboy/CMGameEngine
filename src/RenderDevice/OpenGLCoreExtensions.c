@@ -1,6 +1,7 @@
-﻿#include<GL/glew.h>
+﻿#include<glew/include/GL/glew.h>
 #include<malloc.h>
 #include<string.h>
+#include<hgl/FuncLoad.h>
 
 //供glew使用，请在glew.c中删除原本的glewGetExtension函数
 //旧的glGetString(GL_EXTENSIONS)方式会被报告为错误，但GLEW 1.5.8未改用新式处理方案，所以暂且如此
@@ -27,6 +28,80 @@
 static int opengl_core_ext_number=0;
 static char **opengl_core_ext_string=0;
 
+GLboolean glewGetExtension (const char *name)
+{
+	int i;
+
+	if(opengl_core_ext_number==0)return(GL_FALSE);
+
+	for(i=0;i<opengl_core_ext_number;i++)
+		if(!strcmp(opengl_core_ext_string[i],name))
+			return(GL_TRUE);
+
+	return(GL_FALSE);
+}
+
+void *glCoreGetFunc(struct FuncLoad *flp,const char *ext_name)
+{
+	char fullname[1024];
+
+	strcpy(fullname,flp->func_name);
+
+	if(ext_name)
+		strcat(fullname,ext_name);
+
+	*(flp->func_pointer)=glewGetProcAddress(fullname);
+
+	return(*(flp->func_pointer));
+}
+
+void glCoreGetFuncList(struct FuncLoad *flp)
+{
+	while(flp->func_pointer)
+	{
+		if(!(*flp->func_pointer))
+		if(!glCoreGetFunc(flp,NULL))
+		if(!glCoreGetFunc(flp,"ARB"))
+		if(!glCoreGetFunc(flp,"EXT"))
+		{
+		}
+
+		++flp;
+	}
+}
+
+#define OPENGL_ARB_TO_STANDARD(name)		if(!gl##name)	\
+											{	\
+												if(gl##name##ARB)gl##name=gl##name##ARB;	\
+											}
+
+#define OPENGL_EXT_TO_STANDARD(name)		if(!gl##name)	\
+											{	\
+												if(gl##name##EXT)gl##name=gl##name##EXT;	\
+											}
+
+#define OPENGL_ARB_EXT_TO_STANDARD(name)	if(!gl##name)	\
+											{	\
+												if(gl##name##ARB)gl##name=gl##name##ARB;else	\
+												if(gl##name##EXT)gl##name=gl##name##EXT;	\
+											}
+
+#ifdef HGL_USE_OPENGL_CORE_45
+void OpenGL_Ext_DSA()
+{
+// 	HGL_FUNC_LOAD_LIST_BEGIN(dsa_func_list)
+// 		HGL_FUNC_LOAD(glTextureParameteri)
+// 	HGL_FUNC_LOAD_LIST_END
+
+	if(GLEW_ARB_direct_state_access
+	 ||GLEW_EXT_direct_state_access)
+	{
+		//glCoreGetFuncList(dsa_func_list);
+		OPENGL_ARB_EXT_TO_STANDARD(glTextureParameteri)
+	}
+}
+#endif//HGL_USE_OPENGL_CORE_45
+
 void InitOpenGLCoreExtensions()
 {
 	int i;
@@ -41,6 +116,10 @@ void InitOpenGLCoreExtensions()
 
 	for(i=0;i<opengl_core_ext_number;i++)
 		opengl_core_ext_string[i]=(char *)getfunc(GL_EXTENSIONS,i);
+
+#ifdef HGL_USE_OPENGL_CORE_45
+	OpenGL_Ext_DSA();
+#endif//HGL_USE_OPENGL_CORE_45
 }
 
 void ClearOpenGLCoreExtension()
@@ -54,17 +133,6 @@ void ClearOpenGLCoreExtension()
 
 	opengl_core_ext_number=0;
 }
-/*
-GLboolean glewGetExtension (const char *name)
-{
-	int i;
-
-	if(opengl_core_ext_number==0)return(GL_FALSE);
-
-	for(i=0;i<opengl_core_ext_number;i++)
-		if(!strcmp(opengl_core_ext_string[i],name))
-			return(GL_TRUE);
-
-	return(GL_FALSE);
-}
-*/
+#undef OPENGL_ARB_EXT_TO_STANDARD
+#undef OPENGL_EXT_TO_STANDARD
+#undef OPENGL_ARB_TO_STANDARD
