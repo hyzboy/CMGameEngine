@@ -80,7 +80,7 @@ namespace hgl
 		struct Audio
 		{
 			bool enum_device;																		///<是否枚举设备
-			UTF8String DeviceName;																	///<设备名称
+			AnsiString DeviceName;																	///<设备名称
 		}audio;
 
 		struct WindowSetup
