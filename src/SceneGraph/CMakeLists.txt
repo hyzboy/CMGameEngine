@@ -9,15 +9,15 @@
 								Object/ObjectControl.Makeup.cpp
 								Object/ObjectControl.Proc.cpp
 								Object/GUIObject.cpp)
-								
+
 SOURCE_GROUP("Object" FILES ${BASE_GRAPH_OBJECT_SOURCE})
 
-SET(GRAPHICS_APPLICATION_SOURCE 
+SET(GRAPHICS_APPLICATION_SOURCE
 		GraphicsApplication.cpp
 		GraphicsApplicationEvent.cpp)
-		
+
 SOURCE_GROUP("Application" FILES ${GRAPHICS_APPLICATION_SOURCE})
-								
+
 SET(CM_SCENE_GRAPH_ALL_SOURCE Camera.cpp WalkerCamera.cpp)
 
 IF(WIN32)
@@ -45,9 +45,8 @@ IF(BUILD_OPENGL_LIB)
 		Texture.cpp
 		TileData.cpp
 		Transform.cpp
-		VertexBuffer.cpp
 	)
-	
+
 IF(WIN32)
 	add_library(CM.SceneGraphRender STATIC ${CM_SCENE_GRAPH_RENDER_ALL_SOURCE})
 ELSE()
