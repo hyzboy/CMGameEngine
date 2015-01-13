@@ -132,9 +132,9 @@ namespace hgl
 		if(args.Find(OS_TEXT("-no_enum_audio"))!=-1)
 			audio.enum_device=false;
 
-		pos=args.Find(OS_TEXT("-audio_device"));
-		if(pos!=-1)
-			audio.DeviceName=args[pos+1];
+// 		pos=args.Find(OS_TEXT("-audio_device"));
+// 		if(pos!=-1)
+// 			audio.DeviceName=args[pos+1];
 
 		if(args.Find(OS_TEXT("-top_most"))!=-1)
 			win.TopMost=true;
@@ -172,13 +172,13 @@ namespace hgl
 		if(pos!=-1)
 			stoi(args[pos+1].c_str(),graphics.VSync);
 
-		pos=args.Find(OS_TEXT("-chsfnt"));
-		if(pos!=-1)
-			graphics.fnt.chs_fnt.Name=args[pos+1];
-
-		pos=args.Find(OS_TEXT("-engfnt"));
-		if(pos!=-1)
-			graphics.fnt.eng_fnt.Name=args[pos+1];
+// 		pos=args.Find(OS_TEXT("-chsfnt"));
+// 		if(pos!=-1)
+// 			graphics.fnt.chs_fnt.Name=args[pos+1];
+//
+// 		pos=args.Find(OS_TEXT("-engfnt"));
+// 		if(pos!=-1)
+// 			graphics.fnt.eng_fnt.Name=args[pos+1];
 
 		pos=args.Find(OS_TEXT("-no_vbo"));
 		if(pos!=-1)
