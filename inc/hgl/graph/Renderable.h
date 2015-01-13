@@ -160,8 +160,8 @@ namespace hgl
 
 				vb->GetBoundingBox(min_v,max_v);
 
-				BoundingBox.minPoint=min_v;
-				BoundingBox.maxPoint=max_v;
+				BoundingBox.minPoint=POINT_VEC(min_v);
+				BoundingBox.maxPoint=POINT_VEC(max_v);
 
 				return SetVertexBuffer(vbtVertex,vb);
 			}
