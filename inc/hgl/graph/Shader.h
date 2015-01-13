@@ -3,6 +3,7 @@
 
 #include<hgl/type/BaseString.h>
 #include<hgl/type/Map.h>
+#include<hgl/VectorMath.h>
 namespace hgl
 {
 	namespace graph
@@ -92,6 +93,10 @@ namespace hgl
 			virtual bool SetUniform3fv(int,const float *)=0;
 			virtual bool SetUniform4fv(int,const float *)=0;
 
+					bool SetUniform2fv(int index,const Vector2f &v){return SetUniform2fv(index,(const float *)&v);}
+					bool SetUniform3fv(int index,const Vector3f &v){return SetUniform3fv(index,(const float *)&v);}
+					bool SetUniform4fv(int index,const Vector4f &v){return SetUniform4fv(index,(const float *)&v);}
+
 			virtual bool SetUniform1iv(int,const int *)=0;
 			virtual bool SetUniform2iv(int,const int *)=0;
 			virtual bool SetUniform3iv(int,const int *)=0;
@@ -135,6 +140,10 @@ namespace hgl
 			bool SetUniform3fv(const char *,const float *);
 			bool SetUniform4fv(const char *,const float *);
 
+			bool SetUniform2fv(const char *name,const Vector2f &v){return SetUniform2fv(name,(const float *)&v);}
+			bool SetUniform3fv(const char *name,const Vector3f &v){return SetUniform3fv(name,(const float *)&v);}
+			bool SetUniform4fv(const char *name,const Vector4f &v){return SetUniform4fv(name,(const float *)&v);}
+
 			bool SetUniform1iv(const char *,const int *);
 			bool SetUniform2iv(const char *,const int *);
 			bool SetUniform3iv(const char *,const int *);
@@ -148,6 +157,8 @@ namespace hgl
 			bool SetUniformMatrix2fv(const char *,const float *);
 			bool SetUniformMatrix3fv(const char *,const float *);
 			bool SetUniformMatrix4fv(const char *,const float *);
+
+			bool SetUniformMatrix4fv(const char *name,const Matrix4f &m){return SetUniformMatrix4fv(name,(const float *)&m);}
 
 			bool SetUniformMatrix2x3fv(const char *,const float *);
 			bool SetUniformMatrix3x2fv(const char *,const float *);
