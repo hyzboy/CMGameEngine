@@ -41,35 +41,6 @@ GLboolean glewGetExtension (const char *name)
 	return(GL_FALSE);
 }
 
-void *glCoreGetFunc(struct FuncLoad *flp,const char *ext_name)
-{
-	char fullname[1024];
-
-	strcpy(fullname,flp->func_name);
-
-	if(ext_name)
-		strcat(fullname,ext_name);
-
-	*(flp->func_pointer)=glewGetProcAddress(fullname);
-
-	return(*(flp->func_pointer));
-}
-
-void glCoreGetFuncList(struct FuncLoad *flp)
-{
-	while(flp->func_pointer)
-	{
-		if(!(*flp->func_pointer))
-		if(!glCoreGetFunc(flp,NULL))
-		if(!glCoreGetFunc(flp,"ARB"))
-		if(!glCoreGetFunc(flp,"EXT"))
-		{
-		}
-
-		++flp;
-	}
-}
-
 #define OPENGL_ARB_TO_STANDARD(name)		if(!gl##name)	\
 											{	\
 												if(gl##name##ARB)gl##name=gl##name##ARB;	\
@@ -89,15 +60,10 @@ void glCoreGetFuncList(struct FuncLoad *flp)
 #ifdef HGL_USE_OPENGL_CORE_45
 void OpenGL_Ext_DSA()
 {
-// 	HGL_FUNC_LOAD_LIST_BEGIN(dsa_func_list)
-// 		HGL_FUNC_LOAD(glTextureParameteri)
-// 	HGL_FUNC_LOAD_LIST_END
-
 	if(GLEW_ARB_direct_state_access
 	 ||GLEW_EXT_direct_state_access)
 	{
-		//glCoreGetFuncList(dsa_func_list);
-		OPENGL_ARB_EXT_TO_STANDARD(glTextureParameteri)
+		OPENGL_EXT_TO_STANDARD(TextureParameteri)
 	}
 }
 #endif//HGL_USE_OPENGL_CORE_45
@@ -117,9 +83,7 @@ void InitOpenGLCoreExtensions()
 	for(i=0;i<opengl_core_ext_number;i++)
 		opengl_core_ext_string[i]=(char *)getfunc(GL_EXTENSIONS,i);
 
-#ifdef HGL_USE_OPENGL_CORE_45
 	OpenGL_Ext_DSA();
-#endif//HGL_USE_OPENGL_CORE_45
 }
 
 void ClearOpenGLCoreExtension()

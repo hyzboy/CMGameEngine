@@ -125,7 +125,11 @@ namespace hgl
 
 		glTexture2D::glTexture2D()
 		{
+#ifdef HGL_USE_OPENGL_CORE_45
+			glCreateTextures(GL_TEXTURE_2D,1,&index);
+#else
 			glGenTextures(1,&index);
+#endif//HGL_USE_OPENGL_CORE_45
 		}
 
 		glTexture2D::~glTexture2D()
@@ -165,32 +169,11 @@ namespace hgl
 
 			const bool gen_mip=ltp&ltGenMipmaps;			//取得是否创建mipmaps
 
-			min_filter=gen_mip?GL_LINEAR_MIPMAP_LINEAR:GL_LINEAR;
-			mag_filter=GL_LINEAR;
-
-			wrap_s=GL_REPEAT;
-			wrap_t=GL_REPEAT;
-
-			//未来使用Sampler Object，则不再需要以下部分
-#ifdef HGL_USE_OPENGL_CORE_45
-			glTextureParameteri(index,GL_TEXTURE_MIN_FILTER,min_filter);
-			glTextureParameteri(index,GL_TEXTURE_MAG_FILTER,mag_filter);
-			//glTextureParameteri(index,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
-			//glTextureParameteri(index,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
-			glTextureParameteri(index,GL_TEXTURE_WRAP_S,GL_REPEAT);
-			glTextureParameteri(index,GL_TEXTURE_WRAP_T,GL_REPEAT);
-#else
-			BindTexture(0,GL_TEXTURE_2D,index);				//4.5之后提交纹理不用bind
-
-			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,min_filter);
-			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,mag_filter);
-			//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
-			//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
-			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
-#endif//HGL_USE_OPENGL_CORE_45
-
 			glGetError();			//清除错误
+
+			#ifndef HGL_USE_OPENGL_CORE_45
+				BindTexture(0,GL_TEXTURE_2D,index);				//4.5之后提交纹理不用bind
+			#endif//HGL_USE_OPENGL_CORE_45
 
 			if(sfmt->compress)		//原本就是压缩格式
 			{
@@ -203,7 +186,7 @@ namespace hgl
 			else					//正常非压缩格式
 			{
 			#ifdef HGL_USE_OPENGL_CORE_45
-				glTextureStorage2D(index,0,vf,w,h);
+				glTextureStorage2D(index,1,vf,w,h);
 				glTextureSubImage2D(index,0,0,0,w,h,sfmt->format,sfmt->type,data);
 			#else
 				glTexImage2D(GL_TEXTURE_2D,0,vf,w,h,0,sfmt->format,sfmt->type,data);
@@ -226,6 +209,31 @@ namespace hgl
 				#endif//HGL_USE_OPENGL_CORE_45
 
 //					glTexEnvf(GL_TEXTURE_FILTER_CONTROL,GL_TEXTURE_LOD_BIAS,-1.5f);		//设置LOD偏向,负是更精细，正是更模糊
+			}
+
+			{
+				min_filter=gen_mip?GL_LINEAR_MIPMAP_LINEAR:GL_LINEAR;
+				mag_filter=GL_LINEAR;
+
+				wrap_s=GL_REPEAT;
+				wrap_t=GL_REPEAT;
+
+				//未来使用Sampler Object，则不再需要以下部分
+	#ifdef HGL_USE_OPENGL_CORE_45
+				glTextureParameteri(index,GL_TEXTURE_MIN_FILTER,min_filter);
+				glTextureParameteri(index,GL_TEXTURE_MAG_FILTER,mag_filter);
+				//glTextureParameteri(index,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
+				//glTextureParameteri(index,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
+				glTextureParameteri(index,GL_TEXTURE_WRAP_S,GL_REPEAT);
+				glTextureParameteri(index,GL_TEXTURE_WRAP_T,GL_REPEAT);
+	#else
+				glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,min_filter);
+				glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,mag_filter);
+				//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
+				//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
+				glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
+				glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
+	#endif//HGL_USE_OPENGL_CORE_45
 			}
 
 			return(true);
