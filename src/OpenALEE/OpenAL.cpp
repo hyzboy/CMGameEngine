@@ -135,7 +135,7 @@ namespace openal
 	{
 		if(alcIsExtensionPresent)
 		{
-			const char *result;
+			const char *result=nullptr;
 
 			if(alcIsExtensionPresent(nullptr,"ALC_ENUMERATE_ALL_EXT"))
 				result=(char *)alcGetString(nullptr,ALC_DEFAULT_ALL_DEVICES_SPECIFIER);
