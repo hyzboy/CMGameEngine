@@ -120,7 +120,11 @@ INCLUDE_DIRECTORIES(${CMGDK_PATH}/inc)
 INCLUDE_DIRECTORIES(${CMGDK_PATH}/3rdpty)
 INCLUDE_DIRECTORIES(${CMGDK_PATH}/3rdpty/MathGeoLib/src)
 
-link_directories(${CMGDK_PATH}/3rdpty/MathGeoLib)
+IF(WIN32)
+	link_directories(${CMGDK_PATH}/3rdpty/MathGeoLib/${CMGDK_BUILD_TYPE})
+ELSE()
+	link_directories(${CMGDK_PATH}/3rdpty/MathGeoLib)
+ENDIF()
 
 IF(UNIX)
 	FIND_PATH(ICONV_INCLUDE_DIR
