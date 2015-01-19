@@ -74,7 +74,7 @@ ALvoid LoadOGG(ALbyte *memory, ALsizei memory_size,ALenum *format, ALvoid **data
 {
     int             total=0;
     int             result;
-			char *	ptr;
+			char *	ptr=nullptr;
 			char *	buf;
 
     ov_callbacks    func;
@@ -109,7 +109,7 @@ ALvoid LoadOGG(ALbyte *memory, ALsizei memory_size,ALenum *format, ALvoid **data
     {
         result=ov_read(&ogg_stream,buf,64*1024,0,2,1,&section);
 
-        if(total)ptr=(char *)realloc(ptr,total+result);
+        if(ptr)ptr=(char *)realloc(ptr,total+result);
             else ptr=(char *)malloc(result);
 
         memcpy(ptr+total,buf,result);
