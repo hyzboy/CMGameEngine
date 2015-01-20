@@ -13059,7 +13059,7 @@ GLboolean GLEWAPIENTRY wglewGetExtension (const char* name)
   if (start == 0)
     return GL_FALSE;
   end = start + _glewStrLen(start);
-  return glewGetExtension(name, start, end);
+  return glewGetExtension(name);
 }
 
 GLenum GLEWAPIENTRY wglewContextInit (WGLEW_CONTEXT_ARG_DEF_LIST)
