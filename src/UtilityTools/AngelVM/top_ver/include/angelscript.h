@@ -415,7 +415,8 @@ typedef void (*asRETURNCONTEXTFUNC_t)(asIScriptEngine *, asIScriptContext *, voi
 // BCC v5.8 (C++Builder 2006) and earlier have a similar bug which forces us to fall back to a C-style cast.
 #define asFUNCTIONPR(f,p,r) asFunctionPtr((void (*)())((r (*)p)(f)))
 #else
-#define asFUNCTIONPR(f,p,r) asFunctionPtr((void (*)())(static_cast<r (*)p>(f)))
+typedef void (*asFUNC_VOID)();
+#define asFUNCTIONPR(f,p,r) asFunctionPtr((asFUNC_VOID)(static_cast<r (*)p>(f)))
 #endif
 
 #ifndef AS_NO_CLASS_METHODS
