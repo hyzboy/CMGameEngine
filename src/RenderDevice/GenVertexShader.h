@@ -15,7 +15,7 @@ namespace hgl
 				shader_in_type in_normal;
 				shader_in_type in_vertex_color;
 
-				char vertex_color_to_vec4[SHADER_VALUE_NAME_MAX_LENGTH];
+				UTF8String vertex_color_to_vec4;
 
 				int vertex_type;
 
@@ -28,12 +28,12 @@ namespace hgl
 
 				int out_texcoord_count;
 				bool out_texcoord[HGL_MAX_TEX_COORD];
-				char out_texcoord_name[HGL_MAX_TEX_COORD][SHADER_VALUE_NAME_MAX_LENGTH];
-				char out_texcoord_source[HGL_MAX_TEX_COORD][SHADER_VALUE_NAME_MAX_LENGTH];		//来源
+				UTF8String out_texcoord_name[HGL_MAX_TEX_COORD];
+				UTF8String out_texcoord_source[HGL_MAX_TEX_COORD];		//来源
 
 				int in_tex_count;
 				bool in_tex[mtcMax];
-				char tex_sampler[mtcMax][SHADER_VALUE_NAME_MAX_LENGTH];
+				UTF8String tex_sampler[mtcMax];
 
 				Axis height_axis;				//高度图所用轴
 

@@ -34,62 +34,22 @@ namespace hgl
 
 			shader_stringlist::shader_stringlist()
 			{
-				str=(char *)hgl_malloc(1024);
-
-				length=0;
-				max_length=1023;
 			}
 
 			shader_stringlist::~shader_stringlist()
 			{
 			}
 
-			void shader_stringlist::add(const char *line)
-			{
-				size_t add_length=::strlen(line);
-
-				if(length+add_length>=max_length)
-				{
-					max_length=((length+add_length+1+1023)/1024)*1024;
-
-					str=(char *)hgl_realloc(str,max_length);
-				}
-
-				memcpy(str+length,line,add_length+1);		//+1是为了把0也复制进去
-
-				length+=add_length;
-			}
-
-			void shader_stringlist::add_format(const char *fmt,...)
-			{
-				va_list va;
-
-				char result[1024];
-
-				va_start(va,fmt);
-
-	#ifdef _MSC_VER
-				vsnprintf_s(result,1024,1024,fmt,va);
-	#else
-				vsnprintf(result,1024,fmt,va);
-	#endif//_MSC_VER
-
-				va_end(va);
-
-				add(result);
-			}
-
 			void shader_stringlist::debug_out(const os_char *filename)
 			{
 				if(!filename)return;
 
-				SaveMemoryToFile(filename,str,length);
+				SaveMemoryToFile(filename,str.c_str(),str.Length());
 			}
 
 			void shader_stringlist::add_version(int ver)
 			{
-				add_format("#version %d\n",ver);
-				add();
+				add("#version "+UTF8String(ver)+"\n\n");
 			}
 
 			void shader_stringlist::add_main_begin()

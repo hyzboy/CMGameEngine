@@ -81,11 +81,11 @@ namespace hgl
 			{
 				if(fmt<=HGL_COLOR_NONE||fmt>=HGL_COLOR_END)return(0);
 
-				if(fmt==HGL_COLOR_ALPHA				){::sprintf_s(vertex_color_to_vec4,SHADER_VALUE_NAME_MAX_LENGTH,"vec4(1.0,1.0,1.0,%s);",HGL_VS_COLOR);return(1);}
-				if(fmt==HGL_COLOR_LUMINANCE			){::sprintf_s(vertex_color_to_vec4,SHADER_VALUE_NAME_MAX_LENGTH,"vec4(vec3(%s),1.0);",HGL_VS_COLOR);return(1);}
-				if(fmt==HGL_COLOR_LUMINANCE_ALPHA	){::sprintf_s(vertex_color_to_vec4,SHADER_VALUE_NAME_MAX_LENGTH,"vec4(vec3(%s.x),%s.y);",HGL_VS_COLOR,HGL_VS_COLOR);return(2);}
-				if(fmt==HGL_COLOR_RGB				){::sprintf_s(vertex_color_to_vec4,SHADER_VALUE_NAME_MAX_LENGTH,"vec4(%s,1.0);",HGL_VS_COLOR);return(3);}
-				if(fmt==HGL_COLOR_RGBA				){::sprintf_s(vertex_color_to_vec4,SHADER_VALUE_NAME_MAX_LENGTH,"%s;",HGL_VS_COLOR);return(4);}
+				if(fmt==HGL_COLOR_ALPHA				){vertex_color_to_vec4="vec4(1.0,1.0,1.0," HGL_VS_COLOR ");";return(1);}
+				if(fmt==HGL_COLOR_LUMINANCE			){vertex_color_to_vec4="vec4(vec3(" HGL_VS_COLOR "),1.0);";return(1);}
+				if(fmt==HGL_COLOR_LUMINANCE_ALPHA	){vertex_color_to_vec4="vec4(vec3(" HGL_VS_COLOR ".x)," HGL_VS_COLOR ".y);";return(2);}
+				if(fmt==HGL_COLOR_RGB				){vertex_color_to_vec4="vec4(" HGL_VS_COLOR ",1.0);";return(3);}
+				if(fmt==HGL_COLOR_RGBA				){vertex_color_to_vec4=HGL_VS_COLOR ";";return(4);}
 
 				LOG_ERROR(OS_TEXT("输入的颜色格式无法处理：")+OSString(fmt));
 				return(0);
@@ -129,12 +129,12 @@ namespace hgl
 			{
 				add_sampler(MaterialTextureName[mtc_index],coord_num);
 
-				::strcpy_s(tex_sampler[mtc_index],SHADER_VALUE_NAME_MAX_LENGTH,shader_get_sampler_color[coord_num-1]);
-				::strcat_s(tex_sampler[mtc_index],SHADER_VALUE_NAME_MAX_LENGTH,"(");
-				::strcat_s(tex_sampler[mtc_index],SHADER_VALUE_NAME_MAX_LENGTH,MaterialTextureName[mtc_index]);
-				::strcat_s(tex_sampler[mtc_index],SHADER_VALUE_NAME_MAX_LENGTH,",");
-				::strcat_s(tex_sampler[mtc_index],SHADER_VALUE_NAME_MAX_LENGTH,vb_name);
-				::strcat_s(tex_sampler[mtc_index],SHADER_VALUE_NAME_MAX_LENGTH,")");
+				tex_sampler[mtc_index].Strcat(shader_get_sampler_color[coord_num-1]);
+				tex_sampler[mtc_index].Strcat("(");
+				tex_sampler[mtc_index].Strcat(MaterialTextureName[mtc_index]);
+				tex_sampler[mtc_index].Strcat(",");
+				tex_sampler[mtc_index].Strcat(vb_name);
+				tex_sampler[mtc_index].Strcat(")");
 
 				in_tex[mtc_index]=true;
 				in_tex_count++;
@@ -175,10 +175,10 @@ namespace hgl
 				out_texcoord_count++;
 				out_texcoord[mtc_index]=true;
 
-				::strcpy_s(out_texcoord_name[mtc_index],SHADER_VALUE_NAME_MAX_LENGTH,HGL_FS_TEXCOORD);
-				::strcat_s(out_texcoord_name[mtc_index],SHADER_VALUE_NAME_MAX_LENGTH,MaterialTextureName[mtc_index]);
+				out_texcoord_name[mtc_index].Strcat(HGL_FS_TEXCOORD);
+				out_texcoord_name[mtc_index].Strcat(MaterialTextureName[mtc_index]);
 
-				::strcpy_s(out_texcoord_source[mtc_index], SHADER_VALUE_NAME_MAX_LENGTH,source);
+				out_texcoord_source[mtc_index].Strcat(source);
 
 				add_out_fv(out_texcoord_name[mtc_index],coord_num);
 			}
@@ -189,15 +189,13 @@ namespace hgl
 
 				if(in_normal)			//有法线要算
 				{
-					add();
-					add("\tvec3 VP;\n");
+					add("\n\tvec3 VP;\n");
 					add("\tvec3 MVNormal;\n");
 				}
 
 				if(in_vertex_color)		//有顶点颜色
 				{
-					add();
-					add_format("\t%s=%s\n",HGL_FS_COLOR,vertex_color_to_vec4);
+					add(U8_TEXT("\n\t" HGL_FS_COLOR "=")+vertex_color_to_vec4+U8_TEXT("\n"));
 				}
 
 				if(out_texcoord_count)	//有纹理坐标需要输出到fs
@@ -216,50 +214,43 @@ namespace hgl
 						{
 							if(!out_texcoord[i])continue;
 
-							add_format("\t%s=%s;\n",out_texcoord_name[i],out_texcoord_source[i]);
+							add(U8_TEXT("\t")+out_texcoord_name[i]+U8_TEXT("=")+out_texcoord_source[i]+U8_TEXT(";\n"));
 						}
 					}
 				}
 
 				//gl_Position计算
 				{
-					char pos_str[1024]="\tPosition=";
+					UTF8String pos_str="\tPosition=";
 
 					if(vertex_type==2)
 					{
-						::strcat(pos_str,"vec4(");
+						pos_str.Strcat("vec4(");
 
 						if(height_axis==HGL_AXIS_NONE)							//非高度图
 						{
-							::strcat(pos_str,HGL_VS_VERTEX);
-							::strcat(pos_str,",0.0,1.0);\n");
+							pos_str.Strcat(HGL_VS_VERTEX ",0.0,1.0);\n");
 						}
 						else if(height_axis==HGL_AXIS_X)						//X轴向上
 						{
-							::strcat(pos_str,tex_sampler[mtcHeight]);
-							::strcat(pos_str,".r,");
+							pos_str.Strcat(tex_sampler[mtcHeight]);
+							pos_str.Strcat(".r,");
 
-							::strcat(pos_str,HGL_VS_VERTEX);
-							::strcat(pos_str,",1.0);\n");
+							pos_str.Strcat(HGL_VS_VERTEX ",1.0);\n");
 						}
 						else if(height_axis==HGL_AXIS_Y)						//Y轴向上
 						{
-							::strcat(pos_str,HGL_VS_VERTEX);
-							::strcat(pos_str,".x,");
+							pos_str.Strcat(HGL_VS_VERTEX ".x,");
 
-							::strcat(pos_str,tex_sampler[mtcHeight]);
-							::strcat(pos_str,".r,");
-
-							::strcat(pos_str,HGL_VS_VERTEX);
-							::strcat(pos_str,".y,1.0);\n");
+							pos_str.Strcat(tex_sampler[mtcHeight]);
+							pos_str.Strcat(".r," HGL_VS_VERTEX ".y,1.0);\n");
 						}
 						else if(height_axis==HGL_AXIS_Z)						//Z轴向上
 						{
-							::strcat(pos_str,HGL_VS_VERTEX);
-							::strcat(pos_str,",");
+							pos_str.Strcat(HGL_VS_VERTEX ",");
 
-							::strcat(pos_str,tex_sampler[mtcHeight]);
-							::strcat(pos_str,".r,1.0);\n");
+							pos_str.Strcat(tex_sampler[mtcHeight]);
+							pos_str.Strcat(".r,1.0);\n");
 						}
 						else
 						{
@@ -269,15 +260,12 @@ namespace hgl
 					else
 					if(vertex_type==3)
 					{
-						::strcat(pos_str,"vec4(");
-						::strcat(pos_str,HGL_VS_VERTEX);
-						::strcat(pos_str,",1.0);\n");
+						pos_str.Strcat("vec4(" HGL_VS_VERTEX ",1.0);\n");
 					}
 					else
 					if(vertex_type==4)
 					{
-						::strcat(pos_str,HGL_VS_VERTEX);
-						::strcat(pos_str,";\n");
+						pos_str.Strcat(HGL_VS_VERTEX ";\n");
 					}
 					else
 					{
@@ -290,22 +278,18 @@ namespace hgl
 					add();
 
 					if(!mvp_matrix)
-						add_format("\tgl_Position=Position;\n");
+						add("\tgl_Position=Position;\n");
 					else
-						add_format("\tgl_Position=%s*Position;\n",HGL_VS_MVP_MATRIX);
+						add("\tgl_Position=" HGL_VS_MVP_MATRIX "*Position;\n");
 				}
 
 				if(in_normal)
 				{
-					add();
+					add("\n\tVP=normalize(" HGL_VS_LIGHT_POSITION "-" HGL_VS_NORMAL_MATRIX "*Position);\n");
 
-					add_format("\tVP=normalize(%s-%s*Position);\n",HGL_VS_LIGHT_POSITION,HGL_VS_NORMAL_MATRIX);
+					add("\tMVNormal=normalize(" HGL_VS_NORMAL_MATRIX "*" HGL_VS_NORMAL ");\n\n");
 
-					add_format("\tMVNormal=normalize(%s*%s);\n",HGL_VS_NORMAL_MATRIX,HGL_VS_NORMAL);
-
-					add();
-
-					add_format("\t%s=%s+max(0.0,dot(MVNormal,VP));\n",HGL_FS_LIGHT_INTENSITY,HGL_VS_GLOBAL_LIGHT_INTENSITY);
+					add("\t" HGL_FS_LIGHT_INTENSITY "=" HGL_VS_GLOBAL_LIGHT_INTENSITY "+max(0.0,dot(MVNormal,VP));\n");
 				}
 
 				return(true);

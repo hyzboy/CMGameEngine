@@ -19,8 +19,8 @@ namespace hgl
 				"texture3D"
 			};
 
-			const char HGL_FS_DIFFUSE_COLOR[]="DiffuseColor";
-			const char HGL_FS_ALPHA[]="Alpha";
+			#define HGL_FS_DIFFUSE_COLOR	"DiffuseColor"
+			#define HGL_FS_ALPHA			"Alpha"
 
 			fs::fs():shader_stringlist()
 			{
@@ -36,7 +36,7 @@ namespace hgl
 
 			void fs::add_frag_color()
 			{
-				add_format("layout(location=0,index=0) out vec4 %s;\n",HGL_FS_FRAG_COLOR);
+				add("layout(location=0,index=0) out vec4 " HGL_FS_FRAG_COLOR ";\n");
 			}
 
 			void fs::add_alpha_test()
@@ -77,16 +77,16 @@ namespace hgl
 			{
 				mtc[mtc_index]=coord_num;
 
-				::strcpy_s(tex_coord[mtc_index],SHADER_VALUE_NAME_MAX_LENGTH,HGL_FS_TEXCOORD);
-				::strcat_s(tex_coord[mtc_index],SHADER_VALUE_NAME_MAX_LENGTH,source);
+				tex_coord[mtc_index].Strcat(HGL_FS_TEXCOORD);
+				tex_coord[mtc_index].Strcat(source);
 
-				::strcpy_s(tex_sampler[mtc_index],SHADER_VALUE_NAME_MAX_LENGTH,shader_get_sampler_color[coord_num-1]);
-				::strcat_s(tex_sampler[mtc_index],SHADER_VALUE_NAME_MAX_LENGTH,"(");
-				::strcat_s(tex_sampler[mtc_index],SHADER_VALUE_NAME_MAX_LENGTH,MaterialTextureName[mtc_index]);
-				::strcat_s(tex_sampler[mtc_index],SHADER_VALUE_NAME_MAX_LENGTH,",");
-				::strcat_s(tex_sampler[mtc_index],SHADER_VALUE_NAME_MAX_LENGTH,HGL_FS_TEXCOORD);
-				::strcat_s(tex_sampler[mtc_index],SHADER_VALUE_NAME_MAX_LENGTH,source);
-				::strcat_s(tex_sampler[mtc_index],SHADER_VALUE_NAME_MAX_LENGTH,")");
+				tex_sampler[mtc_index].Strcat(shader_get_sampler_color[coord_num-1]);
+				tex_sampler[mtc_index].Strcat("(");
+				tex_sampler[mtc_index].Strcat(MaterialTextureName[mtc_index]);
+				tex_sampler[mtc_index].Strcat(",");
+				tex_sampler[mtc_index].Strcat(HGL_FS_TEXCOORD);
+				tex_sampler[mtc_index].Strcat(source);
+				tex_sampler[mtc_index].Strcat(")");
 
 				add_sampler(MaterialTextureName[mtc_index],coord_num);
 			}
@@ -98,29 +98,31 @@ namespace hgl
 			*/
 			void fs::add_in_texcoord(int num,const char *fragname)
 			{
-				char texcoord_name[SHADER_VALUE_NAME_MAX_LENGTH];
+				UTF8String texcoord_name;
 
-				::strcpy_s(texcoord_name,SHADER_VALUE_NAME_MAX_LENGTH,HGL_FS_TEXCOORD);
-				::strcat_s(texcoord_name,SHADER_VALUE_NAME_MAX_LENGTH,fragname);
+				texcoord_name.Strcat(HGL_FS_TEXCOORD);
+				texcoord_name.Strcat(fragname);
 
 				add_in_fv(texcoord_name,num);
 			}
 
 			bool fs::add_end()
 			{
-				char fin_color[SHADER_VALUE_NAME_MAX_LENGTH];
+				UTF8String fin_color;
 
 				if(mtc[mtcDiffuse]!=-1)		//如果漫反射贴图也为否，则完全无色彩信息，退出
 				{
 					if(outside_discard)		//有出界放弃处理
 					{
-						add_format(	"\tif(%s.x<0||%s.x>1\n"
-									"\t ||%s.y<0||%s.y>1)discard;\n\n",tex_coord[mtcDiffuse],tex_coord[mtcDiffuse],tex_coord[mtcDiffuse],tex_coord[mtcDiffuse]);
+						add(	"\tvec2 diff_tex_coord="+tex_coord[mtcDiffuse]+".xy;\n\n");
+
+						add(	"\tif(diff_tex_coord.x<0||diff_tex_coord.x>1\n"
+								"\t ||diff_tex_coord.y<0||diff_tex_coord.y>1)discard;\n\n");
 					}
 
 //					if(cf==HGL_COLOR_RGBA)
 					{
-						add_format("\tvec4 %s=%s",	HGL_FS_DIFFUSE_COLOR,tex_sampler[mtcDiffuse]);
+						add(U8_TEXT("\tvec4 " HGL_FS_DIFFUSE_COLOR "=")+tex_sampler[mtcDiffuse]+U8_TEXT(";\n"));
 					}
 					//else if(cf==HGL_COLOR_RGB)
 					//{
@@ -130,27 +132,24 @@ namespace hgl
 					//													texcoord_name);
 					//}
 
-					::strcpy_s(fin_color,SHADER_VALUE_NAME_MAX_LENGTH,HGL_FS_DIFFUSE_COLOR);
-
-					if(in_color)							//还有顶点颜色传入
-					{
-						add("*");
-						add(HGL_FS_COLOR);
-					}
-
-					add(";\n\n");
+					if(in_color)	//还有顶点颜色传入
+						fin_color=HGL_FS_DIFFUSE_COLOR "*" HGL_FS_COLOR ";\n\n";
+					else
+						fin_color=HGL_FS_DIFFUSE_COLOR ";\n\n";
 				}
 				else	//无漫反射贴图
 				{
 					if(!in_color)		//也无顶点颜色
 						return(false);	//即使有其它贴图，也必须有颜色
 
-					::strcpy_s(fin_color,SHADER_VALUE_NAME_MAX_LENGTH,HGL_FS_COLOR);
+					fin_color=HGL_FS_COLOR;
 				}
 
 				if(mtc[mtcAlpha]!=-1)				//透明贴图
 				{
-					add_format("\tfloat %s=%s.r;\n",HGL_FS_ALPHA,tex_sampler[mtcAlpha]);
+					add(U8_TEXT("\tfloat tex_alpha=")+tex_sampler[mtcAlpha]+U8_TEXT(";\n\n"));
+
+					add(U8_TEXT("\tfloat " HGL_FS_ALPHA "=tex_alpha;\n"));
 
 					add();
 				}
@@ -158,9 +157,9 @@ namespace hgl
 				if(alpha_test)		//alpha test
 				{
 					if(mtc[mtcAlpha]!=-1)
-						add_format("\tif(%s.a*%s<%s)discard;\n",fin_color,HGL_FS_ALPHA,HGL_FS_ALPHA_TEST);
+						add("\tif("+fin_color+U8_TEXT(".a*tex_alpha<" HGL_FS_ALPHA_TEST ")discard;\n"));
 					else
-						add_format("\tif(%s.a<%s)discard;\n",fin_color,HGL_FS_ALPHA_TEST);
+						add("\tif("+fin_color+U8_TEXT(".a<" HGL_FS_ALPHA_TEST ")discard;\n"));
 
 					add();
 				}
@@ -171,16 +170,16 @@ namespace hgl
 //					add();
 
 					if(mtc[mtcAlpha]!=-1)
-						add_format("\t%s=%s*vec4(vec3(%s),%s);\n",HGL_FS_FRAG_COLOR,fin_color,HGL_FS_LIGHT_INTENSITY,HGL_FS_ALPHA);
+						add(U8_TEXT("\t" HGL_FS_FRAG_COLOR "=")+fin_color+U8_TEXT("*vec4(vec3(" HGL_FS_LIGHT_INTENSITY ")," HGL_FS_ALPHA ");\n"));
 					else
-						add_format("\t%s=%s*vec4(vec3(%s),1.0);\n",HGL_FS_FRAG_COLOR,fin_color,HGL_FS_LIGHT_INTENSITY);
+						add(U8_TEXT("\t" HGL_FS_FRAG_COLOR "=")+fin_color+U8_TEXT("*vec4(vec3(" HGL_FS_LIGHT_INTENSITY "),1.0);\n"));
 				}
 				else
 				{
 					if(mtc[mtcAlpha]!=-1)
-						add_format("\t%s=vec4(%s.rgb,%s.a*%s);\n",HGL_FS_FRAG_COLOR,fin_color,fin_color,HGL_FS_ALPHA);
+						add(U8_TEXT("\t" HGL_FS_FRAG_COLOR "=vec4(")+fin_color+U8_TEXT(".rgb,")+fin_color+U8_TEXT(".a*" HGL_FS_ALPHA ");\n"));
 					else
-						add_format("\t%s=%s;\n",HGL_FS_FRAG_COLOR,fin_color);
+						add(U8_TEXT("\t" HGL_FS_FRAG_COLOR "=")+fin_color+U8_TEXT(";\n"));
 				}
 
 				return(true);

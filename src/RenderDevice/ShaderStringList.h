@@ -48,20 +48,16 @@ namespace hgl
 			{
 			protected:
 
-				char *str;			//字符串
-
-				int length;			//长度
-				int max_length;		//最大长度
+				UTF8String str;
 
 			public:
 
 				shader_stringlist();
 				virtual ~shader_stringlist();
 
-				char *get()const{return str;}
+				char *get()const{return str.c_str();}
 
-				void add(const char *line="\n");
-				void add_format(const char *,...);
+				void add(const char *line="\n"){str.Strcat(line,::strlen(line));}
 
 				void debug_out(const os_char *filename);
 
