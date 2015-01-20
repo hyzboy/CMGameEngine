@@ -1,10 +1,20 @@
-#include<hgl/audio/AudioSource.h>
+﻿#include<hgl/audio/AudioSource.h>
 #include<hgl/audio/OpenAL.h>
 #include<hgl/LogInfo.h>
 
 using namespace openal;
 namespace hgl
 {
+	inline void alSourcefv(openal::ALuint sid, openal::ALenum param, const Vector3f &v3f)
+	{
+		openal::alSourcefv(sid, param, (const openal::ALfloat *)&v3f);
+	}
+
+	inline void alGetSourcefv(openal::ALuint sid, openal::ALenum param, Vector3f &v3f)
+	{
+		openal::alGetSourcefv(sid, param, (openal::ALfloat *)&v3f);
+	}
+
 	const unsigned int InvalidIndex=0xFFFFFFFF;
 
 	void AudioSource::InitPrivate()
@@ -144,29 +154,29 @@ namespace hgl
 
 	void AudioSource::SetPosition(const Vector3f &pos)
 	{
-		if(!alSourcefv)return;
+		if(!openal::alSourcefv)return;
 		if(index==InvalidIndex)return;
 
 		position=pos;
-		alSourcefv(index,AL_POSITION,position.data());
+		alSourcefv(index,AL_POSITION,position);
 	}
 
 	void AudioSource::SetVelocity(const Vector3f &vel)
 	{
-		if(!alSourcefv)return;
+		if(!openal::alSourcefv)return;
 		if(index==InvalidIndex)return;
 
 		velocity=vel;
-		alSourcefv(index,AL_VELOCITY,velocity.data());
+		alSourcefv(index,AL_VELOCITY,velocity);
 	}
 
 	void AudioSource::SetDirection(const Vector3f &dir)
 	{
-		if(!alSourcefv)return;
+		if(!openal::alSourcefv)return;
 		if(index==InvalidIndex)return;
 
 		direction=dir;
-		alSourcefv(index,AL_DIRECTION,direction.data());
+		alSourcefv(index,AL_DIRECTION,direction);
 	}
 
 	void AudioSource::SetDistance(const ReferenceValue &dist)
@@ -291,9 +301,9 @@ namespace hgl
 		alGetSourcef	(index,AL_PITCH,				&pitch);
 		alGetSourcef	(index,AL_GAIN,					&gain);
 		alGetSourcef	(index,AL_CONE_OUTER_GAIN,		&cone_gain);
-		alGetSourcefv	(index,AL_POSITION,				position.data());
-		alGetSourcefv	(index,AL_VELOCITY,				velocity.data());
-		alGetSourcefv	(index,AL_DIRECTION,			direction.data());
+		alGetSourcefv	(index,AL_POSITION,				position);
+		alGetSourcefv	(index,AL_VELOCITY,				velocity);
+		alGetSourcefv	(index,AL_DIRECTION,			direction);
 		alGetSourcef	(index,AL_MAX_DISTANCE,			&distance.max);
 		alGetSourcef	(index,AL_REFERENCE_DISTANCE,	&distance.half);
 		alGetSourcef	(index,AL_ROLLOFF_FACTOR,		&rolloff_factor);
