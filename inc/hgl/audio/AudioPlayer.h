@@ -1,4 +1,4 @@
-#ifndef HGL_AUDIO_PLAYER_INCLUDE
+﻿#ifndef HGL_AUDIO_PLAYER_INCLUDE
 #define HGL_AUDIO_PLAYER_INCLUDE
 
 // #include<hgl/HAC.H>

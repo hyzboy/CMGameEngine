@@ -1,4 +1,4 @@
-#ifndef HGL_DFS_CLIENT_ID_INCLUDE
+﻿#ifndef HGL_DFS_CLIENT_ID_INCLUDE
 #define HGL_DFS_CLIENT_ID_INCLUDE
 
 #include<hgl/dfs/dfsClientConnect.h>
@@ -11,7 +11,7 @@ namespace hgl
 
 	namespace dfs
 	{
-		class IDLockTeam;
+		struct IDLockTeam;
 		class dfsClientIDConnectPool;
 
 		#define DFS_ID_KEY_SIZE	32		//数据合集ID字节数

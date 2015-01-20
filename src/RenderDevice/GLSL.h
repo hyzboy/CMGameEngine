@@ -1,4 +1,4 @@
-#ifndef HGL_OPENGL_CORE_GLSL_INCLUDE
+﻿#ifndef HGL_OPENGL_CORE_GLSL_INCLUDE
 #define HGL_OPENGL_CORE_GLSL_INCLUDE
 
 #include<hgl/graph/Shader.h>

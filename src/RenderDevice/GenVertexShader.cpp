@@ -1,4 +1,4 @@
-#include"GenVertexShader.h"
+﻿#include"GenVertexShader.h"
 #include"OpenGLRenderable.h"
 #include"GLSL.h"
 #include<hgl/graph/Render.h>
@@ -81,11 +81,11 @@ namespace hgl
 			{
 				if(fmt<=HGL_COLOR_NONE||fmt>=HGL_COLOR_END)return(0);
 
-				if(fmt==HGL_COLOR_ALPHA				){::sprintf(vertex_color_to_vec4,"vec4(1.0,1.0,1.0,%s);",HGL_VS_COLOR);return(1);}
-				if(fmt==HGL_COLOR_LUMINANCE			){::sprintf(vertex_color_to_vec4,"vec4(vec3(%s),1.0);",HGL_VS_COLOR);return(1);}
-				if(fmt==HGL_COLOR_LUMINANCE_ALPHA	){::sprintf(vertex_color_to_vec4,"vec4(vec3(%s.x),%s.y);",HGL_VS_COLOR,HGL_VS_COLOR);return(2);}
-				if(fmt==HGL_COLOR_RGB				){::sprintf(vertex_color_to_vec4,"vec4(%s,1.0);",HGL_VS_COLOR);return(3);}
-				if(fmt==HGL_COLOR_RGBA				){::sprintf(vertex_color_to_vec4,"%s;",HGL_VS_COLOR);return(4);}
+				if(fmt==HGL_COLOR_ALPHA				){::sprintf_s(vertex_color_to_vec4,SHADER_VALUE_NAME_MAX_LENGTH,"vec4(1.0,1.0,1.0,%s);",HGL_VS_COLOR);return(1);}
+				if(fmt==HGL_COLOR_LUMINANCE			){::sprintf_s(vertex_color_to_vec4,SHADER_VALUE_NAME_MAX_LENGTH,"vec4(vec3(%s),1.0);",HGL_VS_COLOR);return(1);}
+				if(fmt==HGL_COLOR_LUMINANCE_ALPHA	){::sprintf_s(vertex_color_to_vec4,SHADER_VALUE_NAME_MAX_LENGTH,"vec4(vec3(%s.x),%s.y);",HGL_VS_COLOR,HGL_VS_COLOR);return(2);}
+				if(fmt==HGL_COLOR_RGB				){::sprintf_s(vertex_color_to_vec4,SHADER_VALUE_NAME_MAX_LENGTH,"vec4(%s,1.0);",HGL_VS_COLOR);return(3);}
+				if(fmt==HGL_COLOR_RGBA				){::sprintf_s(vertex_color_to_vec4,SHADER_VALUE_NAME_MAX_LENGTH,"%s;",HGL_VS_COLOR);return(4);}
 
 				LOG_ERROR(OS_TEXT("输入的颜色格式无法处理：")+OSString(fmt));
 				return(0);
@@ -129,12 +129,12 @@ namespace hgl
 			{
 				add_sampler(MaterialTextureName[mtc_index],coord_num);
 
-				::strcpy(tex_sampler[mtc_index],shader_get_sampler_color[coord_num-1]);
-				::strcat(tex_sampler[mtc_index],"(");
-				::strcat(tex_sampler[mtc_index],MaterialTextureName[mtc_index]);
-				::strcat(tex_sampler[mtc_index],",");
-				::strcat(tex_sampler[mtc_index],vb_name);
-				::strcat(tex_sampler[mtc_index],")");
+				::strcpy_s(tex_sampler[mtc_index],SHADER_VALUE_NAME_MAX_LENGTH,shader_get_sampler_color[coord_num-1]);
+				::strcat_s(tex_sampler[mtc_index],SHADER_VALUE_NAME_MAX_LENGTH,"(");
+				::strcat_s(tex_sampler[mtc_index],SHADER_VALUE_NAME_MAX_LENGTH,MaterialTextureName[mtc_index]);
+				::strcat_s(tex_sampler[mtc_index],SHADER_VALUE_NAME_MAX_LENGTH,",");
+				::strcat_s(tex_sampler[mtc_index],SHADER_VALUE_NAME_MAX_LENGTH,vb_name);
+				::strcat_s(tex_sampler[mtc_index],SHADER_VALUE_NAME_MAX_LENGTH,")");
 
 				in_tex[mtc_index]=true;
 				in_tex_count++;
@@ -175,10 +175,10 @@ namespace hgl
 				out_texcoord_count++;
 				out_texcoord[mtc_index]=true;
 
-				::strcpy(out_texcoord_name[mtc_index],HGL_FS_TEXCOORD);
-				::strcat(out_texcoord_name[mtc_index],MaterialTextureName[mtc_index]);
+				::strcpy_s(out_texcoord_name[mtc_index],SHADER_VALUE_NAME_MAX_LENGTH,HGL_FS_TEXCOORD);
+				::strcat_s(out_texcoord_name[mtc_index],SHADER_VALUE_NAME_MAX_LENGTH,MaterialTextureName[mtc_index]);
 
-				::strcpy(out_texcoord_source[mtc_index],source);
+				::strcpy_s(out_texcoord_source[mtc_index], SHADER_VALUE_NAME_MAX_LENGTH,source);
 
 				add_out_fv(out_texcoord_name[mtc_index],coord_num);
 			}

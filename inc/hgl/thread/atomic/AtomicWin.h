@@ -74,15 +74,15 @@ namespace hgl
 					bool	operator == 		(const volatile T v)const	{return value==v;}
 					bool	operator != 		(const volatile T v)const	{return value!=v;}
 
-					T		operator =			(const volatile T nv)		{return InterlockedExchange64((unsigned __int64 *)&value, (unsigned __int64)nv); }
-					T		operator ++			()							{return InterlockedIncrement64((unsigned __int64 *)&value); }
-					T		operator --			()							{return InterlockedDecrement64((unsigned __int64 *)&value); }
-					T		operator +=			(const volatile T av)		{return InterlockedExchangeAdd64((unsigned __int64 *)&value, av); }
-					T		operator -=			(const volatile T av)		{return InterlockedExchangeAdd64((unsigned __int64 *)&value, -av); }
+					T		operator =			(const volatile T nv)		{return InterlockedExchange64((LONG64 *)&value, (LONG64)nv); }
+					T		operator ++			()							{return InterlockedIncrement64((LONG64 *)&value); }
+					T		operator --			()							{return InterlockedDecrement64((LONG64 *)&value); }
+					T		operator +=			(const volatile T av)		{return InterlockedExchangeAdd64((LONG64 *)&value, av); }
+					T		operator -=			(const volatile T av)		{return InterlockedExchangeAdd64((LONG64 *)&value, -av); }
 
-		volatile	T		operator &=			(const volatile T v)		{return InterlockedAnd64((unsigned __int64 *)&value, v); }
-		volatile	T		operator |=			(const volatile T v)		{return InterlockedOr64((unsigned __int64 *)&value, v); }
-		volatile	T		operator ^=			(const volatile T v)		{return InterlockedXor64((unsigned __int64 *)&value, v); }
+		volatile	T		operator &=			(const volatile T v)		{return InterlockedAnd64((LONG64 *)&value, v); }
+		volatile	T		operator |=			(const volatile T v)		{return InterlockedOr64((LONG64 *)&value, v); }
+		volatile	T		operator ^=			(const volatile T v)		{return InterlockedXor64((LONG64 *)&value, v); }
 
 		volatile	T		operator ++			(int)						{volatile T ret=value;operator++();return ret;}//后置++
 		volatile	T		operator --			(int)   					{volatile T ret=value;operator--();return ret;}//后置--

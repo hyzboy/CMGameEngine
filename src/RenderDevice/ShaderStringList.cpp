@@ -46,7 +46,7 @@ namespace hgl
 
 			void shader_stringlist::add(const char *line)
 			{
-				int add_length=::strlen(line);
+				size_t add_length=::strlen(line);
 
 				if(length+add_length>=max_length)
 				{

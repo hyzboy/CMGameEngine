@@ -44,10 +44,10 @@ namespace hgl
 
 		struct Info
 		{
-			OSString ProjectName;                                                                 	///<工程名称,必须填写
-			OSString ProjectCode;                                                                 	///<工程代码名称,必须填写
-			OSString ProjectVersion;                                                              	///<工程版本
-			OSString ProjectDeveloper;                                                            	///<工程开发者
+			UTF8String ProjectName;																	///<工程名称,必须填写
+			UTF8String ProjectCode;																	///<工程代码名称,必须填写
+			UTF8String ProjectVersion;                                                              ///<工程版本
+			UTF8String ProjectDeveloper;                                                            ///<工程开发者
 		}info;
 
 		AppRunMode RunMode;                                                                         ///<运行模式,默认armASync

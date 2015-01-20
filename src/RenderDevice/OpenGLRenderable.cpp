@@ -170,7 +170,7 @@ namespace hgl
 
 				if(!vertex_buffer[i])
 				{
-					LOG_ERROR(OS_TEXT("Shader Location <")+OSString(i)+OSString(">要求的缓冲区没有数据"));
+					LOG_ERROR(OS_TEXT("Shader Location <")+OSString(i)+OS_TEXT(">要求的缓冲区没有数据"));
 					return(false);
 				}
 

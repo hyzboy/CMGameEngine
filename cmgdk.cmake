@@ -43,7 +43,11 @@ IF(BUILD_OPENGL_LIB)
 			message("Use OpenGL Core 4.5 API")
 		ENDIF()
 
-		SET(HGL_OpenGL_LIB GL)
+		IF(UNIX)
+			SET(HGL_OpenGL_LIB GL)
+		ELSE()
+			SET(HGL_OpenGL_LIB OpenGL32)
+		ENDIF()
 	ELSE()
 		IF(OPENGL_PROFILE_ES1)
 			ADD_DEFINITIONS("-DGLFW_INCLUDE_ES1")
@@ -120,7 +124,11 @@ INCLUDE_DIRECTORIES(${CMGDK_PATH}/inc)
 INCLUDE_DIRECTORIES(${CMGDK_PATH}/3rdpty)
 INCLUDE_DIRECTORIES(${CMGDK_PATH}/3rdpty/MathGeoLib/src)
 
-link_directories(${CMGDK_PATH}/3rdpty/MathGeoLib)
+IF(WIN32)
+	link_directories(${CMGDK_PATH}/3rdpty/MathGeoLib/${CMGDK_BUILD_TYPE})
+ELSE()
+	link_directories(${CMGDK_PATH}/3rdpty/MathGeoLib)
+ENDIF()
 
 IF(UNIX)
 	FIND_PATH(ICONV_INCLUDE_DIR
@@ -206,16 +214,6 @@ IF(UNIX)
 # 			${LIB_3RD_FIND_HINT})
 # 		LINK_DIRECTORIES(${OPENAL_LIBRARY_DIR})
 # 	ENDIF(BUILD_OPENAL_LIB)
-
-	IF(BUILD_OPENGL_LIB)
-		add_definitions("-DGLEW_STATIC")
-
-		INCLUDE_DIRECTORIES(${CMGDK_PATH}/3rdpty/glew/include)
-		SET(GLEW_SOURCE ${CMGDK_PATH}/3rdpty/glew/src/glew.c)
-
-		INCLUDE_DIRECTORIES(${CMGDK_PATH}/3rdpty/glfw/include/GLFW)
-		LINK_DIRECTORIES(${CMGDK_PATH}/3rdpty/glfw/src)
-	ENDIF(BUILD_OPENGL_LIB)
 ENDIF(UNIX)
 
 IF(WIN32)
@@ -277,6 +275,21 @@ IF(WIN32)
 # 	ENDIF(BUILD_OPENAL_LIB)
 ENDIF(WIN32)
 
+IF(BUILD_OPENGL_LIB)
+	add_definitions("-DGLEW_STATIC")
+	
+	IF(WIN32)
+		INCLUDE_DIRECTORIES(${CMGDK_PATH}/3rdpty/opengl)
+		#包含GLCoreARB.h wglext.h等文件
+	ENDIF()
+
+	INCLUDE_DIRECTORIES(${CMGDK_PATH}/3rdpty/glew/include)
+	SET(GLEW_SOURCE ${CMGDK_PATH}/3rdpty/glew/src/glew.c)
+
+	INCLUDE_DIRECTORIES(${CMGDK_PATH}/3rdpty/glfw/include/GLFW)
+	LINK_DIRECTORIES(${CMGDK_PATH}/3rdpty/glfw/src)
+ENDIF(BUILD_OPENGL_LIB)
+	
 SET(HGL_BASE_LIB CM.Base CM.UT CM.SceneGraph CM.DFS MathGeoLib)
 
 IF(BUILD_OPENAL_LIB)
@@ -361,9 +374,9 @@ IF(WIN32)
 	MESSAGE("Host OS is Windows")
 
 	SET(HGL_CONSOLE_MAIN_SOURCE ${CMGDK_PATH}/src/Platform/Win/WinConsole.cpp)
-	SET(HGL_BASE_LIB ${HGL_BASE_LIB} AngelScript)
-	SET(HGL_GUI_MAIN_SOURCE ${CMGDK_PATH}/src/Platform/Win/WinGame.cpp)
+	SET(HGL_GRAPHICS_MAIN_SOURCE ${CMGDK_PATH}/src/Platform/Win/WinOpenGL.cpp)
 	SET(HGL_CONSOLE_LIB ${HGL_BASE_LIB} ${HGL_NETWORK_LIB})
+	SET(HGL_GRAPHICS_LIB ${HGL_CONSOLE_LIB} CM.SceneGraphRender CM.RenderDevice glfw3 ${HGL_OpenGL_LIB})
 ENDIF(WIN32)
 
 message("")

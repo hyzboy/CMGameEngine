@@ -1,4 +1,4 @@
-#ifndef HGL_GRAPH_SKY_LIGHT_INCLUDE
+﻿#ifndef HGL_GRAPH_SKY_LIGHT_INCLUDE
 #define HGL_GRAPH_SKY_LIGHT_INCLUDE
 
 #include<hgl/type/Color3f.h>

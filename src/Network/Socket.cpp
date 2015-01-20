@@ -522,6 +522,8 @@ namespace hgl
 
 			#ifdef _WIN32
 				closesocket(ThisSocket);
+
+				LOG_INFO(OS_TEXT("CloseSocket: ") + OSString(ThisSocket));
 			#else
 				int result;
 
@@ -533,9 +535,9 @@ namespace hgl
 
 					if(errno==EINPROGRESS)continue;
 				}while(result);
-			#endif//_WIN32
 
-			LOG_INFO(OS_TEXT("CloseSocket: ")+OSString(ThisSocket)+OS_TEXT(",result:")+OSString(result));
+				LOG_INFO(OS_TEXT("CloseSocket: ") + OSString(ThisSocket) + OS_TEXT(",result:") + OSString(result));
+			#endif//_WIN32
 		}
 
 		/**
@@ -586,7 +588,7 @@ namespace hgl
 				so_linger.l_onoff=0;
 			}
 
-			setsockopt(ThisSocket,SOL_SOCKET,SO_LINGER,&so_linger,sizeof(linger));
+			setsockopt(ThisSocket,SOL_SOCKET,SO_LINGER,(const char *)&so_linger,sizeof(linger));
 		}
 	}//namespace network
 }//namespace hgl

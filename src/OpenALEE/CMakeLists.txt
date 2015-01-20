@@ -12,6 +12,10 @@
 	OpenAL.cpp
 	XRAM.cpp)
 
-ADD_LIBRARY(CM.OpenALEE SHARED ${OpenALEESource})
-
-ADD_LIBRARY(CM.OpenALEEStandAlone SHARED ${OpenALEESource} OpenALEEStandAlone.cpp)
+IF(WIN32)
+	ADD_LIBRARY(CM.OpenALEE STATIC ${OpenALEESource})
+	ADD_LIBRARY(CM.OpenALEEStandAlone STATIC ${OpenALEESource} OpenALEEStandAlone.cpp)
+ELSE()
+	ADD_LIBRARY(CM.OpenALEE SHARED ${OpenALEESource})
+	ADD_LIBRARY(CM.OpenALEEStandAlone SHARED ${OpenALEESource} OpenALEEStandAlone.cpp)
+ENDIF()

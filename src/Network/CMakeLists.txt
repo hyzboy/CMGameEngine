@@ -80,7 +80,7 @@ SET(CM_NETWORK_ALL_SOURCE
 	${NETWORK_TCP_COMMON_SOURCE}
 	${NETWORK_TCP_CLIENT_SOURCE}
 	${NETWORK_TCP_SERVER_SOURCE}
-	${NETWORK_HTTP_SOURCE}
+#	${NETWORK_HTTP_SOURCE}
 
 	SocketManageThread.cpp
 	MTSocketManage.cpp
@@ -93,6 +93,5 @@ IF(WIN32)
 	ADD_LIBRARY(CM.Network STATIC ${CM_NETWORK_ALL_SOURCE})
 ELSE()
 	ADD_LIBRARY(CM.Network SHARED ${CM_NETWORK_ALL_SOURCE})
+	target_link_libraries(CM.Network curl)
 ENDIF()
-
-target_link_libraries(CM.Network curl)

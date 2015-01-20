@@ -1,4 +1,4 @@
-#include<glew/include/GL/glew.h>
+﻿#include<glew/include/GL/glew.h>
 #include<hgl/type/ColorType.h>
 #include<hgl/Other.h>
 
@@ -6,18 +6,18 @@ namespace hgl
 {
 	const u16char ColorTypeName[ColorTypeCount][32]=
 	{
-		u"",
+		U16_TEXT(""),
 
-		u"Luminance",
-		u"Luminance Alpha",
-		u"RGB",
-		u"RGBA",
-		u"Alpha",
+		U16_TEXT("Luminance"),
+		U16_TEXT("Luminance Alpha"),
+		U16_TEXT("RGB"),
+		U16_TEXT("RGBA"),
+		U16_TEXT("Alpha"),
 
-		u"BGR",
-		u"BGRA",
+		U16_TEXT("BGR"),
+		U16_TEXT("BGRA"),
 
-		u""
+		U16_TEXT("")
 	};
 
 	const unsigned int GLFormatByColorType[ColorTypeCount]=    ///针对色彩类型而对应的OpenGL格式

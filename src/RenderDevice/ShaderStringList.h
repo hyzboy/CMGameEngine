@@ -8,6 +8,8 @@ namespace hgl
 	{
 		namespace shadergen
 		{
+			#define SHADER_VALUE_NAME_MAX_LENGTH	128
+
 			/**
 			* shader 传输限定符
 			*/

@@ -1,4 +1,4 @@
-#include<hgl/platform/SystemInfo.h>
+﻿#include<hgl/platform/SystemInfo.h>
 #include<hgl/audio/OpenAL.h>
 
 namespace hgl
@@ -20,10 +20,11 @@ namespace openal
     	InitCore(si,create_log);				//初始化内核
 		SystemCheck(&si,create_log);			//系统检测
 
-		if(!InitOpenAL(driver_name,device_name))
-		{
+		if(!InitOpenALDriver(driver_name))
 			return(false);
-		}
+
+		if(!InitOpenALDevice(device_name))
+			return(false);
 
 		return(true);
 	}

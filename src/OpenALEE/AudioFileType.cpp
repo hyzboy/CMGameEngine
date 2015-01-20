@@ -11,9 +11,9 @@ namespace hgl
 
 	const AudioFormatExt audio_format_ext_name[]=
 	{
-		{"wav",aftWAV},
-		{"ogg",aftOGG},
-		{"",aftNone}
+		{OS_TEXT("wav"),aftWAV},
+		{OS_TEXT("ogg"), aftOGG },
+		{OS_TEXT(""), aftNone }
 	};
 
 	AudioFileType CheckAudioExtName(const os_char *ext_name)

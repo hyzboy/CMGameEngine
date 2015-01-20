@@ -18,7 +18,7 @@ SET(BASE_OTHER_SOURCE
 	Other/Other.cpp
 	Other/Compress.cpp
 	Other/File.cpp
-	Other/MemoryPool.cpp
+#	Other/MemoryPool.cpp
 	Other/TimeCount.cpp
 	Other/DateTime.cpp
 	Other/PseudoRandom.cpp
@@ -53,10 +53,6 @@ SET(BASE_APPLICATION_SOURCE
 	Application/ConsoleApplication.cpp
 	Application/BaseApplication.cpp
 	Application/SystemInfo.cpp)
-
-IF(BUILD_OPENGL_LIB)
-	SET(BASE_APPLICATION_SOURCE	${BASE_APPLICATION_SOURCE} Application/GraphicsSystemInitInfo.cpp)
-ENDIF(BUILD_OPENGL_LIB)
 
 IF(UNIX)
 SET(BASE_OS_APPLICATION_SOURCE
@@ -110,16 +106,16 @@ SET(BASE_PLUG_IN_SOURCE
 
 SOURCE_GROUP("PlugIn" FILES ${BASE_PLUG_IN_SOURCE})
 
-SET(BASE_MULTI_PROCESS_SOURCE
-	MultiProcess/SharedMemory.cpp
-	MultiProcess/ProcMutexAPR.cpp)
-
 SET(BASE_MULTI_THREAD_SOURCE
 	MultiThread/RingBuffer.cpp
 	MultiThread/RingBufferRead.cpp
 	MultiThread/RingBufferWrite.cpp)
 
 IF(UNIX)
+	SET(BASE_MULTI_PROCESS_SOURCE
+		MultiProcess/SharedMemory.cpp
+		MultiProcess/ProcMutexAPR.cpp)
+
 	SET(BASE_MULTI_THREAD_SOURCE ${BASE_MULTI_THREAD_SOURCE}
 		MultiThread/Posix/CondVarPOSIX.cpp
 		MultiThread/Posix/RWLockPOSIX.cpp
@@ -134,6 +130,9 @@ IF(UNIX)
 ENDIF(UNIX)
 
 IF(WIN32)
+	SET(BASE_MULTI_PROCESS_SOURCE
+		MultiProcess/ProcMutexNT4.cpp)
+		
 	SET(BASE_MULTI_THREAD_SOURCE ${BASE_MULTI_THREAD_SOURCE}
 		MultiThread/WinNT/CondVarNT6.cpp
 		MultiThread/WinNT/RWLockNT6.cpp

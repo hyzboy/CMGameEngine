@@ -1,4 +1,4 @@
-#include<hgl/audio/AudioPlayer.h>
+﻿#include<hgl/audio/AudioPlayer.h>
 #include<hgl/Other.h>
 #include<hgl/LogInfo.h>
 #include<hgl/PlugIn.h>

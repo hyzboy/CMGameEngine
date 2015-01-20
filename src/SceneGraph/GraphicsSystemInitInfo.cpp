@@ -224,7 +224,7 @@ namespace hgl
 		}
 
 #if HGL_OS == HGL_OS_Windows
-		if(win.ClassName.Length==0)
+		if(win.ClassName.IsEmpty())
 			win.ClassName=L"CMGDK Window Class";
 #endif//HGL_OS == HGL_OS_Windows
 

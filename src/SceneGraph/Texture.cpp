@@ -1,4 +1,4 @@
-#include<hgl/graph/Texture.h>
+﻿#include<hgl/graph/Texture.h>
 #include<hgl/Other.h>
 #include<hgl/graph/Image.h>
 #include<string.h>

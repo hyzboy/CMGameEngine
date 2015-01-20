@@ -1,4 +1,4 @@
-#include"AudioDecode.h"
+﻿#include"AudioDecode.h"
 #include<hgl/PlugIn.h>
 
 using namespace openal;

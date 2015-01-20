@@ -16,8 +16,8 @@ namespace hgl
 				shader_in_type in_color;
 
 				int mtc[mtcMax];
-				char tex_sampler[mtcMax][128];
-				char tex_coord[mtcMax][128];
+				char tex_sampler[mtcMax][SHADER_VALUE_NAME_MAX_LENGTH];
+				char tex_coord[mtcMax][SHADER_VALUE_NAME_MAX_LENGTH];
 
 				bool alpha_test;
 				bool outside_discard;

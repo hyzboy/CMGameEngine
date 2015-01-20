@@ -44,7 +44,7 @@ namespace openal                                                									///Open
 	bool alcGetDefaultDevice(char *);																///<取得缺省设备
 	void alcSetDefaultContext();																	///<设置缺省上下文
 
-	const os_char *alGetErrorInfo(const char *,const int);											///<取得最近的错误
+	const char *alGetErrorInfo(const char *,const int);												///<取得最近的错误
 
 	/**
 	 * 初始化OpenAL驱动

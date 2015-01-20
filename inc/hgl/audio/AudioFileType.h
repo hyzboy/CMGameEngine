@@ -1,4 +1,4 @@
-#ifndef HGL_AUDIO_FILE_TYPE_INCLUDE
+﻿#ifndef HGL_AUDIO_FILE_TYPE_INCLUDE
 #define HGL_AUDIO_FILE_TYPE_INCLUDE
 
 #include<hgl/platform/Platform.h>
