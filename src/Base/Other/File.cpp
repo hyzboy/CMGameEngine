@@ -578,6 +578,9 @@ namespace hgl
 
 #if HGL_OS == HGL_OS_Windows
 		GetModuleFileName(nullptr,path,HGL_MAX_PATH);
+
+		result = path;
+		delete[] path;
 #else
 		const int len=readlink("/proc/self/exe",path,HGL_MAX_PATH);
 
