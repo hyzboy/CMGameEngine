@@ -17,8 +17,8 @@ namespace hgl
 		PlugIn *InitLog();																			///<初始化日志系统
 		void CloseLog();																			///<关闭日志系统
 
-		Logger *CreateLoggerConsole	(const OSString &,LogLevel);
-		Logger *CreateLoggerFile	(const OSString &,LogLevel);
+		Logger *CreateLoggerConsole	(const UTF8String &,LogLevel);
+		Logger *CreateLoggerFile	(const UTF8String &,LogLevel);
 //		Logger *CreateLoggerDialog	(const OSString &,LogLevel);
 //		Logger *CreateLoggerNetwork	(const OSString &,LogLevel);
 	}//namespace logger

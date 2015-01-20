@@ -37,7 +37,7 @@ namespace hgl
 				SAFE_CLEAR(tos);
 			}
 
-			bool Create(const OSString &project_code)
+			bool Create(const UTF8String &project_code)
 			{
 				os_char filename[HGL_MAX_PATH];
 				os_char fn[HGL_MAX_PATH];
@@ -68,7 +68,12 @@ namespace hgl
 				MakePath(fn);
 
 				strcat(fn,HGL_DIRECTORY_SEPARATOR);
+
+#if HGL_OS == HGL_OS_Windows
+				strcat(fn,u8_to_u16(project_code.c_str()));
+#else
 				strcat(fn,project_code.c_str());
+#endif//HGL_OS == HGL_OS_Windows
 
 				for(uint i=0;i<=0xFFFF;i++)
 				{
@@ -121,7 +126,7 @@ namespace hgl
 			}
 		};//class LogFile
 
-		Logger *CreateLoggerFile(const OSString &pc,LogLevel ll)
+		Logger *CreateLoggerFile(const UTF8String &pc,LogLevel ll)
 		{
 			if(ll<llError)
 				return(nullptr);
