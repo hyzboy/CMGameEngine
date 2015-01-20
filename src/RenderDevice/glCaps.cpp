@@ -110,7 +110,7 @@ namespace hgl
 				glGetIntegerv(GL_NUM_EXTENSIONS,&num);
 				for(int i=0;i<num;i++)
 				{
-					LOG_INFO(UTF8String((char *)glGetStringi(GL_EXTENSIONS,i))+UTF8String(i?"":"Extensions: "));
+					LOG_INFO(UTF8String(i?"                ":"    Extensions: ")+UTF8String((char *)glGetStringi(GL_EXTENSIONS,i)));
 				}
 
 				PutOpenGLFloatRange	 (u"                        GL_POINT_SIZE_RANGE",GL_POINT_SIZE_RANGE);

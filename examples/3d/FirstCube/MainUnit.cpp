@@ -1,4 +1,4 @@
-#include<hgl/Graphics.h>				//GraphicsApplication,SystemInitInfo
+﻿#include<hgl/Graphics.h>				//GraphicsApplication,SystemInitInfo
 #include<hgl/graph/Render.h>			//SetClearColor,ClearScreen
 #include<hgl/graph/Material.h>			//Material
 #include<hgl/graph/InlineRenderable.h>	//CreateRenderableCube
@@ -11,7 +11,8 @@ using namespace hgl::graph;
 
 const Vector3f	eye(100,70,80),
 				center(0,0,0),
-				upvector(0,1,0);
+				upvector(0,1,0),
+				forvector(0,0,1);
 
 class TestObject:public FlowObject
 {
@@ -31,11 +32,13 @@ private:
 		cam.znear=4.0f;
 		cam.zfar=1000.0f;
 
-		cam.aspect=640.0f/480.0f;
+		cam.width=GetScreenWidth();
+		cam.height=GetScreenHeight();
 
 		cam.eye=eye;
 		cam.center=center;
-		cam.upvector=upvector;
+		cam.up_vector=upvector;
+		cam.forward_vector=forvector;
 	}
 
 	Renderable *CreateCube(float r,float g,float b)

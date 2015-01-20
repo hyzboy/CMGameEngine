@@ -10,7 +10,8 @@ using namespace hgl::graph;
 
 const Vector3f	eye(100,70,80),
 				center(0,0,0),
-				upvector(0,1,0);
+				up_vector(0,1,0),
+				forward_vector(0,0,1);
 
 class TestObject:public FlowObject
 {
@@ -29,11 +30,13 @@ private:
 		cam.znear=4.0f;
 		cam.zfar=1000.0f;
 
-		cam.aspect=640.0f/480.0f;
+		cam.width=GetScreenWidth();
+		cam.height=GetScreenHeight();
 
 		cam.eye=eye;
 		cam.center=center;
-		cam.upvector=upvector;
+		cam.up_vector=up_vector;
+		cam.forward_vector=forward_vector;
 	}
 
 public:

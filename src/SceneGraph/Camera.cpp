@@ -9,7 +9,7 @@ namespace hgl
 			*proj=perspective_wh(cam->width,cam->height,cam->znear,cam->zfar);
 //			*proj=perspective_yfov(cam->yfov,cam->width/cam->height,cam->znear,cam->zfar);
 
-			*mv=lookAt(cam->eye,cam->center,cam->upvector);
+			*mv=lookAt(cam->eye,cam->center,cam->forward_vector,cam->up_vector);
 		}
 	}//namespace graph
 }//namespace hgl

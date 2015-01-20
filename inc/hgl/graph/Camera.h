@@ -19,7 +19,8 @@ namespace hgl
 
 			Vector3f eye;				///<眼睛坐标
 			Vector3f center;			///<视点坐标
-			Vector3f upvector;			///<向上量
+			Vector3f up_vector;			///<向上量
+			Vector3f forward_vector;	///<向前量
 		};//struct Camera
 
 		void MakeCameraMatrix(Matrix4f *proj,Matrix4f *mv,const Camera *cam);
