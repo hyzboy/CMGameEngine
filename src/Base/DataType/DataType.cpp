@@ -47,10 +47,7 @@ namespace hgl
 
 		void InitPointer()
 		{
-			int n=hfpEnd-1;
-
-			while(n--)
-            	hgl_status_pointer[n]=nullptr;
+			hgl_zero(hgl_status_pointer);
 		}
 
 		/**
