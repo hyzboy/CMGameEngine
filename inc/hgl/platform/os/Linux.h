@@ -48,5 +48,7 @@ typedef pthread_mutex_t hgl_thread_mutex;
 #define write64					write
 
 #define struct_dirent64 		struct dirent64
+
+#define sprintf_s				snprintf
 //--------------------------------------------------------------------------------------------------
 #endif//HGL_OS_LINUX_INCLUDE
