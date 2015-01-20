@@ -85,7 +85,7 @@ namespace hgl
 
 		struct WindowSetup
 		{
-			OSString Name;																			///<窗口标题
+			UTF8String Name;																		///<窗口标题
 #if HGL_OS == HGL_OS_Windows
 			UTF16String ClassName;																	///<类名(windows用)
 #endif//HGL_OS == HGL_OS_Windows
