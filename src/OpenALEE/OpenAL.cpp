@@ -161,7 +161,7 @@ namespace openal
 
 		if(!devices)
 		{
-        	LOG_INFO(OSString("取得的OpenAL设备列表为空！"));
+        	LOG_INFO(OS_TEXT("取得的OpenAL设备列表为空！"));
 			return;
 		}
 
@@ -236,7 +236,7 @@ namespace openal
 			}
 			else
 			{
-				LOG_INFO(OSString("没有指定音频设备，按缺省设备初始化，可能不是最佳选择！也有可能初始化失败！"));
+				LOG_INFO(OS_TEXT("没有指定音频设备，按缺省设备初始化，可能不是最佳选择！也有可能初始化失败！"));
 			}
 
 			default_device=true;
@@ -271,7 +271,7 @@ namespace openal
 			}
 		}
 
-		LOG_INFO(OSString("打开音频设备成功: ")+UTF8String(AudioDeviceName));
+		LOG_INFO(U8_TEXT("打开音频设备成功: ")+UTF8String(AudioDeviceName));
 
 		AudioContext=alcCreateContext(AudioDevice,0);
 		if(AudioContext==nullptr)
@@ -354,7 +354,7 @@ namespace openal
 	*/
 	bool SetDistanceModel(ALenum distance_model)
 	{
-		if (!AudioDLL)return(false);
+		if (!AudioEM)return(false);
 		if (!alDistanceModel)return(false);
 
 		if (distance_model<AL_INVERSE_DISTANCE
@@ -367,7 +367,7 @@ namespace openal
 
 	bool SetSpeedOfSound(const float ss)
 	{
-		if (!AudioDLL)return(false);
+		if (!AudioEM)return(false);
 		if (!alSpeedOfSound)return(false);
 
 		alSpeedOfSound(ss);
@@ -376,7 +376,7 @@ namespace openal
 
 	bool SetDopplerFactor(const float df)
 	{
-		if (!AudioDLL)return(false);
+		if (!AudioEM)return(false);
 		if (!alDopplerFactor)return(false);
 
 		alDopplerFactor(df);
@@ -385,7 +385,7 @@ namespace openal
 
 	bool SetDopplerVelocity(const float dv)
 	{
-		if (!AudioDLL)return(false);
+		if (!AudioEM)return(false);
 		if (!alDopplerVelocity)return(false);
 
 		alDopplerVelocity(dv);
@@ -506,19 +506,19 @@ namespace openal
 		return iSourceCount;
 	}
 	//--------------------------------------------------------------------------------------------------
-	const os_char *alGetErrorInfo(const char *filename,const int line)
+	const char *alGetErrorInfo(const char *filename,const int line)
 	{
-		if(!alGetError)return(OS_TEXT("OpenALEE/OpenAL 未初始化!"));
+		if(!alGetError)return(U8_TEXT("OpenALEE/OpenAL 未初始化!"));
 
-		const os_char *result=nullptr;
+		const char *result=nullptr;
 
-		const os_char al_error_invalid			[]=OS_TEXT("invalid");
-		const os_char al_error_invalid_name		[]=OS_TEXT("invalid name");
-		const os_char al_error_invalid_enum		[]=OS_TEXT("invalid enum");
-		const os_char al_error_invalid_value	[]=OS_TEXT("invalid value");
-		const os_char al_error_invalid_operation[]=OS_TEXT("invalid operation");
-		const os_char al_error_out_of_memory	[]=OS_TEXT("out of memory");
-		const os_char al_error_unknown_error	[]=OS_TEXT("unknown error");
+		const char al_error_invalid				[]=U8_TEXT("invalid");
+		const char al_error_invalid_name		[]=U8_TEXT("invalid name");
+		const char al_error_invalid_enum		[]=U8_TEXT("invalid enum");
+		const char al_error_invalid_value		[]=U8_TEXT("invalid value");
+		const char al_error_invalid_operation	[]=U8_TEXT("invalid operation");
+		const char al_error_out_of_memory		[]=U8_TEXT("out of memory");
+		const char al_error_unknown_error		[]=U8_TEXT("unknown error");
 
 		const ALenum error=alGetError();
 
@@ -533,8 +533,8 @@ namespace openal
 
 		if(result)
 		{
-			LOG_ERROR(u8"OpenAL错误,source file:\""+UTF8String(filename)+u8"\",line:"+UTF8String(line));
-			LOG_ERROR(OSString("OpenAL ErrorNo:")+result);
+			LOG_ERROR(U8_TEXT("OpenAL错误,source file:\"")+UTF8String(filename)+u8"\",line:"+UTF8String(line));
+			LOG_ERROR(U8_TEXT("OpenAL ErrorNo:")+UTF8String(result));
 		}
 
 		return(result);
