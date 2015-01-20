@@ -18,7 +18,6 @@ SET(BASE_OTHER_SOURCE
 	Other/Other.cpp
 	Other/Compress.cpp
 	Other/File.cpp
-#	Other/MemoryPool.cpp
 	Other/TimeCount.cpp
 	Other/DateTime.cpp
 	Other/PseudoRandom.cpp
@@ -26,7 +25,8 @@ SET(BASE_OTHER_SOURCE
 	Other/LSinCos.cpp)
 
 IF(UNIX)
-	SET(BASE_OTHER_SOURCE ${BASE_OTHER_SOURCE} Other/TimePOSIX.cpp)
+	SET(BASE_OTHER_SOURCE ${BASE_OTHER_SOURCE}	Other/TimePOSIX.cpp
+												Other/MemoryPool.cpp)
 ENDIF(UNIX)
 
 SOURCE_GROUP("Other"				FILES ${BASE_OTHER_SOURCE})
@@ -132,7 +132,7 @@ ENDIF(UNIX)
 IF(WIN32)
 	SET(BASE_MULTI_PROCESS_SOURCE
 		MultiProcess/ProcMutexNT4.cpp)
-		
+
 	SET(BASE_MULTI_THREAD_SOURCE ${BASE_MULTI_THREAD_SOURCE}
 		MultiThread/WinNT/CondVarNT6.cpp
 		MultiThread/WinNT/RWLockNT6.cpp
