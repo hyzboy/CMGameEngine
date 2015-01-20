@@ -1,4 +1,4 @@
-#ifndef HGL_DFS_CLIENT_MAIL_INCLUDE
+﻿#ifndef HGL_DFS_CLIENT_MAIL_INCLUDE
 #define HGL_DFS_CLIENT_MAIL_INCLUDE
 
 #include<hgl/dfs/dfsClientConnect.h>
