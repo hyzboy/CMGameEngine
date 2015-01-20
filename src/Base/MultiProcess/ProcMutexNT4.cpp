@@ -12,7 +12,7 @@ namespace hgl
 	{
 		if (lock != nullptr)return(false);
 
-		lock = CreateMutexW(NULL, FALSE, name);
+		lock = CreateMutexA(NULL, FALSE, name);
 
 		if(!lock)
 			return(true);
