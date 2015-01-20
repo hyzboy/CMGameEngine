@@ -383,22 +383,5 @@ namespace hgl
 	typedef unsigned int        uint;   ///< 无符号整型
 	typedef unsigned long		ulong;	///< 无符号长整型
 	typedef unsigned short		ushort;	///< 无符号短整型
-
-	typedef uint8	u8;
-	typedef uint16	u16;
-	typedef uint32	u32;
-	typedef uint64	u64;
-
-	typedef int8	i8;
-	typedef int16	i16;
-	typedef int32	i32;
-	typedef int64	i64;
-
-	typedef int8	s8;
-	typedef int16	s16;
-	typedef int32	s32;
-	typedef int64	s64;
-
-	typedef float	f32;
 }//namespace hgl
 #endif//HGL_PLATFORM_INCLUDE
