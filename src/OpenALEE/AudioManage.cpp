@@ -1,4 +1,4 @@
-#include<hgl/audio/AudioManage.h>
+﻿#include<hgl/audio/AudioManage.h>
 #include<hgl/audio/AudioSource.h>
 #include<hgl/audio/AudioBuffer.h>
 #include<hgl/audio/OpenAL.h>

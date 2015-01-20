@@ -1,4 +1,4 @@
-#ifndef HGL_GRAPHICS_INCLUDE
+﻿#ifndef HGL_GRAPHICS_INCLUDE
 #define HGL_GRAPHICS_INCLUDE
 
 #include<hgl.h>
