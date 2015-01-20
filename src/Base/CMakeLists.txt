@@ -106,16 +106,16 @@ SET(BASE_PLUG_IN_SOURCE
 
 SOURCE_GROUP("PlugIn" FILES ${BASE_PLUG_IN_SOURCE})
 
-SET(BASE_MULTI_PROCESS_SOURCE
-	MultiProcess/SharedMemory.cpp
-	MultiProcess/ProcMutexAPR.cpp)
-
 SET(BASE_MULTI_THREAD_SOURCE
 	MultiThread/RingBuffer.cpp
 	MultiThread/RingBufferRead.cpp
 	MultiThread/RingBufferWrite.cpp)
 
 IF(UNIX)
+	SET(BASE_MULTI_PROCESS_SOURCE
+		MultiProcess/SharedMemory.cpp
+		MultiProcess/ProcMutexAPR.cpp)
+
 	SET(BASE_MULTI_THREAD_SOURCE ${BASE_MULTI_THREAD_SOURCE}
 		MultiThread/Posix/CondVarPOSIX.cpp
 		MultiThread/Posix/RWLockPOSIX.cpp
@@ -130,6 +130,9 @@ IF(UNIX)
 ENDIF(UNIX)
 
 IF(WIN32)
+	SET(BASE_MULTI_PROCESS_SOURCE
+		MultiProcess/ProcMutexNT4.cpp)
+		
 	SET(BASE_MULTI_THREAD_SOURCE ${BASE_MULTI_THREAD_SOURCE}
 		MultiThread/WinNT/CondVarNT6.cpp
 		MultiThread/WinNT/RWLockNT6.cpp
