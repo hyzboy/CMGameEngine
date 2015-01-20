@@ -371,8 +371,9 @@ IF(WIN32)
 
 	SET(HGL_CONSOLE_MAIN_SOURCE ${CMGDK_PATH}/src/Platform/Win/WinConsole.cpp)
 	SET(HGL_BASE_LIB ${HGL_BASE_LIB} AngelScript)
-	SET(HGL_GUI_MAIN_SOURCE ${CMGDK_PATH}/src/Platform/Win/WinGame.cpp)
+	SET(HGL_GRAPHICS_MAIN_SOURCE ${CMGDK_PATH}/src/Platform/Win/WinOpenGL.cpp)
 	SET(HGL_CONSOLE_LIB ${HGL_BASE_LIB} ${HGL_NETWORK_LIB})
+	SET(HGL_GRAPHICS_LIB ${HGL_CONSOLE_LIB} CM.SceneGraphRender CM.RenderDevice glfw3 ${HGL_OpenGL_LIB})
 ENDIF(WIN32)
 
 message("")
