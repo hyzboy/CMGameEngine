@@ -19,7 +19,7 @@ namespace hgl
 
 		Logger *CreateLoggerConsole	(const UTF8String &,LogLevel);
 		Logger *CreateLoggerFile	(const UTF8String &,LogLevel);
-//		Logger *CreateLoggerDialog	(const OSString &,LogLevel);
+		Logger *CreateLoggerDialog	(const UTF8String &,LogLevel);
 //		Logger *CreateLoggerNetwork	(const OSString &,LogLevel);
 	}//namespace logger
 
@@ -37,7 +37,10 @@ namespace hgl
 		{
 			AddLogger(CreateLoggerConsole	(sii->info.ProjectCode,(logger::LogLevel)sii->log.console	));
 			AddLogger(CreateLoggerFile		(sii->info.ProjectCode,(logger::LogLevel)sii->log.file		));
-			//AddLogger(CreateLoggerDialog	(sii->info.ProjectCode,sii->log.dialog	));
+
+#if HGL_OS==HGL_OS_Windows
+			AddLogger(CreateLoggerDialog	(sii->info.ProjectCode,(logger::LogLevel)sii->log.dialog	));
+#endif//HGL_OS==HGL_OS_Windows
 			//AddLogger(CreateLoggerNetwork	(sii->info.ProjectCode,sii->log.network	));
 
 			InitLog();        			//初始化日志插件
