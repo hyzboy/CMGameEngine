@@ -52,10 +52,13 @@ namespace hgl
 
 			public:
 
-				shader_stringlist();
-				virtual ~shader_stringlist();
+				shader_stringlist(){}
+				virtual ~shader_stringlist(){}
 
-				char *get()const{return str.c_str();}
+				char *end_get()
+				{
+					return str.Discard();
+				}
 
 				void add(const char *line="\n"){str.Strcat(line,::strlen(line));}
 

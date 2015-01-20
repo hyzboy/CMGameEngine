@@ -98,8 +98,8 @@ namespace hgl
 				}
 			}
 
-			if(vs)hgl_free(vs);
-			if(fs)hgl_free(fs);
+			delete[] vs;		//delete[] nullptr不是个错误，所以不用检测
+			delete[] fs;
 
 			return(glsl);
 		}

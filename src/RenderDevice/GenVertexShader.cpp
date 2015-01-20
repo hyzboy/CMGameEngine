@@ -12,7 +12,7 @@ namespace hgl
 	{
 		namespace shadergen
 		{
-			vs::vs():shader_stringlist()
+			vs::vs()
 			{
 				vertex_format=0;
 
@@ -27,12 +27,10 @@ namespace hgl
 				in_texcoord_count=0;
 				out_texcoord_count=0;
 
-				memset(in_tex				,0,sizeof(in_tex));
-				memset(in_texcoord_num		,0,sizeof(in_texcoord_num));
-				memset(in_vertex_buffer		,0,sizeof(in_vertex_buffer));
-				memset(out_texcoord			,0,sizeof(out_texcoord));
-				memset(out_texcoord_name	,0,sizeof(out_texcoord_name));
-				memset(out_texcoord_source	,0,sizeof(out_texcoord_source));
+				hgl_zero(in_tex				);
+				hgl_zero(in_texcoord_num	);
+				hgl_zero(in_vertex_buffer	);
+				hgl_zero(out_texcoord		);
 
 				height_axis=HGL_AXIS_NONE;
 			}
@@ -419,7 +417,7 @@ namespace hgl
 			code.debug_out(filename);
 #endif//_DEBUG
 
-			return code.get();
+			return code.end_get();
 		}//char *MakeVertexShader(Renderable *able,bool ltw)
 	}//namespace graph
 }//namespace hgl

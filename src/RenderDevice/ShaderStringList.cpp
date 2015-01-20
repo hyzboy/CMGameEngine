@@ -32,14 +32,6 @@ namespace hgl
 				"sampler2DShadow",
 			};
 
-			shader_stringlist::shader_stringlist()
-			{
-			}
-
-			shader_stringlist::~shader_stringlist()
-			{
-			}
-
 			void shader_stringlist::debug_out(const os_char *filename)
 			{
 				if(!filename)return;

@@ -22,13 +22,12 @@ namespace hgl
 			#define HGL_FS_DIFFUSE_COLOR	"DiffuseColor"
 			#define HGL_FS_ALPHA			"Alpha"
 
-			fs::fs():shader_stringlist()
+			fs::fs()
 			{
 				in_normal=sitNone;
 				in_color=sitNone;
 
-				for(int i=0;i<mtcMax;i++)
-					mtc[i]=-1;
+				hgl_set(mtc,-1,mtcMax);
 
 				alpha_test=false;
 				outside_discard=false;
@@ -302,7 +301,7 @@ namespace hgl
 			code.debug_out(filename);
 #endif//_DEBUG
 
-			return code.get();
+			return code.end_get();
 		}//char *MakeFragmentShader(Renderable *able)
 	}//namespace graph
 }//namespace hgl
