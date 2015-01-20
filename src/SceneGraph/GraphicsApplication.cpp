@@ -186,7 +186,7 @@ namespace hgl
 			}
 			else
 			{
-				LOG_ERROR(OS_TEXT("不创建缺省字体！"));
+				LOG_INFO(OS_TEXT("不创建缺省字体！"));
 			}
 
 	/*		if(sii->graphics.gui.use)

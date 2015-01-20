@@ -8,7 +8,7 @@
 #define os_char			wchar_t
 #define to_oschar		to_u16
 #define OS_TEXT(str)	L##str
-#define U8_TEXT(str)	str
+#define U8_TEXT(str)	u8##str
 #define U16_TEXT(str)	L##str
 
 #define HGL_OS_NAME				OS_TEXT("Windows")

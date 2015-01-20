@@ -33,10 +33,10 @@
 													\
 													HGL_GRAPHICS_MAIN_FUNC()\
 													{	\
-														sii.info.ProjectName=name;	\
-														sii.info.ProjectCode=code;	\
+														sii.info.ProjectName=U8_TEXT(name);	\
+														sii.info.ProjectCode=U8_TEXT(code);	\
 														\
-														sii.win.Name=name;	\
+														sii.win.Name=U8_TEXT(name);	\
 														\
 														if(!app.Init(&sii))	\
 															return(-1);	\

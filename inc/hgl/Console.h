@@ -14,8 +14,8 @@
 													\
 													HGL_CONSOLE_MAIN_FUNC()\
 													{	\
-														sii.info.ProjectName=OS_TEXT(name);	\
-														sii.info.ProjectCode=OS_TEXT(code);	\
+														sii.info.ProjectName=U8_TEXT(name);	\
+														sii.info.ProjectCode=U8_TEXT(code);	\
 														\
 														if(!app.Init(&sii))	\
 															return(-1);	\

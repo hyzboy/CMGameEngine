@@ -18,8 +18,8 @@ class WORK_THREAD_NAME:public WORK_THREAD_NAME##BASE
 #define HGL_CONSOLE_PB_SERVER_APPLICATION(app_name,app_code,USER_THREAD_NAME,WORK_IP,WORK_PORT)	\
 HGL_CONSOLE_MAIN_FUNC()	\
 {	\
-	sii.info.ProjectName=OS_TEXT(app_name);	\
-	sii.info.ProjectCode=OS_TEXT(app_code);	\
+	sii.info.ProjectName=U8_TEXT(app_name);	\
+	sii.info.ProjectCode=U8_TEXT(app_code);	\
 	\
 	if(!app.Init(&sii))	\
 		return(-1);	\
