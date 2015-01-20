@@ -10,7 +10,7 @@
  * Define glewGetProcAddress.
  */
 #if defined(_WIN32)
-#include<wglew.h>
+#include<GL/wglew.h>
 #  define glewGetProcAddress(name) wglGetProcAddress((LPCSTR)name)
 #else
 #  include <GL/glxew.h>
@@ -57,16 +57,17 @@ GLboolean glewGetExtension (const char *name)
 												if(gl##name##EXT)gl##name=gl##name##EXT;	\
 											}
 
-#ifdef HGL_USE_OPENGL_CORE_45
 void OpenGL_Ext_DSA()
 {
-	if(GLEW_ARB_direct_state_access
-	 ||GLEW_EXT_direct_state_access)
-	{
-		OPENGL_EXT_TO_STANDARD(TextureParameteri)
-	}
+	if (GLEW_VERSION_4_5)
+		return;
+
+	//if (GLEW_ARB_direct_state_access
+	//	|| GLEW_EXT_direct_state_access)
+	//{
+	//	OPENGL_EXT_TO_STANDARD(TextureParameteri)
+	//}
 }
-#endif//HGL_USE_OPENGL_CORE_45
 
 void InitOpenGLCoreExtensions()
 {
