@@ -18,7 +18,7 @@ SET(BASE_OTHER_SOURCE
 	Other/Other.cpp
 	Other/Compress.cpp
 	Other/File.cpp
-	Other/MemoryPool.cpp
+#	Other/MemoryPool.cpp
 	Other/TimeCount.cpp
 	Other/DateTime.cpp
 	Other/PseudoRandom.cpp

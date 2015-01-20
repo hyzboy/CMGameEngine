@@ -23,7 +23,7 @@ namespace hgl
 //		Logger *CreateLoggerNetwork	(const OSString &,LogLevel);
 	}//namespace logger
 
-	//Base/Other/MemoryPoll.CPP
+	 //Base/Other/MemoryPoll.CPP
 	void InitMemoryPool();
 	void ClearMemoryPool();
 
@@ -68,16 +68,16 @@ namespace hgl
 			return(false);
 		}
 
-		apr_initialize();			//初始化apr
-
 #if HGL_OS == HGL_OS_Windows
 		srand(GetMicroTime());
 #else
+		apr_initialize();			//初始化apr
+		InitMemoryPool();			//初始化内存池
+
 		srand48(GetMicroTime());
 		srand(lrand48());
 #endif//
 
-		InitMemoryPool();			//初始化内存池
 		InitPlugIn();				//初始化插件
 		InitString();
 
@@ -100,8 +100,10 @@ namespace hgl
 		ClearAllPlugIn();
 
 		CloseLog();
-		ClearMemoryPool();
 
+#if HGL_OS != HGL_OS_Windows
+		ClearMemoryPool();
 		apr_terminate();		//终止apr
+#endif//HGL_OS != HGL_OS_Windows
 	}
 }//namespace hgl
