@@ -54,10 +54,6 @@ SET(BASE_APPLICATION_SOURCE
 	Application/BaseApplication.cpp
 	Application/SystemInfo.cpp)
 
-IF(BUILD_OPENGL_LIB)
-	SET(BASE_APPLICATION_SOURCE	${BASE_APPLICATION_SOURCE} Application/GraphicsSystemInitInfo.cpp)
-ENDIF(BUILD_OPENGL_LIB)
-
 IF(UNIX)
 SET(BASE_OS_APPLICATION_SOURCE
 	Application/SystemInfoUNIX.cpp)
