@@ -126,6 +126,15 @@ namespace hgl
 			return(new SelfClass(buffer+start,count));
 		}
 
+		T *Discard()
+		{
+			T *result=buffer;
+
+			buffer=nullptr;
+
+			return result;
+		}
+
 		T * c_str()																					///<取得字符串C指针
 		{
 			return buffer;

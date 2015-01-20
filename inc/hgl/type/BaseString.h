@@ -264,6 +264,20 @@ namespace hgl
 		}
 
 		/**
+		 * 放弃当前数据，将当前字符串清空
+		 */
+		T *Discard()
+		{
+			if(!data.valid())
+				return(nullptr);
+
+			if(data.only())
+				return data->Discard();
+
+			return(nullptr);
+		}
+
+		/**
 		* 取指定索引处的字符
 		* @param n 索引偏移
 		* @param ch 字符存放变量
