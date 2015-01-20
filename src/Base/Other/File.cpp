@@ -425,7 +425,12 @@ namespace hgl
 	bool IsDirectory(const os_char *name)
 	{
 #if HGL_OS == HGL_OS_Windows
-		return GetFileAttributesW(name)&FILE_ATTRIBUTE_DIRECTORY;
+		DWORD attrib = GetFileAttributesW(name);
+		
+		if (attrib == INVALID_FILE_ATTRIBUTES)
+			return(false);
+
+		return attrib&FILE_ATTRIBUTE_DIRECTORY;
 #else
 		struct_stat64 buf;
 
