@@ -1,4 +1,4 @@
-#include<hgl/graph/VertexBuffer.h>
+﻿#include<hgl/graph/VertexBuffer.h>
 #include<glew/include/GL/glew.h>
 
 namespace hgl

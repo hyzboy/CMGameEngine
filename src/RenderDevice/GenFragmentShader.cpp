@@ -1,4 +1,4 @@
-#include"GenFragmentShader.h"
+﻿#include"GenFragmentShader.h"
 #include"OpenGLRenderable.h"
 #include"GLSL.h"
 #include<hgl/graph/Texture.h>
@@ -77,16 +77,16 @@ namespace hgl
 			{
 				mtc[mtc_index]=coord_num;
 
-				::strcpy(tex_coord[mtc_index],HGL_FS_TEXCOORD);
-				::strcat(tex_coord[mtc_index],source);
+				::strcpy_s(tex_coord[mtc_index],SHADER_VALUE_NAME_MAX_LENGTH,HGL_FS_TEXCOORD);
+				::strcat_s(tex_coord[mtc_index],SHADER_VALUE_NAME_MAX_LENGTH,source);
 
-				::strcpy(tex_sampler[mtc_index],shader_get_sampler_color[coord_num-1]);
-				::strcat(tex_sampler[mtc_index],"(");
-				::strcat(tex_sampler[mtc_index],MaterialTextureName[mtc_index]);
-				::strcat(tex_sampler[mtc_index],",");
-				::strcat(tex_sampler[mtc_index],HGL_FS_TEXCOORD);
-				::strcat(tex_sampler[mtc_index],source);
-				::strcat(tex_sampler[mtc_index],")");
+				::strcpy_s(tex_sampler[mtc_index],SHADER_VALUE_NAME_MAX_LENGTH,shader_get_sampler_color[coord_num-1]);
+				::strcat_s(tex_sampler[mtc_index],SHADER_VALUE_NAME_MAX_LENGTH,"(");
+				::strcat_s(tex_sampler[mtc_index],SHADER_VALUE_NAME_MAX_LENGTH,MaterialTextureName[mtc_index]);
+				::strcat_s(tex_sampler[mtc_index],SHADER_VALUE_NAME_MAX_LENGTH,",");
+				::strcat_s(tex_sampler[mtc_index],SHADER_VALUE_NAME_MAX_LENGTH,HGL_FS_TEXCOORD);
+				::strcat_s(tex_sampler[mtc_index],SHADER_VALUE_NAME_MAX_LENGTH,source);
+				::strcat_s(tex_sampler[mtc_index],SHADER_VALUE_NAME_MAX_LENGTH,")");
 
 				add_sampler(MaterialTextureName[mtc_index],coord_num);
 			}
@@ -98,17 +98,17 @@ namespace hgl
 			*/
 			void fs::add_in_texcoord(int num,const char *fragname)
 			{
-				char texcoord_name[128];
+				char texcoord_name[SHADER_VALUE_NAME_MAX_LENGTH];
 
-				::strcpy(texcoord_name,HGL_FS_TEXCOORD);
-				::strcat(texcoord_name,fragname);
+				::strcpy_s(texcoord_name,SHADER_VALUE_NAME_MAX_LENGTH,HGL_FS_TEXCOORD);
+				::strcat_s(texcoord_name,SHADER_VALUE_NAME_MAX_LENGTH,fragname);
 
 				add_in_fv(texcoord_name,num);
 			}
 
 			bool fs::add_end()
 			{
-				char fin_color[128];
+				char fin_color[SHADER_VALUE_NAME_MAX_LENGTH];
 
 				if(mtc[mtcDiffuse]!=-1)		//如果漫反射贴图也为否，则完全无色彩信息，退出
 				{
@@ -130,7 +130,7 @@ namespace hgl
 					//													texcoord_name);
 					//}
 
-					::strcpy(fin_color,HGL_FS_DIFFUSE_COLOR);
+					::strcpy_s(fin_color,SHADER_VALUE_NAME_MAX_LENGTH,HGL_FS_DIFFUSE_COLOR);
 
 					if(in_color)							//还有顶点颜色传入
 					{
@@ -145,7 +145,7 @@ namespace hgl
 					if(!in_color)		//也无顶点颜色
 						return(false);	//即使有其它贴图，也必须有颜色
 
-					::strcpy(fin_color,HGL_FS_COLOR);
+					::strcpy_s(fin_color,SHADER_VALUE_NAME_MAX_LENGTH,HGL_FS_COLOR);
 				}
 
 				if(mtc[mtcAlpha]!=-1)				//透明贴图

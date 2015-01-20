@@ -1,4 +1,4 @@
-#ifndef HGL_GRAPH_TEXTURE_INCLUDE
+﻿#ifndef HGL_GRAPH_TEXTURE_INCLUDE
 #define HGL_GRAPH_TEXTURE_INCLUDE
 
 #include<hgl/graph/TextureFormat.h>

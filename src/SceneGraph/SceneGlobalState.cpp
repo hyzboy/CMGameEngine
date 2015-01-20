@@ -1,4 +1,4 @@
-#include<hgl/graph/SceneGlobalState.h>
+﻿#include<hgl/graph/SceneGlobalState.h>
 
 namespace hgl
 {

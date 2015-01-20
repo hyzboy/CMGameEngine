@@ -1,4 +1,4 @@
-#ifndef HGL_IMAGE_EXT_INCLUDE
+﻿#ifndef HGL_IMAGE_EXT_INCLUDE
 #define HGL_IMAGE_EXT_INCLUDE
 
 #include<hgl/graph/TextureFormat.h>

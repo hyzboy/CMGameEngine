@@ -1,4 +1,4 @@
-#include"GLSL.h"
+﻿#include"GLSL.h"
 #include<hgl/LogInfo.h>
 #include<hgl/Other.h>
 #include<hgl/type/Smart.h>
@@ -65,8 +65,8 @@ namespace hgl
 				u16char vs_filename[1024];
 				u16char fs_filename[1024];
 
-				strcpy(vs_filename,save_filename);strcat(vs_filename,u".vs");
-				strcpy(fs_filename,save_filename);strcat(fs_filename,u".fs");
+				strcpy(vs_filename,save_filename);strcat(vs_filename,U16_TEXT(".vs"));
+				strcpy(fs_filename,save_filename);strcat(fs_filename,U16_TEXT(".fs"));
 
 				vs=MakeVertexShader(able,mvp,state,vs_filename);
 				fs=MakeFragmentShader(able,state,fs_filename);
@@ -138,7 +138,7 @@ namespace hgl
 
 				glGetShaderInfoLog(shader,log_length,&char_writen,log);
 
-				LOG_HINT(OSString(name)+OS_TEXT(" shader compile error\n\n")+OSString(log));
+				LOG_HINT(UTF8String(name)+U8_TEXT(" shader compile error\n\n")+ UTF8String(log));
 
 				delete[] log;
 

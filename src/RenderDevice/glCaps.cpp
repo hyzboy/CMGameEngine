@@ -14,11 +14,11 @@ namespace hgl
 
 			if(glGetError()!=GL_INVALID_ENUM)
 			{
-				LOG_INFO(UTF16String(name)+u": "+UTF16String(value));
+				LOG_INFO(UTF16String(name)+U16_TEXT(": ")+UTF16String(value));
 			}
 			else
 			{
-				LOG_INFO(UTF16String(name)+u": nonsupport");
+				LOG_INFO(UTF16String(name)+U16_TEXT(": nonsupport"));
 			}
 		}
 
@@ -30,11 +30,11 @@ namespace hgl
 
 			if(glGetError()!=GL_INVALID_ENUM)
 			{
-				LOG_INFO(UTF16String(name)+u": "+UTF16String(value));
+				LOG_INFO(UTF16String(name)+U16_TEXT(": ")+UTF16String(value));
 			}
 			else
 			{
-				LOG_INFO(UTF16String(name)+u": nonsupport");
+				LOG_INFO(UTF16String(name)+U16_TEXT(": nonsupport"));
 			}
 		}
 
@@ -46,11 +46,11 @@ namespace hgl
 
 			if(glGetError()!=GL_INVALID_ENUM)
 			{
-    			LOG_INFO(UTF16String(name)+u": "+UTF16String(value[0])+u" - "+UTF16String(value[1]));
+    			LOG_INFO(UTF16String(name)+ U16_TEXT(": ")+UTF16String(value[0])+ U16_TEXT(" - ")+UTF16String(value[1]));
 			}
 			else
 			{
-				LOG_INFO(UTF16String(name)+u": nonsupport");
+				LOG_INFO(UTF16String(name)+U16_TEXT(": nonsupport"));
 			}
 		}
 
@@ -86,7 +86,7 @@ namespace hgl
 
 			glfwGetVersion(&major,&minor,&rev);
 
-			LOG_INFO(OSString("  GLFW Version: ")+OSString(major)+OS_TEXT(".")+OSString(minor)+OS_TEXT(".")+OSString(rev));
+			LOG_INFO(OS_TEXT("  GLFW Version: ")+OSString(major)+OS_TEXT(".")+OSString(minor)+OS_TEXT(".")+OSString(rev));
 		}
 
 		namespace OpenGLCore
@@ -95,7 +95,7 @@ namespace hgl
 			{
 				glGetError();
 
-				LOG_INFO(OSString("OpenGL Info:"));
+				LOG_INFO(OS_TEXT("OpenGL Info:"));
 
 				PutOpenGLFWVersion();
 				PutOpenGLStringValue(  "  GLEW Version",(char *)glewGetString(GLEW_VERSION));
@@ -113,38 +113,38 @@ namespace hgl
 					LOG_INFO(UTF8String((char *)glGetStringi(GL_EXTENSIONS,i))+UTF8String(i?"":"Extensions: "));
 				}
 
-				PutOpenGLFloatRange	 (u"                        GL_POINT_SIZE_RANGE",GL_POINT_SIZE_RANGE);
-				PutOpenGLFloatValue  (u"                  GL_POINT_SIZE_GRANULARITY",GL_POINT_SIZE_GRANULARITY);
-				PutOpenGLFloatRange	 (u"                        GL_LINE_WIDTH_RANGE",GL_LINE_WIDTH_RANGE);
-				PutOpenGLFloatValue  (u"                  GL_LINE_WIDTH_GRANULARITY",GL_LINE_WIDTH_GRANULARITY);
-				PutOpenGLIntegerValue(u"                        GL_MAX_TEXTURE_SIZE",GL_MAX_TEXTURE_SIZE);
-				PutOpenGLIntegerValue(u"               GL_MAX_CUBE_MAP_TEXTURE_SIZE",GL_MAX_CUBE_MAP_TEXTURE_SIZE);
-				PutOpenGLIntegerValue(u"                   GL_MAX_RENDERBUFFER_SIZE",GL_MAX_RENDERBUFFER_SIZE);
-				PutOpenGLIntegerValue(u"              GL_MAX_TEXTURE_MAX_ANISOTROPY",GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT);
+				PutOpenGLFloatRange	 (U16_TEXT("                        GL_POINT_SIZE_RANGE"),GL_POINT_SIZE_RANGE);
+				PutOpenGLFloatValue  (U16_TEXT("                  GL_POINT_SIZE_GRANULARITY"),GL_POINT_SIZE_GRANULARITY);
+				PutOpenGLFloatRange	 (U16_TEXT("                        GL_LINE_WIDTH_RANGE"),GL_LINE_WIDTH_RANGE);
+				PutOpenGLFloatValue  (U16_TEXT("                  GL_LINE_WIDTH_GRANULARITY"),GL_LINE_WIDTH_GRANULARITY);
+				PutOpenGLIntegerValue(U16_TEXT("                        GL_MAX_TEXTURE_SIZE"),GL_MAX_TEXTURE_SIZE);
+				PutOpenGLIntegerValue(U16_TEXT("               GL_MAX_CUBE_MAP_TEXTURE_SIZE"),GL_MAX_CUBE_MAP_TEXTURE_SIZE);
+				PutOpenGLIntegerValue(U16_TEXT("                   GL_MAX_RENDERBUFFER_SIZE"),GL_MAX_RENDERBUFFER_SIZE);
+				PutOpenGLIntegerValue(U16_TEXT("              GL_MAX_TEXTURE_MAX_ANISOTROPY"),GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT);
 
-				PutOpenGLIntegerValue(u"                        GL_MAX_DRAW_BUFFERS",GL_MAX_DRAW_BUFFERS);
-				PutOpenGLIntegerValue(u"                      GL_MAX_VERTEX_ATTRIBS",GL_MAX_VERTEX_ATTRIBS);
+				PutOpenGLIntegerValue(U16_TEXT("                        GL_MAX_DRAW_BUFFERS"),GL_MAX_DRAW_BUFFERS);
+				PutOpenGLIntegerValue(U16_TEXT("                      GL_MAX_VERTEX_ATTRIBS"),GL_MAX_VERTEX_ATTRIBS);
 
-				PutOpenGLIntegerValue(u"          GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS",GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS);		//最大vertex shader用贴图数量
-				PutOpenGLIntegerValue(u"                 GL_MAX_TEXTURE_IMAGE_UNITS",GL_MAX_TEXTURE_IMAGE_UNITS);				//最大fragment shader用贴图数量
-				PutOpenGLIntegerValue(u"        GL_MAX_GEOMETRY_TEXTURE_IMAGE_UNITS",GL_MAX_GEOMETRY_TEXTURE_IMAGE_UNITS);		//最大geometry shader用贴图数量
-				PutOpenGLIntegerValue(u"        GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS",GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS);
+				PutOpenGLIntegerValue(U16_TEXT("          GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS"),GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS);		//最大vertex shader用贴图数量
+				PutOpenGLIntegerValue(U16_TEXT("                 GL_MAX_TEXTURE_IMAGE_UNITS"),GL_MAX_TEXTURE_IMAGE_UNITS);				//最大fragment shader用贴图数量
+				PutOpenGLIntegerValue(U16_TEXT("        GL_MAX_GEOMETRY_TEXTURE_IMAGE_UNITS"),GL_MAX_GEOMETRY_TEXTURE_IMAGE_UNITS);		//最大geometry shader用贴图数量
+				PutOpenGLIntegerValue(U16_TEXT("        GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS"),GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS);
 
-				PutOpenGLIntegerValue(u"           GL_MAX_VERTEX_UNIFORM_COMPONENTS",GL_MAX_VERTEX_UNIFORM_COMPONENTS);
-				PutOpenGLIntegerValue(u"         GL_MAX_FRAGMENT_UNIFORM_COMPONENTS",GL_MAX_FRAGMENT_UNIFORM_COMPONENTS);
-				PutOpenGLIntegerValue(u"                      GL_MAX_VARYING_FLOATS",GL_MAX_VARYING_FLOATS);
+				PutOpenGLIntegerValue(U16_TEXT("           GL_MAX_VERTEX_UNIFORM_COMPONENTS"),GL_MAX_VERTEX_UNIFORM_COMPONENTS);
+				PutOpenGLIntegerValue(U16_TEXT("         GL_MAX_FRAGMENT_UNIFORM_COMPONENTS"),GL_MAX_FRAGMENT_UNIFORM_COMPONENTS);
+				PutOpenGLIntegerValue(U16_TEXT("                      GL_MAX_VARYING_FLOATS"),GL_MAX_VARYING_FLOATS);
 
-				PutOpenGLIntegerValue(u"               GL_MAX_VERTEX_UNIFORM_BLOCKS",GL_MAX_VERTEX_UNIFORM_BLOCKS);
-				PutOpenGLIntegerValue(u"             GL_MAX_GEOMETRY_UNIFORM_BLOCKS",GL_MAX_GEOMETRY_UNIFORM_BLOCKS);
-				PutOpenGLIntegerValue(u"             GL_MAX_FRAGMENT_UNIFORM_BLOCKS",GL_MAX_FRAGMENT_UNIFORM_BLOCKS);
-				PutOpenGLIntegerValue(u"             GL_MAX_COMBINED_UNIFORM_BLOCKS",GL_MAX_COMBINED_UNIFORM_BLOCKS);
-				PutOpenGLIntegerValue(u"             GL_MAX_UNIFORM_BUFFER_BINDINGS",GL_MAX_UNIFORM_BUFFER_BINDINGS);
-				PutOpenGLIntegerValue(u"                  GL_MAX_UNIFORM_BLOCK_SIZE",GL_MAX_UNIFORM_BLOCK_SIZE);
-				PutOpenGLIntegerValue(u"  GL_MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS",GL_MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS);
-				PutOpenGLIntegerValue(u"GL_MAX_COMBINED_GEOMETRY_UNIFORM_COMPONENTS",GL_MAX_COMBINED_GEOMETRY_UNIFORM_COMPONENTS);
-				PutOpenGLIntegerValue(u"GL_MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS",GL_MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS);
+				PutOpenGLIntegerValue(U16_TEXT("               GL_MAX_VERTEX_UNIFORM_BLOCKS"),GL_MAX_VERTEX_UNIFORM_BLOCKS);
+				PutOpenGLIntegerValue(U16_TEXT("             GL_MAX_GEOMETRY_UNIFORM_BLOCKS"),GL_MAX_GEOMETRY_UNIFORM_BLOCKS);
+				PutOpenGLIntegerValue(U16_TEXT("             GL_MAX_FRAGMENT_UNIFORM_BLOCKS"),GL_MAX_FRAGMENT_UNIFORM_BLOCKS);
+				PutOpenGLIntegerValue(U16_TEXT("             GL_MAX_COMBINED_UNIFORM_BLOCKS"),GL_MAX_COMBINED_UNIFORM_BLOCKS);
+				PutOpenGLIntegerValue(U16_TEXT("             GL_MAX_UNIFORM_BUFFER_BINDINGS"),GL_MAX_UNIFORM_BUFFER_BINDINGS);
+				PutOpenGLIntegerValue(U16_TEXT("                  GL_MAX_UNIFORM_BLOCK_SIZE"),GL_MAX_UNIFORM_BLOCK_SIZE);
+				PutOpenGLIntegerValue(U16_TEXT("  GL_MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS"),GL_MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS);
+				PutOpenGLIntegerValue(U16_TEXT("GL_MAX_COMBINED_GEOMETRY_UNIFORM_COMPONENTS"),GL_MAX_COMBINED_GEOMETRY_UNIFORM_COMPONENTS);
+				PutOpenGLIntegerValue(U16_TEXT("GL_MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS"),GL_MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS);
 
-				PutOpenGLIntegerValue(u"                 GL_MAX_TEXTURE_BUFFER_SIZE",GL_MAX_TEXTURE_BUFFER_SIZE);
+				PutOpenGLIntegerValue(U16_TEXT("                 GL_MAX_TEXTURE_BUFFER_SIZE"),GL_MAX_TEXTURE_BUFFER_SIZE);
 			}
 		}//namespace OpenGLCore
 	}//namespace graph

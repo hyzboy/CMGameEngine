@@ -1,4 +1,4 @@
-#include<hgl/graph/Camera.h>
+﻿#include<hgl/graph/Camera.h>
 #include<hgl/graph/SceneNode.h>
 #include<hgl/graph/Renderable.h>
 #include<hgl/graph/VertexBuffer.h>
