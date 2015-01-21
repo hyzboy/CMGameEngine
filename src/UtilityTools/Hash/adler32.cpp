@@ -113,5 +113,34 @@ namespace hgl
 			/* return recombined sums */
 			return adler | (sum2 << 16);
 		}
+
+		class Adler32:public Hash
+		{
+			uint32 result;
+
+		public:
+
+			void GetName(UTF8String &str)const HGL_OVERRIDE{str=U8_TEXT("Adler32");}
+			void GetName(UTF16String &str)const HGL_OVERRIDE{str=U16_TEXT("Adler32");}
+
+			const int GetHashBytes()const HGL_OVERRIDE{return 4;}
+
+			void Init()HGL_OVERRIDE
+			{
+				result=0;
+			}
+
+			void Update(const void *input,uint inputLen)HGL_OVERRIDE
+			{
+				result=CountAdler32(result,(const char *)input,inputLen);
+			}
+
+			void Final(void *digest)HGL_OVERRIDE
+			{
+				*(uint32 *)digest=result;
+			}
+		};//class Adler32
+
+		Hash *CreateAdler32Hash(){return(new Adler32);}
 	}//namespace util
 }//namespace hgl

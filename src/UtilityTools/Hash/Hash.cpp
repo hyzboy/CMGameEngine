@@ -5,6 +5,8 @@ namespace hgl
 {
 	namespace util
 	{
+		Hash *CreateAdler32Hash();
+		Hash *CreateCRC32Hash();
 		Hash *CreateMD4Hash();
 		Hash *CreateMD5Hash();
 		Hash *CreateSHA1Hash();
@@ -20,8 +22,9 @@ namespace hgl
 
 			const CreateHashFunc hash_func[hashEnd-1]=
 			{
-				CreateMD5Hash,
+				CreateCRC32Hash,
 				CreateMD4Hash,
+				CreateMD5Hash,
 				CreateSHA1Hash
 			};
 

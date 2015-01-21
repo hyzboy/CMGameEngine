@@ -61,6 +61,7 @@ SET(ut_files
 	FindPath/FindPath_AStar.cpp
 	FindPath/FindPath_Line.cpp
 	Hash/adler32.cpp
+	Hash/crc32.cpp
 	Hash/md4.cpp
 	Hash/md5.cpp
 	Hash/sha1.cpp

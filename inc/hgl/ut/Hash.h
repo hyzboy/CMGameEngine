@@ -13,8 +13,10 @@ namespace hgl
 		{
 			hashNone=0,
 
-			hashMD5,					///<最常用的HASH算法
+			hashAdler32,				///<一种较CRC32更为安全的快速HASH算法
+			hashCRC32,					///<最快速的HASH算法，但最不安全，仅用于低安全性的简单验证
 			hashMD4,					///<较MD5在安全性下稍弱。但仍未被攻破，且较MD5更快
+			hashMD5,					///<最常用的HASH算法
 			hashSHA1,					///<较MD5更为安全，但计算较慢
 
 			hashEnd
@@ -61,6 +63,8 @@ namespace hgl
 			CompOperator(const HashCode<SIZE> &,CompFunc)
 		};//template<int SIZE> struct HashCode
 
+		typedef HashCode<4> CRC32Code;
+		typedef HashCode<4> Adler32Code;
 		typedef HashCode<16> MD5Code;
 		typedef HashCode<16> MD4Code;
 		typedef HashCode<20> SHA1Code;
@@ -95,9 +99,11 @@ namespace hgl
 		*/
 		bool CountHash(const void *data,int size,void *hash_code,HASH_ALGORITHML ha);
 
-		inline bool CountMD5(const void *data,int size,MD5Code &md5){return CountHash(data,size,&md5,hashMD5);}
-		inline bool CountMD4(const void *data,int size,MD4Code &md4){return CountHash(data,size,&md4,hashMD4);}
-		inline bool CountSHA1(const void *data,int size,SHA1Code &sha1){return CountHash(data,size,&sha1,hashSHA1);}
+		inline bool CountAdler32(const void *data,int size,Adler32Code &hc){return CountHash(data,size,&hc,hashAdler32	);}
+		inline bool CountCRC32	(const void *data,int size,CRC32Code &	hc){return CountHash(data,size,&hc,hashCRC32	);}
+		inline bool CountMD4	(const void *data,int size,MD4Code &	hc){return CountHash(data,size,&hc,hashMD4		);}
+		inline bool CountMD5	(const void *data,int size,MD5Code &	hc){return CountHash(data,size,&hc,hashMD5		);}
+		inline bool CountSHA1	(const void *data,int size,SHA1Code &	hc){return CountHash(data,size,&hc,hashSHA1		);}
 
 		/**
 		* 取得一个文件的hash值
