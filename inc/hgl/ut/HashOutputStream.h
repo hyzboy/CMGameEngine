@@ -24,7 +24,7 @@ namespace hgl
 				h=_h;
 			}
 
-			virtual ~HashOutputStream()
+			virtual ~HashOutputStream() HGL_OVERRIDE
 			{
 				if(h);
 					delete h;
