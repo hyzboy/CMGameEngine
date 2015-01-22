@@ -1,10 +1,10 @@
-﻿#include<hgl/type/DataType.h>
+﻿#include<hgl/ut/Hash.h>
 
 namespace hgl
 {
 	namespace
 	{
-		const u32 crc32_tab[] = {
+		const uint32 crc32_tab[] = {
 			0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419, 0x706af48f,
 			0xe963a535, 0x9e6495a3,	0x0edb8832, 0x79dcb8a4, 0xe0d5e91e, 0x97d2d988,
 			0x09b64c2b, 0x7eb17cbd, 0xe7b82d07, 0x90bf1d91, 0x1db71064, 0x6ab020f2,
@@ -51,45 +51,48 @@ namespace hgl
 		};
 	}//namespace
 
-	uint32 CountCRC32(uint32 crc, const unsigned char *buf, uint32 size)
+	namespace util
 	{
-		const unsigned char *p;
-
-		p = buf;
-		crc = crc ^ ~0U;
-
-		while (size--)
-			crc = crc32_tab[(crc ^ *p++) & 0xFF] ^ (crc >> 8);
-
-		return crc ^ ~0U;
-	}
-
-	class CRC32:public Hash
-	{
-		uint32 result;
-
-	public:
-
-		void GetName(UTF8String &str)const HGL_OVERRIDE{str=U8_TEXT("CRC32");}
-		void GetName(UTF16String &str)const HGL_OVERRIDE{str=U16_TEXT("CRC32");}
-
-		const int GetHashBytes()const HGL_OVERRIDE{return 4;}
-
-		void Init()HGL_OVERRIDE
+		uint32 CountCRC32(uint32 crc, const uint8 *buf, uint32 size)
 		{
-			result=0;
+			const uint8 *p;
+
+			p = buf;
+			crc = crc ^ ~0U;
+
+			while (size--)
+				crc = crc32_tab[(crc ^ *p++) & 0xFF] ^ (crc >> 8);
+
+			return crc ^ ~0U;
 		}
 
-		void Update(const void *input,uint inputLen)HGL_OVERRIDE
+		class CRC32:public Hash
 		{
-			result=CountCRC32(result,(const char *)input,inputLen);
-		}
+			uint32 result;
 
-		void Final(void *digest)HGL_OVERRIDE
-		{
-			*(uint32 *)digest=result;
-		}
-	};//class CRC32
+		public:
 
-	Hash *CreateCRC32Hash(){return(new CRC32);}
+			void GetName(UTF8String &str)const HGL_OVERRIDE{str=U8_TEXT("CRC32");}
+			void GetName(UTF16String &str)const HGL_OVERRIDE{str=U16_TEXT("CRC32");}
+
+			const int GetHashBytes()const HGL_OVERRIDE{return 4;}
+
+			void Init()HGL_OVERRIDE
+			{
+				result=0;
+			}
+
+			void Update(const void *input,uint inputLen)HGL_OVERRIDE
+			{
+				result=CountCRC32(result,(const uint8 *)input,inputLen);
+			}
+
+			void Final(void *digest)HGL_OVERRIDE
+			{
+				*(uint32 *)digest=result;
+			}
+		};//class CRC32
+
+		Hash *CreateCRC32Hash(){return(new CRC32);}
+	}//namespace util
 }//namepace hgl

@@ -1,4 +1,5 @@
-﻿#include<hgl/type/DataType.h>
+﻿#include<hgl/ut/Hash.h>
+
 namespace hgl
 {
 	#define BASE 65521UL    /* largest prime smaller than 65536 */
@@ -54,7 +55,7 @@ namespace hgl
 		* @param len 待校验数据长度
 		* @return 校检码
 		*/
-		uint32 CountAdler32(uint32 adler,const unsigned char *buf,uint32 len)
+		uint32 CountAdler32(uint32 adler,const uint8 *buf,uint32 len)
 		{
 			uint32 sum2;
 			uint32 n;
@@ -132,7 +133,7 @@ namespace hgl
 
 			void Update(const void *input,uint inputLen)HGL_OVERRIDE
 			{
-				result=CountAdler32(result,(const char *)input,inputLen);
+				result=CountAdler32(result,(const uint8 *)input,inputLen);
 			}
 
 			void Final(void *digest)HGL_OVERRIDE
