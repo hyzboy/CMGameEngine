@@ -52,6 +52,15 @@ namespace hgl
 				return(true);
 			}
 
+			virtual bool	CanSeek()const{return false;}											///<是否可以定位
+
+			virtual bool	Restart()																///<复位访问指针
+			{
+				HashRestart();
+				return this->InputStream::Restart();
+			}
+
+
 			virtual int64	Write(void *data,int64 size) HGL_OVERRIDE								///<读取数据
 			{
 				int64 result=this->OutputStream::Write(data,size);

@@ -10,6 +10,7 @@ namespace hgl
 	{
 		/**
 		* 数据输入流，并对输入的数据做HASH计算
+		* Hash输入流主要用于计算输入数据的校验码，使用Hash输入流，数据将不可以重定位访问
 		*/
 		class HashInputStream:public InputStream													///数据输入HASH计算流基类
 		{
@@ -50,6 +51,15 @@ namespace hgl
 
 				h->Final(hash_result);
 				return(true);
+			}
+
+			virtual bool	CanSeek()const{return false;}											///<是否可以定位
+			virtual bool	CanPeek()const{return false;}											///<是否可以预览数据
+
+			virtual bool	Restart()																///<复位访问指针
+			{
+				HashRestart();
+				return this->InputStream::Restart();
 			}
 
 			virtual int64	Read(void *data,int64 size) HGL_OVERRIDE								///<读取数据
