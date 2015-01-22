@@ -1,4 +1,4 @@
-#ifndef HGL_TYPE_FUNC_INCLUDE
+﻿#ifndef HGL_TYPE_FUNC_INCLUDE
 #define HGL_TYPE_FUNC_INCLUDE
 
 #include<hgl/platform/Platform.h>
@@ -97,15 +97,15 @@ namespace hgl
 	 */
 	enum WeekDay
 	{
-		weekNone=0,
+		weekNone=-1,
 
+		weekSunday,		///<星期天
 		weekMonday,		///<星期一
 		weekTuesday,	///<星期二
 		weekWednesday,	///<星期三
 		weekThursday,	///<星期四
 		weekFriday,		///<星期五
 		weekSaturday,	///<星期六
-		weekSunday,		///<星期天
 
 		weekEnd
 	};
