@@ -1,5 +1,5 @@
-#ifndef HGL_PROC_FIFO_INCLUDE
-#define HGL_PROC_FIFO_INCLUDE
+﻿#ifndef HGL_MULTI_PROC_FIFO_INCLUDE
+#define HGL_MULTI_PROC_FIFO_INCLUDE
 namespace hgl
 {
 	/**
@@ -24,4 +24,4 @@ namespace hgl
 		bool Create(const char *);																	///<创建一个管道通信文件(注：只需要文件名，不需要完整路径)
 	};//namespace hgl
 }//namespace hgl
-#endif//HGL_PROC_FIFO_INCLUDE
+#endif//HGL_MULTI_PROC_FIFO_INCLUDE

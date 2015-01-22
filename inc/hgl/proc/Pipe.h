@@ -1,10 +1,10 @@
-#ifndef HGL_PROC_PIPE_INCLUDE
-#define HGL_PROC_PIPE_INCLUDE
+﻿#ifndef HGL_MULTI_PROC_PIPE_INCLUDE
+#define HGL_MULTI_PROC_PIPE_INCLUDE
 
 namespace hgl
 {
 	/**
-	 * 进程管理通信
+	 * 进程管道通信
 	 */
 	class Pipe																						///进程Pipe管道通信
 	{
@@ -34,4 +34,4 @@ namespace hgl
 		bool Create();																				///<创建一个pipe通信管道
 	};//class Pipe
 }//namespace hgl
-#endif//HGL_PROC_PIPE_INCLUDE
+#endif//HGL_MULTI_PROC_PIPE_INCLUDE
