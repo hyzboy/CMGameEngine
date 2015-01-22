@@ -1,4 +1,4 @@
-#include<hgl/ut/XMLParse.h>
+﻿#include<hgl/ut/XMLParse.h>
 #include<hgl/db/TableDesc.h>
 #include<hgl/type/Map.h>
 
@@ -129,7 +129,7 @@ namespace hgl
 			{
 				Start();
 
-				return ParseFile(filename);
+				return XMLParseFile(this,filename);
 			}
 		};//class TableDescLoader
 

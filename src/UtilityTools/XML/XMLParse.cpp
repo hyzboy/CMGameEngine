@@ -1,4 +1,5 @@
 ﻿#include<hgl/ut/XMLParse.h>
+#include<hgl/io/FileInputStream.h>
 #include<hgl/File.h>
 #include<expat.h>
 
@@ -73,27 +74,81 @@ namespace hgl
 		return XML_Parse(xml,buf,len,isFin);
 	}
 
-	bool XMLParse::ParseFile(const OSString &filename)
+	bool hgl::XMLParse::Parse(io::InputStream *is, bool isFin)
 	{
-		if(filename.Length()<=0)return(false);
+		if(!is)return(false);
 
-		LOG_INFO(OS_TEXT("XMLParse::ParseFile(filename=")+filename+OS_TEXT(")"));
+		#define HGL_XML_PARSE_MAX_SIZE	(HGL_SIZE_1KB*128)				//最大一次解晰长度
 
-		char *data;
-		int size;
-
-		size=LoadFileToMemory(filename,(void **)&data);
-
-		if(size<=0)
+		if(is->CanSize()&&is->GetSize()<=HGL_XML_PARSE_MAX_SIZE)		//可以取长度的，并且<=指定长度的一次读完
 		{
-			LOG_INFO(OS_TEXT("XMLParse::ParseFile(filename=")+filename+OS_TEXT(") Load File Failed."));
-			return(false);
+			int full_size=is->Available();
+
+			char *data=new char[full_size];
+
+			int pos=0;
+			int size;
+
+			bool result;
+
+			while(pos<full_size)
+			{
+				size=is->ReadFully(data,full_size);
+
+				if(size<0)
+					return(false);
+
+				result=Parse(data,size,pos+size>=full_size);
+
+				if(!result)
+					return(false);
+			}
+
+			return(true);
 		}
+		else					//不能取长度或是大于指定长度的
+		{
+			char data[HGL_XML_PARSE_MAX_SIZE];
 
-		const bool result=Parse(data,size,true);
+			int size;
+			bool result;
 
-		delete[] data;
-		return(result);
+			for(;;)
+			{
+				size=is->Available();
+
+				if(size<=0)break;
+
+				if(size>HGL_XML_PARSE_MAX_SIZE)
+				{
+					size=is->Read(data,HGL_XML_PARSE_MAX_SIZE);
+					result=Parse(data,HGL_XML_PARSE_MAX_SIZE,false);
+				}
+				else
+				{
+					size=is->Read(data,size);
+					result=Parse(data,size,true);
+				}
+
+				if(!result)return(false);
+			}
+
+			return(true);
+		}
+	}
+
+	/**
+	 * 解晰一个XML文件
+	 */
+	bool XMLParseFile(XMLParse *xml,const OSString &filename)
+	{
+		if(!xml)return(false);
+		if(filename.IsEmpty())return(false);
+		if(!FileCanRead(filename))return(false);
+
+		io::OpenFileInputStream fis(filename);
+
+		return xml->Parse(&fis);
 	}
 
 	namespace

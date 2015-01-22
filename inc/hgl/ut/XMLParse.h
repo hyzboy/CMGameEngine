@@ -15,6 +15,11 @@ extern "C"
 
 namespace hgl
 {
+	namespace io
+	{
+		class InputStream;
+	}//namespace io
+
 	/**
 	* XML解析器(虚拟函数版)<br>
 	*/
@@ -39,9 +44,10 @@ namespace hgl
 
 		virtual void Start();
 		virtual bool Parse(const char *buf,int len,bool isFin);
-
-		virtual bool ParseFile(const OSString &);
+		virtual bool Parse(io::InputStream *,bool isFin=true);
 	};//class XMLParse
+
+	bool XMLParseFile(XMLParse *xml,const OSString &filename);
 
 	/**
 	* XML解析器(回调函数版)
