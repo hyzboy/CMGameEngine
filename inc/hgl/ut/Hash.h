@@ -137,7 +137,20 @@ namespace hgl
 		*/
 		inline bool CountHash(const void *data,int size,HASH_ALGORITHML ha,void *hash_code)
 		{
-			return CountHash<ha>(data,size,hash_code);
+			if(!data||size<=0||ha<=hashNone||ha>=hashEnd||!hash_code)return(false);
+			
+			using CountHashFunc=bool (*)(const void *,int size,void *);
+			
+			const CountHashFunc func[hashEnd-1]=
+			{
+				CountHash<hashAdler32	>,
+				CountHash<hashCRC32		>,
+				CountHash<hashMD4		>,
+				CountHash<hashMD5		>,
+				CountHash<hashSHA1		>
+			};
+			
+			return func[ha-1](data,size,hash_code);
 		}
 
 		inline bool CountAdler32(const void *data,int size,Adler32Code &hc){return CountHash<hashAdler32>(data,size,&hc);}
@@ -155,7 +168,7 @@ namespace hgl
 		* @param litter 小写字母
 		* @return 是否计算成功
 		*/
-		template<HASH_ALGORITHML ha> bool CountHash(const void *data,int size,UTF8String &hash_str,bool litter=true)
+		template<HASH_ALGORITHML ha> bool CountHashStr(const void *data,int size,UTF8String &hash_str,bool litter=true)
 		{
 			if(!data||size<=0)return(false);
 
@@ -163,7 +176,7 @@ namespace hgl
 
 			if(!h)return(false);
 			
-			char *hash_code=new char[hash_code_bytes[ha]];
+			uint8 *hash_code=new uint8[hash_code_bytes[ha]];
 			char *hash_code_str=new char[hash_code_bytes[ha]<<1];
 
 			h->Init();
@@ -192,20 +205,33 @@ namespace hgl
 		*/
 		inline bool CountHash(const void *data,int size,HASH_ALGORITHML ha,UTF8String &hash_str,bool litter=true)
 		{
-			return CountHash<ha>(data,size,hash_str,litter);
+			if(!data||size<=0||ha<=hashNone||ha>=hashEnd)return(false);
+			
+			using CountHashFunc=bool (*)(const void *,int size,UTF8String &,bool);
+			
+			const CountHashFunc func[hashEnd-1]=
+			{
+				CountHashStr<hashAdler32	>,
+				CountHashStr<hashCRC32		>,
+				CountHashStr<hashMD4		>,
+				CountHashStr<hashMD5		>,
+				CountHashStr<hashSHA1		>
+			};
+			
+			return func[ha-1](data,size,hash_str,litter);
 		}
 		
-		inline bool CountAdler32(const void *data,int size,UTF8String &hash_str,bool litter=true){return CountHash<hashAdler32	>(data,size,hash_str,litter);}
-		inline bool CountCRC32	(const void *data,int size,UTF8String &hash_str,bool litter=true){return CountHash<hashCRC32	>(data,size,hash_str,litter);}
-		inline bool CountMD4	(const void *data,int size,UTF8String &hash_str,bool litter=true){return CountHash<hashMD4		>(data,size,hash_str,litter);}
-		inline bool CountMD5	(const void *data,int size,UTF8String &hash_str,bool litter=true){return CountHash<hashMD5		>(data,size,hash_str,litter);}
-		inline bool CountSHA1	(const void *data,int size,UTF8String &hash_str,bool litter=true){return CountHash<hashSHA1		>(data,size,hash_str,litter);}
+		inline bool CountAdler32(const void *data,int size,UTF8String &hash_str,bool litter=true){return CountHashStr<hashAdler32	>(data,size,hash_str,litter);}
+		inline bool CountCRC32	(const void *data,int size,UTF8String &hash_str,bool litter=true){return CountHashStr<hashCRC32		>(data,size,hash_str,litter);}
+		inline bool CountMD4	(const void *data,int size,UTF8String &hash_str,bool litter=true){return CountHashStr<hashMD4		>(data,size,hash_str,litter);}
+		inline bool CountMD5	(const void *data,int size,UTF8String &hash_str,bool litter=true){return CountHashStr<hashMD5		>(data,size,hash_str,litter);}
+		inline bool CountSHA1	(const void *data,int size,UTF8String &hash_str,bool litter=true){return CountHashStr<hashSHA1		>(data,size,hash_str,litter);}
 		
-		inline bool CountAdler32(const UTF8String &str,UTF8String &hash_str,bool litter=true){return CountHash<hashAdler32	>(str.c_str(),str.Length(),hash_str,litter);}
-		inline bool CountCRC32	(const UTF8String &str,UTF8String &hash_str,bool litter=true){return CountHash<hashCRC32	>(str.c_str(),str.Length(),hash_str,litter);}
-		inline bool CountMD4	(const UTF8String &str,UTF8String &hash_str,bool litter=true){return CountHash<hashMD4		>(str.c_str(),str.Length(),hash_str,litter);}
-		inline bool CountMD5	(const UTF8String &str,UTF8String &hash_str,bool litter=true){return CountHash<hashMD5		>(str.c_str(),str.Length(),hash_str,litter);}
-		inline bool CountSHA1	(const UTF8String &str,UTF8String &hash_str,bool litter=true){return CountHash<hashSHA1		>(str.c_str(),str.Length(),hash_str,litter);}
+		inline bool CountAdler32(const UTF8String &str,UTF8String &hash_str,bool litter=true){return CountHashStr<hashAdler32	>(str.c_str(),str.Length(),hash_str,litter);}
+		inline bool CountCRC32	(const UTF8String &str,UTF8String &hash_str,bool litter=true){return CountHashStr<hashCRC32		>(str.c_str(),str.Length(),hash_str,litter);}
+		inline bool CountMD4	(const UTF8String &str,UTF8String &hash_str,bool litter=true){return CountHashStr<hashMD4		>(str.c_str(),str.Length(),hash_str,litter);}
+		inline bool CountMD5	(const UTF8String &str,UTF8String &hash_str,bool litter=true){return CountHashStr<hashMD5		>(str.c_str(),str.Length(),hash_str,litter);}
+		inline bool CountSHA1	(const UTF8String &str,UTF8String &hash_str,bool litter=true){return CountHashStr<hashSHA1		>(str.c_str(),str.Length(),hash_str,litter);}
 
 		/**
 		* 取得一个文件的hash值
