@@ -68,6 +68,8 @@ namespace hgl
 		typedef HashCode<16> MD5Code;
 		typedef HashCode<16> MD4Code;
 		typedef HashCode<20> SHA1Code;
+		
+		const int hash_code_bytes[]={0,4,4,16,16,20};		//hash码长度
 
 		/**
 		 * 散列值计算功能基类
@@ -87,7 +89,19 @@ namespace hgl
 			virtual void Final(void *)=0;					///<结束并取得结果
 		};//class Hash
 
-		Hash *CreateHash(HASH_ALGORITHML);					///<创建一个hash值计算类实例
+		Hash *CreateAdler32Hash();
+		Hash *CreateCRC32Hash();
+		Hash *CreateMD4Hash();
+		Hash *CreateMD5Hash();
+		Hash *CreateSHA1Hash();
+
+		template<HASH_ALGORITHML ha> Hash *CreateHash();					///<创建一个hash值计算类实例
+		
+		template<> Hash *CreateHash<hashAdler32	>(){return CreateAdler32Hash();}
+		template<> Hash *CreateHash<hashCRC32	>(){return CreateCRC32Hash();}
+		template<> Hash *CreateHash<hashMD4		>(){return CreateMD4Hash();}
+		template<> Hash *CreateHash<hashMD5		>(){return CreateMD5Hash();}
+		template<> Hash *CreateHash<hashSHA1	>(){return CreateSHA1Hash();}
 
 		/**
 		* 计算一段数据的Hash值
@@ -97,14 +111,102 @@ namespace hgl
 		* @param hash_code 计算后的hash值存放处
 		* @return 是否计算成功
 		*/
-		bool CountHash(const void *data,int size,HASH_ALGORITHML ha,void *hash_code);
+		template<HASH_ALGORITHML ha> bool CountHash(const void *data,int size,void *hash_code)
+		{			
+			if(!data||size<=0||!hash_code)return(false);
 
-		inline bool CountAdler32(const void *data,int size,Adler32Code &hc){return CountHash(data,size,hashAdler32	,&hc);}
-		inline bool CountCRC32	(const void *data,int size,CRC32Code &	hc){return CountHash(data,size,hashCRC32	,&hc);}
-		inline bool CountMD4	(const void *data,int size,MD4Code &	hc){return CountHash(data,size,hashMD4		,&hc);}
-		inline bool CountMD5	(const void *data,int size,MD5Code &	hc){return CountHash(data,size,hashMD5		,&hc);}
-		inline bool CountSHA1	(const void *data,int size,SHA1Code &	hc){return CountHash(data,size,hashSHA1		,&hc);}
+			Hash *h=CreateHash<ha>();
+
+			if(!h)return(false);
+
+			h->Init();
+			h->Update(data,size);
+			h->Final(hash_code);
+
+			delete h;
+			return(true);
+		}
 		
+		/**
+		* 计算一段数据的Hash值
+		* @param data 数据指针
+		* @param size 数据长度
+		* @param ha hash算法
+		* @param hash_code 计算后的hash值存放处
+		* @return 是否计算成功
+		*/
+		inline bool CountHash(const void *data,int size,HASH_ALGORITHML ha,void *hash_code)
+		{
+			return CountHash<ha>(data,size,hash_code);
+		}
+
+		inline bool CountAdler32(const void *data,int size,Adler32Code &hc){return CountHash<hashAdler32>(data,size,&hc);}
+		inline bool CountCRC32	(const void *data,int size,CRC32Code &	hc){return CountHash<hashCRC32	>(data,size,&hc);}
+		inline bool CountMD4	(const void *data,int size,MD4Code &	hc){return CountHash<hashMD4	>(data,size,&hc);}
+		inline bool CountMD5	(const void *data,int size,MD5Code &	hc){return CountHash<hashMD5	>(data,size,&hc);}
+		inline bool CountSHA1	(const void *data,int size,SHA1Code &	hc){return CountHash<hashSHA1	>(data,size,&hc);}
+				
+		/**
+		* 计算一段数据的Hash值
+		* @param data 数据指针
+		* @param size 数据长度
+		* @param ha hash算法	
+		* @param hash_str 计算后的hash值存放处
+		* @param litter 小写字母
+		* @return 是否计算成功
+		*/
+		template<HASH_ALGORITHML ha> bool CountHash(const void *data,int size,UTF8String &hash_str,bool litter=true)
+		{
+			if(!data||size<=0||!hash_code)return(false);
+
+			Hash *h=CreateHash<ha>();
+
+			if(!h)return(false);
+			
+			char hash_code[hash_code_bytes[ha]];
+			char hash_str[hash_code_bytes[ha]<<1];
+
+			h->Init();
+			h->Update(data,size);
+			h->Final(hash_code);
+
+			delete h;
+			
+			if(litter)
+				ToLowerHexStr(hash_str,hash_code);
+			else
+				ToUpperHexStr(hash_str,hash_code);
+			
+			str.Set(hash_str,hash_code_bytes[ha]<<1);
+			return(true);
+		}
+		
+		/**
+		* 计算一段数据的Hash值
+		* @param data 数据指针
+		* @param size 数据长度
+		* @param ha hash算法	
+		* @param hash_str 计算后的hash值存放处
+		* @param litter 小写字母
+		* @return 是否计算成功
+		*/
+		inline bool CountHash(const void *data,int size,HASH_ALGORITHML ha,UTF8String &hash_str,bool litter=true)
+		{
+			return CountHash<ha>(data,size,hash_str,litter);
+		}
+		
+		inline bool CountAdler32(const void *data,int size,UTF8String &hash_str,bool litter=true){return CountHash<hashAdler32	>(data,size,hash_str,litter);}
+		inline bool CountCRC32	(const void *data,int size,UTF8String &hash_str,bool litter=true){return CountHash<hashCRC32	>(data,size,hash_str,litter);}
+		inline bool CountMD4	(const void *data,int size,UTF8String &hash_str,bool litter=true){return CountHash<hashMD4		>(data,size,hash_str,litter);}
+		inline bool CountMD5	(const void *data,int size,UTF8String &hash_str,bool litter=true){return CountHash<hashMD5		>(data,size,hash_str,litter);}
+		inline bool CountSHA1	(const void *data,int size,UTF8String &hash_str,bool litter=true){return CountHash<hashSHA1		>(data,size,hash_str,litter);}
+		
+		inline bool CountAdler32(const UTF8String &str,UTF8String &hash_str,bool litter=true){return CountHash<hashAdler32	>(str.c_str(),str.Length(),hash_str,litter);}
+		inline bool CountCRC32	(const UTF8String &str,UTF8String &hash_str,bool litter=true){return CountHash<hashCRC32	>(str.c_str(),str.Length(),hash_str,litter);}
+		inline bool CountMD4	(const UTF8String &str,UTF8String &hash_str,bool litter=true){return CountHash<hashMD4		>(str.c_str(),str.Length(),hash_str,litter);}
+		inline bool CountMD5	(const UTF8String &str,UTF8String &hash_str,bool litter=true){return CountHash<hashMD5		>(str.c_str(),str.Length(),hash_str,litter);}
+		inline bool CountSHA1	(const UTF8String &str,UTF8String &hash_str,bool litter=true){return CountHash<hashSHA1		>(str.c_str(),str.Length(),hash_str,litter);}
+
 		/**
 		* 取得一个文件的hash值
 		* @param filename 文件名
@@ -113,6 +215,16 @@ namespace hgl
 		* @return 是否计算成功
 		*/
 		bool GetFileHash(const OSString &,HASH_ALGORITHML ha,void *hash_code);
+		
+		/**
+		* 取得一个文件的hash值
+		* @param filename 文件名
+		* @param ha hash算法
+		* @param hash_str 计算后的hash值存放处
+		* @param litter 小写字母
+		* @return 是否计算成功
+		*/
+		bool GetFileHash(const OSString &,HASH_ALGORITHML ha,UTF8String &hash_str,bool litter=true);
 	}//namespace util
 }//namespace hgl
 #endif//HGL_UTIL_HASH_INCLUDE
