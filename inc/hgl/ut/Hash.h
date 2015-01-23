@@ -157,14 +157,14 @@ namespace hgl
 		*/
 		template<HASH_ALGORITHML ha> bool CountHash(const void *data,int size,UTF8String &hash_str,bool litter=true)
 		{
-			if(!data||size<=0||!hash_code)return(false);
+			if(!data||size<=0)return(false);
 
 			Hash *h=CreateHash<ha>();
 
 			if(!h)return(false);
 			
 			char hash_code[hash_code_bytes[ha]];
-			char hash_str[hash_code_bytes[ha]<<1];
+			char hash_code_str[hash_code_bytes[ha]<<1];
 
 			h->Init();
 			h->Update(data,size);
@@ -173,11 +173,11 @@ namespace hgl
 			delete h;
 			
 			if(litter)
-				ToLowerHexStr(hash_str,hash_code);
+				ToLowerHexStr(hash_code_str,hash_code);
 			else
-				ToUpperHexStr(hash_str,hash_code);
+				ToUpperHexStr(hash_code_str,hash_code);
 			
-			str.Set(hash_str,hash_code_bytes[ha]<<1);
+			hash_str.Set(hash_code_str,hash_code_bytes[ha]<<1);
 			return(true);
 		}
 		
