@@ -102,6 +102,24 @@ namespace hgl
 		template<> Hash *CreateHash<hashMD4		>(){return CreateMD4Hash();}
 		template<> Hash *CreateHash<hashMD5		>(){return CreateMD5Hash();}
 		template<> Hash *CreateHash<hashSHA1	>(){return CreateSHA1Hash();}
+		
+		inline Hash *CreateHash(HASH_ALGORITHML ha)
+		{
+			if(ha<=hashNone||ha>=hashEnd)return(nullptr);
+			
+			using CreateHashFunc=Hash *(*)();
+			
+			const CreateHashFunc func[hashEnd-1]=
+			{
+				CreateAdler32Hash,
+				CreateCRC32Hash,
+				CreateMD4Hash,
+				CreateMD5Hash,
+				CreateSHA1Hash
+			};
+			
+			return func[ha-1]();
+		}
 
 		/**
 		* 计算一段数据的Hash值
