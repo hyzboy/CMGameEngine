@@ -93,26 +93,26 @@ namespace hgl
 		* 计算一段数据的Hash值
 		* @param data 数据指针
 		* @param size 数据长度
-		* @param hash_code 计算后的hash值存放处
 		* @param ha hash算法
+		* @param hash_code 计算后的hash值存放处
 		* @return 是否计算成功
 		*/
-		bool CountHash(const void *data,int size,void *hash_code,HASH_ALGORITHML ha);
+		bool CountHash(const void *data,int size,HASH_ALGORITHML ha,void *hash_code);
 
-		inline bool CountAdler32(const void *data,int size,Adler32Code &hc){return CountHash(data,size,&hc,hashAdler32	);}
-		inline bool CountCRC32	(const void *data,int size,CRC32Code &	hc){return CountHash(data,size,&hc,hashCRC32	);}
-		inline bool CountMD4	(const void *data,int size,MD4Code &	hc){return CountHash(data,size,&hc,hashMD4		);}
-		inline bool CountMD5	(const void *data,int size,MD5Code &	hc){return CountHash(data,size,&hc,hashMD5		);}
-		inline bool CountSHA1	(const void *data,int size,SHA1Code &	hc){return CountHash(data,size,&hc,hashSHA1		);}
-
+		inline bool CountAdler32(const void *data,int size,Adler32Code &hc){return CountHash(data,size,hashAdler32	,&hc);}
+		inline bool CountCRC32	(const void *data,int size,CRC32Code &	hc){return CountHash(data,size,hashCRC32	,&hc);}
+		inline bool CountMD4	(const void *data,int size,MD4Code &	hc){return CountHash(data,size,hashMD4		,&hc);}
+		inline bool CountMD5	(const void *data,int size,MD5Code &	hc){return CountHash(data,size,hashMD5		,&hc);}
+		inline bool CountSHA1	(const void *data,int size,SHA1Code &	hc){return CountHash(data,size,hashSHA1		,&hc);}
+		
 		/**
 		* 取得一个文件的hash值
 		* @param filename 文件名
-		* @param hash_code 计算后的hash存放处
 		* @param ha hash算法
+		* @param hash_code 计算后的hash存放处
 		* @return 是否计算成功
 		*/
-		bool GetFileHash(const OSString &,void *hash_code,HASH_ALGORITHML ha);
+		bool GetFileHash(const OSString &,HASH_ALGORITHML ha,void *hash_code);
 	}//namespace util
 }//namespace hgl
 #endif//HGL_UTIL_HASH_INCLUDE

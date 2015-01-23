@@ -31,7 +31,7 @@ namespace hgl
 			return hash_func[ha-1]();
 		}
 
-		bool CountHash(const void *data,int size,void *hash_code,HASH_ALGORITHML ha)
+		bool CountHash(const void *data,int size,HASH_ALGORITHML ha,void *hash_code)
 		{
 			if(!data||size<=0||!hash_code||ha<=hashNone||ha>=hashEnd)return(false);
 
@@ -47,7 +47,7 @@ namespace hgl
 			return(true);
 		}
 
-		bool GetFileHash(const OSString &filename,void *hash_code,HASH_ALGORITHML ha)
+		bool GetFileHash(const OSString &filename,HASH_ALGORITHML ha,void *hash_code)
 		{
 			Hash *hash=CreateHash(ha);
 
