@@ -1928,6 +1928,9 @@ namespace hgl
 
 		*str=0;
 	}
+	
+	template<typename T> void DataToLowerHexStr(T *str,const uint8 *src,const int size){DataToHexStr(str,src,size,LowerHexChar);}
+	template<typename T> void DataToUpperHexStr(T *str,const uint8 *src,const int size){DataToHexStr(str,src,size,UpperHexChar);}
 
 	/**
 	* 将一串原始数据转转成16进制数值字符串
