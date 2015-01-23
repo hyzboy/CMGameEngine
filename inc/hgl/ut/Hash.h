@@ -172,10 +172,7 @@ namespace hgl
 
 			delete h;
 			
-			if(litter)
-				ToLowerHexStr(hash_code_str,hash_code);
-			else
-				ToUpperHexStr(hash_code_str,hash_code);
+			DataToHexStr(hash_code_str,hash_code,hash_code_bytes[ha],litter?LowerHexChar:UpperHexChar);
 			
 			hash_str.Set(hash_code_str,hash_code_bytes[ha]<<1);
 			return(true);
