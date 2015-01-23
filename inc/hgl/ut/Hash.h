@@ -163,8 +163,8 @@ namespace hgl
 
 			if(!h)return(false);
 			
-			char hash_code[hash_code_bytes[ha]];
-			char hash_code_str[hash_code_bytes[ha]<<1];
+			char *hash_code=new char[hash_code_bytes[ha]];
+			char *hash_code_str=new char[hash_code_bytes[ha]<<1];
 
 			h->Init();
 			h->Update(data,size);
@@ -175,6 +175,9 @@ namespace hgl
 			DataToHexStr(hash_code_str,hash_code,hash_code_bytes[ha],litter?LowerHexChar:UpperHexChar);
 			
 			hash_str.Set(hash_code_str,hash_code_bytes[ha]<<1);
+			
+			delete[] hash_code_str;
+			delete[] hash_code;
 			return(true);
 		}
 		
