@@ -1,4 +1,4 @@
-#include"Loader.h"
+﻿#include"Loader.h"
 #include"ods_xml_parse.h"
 #include<zip.h>
 
@@ -30,7 +30,7 @@ public:
 
 	virtual bool Load(const OSString &filename,const CharSet &)
 	{
-		if(!ods.ParseFile(filename))
+		if(!XMLParseFile(&ods,filename))
 			return(false);
 
 		PrevProcess();
