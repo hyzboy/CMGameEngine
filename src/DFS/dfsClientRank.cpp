@@ -17,7 +17,7 @@ namespace hgl
 			if(!dis->ReadInt64(ri->value))RETURN_FALSE;
 			if(!dis->ReadInt32(ri->size))RETURN_FALSE;
 
-			if(ri->size>sizeof(RankItem::data))RETURN_FALSE;
+			if (ri->size>RANK_ITEM_DATA_MAX_SIZE)RETURN_FALSE;
 
 			return(dis->ReadFully(ri->data,ri->size)==ri->size);
 		}
@@ -35,7 +35,7 @@ namespace hgl
 			if(ri->size<=0)
 				return(true);
 
-			if(ri->size>sizeof(RankItem::data))RETURN_FALSE;
+			if (ri->size>RANK_ITEM_DATA_MAX_SIZE)RETURN_FALSE;
 
 			return(dis->ReadFully(ri->data,ri->size)==ri->size);
 		}

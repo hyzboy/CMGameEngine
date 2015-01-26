@@ -11,6 +11,8 @@ namespace hgl
 
 	namespace dfs
 	{
+		#define RANK_ITEM_DATA_MAX_SIZE	(512-sizeof(int32)-(sizeof(int64)*2))
+
 		/**
 		 * 排行榜记录
 		 */
@@ -21,7 +23,7 @@ namespace hgl
 			int64	value;
 			int32	size;
 
-			char	data[512-sizeof(int32)-(sizeof(int64)*2)];
+			char	data[RANK_ITEM_DATA_MAX_SIZE];
 		};//struct RankItem
 
 		/**
