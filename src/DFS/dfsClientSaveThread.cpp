@@ -94,7 +94,7 @@ namespace hgl
 
 			block->Update((char *)(mos->GetData()),mos->Tell(),++server_version);
 
-			LOG_INFO(u8"dfsClientSaveThread["+group_name+UTF8String("] savefile:")+UTF8String(block->GetFilename()));
+			LOG_INFO(U8_TEXT("dfsClientSaveThread[")+group_name+UTF8String("] savefile:")+UTF8String(block->GetFilename()));
 // 			std::cout<<"dfsClientSaveThread["<<group_name.c_str()<<"] savefile:"<<block->GetFilename()<<std::endl;
 			mos->Unlink();										//退开关联
 

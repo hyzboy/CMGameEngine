@@ -129,7 +129,7 @@ namespace hgl
 
 				if(!tcp->dis->ReadInt64(node_id))RETURN_FALSE;
 
-				LOG_INFO(u8"Connect to DataServer \""+server_node_name+u8"\", my node id:"+UTF8String(node_id)+u8",Socket:"+UTF8String(tcp->tcp->ThisSocket));
+				LOG_INFO(U8_TEXT("Connect to DataServer \"")+server_node_name+U8_TEXT("\", my node id:")+UTF8String(node_id)+U8_TEXT(",Socket:")+UTF8String(tcp->tcp->ThisSocket));
 			}
 
 			tcp->tcp->SetBlock(true,5.0);
