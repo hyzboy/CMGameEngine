@@ -18,21 +18,21 @@ namespace hgl
 		inline	void Log(LogLevel ll,const UTF16String &str){Log(ll,str.c_str(),str.Length());}		///<输出日志
 		inline	void Log(LogLevel ll,const UTF8String &str){Log(ll,str.c_str(),str.Length());}		///<输出日志
 
-		inline	void DebugLog(LogLevel ll,const UTF16String &str,const char *filename,int line)
+		inline	void DebugLog(LogLevel ll,const UTF16String &str,const char *filename,int line,const char *funcname)
 		{
-			Log(ll,str+U16_TEXT(" in \"")+to_u16(filename)+U16_TEXT("\", ")+UTF16String(line)+U16_TEXT(" line."));
+			Log(ll,str+U16_TEXT(" in \"")+to_u16(filename)+U16_TEXT("\", ")+UTF16String(line)+U16_TEXT(" line,func:")+to_u16(funcname));
 		}
 
-		inline	void DebugLog(LogLevel ll,const UTF8String &str,const char *filename,int line)
+		inline	void DebugLog(LogLevel ll,const UTF8String &str,const char *filename,int line,const char *funcname)
 		{
-			Log(ll,str+U8_TEXT(" in \"")+UTF8String(filename)+U8_TEXT("\", ")+UTF8String(line)+U8_TEXT(" line."));
+			Log(ll,str+U8_TEXT(" in \"")+UTF8String(filename)+U8_TEXT("\", ")+UTF8String(line)+U8_TEXT(" line,func:")+UTF8String(funcname));
 		}
 
 		#ifdef LOG_INFO_SOURCE
-			#define LOG_INFO(str)		{DebugLog(llLog,	str,__FILE__,__LINE__);}
-			#define LOG_HINT(str)		{DebugLog(llHint,	str,__FILE__,__LINE__);}
-			#define LOG_PROBLEM(str)	{DebugLog(llProblem,str,__FILE__,__LINE__);}
-			#define LOG_ERROR(str)		{DebugLog(llError,	str,__FILE__,__LINE__);}
+			#define LOG_INFO(str)		{DebugLog(llLog,	str,__FILE__,__LINE__,__FUNCTION__);}
+			#define LOG_HINT(str)		{DebugLog(llHint,	str,__FILE__,__LINE__,__FUNCTION__);}
+			#define LOG_PROBLEM(str)	{DebugLog(llProblem,str,__FILE__,__LINE__,__FUNCTION__);}
+			#define LOG_ERROR(str)		{DebugLog(llError,	str,__FILE__,__LINE__,__FUNCTION__);}
 		#else
 			#define LOG_INFO(str)		{Log(llLog,		str);}
 			#define LOG_HINT(str)		{Log(llHint,	str);}
@@ -40,9 +40,9 @@ namespace hgl
 			#define LOG_ERROR(str)		{Log(llError,	str);}
 		#endif//LOG_INFO_SOURCE
 
-		#define RETURN_FALSE		{DebugLog(llLog,OS_TEXT("return(false)"							),__FILE__,__LINE__);return(false);}
-		#define RETURN_ERROR(v)		{DebugLog(llLog,OS_TEXT("return error(")+OSString(v)+OS_TEXT(")"),__FILE__,__LINE__);return(v);}
-		#define RETURN_ERROR_NULL	{DebugLog(llLog,OS_TEXT("return error(nullptr)"					),__FILE__,__LINE__);return(nullptr);}
+		#define RETURN_FALSE		{DebugLog(llLog,OS_TEXT("return(false)"							),__FILE__,__LINE__,__FUNCTION__);return(false);}
+		#define RETURN_ERROR(v)		{DebugLog(llLog,OS_TEXT("return error(")+OSString(v)+OS_TEXT(")"),__FILE__,__LINE__,__FUNCTION__);return(v);}
+		#define RETURN_ERROR_NULL	{DebugLog(llLog,OS_TEXT("return error(nullptr)"					),__FILE__,__LINE__,__FUNCTION__);return(nullptr);}
 
 		#define RETURN_BOOL(proc)	{if(proc)return(true);RETURN_FALSE}
 #else
