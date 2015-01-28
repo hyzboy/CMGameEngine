@@ -125,11 +125,11 @@ namespace hgl
 
 		glTexture2D::glTexture2D()
 		{
-#ifdef HGL_USE_OPENGL_CORE_45
+#ifdef HGL_OPENGL_USE_DSA
 			glCreateTextures(GL_TEXTURE_2D,1,&index);
 #else
 			glGenTextures(1,&index);
-#endif//HGL_USE_OPENGL_CORE_45
+#endif//HGL_OPENGL_USE_DSA
 		}
 
 		glTexture2D::~glTexture2D()
@@ -171,26 +171,26 @@ namespace hgl
 
 			glGetError();			//清除错误
 
-			#ifndef HGL_USE_OPENGL_CORE_45
+			#ifndef HGL_OPENGL_USE_DSA
 				BindTexture(0,GL_TEXTURE_2D,index);				//4.5之后提交纹理不用bind
-			#endif//HGL_USE_OPENGL_CORE_45
+			#endif//HGL_OPENGL_USE_DSA
 
 			if(sfmt->compress)		//原本就是压缩格式
 			{
-			#ifdef HGL_USE_OPENGL_CORE_45
+			#ifdef HGL_OPENGL_USE_DSA
 				glCompressedTextureSubImage2D(index,0,0,0,w,h,vf,image_size,data);
 			#else
 				glCompressedTexImage2D(GL_TEXTURE_2D,0,vf,w,h,0,image_size,data);
-			#endif//HGL_USE_OPENGL_CORE_45
+			#endif//HGL_OPENGL_USE_DSA
 			}
 			else					//正常非压缩格式
 			{
-			#ifdef HGL_USE_OPENGL_CORE_45
+			#ifdef HGL_OPENGL_USE_DSA
 				glTextureStorage2D(index,1,vf,w,h);
 				glTextureSubImage2D(index,0,0,0,w,h,sfmt->format,sfmt->type,data);
 			#else
 				glTexImage2D(GL_TEXTURE_2D,0,vf,w,h,0,sfmt->format,sfmt->type,data);
-			#endif//HGL_USE_OPENGL_CORE_45
+			#endif//HGL_OPENGL_USE_DSA
 			}
 
 			const GLenum gl_error=glGetError();
@@ -202,11 +202,11 @@ namespace hgl
 
 			if(gen_mip)
 			{
-				#ifdef HGL_USE_OPENGL_CORE_45
+				#ifdef HGL_OPENGL_USE_DSA
 					glGenerateTextureMipmap(index);
 				#else
 					glGenerateMipmap(GL_TEXTURE_2D);
-				#endif//HGL_USE_OPENGL_CORE_45
+				#endif//HGL_OPENGL_USE_DSA
 
 //					glTexEnvf(GL_TEXTURE_FILTER_CONTROL,GL_TEXTURE_LOD_BIAS,-1.5f);		//设置LOD偏向,负是更精细，正是更模糊
 			}
@@ -219,7 +219,7 @@ namespace hgl
 				wrap_t=GL_REPEAT;
 
 				//未来使用Sampler Object，则不再需要以下部分
-	#ifdef HGL_USE_OPENGL_CORE_45
+	#ifdef HGL_OPENGL_USE_DSA
 				glTextureParameteri(index,GL_TEXTURE_MIN_FILTER,min_filter);
 				glTextureParameteri(index,GL_TEXTURE_MAG_FILTER,mag_filter);
 				//glTextureParameteri(index,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
@@ -233,7 +233,7 @@ namespace hgl
 				//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
 				glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
 				glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
-	#endif//HGL_USE_OPENGL_CORE_45
+	#endif//HGL_OPENGL_USE_DSA
 			}
 
 			return(true);
@@ -241,7 +241,7 @@ namespace hgl
 
 		void glTexture2D::GetMipmapLevel(int &base_level,int &max_level)
 		{
-			#ifdef HGL_USE_OPENGL_CORE_45
+			#ifdef HGL_OPENGL_USE_DSA
 				glGetTextureParameteriv(index,GL_TEXTURE_BASE_LEVEL,&base_level);
 				glGetTextureParameteriv(index,GL_TEXTURE_MAX_LEVEL,&max_level);
 			#else
@@ -249,7 +249,7 @@ namespace hgl
 
 				glGetTexParameteriv(GL_TEXTURE_2D,GL_TEXTURE_BASE_LEVEL,&base_level);
 				glGetTexParameteriv(GL_TEXTURE_2D,GL_TEXTURE_MAX_LEVEL,&max_level);
-			#endif//HGL_USE_OPENGL_CORE_45
+			#endif//HGL_OPENGL_USE_DSA
 		}
 
 		int glTexture2D::GetImage(void *data_pointer,TSF fmt,int level)
@@ -269,7 +269,7 @@ namespace hgl
 
 			const OpenGLCoreTextureFormat *tsf=tf_list+fmt;
 
-			#ifdef HGL_USE_OPENGL_CORE_45
+			#ifdef HGL_OPENGL_USE_DSA
 				glGetTextureLevelParameteriv(index,level,GL_TEXTURE_COMPRESSED,&compress);
 
 				if(compress)
@@ -309,7 +309,7 @@ namespace hgl
 					if(data_pointer)
 						glGetTexImage(GL_TEXTURE_2D,level,tsf->format,tsf->type,data_pointer);
 				}
-			#endif//HGL_USE_OPENGL_CORE_45
+			#endif//HGL_OPENGL_USE_DSA
 
 			return(bytes);
 		}
@@ -329,7 +329,7 @@ namespace hgl
 
 			const OpenGLCoreTextureFormat *sfmt=tf_list+sf;		//原始数据格式
 
-			#ifdef HGL_USE_OPENGL_CORE_45
+			#ifdef HGL_OPENGL_USE_DSA
 				if(sfmt->compress)
 					glCompressedTextureSubImage2D(index,0,l,t,w,h,sfmt->internalFormat,bytes,data);
 				else
@@ -341,7 +341,7 @@ namespace hgl
 					glCompressedTexSubImage2D(GL_TEXTURE_2D,0,l,t,w,h,sfmt->internalFormat,bytes,data);
 				else
 					glTexSubImage2D(GL_TEXTURE_2D,0,l,t,w,h,sfmt->format,sfmt->type,data);
-			#endif//HGL_USE_OPENGL_CORE_45
+			#endif//HGL_OPENGL_USE_DSA
 
 			return(true);
 		}
@@ -352,13 +352,13 @@ namespace hgl
 
 			min_filter=mf;
 
-			#ifdef HGL_USE_OPENGL_CORE_45
+			#ifdef HGL_OPENGL_USE_DSA
 				glTextureParameteri(index,GL_TEXTURE_MIN_FILTER,min_filter);
 			#else
 				BindTexture(0,GL_TEXTURE_2D,index);
 
 				glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,min_filter);
-			#endif//HGL_USE_OPENGL_CORE_45
+			#endif//HGL_OPENGL_USE_DSA
 		}
 
 		void glTexture2D::SetMagFilter(uint mf)
@@ -367,13 +367,13 @@ namespace hgl
 
 			mag_filter=mf;
 
-			#ifdef HGL_USE_OPENGL_CORE_45
+			#ifdef HGL_OPENGL_USE_DSA
 				glTextureParameteri(index,GL_TEXTURE_MAG_FILTER,mag_filter);
 			#else
 				BindTexture(0,GL_TEXTURE_2D,index);
 
 				glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,mag_filter);
-			#endif//HGL_USE_OPENGL_CORE_45
+			#endif//HGL_OPENGL_USE_DSA
 		}
 
 		void glTexture2D::SetWrapS(uint wrap)
@@ -382,13 +382,13 @@ namespace hgl
 
 			wrap_s=wrap;
 
-			#ifdef HGL_USE_OPENGL_CORE_45
+			#ifdef HGL_OPENGL_USE_DSA
 				glTextureParameteri(index,GL_TEXTURE_WRAP_S,wrap_s);
 			#else
 				BindTexture(0,GL_TEXTURE_2D,index);
 
 				glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,wrap_s);
-			#endif//HGL_USE_OPENGL_CORE_45
+			#endif//HGL_OPENGL_USE_DSA
 		}
 
 		void glTexture2D::SetWrapT(uint wrap)
@@ -397,13 +397,13 @@ namespace hgl
 
 			wrap_t=wrap;
 
-			#ifdef HGL_USE_OPENGL_CORE_45
+			#ifdef HGL_OPENGL_USE_DSA
 				glTextureParameteri(index,GL_TEXTURE_WRAP_T,wrap_t);
 			#else
 				BindTexture(0,GL_TEXTURE_2D,index);
 
 				glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,wrap_t);
-			#endif//HGL_USE_OPENGL_CORE_45
+			#endif//HGL_OPENGL_USE_DSA
 		}
 
 		Texture2D *CreateTexture2D()

@@ -25,17 +25,17 @@
 #  endif
 #endif
 
-static int opengl_core_ext_number=0;
-static char **opengl_core_ext_string=0;
+static int opengl_core_ext_number = 0;
+static char **opengl_core_ext_string = 0;
 
-GLboolean glewGetExtension (const char *name)
+GLboolean glewGetExtension(const char *name)
 {
 	int i;
 
-	if(opengl_core_ext_number==0)return(GL_FALSE);
+	if (opengl_core_ext_number == 0)return(GL_FALSE);
 
-	for(i=0;i<opengl_core_ext_number;i++)
-		if(!strcmp(opengl_core_ext_string[i],name))
+	for (i = 0; i < opengl_core_ext_number; i++)
+		if (!strcmp(opengl_core_ext_string[i], name))
 			return(GL_TRUE);
 
 	return(GL_FALSE);
@@ -62,12 +62,47 @@ void OpenGL_Ext_DSA()
 	if (GLEW_VERSION_4_5)
 		return;
 
-	//if (GLEW_ARB_direct_state_access
-	//	|| GLEW_EXT_direct_state_access)
-	//{
-	//	OPENGL_EXT_TO_STANDARD(TextureParameteri)
-	//}
+	if (GLEW_ARB_direct_state_access)
+	{
+//		OPENGL_ARB_TO_STANDARD(TextureParameteri)
+		return;
+	}
+
+	if(GLEW_EXT_direct_state_access)
+	{
+		OPENGL_EXT_TO_STANDARD(TextureParameteri)
+		return;
+	}
 }
+
+//void glBindTexturesSOFTWARE(GLuint first, GLsizei count, const GLuint *textures)
+//{
+//	for (i = 0; i < count; i++) 
+//	{
+//		GLuint texture;
+//		if (textures == NULL) 
+//		{
+//			texture = 0;
+//		}
+//		else 
+//		{
+//			texture = textures[i];
+//		}
+//
+//		glActiveTexture(GL_TEXTURE0 + first + i);
+//
+//		if (texture != 0) 
+//		{
+//			GLenum target = /* target of textures[i] */;
+//			glBindTexture(target, textures[i]);
+//		}
+//		else {
+//			for (target in all supported targets) {
+//				glBindTexture(target, 0);
+//			}
+//		}
+//	}
+//}
 
 void InitOpenGLCoreExtensions()
 {
@@ -75,28 +110,28 @@ void InitOpenGLCoreExtensions()
 
 	PFNGLGETSTRINGIPROC getfunc;
 
-	getfunc=(PFNGLGETSTRINGIPROC)glewGetProcAddress((const GLubyte*)"glGetStringi");		//此函数opengl 3.0才有
+	getfunc = (PFNGLGETSTRINGIPROC)glewGetProcAddress((const GLubyte*)"glGetStringi");		//此函数opengl 3.0才有
 
-	glGetIntegerv(GL_NUM_EXTENSIONS,&opengl_core_ext_number);
+	glGetIntegerv(GL_NUM_EXTENSIONS, &opengl_core_ext_number);
 
-	opengl_core_ext_string=malloc(opengl_core_ext_number*sizeof(char *));
+	opengl_core_ext_string = malloc(opengl_core_ext_number*sizeof(char *));
 
-	for(i=0;i<opengl_core_ext_number;i++)
-		opengl_core_ext_string[i]=(char *)getfunc(GL_EXTENSIONS,i);
+	for (i = 0; i < opengl_core_ext_number; i++)
+		opengl_core_ext_string[i] = (char *)getfunc(GL_EXTENSIONS, i);
 
 	OpenGL_Ext_DSA();
 }
 
 void ClearOpenGLCoreExtension()
 {
-	if(opengl_core_ext_string)
+	if (opengl_core_ext_string)
 	{
 		free(opengl_core_ext_string);
 
-		opengl_core_ext_string=0;
+		opengl_core_ext_string = 0;
 	}
 
-	opengl_core_ext_number=0;
+	opengl_core_ext_number = 0;
 }
 #undef OPENGL_ARB_EXT_TO_STANDARD
 #undef OPENGL_EXT_TO_STANDARD

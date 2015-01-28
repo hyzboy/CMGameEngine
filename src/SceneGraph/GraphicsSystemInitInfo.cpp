@@ -53,13 +53,13 @@ namespace hgl
 				graphics.gl.glsl=true;
 				graphics.gl.multi_texture=true;
 
-#ifdef HGL_USE_OPENGL_CORE_45
+#ifdef HGL_OPENGL_USE_DSA
 				graphics.gl.major=4;
 				graphics.gl.minor=5;
 #else
 				graphics.gl.major=3;
 				graphics.gl.minor=3;
-#endif//HGL_USE_OPENGL_CORE_45
+#endif//HGL_OPENGL_USE_DSA
 
 				graphics.gl.debug=false;
 				graphics.gl.opengl_es=false;

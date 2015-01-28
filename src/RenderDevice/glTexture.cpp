@@ -82,7 +82,7 @@ namespace hgl
 			 &&index==texture_index[active])						//也绑定的是这个贴图
 					return(true);
 
-#ifdef HGL_USE_OPENGL_CORE_45
+#ifdef HGL_OPENGL_USE_DSA
 				glBindTextureUnit(active,index);						//注：使用数字的纹理号active，而不是GL_TEXTURE0+active
 #else
 				if(current_active_texture!=active)						//如果活动贴图编号不一致
@@ -102,7 +102,7 @@ namespace hgl
 				}
 
 				glBindTexture(type,index);
-#endif//HGL_USE_OPENGL_CORE_45
+#endif//HGL_OPENGL_USE_DSA
 
 			texture_index[active]=index;
 

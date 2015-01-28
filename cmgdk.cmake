@@ -36,11 +36,11 @@ IF(BUILD_OPENGL_LIB)
 		message("Use OpenGL Core")
 		find_package(OpenGL REQUIRED)
 
-		OPTION(OPENGL_CORE_45			"Use OpenGL Core 4.5"	FALSE)
+		OPTION(OPENGL_DSA			"Use OpenGL Direct State Access"	FALSE)
 
-		IF(OPENGL_CORE_45)
-			add_definitions("-DHGL_USE_OPENGL_CORE_45")
-			message("Use OpenGL Core 4.5 API")
+		IF(OPENGL_DSA)
+			add_definitions("-DHGL_OPENGL_USE_DSA")
+			message("Use OpenGL Direct State Access")
 		ENDIF()
 
 		IF(UNIX)
