@@ -92,6 +92,28 @@ namespace hgl
 	#define HGL_SIZE_1ZB	(HGL_SIZE_1EB*1024LL)
 	#define HGL_SIZE_1YB	(HGL_SIZE_1ZB*1024LL)
 
+	#define HGL_U8_MAX		0xFF
+	#define HGL_U16_MAX		0xFFFF
+	#define HGL_U32_MAX		0xFFFFFFFF
+	#define HGL_U64_MAX		0xFFFFFFFFFFFFFFFFLL
+
+	#define HGL_S8_MAX		0x7F
+	#define HGL_S16_MAX		0x7FFF
+	#define HGL_S32_MAX		0x7FFFFFFF
+	#define HGL_S64_MAX		0x7FFFFFFFFFFFFFFFLL
+
+	#define HGL_S8_MIN		-0x80
+	#define HGL_S16_MIN		-0x8000
+	#define HGL_S32_MIN		-0x80000000
+	#define HGL_S64_MIN		-0x8000000000000000LL
+
+	template<typename T> T HGL_UINT_MAX();
+
+	template<> uint8 HGL_UINT_MAX() { return HGL_U8_MAX; }
+	template<> uint16 HGL_UINT_MAX() { return HGL_U16_MAX; }
+	template<> uint32 HGL_UINT_MAX() { return HGL_U32_MAX; }
+	template<> uint64 HGL_UINT_MAX() { return HGL_U64_MAX; }
+
 	/**
 	 * 星期每天枚举
 	 */
