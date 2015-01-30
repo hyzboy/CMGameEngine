@@ -1,0 +1,1840 @@
+<!DOCTYPE html>
+<html lang="en"><!--
+	generated in 0.469 seconds
+	98191 bytes batcached for 300 seconds
+--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simple VM JIT with LLVM | Mirthful Snowflake</title>
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<link rel="pingback" href="http://blog.fallingsnow.net/xmlrpc.php">
+
+		<script src="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/remote-login.php" type="text/javascript"></script>
+		<script type="text/javascript">
+		/* <![CDATA[ */
+			if ( 'function' === typeof WPRemoteLogin ) {
+				document.cookie = "wordpress_test_cookie=test; path=/";
+				if ( document.cookie.match( /(;|^)\s*wordpress_test_cookie\=/ ) ) {
+					WPRemoteLogin();
+				}
+			}
+		/* ]]> */
+		</script>
+		<link rel="alternate" type="application/rss+xml" title="Mirthful Snowflake » Feed" href="http://blog.fallingsnow.net/feed/">
+<link rel="alternate" type="application/rss+xml" title="Mirthful Snowflake » Comments Feed" href="http://blog.fallingsnow.net/comments/feed/">
+<link rel="alternate" type="application/rss+xml" title="Mirthful Snowflake » Simple VM JIT with&nbsp;LLVM Comments Feed" href="http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/feed/">
+<script type="text/javascript">
+/* <![CDATA[ */
+function addLoadEvent(func){var oldonload=window.onload;if(typeof window.onload!='function'){window.onload=func;}else{window.onload=function(){oldonload();func();}}}
+/* ]]> */
+</script>
+<link rel="stylesheet" id="all-css-0" href="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/a.css" type="text/css" media="all">
+<link rel="stylesheet" id="kelly-fonts-css" href="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/css.css" type="text/css" media="all">
+<link rel="stylesheet" id="all-css-2" href="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/a_002.css" type="text/css" media="all">
+<link rel="stylesheet" id="print-css-2" href="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/global-print.css" type="text/css" media="print">
+<script type="text/javascript">
+/* <![CDATA[ */
+var LoggedOutFollow = {"invalid_email":"Your subscription did not succeed, please try again with a valid email address."};
+/* ]]> */
+</script>
+<script type="text/javascript" src="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/a.js"></script>
+<link rel="stylesheet" id="all-css-0" href="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/style.css" type="text/css" media="all">
+<!--[if lt IE 8]>
+<link rel='stylesheet' id='highlander-comments-ie7-css'  href='https://s2.wp.com/wp-content/mu-plugins/highlander-comments/style-ie7.css?m=1351637563g&#038;ver=20110606' type='text/css' media='all' />
+<![endif]-->
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://evanphx.wordpress.com/xmlrpc.php?rsd">
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://s1.wp.com/wp-includes/wlwmanifest.xml"> 
+<link rel="prev" title="Rails on Rubinius" href="http://blog.fallingsnow.net/2008/05/17/rails-on-rubinius/">
+<link rel="next" title="Code Drive at&nbsp;RailsConf" href="http://blog.fallingsnow.net/2008/05/26/code-drive-at-railsconf/">
+<meta name="generator" content="WordPress.com">
+<link rel="canonical" href="http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/">
+<link rel="shortlink" href="http://wp.me/p6mAA-K">
+<link rel="alternate" type="application/json+oembed" href="https://public-api.wordpress.com/oembed/1.0/?format=json&amp;url=http%3A%2F%2Fblog.fallingsnow.net%2F2008%2F05%2F23%2Fsimple-vm-jit-with-llvm%2F&amp;for=wpcom-auto-discovery"><link rel="alternate" type="application/xml+oembed" href="https://public-api.wordpress.com/oembed/1.0/?format=xml&amp;url=http%3A%2F%2Fblog.fallingsnow.net%2F2008%2F05%2F23%2Fsimple-vm-jit-with-llvm%2F&amp;for=wpcom-auto-discovery">
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Simple VM JIT with LLVM">
+<meta property="og:url" content="http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/">
+<meta property="og:description" content="I've been investigating using LLVM for Rubinius, so I've been doing some very small scale experiments. I typically do this on most projects, to get a mental handle on the problem. In doing this, I'...">
+<meta property="article:published_time" content="2008-05-24T01:03:54+00:00">
+<meta property="article:modified_time" content="2008-05-24T06:54:48+00:00">
+<meta property="article:author" content="http://blog.fallingsnow.net/author/evanphx/">
+<meta property="og:site_name" content="Mirthful Snowflake">
+<meta property="og:image" content="https://s0.wp.com/i/blank.jpg">
+<meta name="twitter:site" content="@evanphx">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@evanphx">
+<meta property="article:publisher" content="https://www.facebook.com/WordPresscom">
+<link rel="shortcut icon" type="image/x-icon" href="http://s2.wp.com/i/favicon.ico?m=1405977958g" sizes="16x16 24x24 32x32 48x48">
+<link rel="icon" type="image/x-icon" href="http://s2.wp.com/i/favicon.ico?m=1405977958g" sizes="16x16 24x24 32x32 48x48">
+<link rel="apple-touch-icon-precomposed" href="http://s0.wp.com/i/webclip.png?m=1391188133g">
+<link rel="openid.server" href="http://evanphx.wordpress.com/?openidserver=1">
+<link rel="openid.delegate" href="http://evanphx.wordpress.com/">
+<link rel="search" type="application/opensearchdescription+xml" href="http://blog.fallingsnow.net/osd.xml" title="Mirthful Snowflake">
+<link rel="search" type="application/opensearchdescription+xml" href="http://wordpress.com/opensearch.xml" title="WordPress.com">
+		<style type="text/css">
+			.recentcomments a {
+				display: inline !important;
+				padding: 0 !important;
+				margin: 0 !important;
+			}
+
+			table.recentcommentsavatartop img.avatar, table.recentcommentsavatarend img.avatar {
+				border: 0px;
+				margin: 0;
+			}
+
+			table.recentcommentsavatartop a, table.recentcommentsavatarend a {
+				border: 0px !important;
+				background-color: transparent !important;
+			}
+
+			td.recentcommentsavatarend, td.recentcommentsavatartop {
+				padding: 0px 0px 1px 0px;
+				margin: 0px;
+			}
+
+			td.recentcommentstextend {
+				border: none !important;
+				padding: 0px 0px 2px 10px;
+			}
+
+			.rtl td.recentcommentstextend {
+				padding: 0px 10px 2px 0px;
+			}
+
+			td.recentcommentstexttop {
+				border: none;
+				padding: 0px 0px 0px 10px;
+			}
+
+			.rtl td.recentcommentstexttop {
+				padding: 0px 10px 0px 0px;
+			}
+		</style>
+		<style type="text/css">
+.widget_twitter li {
+	word-wrap: break-word;
+}
+</style>
+<meta name="application-name" content="Mirthful Snowflake"><meta name="msapplication-window" content="width=device-width;height=device-height"><meta name="msapplication-tooltip" content="life and tech stuff by Evan Phoenix"><meta name="msapplication-task" content="name=Subscribe;action-uri=http://blog.fallingsnow.net/feed/;icon-uri=http://s2.wp.com/i/favicon.ico"><meta name="msapplication-task" content="name=Sign up for a free blog;action-uri=http://wordpress.com/signup/;icon-uri=http://s2.wp.com/i/favicon.ico"><meta name="msapplication-task" content="name=WordPress.com Support;action-uri=http://support.wordpress.com/;icon-uri=http://s2.wp.com/i/favicon.ico"><meta name="msapplication-task" content="name=WordPress.com Forums;action-uri=http://forums.wordpress.com/;icon-uri=http://s2.wp.com/i/favicon.ico"><meta name="title" content="Simple VM JIT with&nbsp;LLVM | Mirthful Snowflake on WordPress.com">
+<meta name="description" content="I've been investigating using LLVM for Rubinius, so I've been doing some very small scale experiments. I typically do this on most projects, to get a mental handle on the problem. In doing this, I've written a very tiny VM to play with how LLVM handles it. Here is the breakdown of the entire VM:…">
+<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #fff; }
+</style>
+
+<script type="text/javascript" src="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/google_service.js">
+</script>
+<script type="text/javascript">
+if ( typeof GS_googleAddAdSenseService == 'function' ) { GS_googleAddAdSenseService("ca-pub-3443918307802676"); }
+if ( typeof GS_googleEnableAllServices == 'function' ) { GS_googleEnableAllServices() };
+</script><script type="text/javascript">
+if ( typeof GA_googleAddSlot == 'function' ) { GA_googleAddSlot("ca-pub-3443918307802676", "wpcom_below_post"); }
+</script>
+<script type="text/javascript">
+if ( typeof GA_googleFetchAds == 'function' ) { GA_googleFetchAds(); }
+</script>
+
+<script type="text/javascript">
+var wpcom_ads = { bid: 1516804, pt: 'permalink', wa: 0, as: 0, domain: 'blog.fallingsnow.net', url: 'http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/', gid: '', };
+</script>
+<style type="text/css" id="syntaxhighlighteranchor"></style>
+<script type="text/javascript">
+	window.google_analytics_uacct = "UA-52447-2";
+</script>
+
+<script type="text/javascript">
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-52447-2']);
+	_gaq.push(['_setDomainName', 'none']);
+	_gaq.push(['_setAllowLinker', true]);
+	_gaq.push(['_initData']);
+	_gaq.push(['_trackPageview']);
+
+	(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+	})();
+</script><script src="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/ga.js" async="" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" id="gravatar-card-css" href="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/hovercard.css"><link rel="stylesheet" type="text/css" id="gravatar-card-services-css" href="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/services.css"><style type="text/css"> #fi #fic {margin-right:100px !important}  #fi #rh {margin-left:-115px !important;width:95px !important}  #fi .rh {display:none !important}  body:not(.xE) div[role='main'] .Bu:not(:first-child) {display: none !important} </style><link rel="stylesheet" href="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/main2.css" type="text/css"><script src="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/a" async="" type="text/javascript"></script><link href="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/sbi.css" rel="stylesheet" type="text/css" id="sbi-style"></head>
+
+<body data-twttr-rendered="true" ryt14009="1" class="single single-post postid-46 single-format-standard custom-background mp6 customizer-styles-applied highlander-enabled highlander-light">
+<div id="page" class="hfeed site">
+			<header id="masthead" class="site-header" role="banner">
+		<div class="header-background"></div>
+		<div class="site-branding">
+			<h1 class="site-title"><a sl-processed="1" href="http://blog.fallingsnow.net/" rel="home">Mirthful Snowflake</a></h1>
+			<h2 class="site-description">life and tech stuff by Evan Phoenix</h2>
+		</div>
+
+		<nav id="site-navigation" class="main-navigation" role="navigation">
+			<h1 class="menu-toggle">Menu</h1>
+			<a sl-processed="1" class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+			<div class="nav-menu"><ul class=" nav-menu"><li><a sl-processed="1" href="http://blog.fallingsnow.net/">Home</a></li><li class="page_item page-item-2"><a sl-processed="1" href="http://blog.fallingsnow.net/about/">About</a></li><li class="page_item page-item-6"><a sl-processed="1" href="http://blog.fallingsnow.net/rubinius/">rubinius</a></li></ul></div>
+		</nav><!-- #site-navigation -->
+	</header><!-- #masthead -->
+
+	<div id="content" class="site-content">
+
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		
+			
+<article id="post-46" class="post-46 post type-post status-publish format-standard hentry category-cs category-llvm">
+		<header class="entry-header">
+					<h1 class="entry-title">Simple VM JIT with&nbsp;LLVM</h1>
+		
+		<div class="entry-meta">
+			<span class="posted-on">Posted on <a sl-processed="1" href="http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/" rel="bookmark"><time class="entry-date published" datetime="2008-05-23T18:03:54+00:00">May 23, 2008</time><time class="updated" datetime="2008-05-23T23:54:48+00:00">May 23, 2008</time></a></span><span class="byline"> by <span class="author vcard"><a sl-processed="1" class="url fn n" href="http://blog.fallingsnow.net/author/evanphx/">evanphx</a></span></span>		</div><!-- .entry-meta -->
+	</header><!-- .entry-header -->
+
+	<div class="entry-content">
+		<p>
+I’ve been investigating using <a sl-processed="1" href="http://llvm.org/">LLVM</a> for <a sl-processed="1" href="http://rubini.us/">Rubinius</a>,
+ so I’ve been doing some very small scale experiments. I typically do 
+this on most projects, to get a mental handle on the problem.
+</p>
+<p>
+In doing this, I’ve written a very tiny VM to play with how LLVM handles it. Here is the breakdown of the entire VM:</p>
+<ul>
+<li>Only operates on <em>int</em>s.
+</li><li>Uses numbered registers for operations.
+</li><li>3 Instructions:
+<ol start="0">
+<li><b>set(reg, val)</b> Set register number <em>reg</em> to integer value <em>val</em></li>
+<li><b>add(result, reg, val)</b> Add register <em>reg</em> to <em>val</em> and put the result in result</li>
+<li><b>show(reg)</b> Print out the contents of register <em>reg</em></li>
+</ol>
+</li>
+</ul>
+<p>
+Pretty trivial. Not turing complete because there is no branching. But 
+it’s simple enough to explore how to handle bytecode in LLVM.
+</p>
+<p></p><h3>Sample Program</h3>
+<p>So, I’ve written a sample program, encoded directly as bytecode:</p>
+<pre>  [ 0, 0, 3,
+    1, 0, 0, 4,
+    2, 0 ]
+</pre>
+<p>
+This is:</p>
+<ul>
+<li>Set register <em>0</em> to <em>3</em></li>
+<li>Add register <em>0</em> to <em>4</em> and put the result in register <em>0</em></li>
+<li>Show register <em>0</em></li>
+</ul>
+<p>
+Again, totally trivial. Should just output 7.
+</p>
+<p></p><h3>C Switch</h3>
+<p>So, the VM Design 101 way is to build a C switch statement to 
+interpret each bytecode and perform it’s operations. It would look like 
+this, given that <em>int ops[]</em> contains the above integer sequence for the program:<br>
+
+</p><pre>void add(int* ops, int* registers) {
+  registers[ops[1]] = registers[ops[2]] + ops[3];
+}
+
+void set(int* ops, int* registers) {
+  registers[ops[1]] = ops[2];
+}
+
+void show(int* ops, int* registers) {
+  printf("=&gt; %d\n", registers[ops[1]]);
+}
+
+void run(int* ops, int* registers) {
+  switch(*ops) {
+  case 0:
+	set(ops, registers);
+	ops += 3;
+    break;
+  case 1:
+	add(ops, registers);
+	ops += 4;
+    break;
+  case 2:
+	show(ops, registers);
+    return;
+  }
+}
+</pre>
+<p>
+Very easy. We increments ops to move forward, using ops as a pointer to 
+the current instruction. This is how every VM starts. But this code is 
+very slow when compared to machine code because it obscures the 
+execution flow from the CPU. And besides, this doesn’t use LLVM, the 
+whole point of this post.
+</p>
+<h3>A static result…</h3>
+<p>As we look at the code that was run, we see that the program is set, 
+add, then show. Lets pretend for a sec that given the above functions, 
+we want to perform the same operation, we’d write:</p>
+<pre>void my_program() {
+  int registers[2] = {0, 0};
+  int program[10] = [ 0, 0, 3,
+                      1, 0, 0, 4,
+                      2, 0 ]
+
+  int* ops = (int*)program;
+
+  set(ops, registers);
+  ops += 3;
+  add(ops, registers);
+  ops += 4;
+  show(ops, registers);
+  ops += 2;
+}
+</pre>
+<p>
+So, <em>my_program</em> would perform the same operations as your 
+bytecode above, and considerable faster because we avoid all the 
+overhead the switch statement.
+</p>
+<p></p><h3>Combining the 2</h3>
+<p>If you look at the bytecode, than the at the hand written C, we can 
+see that there there is a programmatic way to go from our array of 
+numbers to the C code.</p>
+<p>
+A common approach that people have taken in the past to actually write a
+ C code emitter, that would parse the integers once, spit out a .c file,
+ which you’d compile, then run. This works ok for some situations, but 
+it doesn’t allow for any kind of dynamic abilities to run code. And 
+besides, it doesn’t use LLVM.
+</p>
+<p>
+The idea is to write a function thats takes as input the array of 
+numbers and dynamically builds the equivalent of the above C function. 
+And thats where LLVM comes in.
+</p>
+<p></p><h4>Part 1: importing the functions</h4>
+<p>A key part to this scheme is to have the add/set/show functions we 
+defined above available to LLVM. Doing so lets us use our normal tools 
+to write the each instruction as a small operation that can easily be 
+tested. So, given that we have put those 3 functions into ops.c, we run:<br>
+<code>llvm-gcc -emit-llvm -O3 -c ops.c</code>, which generates <em>ops.o</em> as a LLVM bitcode file. Using <code>llvm-dis &lt; ops.o</code> we see it contains:</p>
+<pre>@.str = internal constant [7 x i8] c"=&gt; %dA0"		;  [#uses=1]
+
+define void @add(i32* %ops, i32* %registers) nounwind  {
+entry:
+	%tmp1 = getelementptr i32* %ops, i32 1		;  [#uses=1]
+	%tmp2 = load i32* %tmp1, align 4		;  [#uses=1]
+	%tmp4 = getelementptr i32* %ops, i32 2		;  [#uses=1]
+	%tmp5 = load i32* %tmp4, align 4		;  [#uses=1]
+	%tmp7 = getelementptr i32* %registers, i32 %tmp5		;  [#uses=1]
+	%tmp8 = load i32* %tmp7, align 4		;  [#uses=1]
+	%tmp10 = getelementptr i32* %ops, i32 3		;  [#uses=1]
+	%tmp11 = load i32* %tmp10, align 4		;  [#uses=1]
+	%tmp12 = add i32 %tmp11, %tmp8		;  [#uses=1]
+	%tmp14 = getelementptr i32* %registers, i32 %tmp2		;  [#uses=1]
+	store i32 %tmp12, i32* %tmp14, align 4
+	ret void
+}
+
+define void @set(i32* %ops, i32* %registers) nounwind  {
+entry:
+	%tmp1 = getelementptr i32* %ops, i32 1		;  [#uses=1]
+	%tmp2 = load i32* %tmp1, align 4		;  [#uses=1]
+	%tmp4 = getelementptr i32* %ops, i32 2		;  [#uses=1]
+	%tmp5 = load i32* %tmp4, align 4		;  [#uses=1]
+	%tmp7 = getelementptr i32* %registers, i32 %tmp2		;  [#uses=1]
+	store i32 %tmp5, i32* %tmp7, align 4
+	ret void
+}
+
+declare i32 @printf(i8*, ...) nounwind 
+
+define void @show(i32* %ops, i32* %registers) nounwind  {
+entry:
+	%tmp1 = getelementptr i32* %ops, i32 1		;  [#uses=1]
+	%tmp2 = load i32* %tmp1, align 4		;  [#uses=1]
+	%tmp4 = getelementptr i32* %registers, i32 %tmp2		;  [#uses=1]
+	%tmp5 = load i32* %tmp4, align 4		;  [#uses=1]
+	%tmp7 = tail call i32 (i8*, ...)* @printf( i8* getelementptr ([7 x i8]* @.str, i32 0, i32 0), i32 %tmp5 ) nounwind 		;  [#uses=0]
+	ret void
+}
+</pre>
+<p>
+Now we have our functions ready for easy importing.
+</p>
+<p></p><h4>Phase 2: LLVM C++ API</h4>
+<p>When I did this experiment, I decided that the function that, given 
+an array of ints, would drive the LLVM, wasn’t necessary. After all, all
+ I was concerned was if the output of that process would actually work. 
+So instead, I hand wrote a function that uses the LLVM C++ api the same 
+way it would be if this were dynamic:</p>
+<pre>Function* create(Module** out) {
+  std::string error;
+  Module* jit;
+
+  // Load in the bitcode file containing the functions for each
+  // bytecode operation.
+  if(MemoryBuffer* buffer = MemoryBuffer::getFile("ops.o", &amp;error)) {
+    jit = ParseBitcodeFile(buffer, &amp;error);
+    delete buffer;
+  }
+
+  // Pull out references to them.
+  Function* set =  jit-&gt;getFunction(std::string("set"));
+  Function* add =  jit-&gt;getFunction(std::string("add"));
+  Function* show = jit-&gt;getFunction(std::string("show"));
+
+  // Now, begin building our new function, which calls the
+  // above functions.
+  Function* body = cast&lt;Function&gt;(jit-&gt;getOrInsertFunction("body",
+        Type::VoidTy,
+        PointerType::getUnqual(Type::Int32Ty),
+        PointerType::getUnqual(Type::Int32Ty), (Type*)0));
+
+  // Our function will be passed the ops pointer and the
+  // registers pointer, just like before.
+  Function::arg_iterator args = body-&gt;arg_begin();
+  Value* ops = args++;
+  ops-&gt;setName("ops");
+  Value* registers = args++;
+  registers-&gt;setName("registers");
+
+  BasicBlock *bb = BasicBlock::Create("entry", body);
+
+  // Set up our arguments to be passed to set.
+  std::vector&lt;Value*&gt; params;
+  params.push_back(ops);
+  params.push_back(registers);
+  
+  // Call out to set, passing ops and registers down
+  CallInst* call = CallInst::Create(set, <span class="skimlinks-unlinked">params.begin</span>(), <span class="skimlinks-unlinked">params.end</span>(), "", bb);
+  ConstantInt* const_3 = ConstantInt::get(APInt(32,  "3", 10));
+  ConstantInt* const_4 = ConstantInt::get(APInt(32,  "4", 10));
+
+  // add 3 to the ops pointer.
+  GetElementPtrInst* ptr1 = GetElementPtrInst::Create(ops, const_3, "tmp3", bb);
+
+  // Setup and call add, notice we pass down the updated ops pointer
+  // rather than the original, so that we've moved down.
+  std::vector&lt;Value*&gt; params2;
+  params2.push_back(ptr1);
+  params2.push_back(registers);
+  CallInst* call2 = CallInst::Create(add, params2.begin(), params2.end(), "", bb);
+
+  // Push the ops pointer down another 4.
+  GetElementPtrInst* ptr2 = GetElementPtrInst::Create(ops, const_4, "tmp3", bb);
+ 
+  // Setup and call show.
+  std::vector&lt;Value*&gt; params3;
+  params3.push_back(ptr2);
+  params3.push_back(registers);
+  CallInst* call3 = CallInst::Create(show, params3.begin(), params3.end(), "", bb);
+
+  // And we're done!
+  ReturnInst::Create(bb);
+
+  *out = jit;
+  return body;
+}
+</pre>
+<p>
+Now, lets write a function that calls <code>create()</code> and executes the result:</p>
+<pre>int main() {
+  // The registers.
+  int registers[2] = {0, 0};
+
+  // Our program.
+  int program[20] = {0, 0, 3,
+                     1, 0, 0, 4,
+                     2, 0};
+
+  int* ops = (int*)program;
+
+  // Create our function and give us the Module and Function back.
+  Module* jit;
+  Function* func = create(&amp;jit);
+
+  // Add in optimizations. These were taken from a list that 'opt', LLVMs optimization tool, uses.
+  PassManager p;
+
+  /* Comment out optimize
+  p.add(new TargetData(jit));
+  p.add(createVerifierPass());
+  p.add(createLowerSetJmpPass());
+  p.add(createRaiseAllocationsPass());
+  p.add(createCFGSimplificationPass());
+  p.add(createPromoteMemoryToRegisterPass());
+  p.add(createGlobalOptimizerPass());
+  p.add(createGlobalDCEPass());
+  p.add(createFunctionInliningPass()); 
+  */
+
+  // Run these optimizations on our Module
+  p.run(*jit);
+
+  // Setup for JIT
+  ExistingModuleProvider* mp = new ExistingModuleProvider(jit);
+  ExecutionEngine* engine = ExecutionEngine::create(mp);
+
+  // Show us what we've created!
+  std::cout &lt;&lt; "Created\n" &lt;&lt; *jit;
+
+  // Have our function JIT'd into machine code and return. We cast it to a particular C function pointer signature so we can call in nicely.
+  void (*fp)(int*, int*) = (void (*)(int*, int*))engine-&gt;getPointerToFunction(func);
+
+  // Call what we've created!
+  fp(ops, registers);
+}
+</pre>
+<p>We drive our create() function and then execute the result. As you 
+can see, we’ve commented out all optimizations as a first try. The 
+output from running this is:</p>
+<pre>&lt;snip same LLVM as before&gt;
+
+define void @body(i32* %ops, i32* %registers) {
+entry:
+	call void @set( i32* %ops, i32* %registers )
+	%tmp3 = getelementptr i32* %ops, i32 3		;  [#uses=1]
+	call void @add( i32* %tmp3, i32* %registers )
+	%tmp31 = getelementptr i32* %ops, i32 4		;  [#uses=1]
+	call void @show( i32* %tmp31, i32* %registers )
+	ret void
+}
+=&gt; 7
+</pre>
+<p>Hey! Look at that! It runs! And we can see what it ran. We see it 
+perform the calls to our functions that implement each opcode. Going 
+back, it would be easily to write a function that dynamically drivers 
+the LLVM C++ API to generate this code, it’s simply one call per 
+bytecode, mapped directly.<br>
+Even if that were all that LLVM let us do, it would be worth it, but…
+</p>
+<p></p><h3>Wait, there’s more!</h3>
+<p>Before, we ran without optimizations to keep the output simple, lets see what happens we turn them on:</p>
+<pre>define void @body(i32* %ops, i32* %registers) {
+entry:
+	%tmp1.i = getelementptr i32* %ops, i32 1		;  [#uses=1]
+	%tmp2.i = load i32* %tmp1.i, align 4		;  [#uses=1]
+	%tmp4.i = getelementptr i32* %ops, i32 2		;  [#uses=1]
+	%tmp5.i = load i32* %tmp4.i, align 4		;  [#uses=1]
+	%tmp7.i = getelementptr i32* %registers, i32 %tmp2.i		;  [#uses=1]
+	store i32 %tmp5.i, i32* %tmp7.i, align 4
+	%tmp3 = getelementptr i32* %ops, i32 3		;  [#uses=3]
+	%tmp1.i7 = getelementptr i32* %tmp3, i32 1		;  [#uses=1]
+	%tmp2.i8 = load i32* %tmp1.i7, align 4		;  [#uses=1]
+	%tmp4.i9 = getelementptr i32* %tmp3, i32 2		;  [#uses=1]
+	%tmp5.i10 = load i32* %tmp4.i9, align 4		;  [#uses=1]
+	%tmp7.i11 = getelementptr i32* %registers, i32 %tmp5.i10		;  [#uses=1]
+	%tmp8.i = load i32* %tmp7.i11, align 4		;  [#uses=1]
+	%tmp10.i = getelementptr i32* %tmp3, i32 3		;  [#uses=1]
+	%tmp11.i = load i32* %tmp10.i, align 4		;  [#uses=1]
+	%tmp12.i = add i32 %tmp11.i, %tmp8.i		;  [#uses=1]
+	%tmp14.i = getelementptr i32* %registers, i32 %tmp2.i8		;  [#uses=1]
+	store i32 %tmp12.i, i32* %tmp14.i, align 4
+	%tmp31 = getelementptr i32* %ops, i32 4		;  [#uses=1]
+	%tmp1.i2 = getelementptr i32* %tmp31, i32 1		;  [#uses=1]
+	%tmp2.i3 = load i32* %tmp1.i2, align 4		;  [#uses=1]
+	%tmp4.i4 = getelementptr i32* %registers, i32 %tmp2.i3		;  [#uses=1]
+	%tmp5.i5 = load i32* %tmp4.i4, align 4		;  [#uses=1]
+	%tmp7.i6 = call i32 (i8*, ...)* @printf( i8* getelementptr ([7 x i8]* @.str, i32 0, i32 0), i32 %tmp5.i5 ) nounwind 		;  [#uses=0]
+	ret void
+}
+=&gt; 7
+</pre>
+<p><b>WOW!</b> Now we’re cooking with hot flaming nuclear power! LLVM 
+has the extra mile and rather than just calling our functions that 
+implement each instruction, it’s inlined all that code directly into our
+ dynamically generated function! This means A LOT of additional overhead
+ is discarded because, since our functions themselves did simple 
+operations like store into memory or add 2 numbers, that code is now run
+ a lot more quickly.</p>
+<p>
+It’s commonly known that inlining can dramatically improve performance 
+because it eliminates the over head of function calls (spilling and 
+reload registers, stack frames, etc). And LLVM has just given us a 
+powerful form of that for free.<br>
+This doesn’t allow for inlining across things like the kind of method 
+call that Ruby does, but it puts us on the track to being able to feed 
+LLVM enough information to do just that.
+</p>
+<p>
+LLVM is an amazing piece of software. I can’t wait to start using it more.</p>
+
+<div class="wpcnt">
+<div class="wpa">
+<a sl-processed="1" class="wpa-about" href="http://wordpress.com/about-these-ads/" rel="nofollow">About these ads</a>
+<script type="text/javascript">
+		var wpcom_adclk_hovering = false;
+		var wpcom_adclk_recorded = false;
+		var wpcom_adclk_theme = "Kelly";
+		var wpcom_adclk_slot = "wpcom_below_post";
+		var wpcom_adclk_network = ( typeof wpcom_adclk_network === "undefined" ) ? "" : wpcom_adclk_network ;
+
+		jQuery(document).ready( function() {
+			function wpcom_adclk_hover_yes() { wpcom_adclk_hovering = true; }
+			function wpcom_adclk_hover_no() { wpcom_adclk_hovering = false; }
+			jQuery(".wpa").click(wpcom_adclk_click);
+			jQuery(".wpa iframe").hover( wpcom_adclk_hover_yes, wpcom_adclk_hover_no );
+			jQuery(".wpa object").hover( wpcom_adclk_hover_yes, wpcom_adclk_hover_no );
+
+			jQuery(window).blur( function() {
+				if ( wpcom_adclk_hovering ) { wpcom_adclk_click(); }
+			});
+		});
+
+		function wpcom_adclk_impression() {
+			var stat_gif = document.location.protocol + "//pixel.wp.com/g.gif?v=wpcom-no-pv";
+			stat_gif += "&x_ads_imp_theme=" + wpcom_adclk_theme;
+			stat_gif += "&x_ads_imp_placement="+wpcom_adclk_slot;
+			stat_gif += "&x_ads_imp_network=" + wpcom_adclk_network;
+			stat_gif += "&x_ads_imp_theme_network="+wpcom_adclk_theme+"_"+wpcom_adclk_network;
+			new Image().src = stat_gif + "&baba=" + Math.random();
+			return true;
+		}
+
+		function wpcom_adclk_click() {
+			if (wpcom_adclk_recorded) { return true; } // no double counting
+			var stat_gif = document.location.protocol + "//pixel.wp.com/g.gif?v=wpcom-no-pv";
+			stat_gif += "&x_ads_click_theme=" + wpcom_adclk_theme;
+			stat_gif += "&x_ads_click_placement="+wpcom_adclk_slot;
+			stat_gif += "&x_ads_click_network=" + wpcom_adclk_network;
+			stat_gif += "&x_ads_click_theme_network="+wpcom_adclk_theme+"_"+wpcom_adclk_network;
+
+			new Image().src = stat_gif + "&baba=" + Math.random();
+			wpcom_adclk_recorded = true;
+			var now=new Date(); var end=now.getTime()+250;
+			while(true){now=new Date();if(now.getTime()>end){break;}}
+			return true;
+		}
+	
+if ( typeof GA_googleAddAttr == 'function' ) {
+GA_googleAddAttr("AdOpt", "1");
+GA_googleAddAttr("Origin", "other");
+GA_googleAddAttr("LangId", "1");
+GA_googleAddAttr("Domain", "blog.fallingsnow.net");
+GA_googleAddAttr("BlogId", "1516804");
+GA_googleAddAttr("PageURL", "http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/");
+GA_googleAddAttr("Autotag", "technology");
+GA_googleAddAttr("Autotag", "television");
+GA_googleAddAttr("Autotag", "education");
+GA_googleAddAttr("Tag", "cs");
+GA_googleAddAttr("Tag", "llvm");
+GA_googleAddAttr("theme_bg", "ffffff");
+GA_googleAddAttr("theme_border", "eeeeee");
+GA_googleAddAttr("theme_text", "5f6d80");
+GA_googleAddAttr("theme_link", "f35955");
+GA_googleAddAttr("theme_url", "f35955");
+GA_googleAddAdSensePageAttr("google_page_url", "http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/");
+GA_googleFillSlot("wpcom_below_post");
+}
+</script>
+</div>
+</div>
+
+<script type="text/javascript">
+jQuery( window ).load( function() {
+    if ( jQuery(".wpa script[src*='virool.com']").length > 0 || jQuery(".wpa script[src*='shareth.ru']").length > 0 || jQuery(".wpa iframe[src*='boomvideo.tv']").length > 0 || jQuery(".wpa iframe[src*='viewablemedia.net']").length > 0 || jQuery(".wpa .sharethrough-placement").length > 0 ) {
+        jQuery( '.wpa' ).css( 'width', '400px' );
+    }
+setTimeout(function(){if(typeof GS_googleAddAdSenseService !== 'function'){new Image().src=document.location.protocol+"//pixel.wp.com/g.gif?v=wpcom-no-pv&x_noads=adblock&baba="+Math.random()}},100);
+} );
+</script>
+
+<div id="jp-post-flair" class="sharedaddy sd-like-enabled"><div class="sharedaddy sd-block sd-like jetpack-likes-widget-wrapper jetpack-likes-widget-loaded" id="like-post-wrapper-1516804-46-54cc7114514c8" data-src="//widgets.wp.com/likes/#blog_id=1516804&amp;post_id=46&amp;origin=evanphx.wordpress.com&amp;obj_id=1516804-46-54cc7114514c8" data-name="like-post-frame-1516804-46-54cc7114514c8"><h3 class="sd-title">Like this:</h3><div class="likes-widget-placeholder post-likes-widget-placeholder" style="height: 55px; display: none;"><span class="button"><span>Like</span></span> <span class="loading">Loading...</span></div><iframe class="post-likes-widget jetpack-likes-widget" name="like-post-frame-1516804-46-54cc7114514c8" src="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/a.htm" frameborder="0" height="55px" width="100%"></iframe><span class="sd-text-color"></span><a class="sd-link-color"></a></div>
+<div style="display: block;" id="jp-relatedposts" class="jp-relatedposts">
+	<h3 class="jp-relatedposts-headline"><em>Related</em></h3>
+<div class="jp-relatedposts-items jp-relatedposts-items-minimal"><p class="jp-relatedposts-post jp-relatedposts-post0" data-post-id="119" data-post-format="false"><span class="jp-relatedposts-post-title"><a sl-processed="1" data-position="0" data-origin="46" rel="nofollow" title="On Portable Computation...
+
+Since the first time two computers communicated directly over a network, programmers have mused about the programs running on those computers. Back in those early days, there was careful external synchronization of programs &quot;Bob, will you load number 3 while I'll do the same over here?&quot; We like to think…" href="http://blog.fallingsnow.net/2014/11/09/on-portable-computation/" class="jp-relatedposts-post-a">On Portable Computation...</a></span><span class="jp-relatedposts-post-context">In "CS"</span></p><p class="jp-relatedposts-post jp-relatedposts-post1" data-post-id="43" data-post-format="false"><span class="jp-relatedposts-post-title"><a sl-processed="1" data-position="1" data-origin="46" rel="nofollow" title="Rubinius Retort
+
+By now, a good deal of you have read Charles breakdown of Ruby implementations. If you haven't please go read at least the Rubinius section before reading the rest of this post, as it is largely a response to that. Now, on to Charles section on Rubinius: Evan Phoenix's Rubinius…" href="http://blog.fallingsnow.net/2008/04/28/rubinius-retort/" class="jp-relatedposts-post-a">Rubinius Retort</a></span><span class="jp-relatedposts-post-context">In "rubinius"</span></p><p class="jp-relatedposts-post jp-relatedposts-post2" data-post-id="55" data-post-format="false"><span class="jp-relatedposts-post-title"><a sl-processed="1" data-position="2" data-origin="46" rel="nofollow" title="Rubinius Status
+
+Hey folks, sorry for the quietness here. Thought I'd fill everyone in on the current status of Rubinius. We (the Rubinius team) have been hard at work on a couple of fronts: a new C++ VM: the team has been hard at work getting a new VM up and running…" href="http://blog.fallingsnow.net/2008/09/05/rubinius-status/" class="jp-relatedposts-post-a">Rubinius Status</a></span><span class="jp-relatedposts-post-context">In "rubinius"</span></p></div></div></div>			</div><!-- .entry-content -->
+
+	<footer class="entry-meta">
+					<span class="cat-links">
+				Posted in <a sl-processed="1" href="http://blog.fallingsnow.net/category/awesomeness/cs/" rel="category tag">CS</a>, <a sl-processed="1" href="http://blog.fallingsnow.net/category/awesomeness/llvm/" rel="category tag">LLVM</a>			</span>
+			
+			
+			</footer><!-- .entry-meta -->
+</article><!-- #post-## -->
+
+				<nav role="navigation" id="nav-below" class="post-navigation">
+		<h1 class="screen-reader-text">Post navigation</h1>
+
+	
+		<div class="nav-previous"><a sl-processed="1" href="http://blog.fallingsnow.net/2008/05/17/rails-on-rubinius/" rel="prev"><span class="meta-nav">←</span> Rails on Rubinius</a></div>		<div class="nav-next"><a sl-processed="1" href="http://blog.fallingsnow.net/2008/05/26/code-drive-at-railsconf/" rel="next">Code Drive at&nbsp;RailsConf <span class="meta-nav">→</span></a></div>
+	
+	</nav><!-- #nav-below -->
+	
+			
+<div id="comments" class="comments-area">
+
+	
+			<h2 class="comments-title">
+			14 thoughts on “<span>Simple VM JIT with&nbsp;LLVM</span>”		</h2>
+
+		
+		<ol class="comment-list">
+					<li id="comment-10216" class="comment even thread-even depth-1 highlander-comment">
+			<article id="div-comment-10216" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img id="grav-d3944ff4e8bc05067a615579b6ef599b-0" alt="" src="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/d3944ff4e8bc05067a615579b6ef599b.png" class="avatar avatar-50 grav-hashed grav-hijack" height="50" width="50">						<b class="fn">rubyfan</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a sl-processed="1" href="http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/#comment-10216">
+							<time datetime="2008-05-23T18:23:55+00:00">
+								May 23, 2008 at 6:23 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>So…. does this mean yet another change for the Rubinius VM?  Is the recent C++ VM soon to be replaced?</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a sl-processed="1" class="comment-reply-link" href="http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/?replytocom=10216#respond" onclick='return addComment.moveForm( "div-comment-10216", "10216", "respond", "46" )' aria-label="Reply to rubyfan">Reply</a></div>			</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-10217" class="comment byuser comment-author-evanphx bypostauthor odd alt thread-odd thread-alt depth-1 highlander-comment">
+			<article id="div-comment-10217" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img id="grav-540cb3b3712ffe045113cb03bab616a2-0" alt="" src="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/540cb3b3712ffe045113cb03bab616a2.jpg" class="avatar avatar-50 grav-hashed grav-hijack" height="50" width="50">						<b class="fn">evanphx</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a sl-processed="1" href="http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/#comment-10217">
+							<time datetime="2008-05-23T18:26:59+00:00">
+								May 23, 2008 at 6:26 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>This isn’t instead of the C++ VM at all. Using LLVM to execute 
+methods is actually only one small part of the over all VM, and we’re 
+potentially using it with the C++ VM. I’ve had this kind of thing in the
+ back of my mind for a while, so the C++ VM is actually setup so that 
+this can be easily plugged in.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a sl-processed="1" class="comment-reply-link" href="http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/?replytocom=10217#respond" onclick='return addComment.moveForm( "div-comment-10217", "10217", "respond", "46" )' aria-label="Reply to evanphx">Reply</a></div>			</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-10218" class="comment even thread-even depth-1 highlander-comment">
+			<article id="div-comment-10218" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img id="grav-786217473f20a537176cbb14b2950b74-0" alt="" src="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/786217473f20a537176cbb14b2950b74.png" class="avatar avatar-50 grav-hashed grav-hijack" height="50" width="50">						<b class="fn"><a sl-processed="1" href="http://www.cincomsmalltalk.com/userblogs/antony/blogView" rel="external nofollow" class="url">Antony Blakey</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a sl-processed="1" href="http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/#comment-10218">
+							<time datetime="2008-05-23T19:47:44+00:00">
+								May 23, 2008 at 7:47 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>I’ve done some work on using LLVM with the VisualWorks Smalltalk
+ VM, and I’ve been looking at Rubinius with an eye to doing exactly what
+ you are suggesting.</p>
+<p>“This doesn’t allow for inlining across things like the kind of 
+method call that Ruby does” – actually, you can if you implement partial
+ specialisation, which I think could generate enormous wins, especially 
+if you specialise code that dispatches to immediates. It’s like a PIC, 
+but with the code inlined at the call site rather than just caching the 
+method lookup.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a sl-processed="1" class="comment-reply-link" href="http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/?replytocom=10218#respond" onclick='return addComment.moveForm( "div-comment-10218", "10218", "respond", "46" )' aria-label="Reply to Antony Blakey">Reply</a></div>			</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-10223" class="comment byuser comment-author-evanphx bypostauthor odd alt thread-odd thread-alt depth-1 highlander-comment">
+			<article id="div-comment-10223" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img id="grav-540cb3b3712ffe045113cb03bab616a2-1" alt="" src="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/540cb3b3712ffe045113cb03bab616a2.jpg" class="avatar avatar-50 grav-hashed grav-hijack" height="50" width="50">						<b class="fn">evanphx</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a sl-processed="1" href="http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/#comment-10223">
+							<time datetime="2008-05-24T00:12:37+00:00">
+								May 24, 2008 at 12:12 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Antony: Interesting! Is your work with VW available anywhere? 
+Rubinius actually implements a MethodContext caching scheme I found 
+described in a cincom paper on VW’s  context cache.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a sl-processed="1" class="comment-reply-link" href="http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/?replytocom=10223#respond" onclick='return addComment.moveForm( "div-comment-10223", "10223", "respond", "46" )' aria-label="Reply to evanphx">Reply</a></div>			</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-10229" class="comment even thread-even depth-1 highlander-comment">
+			<article id="div-comment-10229" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img id="grav-786217473f20a537176cbb14b2950b74-1" alt="" src="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/786217473f20a537176cbb14b2950b74.png" class="avatar avatar-50 grav-hashed grav-hijack" height="50" width="50">						<b class="fn"><a sl-processed="1" href="http://www.cincomsmalltalk.com/userblogs/antony/blogView" rel="external nofollow" class="url">Antony Blakey</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a sl-processed="1" href="http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/#comment-10229">
+							<time datetime="2008-05-24T01:26:03+00:00">
+								May 24, 2008 at 1:26 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>There are two parts to what I was doing.</p>
+<p>1) Allowing methods to be written in C, inline. This used the clang 
+project associated with LLVM, plus the LLVM jitter infrastructure. This 
+would also be useful in Ruby. I published a WIP version of that work 
+with VW but it’s not useful in this forum.</p>
+<p>2) Using LLVM as you have described, to replace the existing VW 
+jitter and ‘outsource’ most of the platform details to LLVM. 
+Unfortunately you need to be a Cincom commercial customer to get the VM 
+source (I am), and then there’s the problem of how to distribute it. 
+This problem contributed to me putting two of my projects on hold (the 
+other was embedding WebKit with full GC integration). This work wasn’t 
+far enough along to produce results, although as you have seen, results 
+can actually come very easily with LLVM.</p>
+<p>You should post the x86 machine code generated from your exampl, 
+because in my experience that’s where the OMG kicks in because those 
+getelementptr lines disappear.</p>
+<p>Over the last month I have been looking to restart this work in a 
+Ruby context, because as you’ve discovered LLVM is absolutely the dogs 
+bollocks, and it’s beautifully written and architected. It really could 
+be like standing of the shoulders of giants as far as what it could do 
+for Ruby performance, particularly with, as I mentioned, partial 
+specialisation keyed off something like multimethod dispatch signatures.
+ </p>
+<p>One of the nice things that can be done is for nearly all of the work
+ to be done in Ruby, rather than using C. Theoretically you can do the 
+entire thing in LLVM + Ruby, although bootstrapping can be a curly 
+problem.</p>
+<p>I’d love to work on this, I’ve just got to get up to speed on the Rubinius architecture.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a sl-processed="1" class="comment-reply-link" href="http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/?replytocom=10229#respond" onclick='return addComment.moveForm( "div-comment-10229", "10229", "respond", "46" )' aria-label="Reply to Antony Blakey">Reply</a></div>			</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-10232" class="comment odd alt thread-odd thread-alt depth-1 highlander-comment">
+			<article id="div-comment-10232" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img id="grav-c510febb9bed68b5cc4a09f076701e0f-0" alt="" src="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/c510febb9bed68b5cc4a09f076701e0f.jpg" class="avatar avatar-50 grav-hashed grav-hijack" height="50" width="50">						<b class="fn">anon</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a sl-processed="1" href="http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/#comment-10232">
+							<time datetime="2008-05-24T02:58:10+00:00">
+								May 24, 2008 at 2:58 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p><a sl-processed="1" href="http://etoileos.com/news/archive/2008/05/12/1719/" rel="nofollow">http://etoileos.com/news/archive/2008/05/12/1719/</a></p>
+<p>Someone else is doing work with LLVM which will enable the use of 
+Smalltalk as a first class citizen next to Objective C, a Smalltalk 
+compiler that will be able to inherit Objective C classes. Maybe that 
+work could be reused, if it ever gets done, for Ruby, as the Ruby object
+ model is quite like the one in Smalltalk.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a sl-processed="1" class="comment-reply-link" href="http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/?replytocom=10232#respond" onclick='return addComment.moveForm( "div-comment-10232", "10232", "respond", "46" )' aria-label="Reply to anon">Reply</a></div>			</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-10260" class="pingback even thread-even depth-1 highlander-comment">
+			<article id="div-comment-10260" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+												<b class="fn"><a sl-processed="1" href="http://botd.wordpress.com/2008/05/26/top-posts-759/" rel="external nofollow" class="url">Top Posts « WordPress.com</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a sl-processed="1" href="http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/#comment-10260">
+							<time datetime="2008-05-25T17:03:18+00:00">
+								May 25, 2008 at 5:03 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>[…]  Simple VM JIT with LLVM I’ve been investigating using LLVM 
+for Rubinius, so I’ve been doing some very small scale experiments. I 
+[…] […]</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a sl-processed="1" class="comment-reply-link" href="http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/?replytocom=10260#respond" onclick='return addComment.moveForm( "div-comment-10260", "10260", "respond", "46" )' aria-label="Reply to Top Posts « WordPress.com">Reply</a></div>			</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-10287" class="pingback odd alt thread-odd thread-alt depth-1 highlander-comment">
+			<article id="div-comment-10287" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+												<b class="fn"><a sl-processed="1" href="http://www.sermet.unitenist.com/genel/basit-bir-sanal-makine.html" rel="external nofollow" class="url">» Basit bir sanal makine yonetim danışmanlığı ekonomi sermet sandıkcı</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a sl-processed="1" href="http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/#comment-10287">
+							<time datetime="2008-05-28T13:23:36+00:00">
+								May 28, 2008 at 1:23 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>[…] Buradan esinlenerek yazdigim basit bir sanal makine. Sanal 
+makinenin kendisi C++ ile yazildi. Assembler’i ise python ile. […]</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a sl-processed="1" class="comment-reply-link" href="http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/?replytocom=10287#respond" onclick='return addComment.moveForm( "div-comment-10287", "10287", "respond", "46" )' aria-label="Reply to » Basit bir sanal makine yonetim danışmanlığı ekonomi sermet sandıkcı">Reply</a></div>			</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-10384" class="comment even thread-even depth-1 highlander-comment">
+			<article id="div-comment-10384" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img id="grav-bcf07fb949aed3d7ce8bb825df7c06e6-0" alt="" src="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/bcf07fb949aed3d7ce8bb825df7c06e6.jpg" class="avatar avatar-50 grav-hashed grav-hijack" height="50" width="50">						<b class="fn"><a sl-processed="1" href="http://my-god-its-full-of-tubes.blogspot.com/" rel="external nofollow" class="url">Tomy</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a sl-processed="1" href="http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/#comment-10384">
+							<time datetime="2008-06-08T19:56:41+00:00">
+								June 8, 2008 at 7:56 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Evan, definitely check out what David Chisnall is doing with the
+ Étoilé project. A unified Objective-C, Smalltalk, and Ruby runtime 
+built on top of LLVM is pretty close to Nirvana (the state, not the 
+band). Throw Javascript into the mix and we’re pretty close to heaven.</p>
+<p>My work on Ruby and LLVM got sidetracked when I read Ian Piumarta’s papers about Cola (<a sl-processed="1" href="http://piumarta.com/software/cola/" rel="nofollow">http://piumarta.com/software/cola/</a>). Especially check out the minimal object model (<a sl-processed="1" href="http://piumarta.com/software/cola/" rel="nofollow">http://piumarta.com/software/cola/</a>). Now I’m  spending my time on just enough icing on top of LLVM to build multiple dynamic object models.</p>
+<p>How are you planning on implementing closures? Garbage collected 
+stack frames and CPS? Also, the GC interface in LLVM is pretty sweet, 
+you can tag roots with meta  info when you create them and have this 
+passed to your GC at collection time.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a sl-processed="1" class="comment-reply-link" href="http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/?replytocom=10384#respond" onclick='return addComment.moveForm( "div-comment-10384", "10384", "respond", "46" )' aria-label="Reply to Tomy">Reply</a></div>			</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-10914" class="comment odd alt thread-odd thread-alt depth-1 highlander-comment">
+			<article id="div-comment-10914" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img id="grav-08e9148c9978844d75886e91b61a8996-0" alt="" src="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/08e9148c9978844d75886e91b61a8996.png" class="avatar avatar-50 grav-hashed grav-hijack" height="50" width="50">						<b class="fn"><a sl-processed="1" href="http://llvmruby.org/" rel="external nofollow" class="url">Tom Bagby</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a sl-processed="1" href="http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/#comment-10914">
+							<time datetime="2008-09-07T22:01:49+00:00">
+								September 7, 2008 at 10:01 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>I put together Ruby LLVM bindings that make experimenting with 
+this sort of thing faster/more fun. Certainly beats waiting for C++ 
+build and link.  I’ve blogged some examples of using the extension at <a sl-processed="1" href="http://llvmruby.org/" rel="nofollow">http://llvmruby.org</a> and the source lives at <a sl-processed="1" href="http://github.com/tombagby/llvmruby" rel="nofollow">http://github.com/tombagby/llvmruby</a></p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a sl-processed="1" class="comment-reply-link" href="http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/?replytocom=10914#respond" onclick='return addComment.moveForm( "div-comment-10914", "10914", "respond", "46" )' aria-label="Reply to Tom Bagby">Reply</a></div>			</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-11532" class="comment even thread-even depth-1 parent highlander-comment">
+			<article id="div-comment-11532" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img id="grav-8c73dab2ecd23d5b5627a0235ae2f9b1-0" alt="" src="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/8c73dab2ecd23d5b5627a0235ae2f9b1.jpg" class="avatar avatar-50 grav-hashed grav-hijack" height="50" width="50">						<b class="fn"><a sl-processed="1" href="http://godfat.org/" rel="external nofollow" class="url">Lin Jen-Shin (godfat 真常)</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a sl-processed="1" href="http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/#comment-11532">
+							<time datetime="2008-10-31T08:30:57+00:00">
+								October 31, 2008 at 8:30 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Greetings Evan,</p>
+<p>I am very, very surprised that you have left a message for me.<br>
+Although I was talking about your examples and LLVM and Rubinius,<br>
+most of contents were written in Chinese. I didn’t expect there<br>
+would be any reader who’s first language wasn’t Chinese.</p>
+<p>So, I am very surprised and glad to see your message.<br>
+If you were interested in some content of that blog post,<br>
+I could translate some of them to English for you,<br>
+if you don’t mind my poor, strange English sentence.</p>
+<p>*</p>
+<p>Let’s get back to your examples. At first, I couldn’t find a way to<br>
+compile the examples. After searching header files and llvm-config,<br>
+the examples ran fine. I was glad to reach here.</p>
+<p>But I thought it’s a bit strange that your “create” function which<br>
+creates JIT module, was skipping “function label”, lacking a switch<br>
+case to find out which function it should call this time.</p>
+<p>By talking about “function label”, I mean the 0, 1, 2 in our source<br>
+program. 0 stands for set, 1 stands for add, and 2 stands for show.</p>
+<p>Then I started to add the switch case in your create function,<br>
+thinking it should let me rewrite our source program to such as:</p>
+<p>int program[] = {<br>
+0, 0, 5,    // res[0] = 5<br>
+2, 0,       // puts res[0]<br>
+1, 0, 0, 4, // res[0] = res[0] + 4<br>
+2, 0,       // puts res[0]<br>
+1, 1, 0, 7, // res[1] = res[0] + 7<br>
+2, 1        // puts res[1]<br>
+};</p>
+<p>Problems occurred here.<br>
+Segmentation fault, or strange result, e.g. -2153546.</p>
+<p>blah blah blah… time passed.</p>
+<p>I started to think perhaps there would be a bug in your examples.<br>
+The body bytecode (or bitcode?) emitted by llvm, i.e.,</p>
+<p>define void @body(i32* %ops, i32* %registers) {<br>
+entry:<br>
+  call void @set( i32* %ops, i32* %registers )<br>
+  %tmp3 = getelementptr i32* %ops, i32 3        ;  [#uses=1]<br>
+  call void @add( i32* %tmp3, i32* %registers )<br>
+  %tmp31 = getelementptr i32* %ops, i32 4       ;  [#uses=1]<br>
+  call void @show( i32* %tmp31, i32* %registers )<br>
+  ret void<br>
+}</p>
+<p>I thought it’s very strange that the second getelementptr told<br>
+%ops to step 4, just like “ops + 4″ in C. Then it passed %tmp31,<br>
+i.e. “ops + 4″ to show. Shouldn’t it be “ops + 3 + 4″ ?</p>
+<p>Then I took out the line:</p>
+<p>GetElementPtrInst* ptr2 = GetElementPtrInst::Create(ops, const_4, “tmp3″, bb);</p>
+<p>and changed it to:</p>
+<p>GetElementPtrInst* ptr2 = GetElementPtrInst::Create(ptr1, const_4, “tmp3″, bb);</p>
+<p>save, compile, and it runs fine. Of course it’s not the exactly<br>
+modification I made, because I built a loop and a switch case to<br>
+create many CallInst(s). The exactly lines were:</p>
+<p>const_n = ConstantInt::get(APInt(32, lexical_cast&lt;std::string&gt;(step), 10));<br>
+ptr = GetElementPtrInst::Create(<span class="skimlinks-unlinked">params.back</span>(), const_n, “tmp”, bb);</p>
+<p>You can find the source code at the bottom of previous post.<br>
+[<a sl-processed="1" href="http://blogger.godfat.org/2008/10/llvm-rubinius.html" rel="nofollow">LLVM &amp; Rubinius</a>]</p>
+<p>Many thanks for your listening and kindness!</p>
+<p>cheers,<br>
+Lin Jen-Shin (a.k.a. godfat 真常)</p>
+<p>p.s. below is another copy of above message.</p>
+<p><a sl-processed="1" href="http://blogger.godfat.org/2008/10/llvm-rubinius-2.html" rel="nofollow">http://blogger.godfat.org/2008/10/llvm-rubinius-2.html</a></p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a sl-processed="1" class="comment-reply-link" href="http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/?replytocom=11532#respond" onclick='return addComment.moveForm( "div-comment-11532", "11532", "respond", "46" )' aria-label="Reply to Lin Jen-Shin (godfat 真常)">Reply</a></div>			</article><!-- .comment-body -->
+<ul class="children">
+		<li id="comment-32501" class="comment odd alt depth-2 highlander-comment">
+			<article id="div-comment-32501" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img id="grav-795b52c9ec69e1d09c5dfd82f9ac69c1-0" alt="" src="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/795b52c9ec69e1d09c5dfd82f9ac69c1.png" class="avatar avatar-50 grav-hashed grav-hijack" height="50" width="50">						<b class="fn"><a sl-processed="1" href="http://www.facebook.com/profile.php?id=100003406032937" rel="external nofollow" class="url">Sundar</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a sl-processed="1" href="http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/#comment-32501">
+							<time datetime="2012-05-28T19:42:41+00:00">
+								May 28, 2012 at 7:42 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>I haven’t looked into Parrot in a lot of depth, but from what I 
+unedsrtand it’s a higher-level virtual machine than LLVM.  LLVM really 
+models a RISC processor with an infinite number of write-once registers 
+(i.e. a single static assignment machine); it doesn’t have primitives 
+for anything like method dispatch or imply support for garbage 
+collection or anything like <span class="skimlinks-unlinked">that.The</span>
+ point of LLVM is that it provides a great, flexible and 
+platform-independent target for other things like Parrot.  For example, 
+since LLVM is structured as a set of libraries, Parrot could use it to 
+perform just-in-time compilation from the higher-level abstraction it 
+offers to an instruction stream that can be used on a particular piece 
+of hardware.  (Thus saving Parrot the work of implementing its own JIT.)</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a sl-processed="1" class="comment-reply-link" href="http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/?replytocom=32501#respond" onclick='return addComment.moveForm( "div-comment-32501", "32501", "respond", "46" )' aria-label="Reply to Sundar">Reply</a></div>			</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+		<li id="comment-16223" class="comment even thread-odd thread-alt depth-1 highlander-comment">
+			<article id="div-comment-16223" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img id="grav-7414d86492d3ffad0feb5755ceb239f9-0" alt="" src="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/7414d86492d3ffad0feb5755ceb239f9.png" class="avatar avatar-50 grav-hashed grav-hijack" height="50" width="50">						<b class="fn"><a sl-processed="1" href="http://code.google.com/p/libjit-linear-scan-register-allocator/" rel="external nofollow" class="url">Kirill Kononenko</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a sl-processed="1" href="http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/#comment-16223">
+							<time datetime="2009-05-02T13:16:49+00:00">
+								May 2, 2009 at 1:16 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Hi</p>
+<p>Did you consider use libJIT? I am interested about your opinion, if 
+you compare both LLVM and libJIT for your work. Because as our 
+experiments show for ECMA-335 Microsoft Common Intermediate Language 
+Infrastructure, Common Intermediate Runtime, and Common Intermediate 
+Language, libJIT is both much faster, platform independent, and 
+remarkably easier to use than LLVM (or GNU Lightning). It was one of the
+ reason we actually started developement of libJIT. The other libraries 
+were not suitable for our needs, when we started libJIT, to implement an
+ advanced Just-In-Time compiler, which would run much faster than Mono 
+Just-In-Time compiler. And as of today which we actually archieved as 
+seen in following results in end of text.</p>
+<p>Also LLVM is not suitable for Just-In-Time compilation at all in real
+ projects, because of huge compilation time. Moreover, it does not 
+support a large range of features needed to implement ECMA-335. These 
+are just a couple of them:</p>
+<p>* the whole spectrum of ECMA 335 for CLR types and operations</p>
+<p>* async exception handling</p>
+<p>* precise stack marking</p>
+<p>* multiple custom call conventions</p>
+<p>* fast Just-In-Time compilation</p>
+<p>libJIT from end of 2008 runs 26% faster in PNETMARK than the 
+commercial Mono 2.0 from August 2008, and faster 12.5% than Mono 2.2 
+from January 2009, and Mono 2.4 from March 2009.</p>
+<p>You can try this:</p>
+<p><a sl-processed="1" href="http://code.google.com/p/libjit-linear-scan-register-allocator/" rel="nofollow">http://code.google.com/p/libjit-linear-scan-register-allocator/</a></p>
+<p>This is my research experimental branch of libJIT.</p>
+<p>There is a tutorial with libJIT here:</p>
+<p><a sl-processed="1" href="http://www.gnu.org/software/dotgnu/libjit-doc/libjit.html" rel="nofollow">http://www.gnu.org/software/dotgnu/libjit-doc/libjit.html</a></p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a sl-processed="1" class="comment-reply-link" href="http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/?replytocom=16223#respond" onclick='return addComment.moveForm( "div-comment-16223", "16223", "respond", "46" )' aria-label="Reply to Kirill Kononenko">Reply</a></div>			</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-36521" class="comment odd alt thread-even depth-1 highlander-comment">
+			<article id="div-comment-36521" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img id="grav-c5f08253dd59aa73d9efa74780c29e91-0" alt="" src="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/c5f08253dd59aa73d9efa74780c29e91.png" class="avatar avatar-50 grav-hashed grav-hijack" height="50" width="50">						<b class="fn">zebozhuang@163.com</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a sl-processed="1" href="http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/#comment-36521">
+							<time datetime="2012-11-21T22:55:52+00:00">
+								November 21, 2012 at 10:55 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Hi, I wanted to write to something about how to keep track of a 
+variable, which means that I want  to know the variable’s memory access,
+ including read and <span class="skimlinks-unlinked">write.Is</span> there any API in LLVM I can use?</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a sl-processed="1" class="comment-reply-link" href="http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/?replytocom=36521#respond" onclick='return addComment.moveForm( "div-comment-36521", "36521", "respond", "46" )' aria-label="Reply to zebozhuang@163.com">Reply</a></div>			</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		</ol><!-- .comment-list -->
+
+		
+	
+	
+									<div id="respond" class="comment-respond js">
+				<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a sl-processed="1" rel="nofollow" id="cancel-comment-reply-link" href="http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/#respond" style="display:none;">Cancel reply</a></small></h3>
+									<form action="http://blog.fallingsnow.net/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate="">
+																										
+
+
+												<input id="highlander_comment_nonce" name="highlander_comment_nonce" value="1f6b955550" type="hidden"><input name="_wp_http_referer" value="/2008/05/23/simple-vm-jit-with-llvm/" type="hidden">
+<input name="hc_post_as" id="hc_post_as" value="guest" type="hidden">
+
+<div class="comment-form-field comment-textarea">
+	
+	<div id="comment-form-comment"><textarea class="autosizejs " tabindex="-1" style="position: absolute; top: -999px; left: 0px; right: auto; bottom: auto; border: 0px none; padding: 0px; box-sizing: content-box; word-wrap: break-word; height: 0px ! important; min-height: 0px ! important; overflow: hidden; transition: none 0s ease 0s ; font-family: Arial,Helvetica,Tahoma,Verdana,sans-serif; font-size: 14px; font-weight: 400; font-style: normal; letter-spacing: 0px; text-transform: none; text-decoration: none; word-spacing: 0px; text-indent: 0px; line-height: 21px; width: 1130px;">Enter your comment here...</textarea><textarea style="height: 41px; overflow: hidden; word-wrap: break-word; resize: none;" placeholder="Enter your comment here..." id="comment" name="comment" title="Enter your comment here..."></textarea></div>
+</div>
+
+<div style="display: none;" id="comment-form-identity">
+
+	<div id="comment-form-nascar">
+		<p>Fill in your details below or click an icon to log in:</p>
+		<ul>
+			<li class="selected" style="display:none;">
+				<a sl-processed="1" href="#comment-form-guest" id="postas-guest" title="Guest">
+					<span></span>
+				</a>
+			</li>
+			<li>
+				<a sl-processed="1" href="#comment-form-load-service:WordPress.com" id="postas-wordpress" title="WordPress.com">
+					<span></span>
+				</a>
+			</li>
+			<li>
+				<a sl-processed="1" href="#comment-form-load-service:Twitter" id="postas-twitter" title="Twitter">
+					<span></span>
+				</a>
+			</li>
+			<li>
+				<a sl-processed="1" href="#comment-form-load-service:Facebook" id="postas-facebook" title="Facebook">
+					<span></span>
+				</a>
+			</li>
+			<li>
+		</li></ul>
+	</div>
+
+	<div id="comment-form-guest" class="comment-form-service selected">
+		<div class="comment-form-padder">
+			<div class="comment-form-avatar">
+<a sl-processed="1" href="https://gravatar.com/site/signup/" target="_blank">				<img src="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/ad516503a11cd5ca435acc9bb6523536.png" alt="Gravatar" class="no-grav" width="25">
+</a>			</div>
+
+				<div class="comment-form-fields">
+				<div class="comment-form-field comment-form-email">
+					<label for="email">Email <span class="required">(required)</span> <span class="nopublish">(Address never made public)</span></label>
+					<div class="comment-form-input"><input id="email" name="email" type="email"></div>
+				</div>
+				<div class="comment-form-field comment-form-author">
+					<label for="author">Name <span class="required">(required)</span></label>
+					<div class="comment-form-input"><input id="author" name="author" type="text"></div>
+				</div>
+				<div class="comment-form-field comment-form-url">
+					<label for="url">Website</label>
+					<div class="comment-form-input"><input id="url" name="url" type="text"></div>
+				</div>
+			</div>
+	
+		</div>
+	</div>
+
+	<div id="comment-form-wordpress" class="comment-form-service">
+		<div class="comment-form-padder">
+			<div class="comment-form-avatar">
+				<img src="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/wplogo.png" alt="WordPress.com Logo" class="no-grav" width="25">
+			</div>
+
+				<div class="comment-form-fields">
+				<input name="wp_avatar" id="wordpress-avatar" class="comment-meta-wordpress" value="" type="hidden">
+				<input name="wp_user_id" id="wordpress-user_id" class="comment-meta-wordpress" value="" type="hidden">
+				<input name="wp_access_token" id="wordpress-access_token" class="comment-meta-wordpress" value="" type="hidden">
+				<p class="comment-form-posting-as pa-wordpress"><strong></strong> You are commenting using your <span class="skimlinks-unlinked">WordPress.com</span> account. <span class="comment-form-log-out">(&nbsp;<a sl-processed="1" href="javascript:HighlanderComments.doExternalLogout(%20'wordpress'%20);">Log&nbsp;Out</a>&nbsp;/&nbsp;<a sl-processed="1" href="#" onclick="javascript:HighlanderComments.switchAccount();return false;">Change</a>&nbsp;)</span></p>
+			</div>
+	
+		</div>
+	</div>
+
+	<div id="comment-form-twitter" class="comment-form-service">
+		<div class="comment-form-padder">
+			<div class="comment-form-avatar">
+				<img src="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/ad516503a11cd5ca435acc9bb6523536.png" alt="Twitter picture" class="no-grav" width="25">
+			</div>
+
+				<div class="comment-form-fields">
+				<input name="twitter_avatar" id="twitter-avatar" class="comment-meta-twitter" value="" type="hidden">
+				<input name="twitter_user_id" id="twitter-user_id" class="comment-meta-twitter" value="" type="hidden">
+				<input name="twitter_access_token" id="twitter-access_token" class="comment-meta-twitter" value="" type="hidden">
+				<p class="comment-form-posting-as pa-twitter"><strong></strong> You are commenting using your Twitter account. <span class="comment-form-log-out">(&nbsp;<a sl-processed="1" href="javascript:HighlanderComments.doExternalLogout(%20'twitter'%20);">Log&nbsp;Out</a>&nbsp;/&nbsp;<a sl-processed="1" href="#" onclick="javascript:HighlanderComments.switchAccount();return false;">Change</a>&nbsp;)</span></p>
+			</div>
+	
+		</div>
+	</div>
+
+	<div id="comment-form-facebook" class="comment-form-service">
+		<div class="comment-form-padder">
+			<div class="comment-form-avatar">
+				<img src="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/ad516503a11cd5ca435acc9bb6523536.png" alt="Facebook photo" class="no-grav" width="25">
+			</div>
+
+				<div class="comment-form-fields">
+				<input name="fb_avatar" id="facebook-avatar" class="comment-meta-facebook" value="" type="hidden">
+				<input name="fb_user_id" id="facebook-user_id" class="comment-meta-facebook" value="" type="hidden">
+				<input name="fb_access_token" id="facebook-access_token" class="comment-meta-facebook" value="" type="hidden">
+				<p class="comment-form-posting-as pa-facebook"><strong></strong> You are commenting using your Facebook account. <span class="comment-form-log-out">(&nbsp;<a sl-processed="1" href="javascript:HighlanderComments.doExternalLogout(%20'facebook'%20);">Log&nbsp;Out</a>&nbsp;/&nbsp;<a sl-processed="1" href="#" onclick="javascript:HighlanderComments.switchAccount();return false;">Change</a>&nbsp;)</span></p>
+			</div>
+	
+		</div>
+	</div>
+
+	<div id="comment-form-googleplus" class="comment-form-service">
+		<div class="comment-form-padder">
+			<div class="comment-form-avatar">
+				<img src="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/ad516503a11cd5ca435acc9bb6523536.png" alt="Google+ photo" class="no-grav" width="25">
+			</div>
+
+				<div class="comment-form-fields">
+				<input name="googleplus_avatar" id="googleplus-avatar" class="comment-meta-googleplus" value="" type="hidden">
+				<input name="googleplus_user_id" id="googleplus-user_id" class="comment-meta-googleplus" value="" type="hidden">
+				<input name="googleplus_access_token" id="googleplus-access_token" class="comment-meta-googleplus" value="" type="hidden">
+				<p class="comment-form-posting-as pa-googleplus"><strong></strong> You are commenting using your Google+ account. <span class="comment-form-log-out">(&nbsp;<a sl-processed="1" href="javascript:HighlanderComments.doExternalLogout(%20'googleplus'%20);">Log&nbsp;Out</a>&nbsp;/&nbsp;<a sl-processed="1" href="#" onclick="javascript:HighlanderComments.switchAccount();return false;">Change</a>&nbsp;)</span></p>
+			</div>
+	
+		</div>
+	</div>
+
+
+	<div id="comment-form-load-service" class="comment-form-service">
+		<div class="comment-form-posting-as-cancel"><a sl-processed="1" href="javascript:HighlanderComments.cancelExternalWindow();">Cancel</a></div>
+		<p>Connecting to %s</p>
+	</div>
+
+	
+</div>
+
+<script type="text/javascript">
+var highlander_expando_javascript = function(){
+	var input = document.createElement( 'input' ),
+	    comment = jQuery( '#comment' );
+
+	if ( 'placeholder' in input ) {
+		comment.attr( 'placeholder', jQuery( '.comment-textarea label' ).remove().text() );
+	}
+
+	// Expando Mode: start small, then auto-resize on first click + text length
+	jQuery( '#comment-form-identity' ).hide();
+	jQuery( '#comment-form-subscribe' ).hide();
+	jQuery( '#commentform .form-submit' ).hide();
+
+	comment.css( { 'height':'10px' } ).one( 'focus', function() {
+		var timer = setInterval( HighlanderComments.resizeCallback, 10 )
+		jQuery( this ).animate( { 'height': HighlanderComments.initialHeight } ).delay( 100 ).queue( function(n) { clearInterval( timer ); HighlanderComments.resizeCallback(); n(); } );
+		jQuery( '#comment-form-identity' ).slideDown();
+		jQuery( '#comment-form-subscribe' ).slideDown();
+		jQuery( '#commentform .form-submit' ).slideDown();
+	});
+}
+jQuery(document).ready( highlander_expando_javascript );
+</script>
+
+<div style="display: none;" id="comment-form-subscribe">
+	<p class="comment-subscription-form"><input name="subscribe" id="subscribe" value="subscribe" style="width: auto;" tabindex="6" type="checkbox"> <label class="subscribe-label" id="subscribe-label" for="subscribe" style="display: inline;">Notify me of new comments via email.</label></p></div>
+
+												<p style="display: none;" class="form-submit">
+							<input name="submit" id="comment-submit" class="submit" value="Post Comment" type="submit">
+							<input name="comment_post_ID" value="46" id="comment_post_ID" type="hidden">
+<input name="comment_parent" id="comment_parent" value="0" type="hidden">
+						</p>
+						<p style="display: none;"><input id="akismet_comment_nonce" name="akismet_comment_nonce" value="41a9ca9d95" type="hidden"></p>
+<input name="genseq" value="1422684436" type="hidden">
+<p style="display: none;"></p>					<input id="ak_js" name="ak_js" value="1422655639992" type="hidden"></form>
+							</div><!-- #respond -->
+			<div style="clear: both"></div>
+</div><!-- #comments -->
+
+		
+		</main><!-- #main -->
+	</div><!-- #primary -->
+
+	<div id="secondary" class="widget-areas clear" role="complementary">
+		<div class="widget-areas-inner">
+										<div class="widget-area">
+					<aside id="twitter-2" class="widget widget_twitter"><h1 class="widget-title"><a sl-processed="1" href="http://twitter.com/evanphx">Twitter Updates</a></h1><ul class="tweets">
+			<li>
+				@<a sl-processed="1" href="http://twitter.com/armon">armon</a> Exactly. 				<a sl-processed="1" href="http://twitter.com/evanphx/statuses/561308120534618112" class="timesince">6&nbsp;hours&nbsp;ago</a>
+			</li>
+
+			
+			<li>
+				@<a sl-processed="1" href="http://twitter.com/armon">armon</a> Gotcha. I thought you might say that by the approach taken with go-metrics. 				<a sl-processed="1" href="http://twitter.com/evanphx/statuses/561307905236803584" class="timesince">6&nbsp;hours&nbsp;ago</a>
+			</li>
+
+			
+			<li>
+				RT @<a sl-processed="1" href="http://twitter.com/erowidrecruiter">erowidrecruiter</a>: Hi Zachary, Hope your week is going horribly slow, i want this to end. 				<a sl-processed="1" href="http://twitter.com/evanphx/statuses/561307594879696896" class="timesince">6&nbsp;hours&nbsp;ago</a>
+			</li>
+
+			
+			<li>
+				@<a sl-processed="1" href="http://twitter.com/dipolesource">dipolesource</a> Joan's on Third. 				<a sl-processed="1" href="http://twitter.com/evanphx/statuses/561297282969391105" class="timesince">7&nbsp;hours&nbsp;ago</a>
+			</li>
+
+			
+			<li>
+				@<a sl-processed="1" href="http://twitter.com/tenderlove">tenderlove</a> Next time you're in LA. <a sl-processed="1" href="http://t.co/O42sfMYDQz" rel="nofollow">http://t.co/O42sfMYDQz</a> 				<a sl-processed="1" href="http://twitter.com/evanphx/statuses/561270369323991040" class="timesince">8&nbsp;hours&nbsp;ago</a>
+			</li>
+
+			</ul></aside><aside id="tag_cloud-2" class="widget widget_tag_cloud"><h1 class="widget-title"></h1><div style="overflow: hidden;"><a sl-processed="1" href="http://blog.fallingsnow.net/category/awesomeness/" style="font-size: 100%; padding: 1px; margin: 1px;" title="awesomeness (1)">awesomeness</a> <a sl-processed="1" href="http://blog.fallingsnow.net/category/ruby/community/" style="font-size: 100%; padding: 1px; margin: 1px;" title="community (1)">community</a> <a sl-processed="1" href="http://blog.fallingsnow.net/category/awesomeness/cs/" style="font-size: 106.03448275862%; padding: 1px; margin: 1px;" title="CS (2)">CS</a> <a sl-processed="1" href="http://blog.fallingsnow.net/category/family/" style="font-size: 100%; padding: 1px; margin: 1px;" title="family (1)">family</a> <a sl-processed="1" href="http://blog.fallingsnow.net/category/git/" style="font-size: 106.03448275862%; padding: 1px; margin: 1px;" title="git (2)">git</a> <a sl-processed="1" href="http://blog.fallingsnow.net/category/life/" style="font-size: 142.24137931034%; padding: 1px; margin: 1px;" title="life (8)">life</a> <a sl-processed="1" href="http://blog.fallingsnow.net/category/awesomeness/llvm/" style="font-size: 100%; padding: 1px; margin: 1px;" title="LLVM (1)">LLVM</a> <a sl-processed="1" href="http://blog.fallingsnow.net/category/los-angeles/" style="font-size: 112.06896551724%; padding: 1px; margin: 1px;" title="los angeles (3)">los angeles</a> <a sl-processed="1" href="http://blog.fallingsnow.net/category/poetry/" style="font-size: 100%; padding: 1px; margin: 1px;" title="poetry (1)">poetry</a> <a sl-processed="1" href="http://blog.fallingsnow.net/category/rubinius/" style="font-size: 275%; padding: 1px; margin: 1px;" title="rubinius (30)">rubinius</a> <a sl-processed="1" href="http://blog.fallingsnow.net/category/ruby/" style="font-size: 160.34482758621%; padding: 1px; margin: 1px;" title="ruby (11)">ruby</a> <a sl-processed="1" href="http://blog.fallingsnow.net/category/speaking/" style="font-size: 130.1724137931%; padding: 1px; margin: 1px;" title="speaking (6)">speaking</a> <a sl-processed="1" href="http://blog.fallingsnow.net/category/uncategorized/" style="font-size: 166.37931034483%; padding: 1px; margin: 1px;" title="Uncategorized (12)">Uncategorized</a> </div></aside><aside id="archives-2" class="widget widget_archive"><h1 class="widget-title">Archives</h1>		<ul>
+	<li><a sl-processed="1" href="http://blog.fallingsnow.net/2014/11/">November 2014</a></li>
+	<li><a sl-processed="1" href="http://blog.fallingsnow.net/2012/03/">March 2012</a></li>
+	<li><a sl-processed="1" href="http://blog.fallingsnow.net/2009/11/">November 2009</a></li>
+	<li><a sl-processed="1" href="http://blog.fallingsnow.net/2009/08/">August 2009</a></li>
+	<li><a sl-processed="1" href="http://blog.fallingsnow.net/2009/06/">June 2009</a></li>
+	<li><a sl-processed="1" href="http://blog.fallingsnow.net/2009/05/">May 2009</a></li>
+	<li><a sl-processed="1" href="http://blog.fallingsnow.net/2008/12/">December 2008</a></li>
+	<li><a sl-processed="1" href="http://blog.fallingsnow.net/2008/11/">November 2008</a></li>
+	<li><a sl-processed="1" href="http://blog.fallingsnow.net/2008/10/">October 2008</a></li>
+	<li><a sl-processed="1" href="http://blog.fallingsnow.net/2008/09/">September 2008</a></li>
+	<li><a sl-processed="1" href="http://blog.fallingsnow.net/2008/07/">July 2008</a></li>
+	<li><a sl-processed="1" href="http://blog.fallingsnow.net/2008/06/">June 2008</a></li>
+	<li><a sl-processed="1" href="http://blog.fallingsnow.net/2008/05/">May 2008</a></li>
+	<li><a sl-processed="1" href="http://blog.fallingsnow.net/2008/04/">April 2008</a></li>
+	<li><a sl-processed="1" href="http://blog.fallingsnow.net/2008/03/">March 2008</a></li>
+	<li><a sl-processed="1" href="http://blog.fallingsnow.net/2008/02/">February 2008</a></li>
+	<li><a sl-processed="1" href="http://blog.fallingsnow.net/2008/01/">January 2008</a></li>
+	<li><a sl-processed="1" href="http://blog.fallingsnow.net/2007/12/">December 2007</a></li>
+	<li><a sl-processed="1" href="http://blog.fallingsnow.net/2007/11/">November 2007</a></li>
+	<li><a sl-processed="1" href="http://blog.fallingsnow.net/2007/10/">October 2007</a></li>
+	<li><a sl-processed="1" href="http://blog.fallingsnow.net/2007/08/">August 2007</a></li>
+	<li><a sl-processed="1" href="http://blog.fallingsnow.net/2007/07/">July 2007</a></li>
+	<li><a sl-processed="1" href="http://blog.fallingsnow.net/2007/06/">June 2007</a></li>
+	<li><a sl-processed="1" href="http://blog.fallingsnow.net/2007/04/">April 2007</a></li>
+	<li><a sl-processed="1" href="http://blog.fallingsnow.net/2007/03/">March 2007</a></li>
+	<li><a sl-processed="1" href="http://blog.fallingsnow.net/2007/01/">January 2007</a></li>
+	<li><a sl-processed="1" href="http://blog.fallingsnow.net/2006/12/">December 2006</a></li>
+	<li><a sl-processed="1" href="http://blog.fallingsnow.net/2006/11/">November 2006</a></li>
+	<li><a sl-processed="1" href="http://blog.fallingsnow.net/2006/10/">October 2006</a></li>
+		</ul>
+</aside><aside id="pages-2" class="widget widget_pages"><h1 class="widget-title">Pages</h1>		<ul>
+			<li class="page_item page-item-2"><a sl-processed="1" href="http://blog.fallingsnow.net/about/">About</a></li>
+<li class="page_item page-item-6"><a sl-processed="1" href="http://blog.fallingsnow.net/rubinius/">rubinius</a></li>
+		</ul>
+		</aside><aside id="calendar-2" class="widget widget_calendar"><div id="calendar_wrap"><table id="wp-calendar">
+	<caption>May 2008</caption>
+	<thead>
+	<tr>
+		<th scope="col" title="Monday">M</th>
+		<th scope="col" title="Tuesday">T</th>
+		<th scope="col" title="Wednesday">W</th>
+		<th scope="col" title="Thursday">T</th>
+		<th scope="col" title="Friday">F</th>
+		<th scope="col" title="Saturday">S</th>
+		<th scope="col" title="Sunday">S</th>
+	</tr>
+	</thead>
+
+	<tfoot>
+	<tr>
+		<td colspan="3" id="prev"><a sl-processed="1" href="http://blog.fallingsnow.net/2008/04/">« Apr</a></td>
+		<td class="pad">&nbsp;</td>
+		<td colspan="3" id="next"><a sl-processed="1" href="http://blog.fallingsnow.net/2008/06/">Jun »</a></td>
+	</tr>
+	</tfoot>
+
+	<tbody>
+	<tr>
+		<td colspan="3" class="pad">&nbsp;</td><td>1</td><td>2</td><td><a sl-processed="1" href="http://blog.fallingsnow.net/2008/05/03/" title="Welcome to the&nbsp;Club">3</a></td><td>4</td>
+	</tr>
+	<tr>
+		<td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td>
+	</tr>
+	<tr>
+		<td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td><a sl-processed="1" href="http://blog.fallingsnow.net/2008/05/17/" title="Rails on Rubinius">17</a></td><td>18</td>
+	</tr>
+	<tr>
+		<td>19</td><td>20</td><td>21</td><td>22</td><td><a sl-processed="1" href="http://blog.fallingsnow.net/2008/05/23/" title="Simple VM JIT with&nbsp;LLVM">23</a></td><td>24</td><td>25</td>
+	</tr>
+	<tr>
+		<td><a sl-processed="1" href="http://blog.fallingsnow.net/2008/05/26/" title="Code Drive at&nbsp;RailsConf, CS Nerds Anonymous">26</a></td><td>27</td><td>28</td><td>29</td><td>30</td><td>31</td>
+		<td class="pad" colspan="1">&nbsp;</td>
+	</tr>
+	</tbody>
+	</table></div></aside><aside id="linkcat-1356" class="widget widget_links"><h1 class="widget-title">Blogroll</h1>
+	<ul class="xoxo blogroll">
+<li><a sl-processed="1" href="http://wordpress.com/">WordPress.com</a></li>
+<li><a sl-processed="1" href="http://wordpress.org/">WordPress.org</a></li>
+
+	</ul>
+</aside>
+<aside id="meta-2" class="widget widget_meta"><h1 class="widget-title">Meta</h1>			<ul>
+			<li><a sl-processed="1" href="https://en.wordpress.com/signup/?ref=wplogin">Register</a></li>			<li><a sl-processed="1" href="https://evanphx.wordpress.com/wp-login.php">Log in</a></li>
+			<li><a sl-processed="1" href="http://blog.fallingsnow.net/feed/">Entries <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+			<li><a sl-processed="1" href="http://blog.fallingsnow.net/comments/feed/">Comments <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+<li><a sl-processed="1" href="http://wordpress.com/" title="Powered by WordPress, state-of-the-art semantic personal publishing platform.">WordPress.com</a></li>			</ul>
+</aside><aside id="search-2" class="widget widget_search"><form role="search" method="get" class="search-form" action="http://blog.fallingsnow.net/">
+	<label>
+		<span class="screen-reader-text">Search for:</span>
+		<input class="search-field" placeholder="Search …" name="s" type="search">
+	</label>
+	<input class="search-submit" value="Search" type="submit">
+</form>
+</aside>				</div>
+											</div>
+	</div><!-- #secondary -->
+	</div><!-- #content -->
+
+	<footer id="colophon" class="site-footer" role="contentinfo">
+		<div class="site-info">
+						<a sl-processed="1" href="https://wordpress.com/?ref=footer_blog">Blog at WordPress.com</a>.
+			<span class="sep"> | </span>
+			<a sl-processed="1" href="https://wordpress.com/themes/kelly/" title="Learn more about this theme">The Kelly Theme</a>.		</div><!-- .site-info -->
+	</footer><!-- #colophon -->
+</div><!-- #page -->
+
+<!-- wpcom_wp_footer -->
+<script type="text/javascript" src="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/gprofiles.js"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]> */
+</script>
+<script type="text/javascript" src="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/wpgroho.js"></script>
+
+	<script>
+		//initialize and attach hovercards to all gravatars
+		jQuery( document ).ready( function( $ ) {
+
+			if (typeof Gravatar === "undefined"){
+				return;
+			}
+
+			if ( typeof Gravatar.init !== "function" ) {
+				return;
+			}			
+
+			Gravatar.profile_cb = function( hash, id ) {
+				WPGroHo.syncProfileData( hash, id );
+			};
+			Gravatar.my_hash = WPGroHo.my_hash;
+			Gravatar.init( 'body', '#wp-admin-bar-my-account' );
+		});
+	</script>
+
+		<div style="display:none">
+	<div class="grofile-hash-map-d3944ff4e8bc05067a615579b6ef599b">
+	</div>
+	<div class="grofile-hash-map-540cb3b3712ffe045113cb03bab616a2">
+	</div>
+	<div class="grofile-hash-map-786217473f20a537176cbb14b2950b74">
+	</div>
+	<div class="grofile-hash-map-c510febb9bed68b5cc4a09f076701e0f">
+	</div>
+	<div class="grofile-hash-map-bcf07fb949aed3d7ce8bb825df7c06e6">
+	</div>
+	<div class="grofile-hash-map-08e9148c9978844d75886e91b61a8996">
+	</div>
+	<div class="grofile-hash-map-8c73dab2ecd23d5b5627a0235ae2f9b1">
+	</div>
+	<div class="grofile-hash-map-795b52c9ec69e1d09c5dfd82f9ac69c1">
+	</div>
+	<div class="grofile-hash-map-7414d86492d3ffad0feb5755ceb239f9">
+	</div>
+	<div class="grofile-hash-map-c5f08253dd59aa73d9efa74780c29e91">
+	</div>
+	</div>
+<script type="text/javascript">
+/* <![CDATA[ */
+var HighlanderComments = {"loggingInText":"Logging In\u2026","submittingText":"Posting Comment\u2026","postCommentText":"Post Comment","connectingToText":"Connecting to %s","commentingAsText":"%1$s: You are commenting using your %2$s account.","logoutText":"Log Out","loginText":"Log In","connectURL":"https:\/\/evanphx.wordpress.com\/public.api\/connect\/?action=request","logoutURL":"https:\/\/evanphx.wordpress.com\/wp-login.php?action=logout&_wpnonce=d1ffba8969","homeURL":"http:\/\/blog.fallingsnow.net\/","postID":"46","gravDefault":"mystery","enterACommentError":"Please enter a comment","enterEmailError":"Please enter your email address here","invalidEmailError":"Invalid email address","enterAuthorError":"Please enter your name here","gravatarFromEmail":"This picture will show whenever you leave a comment. Click to customize it.","logInToExternalAccount":"Log in to use details from one of these accounts.","change":"Change","changeAccount":"Change Account","comment_registration":"","userIsLoggedIn":"","isJetpack":"0"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/a_002.js"></script>
+
+	<div style="bottom: -287px;" id="bit" class="loggedout-follow-normal">
+		<a sl-processed="1" class="bsub" href="javascript:void(0)"><span id="bsub-text">Follow</span></a>
+		<div id="bitsubscribe">
+
+					<h3><label for="loggedout-follow-field">Follow “Mirthful Snowflake”</label></h3>
+
+			<form action="https://subscribe.wordpress.com" method="post" accept-charset="utf-8" id="loggedout-follow">
+			<p>Get every new post delivered to your Inbox.</p>
+
+			<p id="loggedout-follow-error" style="display: none;"></p>
+
+						<p class="bit-follow-count">Join 27 other followers</p>
+			<p><input name="email" value="Enter your email address" onfocus='this.value=(this.value=="Enter your email address") ? "" : this.value;' onblur='this.value=(this.value=="") ? "Enter your email address" : this.value;' id="loggedout-follow-field" type="email"></p>
+
+			<input name="action" value="subscribe" type="hidden">
+			<input name="blog_id" value="1516804" type="hidden">
+			<input name="source" value="http://blog.fallingsnow.net/2008/05/23/simple-vm-jit-with-llvm/" type="hidden">
+			<input name="sub-type" value="loggedout-follow" type="hidden">
+
+			<input id="_wpnonce" name="_wpnonce" value="58ee86a080" type="hidden"><input name="_wp_http_referer" value="/2008/05/23/simple-vm-jit-with-llvm/" type="hidden">
+			<p id="bsub-subscribe-button"><input value="Sign me up" type="submit"></p>
+			</form>
+					<div id="bsub-credit"><a sl-processed="1" href="https://wordpress.com/?ref=lof">Build a website with WordPress.com</a></div>
+		</div><!-- #bitsubscribe -->
+	</div><!-- #bit -->
+		<iframe src="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/master.htm" scrolling="no" id="likes-master" name="likes-master" style="display:none;"></iframe>
+		<div id="likes-other-gravatars"><div class="likes-text"><span>%d</span> bloggers like this:</div><ul class="wpl-avatars sd-like-gravatars"></ul></div>
+		<script type="text/javascript">
+		//<![CDATA[
+			var jetpackLikesWidgetQueue = [];
+			var jetpackLikesWidgetBatch = [];
+			var jetpackLikesMasterReady = false;
+
+			function JetpackLikespostMessage( message, target ) {
+				if ( "string" === typeof message ){
+					try{
+						message = JSON.parse( message );
+					}
+					catch(e) {
+						return;
+					}
+				}
+
+				pm( {
+					target: target,
+					type: 'likesMessage',
+					data: message,
+					origin: '*'
+				} );
+			}
+
+			function JetpackLikesBatchHandler() {
+				var requests = [];
+				jQuery( 'div.jetpack-likes-widget-unloaded' ).each( function( i ) {
+					if ( jetpackLikesWidgetBatch.indexOf( this.id ) > -1 )
+						return;
+					jetpackLikesWidgetBatch.push( this.id );
+					var regex = /like-(post|comment)-wrapper-(\d+)-(\d+)-(\w+)/;
+					var match = regex.exec( this.id );
+					if ( ! match || match.length != 5 )
+						return;
+
+					var info = {
+						blog_id: match[2],
+						width:   this.width
+					};
+
+					if ( 'post' == match[1] ) {
+						info.post_id = match[3];
+					} else if ( 'comment' == match[1] ) {
+						info.comment_id = match[3];
+					}
+
+					info.obj_id = match[4];
+
+					requests.push( info );
+				});
+
+				if ( requests.length > 0 ) {
+					JetpackLikespostMessage( { event: 'initialBatch', requests: requests }, window.frames['likes-master'] );
+				}
+			}
+
+			function JetpackLikesMessageListener( event ) {
+				if ( "undefined" == typeof event.event )
+					return;
+
+				if ( 'masterReady' == event.event ) {
+					jQuery( document ).ready( function() {
+						jetpackLikesMasterReady = true;
+
+						var stylesData = {
+								event: 'injectStyles'
+						};
+
+						if ( jQuery( 'iframe.admin-bar-likes-widget' ).length > 0 ) {
+							JetpackLikespostMessage( { event: 'adminBarEnabled' }, window.frames[ 'likes-master' ] );
+
+							stylesData.adminBarStyles = {
+								background: jQuery( '#wpadminbar .quicklinks li#wp-admin-bar-wpl-like > a' ).css( 'background' ),
+								isRtl: ( 'rtl' == jQuery( '#wpadminbar' ).css( 'direction' ) )
+							};
+						}
+
+						if ( !window.addEventListener )
+							jQuery( '#wp-admin-bar-admin-bar-likes-widget' ).hide();
+
+						stylesData.textStyles = {
+							color: jQuery( '.sd-text-color').css( 'color' ),
+							fontFamily: jQuery( '.sd-text-color' ).css( 'font-family' ),
+							fontSize: jQuery( '.sd-text-color' ).css( 'font-size' ),
+							direction: jQuery( '.sd-text-color' ).css( 'direction' ),
+							fontWeight: jQuery( '.sd-text-color' ).css( 'font-weight' ),
+							fontStyle: jQuery( '.sd-text-color' ).css( 'font-style' ),
+							textDecoration: jQuery( '.sd-text-color' ).css('text-decoration')
+						};
+
+						stylesData.linkStyles = {
+							color: jQuery( '.sd-link-color' ).css('color'),
+							fontFamily: jQuery( '.sd-link-color' ).css('font-family'),
+							fontSize: jQuery( '.sd-link-color' ).css('font-size'),
+							textDecoration: jQuery( '.sd-link-color' ).css('text-decoration'),
+							fontWeight: jQuery( '.sd-link-color' ).css( 'font-weight' ),
+							fontStyle: jQuery( '.sd-link-color' ).css( 'font-style' )
+						};
+
+						JetpackLikespostMessage( stylesData, window.frames[ 'likes-master' ] );
+
+						JetpackLikesBatchHandler();
+
+						jQuery( document ).on( 'inview', 'div.jetpack-likes-widget-unloaded', function() {
+							jetpackLikesWidgetQueue.push( this.id );
+						});
+					});
+				}
+
+				if ( 'showLikeWidget' == event.event ) {
+					jQuery( '#' + event.id + ' .post-likes-widget-placeholder'  ).fadeOut( 'fast', function() {
+						jQuery( '#' + event.id + ' .post-likes-widget' ).fadeIn( 'fast', function() {
+							JetpackLikespostMessage( { event: 'likeWidgetDisplayed', blog_id: event.blog_id, post_id: event.post_id, obj_id: event.obj_id }, window.frames['likes-master'] );
+						});
+					});
+				}
+
+				if ( 'clickReblogFlair' == event.event ) {
+					wpcom_reblog.toggle_reblog_box_flair( event.obj_id );
+				}
+
+				if ( 'showOtherGravatars' == event.event ) {
+					var $container = jQuery( '#likes-other-gravatars' );
+					var $list = $container.find( 'ul' );
+
+					$container.hide();
+					$list.html( '' );
+
+					$container.find( '.likes-text span' ).text( event.total );
+
+					jQuery.each( event.likers, function( i, liker ) {
+						$list.append( '<li class="' + liker.css_class + '"><a href="' + liker.profile_URL + '" class="wpl-liker" rel="nofollow" target="_parent"><img src="' + liker.avatar_URL + '" alt="' + liker.name + '" width="30" height="30" style="padding-right: 3px;" /></a></li>');
+					} );
+
+					var offset = jQuery( "[name='" + event.parent + "']" ).offset();
+
+					$container.css( 'left', offset.left + event.position.left - 10 + 'px' );
+					$container.css( 'top', offset.top + event.position.top - 33 + 'px' );
+
+					var rowLength = Math.floor( event.width / 37 );
+					var height = ( Math.ceil( event.likers.length / rowLength ) * 37 ) + 13;
+					if ( height > 204 ) {
+						height = 204;
+					}
+
+					$container.css( 'height', height + 'px' );
+					$container.css( 'width', rowLength * 37 - 7 + 'px' );
+
+					$list.css( 'width', rowLength * 37 + 'px' );
+
+					$container.fadeIn( 'slow' );
+
+					var scrollbarWidth = $list[0].offsetWidth - $list[0].clientWidth;
+					if ( scrollbarWidth > 0 ) {
+						$container.width( $container.width() + scrollbarWidth );
+						$list.width( $list.width() + scrollbarWidth );
+					}
+				}
+			}
+
+			pm.bind( 'likesMessage', function(e) { JetpackLikesMessageListener(e); } );
+
+			jQuery( document ).click( function( e ) {
+				var $container = jQuery( '#likes-other-gravatars' );
+
+				if ( $container.has( e.target ).length === 0 ) {
+					$container.fadeOut( 'slow' );
+				}
+			});
+
+			function JetpackLikesWidgetQueueHandler() {
+				var wrapperID;
+				if ( ! jetpackLikesMasterReady ) {
+					setTimeout( JetpackLikesWidgetQueueHandler, 500 );
+					return;
+				}
+
+				if ( jetpackLikesWidgetQueue.length > 0 ) {
+					// We may have a widget that needs creating now
+					var found = false;
+					while( jetpackLikesWidgetQueue.length > 0 ) {
+						// Grab the first member of the queue that isn't already loading.
+						wrapperID = jetpackLikesWidgetQueue.splice( 0, 1 )[0];
+						if ( jQuery( '#' + wrapperID ).hasClass( 'jetpack-likes-widget-unloaded' ) ) {
+							found = true;
+							break;
+						}
+					}
+					if ( ! found ) {
+						setTimeout( JetpackLikesWidgetQueueHandler, 500 );
+						return;
+					}
+				} else if ( jQuery( 'div.jetpack-likes-widget-unloaded' ).length > 0 ) {
+					// Grab any unloaded widgets for a batch request
+					JetpackLikesBatchHandler();
+
+					// Get the next unloaded widget
+					wrapperID = jQuery( 'div.jetpack-likes-widget-unloaded' ).first()[0].id;
+					if ( ! wrapperID ) {
+						// Everything is currently loaded
+						setTimeout( JetpackLikesWidgetQueueHandler, 500 );
+						return;
+					}
+				}
+
+				if ( 'undefined' === typeof wrapperID ) {
+					setTimeout( JetpackLikesWidgetQueueHandler, 500 );
+					return;
+				}
+
+				var $wrapper = jQuery( '#' + wrapperID );
+				$wrapper.find( 'iframe' ).remove();
+
+				if ( $wrapper.hasClass( 'slim-likes-widget' ) ) {
+					$wrapper.find( '.post-likes-widget-placeholder' ).after( "<iframe class='post-likes-widget jetpack-likes-widget' name='" + $wrapper.data( 'name' ) + "' height='22px' width='68px' frameBorder='0' scrolling='no' src='" + $wrapper.data( 'src' ) + "'></iframe>" );
+				} else {
+					$wrapper.find( '.post-likes-widget-placeholder' ).after( "<iframe class='post-likes-widget jetpack-likes-widget' name='" + $wrapper.data( 'name' ) + "' height='55px' width='100%' frameBorder='0' src='" + $wrapper.data( 'src' ) + "'></iframe>" );
+				}
+
+				$wrapper.removeClass( 'jetpack-likes-widget-unloaded' ).addClass( 'jetpack-likes-widget-loading' );
+
+				$wrapper.find( 'iframe' ).load( function( e ) {
+					var $iframe = jQuery( e.target );
+					$wrapper.removeClass( 'jetpack-likes-widget-loading' ).addClass( 'jetpack-likes-widget-loaded' );
+
+					JetpackLikespostMessage( { event: 'loadLikeWidget', name: $iframe.attr( 'name' ), width: $iframe.width() }, window.frames[ 'likes-master' ] );
+
+					if ( $wrapper.hasClass( 'slim-likes-widget' ) ) {
+						$wrapper.find( 'iframe' ).Jetpack( 'resizeable' );
+					}
+				});
+				setTimeout( JetpackLikesWidgetQueueHandler, 250 );
+			}
+			JetpackLikesWidgetQueueHandler();
+		//]]>
+		</script>
+<script type="text/javascript" src="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/form.js"></script>
+<script type="text/javascript" src="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/widgets.js"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var JetpackEmojiSettings = {"base_url":"http:\/\/s0.wp.com\/wp-content\/mu-plugins\/emoji\/twemoji\/"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/a_003.js"></script>
+<script type="text/javascript">
+// <![CDATA[
+(function() {
+try{
+  if ( window.external &&'msIsSiteMode' in window.external) {
+    if (window.external.msIsSiteMode()) {
+      var jl = document.createElement('script');
+      jl.type='text/javascript';
+      jl.async=true;
+      jl.src='/wp-content/plugins/ie-sitemode/custom-jumplist.php';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(jl, s);
+    }
+  }
+}catch(e){}
+})();
+// ]]>
+</script>	<script type="text/javascript">
+	var skimlinks_pub_id = "725X584219"
+	var skimlinks_sitename = "evanphx.wordpress.com";
+	</script>
+	<script type="text/javascript" src="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/725X1342.js"></script><script src="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/w.js" type="text/javascript" async="" defer="defer"></script>
+<script type="text/javascript">
+_tkq = window._tkq || [];
+_stq = window._stq || [];
+_tkq.push(['storeContext', {'blog_id':'1516804','blog_tz':'-8','user_lang':'en','blog_lang':'en','user_id':'0'}]);
+_stq.push(['view', {'blog':'1516804','v':'wpcom','tz':'-8','user_id':'0','post':'46','subd':'evanphx'}]);
+_stq.push(['extra', {'crypt':'UE5XaGUuOTlwaD85flAmcm1mcmZsaDhkV11YdWtpP0NsWnVkPS9sL0ViLndld3BGbzF6Jl9aRTBjRkRoakFOeCZpdDk9Q1NPMlFYW1pBXzBRckMwaEpqcE4lS09yZnJKPzdaU25DeCVddjh5fEhbekdzVm5dZm1qbEFMc1c0WGxOQltvRHMmLFE0dVtqXVdmREZ8UGZCUWtOLzlDdUVCWnRCLTFbZmhkRjdpS3lddiYsQXI0bW9Ga3pobEJWZ0tNYzBwfC95dS5rNUh2Zy9FTlQmWlJPdlBFY1JmUVAtNFhuVitVVDJ1cFZHeTFSenxZeFttWlg2Vy93Znw1cTZML3hsVkpGaUpma3lScFdmTlVxeGM4ZmFVamlXfklIfkZqfjBYLjNkP2IrcW00OEhVc3hhTjhbZTJDUG1FTVp4XWw='}]);
+_stq.push([ 'clickTrackerInit', '1516804', '46' ]);
+	</script>
+<noscript><img src="http://pixel.wp.com/b.gif?v=noscript" style="height:0px;width:0px;overflow:hidden" alt="" /></noscript>
+<script>
+if ( 'object' === typeof wpcom_mobile_user_agent_info ) {
+
+	wpcom_mobile_user_agent_info.init();
+	var mobileStatsQueryString = "";
+	
+	if( false !== wpcom_mobile_user_agent_info.matchedPlatformName )
+		mobileStatsQueryString += "&x_" + 'mobile_platforms' + '=' + wpcom_mobile_user_agent_info.matchedPlatformName;
+	
+	if( false !== wpcom_mobile_user_agent_info.matchedUserAgentName )
+		mobileStatsQueryString += "&x_" + 'mobile_devices' + '=' + wpcom_mobile_user_agent_info.matchedUserAgentName;
+	
+	if( wpcom_mobile_user_agent_info.isIPad() )
+		mobileStatsQueryString += "&x_" + 'ipad_views' + '=' + 'views';
+
+	if( "" != mobileStatsQueryString ) {
+		new Image().src = document.location.protocol + '//pixel.wp.com/g.gif?v=wpcom-no-pv' + mobileStatsQueryString + '&baba=' + Math.random();
+	}
+	
+}
+</script>
+
+<div id="GWDANG_HAS_BUILT"></div><img id="wpstats" src="Simple%20VM%20JIT%20with%20LLVM%20_%20Mirthful%20Snowflake_files/g.gif"><div style="left: 0px; top: 0px; position: absolute; width: 29px; height: 27px; border: medium none; margin: 0px; padding: 0px; z-index: 2147483647; display: none;" class="sbi_search" id="sbi_camera_button"></div></body></html>
