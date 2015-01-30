@@ -107,12 +107,23 @@ namespace hgl
 	#define HGL_S32_MIN		-0x80000000
 	#define HGL_S64_MIN		-0x8000000000000000LL
 
-	template<typename T> T HGL_UINT_MAX();
+	template<typename T> T HGL_INTEGER_MAX();
+	template<typename T> T HGL_INTEGER_MIN();
 
-	template<> uint8 HGL_UINT_MAX() { return HGL_U8_MAX; }
-	template<> uint16 HGL_UINT_MAX() { return HGL_U16_MAX; }
-	template<> uint32 HGL_UINT_MAX() { return HGL_U32_MAX; }
-	template<> uint64 HGL_UINT_MAX() { return HGL_U64_MAX; }
+	template<> inline uint8		HGL_INTEGER_MAX<uint8	>() { return HGL_U8_MAX; }
+	template<> inline uint16	HGL_INTEGER_MAX<uint16	>() { return HGL_U16_MAX; }
+	template<> inline uint32	HGL_INTEGER_MAX<uint32	>() { return HGL_U32_MAX; }
+	template<> inline uint64	HGL_INTEGER_MAX<uint64	>() { return HGL_U64_MAX; }
+
+	template<> inline int8		HGL_INTEGER_MAX<int8	>() { return HGL_S8_MAX; }
+	template<> inline int16		HGL_INTEGER_MAX<int16	>() { return HGL_S16_MAX; }
+	template<> inline int32		HGL_INTEGER_MAX<int32	>() { return HGL_S32_MAX; }
+	template<> inline int64		HGL_INTEGER_MAX<int64	>() { return HGL_S64_MAX; }
+
+	template<> inline int8		HGL_INTEGER_MIN<int8	>() { return HGL_S8_MIN; }
+	template<> inline int16		HGL_INTEGER_MIN<int16	>() { return HGL_S16_MIN; }
+	template<> inline int32		HGL_INTEGER_MIN<int32	>() { return HGL_S32_MIN; }
+	template<> inline int64		HGL_INTEGER_MIN<int64	>() { return HGL_S64_MIN; }
 
 	/**
 	 * 星期每天枚举
