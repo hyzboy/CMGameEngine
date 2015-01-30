@@ -631,12 +631,12 @@ namespace hgl
 		* 将当前字符串全部转为小写
 		* @return 转换后的字符串
 		*/
-		SelfClass &ToLowerCase()																		///<将本类中的字母全部转为小写
+		SelfClass ToLowerCase()const																///<将本类中的字母全部转为小写
 		{
 			if(!data.valid())
 				return SelfClass();
 
-			return SelfClass(data->c_str()).LowerString();
+			return SelfClass(data->c_str()).LowerCase();
 		}
 
 		/**
@@ -655,12 +655,12 @@ namespace hgl
 		* 将当前字符串全部转换为大写
 		* @return 转换后的字符串
 		*/
-		SelfClass &ToUpperCase()																		///<将本类中的字母全部转为大写
+		SelfClass ToUpperCase()const																///<将本类中的字母全部转为大写
 		{
 			if(!data.valid())
 				return SelfClass();
 
-			return SelfClass(data->c_str()).UpperString();
+			return SelfClass(data->c_str()).UpperCase();
 		}
 
 		/**
