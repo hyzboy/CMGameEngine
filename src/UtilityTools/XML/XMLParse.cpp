@@ -102,6 +102,8 @@ namespace hgl
 
 				if(!result)
 					return(false);
+
+				pos+=size;
 			}
 
 			return(true);
