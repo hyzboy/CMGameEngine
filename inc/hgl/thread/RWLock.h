@@ -61,6 +61,54 @@ namespace hgl
 									virtual bool WriteUnlock()	{return true;}	\
 
 	/**
+	 * 读写锁/共享锁对象
+	 */
+	template<typename T> class RWLockObject:public RWLock
+	{
+		T *data;
+
+	public:
+
+		RWLockObject()
+		{
+			data=new T;
+		}
+
+		RWLockObject(T *t)
+		{
+			data=t;
+		}
+
+		virtual ~RWLockObject()
+		{
+			SAFE_CLEAR(data);
+		}
+
+		void operator = (T *t)
+		{
+			if(data)
+				delete data;
+
+			data=t;
+		}
+
+		T *operator ->()
+		{
+			return data;
+		}
+
+		bool valid()const
+		{
+			return data;
+		}
+
+		bool operator !()
+		{
+			return !data;
+		}
+	};//class RWLockObject
+
+	/**
 	 * 读写锁共享锁定自动释放类
 	 */
 	class OnlyReadLock
