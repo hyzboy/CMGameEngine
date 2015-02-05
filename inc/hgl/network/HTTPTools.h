@@ -17,8 +17,18 @@ namespace hgl
 			 * 注：返回信息会包含HTTP信息头，用于下载文件时，需自行将信息头去掉
 			 */
 			int get(io::OutputStream *,const char *);										///<http/https get
-			
+
 			int post(io::OutputStream *,const char *,const void *,const int);				///<http/htpps post
+
+			int post(io::OutputStream *os,const char *url,const UTF8String &post_data)
+			{
+				return post(os,url,post_data.c_str(),post_data.Length());
+			}
+
+			int post(io::OutputStream *os,const UTF8String &url,const UTF8String &post_data)
+			{
+				return post(os,url.c_str(),post_data.c_str(),post_data.Length());
+			}
 
 			/**
 			 * 通过http/https get下载一个文件

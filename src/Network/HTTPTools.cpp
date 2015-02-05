@@ -32,7 +32,7 @@ namespace hgl
 			int get(io::OutputStream *os,const char *url)
 			{
 				LOG_INFO(U8_TEXT("http get,url:")+UTF8String(url));
-			
+
 				CURLcode res;
 
 				CURL *curl=curl_easy_init();
@@ -50,18 +50,18 @@ namespace hgl
 
 				return(os->Tell()-cur);
 			}
-			
+
 			int post(io::OutputStream *os,const char *url,const void *post_data,const int post_data_size)
 			{
 				CURLcode res;
-				
+
 				CURL *curl=curl_easy_init();
-				
+
 				if(!curl)
 					return(-1);
-				
+
 				int cur=os->Tell();
-				
+
 				curl_easy_setopt(curl,CURLOPT_URL,url);
 				curl_easy_setopt(curl,CURLOPT_POSTFIELDS,post_data);
 				curl_easy_setopt(curl,CURLOPT_POSTFIELDSIZE,post_data_size);
