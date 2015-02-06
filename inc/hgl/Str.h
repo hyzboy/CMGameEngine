@@ -1799,10 +1799,11 @@ namespace hgl
 	{
 		if(!str)return(false);
 
-		//const char err_chr[]=u8R"( <>/\|?%$#@`':"*&!)";
+		//const char err_chr[]=u8R"( <>,/\|?%$#@`':"*&!)";
 		const char err_chr[] = { ' ',
 			'<',
 			'>',
+			',',
 			'/',
 			'\\',
 			'|',
@@ -1817,7 +1818,8 @@ namespace hgl
 			'"',
 			'*',
 			'&',
-			'!'};
+			'!',
+			0};
 		const char *sp;
 
 		while(*str)
