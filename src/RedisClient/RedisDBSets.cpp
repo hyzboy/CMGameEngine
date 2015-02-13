@@ -24,7 +24,6 @@ namespace hgl
 			};
 
 			REPLY r(con,3,argv,argvlen);
-			//REPLY r(con,"SADD %s %s",set,member);
 
 			return_integer;
 		}
@@ -55,7 +54,6 @@ namespace hgl
 			};
 
 			REPLY r(con,3,argv,argvlen);
-			//REPLY r(con,"SREM %s %s",set,member);
 
 			return_integer;
 		}

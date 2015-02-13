@@ -24,7 +24,6 @@ namespace hgl
 			};
 
 			REPLY r(con,4,argv,argvlen);
-			//REPLY r(con,"HSET %s %s %s",key,field,value);
 
 			return_bool;
 		}
@@ -48,7 +47,6 @@ namespace hgl
 			};
 
 			REPLY r(con,4,argv,argvlen);
-			//REPLY r(con,"HSETNX %s %s %s",key,field,value);
 
 			return_bool;
 		}
@@ -240,7 +238,6 @@ namespace hgl
 			};
 
 			REPLY r(con,3,argv,argvlen);
-			//REPLY r(con,"HGET %s %s",key,field);
 
 			if(r->type!=REDIS_REPLY_STRING)
 				return(false);
@@ -302,7 +299,6 @@ namespace hgl
 			};
 
 			REPLY r(con,2,argv,argvlen);
-			//REPLY r(con,"HGETALL %s",key);
 
 			return_pair_str_array(r,field,value);
 		}
@@ -322,7 +318,6 @@ namespace hgl
 			};
 
 			REPLY r(con,2,argv,argvlen);
-			//REPLY r(con,"HGETALL %s",key);
 
 			return_hashs_pair(r,result);
 		}
@@ -342,7 +337,6 @@ namespace hgl
 			};
 
 			REPLY r(con,2,argv,argvlen);
-			//REPLY r(con,"HVALS %s",key);
 
 			return_str_array(r,result_list);
 		}
@@ -385,7 +379,6 @@ namespace hgl
 			};
 
 			REPLY r(con,3,argv,argvlen);
-			//REPLY r(con,"HDEL %s %s",key,field);
 
 			return_bool;
 		}
@@ -445,7 +438,6 @@ namespace hgl
 			};
 
 			REPLY r(con,3,argv,argvlen);
-			//REPLY r(con,"HEXISTS %s %s",key,field);
 
 			return_bool;
 		}
@@ -465,7 +457,6 @@ namespace hgl
 			};
 
 			REPLY r(con,2,argv,argvlen);
-			//REPLY r(con,"HKEYS %s",key);
 
 			return_str_array(r,result_list);
 		}
@@ -485,7 +476,6 @@ namespace hgl
 			};
 
 			REPLY r(con,2,argv,argvlen);
-			//REPLY r(con,"HLEN %s",key);
 
 			return_integer;
 		}

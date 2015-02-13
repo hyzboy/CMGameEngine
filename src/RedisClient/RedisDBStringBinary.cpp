@@ -34,7 +34,6 @@ namespace hgl
 					(size_t)size
 				};
 
-				//REPLY r(con,"SETEX %s %d %b",key,et,value,size);
 				REPLY r(con,4,argv,argvlen);
 
 				if(!r)return(false);
@@ -55,7 +54,6 @@ namespace hgl
 					(size_t)size
 				};
 
-				//REPLY r(con,"SET %s %b",key,value,size);
 				REPLY r(con,3,argv,argvlen);
 
 				if(!r)return(false);
@@ -87,7 +85,6 @@ namespace hgl
 			};
 
 			REPLY r(con,3,argv,argvlen);
-			//REPLY r(con,"SETNX %s %b",key,value,size);
 
 			return_bool;
 		}
@@ -114,7 +111,6 @@ namespace hgl
 			};
 
 			REPLY r(con,2,argv,argvlen);
-			//REPLY r(con,"GET %s",key);
 
 			if(!r)return(false);
 
@@ -152,7 +148,6 @@ namespace hgl
 			};
 
 			REPLY r(con,2,argv,argvlen);
-			//REPLY r(con,"GET %s",key);
 
 			if(!r)return(nullptr);
 
@@ -195,7 +190,6 @@ namespace hgl
 			};
 
 			REPLY r(con,3,argv,argvlen);
-			//REPLY r(con,"GETSET %s %b",key,data,size);
 
 			if(!r)return(false);
 
@@ -238,7 +232,6 @@ namespace hgl
 			};
 
 			REPLY r(con,3,argv,argvlen);
-			//REPLY r(con,"APPEND %s %b",key,data,size);
 
 			return_integer;
 		}

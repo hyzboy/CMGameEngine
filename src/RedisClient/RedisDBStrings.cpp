@@ -34,7 +34,6 @@ namespace hgl
 				};
 
 				REPLY r(con,4,argv,argvlen);
-				//REPLY r(con,"SETEX %s %d %s",key,et,value);
 
 				if(!r)return(false);
 			}
@@ -55,7 +54,6 @@ namespace hgl
 				};
 
 				REPLY r(con,3,argv,argvlen);
-				//REPLY r(con,"SET %s %s",key,value);
 
 				if(!r)return(false);
 			}
@@ -85,7 +83,6 @@ namespace hgl
 			};
 
 			REPLY r(con,3,argv,argvlen);
-			//REPLY r(con,"SETNX %s %s",key,value);
 
 			return_bool;
 		}
@@ -105,7 +102,6 @@ namespace hgl
 			};
 
 			REPLY r(con,2,argv,argvlen);
-			//REPLY r(con,"GET %s",key);
 
 			if(!r)return(false);
 
@@ -139,7 +135,6 @@ namespace hgl
 			};
 
 			REPLY r(con,3,argv,argvlen);
-			//REPLY r(con,"GETSET %s %s",key,value);
 
 			if(!r)return(false);
 
@@ -167,7 +162,6 @@ namespace hgl
 			};
 
 			REPLY r(con,2,argv,argvlen);
-			//REPLY r(con,"DEL %s",key);
 
 			return_integer;
 		}
@@ -193,7 +187,6 @@ namespace hgl
 			};
 
 			REPLY r(con,1,argv,argvlen);
-			//REPLY r(con,"RANDOMKEY");
 
 			if(!r)return(false);
 			if(r->type!=REDIS_REPLY_STRING)
@@ -218,7 +211,6 @@ namespace hgl
 			};
 
 			REPLY r(con,2,argv,argvlen);
-			//REPLY r(con,"EXISTS %s",key);
 
 			return_bool;
 		}
@@ -246,7 +238,6 @@ namespace hgl
 			};
 
 			REPLY r(con,3,argv,argvlen);
-			//REPLY r(con,"%s %s %s",nx?"RENAMENX":"RENAME",old_name,new_name);
 
 			if(!r)return(false);
 			if(r->type!=REDIS_REPLY_STATUS)return(false);
@@ -276,7 +267,6 @@ namespace hgl
 			};
 
 			REPLY r(con,2,argv,argvlen);
-			//REPLY r(con,"PERSIST %s",key);
 
 			return_bool;
 		}
@@ -296,7 +286,6 @@ namespace hgl
 			};
 
 			REPLY r(con,2,argv,argvlen);
-			//REPLY r(con,"TTL %s",key);
 
 			return_integer;
 		}
@@ -316,7 +305,6 @@ namespace hgl
 			};
 
 			REPLY r(con,2,argv,argvlen);
-			//REPLY r(con,"STRLEN %s",key);
 
 			return_integer;
 		}
@@ -344,7 +332,6 @@ namespace hgl
 			};
 
 			REPLY r(con,3,argv,argvlen);
-			//REPLY r(con,"APPEND %s %s",key,value);
 
 			return_integer;
 		}

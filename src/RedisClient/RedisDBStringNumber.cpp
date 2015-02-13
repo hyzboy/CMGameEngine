@@ -20,7 +20,6 @@ namespace hgl
 			};
 
 			REPLY r(con,2,argv,argvlen);
-			//REPLY r(con,"INCR %s",key);
 
 			if(!r)return(false);
 			if(r->type!=REDIS_REPLY_INTEGER)return(false);
@@ -48,7 +47,6 @@ namespace hgl
 			};
 
 			REPLY r(con,3,argv,argvlen);
-			//REPLY r(con,"INCRBY %s %d",key,value);
 
 			if(!r)return(false);
 			if(r->type!=REDIS_REPLY_INTEGER)return(false);
@@ -72,7 +70,6 @@ namespace hgl
 			};
 
 			REPLY r(con,2,argv,argvlen);
-			//REPLY r(con,"INCR %s",key);
 
 			if(!r)return(false);
 			if(r->type!=REDIS_REPLY_INTEGER)return(false);
@@ -100,7 +97,6 @@ namespace hgl
 			};
 
 			REPLY r(con,3,argv,argvlen);
-			//REPLY r(con,"INCRBY %s " HGL_FMT_I64,key,value);
 
 			if(!r)return(false);
 			if(r->type!=REDIS_REPLY_INTEGER)return(false);
@@ -128,7 +124,6 @@ namespace hgl
 			};
 
 			REPLY r(con,3,argv,argvlen);
-			//REPLY r(con,"INCRBYFLOAT %s %f",key,value);
 
 			if(!r)return(false);
 			if(r->type!=REDIS_REPLY_STRING)return(false);
@@ -151,7 +146,6 @@ namespace hgl
 			};
 
 			REPLY r(con,2,argv,argvlen);
-			//REPLY r(con,"DECR %s",key);
 
 			if(!r)return(false);
 			if(r->type!=REDIS_REPLY_INTEGER)return(false);
@@ -179,7 +173,6 @@ namespace hgl
 			};
 
 			REPLY r(con,3,argv,argvlen);
-			//REPLY r(con,"DECRBY %s %d",key,value);
 
 			if(!r)return(false);
 			if(r->type!=REDIS_REPLY_INTEGER)return(false);
@@ -203,7 +196,6 @@ namespace hgl
 			};
 
 			REPLY r(con,2,argv,argvlen);
-			//REPLY r(con,"DECR %s",key);
 
 			if(!r)return(false);
 			if(r->type!=REDIS_REPLY_INTEGER)return(false);
@@ -231,7 +223,6 @@ namespace hgl
 			};
 
 			REPLY r(con,3,argv,argvlen);
-			//REPLY r(con,"DECRBY %s " HGL_FMT_I64,key,value);
 
 			if(!r)return(false);
 			if(r->type!=REDIS_REPLY_INTEGER)return(false);
