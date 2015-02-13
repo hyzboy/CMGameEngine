@@ -6,6 +6,10 @@ else()
 	set(CMGDK_BUILD_TYPE "Release")
 endif()
 
+IF(CMGDK_DEBUG)
+	add_definitions(-ggdb3 -D_DEBUG)
+ENDIF()
+
 IF(WIN32)
 	OPTION(USE_64_BIT	"Build 64bit Library" FALSE)
 
