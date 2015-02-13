@@ -45,12 +45,12 @@ struct sdshdr {
 };
 
 static inline size_t sdslen(const sds s) {
-    struct sdshdr *sh = (void*)(s-sizeof *sh);
+    struct sdshdr *sh = (struct sdshdr *)(s-sizeof *sh);
     return sh->len;
 }
 
 static inline size_t sdsavail(const sds s) {
-    struct sdshdr *sh = (void*)(s-sizeof *sh);
+    struct sdshdr *sh = (struct sdshdr *)(s-sizeof *sh);
     return sh->free;
 }
 
@@ -76,6 +76,7 @@ sds sdscatprintf(sds s, const char *fmt, ...)
 sds sdscatprintf(sds s, const char *fmt, ...);
 #endif
 
+sds sdscatfmt(sds s, char const *fmt, ...);
 void sdstrim(sds s, const char *cset);
 void sdsrange(sds s, int start, int end);
 void sdsupdatelen(sds s);

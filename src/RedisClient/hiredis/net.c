@@ -67,7 +67,7 @@ static void __redisSetErrorFromErrno(redisContext *c, int type, const char *pref
 
     if (prefix != NULL)
         len = snprintf(buf,sizeof(buf),"%s: ",prefix);
-    strerror_r(errno,buf+len,sizeof(buf)-len);
+    __redis_strerror_r(errno, (char *)(buf + len), sizeof(buf) - len);
     __redisSetError(c,type,buf);
 }
 
@@ -138,7 +138,7 @@ int redisKeepAlive(redisContext *c, int interval) {
         return REDIS_ERR;
     }
 #else
-#ifndef __sun
+#if defined(__GLIBC__) && !defined(__FreeBSD_kernel__)
     val = interval;
     if (setsockopt(fd, IPPROTO_TCP, TCP_KEEPIDLE, &val, sizeof(val)) < 0) {
         __redisSetError(c,REDIS_ERR_OTHER,strerror(errno));
@@ -256,10 +256,12 @@ int redisContextSetTimeout(redisContext *c, const struct timeval tv) {
 static int _redisContextConnectTcp(redisContext *c, const char *addr, int port,
                                    const struct timeval *timeout,
                                    const char *source_addr) {
-    int s, rv;
+    int s, rv, n;
     char _port[6];  /* strlen("65535"); */
     struct addrinfo hints, *servinfo, *bservinfo, *p, *b;
     int blocking = (c->flags & REDIS_BLOCK);
+    int reuseaddr = (c->flags & REDIS_REUSEADDR);
+    int reuses = 0;
 
     snprintf(_port, 6, "%d", port);
     memset(&hints,0,sizeof(hints));
@@ -279,6 +281,7 @@ static int _redisContextConnectTcp(redisContext *c, const char *addr, int port,
         }
     }
     for (p = servinfo; p != NULL; p = p->ai_next) {
+addrretry:
         if ((s = socket(p->ai_family,p->ai_socktype,p->ai_protocol)) == -1)
             continue;
 
@@ -294,12 +297,22 @@ static int _redisContextConnectTcp(redisContext *c, const char *addr, int port,
                 __redisSetError(c,REDIS_ERR_OTHER,buf);
                 goto error;
             }
+
+            if (reuseaddr) {
+                n = 1;
+                if (setsockopt(s, SOL_SOCKET, SO_REUSEADDR, (char*) &n,
+                               sizeof(n)) < 0) {
+                    goto error;
+                }
+            }
+
             for (b = bservinfo; b != NULL; b = b->ai_next) {
                 if (bind(s,b->ai_addr,b->ai_addrlen) != -1) {
                     bound = 1;
                     break;
                 }
             }
+            freeaddrinfo(bservinfo);
             if (!bound) {
                 char buf[128];
                 snprintf(buf,sizeof(buf),"Can't bind socket: %s",strerror(errno));
@@ -313,6 +326,12 @@ static int _redisContextConnectTcp(redisContext *c, const char *addr, int port,
                 continue;
             } else if (errno == EINPROGRESS && !blocking) {
                 /* This is ok. */
+            } else if (errno == EADDRNOTAVAIL && reuseaddr) {
+                if (++reuses >= REDIS_CONNECT_RETRIES) {
+                    goto error;
+                } else {
+                    goto addrretry;
+                }
             } else {
                 if (redisContextWaitReady(c,timeout) != REDIS_OK)
                     goto error;
