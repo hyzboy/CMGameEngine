@@ -22,7 +22,7 @@ namespace hgl
 
 		bool RedisDB::Info(char *result)
 		{
-			REPLY r(con,"INFO");
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"INFO");
 
 			if(!r)return(false);
 			if(r->type!=REDIS_REPLY_STRING)return(false);
@@ -37,7 +37,7 @@ namespace hgl
 		*/
 		bool RedisDB::SelectDB(int db_index)
 		{
-			REPLY r(con,"SELECT %d",db_index);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"SELECT %d",db_index);
 
 			if(!r)return(false);
 
@@ -46,14 +46,14 @@ namespace hgl
 
 		int RedisDB::DBSize()
 		{
-			REPLY r(con,"DBSIZE");
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"DBSIZE");
 
 			return_integer;
 		}
 
 		bool RedisDB::Ping(char *result)
 		{
-			REPLY r(con,"PING");
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"PING");
 
 			if(!r)return(false);
 
@@ -63,15 +63,15 @@ namespace hgl
 			return(true);
 		}
 
-		void RedisDB::Save		(){REPLY r(con,"SAVE");}
-		void RedisDB::BGSave	(){REPLY r(con,"BGSAVE");}
+		void RedisDB::Save		(){REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"SAVE");}
+		void RedisDB::BGSave	(){REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"BGSAVE");}
 
-		void RedisDB::FlushDB	(){REPLY r(con,"FLUSHDB");}
-		void RedisDB::FlushAll	(){REPLY r(con,"FLUSHALL");}
+		void RedisDB::FlushDB	(){REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"FLUSHDB");}
+		void RedisDB::FlushAll	(){REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"FLUSHALL");}
 
-		void RedisDB::Multi		(){REPLY r(con,"MULTI");}
-		void RedisDB::Discard	(){REPLY r(con,"DISCARD");}
-		void RedisDB::Exec		(){REPLY r(con,"EXEC");}
+		void RedisDB::Multi		(){REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"MULTI");}
+		void RedisDB::Discard	(){REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"DISCARD");}
+		void RedisDB::Exec		(){REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"EXEC");}
 
 		int RedisDB::MultiParam	(const UTF8String &cmd,int number,const char **keys)
 		{
@@ -91,7 +91,7 @@ namespace hgl
 				argv_len[i+1]=strlen(keys[i]);
 			}
 
-			REPLY r(con,number+1,argv,argv_len);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),number+1,argv,argv_len);
 
 			return_integer;
 		}
@@ -116,7 +116,7 @@ namespace hgl
 				argv_len[i+2]=strlen(keys[i]);
 			}
 
-			REPLY r(con,number+2,argv,argv_len);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),number+2,argv,argv_len);
 
 			return_integer;
 		}
@@ -125,7 +125,7 @@ namespace hgl
 		{
 			if(!str||!*str)return(-1);
 
-			REPLY r(con,"keys %s",str);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"keys %s",str);
 
 			return_str_array(r,key_list);
 		}

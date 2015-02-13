@@ -1,4 +1,4 @@
-﻿#include<hgl/db/RedisDB.h>
+#include<hgl/db/RedisDB.h>
 #include"RedisDBReply.h"
 
 namespace hgl
@@ -23,7 +23,7 @@ namespace hgl
 				(size_t)size
 			};
 
-			REPLY r(con,4,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),4,argv,argvlen);
 
 			return_bool;
 		}
@@ -46,7 +46,7 @@ namespace hgl
 				(size_t)value.Length()
 			};
 
-			REPLY r(con,4,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),4,argv,argvlen);
 
 			return_bool;
 		}
@@ -95,7 +95,7 @@ namespace hgl
 				++vp;
 			}
 
-			REPLY r(con,argc,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),argc,argv,argvlen);
 
 			delete[] argv;
 			delete[] argvlen;
@@ -141,7 +141,7 @@ namespace hgl
 				++idp;
 			}
 
-			REPLY r(con,argc,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),argc,argv,argvlen);
 
 			delete[] argv;
 			delete[] argvlen;
@@ -202,7 +202,7 @@ namespace hgl
 				++idp;
 			}
 
-			REPLY r(con,argc,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),argc,argv,argvlen);
 
 			delete[] argv;
 			delete[] argvlen;
@@ -237,7 +237,7 @@ namespace hgl
 				(size_t)field.Length()
 			};
 
-			REPLY r(con,3,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),3,argv,argvlen);
 
 			if(r->type!=REDIS_REPLY_STRING)
 				return(false);
@@ -276,7 +276,7 @@ namespace hgl
 				++sp;
 			}
 
-			REPLY r(con,argc,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),argc,argv,argvlen);
 
 			delete[] argv;
 			delete[] argvlen;
@@ -298,7 +298,7 @@ namespace hgl
 				(size_t)key.Length()
 			};
 
-			REPLY r(con,2,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),2,argv,argvlen);
 
 			return_pair_str_array(r,field,value);
 		}
@@ -317,7 +317,7 @@ namespace hgl
 				(size_t)key.Length()
 			};
 
-			REPLY r(con,2,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),2,argv,argvlen);
 
 			return_hashs_pair(r,result);
 		}
@@ -336,14 +336,14 @@ namespace hgl
 				(size_t)key.Length()
 			};
 
-			REPLY r(con,2,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),2,argv,argvlen);
 
 			return_str_array(r,result_list);
 		}
 
 		bool RedisDB::HIncr(const char *key,const char *field,int &value)
 		{
-			REPLY r(con,"HINCRBY %s %s %d",key,field,value);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"HINCRBY %s %s %d",key,field,value);
 
 			if(r->type!=REDIS_REPLY_INTEGER)
 				return(false);
@@ -354,7 +354,7 @@ namespace hgl
 
 		bool RedisDB::HIncrByFloat(const char *key,const char *field,double &value)
 		{
-			REPLY r(con,"HINCRBY %s %s " HGL_FMT_DOUBLE,key,field,value);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"HINCRBY %s %s " HGL_FMT_DOUBLE,key,field,value);
 
 			if(r->type!=REDIS_REPLY_STRING)
 				return(false);
@@ -378,7 +378,7 @@ namespace hgl
 				(size_t)field.Length()
 			};
 
-			REPLY r(con,3,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),3,argv,argvlen);
 
 			return_bool;
 		}
@@ -413,7 +413,7 @@ namespace hgl
 				++sp;
 			}
 
-			REPLY r(con,argc,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),argc,argv,argvlen);
 
 			delete[] argv;
 			delete[] argvlen;
@@ -437,7 +437,7 @@ namespace hgl
 				(size_t)field.Length()
 			};
 
-			REPLY r(con,3,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),3,argv,argvlen);
 
 			return_bool;
 		}
@@ -456,7 +456,7 @@ namespace hgl
 				(size_t)key.Length()
 			};
 
-			REPLY r(con,2,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),2,argv,argvlen);
 
 			return_str_array(r,result_list);
 		}
@@ -475,7 +475,7 @@ namespace hgl
 				(size_t)key.Length()
 			};
 
-			REPLY r(con,2,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),2,argv,argvlen);
 
 			return_integer;
 		}

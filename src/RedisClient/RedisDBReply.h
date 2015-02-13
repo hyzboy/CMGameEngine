@@ -6,55 +6,62 @@ namespace hgl
 {
 	namespace redis
 	{
+#ifdef _DEBUG
+	#define REDIS_REPLY_DEBUG_HEADER(con) __FILE__,__LINE__,__FUNCTION__,con
+
+	#define REDIS_REPLY_INIT_END	if(!reply)	\
+										std::cout<<"redisvCommand return NULL.file:"<<source_filename<<",line:"<<source_line<<",func:"<<source_function<<std::endl;\
+									else	\
+									if(reply->type==REDIS_REPLY_ERROR)	\
+										std::cout<<"redisvCommand return error:"<<reply->str<<".file:"<<source_filename<<",line:"<<source_line<<",func:"<<source_function<<std::endl;
+
+#else
+	#define REDIS_REPLY_DEBUG_HEADER(con)	con
+
+	#define REDIS_REPLY_INIT_END	if(!reply)	\
+										std::cout<<"redisvCommand return NULL."<<std::endl;	\
+									else	\
+									if(reply->type==REDIS_REPLY_ERROR)	\
+										std::cout<<"redisvCommand return error:"<<reply->str<<std::endl;
+#endif//_DEBUG
+
 		class REPLY
 		{
 			redisReply *reply;
 
 		public:
 
-			REPLY(redisContext *con,const char *format,...)
+			void OutReplyError()
+			{
+
+			}
+
+			REPLY(
+				#ifdef _DEBUG
+				const char *source_filename,const int source_line,const char *source_function,
+				#endif//_DEBUG
+				redisContext *con,const char *format,...)
+
 			{
 				va_list ap;
-
-// #ifndef NO_LOGINFO
-// 				char tmp[1024];
-// 				va_start(ap,format);
-// 				vsprintf(tmp,format,ap);
-// 				va_end(ap);
-//
-// 				LOG_INFO(tmp);
-// #endif//NO_LOGINFO
 
 				va_start(ap,format);
 				reply = (redisReply *)redisvCommand(con,format,ap);
 				va_end(ap);
 
-				if(!reply)
-				{
-					printf("redisvCommand return NULL.\n");
-					return;
-				}
-
-				if(reply->type==REDIS_REPLY_ERROR)
-				{
-					printf("redisvCommand return error: %s\n",reply->str);
-				}
+				REDIS_REPLY_INIT_END
 			}
 
-			REPLY(redisContext *con,int argc,const char **argv,const size_t *argvlen)
+			REPLY(
+				#ifdef _DEBUG
+				const char *source_filename,const int source_line,const char *source_function,
+				#endif//_DEBUG
+				redisContext *con,int argc,const char **argv,const size_t *argvlen)
+
 			{
 				reply=(redisReply *)redisCommandArgv(con,argc,argv,argvlen);
 
-				if(!reply)
-				{
-					printf("redisvCommand return NULL.\n");
-					return;
-				}
-
-				if(reply->type==REDIS_REPLY_ERROR)
-				{
-					printf("redisvCommand return error: %s\n",reply->str);
-				}
+				REDIS_REPLY_INIT_END
 			}
 
 			~REPLY()

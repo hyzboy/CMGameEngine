@@ -1,4 +1,4 @@
-﻿#include<hgl/db/RedisDB.h>
+#include<hgl/db/RedisDB.h>
 #include"RedisDBReply.h"
 
 namespace hgl
@@ -33,7 +33,7 @@ namespace hgl
 					(size_t)etstr.Length()
 				};
 
-				REPLY r(con,4,argv,argvlen);
+				REPLY r(REDIS_REPLY_DEBUG_HEADER(con),4,argv,argvlen);
 
 				if(!r)return(false);
 			}
@@ -53,7 +53,7 @@ namespace hgl
 					(size_t)value.Length()
 				};
 
-				REPLY r(con,3,argv,argvlen);
+				REPLY r(REDIS_REPLY_DEBUG_HEADER(con),3,argv,argvlen);
 
 				if(!r)return(false);
 			}
@@ -82,7 +82,7 @@ namespace hgl
 				(size_t)value.Length()
 			};
 
-			REPLY r(con,3,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),3,argv,argvlen);
 
 			return_bool;
 		}
@@ -101,7 +101,7 @@ namespace hgl
 				(size_t)key.Length()
 			};
 
-			REPLY r(con,2,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),2,argv,argvlen);
 
 			if(!r)return(false);
 
@@ -134,7 +134,7 @@ namespace hgl
 				(size_t)value.Length()
 			};
 
-			REPLY r(con,3,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),3,argv,argvlen);
 
 			if(!r)return(false);
 
@@ -161,7 +161,7 @@ namespace hgl
 				(size_t)key.Length(),
 			};
 
-			REPLY r(con,2,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),2,argv,argvlen);
 
 			return_integer;
 		}
@@ -186,7 +186,7 @@ namespace hgl
 				9,
 			};
 
-			REPLY r(con,1,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),1,argv,argvlen);
 
 			if(!r)return(false);
 			if(r->type!=REDIS_REPLY_STRING)
@@ -210,7 +210,7 @@ namespace hgl
 				(size_t)key.Length(),
 			};
 
-			REPLY r(con,2,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),2,argv,argvlen);
 
 			return_bool;
 		}
@@ -237,7 +237,7 @@ namespace hgl
 				(size_t)new_name.Length()
 			};
 
-			REPLY r(con,3,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),3,argv,argvlen);
 
 			if(!r)return(false);
 			if(r->type!=REDIS_REPLY_STATUS)return(false);
@@ -247,7 +247,7 @@ namespace hgl
 
 		bool RedisDB::Expire(const char *key,int t)
 		{
-			REPLY r(con,"EXPIRE %s %d",key,t);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"EXPIRE %s %d",key,t);
 
 			return_bool;
 		}
@@ -266,7 +266,7 @@ namespace hgl
 				(size_t)key.Length(),
 			};
 
-			REPLY r(con,2,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),2,argv,argvlen);
 
 			return_bool;
 		}
@@ -285,7 +285,7 @@ namespace hgl
 				(size_t)key.Length(),
 			};
 
-			REPLY r(con,2,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),2,argv,argvlen);
 
 			return_integer;
 		}
@@ -304,7 +304,7 @@ namespace hgl
 				(size_t)key.Length(),
 			};
 
-			REPLY r(con,2,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),2,argv,argvlen);
 
 			return_integer;
 		}
@@ -331,7 +331,7 @@ namespace hgl
 				(size_t)value.Length()
 			};
 
-			REPLY r(con,3,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),3,argv,argvlen);
 
 			return_integer;
 		}
@@ -345,7 +345,7 @@ namespace hgl
 		*/
 		bool RedisDB::Get(const char *key,int start,int end,char *result)
 		{
-			REPLY r(con,"GETRANGE %s %d %d",key,start,end);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"GETRANGE %s %d %d",key,start,end);
 
 			if(!r)return(false);
 			if(r->type!=REDIS_REPLY_STRING)return(false);

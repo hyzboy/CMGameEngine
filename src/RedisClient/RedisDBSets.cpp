@@ -1,4 +1,4 @@
-﻿#include<hgl/db/RedisDB.h>
+#include<hgl/db/RedisDB.h>
 #include"RedisDBReply.h"
 
 namespace hgl
@@ -23,7 +23,7 @@ namespace hgl
 				(size_t)member.Length()
 			};
 
-			REPLY r(con,3,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),3,argv,argvlen);
 
 			return_integer;
 		}
@@ -53,7 +53,7 @@ namespace hgl
 				(size_t)member.Length()
 			};
 
-			REPLY r(con,3,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),3,argv,argvlen);
 
 			return_integer;
 		}
@@ -71,7 +71,7 @@ namespace hgl
 
 			if(count>0)
 			{
-				REPLY r(con,"SRANDMEMBER %s %d",key,count);
+				REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"SRANDMEMBER %s %d",key,count);
 
 				if(r->type!=REDIS_REPLY_STRING)
 					return(false);
@@ -80,7 +80,7 @@ namespace hgl
 			}
 			else
 			{
-				REPLY r(con,"SRANDMEMBER %s",key);
+				REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"SRANDMEMBER %s",key);
 
 				if(r->type!=REDIS_REPLY_STRING)
 					return(false);
@@ -95,7 +95,7 @@ namespace hgl
 		{
 			if(!key||!(*key))return(false);
 
-			REPLY r(con,"SPOP %s",key);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"SPOP %s",key);
 
 			if(r->type!=REDIS_REPLY_STRING)
 				return(false);
@@ -110,7 +110,7 @@ namespace hgl
 			 ||!dst||!(*dst)
 			 ||!member||!(*member))return(false);
 
-			REPLY r(con,"SMOVE %s %s %s",src,dst,member);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"SMOVE %s %s %s",src,dst,member);
 
 			return_integer;
 		}
@@ -119,7 +119,7 @@ namespace hgl
 		{
 			if(!set||!(*set))return(-1);
 
-			REPLY r(con,"SCARD %s",set);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"SCARD %s",set);
 
 			return_integer;
 		}
@@ -142,14 +142,14 @@ namespace hgl
 				(size_t)member.Length()
 			};
 
-			REPLY r(con,3,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),3,argv,argvlen);
 
 			return_integer;
 		}
 
 		bool RedisDB::SMembers(const char *set,redis_string_list &result_list)
 		{
-			REPLY r(con,"SMEMBERS %s",set);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"SMEMBERS %s",set);
 
 			return_str_array(r,result_list);
 		}
@@ -168,7 +168,7 @@ namespace hgl
 				str+=' ';
 			}
 
-			REPLY r(con,str);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),str);
 			return_str_array(r,result_list);
 		}
 
@@ -190,7 +190,7 @@ namespace hgl
 				str+=' ';
 			}
 
-			REPLY r(con,str);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),str);
 			return_integer;
 		}
 
@@ -208,7 +208,7 @@ namespace hgl
 				str+=' ';
 			}
 
-			REPLY r(con,str);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),str);
 			return_str_array(r,result_list);
 		}
 
@@ -230,7 +230,7 @@ namespace hgl
 				str+=' ';
 			}
 
-			REPLY r(con,str);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),str);
 			return_integer;
 		}
 	}//namespace redis

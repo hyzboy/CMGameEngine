@@ -1,4 +1,4 @@
-﻿#include<hgl/db/RedisDB.h>
+#include<hgl/db/RedisDB.h>
 #include"RedisDBReply.h"
 
 namespace hgl
@@ -9,7 +9,7 @@ namespace hgl
 		{
 			if(!set||!(*set)||!member||!(*member))return(-1);
 
-			REPLY r(con,"ZADD %s " HGL_FMT_I64 " %s",set,score,member);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"ZADD %s " HGL_FMT_I64 " %s",set,score,member);
 
 			return_integer;
 		}
@@ -41,7 +41,7 @@ namespace hgl
 
 			*p=0;
 
-			REPLY r(con,str);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),str);
 			return_integer;
 		}
 
@@ -63,7 +63,7 @@ namespace hgl
 				(size_t)member.Length()
 			};
 
-			REPLY r(con,3,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),3,argv,argvlen);
 
 			return_integer;
 		}
@@ -77,14 +77,14 @@ namespace hgl
 
 		bool RedisDB::ZRemRangeByRank(const char *set,int64 start,int64 top)
 		{
-			REPLY r(con,"ZREMRANGEBYRANK %s " HGL_FMT_I64 " " HGL_FMT_I64,set,start,top);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"ZREMRANGEBYRANK %s " HGL_FMT_I64 " " HGL_FMT_I64,set,start,top);
 
 			return_integer;
 		}
 
 		bool RedisDB::ZRemRangeByScore(const char *set,int64 min_score,int64 max_score)
 		{
-			REPLY r(con,"ZREMRANGEBYSCORE %s " HGL_FMT_I64 " " HGL_FMT_I64,set,min_score,max_score);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"ZREMRANGEBYSCORE %s " HGL_FMT_I64 " " HGL_FMT_I64,set,min_score,max_score);
 
 			return_integer;
 		}
@@ -109,7 +109,7 @@ namespace hgl
 				(size_t)member.Length()
 			};
 
-			REPLY r(con,4,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),4,argv,argvlen);
 
 			result=r->str;
 			return(true);
@@ -131,42 +131,42 @@ namespace hgl
 				(size_t)set.Length(),
 			};
 
-			REPLY r(con,2,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),2,argv,argvlen);
 
 			return_integer;
 		}
 
 		int RedisDB::ZCount(const char *set,int64 min_score,int64 max_score)
 		{
-			REPLY r(con,"ZCOUNT %s " HGL_FMT_I64 " " HGL_FMT_I64,set,min_score,max_score);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"ZCOUNT %s " HGL_FMT_I64 " " HGL_FMT_I64,set,min_score,max_score);
 
 			return_integer;
 		}
 
 		int RedisDB::ZRange(const char *set,int64 start,int64 stop,redis_string_list &sl)
 		{
-			REPLY r(con,"ZRANGE %s " HGL_FMT_I64 " " HGL_FMT_I64,set,start,stop);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"ZRANGE %s " HGL_FMT_I64 " " HGL_FMT_I64,set,start,stop);
 
 			return_str_array(r,sl);
 		}
 
 		int RedisDB::ZRangeByScore(const char *set,int64 min_score,int64 max_score,redis_string_list &sl)
 		{
-			REPLY r(con,"ZRANGEBYSCORE %s " HGL_FMT_I64 " " HGL_FMT_I64,set,min_score,max_score);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"ZRANGEBYSCORE %s " HGL_FMT_I64 " " HGL_FMT_I64,set,min_score,max_score);
 
 			return_str_array(r,sl);
 		}
 
 		bool RedisDB::ZRange(const char *set,int64 score,redis_string &str)
 		{
-			REPLY r(con,"ZRANGE %s " HGL_FMT_I64 " " HGL_FMT_I64,set,score,score);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"ZRANGE %s " HGL_FMT_I64 " " HGL_FMT_I64,set,score,score);
 
 			return_str_array_first(r,str);
 		}
 
 		bool RedisDB::ZRangeByScore(const char *set,int64 score,redis_string &str)
 		{
-			REPLY r(con,"ZRANGEBYSCORE %s " HGL_FMT_I64 " " HGL_FMT_I64,set,score,score);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"ZRANGEBYSCORE %s " HGL_FMT_I64 " " HGL_FMT_I64,set,score,score);
 
 			return_str_array_first(r,str);
 		}
@@ -189,7 +189,7 @@ namespace hgl
 				(size_t)member.Length()
 			};
 
-			REPLY r(con,3,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),3,argv,argvlen);
 
 			if(!r)return(false);
 			if(r->type!=REDIS_REPLY_STRING)return(false);
@@ -216,7 +216,7 @@ namespace hgl
 				(size_t)member.Length()
 			};
 
-			REPLY r(con,3,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),3,argv,argvlen);
 
 			if(!r)return(false);
 			if(r->type!=REDIS_REPLY_INTEGER)return(false);

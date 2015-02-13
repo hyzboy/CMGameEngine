@@ -1,4 +1,4 @@
-﻿#include<hgl/db/RedisDB.h>
+#include<hgl/db/RedisDB.h>
 #include"RedisDBReply.h"
 
 namespace hgl
@@ -19,7 +19,7 @@ namespace hgl
 				(size_t)key.Length()
 			};
 
-			REPLY r(con,2,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),2,argv,argvlen);
 
 			if(!r)return(false);
 			if(r->type!=REDIS_REPLY_INTEGER)return(false);
@@ -46,7 +46,7 @@ namespace hgl
 				(size_t)val_str.Length()
 			};
 
-			REPLY r(con,3,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),3,argv,argvlen);
 
 			if(!r)return(false);
 			if(r->type!=REDIS_REPLY_INTEGER)return(false);
@@ -69,7 +69,7 @@ namespace hgl
 				(size_t)key.Length()
 			};
 
-			REPLY r(con,2,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),2,argv,argvlen);
 
 			if(!r)return(false);
 			if(r->type!=REDIS_REPLY_INTEGER)return(false);
@@ -96,7 +96,7 @@ namespace hgl
 				(size_t)val_str.Length()
 			};
 
-			REPLY r(con,3,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),3,argv,argvlen);
 
 			if(!r)return(false);
 			if(r->type!=REDIS_REPLY_INTEGER)return(false);
@@ -123,7 +123,7 @@ namespace hgl
 				(size_t)val_str.Length()
 			};
 
-			REPLY r(con,3,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),3,argv,argvlen);
 
 			if(!r)return(false);
 			if(r->type!=REDIS_REPLY_STRING)return(false);
@@ -145,7 +145,7 @@ namespace hgl
 				(size_t)key.Length()
 			};
 
-			REPLY r(con,2,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),2,argv,argvlen);
 
 			if(!r)return(false);
 			if(r->type!=REDIS_REPLY_INTEGER)return(false);
@@ -172,7 +172,7 @@ namespace hgl
 				(size_t)val_str.Length()
 			};
 
-			REPLY r(con,3,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),3,argv,argvlen);
 
 			if(!r)return(false);
 			if(r->type!=REDIS_REPLY_INTEGER)return(false);
@@ -195,7 +195,7 @@ namespace hgl
 				(size_t)key.Length()
 			};
 
-			REPLY r(con,2,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),2,argv,argvlen);
 
 			if(!r)return(false);
 			if(r->type!=REDIS_REPLY_INTEGER)return(false);
@@ -222,7 +222,7 @@ namespace hgl
 				(size_t)val_str.Length()
 			};
 
-			REPLY r(con,3,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),3,argv,argvlen);
 
 			if(!r)return(false);
 			if(r->type!=REDIS_REPLY_INTEGER)return(false);

@@ -1,4 +1,4 @@
-﻿#include<hgl/db/RedisDB.h>
+#include<hgl/db/RedisDB.h>
 #include"RedisDBReply.h"
 
 namespace hgl
@@ -34,7 +34,7 @@ namespace hgl
 					(size_t)size
 				};
 
-				REPLY r(con,4,argv,argvlen);
+				REPLY r(REDIS_REPLY_DEBUG_HEADER(con),4,argv,argvlen);
 
 				if(!r)return(false);
 			}
@@ -54,7 +54,7 @@ namespace hgl
 					(size_t)size
 				};
 
-				REPLY r(con,3,argv,argvlen);
+				REPLY r(REDIS_REPLY_DEBUG_HEADER(con),3,argv,argvlen);
 
 				if(!r)return(false);
 			}
@@ -84,7 +84,7 @@ namespace hgl
 				(size_t)size
 			};
 
-			REPLY r(con,3,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),3,argv,argvlen);
 
 			return_bool;
 		}
@@ -110,7 +110,7 @@ namespace hgl
 				(size_t)key.Length(),
 			};
 
-			REPLY r(con,2,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),2,argv,argvlen);
 
 			if(!r)return(false);
 
@@ -147,7 +147,7 @@ namespace hgl
 				(size_t)key.Length(),
 			};
 
-			REPLY r(con,2,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),2,argv,argvlen);
 
 			if(!r)return(nullptr);
 
@@ -189,7 +189,7 @@ namespace hgl
 				(size_t)size
 			};
 
-			REPLY r(con,3,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),3,argv,argvlen);
 
 			if(!r)return(false);
 
@@ -231,7 +231,7 @@ namespace hgl
 				(size_t)size
 			};
 
-			REPLY r(con,3,argv,argvlen);
+			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),3,argv,argvlen);
 
 			return_integer;
 		}
