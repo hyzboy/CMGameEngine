@@ -170,7 +170,7 @@ namespace hgl
 			if(Load())
 			{
 				#ifdef _DEBUG
-				LOG_INFO(OS_TEXT("Load Plug-in <")+plugin_name+OS_TEXT(">:<")+filename+OS_TEXT("> ok,Plug-In intro:")+intro);
+				LOG_INFO(OS_TEXT("Load Plug-in <")+plugin_name+OS_TEXT(">:<")+filename+OS_TEXT("> ok,Plug-In intro:")+to_oschar(intro));
 				#else
 				LOG_INFO(OS_TEXT("Load Plug-in <")+plugin_name+OS_TEXT(">:<")+filename+OS_TEXT("> ok"));
 				#endif//_DEBUG
