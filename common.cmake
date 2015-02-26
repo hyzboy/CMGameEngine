@@ -20,7 +20,7 @@ IF(WIN32)
 ELSE(WIN32)
 	OPTION(USE_CPP14				"Use C++ 14"							FALSE	)
 	OPTION(USE_CPP11				"Use C++ 11"							TRUE	)
-	OPTION(USE_ICE_CREAM			"Use IceCream"							TRUE	)
+	OPTION(USE_ICE_CREAM			"Use IceCream"							FALSE	)
 
 	IF(APPLE)
 		OPTION(USE_LLVM_CLANG			"Use LLVM Clang"						TRUE	)
