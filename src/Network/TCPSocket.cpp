@@ -100,19 +100,15 @@ namespace hgl
 		 * @param keep_alive 是否自动保持连接
 		 * @param time_interval 检测时间间隔
 		 */
-		bool TCPSocket::SetKeepAlive(bool keep_alive,const double time_interval)
+		bool TCPSocket::SetKeepAlive(bool keep_alive,const uint time_interval)
 		{
 			int flag=(keep_alive?1:0);
 
 			setsockopt(ThisSocket,SOL_SOCKET,SO_KEEPALIVE,&flag,sizeof(flag));
 
-			timeval tv;
-
-			SetTimeVal(tv,time_interval);
-
-			setsockopt(ThisSocket,IPPROTO_TCP,TCP_KEEPIDLE,&tv,sizeof(timeval));
-			setsockopt(ThisSocket,IPPROTO_TCP,TCP_KEEPINTVL,&tv,sizeof(timeval));
-			setsockopt(ThisSocket,IPPROTO_TCP,TCP_KEEPCNT,&tv,sizeof(timeval));
+			setsockopt(ThisSocket,IPPROTO_TCP,TCP_KEEPIDLE,&time_interval,sizeof(time_interval));
+			setsockopt(ThisSocket,IPPROTO_TCP,TCP_KEEPINTVL,&time_interval,sizeof(time_interval));
+			setsockopt(ThisSocket,IPPROTO_TCP,TCP_KEEPCNT,&time_interval,sizeof(time_interval));
 
 			return(true);
 		}

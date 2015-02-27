@@ -44,7 +44,7 @@ namespace hgl
 
 			const sockaddr_in &GetAddr()const{return ThisAddr;}										///<取得当前socket地址
 			bool SetNodelay(bool);																	///<设置是否使用无延迟方式
-			bool SetKeepAlive(bool,const double=HGL_NETWORK_TIME_OUT);								///<设置自动保持连接机制
+			bool SetKeepAlive(bool,const uint=HGL_NETWORK_TIME_OUT);								///<设置自动保持连接机制
 
 			virtual void UseSocket(int,const sockaddr_in *addr=0);									///<使用指定socket
 
