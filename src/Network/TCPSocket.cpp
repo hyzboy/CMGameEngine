@@ -96,6 +96,28 @@ namespace hgl
 		}
 
 		/**
+		 * 设置是否使唤用KEEPALIVE自动保持连接机制
+		 * @param keep_alive 是否自动保持连接
+		 * @param time_interval 检测时间间隔
+		 */
+		bool TCPSocket::SetKeepAlive(bool keep_alive,const double time_interval)
+		{
+			int flag=(keep_alive?1:0);
+
+			setsockopt(ThisSocket,SOL_SOCKET,SO_KEEPALIVE,&flag,sizeof(flag));
+
+			timeval tv;
+
+			SetTimeVal(tv,time_interval);
+
+			setsockopt(ThisSocket,IPPROTO_TCP,TCP_KEEPIDLE,&tv,sizeof(timeval));
+			setsockopt(ThisSocket,IPPROTO_TCP,TCP_KEEPINTVL,&tv,sizeof(timeval));
+			setsockopt(ThisSocket,IPPROTO_TCP,TCP_KEEPCNT,&tv,sizeof(timeval));
+
+			return(true);
+		}
+
+		/**
 		* 使用指定socket
 		* @param sock 指定socket编号
 		* @param addr socket地址
