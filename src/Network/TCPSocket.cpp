@@ -97,20 +97,23 @@ namespace hgl
 
 		/**
 		 * 设置是否使唤用KEEPALIVE自动保持连接机制
-		 * @param keep_alive 是否自动保持连接
-		 * @param time_interval 检测时间间隔
+		 * @param keep_alive	是否自动保持连接
+		 * @param idle			没有数据交互，开始探测的是时间(默认为7200秒)
+		 * @param interval		探测之间的时间间隔(默认为75秒)
+		 * @param count			探测的最大次数(默认为9次)
 		 */
-		bool TCPSocket::SetKeepAlive(bool keep_alive,const uint time_interval)
+		void TCPSocket::SetKeepAlive(bool keep_alive,const int idle,const int interval,const int count)
 		{
 			int flag=(keep_alive?1:0);
 
 			setsockopt(ThisSocket,SOL_SOCKET,SO_KEEPALIVE,&flag,sizeof(flag));
 
-			setsockopt(ThisSocket,IPPROTO_TCP,TCP_KEEPIDLE,&time_interval,sizeof(time_interval));
-			setsockopt(ThisSocket,IPPROTO_TCP,TCP_KEEPINTVL,&time_interval,sizeof(time_interval));
-			setsockopt(ThisSocket,IPPROTO_TCP,TCP_KEEPCNT,&time_interval,sizeof(time_interval));
+			if(!flag)
+				return;
 
-			return(true);
+			setsockopt(ThisSocket,IPPROTO_TCP,TCP_KEEPIDLE,	&idle,		sizeof(int));
+			setsockopt(ThisSocket,IPPROTO_TCP,TCP_KEEPINTVL,&interval,	sizeof(int));
+			setsockopt(ThisSocket,IPPROTO_TCP,TCP_KEEPCNT,	&count,		sizeof(int));
 		}
 
 		/**
