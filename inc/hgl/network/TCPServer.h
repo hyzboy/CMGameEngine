@@ -11,7 +11,11 @@ namespace hgl
 		*/
 		class TCPServer:public AcceptServer															///TCP服务器端实现基类
 		{
-			int	CreateServerSocket() HGL_OVERRIDE final;												///<创建一个服务器用Socket
+			int	CreateServerSocket() HGL_OVERRIDE final;											///<创建一个服务器用Socket
+
+		public:
+
+			void SetDeferAccept(const int);															///<设置推迟Accept
 		};//class TCPServer
 	}//namespace network
 
