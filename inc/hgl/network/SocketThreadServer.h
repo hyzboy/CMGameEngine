@@ -38,6 +38,11 @@ namespace hgl
 				delete server;
 			}
 
+			S *GetServer()
+			{
+				return server;
+			}
+
 			void Update()
 			{
 				sockaddr_in sa;
