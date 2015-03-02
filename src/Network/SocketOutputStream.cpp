@@ -62,6 +62,7 @@ namespace hgl
 			if(sock==-1)return(-1);
 
 			int err;
+			const os_char *err_str;
 			char *p=(char *)buf;
 
 // 			const double start_time=GetDoubleTime();
@@ -101,7 +102,15 @@ namespace hgl
 						break;
 					}
 
-					LOG_ERROR(OS_TEXT("SocketOutputStream::WriteFully error,Socket:")+OSString(sock)+OS_TEXT(",error code=")+OSString(err));
+					err_str=GetSocketString(err);
+					if(err_str)
+					{
+						LOG_ERROR(OS_TEXT("SocketOutputStream::WriteFully error,Socket:")+OSString(sock)+OS_TEXT(",error code=")+OSString(err)+OS_TEXT(":")+OSString(err_str));
+					}
+					else
+					{
+						LOG_ERROR(OS_TEXT("SocketOutputStream::WriteFully error,Socket:")+OSString(sock)+OS_TEXT(",error code=")+OSString(err));
+					}
 					sock=-1;
 					break;
 				}

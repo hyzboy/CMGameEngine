@@ -88,6 +88,7 @@ namespace hgl
 
 			bool to_first=true;
 			int err;
+			const os_char *err_str;
 			char *p=(char *)buf;
 
 #if HGL_OS == HGL_OS_Windows
@@ -137,7 +138,16 @@ namespace hgl
 						LOG_ERROR(OS_TEXT("SocketInputStream::ReadFully TimeOut,Socket:")+OSString(sock));
 					}
 
-					LOG_ERROR(OS_TEXT("SocketInputStream::ReadFully error,Socket:")+OSString(sock)+OS_TEXT(",error code=")+OSString(err));
+					err_str=GetSocketString(err);
+					if(err_str)
+					{
+						LOG_ERROR(OS_TEXT("SocketInputStream::ReadFully error,Socket:")+OSString(sock)+OS_TEXT(",error code=")+OSString(err)+OS_TEXT(":")+OSString(err_str));
+					}
+					else
+					{
+						LOG_ERROR(OS_TEXT("SocketInputStream::ReadFully error,Socket:")+OSString(sock)+OS_TEXT(",error code=")+OSString(err));
+					}
+
 					sock=-1;
 					break;
 				}
