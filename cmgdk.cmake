@@ -16,7 +16,7 @@ OPTION(LOG_INFO_THREAD			"Output Log info include ThreadPID"			TRUE	)
 OPTION(LOG_INFO_TIME			"Output Log info include time"				TRUE	)
 OPTION(LOG_INFO_SOURCE			"Output Log info include source and line"	OFF		)
 OPTION(LOG_FILE_ONLY_ERROR 		"Only log error to file"					TRUE	)
-OPTION(LOG_THREAD_MUTEX			"Log Thread Mutex"							FALSE	)
+OPTION(LOG_THREAD_MUTEX			"Log Thread Mutex"							TRUE	)
 OPTION(LOG_CDB_LOADER_LOG		"Output CDBLoader log"						FALSE	)
 
 IF(BUILD_OPENGL_LIB)
