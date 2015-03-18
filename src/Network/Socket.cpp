@@ -253,7 +253,6 @@ namespace hgl
 			{ENOMEDIUM		,OS_TEXT("No medium found")},
 			{EMEDIUMTYPE	,OS_TEXT("Wrong medium type")},
 			{ECANCELED		,OS_TEXT("Operation Canceled")},
-			{ECANCELED		,OS_TEXT("Operation Canceled")},
 			{ENOKEY			,OS_TEXT("Required key not available")},
 			{EKEYEXPIRED	,OS_TEXT("Key has expired")},
 			{EKEYREVOKED	,OS_TEXT("Key has been revoked")},
