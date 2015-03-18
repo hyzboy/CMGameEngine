@@ -5,7 +5,6 @@ ENDIF(BUILD_BASE_LIB)
 
 IF(BUILD_NETWORK_LIB)
 	add_subdirectory(Network)
-	add_subdirectory(WebAPI)
 ENDIF(BUILD_NETWORK_LIB)
 
 add_subdirectory(SceneGraph)
