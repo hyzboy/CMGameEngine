@@ -86,7 +86,8 @@ namespace hgl
 			{
 				int wr=s->WaitRecv(wait_time);
 
-				if(wr<0)return(false);
+				if(wr<0)
+					RETURN_FALSE;
 
 				if(wr==0)
 					return IdleUpdate();
