@@ -1,4 +1,5 @@
 ﻿#include<hgl/network/TCPSocket.h>
+#include<hgl/LogInfo.h>
 
 #if HGL_OS != HGL_OS_Windows
 #include<netinet/tcp.h>
@@ -166,7 +167,8 @@ namespace hgl
 		 */
 		int TCPSocket::WaitRecv(double wait_time)
 		{
-			if(ThisSocket==-1)return(-1);
+			if(ThisSocket==-1)
+				RETURN_ERROR(-1);
 
 			SetTimeVal(time_out,wait_time);
 
@@ -179,14 +181,14 @@ namespace hgl
 			{
 				int err=GetLastSocketError();
 
-				return -err;
+				RETURN_ERROR(-err);
 			}
 
 			if(FD_ISSET(ThisSocket,&recv_set))
 				return(1);
 
 			if(FD_ISSET(ThisSocket,&err_set))
-				return(-1);
+				RETURN_ERROR(-1);
 
 			return(0);
 		}
