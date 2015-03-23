@@ -25,9 +25,10 @@ bool WriteBool(void *buf,int max_count,const UTF16String &str)
 	return(true);
 }
 
-template<typename T> bool WriteInteger	(void *buf,int max_count,const UTF16String &str){parse_int_array	<>(str.c_str(),(T *)buf,max_count);return(true);}
-template<typename T> bool WriteUInteger	(void *buf,int max_count,const UTF16String &str){parse_uint_array	<>(str.c_str(),(T *)buf,max_count);return(true);}
-template<typename T> bool WriteFloat	(void *buf,int max_count,const UTF16String &str){parse_float_array	<>(str.c_str(),(T *)buf,max_count);return(true);}
+template<typename T> bool WriteNumber(void *buf,int max_count,const UTF16String &str)
+{
+	parse_float_array(str.c_str(),(T *)buf,max_count);return(true);
+}
 
 bool WriteUTF16LE(void *buf,int max_count,const UTF16String &str)
 {
@@ -85,18 +86,18 @@ void InitWriteField()
 
 	WriteField[fbtBool	]=WriteBool;
 
-	WriteField[fbtInt8	]=WriteInteger<int8>;
-	WriteField[fbtInt16	]=WriteInteger<int16>;
-	WriteField[fbtInt32	]=WriteInteger<int32>;
-	WriteField[fbtInt64	]=WriteInteger<int64>;
+	WriteField[fbtInt8	]=WriteNumber<int8>;
+	WriteField[fbtInt16	]=WriteNumber<int16>;
+	WriteField[fbtInt32	]=WriteNumber<int32>;
+	WriteField[fbtInt64	]=WriteNumber<int64>;
 
-	WriteField[fbtUint8	]=WriteUInteger<uint8>;
-	WriteField[fbtUint16]=WriteUInteger<uint16>;
-	WriteField[fbtUint32]=WriteUInteger<uint32>;
-	WriteField[fbtUint64]=WriteUInteger<uint64>;
+	WriteField[fbtUint8	]=WriteNumber<uint8>;
+	WriteField[fbtUint16]=WriteNumber<uint16>;
+	WriteField[fbtUint32]=WriteNumber<uint32>;
+	WriteField[fbtUint64]=WriteNumber<uint64>;
 
-	WriteField[fbtFloat	]=WriteFloat<float>;
-	WriteField[fbtDouble]=WriteFloat<double>;
+	WriteField[fbtFloat	]=WriteNumber<float>;
+	WriteField[fbtDouble]=WriteNumber<double>;
 
 	WriteField[fbtChar16le	]=WriteUTF16LE;
 	WriteField[fbtChar8		]=WriteUTF8;
