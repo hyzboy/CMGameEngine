@@ -99,6 +99,8 @@ void InitWriteField()
 	WriteField[fbtFloat	]=WriteNumber<float>;
 	WriteField[fbtDouble]=WriteNumber<double>;
 
+	//限定仅使用parse_float_array，因为excel等工具在表示极小或极大数时，会使用指数形式
+
 	WriteField[fbtChar16le	]=WriteUTF16LE;
 	WriteField[fbtChar8		]=WriteUTF8;
 }
