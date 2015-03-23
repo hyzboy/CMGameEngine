@@ -1837,7 +1837,7 @@ namespace hgl
 	* @param result_list 结果数组
 	* @return 解晰出来的数据数量
 	*/
-	template<typename T,typename I,typename SET>
+	template<typename T,typename I,typename SET,bool (*IS_FUNC)(const T &),bool (*STOV)(const T *str,I &)>
 	int parse_number_array(const T *str,const int str_len,SET &result_list)
 	{
 		if(!str||str_len<=0)return(-1);
@@ -1853,13 +1853,13 @@ namespace hgl
 		while(*p&&len)
 		{
 			--len;
-			if(hgl::isdigit(*p)||*p=='-')
+			if(IS_FUNC(*p))
 			{
 				p++;
 				continue;
 			}
 
-			if(hgl::stoi(sp,result))
+			if(STOV(sp,result))
 			{
 				++count;
 
@@ -1876,13 +1876,18 @@ namespace hgl
 
 		if(p>sp)
 		{
-			hgl::stoi(sp,result);
+			STOV(sp,result);
 			result_list.Add(result);
 			++count;
 		}
 
 		return(count);
 	}
+
+	template<typename T,typename I,typename SET> inline int parse_float_array	(const T *str,const int len,SET &result_list){return parse_number_array<T,I,SET,hgl::isfloat,	hgl::etof>(str,len,result_list);}
+	template<typename T,typename I,typename SET> inline int parse_int_array		(const T *str,const int len,SET &result_list){return parse_number_array<T,I,SET,hgl::isinteger,	hgl::stoi>(str,len,result_list);}
+	template<typename T,typename I,typename SET> inline int parse_uint_array	(const T *str,const int len,SET &result_list){return parse_number_array<T,I,SET,hgl::isdigit,	hgl::stou>(str,len,result_list);}
+	template<typename T,typename I,typename SET> inline int parse_xint_array	(const T *str,const int len,SET &result_list){return parse_number_array<T,I,SET,hgl::isxdigit,	hgl::xtou>(str,len,result_list);}
 
 	/**
 	* 将一个字符串转换成对应的枚举值
