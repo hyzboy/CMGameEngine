@@ -79,6 +79,28 @@ namespace hgl
 	}
 
 	/**
+	 * 测试当前字符串是否为10进制数字以及小数点、正负符号、指数字符
+	 */
+	template<typename T>
+	bool isfloat(const T ch)
+	{
+		return isdigit(ch)
+				||ch=='-'
+				||ch=='+'
+				||ch=='.'
+				||ch=='E'
+				||ch=='e';
+	}
+
+	template<typename T>
+	bool isinteger(const T ch)
+	{
+		return isdigit(ch)
+				||ch=='-'
+				||ch=='+';
+	}
+
+	/**
 	* 测试当前字符是否为16进制数用字符(0-9,A-F)
 	*/
 	template<typename T>
@@ -983,7 +1005,6 @@ namespace hgl
 		}
 	}
 
-
 	/**
 	* 将一个字符串中的字母全部改为小写
 	* @param src 要处理的字符串
@@ -1019,7 +1040,7 @@ namespace hgl
 
 		do
 		{
-			if(*src>='A'&&*src<='Z')
+			if(*src>='a'&&*src<='z')
 				*dst=*src-32;
 			else
 				*dst=*src;
@@ -1210,6 +1231,67 @@ namespace hgl
 		{
 			result*=10;
 			result+=(*str-'0');
+
+			++str;
+			--size;
+		}
+
+		return(true);
+	}
+
+	template<typename R,typename S>
+	bool xtou(S *str,R &result)
+	{
+		if(!str)
+		{
+			result=0;
+			return(false);
+		}
+
+		result=0;
+
+		while(*str&&isxdigit(*str))
+		{
+			result*=16;
+
+			if(*str>='0'&&*str<='9')
+				result+=(*str-'0');
+			else
+			if(*str>='a'&&*str<='f')
+				result+=(*str-'a')+10;
+			else
+			if(*str>='A'&&*str<='F')
+				result+=(*str-'A')+10;
+
+			++str;
+		}
+
+		return(true);
+	}
+
+	template<typename R,typename S>
+	bool xtou(S *str,int size,R &result)
+	{
+		if(!str||size<=0)
+		{
+			result=0;
+			return(false);
+		}
+
+		result=0;
+
+		while(*str&&isxdigit(*str))
+		{
+			result*=16;
+
+			if(*str>='0'&&*str<='9')
+				result+=(*str-'0');
+			else
+			if(*str>='a'&&*str<='f')
+				result+=(*str-'a')+10;
+			else
+			if(*str>='A'&&*str<='F')
+				result+=(*str-'A')+10;
 
 			++str;
 			--size;
@@ -1685,7 +1767,7 @@ namespace hgl
 	* @param end_pointer 结束指针
 	* @return 解晰出来的数据数量
 	*/
-	template<typename T,typename I>
+	template<typename T,typename I,bool (*IS_FUNC)(const T &),bool (*STOV)(const T *str,I &)>
 	int parse_number_array(const T *str,I *result,int max_count,const T end_char=0,const T **end_pointer=0)
 	{
 		if(!str||!result||max_count<=0)return(-1);
@@ -1698,18 +1780,13 @@ namespace hgl
 
 		while(*p&&*p!=end_char)
 		{
-			if(hgl::isdigit(*p)
-			||*p=='-'
-			||*p=='+'
-			||*p=='.'
-			||*p=='E'
-			||*p=='e')
+			if(IS_FUNC(*p))
 			{
 				p++;
 				continue;
 			}
 
-			if(hgl::etof(sp,*result))
+			if(STOV(sp,*result))
 			{
 				++count;
 				--max_count;
@@ -1738,12 +1815,72 @@ namespace hgl
 
 		if(p>sp)
 		{
-			etof(sp,*result);
+			STOV(sp,*result);
 			++count;
 		}
 
 		if(end_pointer)
 			*end_pointer=p;
+
+		return(count);
+	}
+
+	template<typename T,typename I> inline int parse_float_array(const T *str,I *result,int max_count,const T end_char=0,const T **end_pointer=0){return parse_number_array<T,I,hgl::isfloat,	hgl::etof>(str,result,max_count,end_char,end_pointer);}
+	template<typename T,typename I> inline int parse_int_array	(const T *str,I *result,int max_count,const T end_char=0,const T **end_pointer=0){return parse_number_array<T,I,hgl::isinteger,	hgl::stoi>(str,result,max_count,end_char,end_pointer);}
+	template<typename T,typename I> inline int parse_uint_array	(const T *str,I *result,int max_count,const T end_char=0,const T **end_pointer=0){return parse_number_array<T,I,hgl::isdigit,	hgl::stou>(str,result,max_count,end_char,end_pointer);}
+	template<typename T,typename I> inline int parse_xint_array	(const T *str,I *result,int max_count,const T end_char=0,const T **end_pointer=0){return parse_number_array<T,I,hgl::isxdigit,	hgl::xtou>(str,result,max_count,end_char,end_pointer);}
+
+	/**
+	* 解析数值阵列字符串到数组,如"1,2,3"或"1 2 3"
+	* @param str 要解析的字符串
+	* @param str_len 字符串的长度
+	* @param result_list 结果数组
+	* @return 解晰出来的数据数量
+	*/
+	template<typename T,typename I,typename SET>
+	int parse_number_array(const T *str,const int str_len,SET &result_list)
+	{
+		if(!str||str_len<=0)return(-1);
+
+		const T *p,*sp;
+		int len=str_len;
+		int count=0;
+		I result;
+
+		sp=str;
+		p=sp;
+
+		while(*p&&len)
+		{
+			--len;
+			if(hgl::isdigit(*p)||*p=='-')
+			{
+				p++;
+				continue;
+			}
+
+			if(hgl::stoi(sp,result))
+			{
+				++count;
+
+				result_list.Add(result);
+
+				++p;
+				sp=p;
+
+				continue;
+			}
+
+			return count;
+		}
+
+		if(p>sp)
+		{
+			hgl::stoi(sp,result);
+			result_list.Add(result);
+			++count;
+		}
+
 		return(count);
 	}
 
