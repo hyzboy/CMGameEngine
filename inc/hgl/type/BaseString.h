@@ -249,6 +249,18 @@ namespace hgl
 		}
 
 		/**
+		 * 复制一个字符串
+		 */
+		bool Copy(const SelfClass &bs)
+		{
+			if(bs.IsEmpty())
+				return(false);
+
+			data=bs.data->CreateCopy();
+			return(true);
+		}
+
+		/**
 		* 断开与其它BaseString共用的情况，创建一个独有的实例
 		*/
 		bool Unlink()
