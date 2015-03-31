@@ -93,7 +93,11 @@ namespace hgl
 
 			bool Proc(int id,void *data,int size)
 			{
-				if(id<start_cmd_pb||id>end_cmd_pb)RETURN_FALSE;
+				if(id<start_cmd_pb||id>end_cmd_pb)
+				{
+					LOG_ERROR(OS_TEXT("MessageID error:")+OSString(id));
+					RETURN_FALSE;
+				}
 
 				PBItem pb_item;
 
