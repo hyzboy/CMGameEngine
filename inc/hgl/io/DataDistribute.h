@@ -107,7 +107,7 @@ namespace hgl
 			{
 				if(proc_func==nullptr)return(false);
 
-				return CallEvent(proc_func,(data_pack->GetData()));
+				return proc_func(data_pack->GetData());
 			}
 		};//class DataPacketProc
 

@@ -15,7 +15,7 @@ namespace hgl
 
 		bool LineFindPath::PutPixel(int x,int y)
 		{
-			if(CallEvent(CheckPoint,(x,y,px,py)))
+			if(CheckPoint(x,y,px,py))
 			{
 				Steps.Add(x,y);			//添加到路径中
 

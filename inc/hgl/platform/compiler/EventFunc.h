@@ -16,6 +16,8 @@ namespace hgl
 
 		template <typename RT,typename Func> struct EventFunc
 		{
+			typedef EventFunc<RT,Func> SelfClass;
+
 			union
 			{
 				void *vp_this;
@@ -33,7 +35,7 @@ namespace hgl
 
 			EventFunc()
 			{
-				memset(this,0,sizeof(EventFunc<RT,Func>));
+				memset(this,0,sizeof(SelfClass));
 			}
 
 			bool operator !()const
@@ -46,12 +48,12 @@ namespace hgl
 			void operator = (void *v)
 			{
 				if(v==0)
-					memset(this,0,sizeof(EventFunc<RT,Func>));			//omf可能不止一个指针的长度，所以必须这样清
+					memset(this,0,sizeof(SelfClass));			//omf可能不止一个指针的长度，所以必须这样清
 			}
 
-			void operator = (const EventFunc<RT,Func> &ef)
+			void operator = (const SelfClass &ef)
 			{
-				memcpy(this,&ef,sizeof(EventFunc<RT,Func>));
+				memcpy(this,&ef,sizeof(SelfClass));
 			}
 
 			bool operator == (void *v)
@@ -64,7 +66,7 @@ namespace hgl
 				return(vp_func!=v);
 			}
 
-#ifdef HGL_VARIADIC_TEMPLATES
+#ifdef HGL_VARIADIC_TEMPLATES							//不用关心动态模板参数多一次调用问题，在开启优化编译时，这种会直接被优化掉
 			template<typename ...ARGS>
 			RT operator()(ARGS...args)
 			{
@@ -89,7 +91,86 @@ namespace hgl
 				return (((_Object *)tp)->*(func_pointer))(args...);
 			}
 #endif//HGL_VARIADIC_TEMPLATES
-		};//template <typename Func> struct EventFunc
+		};//template<typename RT,typename Func> struct EventFunc
+
+		template<typename Func> struct EventFunc<void,Func>
+		{
+			typedef EventFunc<void,Func> SelfClass;
+
+			union
+			{
+				void *vp_this;
+				_Object *this_pointer;
+			};
+
+			union
+			{
+				void *vp_func;
+				Func func_pointer;
+				ObjectMemberFunc omf;
+			};
+
+		public:
+
+			EventFunc()
+			{
+				memset(this,0,sizeof(SelfClass));
+			}
+
+			bool operator !()const
+			{
+				if(!vp_func)return(true);
+
+				return(false);
+			}
+
+			void operator = (void *v)
+			{
+				if(v==0)
+					memset(this,0,sizeof(SelfClass));			//omf可能不止一个指针的长度，所以必须这样清
+			}
+
+			void operator = (const SelfClass &ef)
+			{
+				memcpy(this,&ef,sizeof(SelfClass));
+			}
+
+			bool operator == (void *v)
+			{
+				return(vp_func==v);
+			}
+
+			bool operator != (void *v)
+			{
+				return(vp_func!=v);
+			}
+
+#ifdef HGL_VARIADIC_TEMPLATES							//不用关心动态模板参数多一次调用问题，在开启优化编译时，这种会直接被优化掉
+			template<typename ...ARGS>
+			void operator()(ARGS...args)
+			{
+				(this_pointer->*(func_pointer))(args...);
+			}
+
+			template<typename ...ARGS>
+			void operator()(ARGS...args)const
+			{
+				(this_pointer->*(func_pointer))(args...);
+			}
+
+			template<typename ...ARGS>
+			void ThisCall(void *tp,ARGS...args)
+			{
+				(((_Object *)tp)->*(func_pointer))(args...);
+			}
+
+			template<typename ...ARGS>
+			void ThisCall(void *tp,ARGS...args)const
+			{
+				(((_Object *)tp)->*(func_pointer))(args...);
+			}
+#endif//HGL_VARIADIC_TEMPLATES
+		};//template<void,typename Func> struct EventFunc
 
 		#define SetEventCall(event_obj,obj_this,class_name,event_func)	{	\
 																			event_obj.vp_this=obj_this;	\
@@ -98,9 +179,9 @@ namespace hgl
 
 		#define	SetEventThis(event_obj,obj_this)			event_obj.vp_this=obj_this;
 
-		#define CallEvent(event_obj,intro)					((event_obj.this_pointer->*(event_obj.func_pointer))intro)
+//		#define CallEvent(event_obj,intro)					((event_obj.this_pointer->*(event_obj.func_pointer))intro)
 
-		#define SafeCallEvent(event_obj,intro)				{if(event_obj.vp_func)CallEvent(event_obj,intro);}
+		#define SafeCallEvent(event_obj,intro)				{if(event_obj.vp_func)event_obj intro;}
 
 		#define DefEvent(result,name,intro)					EventFunc<result,result (_Object:: *)intro> name;
 

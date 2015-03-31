@@ -63,7 +63,7 @@ namespace hgl
 
 			__inline bool checkpoint(int x,int y,int px,int py)
 			{
-				return CallEvent(CheckPoint,(x,y,px,py));
+				return CheckPoint(x,y,px,py);
 			}
 
 			__inline float comp_length(int x,int y)

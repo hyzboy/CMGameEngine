@@ -140,6 +140,6 @@ namespace hgl
 		if(!enabled)return(false);
 		if(items[cur]==nullptr)return(false);
 
-		return CallEvent(items[cur],(this));
+		return items[cur](this);
 	}
 }//namespace hgl
