@@ -7,6 +7,7 @@ namespace hgl
 	{
 		template<> bool DataOutputStream::WriteUTF8Chars<char>		(const char *str,int64 size)
 		{
+			if(!out)return(false);
 			if(size==0)return(true);
 
 			if(!str||!*str||size<0)return(false);
@@ -16,6 +17,7 @@ namespace hgl
 
 		template<> bool DataOutputStream::WriteUTF8Chars<u16char>	(const u16char *str,int64 size)
 		{
+			if(!out)return(false);
 			if(size==0)return(true);
 
 			if(!str||!*str||size<0)return(false);
@@ -28,6 +30,8 @@ namespace hgl
 	{
 		bool DataOutputStream::WriteUTF8String(const char *str,int32 length)
 		{
+			if(!out)return(false);
+
 			if(length==-1)
 				length=strlen(str);
 
