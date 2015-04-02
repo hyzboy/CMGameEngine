@@ -1895,7 +1895,7 @@ namespace hgl
 	* @param str 要查找的字节串
 	* @return 返回查找出的序号,-1表示失败
 	*/
-	template<typename T> int string_to_enum(const T **list,T *str)
+	template<typename T> int string_to_enum(const T **list,const T *str)
 	{
 		if(!str||!list)return(-1);
 
