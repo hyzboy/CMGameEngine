@@ -67,19 +67,19 @@ namespace hgl
 	}
 
 	/**
-     * 添加多个机率数据,以0为结束
+     * 添加多个机率数据,<0为结束
      * @return 添加的数据数量
      */
-    uint ProbSelect::Add(const uint first,...)
+    uint ProbSelect::AddBatch(const uint first,...)
     {
         va_list va;
 
         uint count=0;
-        uint tmp=first;
+        int tmp=first;
 
         va_start(va,first);
 
-        while(tmp)
+        while(tmp>=0)
         {
             val.Add(tmp);
             total+=tmp;
@@ -109,6 +109,8 @@ namespace hgl
 
 			if(!val.Get(n,r))
 				continue;
+
+            if(r==0)continue;
 
 			if(v<r)
 				return(n);

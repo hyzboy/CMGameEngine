@@ -44,7 +44,7 @@ namespace hgl
 
         void Add(const uint);                                                                       ///<添加一个机率数据
 		void Add(const uint *,const uint);                                                          ///<添加多个机率数据
-        uint Add(const uint,...);                                                                   ///<添加多个机率数据，以0为结尾
+        uint AddBatch(const uint,...);                                                              ///<添加多个机率数据，<0为结尾
 
 		uint Select()const;
 	};//class ProbSelect
