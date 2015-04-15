@@ -1,5 +1,6 @@
 ﻿#include<hgl/type/ProbSelect.h>
 #include<hgl/Other.h>
+#include<stdarg.h>
 
 namespace hgl
 {
@@ -65,6 +66,32 @@ namespace hgl
 		total+=data;
 	}
 
+	/**
+     * 添加多个机率数据,以0为结束
+     * @return 添加的数据数量
+     */
+    int ProbSelect::Add(const uint first,...)
+    {
+        va_list va;
+
+        int count=0;
+        uint tmp=first;
+
+        va_start(va,first);
+
+        while(tmp)
+        {
+            val.Add(tmp);
+            total+=tmp;
+
+            tmp=va_arg(va,uint);
+
+            ++count;
+        }
+
+        va_end(va);
+        return(count);
+    }
 
 	/**
 	* 选择一个机率

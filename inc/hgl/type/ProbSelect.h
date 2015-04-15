@@ -42,8 +42,9 @@ namespace hgl
 		ProbSelect();
 		virtual ~ProbSelect()HGL_DEFAULT_MEMFUNC;
 
-		void Add(const uint *,const uint);
-		void Add(const uint);
+        void Add(const uint);                                                                       ///<添加一个机率数据
+		void Add(const uint *,const uint);                                                          ///<添加多个机率数据
+        void Add(const uint,...);                                                                   ///<添加多个机率数据，以0为结尾
 
 		uint Select()const;
 	};//class ProbSelect
