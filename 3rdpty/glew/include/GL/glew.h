@@ -1,6 +1,6 @@
 /*
 ** The OpenGL Extension Wrangler Library
-** Copyright (C) 2008-2014, Nigel Stewart <nigels[]users sourceforge net>
+** Copyright (C) 2008-2015, Nigel Stewart <nigels[]users sourceforge net>
 ** Copyright (C) 2002-2008, Milan Ikits <milan ikits[]ieee org>
 ** Copyright (C) 2002-2008, Marcelo E. Magallon <mmagallo[]debian org>
 ** Copyright (C) 2002, Lev Povalahev
@@ -3990,7 +3990,6 @@ typedef GLuint (GLAPIENTRY * PFNGLGETDEBUGMESSAGELOGARBPROC) (GLuint count, GLsi
 
 #define GL_TEXTURE_TARGET 0x1006
 #define GL_QUERY_TARGET 0x82EA
-#define GL_TEXTURE_BINDING 0x82EB
 
 typedef void (GLAPIENTRY * PFNGLBINDTEXTUREUNITPROC) (GLuint unit, GLuint texture);
 typedef void (GLAPIENTRY * PFNGLBLITNAMEDFRAMEBUFFERPROC) (GLuint readFramebuffer, GLuint drawFramebuffer, GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter);
@@ -14688,6 +14687,15 @@ typedef void (GLAPIENTRY * PFNGLVIDEOCAPTURESTREAMPARAMETERIVNVPROC) (GLuint vid
 
 #endif /* GL_NV_video_capture */
 
+/* ------------------------- GL_NV_viewport_array2 ------------------------- */
+
+#ifndef GL_NV_viewport_array2
+#define GL_NV_viewport_array2 1
+
+#define GLEW_NV_viewport_array2 GLEW_GET_VAR(__GLEW_NV_viewport_array2)
+
+#endif /* GL_NV_viewport_array2 */
+
 /* ------------------------ GL_OES_byte_coordinates ------------------------ */
 
 #ifndef GL_OES_byte_coordinates
@@ -19200,6 +19208,7 @@ GLEW_VAR_EXPORT GLboolean __GLEW_NV_vertex_program2_option;
 GLEW_VAR_EXPORT GLboolean __GLEW_NV_vertex_program3;
 GLEW_VAR_EXPORT GLboolean __GLEW_NV_vertex_program4;
 GLEW_VAR_EXPORT GLboolean __GLEW_NV_video_capture;
+GLEW_VAR_EXPORT GLboolean __GLEW_NV_viewport_array2;
 GLEW_VAR_EXPORT GLboolean __GLEW_OES_byte_coordinates;
 GLEW_VAR_EXPORT GLboolean __GLEW_OES_compressed_paletted_texture;
 GLEW_VAR_EXPORT GLboolean __GLEW_OES_read_format;
@@ -19297,6 +19306,17 @@ GLEW_VAR_EXPORT GLboolean __GLEW_WIN_swap_hint;
 #define GLEW_VERSION_MAJOR 2
 #define GLEW_VERSION_MINOR 3
 #define GLEW_VERSION_MICRO 4
+
+/* ------------------------------------------------------------------------- */
+
+/* GLEW version info */
+
+/*
+VERSION 1.12.0
+VERSION_MAJOR 1
+VERSION_MINOR 12
+VERSION_MICRO 0
+*/
 
 /* API */
 #ifdef GLEW_MX

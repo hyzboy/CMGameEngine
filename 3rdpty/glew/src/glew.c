@@ -1,6 +1,6 @@
-﻿/*
+/*
 ** The OpenGL Extension Wrangler Library
-** Copyright (C) 2008-2014, Nigel Stewart <nigels[]users sourceforge net>
+** Copyright (C) 2008-2015, Nigel Stewart <nigels[]users sourceforge net>
 ** Copyright (C) 2002-2008, Milan Ikits <milan ikits[]ieee org>
 ** Copyright (C) 2002-2008, Marcelo E. Magallon <mmagallo[]debian org>
 ** Copyright (C) 2002, Lev Povalahev
@@ -3389,6 +3389,7 @@ GLboolean __GLEW_NV_vertex_program2_option = GL_FALSE;
 GLboolean __GLEW_NV_vertex_program3 = GL_FALSE;
 GLboolean __GLEW_NV_vertex_program4 = GL_FALSE;
 GLboolean __GLEW_NV_video_capture = GL_FALSE;
+GLboolean __GLEW_NV_viewport_array2 = GL_FALSE;
 GLboolean __GLEW_OES_byte_coordinates = GL_FALSE;
 GLboolean __GLEW_OES_compressed_paletted_texture = GL_FALSE;
 GLboolean __GLEW_OES_read_format = GL_FALSE;
@@ -9528,6 +9529,10 @@ static GLboolean _glewInit_GL_NV_video_capture (GLEW_CONTEXT_ARG_DEF_INIT)
 
 #endif /* GL_NV_video_capture */
 
+#ifdef GL_NV_viewport_array2
+
+#endif /* GL_NV_viewport_array2 */
+
 #ifdef GL_OES_byte_coordinates
 
 #endif /* GL_OES_byte_coordinates */
@@ -11979,6 +11984,9 @@ GLenum GLEWAPIENTRY glewContextInit (GLEW_CONTEXT_ARG_DEF_LIST)
   GLEW_NV_video_capture = glewGetExtension("GL_NV_video_capture");
   if (glewExperimental || GLEW_NV_video_capture) GLEW_NV_video_capture = !_glewInit_GL_NV_video_capture(GLEW_CONTEXT_ARG_VAR_INIT);
 #endif /* GL_NV_video_capture */
+#ifdef GL_NV_viewport_array2
+  GLEW_NV_viewport_array2 = glewGetExtension("GL_NV_viewport_array2");
+#endif /* GL_NV_viewport_array2 */
 #ifdef GL_OES_byte_coordinates
   GLEW_OES_byte_coordinates = glewGetExtension("GL_OES_byte_coordinates");
 #endif /* GL_OES_byte_coordinates */
@@ -14183,6 +14191,18 @@ static GLboolean _glewInit_GLX_SUN_video_resize (GLXEW_CONTEXT_ARG_DEF_INIT)
 
 /* ------------------------------------------------------------------------ */
 
+GLboolean glxewGetExtension (const char* name)
+{
+  const GLubyte* start;
+  const GLubyte* end;
+
+  if (glXGetCurrentDisplay == NULL) return GL_FALSE;
+  start = (const GLubyte*)glXGetClientString(glXGetCurrentDisplay(), GLX_EXTENSIONS);
+  if (0 == start) return GL_FALSE;
+  end = start + _glewStrLen(start);
+  return glewGetExtension(name);
+}
+
 GLenum glxewContextInit (GLXEW_CONTEXT_ARG_DEF_LIST)
 {
   int major, minor;
@@ -14481,9 +14501,9 @@ const GLubyte * GLEWAPIENTRY glewGetString (GLenum name)
   static const GLubyte* _glewString[] =
   {
     (const GLubyte*)NULL,
-    (const GLubyte*)"1.11.0",
+    (const GLubyte*)"1.12.0",
     (const GLubyte*)"1",
-    (const GLubyte*)"11",
+    (const GLubyte*)"12",
     (const GLubyte*)"0"
   };
   const size_t max_string = sizeof(_glewString)/sizeof(*_glewString) - 1;
@@ -18002,6 +18022,13 @@ GLboolean GLEWAPIENTRY glewIsSupported (const char* name)
         if (_glewStrSame3(&pos, &len, (const GLubyte*)"video_capture", 13))
         {
           ret = GLEW_NV_video_capture;
+          continue;
+        }
+#endif
+#ifdef GL_NV_viewport_array2
+        if (_glewStrSame3(&pos, &len, (const GLubyte*)"viewport_array2", 15))
+        {
+          ret = GLEW_NV_viewport_array2;
           continue;
         }
 #endif
