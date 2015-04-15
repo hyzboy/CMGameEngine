@@ -426,7 +426,7 @@ namespace hgl
 	{
 #if HGL_OS == HGL_OS_Windows
 		DWORD attrib = GetFileAttributesW(name);
-		
+
 		if (attrib == INVALID_FILE_ATTRIBUTES)
 			return(false);
 
@@ -869,8 +869,6 @@ namespace hgl
 			return(-1);
 		if((entry = readdir64(dir)) == NULL)
 			return(-1);
-
-		memset(&statbuf,0,sizeof(struct_stat64));
 
 		do
 		{
