@@ -70,11 +70,11 @@ namespace hgl
      * 添加多个机率数据,以0为结束
      * @return 添加的数据数量
      */
-    int ProbSelect::Add(const uint first,...)
+    uint ProbSelect::Add(const uint first,...)
     {
         va_list va;
 
-        int count=0;
+        uint count=0;
         uint tmp=first;
 
         va_start(va,first);
