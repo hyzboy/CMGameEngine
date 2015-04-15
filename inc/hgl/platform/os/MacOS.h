@@ -7,11 +7,11 @@
 #define HGL_PLUGIN_EXTNAME		u".dylib"										//插件文件扩展名
 #define HGL_PLUGIN_FUNC 		extern "C"										//插件函数定义
 
-#define HGL_DIRECTORY_SEPARATOR L'/'											//目录分隔符
+#define HGL_DIRECTORY_SEPARATOR u'/'											//目录分隔符
 #define HGL_LINE_END			u"\r"											//换行符
 #define HGL_LINE_END_SIZE		1												//换行符长度
 
-#define HGL_MAX_PATH			256
+#define HGL_MAX_PATH			__DARWIN_MAXPATHLEN
 #define HGL_MEM_ALIGN			16												//内存对齐字节数
 
 #include<pthread.h>
