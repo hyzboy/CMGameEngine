@@ -48,6 +48,7 @@
 #define HGL_CPU_ARM9				HGL_MERGE32('A','R','M','9')
 #define HGL_CPU_SH					HGL_MERGE32('S','H',' ',' ')
 #define HGL_CPU_Sparc				HGL_MERGE32('S','P','A','R')
+#define HGL_CPU_Sparc64             HGL_MERGE32('S','P','6','4')
 
 #define HGL_COMPILER_CBuilder		HGL_MERGE32('C','P','P','B')
 #define HGL_COMPILER_Microsoft		HGL_MERGE32('M','S','C',' ')
@@ -142,6 +143,12 @@
 	#define HGL_LIB_CPU_NAME			OS_TEXT("SuperH")
 	#define HGL_MIN_MEMORY_ALLOC_BYTES	4
 	#define HGL_ENDIAN					HGL_LITTLE_ENDIAN
+#elif defined(__sparc64__)||defined(sparc64)
+    #define HGL_CPU                     HGL_CPU_SPARC64
+    #define HGL_CPU_NAME                OS_TEXT("Sparc64")
+    #define HGL_LIB_CPU_NAME            OS_TEXT("Sparc64")
+    #define HGL_MIN_MEMORY_ALLOC_BYTES  8
+    #define HGL_ENDIAN                  HGL_BIG_ENDIAN
 #elif defined(__sparc__) || defined(__sparc) || defined(__sparcv8)
 	#define	HGL_CPU						HGL_CPU_SPARC
 	#define HGL_CPU_NAME				OS_TEXT("Sparc")
