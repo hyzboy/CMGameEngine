@@ -59,6 +59,8 @@ namespace openal                                                									///Open
 	 * @return 是否成功
 	 */
 	bool InitOpenALDevice(const char *device_name=nullptr);
+
+    bool InitOpenAL(const os_char *driver_name,const char *device_name,bool enum_device);           ///<初始化OpenAL(等同于先调用InitOpenALDriver再调用InitOpenALDevice)
 	void CloseOpenAL();                                                                             ///<关闭OpenAL
 
 	unsigned int AudioTime(ALenum,ALsizei);

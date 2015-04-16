@@ -624,7 +624,7 @@ namespace openal
 		LOG_INFO(OS_TEXT("输出OpenAL信息完成"));
 		#endif//
 	}
-	
+
 	/**
 	* 初始化OpenAL
 	* @param driver_name 驱动名称,如果不写则自动查找
@@ -632,8 +632,8 @@ namespace openal
 	* @param enum_device 是否枚举所有的设备
 	* @return 是否初始化成功
 	*/
-	bool InitOpenAL(const wchar_t *driver_name,const char *device_name,bool enum_device)
-	{		
+	bool InitOpenAL(const os_char *driver_name,const char *device_name,bool enum_device)
+	{
 		if (!InitOpenALDriver(driver_name))
 			return(false);
 
