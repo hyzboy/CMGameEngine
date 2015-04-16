@@ -229,7 +229,7 @@ static OutInterface out_interface=
 	RestartOGG
 };
 //--------------------------------------------------------------------------------------------------
-const u16char plugin_intro[]=u"Vorbis OGG 音频文件解码(LibOGG 1.3.0,LibVorbis 1.3.2,MMX,2014-04-09)";
+const u16char plugin_intro[]=u"Vorbis OGG 音频文件解码(LibOGG 1.3.2,LibVorbis 1.3.5,MMX,2015-04-16)";
 
 HGL_PLUGIN_FUNC uint32 GetPlugInVersion()
 {
