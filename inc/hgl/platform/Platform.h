@@ -38,9 +38,12 @@
 #define HGL_CPU_Itanium				HGL_MERGE32('I','A','6','4')
 #define HGL_CPU_MIPS				HGL_MERGE32('M','I','P','S')
 #define HGL_CPU_MIPSel				HGL_MERGE32('M','I','e','l')
+#define HGL_CPU_MIPS64              HGL_MERGE32('M','I','6','4')
 #define HGL_CPU_PowerPC				HGL_MERGE32('P','P','C',' ')
+#define HGL_CPU_PowerPC64           HGL_MERGE32('P','P','6','4')
 #define HGL_CPU_Cell				HGL_MERGE32('C','E','L','L')
 #define HGL_CPU_ARM5				HGL_MERGE32('A','R','M','5')
+#define HGL_CPU_ARM6                HGL_MERGE32('A','R','M','6')
 #define HGL_CPU_ARM7				HGL_MERGE32('A','R','M','7')
 #define HGL_CPU_ARM9				HGL_MERGE32('A','R','M','9')
 #define HGL_CPU_SH					HGL_MERGE32('S','H',' ',' ')
@@ -99,15 +102,30 @@
 		#define HGL_LIB_CPU_NAME			OS_TEXT("MIPS")
 		#define HGL_ENDIAN					HGL_BIG_ENDIAN
 	#endif//__MIPSEL__
-#elif defined(__powerpc__) || defined(__powerpc) || defined(__ppc__) || defined(__PPC__) || defined(_M_PPC) || defined(_ARCH_PPC) || defined(_ARCH_PWR)
+#elif defined(__mips64__)||defined(mips64)
+        #define HGL_MIN_MEMORY_ALLOC_BYTES  8
+        #define HGL_CPU                     HGL_CPU_MIPS64
+        #define HGL_CPU_NAME                OS_TEXT("MIPS64")
+        #define HGL_LIB_CPU_NAME            OS_TEXT("MIPS64")
+        #define HGL_ENDIAN                  HGL_BIG_ENDIAN
+#elif defined(__powerpc__) || defined(__powerpc)    \
+     || defined(__ppc__) || defined(__PPC__) || defined(__ppc) \
+     || defined(_M_PPC) ||defined(_M_MPPC) \
+     || defined(_ARCH_PPC) || defined(_ARCH_PWR)
 	#ifdef __PPU__
 		#define HGL_CPU				HGL_CPU_Cell
 		#define HGL_CPU_NAME		OS_TEXT("Cell")
 		#define HGL_LIB_CPU_NAME	OS_TEXT("Cell")
 	#else
-		#define HGL_CPU				HGL_CPU_PowerPC
-		#define HGL_CPU_NAME		OS_TEXT("PowerPC")
-		#define HGL_LIB_CPU_NAME	OS_TEXT("PowerPC")
+        #ifdef defined(__ppc64__) || defined(__powerpc64__) || defined(__64BIT__)
+            #define HGL_CPU             HGL_CPU_PowerPC64
+            #define HGL_CPU_NAME        OS_TEXT("PowerPC64")
+            #define HGL_LIB_CPU_NAME    OS_TEXT("PowerPC64")
+        #else
+            #define HGL_CPU				HGL_CPU_PowerPC
+            #define HGL_CPU_NAME		OS_TEXT("PowerPC")
+            #define HGL_LIB_CPU_NAME	OS_TEXT("PowerPC")
+        #endif//PowerPC64
 	#endif
 
 	#define HGL_MIN_MEMORY_ALLOC_BYTES	8
