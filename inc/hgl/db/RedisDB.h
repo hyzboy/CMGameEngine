@@ -195,13 +195,13 @@ namespace hgl
 			bool SRandMember(const char *,redis_string &,int count=-1);								///<从集合中随机取出一个元素
 			bool SPop(const char *,redis_string &);													///<从集合中随机取出一个元素，并从合集中移除它
 
-			bool SMove(const char *,const char *,const char *);										///<将一个元素从一个合集移到另一个合集
+			bool SMove(const redis_string &,const redis_string &,const redis_string &);				///<将一个元素从一个合集移到另一个合集
 
-			int SCard(const char *);																///<取得集合里的元素数量
+			int SCard(const redis_string &);														///<取得集合里的元素数量
 
 			bool SIsMember(const redis_string &,const redis_string &);								///<确认这个元素是否在集合内
 
-			bool SMembers(const char *,redis_string_list &);										///<取得集合里的所有元素
+			bool SMembers(const redis_string &,redis_string_list &);										///<取得集合里的所有元素
 
 			bool SInter(const redis_string_list &,redis_string_list &);								///<取得指定所有集合的成员交集
 			int SInterStore(const char *,const redis_string_list &);								///<将指定所有集合的成员交集存在一个新的集合中

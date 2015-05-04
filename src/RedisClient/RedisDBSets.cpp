@@ -104,24 +104,60 @@ namespace hgl
 			return(true);
 		}
 
-		bool RedisDB::SMove(const char *src,const char *dst,const char *member)
+		bool RedisDB::SMove(const redis_string &src,const redis_string &dst,const redis_string &member)
 		{
-			if(!src||!(*src)
-			 ||!dst||!(*dst)
-			 ||!member||!(*member))return(false);
+// 			if(!src||!(*src)
+// 			 ||!dst||!(*dst)
+// 			 ||!member||!(*member))return(false);
+//
+// 			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"SMOVE %s %s %s",src,dst,member);
 
-			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"SMOVE %s %s %s",src,dst,member);
+            if(src.IsEmpty()
+             ||dst.IsEmpty()
+             ||member.IsEmpty())RETURN_FALSE;
+
+            const char *argv[]=
+            {
+                "SMOVE",
+                src.c_str(),
+                dst.c_str(),
+                member.c_str()
+            };
+
+            const size_t argvlen[]=
+            {
+                5,
+                (size_t)src.Length(),
+                (size_t)dst.Length(),
+                (size_t)member.Length()
+            };
+
+            REPLY r(REDIS_REPLY_DEBUG_HEADER(con),4,argv,argvlen);
 
 			return_integer;
 		}
 
-		int RedisDB::SCard(const char *set)
+		int RedisDB::SCard(const redis_string &set)
 		{
-			if(!set||!(*set))return(-1);
+            if(set.IsEmpty())return(-1);
 
-			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"SCARD %s",set);
+			//REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"SCARD %s",set);
 
-			return_integer;
+            const char *argv[]=
+            {
+                "SCARD",
+                set.c_str(),
+            };
+
+            const size_t argvlen[]=
+            {
+                5,
+                (size_t)set.Length(),
+            };
+
+            REPLY r(REDIS_REPLY_DEBUG_HEADER(con),2,argv,argvlen);
+
+            return_integer;
 		}
 
 		bool RedisDB::SIsMember(const redis_string &set,const redis_string &member)
@@ -147,9 +183,23 @@ namespace hgl
 			return_integer;
 		}
 
-		bool RedisDB::SMembers(const char *set,redis_string_list &result_list)
+		bool RedisDB::SMembers(const redis_string &set,redis_string_list &result_list)
 		{
-			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"SMEMBERS %s",set);
+			//REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"SMEMBERS %s",set);
+
+            const char *argv[]=
+            {
+                "SMEMBERS",
+                set.c_str(),
+            };
+
+            const size_t argvlen[]=
+            {
+                8,
+                (size_t)set.Length(),
+            };
+
+            REPLY r(REDIS_REPLY_DEBUG_HEADER(con),2,argv,argvlen);
 
 			return_str_array(r,result_list);
 		}
