@@ -10,6 +10,7 @@
 #include <google/protobuf/stubs/once.h>
 #include <google/protobuf/io/coded_stream.h>
 #include <google/protobuf/wire_format_lite_inl.h>
+#include <google/protobuf/io/zero_copy_stream_impl_lite.h>
 // @@protoc_insertion_point(includes)
 
 void protobuf_ShutdownFile_msg_2eproto() {
@@ -36,7 +37,7 @@ void protobuf_AddDesc_msg_2eproto() {
 #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
 GOOGLE_PROTOBUF_DECLARE_ONCE(protobuf_AddDesc_msg_2eproto_once_);
 void protobuf_AddDesc_msg_2eproto() {
-  ::google::protobuf::::google::protobuf::GoogleOnceInit(&protobuf_AddDesc_msg_2eproto_once_,
+  ::google::protobuf::GoogleOnceInit(&protobuf_AddDesc_msg_2eproto_once_,
                  &protobuf_AddDesc_msg_2eproto_impl);
 }
 #else
@@ -72,6 +73,7 @@ const int c2s_login::kNameFieldNumber;
 c2s_login::c2s_login()
   : ::google::protobuf::MessageLite() {
   SharedCtor();
+  // @@protoc_insertion_point(constructor:c2s_login)
 }
 
 void c2s_login::InitAsDefaultInstance() {
@@ -81,20 +83,23 @@ c2s_login::c2s_login(const c2s_login& from)
   : ::google::protobuf::MessageLite() {
   SharedCtor();
   MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:c2s_login)
 }
 
 void c2s_login::SharedCtor() {
+  ::google::protobuf::internal::GetEmptyString();
   _cached_size_ = 0;
-  name_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
 c2s_login::~c2s_login() {
+  // @@protoc_insertion_point(destructor:c2s_login)
   SharedDtor();
 }
 
 void c2s_login::SharedDtor() {
-  if (name_ != &::google::protobuf::internal::kEmptyString) {
+  if (name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete name_;
   }
   #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
@@ -126,58 +131,75 @@ c2s_login* c2s_login::New() const {
 }
 
 void c2s_login::Clear() {
-  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    if (has_name()) {
-      if (name_ != &::google::protobuf::internal::kEmptyString) {
-        name_->clear();
-      }
+  if (has_name()) {
+    if (name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+      name_->clear();
     }
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->clear();
 }
 
 bool c2s_login::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!(EXPRESSION)) return false
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  while ((tag = input->ReadTag()) != 0) {
+  ::google::protobuf::io::StringOutputStream unknown_fields_string(
+      mutable_unknown_fields());
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_string);
+  // @@protoc_insertion_point(parse_start:c2s_login)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
       // required string name = 1;
       case 1: {
-        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+        if (tag == 10) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_name()));
         } else {
-          goto handle_uninterpreted;
+          goto handle_unusual;
         }
-        if (input->ExpectAtEnd()) return true;
+        if (input->ExpectAtEnd()) goto success;
         break;
       }
 
       default: {
-      handle_uninterpreted:
-        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
-          return true;
+          goto success;
         }
-        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
         break;
       }
     }
   }
+success:
+  // @@protoc_insertion_point(parse_success:c2s_login)
   return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:c2s_login)
+  return false;
 #undef DO_
 }
 
 void c2s_login::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:c2s_login)
   // required string name = 1;
   if (has_name()) {
-    ::google::protobuf::internal::WireFormatLite::WriteString(
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->name(), output);
   }
 
+  output->WriteRaw(unknown_fields().data(),
+                   unknown_fields().size());
+  // @@protoc_insertion_point(serialize_end:c2s_login)
 }
 
 int c2s_login::ByteSize() const {
@@ -192,6 +214,8 @@ int c2s_login::ByteSize() const {
     }
 
   }
+  total_size += unknown_fields().size();
+
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = total_size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
@@ -210,6 +234,7 @@ void c2s_login::MergeFrom(const c2s_login& from) {
       set_name(from.name());
     }
   }
+  mutable_unknown_fields()->append(from.unknown_fields());
 }
 
 void c2s_login::CopyFrom(const c2s_login& from) {
@@ -228,6 +253,7 @@ void c2s_login::Swap(c2s_login* other) {
   if (other != this) {
     std::swap(name_, other->name_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.swap(other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
   }
 }

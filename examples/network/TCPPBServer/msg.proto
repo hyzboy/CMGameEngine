@@ -1,4 +1,4 @@
-﻿option optimize_for = LITE_RUNTIME;
+option optimize_for = LITE_RUNTIME;
 message c2s_login
 {
 	enum MsgID
