@@ -97,9 +97,11 @@ public:
 
 	bool Execute()	//工作投递线程执行函数
 	{
-		for(int i=0;i<POST_ONE_MAX;i++)				//产生指定量的工作内容
+        const int num=rand()%POST_ONE_MAX;              //产生随机量的工作内容
+
+		for(int i=0;i<num;i++)
 		{
-			int target=rand()%WORK_QUEUE_NUMBER;	//随机一个投递目标
+			int target=rand()%WORK_QUEUE_NUMBER;	    //随机一个投递目标
 
 			wo_list[target]->Push();
 		}
@@ -129,7 +131,6 @@ public:
 
 		for(int i=0;i<WORK_QUEUE_BY_THREAD*WORK_THREAD_NUMBER;i++)
 			wo_list[i]=new WorkObject;
-
 
 		for(int i=0;i<WORK_THREAD_NUMBER;i++)		//创建工作处理线程
 		{
