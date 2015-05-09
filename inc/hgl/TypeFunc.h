@@ -10,6 +10,12 @@ namespace hgl
 	#define NULL 0
 	#endif//
 
+    template<class T>
+    inline void hgl_call_construct(T *obj)      //呼叫构造函数
+    {
+        new (static_cast<void *>(obj)) T();
+    }
+
 	#define HGL_BIT(n)		(1<<(n))
 	#define HGL_64BIT(n)	(1L<<(n))
 
