@@ -2,6 +2,7 @@
 #define HGL_PB_SERIALIZE_INCLUDE
 
 #include<hgl/MemBlock.h>
+#include<hgl/io/OutputStream.h>
 namespace hgl
 {
 	namespace pb
@@ -63,6 +64,40 @@ namespace hgl
 				return(*this);
 			}
 		};//class Serialize
+
+		/**
+         * 序列化输出流
+         */
+        class SerializeOutputStream:public pb::Serialize
+        {
+            hgl::io::OutputStream *os;
+
+        public:
+
+            SerializeOutputStream(hgl::io::OutputStream *_os)
+            {
+                os=_os;
+            }
+
+            template<typename T> bool Write(const T *msg)
+            {
+                if(!os)
+                    RETURN_FALSE;
+
+                if(!Append(msg))
+                {
+                    this->mb.ClearData();
+                    return(false);
+                }
+
+                if(os->WriteFully(this->mb.data(),this->mb.length())!=this->mb.length())
+                    RETURN_FALSE;
+
+                this->mb.ClearData();
+
+                return(true);
+            }
+        };//class SerializeOutputStream
 	}//namespace pb
 }//namespace hgl
 #endif//HGL_PB_SERIALIZE_INCLUDE
