@@ -163,7 +163,6 @@ namespace hgl
 
 	void Font::operator = (const Font &src)
 	{
-		if(!this||!(&src))return;
 		if(this==&src)return;
 
 		Name		=src.name;

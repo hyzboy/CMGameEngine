@@ -126,19 +126,19 @@ namespace hgl
 
 		const T GetEndChar()const																	///<取得当前字符串最后一个字符
 		{
-			if(!this)return(0);
+// 			if(!this)return(0);
 			return(data.valid()?data->GetEndChar():0);
 		}
 
 		const int Length()const																		///<当前字符串长度
 		{
-			if(!this)return(0);
+// 			if(!this)return(0);
 			return(data.valid()?data->GetLength():0);
 		}
 
 		const bool IsEmpty()const																	///<当前字符串是否空的
 		{
-			if(!this)return(true);
+// 			if(!this)return(true);
 			return(data.valid()?data->GetLength()<=0:true);
 		}
 
@@ -147,7 +147,7 @@ namespace hgl
 		*/
 		T *c_str()const
 		{
-			if(!this)return(nullptr);
+// 			if(!this)return(nullptr);
 			return(data.valid()?data->c_str():nullptr);
 		}
 
@@ -156,7 +156,7 @@ namespace hgl
 		*/
 		T *strchr(T ch)const
 		{
-			if(!this)return(nullptr);
+// 			if(!this)return(nullptr);
 			return(data.valid()?data->c_str()+FindChar(ch):nullptr);
 		}
 
@@ -165,7 +165,7 @@ namespace hgl
 		*/
 		T *strrchr(T ch)const
 		{
-			if(!this)return(nullptr);
+// 			if(!this)return(nullptr);
 			return(data.valid()?data->c_str()+FindRightChar(ch):nullptr);
 		}
 
