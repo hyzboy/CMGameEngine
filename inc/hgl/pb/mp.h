@@ -104,7 +104,7 @@ namespace hgl
 				if(!ml_list.Get(id,pb_item))
 				{
 					LOG_ERROR(OS_TEXT("MsgID error:")+OSString(id));
-					return nullptr;
+					RETURN_FALSE;
 				}
 
 				pb_item.ml->Clear();
