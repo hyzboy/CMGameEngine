@@ -208,9 +208,9 @@ namespace hgl
 
 	template<typename T> class _MTObjectPool:public MTPool<T *>										///多线程对象池
 	{
-		virtual T *Create()=0;
+		virtual T *Create() HGL_OVERRIDE=0;
 
-		virtual void Clear(T *obj)	{	if(obj)delete obj;	}
+		virtual void Clear(T *obj) HGL_OVERRIDE	{	if(obj)delete obj;	}
 
 	public:
 
@@ -223,14 +223,15 @@ namespace hgl
 
 	template<typename T> class MTObjectPool:public _MTObjectPool<T>										///多线程对象池
 	{
-		virtual T *Create()HGL_OVERRIDE{return(new T());}
+		virtual T *Create() HGL_OVERRIDE {return(new T());}
 
-		virtual void Clear(T *obj)	{	if(obj)delete obj;	}
+		virtual void Clear(T *obj) HGL_OVERRIDE	{	if(obj)delete obj;	}
 
 	public:
 
 #ifdef HGL_CONSTRUCTION_REUSE
 		using _MTObjectPool<T>::_MTObjectPool;
+
 #else
 #endif//HGL_CONSTRUCTION_REUSE
 		virtual ~MTObjectPool(){_MTObjectPool<T>::ClearAll();}

@@ -55,7 +55,7 @@ namespace hgl
 
 			virtual bool Execute()HGL_OVERRIDE;														///<本线程刷新函数
 
-			virtual bool ProcStartThread()=0;
+			virtual bool ProcStartThread()HGL_OVERRIDE=0;
 			virtual void ProcError(IOSocket **,const int)=0;										///<处理错误Socket列表函数
 			virtual bool ProcEvent(IOSocket *,int)=0;												///<处理事件Socket列表函数(需使用者自行重载处理)
 

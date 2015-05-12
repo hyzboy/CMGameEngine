@@ -364,7 +364,7 @@ namespace hgl
 				return(true);
 			}
 
-			const bool Set(const char *str,	int size)
+			const bool Set(const char *str,	int size) HGL_OVERRIDE
 			{
 				if(size>this->desc->type.count)
 					size=this->desc->type.count;
@@ -373,7 +373,7 @@ namespace hgl
 				return(true);
 			}
 
-			const bool Set(const u16char *str,int size)
+			const bool Set(const u16char *str,int size) HGL_OVERRIDE
 			{
 				size<<=1;
 

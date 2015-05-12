@@ -145,7 +145,7 @@ namespace hgl
 			TCPSocketRB(int s,const sockaddr_in *addr);												///<本类构造函数
 			virtual ~TCPSocketRB();
 
-			virtual void UseSocket(int,const sockaddr_in *addr=0);									///<使用指定socket
+			virtual void UseSocket(int,const sockaddr_in *addr=0)HGL_OVERRIDE;						///<使用指定socket
 			virtual io::InputStream *GetInputStream(){return ris;}									///<取得输入流
 			virtual io::OutputStream *GetOutputStream(){return ros;}								///<取得输出流
 
