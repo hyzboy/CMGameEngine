@@ -52,9 +52,6 @@
 
 #endif//__clang__
 //--------------------------------------------------------------------------------------------------
-#include<hgl/platform/compiler/DataTypeGNU.h>
-#include<hgl/platform/compiler/Property.h>
-
 // #if (__clang_major__>=3)||(__clang_major__==3&&__clang_minor__>=1)
 // 	#define HGL_ATOMIC_CPP11					//C++11原子模板
 // #endif//clang >=3.1
@@ -63,11 +60,11 @@
 #define enum_int(name)			enum name:int
 #define enum_uint(name)			enum name:uint
 
-#if (__clang_major__>=3)||(__clang_major__==3&&__clang_minor__>=4)
+#if (__clang_major__>=3)||(__clang_major__==3&&__clang_minor__>=6)
 	#define HGL_CONSTRUCTION_REUSE				//构造函数复用
 	#define HGL_DEFAULT_MEMFUNC		=default
 	#define HGL_OVERRIDE			override
-// 	#define HGL_VARIADIC_TEMPLATES				//变长参数模板	clang 3.4不支持
+ 	#define HGL_VARIADIC_TEMPLATES				//变长参数模板
 	#define HGL_INITIALIZER_LIST				//初始化列表
 #else
 	#define HGL_DEFAULT_MEMFUNC		{}
@@ -77,5 +74,8 @@
 #define HGL_LIB_FRONT	HGL_LIB_OS "_" HGL_LIB_COMPILER_NAME "_" HGL_LIB_DEBUG_NAME "_"
 
 #define HGL_LIB_END		".a"
+
+#include<hgl/platform/compiler/DataTypeGNU.h>
+#include<hgl/platform/compiler/Property.h>
 //--------------------------------------------------------------------------------------------------
 #endif//HGL_COMPILER_LLVM_CLANG_INCLUDE
