@@ -60,12 +60,15 @@
 #define enum_int(name)			enum name:int
 #define enum_uint(name)			enum name:uint
 
-#if (__clang_major__>=3)||(__clang_major__==3&&__clang_minor__>=6)
+#if (__clang_major__>=3)||(__clang_major__==3&&__clang_minor__>=4)
 	#define HGL_CONSTRUCTION_REUSE				//构造函数复用
 	#define HGL_DEFAULT_MEMFUNC		=default
 	#define HGL_OVERRIDE			override
- 	#define HGL_VARIADIC_TEMPLATES				//变长参数模板
 	#define HGL_INITIALIZER_LIST				//初始化列表
+
+    #if (__clang_major__>=3)||(__clang_major__==3&&__clang_minor__>=5)
+        #define HGL_VARIADIC_TEMPLATES              //变长参数模板
+    #endif//Clang >=3.5
 #else
 	#define HGL_DEFAULT_MEMFUNC		{}
 	#define HGL_OVERRIDE
