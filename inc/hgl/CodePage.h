@@ -1,4 +1,5 @@
-﻿#ifndef HGL_CODE_PAGE_INCLUDE
+﻿
+#ifndef HGL_CODE_PAGE_INCLUDE
 #define HGL_CODE_PAGE_INCLUDE
 
 #include<hgl/platform/Platform.h>

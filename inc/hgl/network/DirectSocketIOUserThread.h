@@ -22,7 +22,7 @@ namespace hgl
 		template<typename DIS,typename DOS,typename S>
 		class DirectSocketIOUserThread:public Thread
 		{
-			bool IsExitDelete()const{return true;}													///<返回在退出线程时，是否删除本对象
+			bool IsExitDelete()const HGL_OVERRIDE {return true;}									///<返回在退出线程时，是否删除本对象
 
 		protected:
 
@@ -82,7 +82,7 @@ namespace hgl
 			virtual bool Update()=0;
 			virtual bool IdleUpdate(){return(true);}
 
-			virtual bool Execute()
+			virtual bool Execute() HGL_OVERRIDE
 			{
 				int wr=s->WaitRecv(wait_time);
 
