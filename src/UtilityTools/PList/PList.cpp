@@ -26,7 +26,7 @@ namespace hgl
 	{
 		UTF16StringList sl;
 
-        if(LoadStringList(sl,filename)<=0)
+        if(LoadStringListBOM(sl,filename)<=0)
             return(false);
 
 		ReadData(sl);

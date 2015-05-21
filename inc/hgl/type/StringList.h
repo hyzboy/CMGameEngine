@@ -2,6 +2,7 @@
 #define HGL_STRINGLIST_INCLUDE
 
 #include<hgl/type/List.h>
+#include<hgl/File.h>
 #include<hgl/type/BaseString.h>
 #include<hgl/io/DataInputStream.h>
 #include<hgl/io/DataOutputStream.h>
@@ -459,22 +460,34 @@ namespace hgl
 	typedef StringList<WideString	> WideStringList;
 	typedef StringList<OSString		> OSStringList;
 
-	template<ByteOrderMask bom> bool ReadStringFromDIS(UTF16String &,io::DataInputStream *);
+    template<typename T,ByteOrderMask bom> struct ReadStringFromDIS
+    {
+        bool ReadString(io::DataInputStream *dis,T &str);
+    };
 
-	template<> inline bool ReadStringFromDIS<bomUTF8>(UTF16String &str,io::DataInputStream *dis)
-	{
-		return dis->ReadUTF8String(str);
-	}
+    template<typename T> struct ReadStringFromDIS<T,bomUTF8>
+    {
+        bool ReadString(io::DataInputStream *dis,T &str)
+        {
+            return dis->ReadUTF8String(str);
+        }
+    };
 
-	template<> inline bool ReadStringFromDIS<bomUTF16LE>(UTF16String &str,io::DataInputStream *dis)
-	{
-		return dis->ReadUTF16LEString(str);
-	}
+    template<typename T> struct ReadStringFromDIS<T,bomUTF16LE>
+    {
+        bool ReadString(io::DataInputStream *dis,T &str)
+        {
+            return dis->ReadUTF16LEString(str);
+        }
+    };
 
-	template<> inline bool ReadStringFromDIS<bomUTF16BE>(UTF16String &str,io::DataInputStream *dis)
-	{
-		return dis->ReadUTF16BEString(str);
-	}
+    template<typename T> struct ReadStringFromDIS<T,bomUTF16BE>
+    {
+        bool ReadString(io::DataInputStream *dis,T &str)
+        {
+            return dis->ReadUTF16BEString(str);
+        }
+    };
 
 	/**
 	 * 从DataInputStream流中读取一个字符串列表
@@ -492,11 +505,13 @@ namespace hgl
 		if(!dis->ReadInt32(count))
 			return(-2);
 
+        ReadStringFromDIS<BaseString<T>,bom> rsfd;
+
 		BaseString<T> str;
 
 		for(int i=0;i<count;i++)
 		{
-			if(!ReadStringFromDIS<bom>(str,dis))
+			if(!rsfd.ReadString(dis,str))
 				break;
 
 			sl.Add(str);
@@ -521,8 +536,11 @@ namespace hgl
 		return LoadStringList<T,bomUTF16BE>(sl,dis);
 	}
 
-	//目前仅用到UTF16String
-	int LoadStringList(UTF16StringList &,const OSString &,const CharSet &cs=CharSet());            //从文件加载一个字符串列表
+	int LoadStringListBOM(UTF16StringList &,const OSString &,const CharSet &cs=CharSet());          ///<从文件加载一个文本到UTF16StringList,支持BOM头
+
+    int LoadUTF8FileToStringList    (UTF8StringList   &sl,const OSString &filename);                ///<从文件加载一个UTF8文本到UTF8StringList,不支持BOM头
+    int LoadUTF16LEFileToStringList (UTF16StringList  &sl,const OSString &filename);                ///<从文件加载一个UTF16LE文本到UTF16LEStringList,不支持BOM头
+    int LoadUTF16BEFileToStringList (UTF16StringList  &sl,const OSString &filename);                ///<从文件加载一个UTF16BE文本到UTF16BEStringList,不支持BOM头
 
 	template<typename T,ByteOrderMask bom> struct WriteStringToDOS
 	{
