@@ -544,9 +544,9 @@ namespace hgl
 		if(GetCurrentDirectoryW(len,dir))
 		{
 			if(len==3&&dir[1]==OS_TEXT(':'))
-				dir[len=2]=0;        //如果是"C:\"这种情况，去掉"\"
-			else
-				dir[len]=0;
+				len=2;        //如果是"C:\"这种情况，去掉"\"
+
+			dir[len]=0;
 
 			path.Set(dir,len,true);
 			return(true);
