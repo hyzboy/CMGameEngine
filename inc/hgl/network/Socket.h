@@ -106,7 +106,7 @@ namespace hgl
 		#define HGL_NETWORK_HEART_TIME		(HGL_NETWORK_TIME_OUT/2)								///<默认心跳时间(注：心跳并不是每隔指定时间都发送，而是离上一次发送任意封包超过指定时间才发送)
 		#define HGL_NETWORK_DOUBLE_TIME_OUT	(HGL_NETWORK_TIME_OUT*2)								///<2次超时时间
 
-		#define HGL_SERVER_OVERLOAD_WAIT_TIME	10													///<服务器超载再恢复等待时间
+		#define HGL_SERVER_OVERLOAD_RESUME_TIME	10													///<服务器超载再恢复等待时间
 
 		#define HGL_TCP_BUFFER_SIZE			HGL_SIZE_1KB*256										///<TCP缓冲区大小
 

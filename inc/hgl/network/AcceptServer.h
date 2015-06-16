@@ -23,7 +23,7 @@ namespace hgl
 
 			AcceptServer()
 			{
-				overload_wait=HGL_SERVER_OVERLOAD_WAIT_TIME;
+				overload_wait=HGL_SERVER_OVERLOAD_RESUME_TIME;
 			}
 
 			virtual ~AcceptServer()HGL_DEFAULT_MEMFUNC;
