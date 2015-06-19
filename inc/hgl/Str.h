@@ -1923,7 +1923,7 @@ namespace hgl
                 continue;
             }
 
-            result_list.Add(I(p,p-sp));
+            result_list.Add(I(sp,p-sp));
 
             ++p;
             sp=p;
@@ -1932,7 +1932,7 @@ namespace hgl
 
         if(p>sp)
         {
-            result_list.Add(I(p,p-sp));
+            result_list.Add(I(sp,p-sp));
             ++count;
         }
 
