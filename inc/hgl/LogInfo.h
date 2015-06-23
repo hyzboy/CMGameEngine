@@ -6,9 +6,11 @@
 #include<hgl/CodePage.h>
 
 #if (HGL_COMPILER == HGL_COMPILER_GNU)||(HGL_COMPILER == HGL_COMPILER_LLVM)
-    #define __FUNC__    __PRETTY_FUNCTION__
+    #define __HGL_FUNC__    __PRETTY_FUNCTION__
+#elif HGL_COMPILER == HGL_COMPILER_Microsoft
+    #define __HGL_FUNC__    __FUNCSIG__
 #else
-    #define __FUNC__    __FUNCTION__
+    #define __HGL_FUNC__    __FUNCTION__
 #endif//
 
 namespace hgl
@@ -36,10 +38,10 @@ namespace hgl
 		}
 
 		#ifdef LOG_INFO_SOURCE
-			#define LOG_INFO(str)		{DebugLog(llLog,	str,__FILE__,__LINE__,__FUNC__);}
-			#define LOG_HINT(str)		{DebugLog(llHint,	str,__FILE__,__LINE__,__FUNC__);}
-			#define LOG_PROBLEM(str)	{DebugLog(llProblem,str,__FILE__,__LINE__,__FUNC__);}
-			#define LOG_ERROR(str)		{DebugLog(llError,	str,__FILE__,__LINE__,__FUNC__);}
+			#define LOG_INFO(str)		{DebugLog(llLog,	str,__FILE__,__LINE__,__HGL_FUNC__);}
+			#define LOG_HINT(str)		{DebugLog(llHint,	str,__FILE__,__LINE__,__HGL_FUNC__);}
+			#define LOG_PROBLEM(str)	{DebugLog(llProblem,str,__FILE__,__LINE__,__HGL_FUNC__);}
+			#define LOG_ERROR(str)		{DebugLog(llError,	str,__FILE__,__LINE__,__HGL_FUNC__);}
 		#else
 			#define LOG_INFO(str)		{Log(llLog,		str);}
 			#define LOG_HINT(str)		{Log(llHint,	str);}
@@ -47,9 +49,9 @@ namespace hgl
 			#define LOG_ERROR(str)		{Log(llError,	str);}
 		#endif//LOG_INFO_SOURCE
 
-		#define RETURN_FALSE		{DebugLog(llLog,OS_TEXT("return(false)"							),__FILE__,__LINE__,__FUNC__);return(false);}
-		#define RETURN_ERROR(v)		{DebugLog(llLog,OS_TEXT("return error(")+OSString(v)+OS_TEXT(")"),__FILE__,__LINE__,__FUNC__);return(v);}
-		#define RETURN_ERROR_NULL	{DebugLog(llLog,OS_TEXT("return error(nullptr)"					),__FILE__,__LINE__,__FUNC__);return(nullptr);}
+		#define RETURN_FALSE		{DebugLog(llLog,OS_TEXT("return(false)"							),__FILE__,__LINE__,__HGL_FUNC__);return(false);}
+		#define RETURN_ERROR(v)		{DebugLog(llLog,OS_TEXT("return error(")+OSString(v)+OS_TEXT(")"),__FILE__,__LINE__,__HGL_FUNC__);return(v);}
+		#define RETURN_ERROR_NULL	{DebugLog(llLog,OS_TEXT("return error(nullptr)"					),__FILE__,__LINE__,__HGL_FUNC__);return(nullptr);}
 
 		#define RETURN_BOOL(proc)	{if(proc)return(true);RETURN_FALSE}
 #else
