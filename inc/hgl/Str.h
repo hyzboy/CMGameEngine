@@ -1891,10 +1891,10 @@ namespace hgl
 	template<typename T,typename I,typename SET> inline int parse_xint_array	(const T *str,const int len,SET &result_list){return parse_number_array<T,I,SET,hgl::isxdigit,	hgl::xtou>(str,len,result_list);}
 
     /**
-     * 拆分字符串为多个字符串
+     * 按指定分隔符拆分字符串为多个字符串
      * @param str 要拆分的字符串
      * @param str_len 字符串长度
-     * @param sc 分隔字符串
+     * @param sc 分隔字符
      * @param result_list 拆分后的字符串保存的列表
      * @return 拆分出来的字符串数量
      * @return -1 出错
