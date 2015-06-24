@@ -38,7 +38,7 @@ namespace hgl
 			threadptr=0;
 
 			pthread_attr_destroy(&attr);
-			LOG_ERROR(OS_TEXT("Create Thread (pthread_create) failed."));
+			LOG_ERROR(OS_TEXT("Create Thread (pthread_create) failed.errno:")+OSString(errno));
 			return(false);
 		}
 
