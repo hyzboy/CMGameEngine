@@ -9,13 +9,19 @@
 #else
 
 	#if __GNUC__ == 4
-		#define HGL_LIB_COMPILER_MAIOR_VER	OS_TEXT("4")
+		#define HGL_LIB_COMPILER_MAIOR_VER  OS_TEXT("4")
 	#elif __GNUC__ == 5
-		#define HGL_LIB_COMPILER_MAIOR_VER	OS_TEXT("5")
+		#define HGL_LIB_COMPILER_MAIOR_VER  OS_TEXT("5")
 	#elif __GNUC__ == 6
-		#define HGL_LIB_COMPILER_MAIOR_VER	OS_TEXT("6")
+		#define HGL_LIB_COMPILER_MAIOR_VER  OS_TEXT("6")
 	#elif __GNUC__ == 7
-		#define HGL_LIB_COMPILER_MAIOR_VER	OS_TEXT("7")
+		#define HGL_LIB_COMPILER_MAIOR_VER  OS_TEXT("7")
+    #elif __GNUC__ == 8
+        #define HGL_LIB_COMPILER_MAIOR_VER  OS_TEXT("8")
+    #elif __GNUC__ == 9
+        #define HGL_LIB_COMPILER_MAIOR_VER  OS_TEXT("9")
+    #elif __GNUC__ == 10
+        #define HGL_LIB_COMPILER_MAIOR_VER  OS_TEXT("10")
 	#endif//__GNUC__
 
 	#if	__GNUC_MINOR__ == 0
