@@ -109,7 +109,8 @@ SOURCE_GROUP("PlugIn" FILES ${BASE_PLUG_IN_SOURCE})
 SET(BASE_MULTI_THREAD_SOURCE
 	MultiThread/RingBuffer.cpp
 	MultiThread/RingBufferRead.cpp
-	MultiThread/RingBufferWrite.cpp)
+	MultiThread/RingBufferWrite.cpp
+	MultiThread/ASyncThread.cpp)
 
 IF(UNIX)
 	SET(BASE_MULTI_PROCESS_SOURCE
