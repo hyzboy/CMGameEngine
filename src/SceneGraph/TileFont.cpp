@@ -73,7 +73,7 @@ namespace hgl
 
 			delete tile_data;
 		}
-		
+
 		FontSource::Bitmap *TileFont::MakeCharBitmap(const wchar_t &ch)
 		{
 			FontSource::Bitmap *bmp=GetCharBitmap(ch);
@@ -99,9 +99,9 @@ namespace hgl
 
 			return(bmp);
 		}
-		
+
 		TileData::Object *TileFont::GetCharData(const wchar_t &ch)
-		{			
+		{
 			FudItem<wchar_t,TileData::Object *> *obj;
 
 			TileData::Object *tile;
@@ -155,7 +155,7 @@ namespace hgl
 		float TileFont::GetStringWidth(const wchar_t *str,int limit)
 		{
 			if(!str||!(*str)||limit==0)return(0);
-	        
+
 			const wchar_t *p=str;
 			int w=0;
 
@@ -175,7 +175,7 @@ namespace hgl
 
 			return(w);
 		}
-		
+
 		/**
 		* 排版字符串(无自动换行,无\n处理)
 		* @param makeup 排版数据
@@ -320,8 +320,8 @@ namespace hgl
 			return(true);
 		}
 
-		const wchar_t 	BeginSymbol[]=	L"!),.:;?]}¨·ˇˉ―‖’”…∶、。〃々〉》」』】〕〗！＂＇），．：；？］｀｜｝～￠";
-		const wchar_t 	EndSymbol[]=	L"([{·‘“〈《「『【〔〖（．［｛￡￥";
+		const wchar_t 	BeginSymbol[]=	L"!),.:;?]}¨·ˇˉ―‖’”…∶、。〃々〉》」』】〕〗〙〛！＂＇），．：；？］｀｜｝～￠";
+		const wchar_t 	EndSymbol[]=	L"([{·‘“〈《「『【〔〖〘〚（．［｛￡￥";
 
 		const int 		BeginSymbolCount=sizeof(BeginSymbol)/sizeof(wchar_t);
 		const int 		EndSymbolCount	=sizeof(EndSymbol)/sizeof(wchar_t);
@@ -351,7 +351,7 @@ namespace hgl
 				{
 					if(align==taCenter	)pos=(max_width-tw)/2;else
 					if(align==taRight	)pos=max_width-tw;else pos=0;
-					
+
 					MakeupText(makeup,pos,row,sp,p-sp);
 
 					cm.scope.Width=0;
@@ -392,7 +392,7 @@ namespace hgl
 							if(strchr(BeginSymbol,	*p,		BeginSymbolCount))result=true;		//查找当前字符是否出现在行首禁用符号
 
 							if(result)								//无论行首行尾出现，都是换行前移一个字符
-							{								
+							{
 								const FontSource::Bitmap *prev_bmp=GetCharBitmap(*(p-1));
 
 								tw-=prev_bmp->adv_x;				//删除字符宽度
@@ -496,14 +496,14 @@ namespace hgl
 //#endif//_DEBUG
 
 			fnt_mtl->SetColor(Color);
-			fnt_draw->SetDrawCount(0,count*6);			
+			fnt_draw->SetDrawCount(0,count*6);
 			DirectRender2D(fnt_draw,mat);
 		}
 
 		/**
 		* 以格式化方式绘制字符串
 		* @param l,t 绘制字符串的坐标
-		* @param fmt 格式化字串        
+		* @param fmt 格式化字串
 		* @return 字符串的象素级宽度
 		*/
 		float TileFont::DrawFormat(const Matrix4f *mat,const wchar_t *fmt,...)
@@ -521,7 +521,7 @@ namespace hgl
 		/**
 		* 以格式化方式绘制字符串
 		* @param l,t 绘制字符串的坐标
-		* @param fmt 格式化字串        
+		* @param fmt 格式化字串
 		* @return 字符串的象素级宽度
 		*/
 		float TileFont::DrawFormat(float l,float t,const wchar_t *fmt,...)

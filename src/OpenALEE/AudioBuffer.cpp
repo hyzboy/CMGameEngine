@@ -26,9 +26,11 @@ namespace hgl
 
 		const os_char *plugin_name=GetAudioDecodeName(aft);
 
-		if(!plugin_name)return(0);
+		if(!plugin_name)RETURN_ERROR(0);
 
 		AudioPlugInInterface *decode=AudioInterfaceCheck(plugin_name);
+
+        if(!decode)RETURN_ERROR(0);
 
 		decode->Load((ALbyte *)memory, memory_size, &format, &data, &size, &freq, &loop);
 
@@ -36,7 +38,7 @@ namespace hgl
 
 		decode->Clear(format, data, size, freq);
 
-		if(alLastError())return(0);
+		if(alLastError())RETURN_ERROR(0);
 
     	return AudioDataTime(size,format,freq);
 	}
@@ -87,7 +89,7 @@ namespace hgl
 	*/
 	bool AudioBuffer::SetData(uint format, const void* data, uint size, uint freq )
 	{
-		if(!alGenBuffers)return(false);
+		if(!alGenBuffers)RETURN_FALSE;
 
 		Clear();
 		alGenBuffers(1,&Index);
@@ -111,7 +113,7 @@ namespace hgl
 	*/
 	bool AudioBuffer::Load(void *memory,int size,AudioFileType aft)
 	{
-		if(!alGenBuffers)return(false);
+		if(!alGenBuffers)RETURN_FALSE;
 
 		Clear();
 		alGenBuffers(1,&Index);
@@ -122,7 +124,7 @@ namespace hgl
 		{
 			LOG_ERROR(OS_TEXT("未知的音频文件类型！AudioFileType:")+OSString(aft));
 			alDeleteBuffers(1,&Index);
-			return(false);
+			RETURN_FALSE;
 		}
 		else
 		{
@@ -133,7 +135,7 @@ namespace hgl
 		if(Time==0)
 		{
 			alDeleteBuffers(1,&Index);
-			return(false);
+			RETURN_FALSE;
 		}
 
 		return(ok=true);
@@ -147,14 +149,14 @@ namespace hgl
 	*/
 	bool AudioBuffer::Load(InputStream *in,int size,AudioFileType aft)
 	{
-		if(!alGenBuffers)return(false);
-		if(!in)return(false);
-		if(size<=0)return(false);
+		if(!alGenBuffers)RETURN_FALSE;
+		if(!in)RETURN_FALSE;
+		if(size<=0)RETURN_FALSE;
 
 		if(aft<=aftNone||aft>=aftEnd)
 		{
 			LOG_ERROR(OS_TEXT("未知的音频文件类型！AudioFileType:")+OSString(aft));
-			return(ok=false);
+			ok=false;
 		}
 		else
 		{
@@ -166,7 +168,7 @@ namespace hgl
 			delete[] memory;
 		}
 
-		return(ok);
+		RETURN_BOOL(ok);
 	}
 
 	/**
@@ -177,19 +179,20 @@ namespace hgl
 	*/
 	bool AudioBuffer::Load(const os_char *filename,AudioFileType aft)
 	{
-		if(!alGenBuffers)return(false);
+		if(!alGenBuffers)RETURN_FALSE;
 
 		aft=CheckAudioFileType(filename);
 
 		if(!aft)
 		{
 			LOG_ERROR(OS_TEXT("未知的音频文件类型！AudioFile: ")+OSString(filename));
-			return(ok=false);
+            ok=false;
+			RETURN_FALSE;
 		}
 
 		OpenFileInputStream fis(filename);
 
-		return(Load(fis,fis->Available(),aft));
+		RETURN_BOOL(Load(fis,fis->Available(),aft));
 	}
 
 // 	/**
@@ -200,7 +203,7 @@ namespace hgl
 // 	*/
 // 	bool AudioBuffer::Load(HAC *hac,const os_char *filename,AudioFileType aft)
 // 	{
-// 		if(!alGenBuffers)return(false);
+// 		if(!alGenBuffers)RETURN_FALSE;
 //
 // 		os_char *ext;
 // 		InputStream *stream;
@@ -215,7 +218,7 @@ namespace hgl
 // 			if(strcmp(ext,u".wav")==0)aft=aftWAV;else
 // 			{
 // 				PutError(u"未知的音频文件类型！AudioFileType:%d",aft);
-// 				return(false);
+// 				RETURN_FALSE;
 // 			}
 // 		}
 //
@@ -228,7 +231,7 @@ namespace hgl
 // 			return(result);
 // 		}
 //
-// 		return(false);
+// 		RETURN_FALSE;
 // 	}
 
 	void AudioBuffer::Clear()
