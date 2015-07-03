@@ -228,7 +228,11 @@ static OutInterface out_interface=
 	RestartOGG
 };
 //--------------------------------------------------------------------------------------------------
-const u16char plugin_intro[]=u"Vorbis OGG 音频文件解码(LibOGG 1.3.2,LibVorbis 1.3.5,MMX,2015-04-16)";
+#if HGL_OS != HGL_OS_Windows
+const u16char plugin_intro[]=u"Vorbis OGG 音频文件解码(使用操作系统内置解码器,2015-07-03)";
+#else
+const u16char plugin_intro[]=u"Vorbis OGG 音频文件解码(LibOGG 1.3.2,LibVorbis 1.3.5,MMX,2015-07-03)";
+#endif//
 
 HGL_PLUGIN_FUNC uint32 GetPlugInVersion()
 {

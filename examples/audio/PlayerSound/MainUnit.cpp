@@ -2,6 +2,7 @@
 #include<hgl/audio/OpenAL.h>
 #include<hgl/audio/AudioBuffer.h>
 #include<hgl/audio/AudioSource.h>
+#include<hgl/Other.h>
 
 using namespace hgl;
 using namespace openal;
@@ -64,10 +65,19 @@ class TestObject:public ConsoleFlowObject
 
 		buf.Load("cicada3.ogg");
 
-		CloseOpenAL();
+        source.Link(&buf);
+
+        source.Play();
+
+        WaitTime(buf.Time);
 
 		fos=hgl::fosExitGame;
 	}
+
+    ~TestObject()
+    {
+        CloseOpenAL();
+    }
 };//class TestObject
 
 HGL_CONSOLE_APPLICATION("音效播放","PlayerSound",new TestObject)
