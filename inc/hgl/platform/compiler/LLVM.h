@@ -8,47 +8,7 @@
 	#error Please upgrade your compiler or development tools to LLVM Clang 3.0 or later
 #else
 
-	#if __clang_major__ == 3
-		#define HGL_LIB_COMPILER_MAIOR_VER	OS_TEXT("3")
-	#elif __clang_major__ == 4
-		#define HGL_LIB_COMPILER_MAIOR_VER	OS_TEXT("4")
-	#elif __clang_major__ == 5
-		#define HGL_LIB_COMPILER_MAIOR_VER	OS_TEXT("5")
-	#elif __clang_major__ == 6
-		#define HGL_LIB_COMPILER_MAIOR_VER	OS_TEXT("6")
-	#elif __clang_major__ == 7
-		#define HGL_LIB_COMPILER_MAIOR_VER	OS_TEXT("7")
-	#elif __clang_major__ == 8
-		#define HGL_LIB_COMPILER_MAIOR_VER	OS_TEXT("8")
-	#elif __clang_major__ == 9
-		#define HGL_LIB_COMPILER_MAIOR_VER	OS_TEXT("9")
-	#elif __clang_major__ == 10
-		#define HGL_LIB_COMPILER_MAIOR_VER	OS_TEXT("10")
-	#endif//__clang_major__
-
-	#if	__clang_minor__ == 0
-		#define HGL_LIB_COMPILER_MINOR_VER	OS_TEXT("0")
-	#elif __clang_minor__ == 1
-		#define HGL_LIB_COMPILER_MINOR_VER	OS_TEXT("1")
-	#elif __clang_minor__ == 2
-		#define HGL_LIB_COMPILER_MINOR_VER	OS_TEXT("2")
-	#elif __clang_minor__ == 3
-		#define HGL_LIB_COMPILER_MINOR_VER	OS_TEXT("3")
-	#elif __clang_minor__ == 4
-		#define HGL_LIB_COMPILER_MINOR_VER	OS_TEXT("4")
-	#elif __clang_minor__ == 5
-		#define HGL_LIB_COMPILER_MINOR_VER	OS_TEXT("5")
-	#elif __clang_minor__ == 6
-		#define HGL_LIB_COMPILER_MINOR_VER	OS_TEXT("6")
-	#elif __clang_minor__ == 7
-		#define HGL_LIB_COMPILER_MINOR_VER	OS_TEXT("7")
-	#elif __clang_minor__ == 8
-		#define HGL_LIB_COMPILER_MINOR_VER	OS_TEXT("8")
-	#elif __clang_minor__ == 9
-		#define HGL_LIB_COMPILER_MINOR_VER	OS_TEXT("9")
-	#endif//
-
-	#define HGL_LIB_COMPILER_VERSION HGL_LIB_COMPILER_MAIOR_VER OS_TEXT(".") HGL_LIB_COMPILER_MINOR_VER
+	#define HGL_LIB_COMPILER_VERSION __clang_version__
 
 #endif//__clang__
 //--------------------------------------------------------------------------------------------------
