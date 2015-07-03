@@ -395,7 +395,12 @@ namespace openal
 //	void *alcGetCurrentDevice() { return (AudioDevice); }
 //	char *alcGetCurrentDeviceName() { return(AudioDeviceName); }
 
-	const struct Pair<ALenum,uint> al_format_bytes[]=
+	const struct ALFormatBytes
+	{
+        ALenum format;
+        uint bytes;
+    }
+    al_format_bytes[]=
 	{
 		{AL_FORMAT_MONO8,			1},
 		{AL_FORMAT_MONO16,			2},
@@ -431,12 +436,14 @@ namespace openal
 
 	const int al_get_format_byte(ALenum format)
 	{
-		const Pair<ALenum,uint> *p=al_format_bytes;
+		const ALFormatBytes *p=al_format_bytes;
 
-		while(p->first)
+		while(p->format)
 		{
-			if(p->first==format)
-				return p->second;
+			if(p->format==format)
+				return p->bytes;
+
+            ++p;
 		}
 
 		return(0);
@@ -600,7 +607,7 @@ namespace openal
 			LOG_INFO(UTF8String(u8"　　支持的OpenAL扩展: ")+sp);
 
 			sp=p;
-			while(p=::strchr(sp,' '))
+			while((p=::strchr(sp,' ')))
 			{
 				*p++=0;
 

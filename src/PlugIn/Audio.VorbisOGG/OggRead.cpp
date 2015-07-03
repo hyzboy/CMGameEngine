@@ -54,7 +54,6 @@ int VorbisSeek(void *ptr,ogg_int64_t offset,int whence)
 		obj->pos=obj->size+offset;
 	}
 
-	if(obj->pos<0)obj->pos=0;else
 	if(obj->pos>obj->size)obj->pos=obj->size;
 
 	return(0);
