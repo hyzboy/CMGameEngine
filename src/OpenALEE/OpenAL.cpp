@@ -435,6 +435,20 @@ namespace openal
 		return(true);
 	}
 
+	bool SetSpeedOfSound(const double height,const double temperature)
+    {
+        if (!AudioEM)return(false);
+        if (!alSpeedOfSound)return(false);
+
+        double v=331.5;                         //海拔0米，0摄氏度
+
+        v-=((331.5f-295.0f)/10000.0f)*height;   //海平面为331.5m/s，一万米为295m/s
+        v+=temperature*0.607f;                  //温度每升高一度，音速增加0.607m/s
+
+        alSpeedOfSound(v/331.5f);
+        return(true);
+    }
+
 	bool SetDopplerFactor(const float df)
 	{
 		if (!AudioEM)return(false);

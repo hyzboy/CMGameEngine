@@ -90,7 +90,14 @@ namespace openal                                                									///Open
 	// #define AL_EXPONENT_DISTANCE_CLAMPED             0xD006	//钳位指数距离
 	bool SetDistanceModel(ALenum dm = AL_INVERSE_DISTANCE_CLAMPED);									///<设置距离模型
 
-	bool SetSpeedOfSound(const float ss = 343.3f);													///<设置声音速度
+	bool SetSpeedOfSound(const float ss = 1.0f);													///<设置声音速度比值
+
+    /**
+     * 根据海拔和温度设置音速
+     * @param height 海拔高度
+     * @param temperature 温度(摄氏度)
+     */
+    bool SetSpeedOfSound(const double height=0,const double temperature=25);                        ///<根据海拔和温度设置音速
 
 	bool SetDopplerFactor(const float);																///<设置多普勒缩放倍数
 	bool SetDopplerVelocity(const float);															///<设置多普勒速度
