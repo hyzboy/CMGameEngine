@@ -78,7 +78,6 @@ namespace hgl
         ASyncResult(ASyncThread *wt)
         {
             work_thread=wt;
-
         }
 
         virtual ~ASyncResult();

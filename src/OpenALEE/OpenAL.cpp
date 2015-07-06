@@ -118,7 +118,7 @@ namespace openal
 		}
 	}
 
-	const char *alcGetDeviceList()
+	const char *alcGetDeviceNameList()
 	{
 		if(!alcIsExtensionPresent)return(nullptr);
 
@@ -131,7 +131,7 @@ namespace openal
 			return(nullptr);
 	}
 
-	bool alcGetDefaultDevice(char *name)
+	bool alcGetDefaultDeviceName(char *name)
 	{
 		if(alcIsExtensionPresent)
 		{
@@ -154,9 +154,66 @@ namespace openal
 		return(false);
 	}
 
+	bool alcGetDeviceInfo(OpenALDevice &dev,const char *device_name)
+    {
+        ALCdevice *device=alcOpenDevice(device_name);
+
+        if(!device)
+            return(false);
+
+        hgl::strcpy(dev.name,device_name);
+        hgl::strcpy(dev.specifier,alcGetString(device,ALC_DEVICE_SPECIFIER));
+
+        alcGetIntegerv(device,ALC_MAJOR_VERSION,sizeof(int),&dev.major);
+
+        if(dev.major)
+        {
+            alcGetIntegerv(device,ALC_MINOR_VERSION,sizeof(int),&dev.minor);
+        }
+        else
+        {
+            dev.major=1;
+            dev.minor=0;
+        }
+
+        alcCloseDevice(device);
+        return(true);
+    }
+
+    bool alcGetDefaultDevice(OpenALDevice &dev)
+    {
+        if(!alcGetDefaultDeviceName(dev.name))
+            return(false);
+
+        return alcGetDeviceInfo(dev,dev.name);
+    }
+
+    int alcGetDeviceList(List<OpenALDevice> &device_list)
+    {
+        const char *devices=alcGetDeviceNameList();
+
+        if(!devices)
+        {
+            LOG_INFO(OS_TEXT("取得的OpenAL设备列表为空！"));
+            return(-1);
+        }
+
+        while(*devices)
+        {
+            OpenALDevice dev;
+
+            if(alcGetDeviceInfo(dev,devices))
+                device_list.Add(dev);
+
+            devices+=::strlen(devices)+1;
+        }
+
+        return device_list.GetCount();
+    }
+
 	void EnumOpenALDevice()
 	{
-		const char *devices=alcGetDeviceList();
+		const char *devices=alcGetDeviceNameList();
 		const char *actual_devicename;
 
 		if(!devices)
@@ -215,12 +272,7 @@ namespace openal
 		return(true);
 	}
 
-	/**
-	* 初始化OpenAL设备
-	* @param device_name 设备名称,如果不写则自动选择缺省设备
-	* @return 是否初始化成功
-	*/
-	bool InitOpenALDevice(const char *device_name)
+	bool InitOpenALDeviceByName(const char *device_name)
 	{
     	bool default_device=false;
 
@@ -228,7 +280,7 @@ namespace openal
 			hgl::strcpy(AudioDeviceName,device_name);
 		else
 		{
-			alcGetDefaultDevice(AudioDeviceName);
+			alcGetDefaultDeviceName(AudioDeviceName);
 
 			if(*AudioDeviceName)
 			{
@@ -256,7 +308,7 @@ namespace openal
 
 			//使用缺省设备
 			{
-				alcGetDefaultDevice(AudioDeviceName);
+				alcGetDefaultDeviceName(AudioDeviceName);
 				AudioDevice=alcOpenDevice(AudioDeviceName);
 
 				if(!AudioDevice)
@@ -265,7 +317,6 @@ namespace openal
 					CloseOpenAL();
 					return(AL_FALSE);
 				}
-
 
 				LOG_INFO(OS_TEXT("指定音频设备初始化失败，改用缺省设备！"));
 			}
@@ -326,6 +377,16 @@ namespace openal
 
 		return(AL_TRUE);
 	}
+
+
+    bool InitOpenALDevice(const OpenALDevice *device)
+    {
+        if(device)
+            return InitOpenALDeviceByName(device->name);
+        else
+            return InitOpenALDeviceByName(nullptr);
+    }
+
 	//--------------------------------------------------------------------------------------------------
 	/**
 	* 关闭OpenAL
@@ -631,15 +692,15 @@ namespace openal
 		LOG_INFO(OS_TEXT("输出OpenAL信息完成"));
 		#endif//
 	}
-
-	/**
-	* 初始化OpenAL
-	* @param driver_name 驱动名称,如果不写则自动查找
-	* @param device_name 设备名称,如果不写则自动选择缺省设备
-	* @param enum_device 是否枚举所有的设备
-	* @return 是否初始化成功
-	*/
-	bool InitOpenAL(const os_char *driver_name,const char *device_name,bool enum_device)
+    /**
+    * 初始化OpenAL
+    * @param driver_name 驱动名称,如果不写则自动查找
+    * @param device_name 设备名称,如果不写则自动选择缺省设备
+    * @param out_info   是否输出当前OpenAL设备信息
+    * @param enum_device 是否枚举所有的设备信息输出
+    * @return 是否初始化成功
+    */
+	bool InitOpenAL(const os_char *driver_name,const char *device_name,bool out_info,bool enum_device)
 	{
 		if (!InitOpenALDriver(driver_name))
 			return(false);
@@ -647,13 +708,15 @@ namespace openal
 		if (enum_device)
 			EnumOpenALDevice();
 
-		if (!InitOpenALDevice(device_name))
+		if (!InitOpenALDeviceByName(device_name))
 		{
 			CloseOpenAL();
 			return(false);
 		}
 
-		PutOpenALInfo();
+		if(out_info)
+            PutOpenALInfo();
+
 		return(true);
 	}
 }//namespace openal

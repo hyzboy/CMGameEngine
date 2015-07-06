@@ -30,6 +30,7 @@
 #endif //__al_h_
 
 #include<hgl/platform/Platform.h>
+#include<hgl/type/List.h>
 
 #include<hgl/al/al.h>
 #include<hgl/al/alc.h>
@@ -40,8 +41,16 @@ namespace openal                                                									///Open
 {
 	bool LoadOpenAL(const os_char *driver_name=nullptr);											///<加载OpenAL,参数为驱动名称
 
-	const char *alcGetDeviceList();																	///<取得设备列表
-	bool alcGetDefaultDevice(char *);																///<取得缺省设备
+    struct OpenALDevice
+    {
+        char name[256];                 ///<设备名称
+        char specifier[256];            ///<设备技术名称
+        int major,minor;                ///<设备版本号
+    };
+
+    bool alcGetDefaultDevice(OpenALDevice &);                                                       ///<取得缺省设备
+    int alcGetDeviceList(hgl::List<OpenALDevice> &);                                                ///<取得设备列表
+
 	void alcSetDefaultContext();																	///<设置缺省上下文
 
 	const char *alGetErrorInfo(const char *,const int);												///<取得最近的错误
@@ -58,9 +67,16 @@ namespace openal                                                									///Open
 	 * @param device_name 设备名称
 	 * @return 是否成功
 	 */
-	bool InitOpenALDevice(const char *device_name=nullptr);
+	bool InitOpenALDevice(const OpenALDevice *device=nullptr);
 
-    bool InitOpenAL(const os_char *driver_name,const char *device_name,bool enum_device);           ///<初始化OpenAL(等同于先调用InitOpenALDriver再调用InitOpenALDevice)
+    /**
+    * 初始化OpenAL驱动与设备(使用本函数等同于依次调用InitOpenALDriver,InitOpenALDevice)
+    */
+    bool InitOpenAL(const os_char *driver_name=nullptr,
+                    const char *device_name=nullptr,
+                    bool out_info=false,
+                    bool enum_device=false);
+
 	void CloseOpenAL();                                                                             ///<关闭OpenAL
 
 	unsigned int AudioTime(ALenum,ALsizei);

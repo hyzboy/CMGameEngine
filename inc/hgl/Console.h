@@ -10,18 +10,18 @@
 #define HGL_CONSOLE_MAIN_FUNC()							using namespace hgl;    \
                                                         HGL_CONSOLE_MAIN(sii,app,args)
 
-#define HGL_CONSOLE_APPLICATION(name,code,start)	using namespace hgl;	\
-													\
-													HGL_CONSOLE_MAIN_FUNC()\
-													{	\
-														sii.info.ProjectName=U8_TEXT(name);	\
-														sii.info.ProjectCode=U8_TEXT(code);	\
-														\
-														if(!app.Init(&sii))	\
-															return(-1);	\
-														\
-														app.SetStart(start);	\
-														\
-														return app.Run();	\
-													}
+#define HGL_CONSOLE_APPLICATION(name,code,start)	    using namespace hgl;	\
+                                                        \
+                                                        HGL_CONSOLE_MAIN(sii,app,args)\
+                                                        {	\
+                                                            sii.info.ProjectName=U8_TEXT(name);	\
+                                                            sii.info.ProjectCode=U8_TEXT(code);	\
+                                                            \
+                                                            if(!app.Init(&sii))	\
+                                                                return(-1);	\
+                                                            \
+                                                            app.SetStart(start);	\
+                                                            \
+                                                            return app.Run();	\
+                                                        }
 #endif//HGL_CONSOLE_INCLUDE
