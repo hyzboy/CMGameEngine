@@ -435,18 +435,21 @@ namespace openal
 		return(true);
 	}
 
-	bool SetSpeedOfSound(const double height,const double temperature)
+	double SetSpeedOfSound(const double height,const double temperature,const double humidity)
     {
-        if (!AudioEM)return(false);
-        if (!alSpeedOfSound)return(false);
+        if (!AudioEM)return(0);
+        if (!alSpeedOfSound)return(0);
 
-        double v=331.5;                         //海拔0米，0摄氏度
+        double v=HGL_SPEED_OF_SOUND;                        //海拔0米，0摄氏度
 
-        v-=((331.5f-295.0f)/10000.0f)*height;   //海平面为331.5m/s，一万米为295m/s
-        v+=temperature*0.607f;                  //温度每升高一度，音速增加0.607m/s
+        v*=sqrt(1.0f+temperature/(-HGL_ABSOLUTE_ZERO));     //先计算温度
 
-        alSpeedOfSound(v/331.5f);
-        return(true);
+        ////11000米高度，温度-56.5，音速295m/s。需根据大气密度来计算
+
+        //另需计算温度，影响在0.1-0.6之间。
+
+        alSpeedOfSound(v/HGL_SPEED_OF_SOUND);
+        return(v);
     }
 
 	bool SetDopplerFactor(const float df)

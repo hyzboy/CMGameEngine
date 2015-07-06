@@ -96,8 +96,10 @@ namespace openal                                                									///Open
      * 根据海拔和温度设置音速
      * @param height 海拔高度
      * @param temperature 温度(摄氏度)
+     * @param humidity 相对湿度
+     * @return 音速(米/秒)
      */
-    bool SetSpeedOfSound(const double height=0,const double temperature=25);                        ///<根据海拔和温度设置音速
+    double SetSpeedOfSound(const double height=0,const double temperature=15,const double humidity=0.5);                      ///<根据海拔和温度设置音速
 
 	bool SetDopplerFactor(const float);																///<设置多普勒缩放倍数
 	bool SetDopplerVelocity(const float);															///<设置多普勒速度

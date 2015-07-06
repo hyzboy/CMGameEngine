@@ -200,7 +200,10 @@ namespace hgl
 	#define HGL_GOLDEN_RATIO				1.6180339887498948482	//黄金比例
 	#define HGL_SILVER_RATIO				2.4142135623730950488	//白银比例
 
+    #define HGL_SPEED_OF_SOUND              331.3f          //音速(米/秒)
 	#define HGL_SPEED_OF_LIGHT				299792458		//光速(米/秒)
+
+    #define HGL_ABSOLUTE_ZERO               -273.15f        //绝对零度
 
 	#define HGL_UNIVERSAL_GRAVITATION		(6.6742e-11)	//万有引力常数
 	#define HGL_GRAVITATIONAL_ACCELERATION	9.80665			//重力加速度
