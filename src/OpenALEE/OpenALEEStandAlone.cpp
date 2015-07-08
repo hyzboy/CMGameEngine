@@ -20,10 +20,7 @@ namespace openal
     	InitCore(si,create_log);				//初始化内核
 		SystemCheck(&si,create_log);			//系统检测
 
-		if(!InitOpenALDriver(driver_name))
-			return(false);
-
-		if(!InitOpenALDevice(device_name))
+		if(!InitOpenAL(driver_name,device_name))
 			return(false);
 
 		return(true);

@@ -3,21 +3,16 @@
 //
 // 这是一个根据标准OpenAL SDK所编写的特殊增强版本，它支持目前所有的OpenAL扩展。
 //
-//           作者: 胡颖卓
-//           版本: 1.15
+//          作者: 胡颖卓
+//          版本: 1.15
 // 对应OpenAL版本: 1.1
 //       对应语言: C/C++
-//		对应操作系统: Windows,Linux
-//   适用开发工具: Borland C++ Compiler 5.5 或更高
-//                 Borland C++ Builder 5 或更高
-//                 Borland C++ BuilderX 1.0 或更高
-//				   Microsoft C++ 15.0 (Visual C++ 9.0)或更高
-//				   GNU C/C++ 4.0 或更高
+//    对应操作系统: Windows,MacOSX,iOS,Linux,BSD,Android
 //
 // 第一版编写时间: 2003年10月5日
-// 当前版完成时间: 2014年4月9日
+// 当前版完成时间: 2015年7月6日
 //
-//       官方网站: http://www.hyzgame.com.cn/openalee
+//       官方网站: http://www.hyzgame.com.cn
 // OpenAL官方网站: http://www.openal.org
 //--------------------------------------------------------------------------------------------------
 #ifndef OpenALH

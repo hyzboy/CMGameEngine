@@ -63,7 +63,7 @@ namespace hgl
 
 		public:	//坐标相关方法
 
-			virtual			void		RefreshMatrix		(const Matrix4f *mat=nullptr);									///<刷新世界变换矩阵
+			virtual			void		RefreshMatrix		(const Matrix4f *mat=nullptr);								///<刷新世界变换矩阵
 			virtual			void		RefreshBoundingBox	();															///<刷新绑定盒
 
 			virtual const	AABB &		GetBoundingBox		()const{return BoundingBox;}								///<取得绑定盒
@@ -76,11 +76,11 @@ namespace hgl
 
 		public:	//渲染列表相关方法
 
-			virtual	bool ExpendToList(RenderList *,FilterSceneNodeFunc func=nullptr,void *func_data=nullptr)const;			///<展开到渲染列表
+			virtual	bool ExpendToList(RenderList *,FilterSceneNodeFunc func=nullptr,void *func_data=nullptr)const;		///<展开到渲染列表
 					bool ExpendToList(RenderList *rl,Frustum *f)const													///<展开到渲染列表(使用平截头裁剪)
 						{return ExpendToList(rl,FrustumClipFilter,f);}
 
-					bool ExpendToList(RenderList *,Camera *,RenderListCompFunc=nullptr)const;								///<展开到渲染列表(使用摄像机平截头裁剪并排序)
+					bool ExpendToList(RenderList *,Camera *,RenderListCompFunc=nullptr)const;							///<展开到渲染列表(使用摄像机平截头裁剪并排序)
 		};//class SceneNode
 	}//namespace graph
 }//namespace hgl
