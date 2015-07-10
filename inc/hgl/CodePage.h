@@ -204,7 +204,7 @@ namespace hgl
 	int				u8_to_u16(u16char *,int,const char *,const int=-1);							///<转换utf8格式的char *到u16char *
 
 	char *			u16_to_u8(const u16char *,const int,int &);									///<转换u16char *到utf8格式的char *
-	u16char *		u8_to_u16(const char *,const int,int &);										///<转换utf8格式的char *到u16char *
+	u16char *		u8_to_u16(const char *,const int,int &);									///<转换utf8格式的char *到u16char *
 
 	inline char *	u16_to_u8(const u16char *str)
 	{

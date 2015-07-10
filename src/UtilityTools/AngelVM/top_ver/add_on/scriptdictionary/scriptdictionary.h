@@ -52,11 +52,15 @@ public:
 	void Set(asIScriptEngine *engine, void *value, int typeId);
 	void Set(asIScriptEngine *engine, const asINT64 &value);
 	void Set(asIScriptEngine *engine, const double &value);
+	void Set(asIScriptEngine *engine, CScriptDictValue &value);
 
 	// Gets the stored value. Returns false if the value isn't compatible with the informed typeId
 	bool Get(asIScriptEngine *engine, void *value, int typeId) const;
 	bool Get(asIScriptEngine *engine, asINT64 &value) const;
 	bool Get(asIScriptEngine *engine, double &value) const;
+
+	// Returns the address of the stored value for inspection
+	const void *GetAddressOfValue() const;
 
 	// Returns the type id of the stored value
 	int  GetTypeId() const;
@@ -148,6 +152,7 @@ public:
 		bool               GetValue(asINT64 &value) const;
 		bool               GetValue(double &value) const;
 		bool               GetValue(void *value, int typeId) const;
+		const void *       GetAddressOfValue() const;
 
 	protected:
 		friend class CScriptDictionary;

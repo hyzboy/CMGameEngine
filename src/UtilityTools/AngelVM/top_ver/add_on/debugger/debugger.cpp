@@ -12,16 +12,22 @@ CDebugger::CDebugger()
 {
 	m_action = CONTINUE;
 	m_lastFunction = 0;
+	m_engine = 0;
 }
 
 CDebugger::~CDebugger()
 {
+	SetEngine(0);
 }
 
-string CDebugger::ToString(void *value, asUINT typeId, bool expandMembers, asIScriptEngine *engine)
+string CDebugger::ToString(void *value, asUINT typeId, int expandMembers, asIScriptEngine *engine)
 {
 	if( value == 0 )
 		return "<null>";
+
+	// If no engine pointer was provided use the default
+	if( engine == 0 )
+		engine = m_engine;
 
 	stringstream s;
 	if( typeId == asTYPEID_VOID )
@@ -62,14 +68,17 @@ string CDebugger::ToString(void *value, asUINT typeId, bool expandMembers, asISc
 		s << *(asUINT*)value;
 
 		// Check if the value matches one of the defined enums
-		for( int n = engine->GetEnumValueCount(typeId); n-- > 0; )
+		if( engine )
 		{
-			int enumVal;
-			const char *enumName = engine->GetEnumValueByIndex(typeId, n, &enumVal);
-			if( enumVal == *(int*)value )
+			for( int n = engine->GetEnumValueCount(typeId); n-- > 0; )
 			{
-				s << ", " << enumName;
-				break;
+				int enumVal;
+				const char *enumName = engine->GetEnumValueByIndex(typeId, n, &enumVal);
+				if( enumVal == *(int*)value )
+				{
+					s << ", " << enumName;
+					break;
+				}
 			}
 		}
 	}
@@ -85,12 +94,17 @@ string CDebugger::ToString(void *value, asUINT typeId, bool expandMembers, asISc
 		s << "{" << obj << "}";
 
 		// Print the members
-		if( obj && expandMembers )
+		if( obj && expandMembers > 0 )
 		{
 			asIObjectType *type = obj->GetObjectType();
 			for( asUINT n = 0; n < obj->GetPropertyCount(); n++ )
 			{
-				s << endl << "  " << type->GetPropertyDeclaration(n) << " = " << ToString(obj->GetAddressOfProperty(n), obj->GetPropertyTypeId(n), false, engine);
+				if( n == 0 )
+					s << " ";
+				else
+					s << ", ";
+
+				s << type->GetPropertyDeclaration(n) << " = " << ToString(obj->GetAddressOfProperty(n), obj->GetPropertyTypeId(n), expandMembers - 1, type->GetEngine());
 			}
 		}
 	}
@@ -102,39 +116,40 @@ string CDebugger::ToString(void *value, asUINT typeId, bool expandMembers, asISc
 
 		// Print the address for reference types so it will be
 		// possible to see when handles point to the same object
-		asIObjectType *type = engine->GetObjectTypeById(typeId);
-		if( type->GetFlags() & asOBJ_REF )
-			s << "{" << value << "}";
-
-		if( value )
+		if( engine )
 		{
-			// Check if there is a registered to-string callback
-			map<const asIObjectType*, ToStringCallback>::iterator it = m_toStringCallbacks.find(type);
-			if( it == m_toStringCallbacks.end() )
+			asIObjectType *type = engine->GetObjectTypeById(typeId);
+			if( type->GetFlags() & asOBJ_REF )
+				s << "{" << value << "}";
+
+			if( value )
 			{
-				// If the type is a template instance, there might be a
-				// to-string callback for the generic template type
-				if( type->GetFlags() & asOBJ_TEMPLATE )
+				// Check if there is a registered to-string callback
+				map<const asIObjectType*, ToStringCallback>::iterator it = m_toStringCallbacks.find(type);
+				if( it == m_toStringCallbacks.end() )
 				{
-					asIObjectType *tmplType = engine->GetObjectTypeByName(type->GetName());
-					it = m_toStringCallbacks.find(tmplType);
+					// If the type is a template instance, there might be a
+					// to-string callback for the generic template type
+					if( type->GetFlags() & asOBJ_TEMPLATE )
+					{
+						asIObjectType *tmplType = engine->GetObjectTypeByName(type->GetName());
+						it = m_toStringCallbacks.find(tmplType);
+					}
+				}
+
+				if( it != m_toStringCallbacks.end() )
+				{
+					if( type->GetFlags() & asOBJ_REF )
+						s << " ";
+
+					// Invoke the callback to get the string representation of this type
+					string str = it->second(value, expandMembers, this);
+					s << str;
 				}
 			}
-
-			if( it != m_toStringCallbacks.end() )
-			{
-				if( type->GetFlags() & asOBJ_REF )
-					s << endl;
-
-				// Invoke the callback to get the string representation of this type
-				string str = it->second(value, expandMembers, this);
-				s << str;
-			}
-			else
-			{
-				// TODO: Value types can have their properties expanded by default
-			}
 		}
+		else
+			s << "{no engine}";
 	}
 
 	return s.str();
@@ -490,15 +505,34 @@ void CDebugger::PrintValue(const std::string &expr, asIScriptContext *ctx)
 
 	asIScriptEngine *engine = ctx->GetEngine();
 
-	int len = 0;
-	asETokenClass t = engine->ParseToken(expr.c_str(), 0, &len);
-
-	// TODO: If the expression starts with :: we should only look for global variables
-	// TODO: If the expression starts with identifier followed by ::, then use that as namespace
-	if( t == asTC_IDENTIFIER )
+	// Tokenize the input string to get the variable scope and name
+	asUINT len = 0;
+	string scope;
+	string name;
+	string str = expr;
+	asETokenClass t = engine->ParseToken(str.c_str(), 0, &len);
+	while( t == asTC_IDENTIFIER || (t == asTC_KEYWORD && len == 2 && str.compare("::")) )
 	{
-		string name(expr.c_str(), len);
+		if( t == asTC_KEYWORD )
+		{
+			if( scope == "" && name == "" )
+				scope = "::";			// global scope
+			else if( scope == "::" || scope == "" )
+				scope = name;			// namespace
+			else
+				scope += "::" + name;	// nested namespace
+			name = "";
+		}
+		else if( t == asTC_IDENTIFIER )
+			name.assign(str.c_str(), len);
 
+		// Skip the parsed token and get the next one
+		str = str.substr(len);
+		t = engine->ParseToken(str.c_str(), 0, &len);
+	}
+
+	if( name.size() )
+	{
 		// Find the variable
 		void *ptr = 0;
 		int typeId = 0;
@@ -506,39 +540,43 @@ void CDebugger::PrintValue(const std::string &expr, asIScriptContext *ctx)
 		asIScriptFunction *func = ctx->GetFunction();
 		if( !func ) return;
 
-		// We start from the end, in case the same name is reused in different scopes
-		for( asUINT n = func->GetVarCount(); n-- > 0; )
+		// skip local variables if a scope was informed
+		if( scope == "" )
 		{
-			if( ctx->IsVarInScope(n) && name == ctx->GetVarName(n) )
+			// We start from the end, in case the same name is reused in different scopes
+			for( asUINT n = func->GetVarCount(); n-- > 0; )
 			{
-				ptr = ctx->GetAddressOfVar(n);
-				typeId = ctx->GetVarTypeId(n);
-				break;
-			}
-		}
-
-		// Look for class members, if we're in a class method
-		if( !ptr && func->GetObjectType() )
-		{
-			if( name == "this" )
-			{
-				ptr = ctx->GetThisPointer();
-				typeId = ctx->GetThisTypeId();
-			}
-			else
-			{
-				asIObjectType *type = engine->GetObjectTypeById(ctx->GetThisTypeId());
-				for( asUINT n = 0; n < type->GetPropertyCount(); n++ )
+				if( ctx->IsVarInScope(n) && name == ctx->GetVarName(n) )
 				{
-					const char *propName = 0;
-					int offset = 0;
-					bool isReference = 0;
-					type->GetProperty(n, &propName, &typeId, 0, &offset, &isReference);
-					if( name == propName )
+					ptr = ctx->GetAddressOfVar(n);
+					typeId = ctx->GetVarTypeId(n);
+					break;
+				}
+			}
+
+			// Look for class members, if we're in a class method
+			if( !ptr && func->GetObjectType() )
+			{
+				if( name == "this" )
+				{
+					ptr = ctx->GetThisPointer();
+					typeId = ctx->GetThisTypeId();
+				}
+				else
+				{
+					asIObjectType *type = engine->GetObjectTypeById(ctx->GetThisTypeId());
+					for( asUINT n = 0; n < type->GetPropertyCount(); n++ )
 					{
-						ptr = (void*)(((asBYTE*)ctx->GetThisPointer())+offset);
-						if( isReference ) ptr = *(void**)ptr;
-						break;
+						const char *propName = 0;
+						int offset = 0;
+						bool isReference = 0;
+						type->GetProperty(n, &propName, &typeId, 0, 0, &offset, &isReference);
+						if( name == propName )
+						{
+							ptr = (void*)(((asBYTE*)ctx->GetThisPointer())+offset);
+							if( isReference ) ptr = *(void**)ptr;
+							break;
+						}
 					}
 				}
 			}
@@ -547,15 +585,27 @@ void CDebugger::PrintValue(const std::string &expr, asIScriptContext *ctx)
 		// Look for global variables
 		if( !ptr )
 		{
+			if( scope == "" )
+			{
+				// If no explicit scope was informed then use the namespace of the current function by default
+				scope = func->GetNamespace();
+			}
+			else if( scope == "::" )
+			{
+				// The global namespace will be empty
+				scope = "";
+			}
+
 			asIScriptModule *mod = func->GetModule();
 			if( mod )
 			{
 				for( asUINT n = 0; n < mod->GetGlobalVarCount(); n++ )
 				{
-					// TODO: Handle namespace too
 					const char *varName = 0, *nameSpace = 0;
 					mod->GetGlobalVar(n, &varName, &nameSpace, &typeId);
-					if( name == varName )
+
+					// Check if both name and namespace match
+					if( name == varName && scope == nameSpace )
 					{
 						ptr = mod->GetAddressOfGlobalVar(n);
 						break;
@@ -567,9 +617,12 @@ void CDebugger::PrintValue(const std::string &expr, asIScriptContext *ctx)
 		if( ptr )
 		{
 			// TODO: If there is a . after the identifier, check for members
+			// TODO: If there is a [ after the identifier try to call the 'opIndex(expr) const' method 
 
 			stringstream s;
-			s << ToString(ptr, typeId, true, engine) << endl;
+			// TODO: Allow user to set if members should be expanded
+			// Expand members by default to 3 recursive levels only
+			s << ToString(ptr, typeId, 3, engine) << endl;
 			Output(s.str());
 		}
 	}
@@ -603,7 +656,9 @@ void CDebugger::ListMemberProperties(asIScriptContext *ctx)
 	if( ptr )
 	{
 		stringstream s;
-		s << "this = " << ToString(ptr, ctx->GetThisTypeId(), true, ctx->GetEngine()) << endl;
+		// TODO: Allow user to define if members should be expanded or not
+		// Expand members by default to 3 recursive levels only
+		s << "this = " << ToString(ptr, ctx->GetThisTypeId(), 3, ctx->GetEngine()) << endl;
 		Output(s.str());
 	}
 }
@@ -623,7 +678,11 @@ void CDebugger::ListLocalVariables(asIScriptContext *ctx)
 	for( asUINT n = 0; n < func->GetVarCount(); n++ )
 	{
 		if( ctx->IsVarInScope(n) )
-			s << func->GetVarDecl(n) << " = " << ToString(ctx->GetAddressOfVar(n), ctx->GetVarTypeId(n), false, ctx->GetEngine()) << endl;
+		{
+			// TODO: Allow user to set if members should be expanded or not
+			// Expand members by default to 3 recursive levels only
+			s << func->GetVarDecl(n) << " = " << ToString(ctx->GetAddressOfVar(n), ctx->GetVarTypeId(n), 3, ctx->GetEngine()) << endl;
+		}
 	}
 	Output(s.str());
 }
@@ -648,7 +707,9 @@ void CDebugger::ListGlobalVariables(asIScriptContext *ctx)
 	{
 		int typeId = 0;
 		mod->GetGlobalVar(n, 0, 0, &typeId);
-		s << mod->GetGlobalVarDeclaration(n) << " = " << ToString(mod->GetAddressOfGlobalVar(n), typeId, false, ctx->GetEngine()) << endl;
+		// TODO: Allow user to set how many recursive expansions should be done
+		// Expand members by default to 3 recursive levels only
+		s << mod->GetGlobalVarDeclaration(n) << " = " << ToString(mod->GetAddressOfGlobalVar(n), typeId, 3, ctx->GetEngine()) << endl;
 	}
 	Output(s.str());
 }
@@ -753,6 +814,23 @@ void CDebugger::Output(const string &str)
 {
 	// By default we just output to stdout
 	cout << str;
+}
+
+void CDebugger::SetEngine(asIScriptEngine *engine)
+{
+	if( m_engine != engine )
+	{
+		if( m_engine )
+			m_engine->Release();
+		m_engine = engine;
+		if( m_engine )
+			m_engine->AddRef();
+	}
+}
+
+asIScriptEngine *CDebugger::GetEngine()
+{
+	return m_engine;
 }
 
 END_AS_NAMESPACE

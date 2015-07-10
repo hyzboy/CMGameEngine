@@ -3,12 +3,17 @@
 #include <string.h>
 #include <assert.h>
 #include <stdio.h> // sprintf
+#include <string>
 
 #include "scriptarray.h"
 
 using namespace std;
 
 BEGIN_AS_NAMESPACE
+
+// This macro is used to avoid warnings about unused variables.
+// Usually where the variables are only used in debug mode.
+#define UNUSED_VAR(x) (void)(x)
 
 // Set the default memory routines
 // Use the angelscript engine's memory routines by default
@@ -57,12 +62,11 @@ static void CleanupObjectTypeArrayCache(asIObjectType *type)
 
 CScriptArray* CScriptArray::Create(asIObjectType *ot, asUINT length)
 {
-	asIScriptContext *ctx = asGetActiveContext();
-
 	// Allocate the memory
 	void *mem = userAlloc(sizeof(CScriptArray));
 	if( mem == 0 )
 	{
+		asIScriptContext *ctx = asGetActiveContext();
 		if( ctx )
 			ctx->SetException("Out of memory");
 
@@ -72,25 +76,16 @@ CScriptArray* CScriptArray::Create(asIObjectType *ot, asUINT length)
 	// Initialize the object
 	CScriptArray *a = new(mem) CScriptArray(length, ot);
 
-	// It's possible the constructor raised a script exception, in which case we
-	// need to free the memory and return null instead, else we get a memory leak.
-	if( ctx && ctx->GetState() == asEXECUTION_EXCEPTION )
-	{
-		a->Release();
-		return 0;
-	}
-
 	return a;
 }
 
 CScriptArray* CScriptArray::Create(asIObjectType *ot, void *initList)
 {
-	asIScriptContext *ctx = asGetActiveContext();
-
 	// Allocate the memory
 	void *mem = userAlloc(sizeof(CScriptArray));
 	if( mem == 0 )
 	{
+		asIScriptContext *ctx = asGetActiveContext();
 		if( ctx )
 			ctx->SetException("Out of memory");
 
@@ -100,25 +95,16 @@ CScriptArray* CScriptArray::Create(asIObjectType *ot, void *initList)
 	// Initialize the object
 	CScriptArray *a = new(mem) CScriptArray(ot, initList);
 
-	// It's possible the constructor raised a script exception, in which case we
-	// need to free the memory and return null instead, else we get a memory leak.
-	if( ctx && ctx->GetState() == asEXECUTION_EXCEPTION )
-	{
-		a->Release();
-		return 0;
-	}
-
 	return a;
 }
 
 CScriptArray* CScriptArray::Create(asIObjectType *ot, asUINT length, void *defVal)
 {
-	asIScriptContext *ctx = asGetActiveContext();
-
 	// Allocate the memory
 	void *mem = userAlloc(sizeof(CScriptArray));
 	if( mem == 0 )
 	{
+		asIScriptContext *ctx = asGetActiveContext();
 		if( ctx )
 			ctx->SetException("Out of memory");
 
@@ -127,14 +113,6 @@ CScriptArray* CScriptArray::Create(asIObjectType *ot, asUINT length, void *defVa
 
 	// Initialize the object
 	CScriptArray *a = new(mem) CScriptArray(length, defVal, ot);
-
-	// It's possible the constructor raised a script exception, in which case we
-	// need to free the memory and return null instead, else we get a memory leak.
-	if( ctx && ctx->GetState() == asEXECUTION_EXCEPTION )
-	{
-		a->Release();
-		return 0;
-	}
 
 	return a;
 }
@@ -224,6 +202,39 @@ static bool ScriptArrayTemplateCallback(asIObjectType *ot, bool &dontGarbageColl
 		// thus there is no need to garbage collect them
 		dontGarbageCollect = true;
 	}
+	else
+	{
+		assert( typeId & asTYPEID_OBJHANDLE );
+
+		// It is not necessary to set the array as garbage collected for all handle types.
+		// If it is possible to determine that the handle cannot refer to an object type
+		// that can potentially form a circular reference with the array then it is not 
+		// necessary to make the array garbage collected.
+		asIObjectType *subtype = ot->GetEngine()->GetObjectTypeById(typeId);
+		asDWORD flags = subtype->GetFlags();
+		if( !(flags & asOBJ_GC) )
+		{
+			if( (flags & asOBJ_SCRIPT_OBJECT) )
+			{
+				// Even if a script class is by itself not garbage collected, it is possible
+				// that classes that derive from it may be, so it is not possible to know 
+				// that no circular reference can occur.
+				if( (flags & asOBJ_NOINHERIT) )
+				{
+					// A script class declared as final cannot be inherited from, thus
+					// we can be certain that the object cannot be garbage collected.
+					dontGarbageCollect = true;
+				}
+			}
+			else
+			{
+				// For application registered classes we assume the application knows
+				// what it is doing and don't mark the array as garbage collected unless
+				// the type is also garbage collected.
+				dontGarbageCollect = true;
+			}
+		}
+	}
 
 	// The type is ok
 	return true;
@@ -240,12 +251,14 @@ void RegisterScriptArray(asIScriptEngine *engine, bool defaultArray)
 	if( defaultArray )
 	{
 		int r = engine->RegisterDefaultArrayType("array<T>"); assert( r >= 0 );
+		UNUSED_VAR(r);
 	}
 }
 
 static void RegisterScriptArray_Native(asIScriptEngine *engine)
 {
-	int r;
+	int r = 0;
+	UNUSED_VAR(r);
 
 	// Register the object type user data clean up
 	engine->SetObjectTypeUserDataCleanupCallback(CleanupObjectTypeArrayCache, ARRAY_CACHE);
@@ -341,6 +354,9 @@ CScriptArray &CScriptArray::operator=(const CScriptArray &other)
 
 CScriptArray::CScriptArray(asIObjectType *ot, void *buf)
 {
+	// The object type should be the template instance of the array
+	assert( ot && string(ot->GetName()) == "array" );
+
 	refCount = 1;
 	gcFlag = false;
 	objType = ot;
@@ -373,14 +389,16 @@ CScriptArray::CScriptArray(asIObjectType *ot, void *buf)
 		CreateBuffer(&buffer, length);
 
 		// Copy the values of the primitive type into the internal buffer
-		memcpy(At(0), (((asUINT*)buf)+1), length * elementSize);
+		if( length > 0 )
+			memcpy(At(0), (((asUINT*)buf)+1), length * elementSize);
 	}
 	else if( ot->GetSubTypeId() & asTYPEID_OBJHANDLE )
 	{
 		CreateBuffer(&buffer, length);
 
 		// Copy the handles into the internal buffer
-		memcpy(At(0), (((asUINT*)buf)+1), length * elementSize);
+		if( length > 0 )
+			memcpy(At(0), (((asUINT*)buf)+1), length * elementSize);
 
 		// With object handles it is safe to clear the memory in the received buffer
 		// instead of increasing the ref count. It will save time both by avoiding the
@@ -396,7 +414,8 @@ CScriptArray::CScriptArray(asIObjectType *ot, void *buf)
 		subTypeId &= ~asTYPEID_OBJHANDLE;
 
 		// Copy the handles into the internal buffer
-		memcpy(buffer->data, (((asUINT*)buf)+1), length * elementSize);
+		if( length > 0 )
+			memcpy(buffer->data, (((asUINT*)buf)+1), length * elementSize);
 
 		// For ref types we can do the same as for handles, as they are
 		// implicitly stored as handles.
@@ -428,6 +447,9 @@ CScriptArray::CScriptArray(asIObjectType *ot, void *buf)
 
 CScriptArray::CScriptArray(asUINT length, asIObjectType *ot)
 {
+	// The object type should be the template instance of the array
+	assert( ot && string(ot->GetName()) == "array" );
+
 	refCount = 1;
 	gcFlag = false;
 	objType = ot;
@@ -479,6 +501,9 @@ CScriptArray::CScriptArray(const CScriptArray &other)
 
 CScriptArray::CScriptArray(asUINT length, void *defVal, asIObjectType *ot)
 {
+	// The object type should be the template instance of the array
+	assert( ot && string(ot->GetName()) == "array" );
+
 	refCount = 1;
 	gcFlag = false;
 	objType = ot;
@@ -785,6 +810,11 @@ const void *CScriptArray::At(asUINT index) const
 void *CScriptArray::At(asUINT index)
 {
 	return const_cast<void*>(const_cast<const CScriptArray *>(this)->At(index));
+}
+
+void *CScriptArray::GetBuffer()
+{
+	return buffer->data;
 }
 
 
@@ -1575,6 +1605,9 @@ void CScriptArray::Precache()
 // GC behaviour
 void CScriptArray::EnumReferences(asIScriptEngine *engine)
 {
+	// TODO: If garbage collection can be done from a separate thread, then this method must be
+	//       protected so that it doesn't get lost during the iteration if the array is modified
+
 	// If the array is holding handles, then we need to notify the GC of them
 	if( subTypeId & asTYPEID_MASK_OBJECT )
 	{
@@ -1639,7 +1672,7 @@ static void ScriptArrayFactory_Generic(asIScriptGeneric *gen)
 {
 	asIObjectType *ot = *(asIObjectType**)gen->GetAddressOfArg(0);
 
-	*(CScriptArray**)gen->GetAddressOfReturnLocation() = CScriptArray::Create(ot);
+	*reinterpret_cast<CScriptArray**>(gen->GetAddressOfReturnLocation()) = CScriptArray::Create(ot);
 }
 
 static void ScriptArrayFactory2_Generic(asIScriptGeneric *gen)
@@ -1647,7 +1680,7 @@ static void ScriptArrayFactory2_Generic(asIScriptGeneric *gen)
 	asIObjectType *ot = *(asIObjectType**)gen->GetAddressOfArg(0);
 	asUINT length = gen->GetArgDWord(1);
 
-	*(CScriptArray**)gen->GetAddressOfReturnLocation() = CScriptArray::Create(ot, length);
+	*reinterpret_cast<CScriptArray**>(gen->GetAddressOfReturnLocation()) = CScriptArray::Create(ot, length);
 }
 
 static void ScriptArrayListFactory_Generic(asIScriptGeneric *gen)
@@ -1655,7 +1688,7 @@ static void ScriptArrayListFactory_Generic(asIScriptGeneric *gen)
 	asIObjectType *ot = *(asIObjectType**)gen->GetAddressOfArg(0);
 	void *buf = gen->GetArgAddress(1);
 
-	*(CScriptArray**)gen->GetAddressOfReturnLocation() = CScriptArray::Create(ot, buf);
+	*reinterpret_cast<CScriptArray**>(gen->GetAddressOfReturnLocation()) = CScriptArray::Create(ot, buf);
 }
 
 static void ScriptArrayFactoryDefVal_Generic(asIScriptGeneric *gen)
@@ -1664,14 +1697,14 @@ static void ScriptArrayFactoryDefVal_Generic(asIScriptGeneric *gen)
 	asUINT length = gen->GetArgDWord(1);
 	void *defVal = gen->GetArgAddress(2);
 
-	*(CScriptArray**)gen->GetAddressOfReturnLocation() = CScriptArray::Create(ot, length, defVal);
+	*reinterpret_cast<CScriptArray**>(gen->GetAddressOfReturnLocation()) = CScriptArray::Create(ot, length, defVal);
 }
 
 static void ScriptArrayTemplateCallback_Generic(asIScriptGeneric *gen)
 {
 	asIObjectType *ot = *(asIObjectType**)gen->GetAddressOfArg(0);
 	bool *dontGarbageCollect = *(bool**)gen->GetAddressOfArg(1);
-	*(bool*)gen->GetAddressOfReturnLocation() = ScriptArrayTemplateCallback(ot, *dontGarbageCollect);
+	*reinterpret_cast<bool*>(gen->GetAddressOfReturnLocation()) = ScriptArrayTemplateCallback(ot, *dontGarbageCollect);
 }
 
 static void ScriptArrayAssignment_Generic(asIScriptGeneric *gen)
@@ -1792,7 +1825,7 @@ static void ScriptArrayReverse_Generic(asIScriptGeneric *gen)
 static void ScriptArrayIsEmpty_Generic(asIScriptGeneric *gen)
 {
 	CScriptArray *self = (CScriptArray*)gen->GetObject();
-	self->IsEmpty();
+	*reinterpret_cast<bool*>(gen->GetAddressOfReturnLocation()) = self->IsEmpty();
 }
 
 static void ScriptArraySortAsc2_Generic(asIScriptGeneric *gen)
@@ -1832,7 +1865,7 @@ static void ScriptArrayRelease_Generic(asIScriptGeneric *gen)
 static void ScriptArrayGetRefCount_Generic(asIScriptGeneric *gen)
 {
 	CScriptArray *self = (CScriptArray*)gen->GetObject();
-	*(int*)gen->GetAddressOfReturnLocation() = self->GetRefCount();
+	*reinterpret_cast<int*>(gen->GetAddressOfReturnLocation()) = self->GetRefCount();
 }
 
 static void ScriptArraySetFlag_Generic(asIScriptGeneric *gen)
@@ -1844,7 +1877,7 @@ static void ScriptArraySetFlag_Generic(asIScriptGeneric *gen)
 static void ScriptArrayGetFlag_Generic(asIScriptGeneric *gen)
 {
 	CScriptArray *self = (CScriptArray*)gen->GetObject();
-	*(bool*)gen->GetAddressOfReturnLocation() = self->GetFlag();
+	*reinterpret_cast<bool*>(gen->GetAddressOfReturnLocation()) = self->GetFlag();
 }
 
 static void ScriptArrayEnumReferences_Generic(asIScriptGeneric *gen)
@@ -1863,7 +1896,8 @@ static void ScriptArrayReleaseAllHandles_Generic(asIScriptGeneric *gen)
 
 static void RegisterScriptArray_Generic(asIScriptEngine *engine)
 {
-	int r;
+	int r = 0;
+	UNUSED_VAR(r);
 
 	engine->SetObjectTypeUserDataCleanupCallback(CleanupObjectTypeArrayCache, ARRAY_CACHE);
 

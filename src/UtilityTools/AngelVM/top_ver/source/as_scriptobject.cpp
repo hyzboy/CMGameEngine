@@ -1,6 +1,6 @@
 /*
    AngelCode Scripting Library
-   Copyright (c) 2003-2014 Andreas Jonsson
+   Copyright (c) 2003-2015 Andreas Jonsson
 
    This software is provided 'as-is', without any express or implied 
    warranty. In no event will the authors be held liable for any 
@@ -173,6 +173,24 @@ static void ScriptObject_ReleaseAllHandles_Generic(asIScriptGeneric *gen)
 	self->ReleaseAllHandles(engine);
 }
 
+static void ScriptObject_Assignment_Generic(asIScriptGeneric *gen)
+{
+	asCScriptObject *other = *(asCScriptObject**)gen->GetAddressOfArg(0);
+	asCScriptObject *self = (asCScriptObject*)gen->GetObject();
+
+	*self = *other;
+
+	*(asCScriptObject**)gen->GetAddressOfReturnLocation() = self;
+}
+
+static void ScriptObject_Construct_Generic(asIScriptGeneric *gen)
+{
+	asCObjectType *objType = *(asCObjectType**)gen->GetAddressOfArg(0);
+	asCScriptObject *self = (asCScriptObject*)gen->GetObject();
+
+	ScriptObject_Construct(objType, self);
+}
+
 #endif
 
 void RegisterScriptObject(asCScriptEngine *engine)
@@ -216,14 +234,6 @@ void RegisterScriptObject(asCScriptEngine *engine)
 #endif
 }
 
-void ScriptObject_Construct_Generic(asIScriptGeneric *gen)
-{
-	asCObjectType *objType = *(asCObjectType**)gen->GetAddressOfArg(0);
-	asCScriptObject *self = (asCScriptObject*)gen->GetObject();
-
-	ScriptObject_Construct(objType, self);
-}
-
 void ScriptObject_Construct(asCObjectType *objType, asCScriptObject *self)
 {
 	new(self) asCScriptObject(objType);
@@ -240,7 +250,7 @@ asCScriptObject::asCScriptObject(asCObjectType *ot, bool doInitialize)
 	objType = ot;
 	objType->AddRef();
 	isDestructCalled = false;
-	weakRefFlag = 0;
+	extra = 0;
 	hasRefCountReachedZero = false;
 
 	// Notify the garbage collector of this object
@@ -298,15 +308,40 @@ void asCScriptObject::Destruct()
 	this->~asCScriptObject();
 
 	// Free the memory
+#ifndef WIP_16BYTE_ALIGN
 	userFree(this);
+#else
+	// Script object memory is allocated through asCScriptEngine::CallAlloc()
+	// This free call must match the allocator used in CallAlloc().
+	userFreeAligned(this);
+#endif
 }
 
 asCScriptObject::~asCScriptObject()
 {
-	if( weakRefFlag )
+	if( extra )
 	{
-		weakRefFlag->Release();
-		weakRefFlag = 0;
+		if( extra->weakRefFlag )
+		{
+			extra->weakRefFlag->Release();
+			extra->weakRefFlag = 0;
+		}
+
+		if( objType->engine )
+		{
+			// Clean the user data
+			for( asUINT n = 0; n < extra->userData.GetLength(); n += 2 )
+			{
+				if( extra->userData[n+1] )
+				{
+					for( asUINT c = 0; c < objType->engine->cleanScriptObjectFuncs.GetLength(); c++ )
+						if( objType->engine->cleanScriptObjectFuncs[c].type == extra->userData[n] )
+							objType->engine->cleanScriptObjectFuncs[c].cleanFunc(this);
+				}
+			}
+		}
+
+		asDELETE(extra, SExtra);
 	}
 
 	// The engine pointer should be available from the objectType
@@ -360,8 +395,8 @@ asILockableSharedBool *asCScriptObject::GetWeakRefFlag() const
 	// If the object's refCount has already reached zero then the object is already
 	// about to be destroyed so it's ok to return null if the weakRefFlag doesn't already
 	// exist
-	if( weakRefFlag || hasRefCountReachedZero )
-		return weakRefFlag;
+	if( (extra && extra->weakRefFlag) || hasRefCountReachedZero )
+		return extra->weakRefFlag;
 
 	// Lock globally so no other thread can attempt
 	// to create a shared bool at the same time.
@@ -372,12 +407,77 @@ asILockableSharedBool *asCScriptObject::GetWeakRefFlag() const
 
 	// Make sure another thread didn't create the 
 	// flag while we waited for the lock
-	if( !weakRefFlag )
-		weakRefFlag = asNEW(asCLockableSharedBool);
+	if( !extra )
+		extra = asNEW(SExtra);
+	if( !extra->weakRefFlag )
+		extra->weakRefFlag = asNEW(asCLockableSharedBool);
 
 	asReleaseExclusiveLock();
 
-	return weakRefFlag;
+	return extra->weakRefFlag;
+}
+
+void *asCScriptObject::GetUserData(asPWORD type) const
+{
+	if( !extra )
+		return 0;
+
+	// There may be multiple threads reading, but when
+	// setting the user data nobody must be reading.
+	// TODO: runtime optimize: Would it be worth it to have a rwlock per object type?
+	asAcquireSharedLock();
+
+	for( asUINT n = 0; n < extra->userData.GetLength(); n += 2 )
+	{
+		if( extra->userData[n] == type )
+		{
+			void *userData = reinterpret_cast<void*>(extra->userData[n+1]);
+			asReleaseSharedLock();
+			return userData;
+		}
+	}
+
+	asReleaseSharedLock();
+
+	return 0;
+}
+
+void *asCScriptObject::SetUserData(void *data, asPWORD type)
+{
+	// Lock globally so no other thread can attempt
+	// to manipulate the extra data at the same time.
+	// TODO: runtime optimize: Instead of locking globally, it would be possible to have 
+	//                         a critical section per object type. This would reduce the 
+	//                         chances of two threads lock on the same critical section.
+	asAcquireExclusiveLock();
+
+	// Make sure another thread didn't create the 
+	// flag while we waited for the lock
+	if( !extra )
+		extra = asNEW(SExtra);
+
+	// It is not intended to store a lot of different types of userdata,
+	// so a more complex structure like a associative map would just have
+	// more overhead than a simple array.
+	for( asUINT n = 0; n < extra->userData.GetLength(); n += 2 )
+	{
+		if( extra->userData[n] == type )
+		{
+			void *oldData = reinterpret_cast<void*>(extra->userData[n+1]);
+			extra->userData[n+1] = reinterpret_cast<asPWORD>(data);
+
+			asReleaseExclusiveLock();
+
+			return oldData;
+		}
+	}
+
+	extra->userData.PushLast(type);
+	extra->userData.PushLast(reinterpret_cast<asPWORD>(data));
+
+	asReleaseExclusiveLock();
+
+	return 0;
 }
 
 asIScriptEngine *asCScriptObject::GetEngine() const
@@ -416,14 +516,14 @@ int asCScriptObject::Release() const
 	// is ok to check the existance of the weakRefFlag without locking here
 	// because if the refCount is 1 then no other thread is currently 
 	// creating the weakRefFlag.
-	if( refCount.get() == 1 && weakRefFlag )
+	if( refCount.get() == 1 && extra && extra->weakRefFlag )
 	{
 		// Set the flag to tell others that the object is no longer alive
 		// We must do this before decreasing the refCount to 0 so we don't
 		// end up with a race condition between this thread attempting to 
 		// destroy the object and the other that temporary added a strong
 		// ref from the weak ref.
-		weakRefFlag->Set(true);
+		extra->weakRefFlag->Set(true);
 	}
 
 	// Call the script destructor behaviour if the reference counter is 1.
@@ -652,16 +752,6 @@ void asCScriptObject::ReleaseAllHandles(asIScriptEngine *engine)
 			}
 		}
 	}
-}
-
-void ScriptObject_Assignment_Generic(asIScriptGeneric *gen)
-{
-	asCScriptObject *other = *(asCScriptObject**)gen->GetAddressOfArg(0);
-	asCScriptObject *self = (asCScriptObject*)gen->GetObject();
-
-	*self = *other;
-
-	*(asCScriptObject**)gen->GetAddressOfReturnLocation() = self;
 }
 
 asCScriptObject &ScriptObject_Assignment(asCScriptObject *other, asCScriptObject *self)

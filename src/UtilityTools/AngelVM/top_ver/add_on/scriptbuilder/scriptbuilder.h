@@ -68,7 +68,8 @@ public:
 	//         <0 on error
 	int AddSectionFromMemory(const char *sectionName,
 							 const char *scriptCode, 
-							 unsigned int scriptLength = 0);
+							 unsigned int scriptLength = 0,
+							 int lineOffset = 0);
 
 	// Build the added script sections
 	int BuildModule();
@@ -106,7 +107,7 @@ public:
 protected:
 	void ClearAll();
 	int  Build();
-	int  ProcessScriptSection(const char *script, unsigned int length, const char *sectionname);
+	int  ProcessScriptSection(const char *script, unsigned int length, const char *sectionname, int lineOffset);
 	int  LoadScriptSection(const char *filename);
 	bool IncludeIfNotAlreadyIncluded(const char *filename);
 
@@ -157,7 +158,30 @@ protected:
 
 #endif
 
+#ifdef _WIN32
+	// On Windows the filenames are case insensitive so the comparisons to 
+	// avoid duplicate includes must also be case insensitive. True case insensitive
+	// is not easy as it must be language aware, but a simple implementation such
+	// as strcmpi should suffice in almost all cases.
+	//
+	// ref: http://www.gotw.ca/gotw/029.htm
+	// ref: https://msdn.microsoft.com/en-us/library/windows/desktop/dd317761(v=vs.85).aspx
+	// ref: http://site.icu-project.org/
+	
+	// TODO: Strings by default are treated as UTF8 encoded. If the application choses to
+	//       use a different encoding, the comparison algorithm should be adjusted as well
+
+	struct ci_less
+	{
+		bool operator()(const std::string &a, const std::string &b) const
+		{
+			return _strcmpi(a.c_str(), b.c_str()) < 0;
+		}
+	};
+	std::set<std::string, ci_less> includedScripts;
+#else
 	std::set<std::string>      includedScripts;
+#endif
 
 	std::set<std::string>      definedWords;
 };

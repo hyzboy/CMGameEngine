@@ -87,6 +87,9 @@ public:
 	int  FindByRef(void *ref) const;
 	int  FindByRef(asUINT startAt, void *ref) const;
 
+	// Return the address of internal buffer for direct manipulation of elements
+	void *GetBuffer();
+
 	// GC methods
 	int  GetRefCount();
 	void SetFlag();
@@ -111,7 +114,7 @@ protected:
 
 	bool  Less(const void *a, const void *b, bool asc, asIScriptContext *ctx, SArrayCache *cache);
 	void *GetArrayItemPointer(int index);
-	void *GetDataPointer(void *);
+	void *GetDataPointer(void *buffer);
 	void  Copy(void *dst, void *src);
 	void  Precache();
 	bool  CheckMaxSize(asUINT numElements);
