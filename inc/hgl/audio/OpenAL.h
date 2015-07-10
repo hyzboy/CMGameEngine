@@ -36,11 +36,13 @@ namespace openal                                                									///Open
 {
 	bool LoadOpenAL(const os_char *driver_name=nullptr);											///<加载OpenAL,参数为驱动名称
 
+    #define AL_DEVICE_NAME_MAX_LEN  256         ///<音频设备名称最大长度
+
     struct OpenALDevice
     {
-        char name[256];                 ///<设备名称
-        char specifier[256];            ///<设备技术名称
-        int major,minor;                ///<设备版本号
+        char name[AL_DEVICE_NAME_MAX_LEN];      ///<设备名称
+        char specifier[AL_DEVICE_NAME_MAX_LEN]; ///<设备技术名称
+        int major,minor;                        ///<设备版本号
     };
 
     bool alcGetDefaultDevice(OpenALDevice &);                                                       ///<取得缺省设备

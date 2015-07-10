@@ -20,7 +20,7 @@ namespace hgl
 
 		memset(home_path,0,sizeof(home_path));
 
-		strcpy(home_path,pwd->pw_dir);
+		strcpy(home_path,HGL_MAX_PATH,pwd->pw_dir);
 		strcat(home_path,"/cmgdk");
 
 		if(IsDirectory(home_path))

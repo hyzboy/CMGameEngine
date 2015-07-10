@@ -1,5 +1,7 @@
 ﻿#ifndef HGL_MULTI_PROC_FIFO_INCLUDE
 #define HGL_MULTI_PROC_FIFO_INCLUDE
+
+#include<hgl/platform/Platform.h>
 namespace hgl
 {
 	/**
@@ -9,7 +11,7 @@ namespace hgl
 	{
 	public:
 
-		char filename[1024];
+		char filename[HGL_MAX_PATH];
 
 		int fd;
 

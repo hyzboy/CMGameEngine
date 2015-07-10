@@ -14,8 +14,8 @@ namespace hgl
 		if(!fn||!(*fn))
 			return(false);
 
-		hgl::strcpy(filename,"/tmp/");
-		hgl::strcpy(filename+5,fn);
+		hgl::strcpy(filename,HGL_MAX_PATH-5,"/tmp/");
+		hgl::strcpy(filename+5,HGL_MAX_PATH-5,fn);
 
 		fd=mkfifo(filename,0777);
 

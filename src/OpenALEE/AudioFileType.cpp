@@ -43,7 +43,7 @@ namespace hgl
 
 		++ext;
 
-		hgl::strcpy(extname,ext);
+		hgl::strcpy(extname,16,ext);
 		hgl::tolower(extname);
 
 		return CheckAudioExtName(extname);

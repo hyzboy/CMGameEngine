@@ -152,7 +152,7 @@ namespace hgl
 			T str[8];
 
 			utos(str,8,*p++);
-			strcpy(name,str);
+			strcpy(name,3,str);
 			strcat(name,(T)'.');
 
 			utos(str,8,*p++);

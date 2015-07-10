@@ -45,10 +45,13 @@ namespace hgl
 		ccpEnd                          					///<结束定义，无意义
 	};//enum CharCodePage
 
+    #define CharSetNameLength   32
+    using CharSetName=char[CharSetNameLength];
+
 	struct CodePageAndCharSet
 	{
 		CharCodePage codepage;
-		char charset[32];
+		CharSetName charset;
 	};
 
 	const struct CodePageAndCharSet CodePage2CharSet[]=
@@ -137,20 +140,20 @@ namespace hgl
 	struct CharSet
 	{
 		CharCodePage codepage;
-		char charset[32];
+        CharSetName charset;
 
 	public:
 
 		CharSet()
 		{
 			codepage=ccpNone;
-			strcpy(charset,"us-ascii");
+			strcpy(charset,CharSetNameLength,"us-ascii");
 		}
 
 		CharSet(CharCodePage ccp,const char *cs)
 		{
 			codepage=ccp;
-			strcpy(charset,cs);
+			strcpy(charset,CharSetNameLength,cs);
 		}
 
 		CharSet(CharCodePage);
@@ -159,19 +162,19 @@ namespace hgl
 		CharSet(const CodePageAndCharSet &cs)
 		{
 			codepage=cs.codepage;
-			strcpy(charset,cs.charset);
+			strcpy(charset,CharSetNameLength,cs.charset);
 		}
 	};//struct CharacterSet
 
 	inline CharSet::CharSet(CharCodePage ccp)
 	{
 		codepage=ccp;
-		strcpy(charset,FindCharSet(ccp));
+		strcpy(charset,CharSetNameLength,FindCharSet(ccp));
 	}
 
 	inline CharSet::CharSet(const char *cs)
 	{
-		strcpy(charset,cs);
+		strcpy(charset,CharSetNameLength,cs);
 		codepage=FindCodePage(cs);
 	}
 

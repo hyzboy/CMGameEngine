@@ -58,7 +58,7 @@ namespace hgl
 
 				getpwuid_r(getuid(),&pwd,buf,bufsize,&result);
 
-				strcpy(fn,pwd.pw_dir);
+				strcpy(fn,HGL_MAX_PATH,pwd.pw_dir);
 
 				free(buf);
 			#endif//HGL_OS == HGL_OS_Windows
@@ -77,7 +77,7 @@ namespace hgl
 
 				for(uint i=0;i<=0xFFFF;i++)
 				{
-					strcpy(filename,fn);
+					strcpy(filename,HGL_MAX_PATH,fn);
 
 					if(i)
 					{

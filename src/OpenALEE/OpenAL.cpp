@@ -11,7 +11,7 @@ using namespace hgl;
 
 namespace openal
 {
-	static ALCchar AudioDeviceName[256]={0};
+	static ALCchar AudioDeviceName[AL_DEVICE_NAME_MAX_LEN]={0};
 
 	static ExternalModule *AudioEM	=nullptr;		//OpenAL动态链接库指针
 	static ALCdevice *AudioDevice	=nullptr;		//OpenAL设备
@@ -63,11 +63,11 @@ namespace openal
 
 		if(filename)
 		{
-			hgl::strcpy(dllfn,hgl::info::GetString(hgl::info::hfsOSLibraryPath).c_str());
+			hgl::strcpy(dllfn,HGL_MAX_PATH,hgl::info::GetString(hgl::info::hfsOSLibraryPath).c_str());
 			hgl::strcat(dllfn,HGL_DIRECTORY_SEPARATOR);
 			hgl::strcat(dllfn,filename);
 
-			hgl::strcpy(pifn,pi_path);
+			hgl::strcpy(pifn,HGL_MAX_PATH,pi_path);
 			hgl::strcat(pifn,HGL_DIRECTORY_SEPARATOR);
 			hgl::strcat(pifn,filename);
 
@@ -81,10 +81,10 @@ namespace openal
 		{
 			do
 			{
-				hgl::strcpy(pifn,pi_path);
+				hgl::strcpy(pifn,HGL_MAX_PATH,pi_path);
 				hgl::strcat(pifn,oalfn[count]);
 
-				hgl::strcpy(dllfn,hgl::info::GetString(hgl::info::hfsOSLibraryPath).c_str());
+				hgl::strcpy(dllfn,HGL_MAX_PATH,hgl::info::GetString(hgl::info::hfsOSLibraryPath).c_str());
 				hgl::strcat(dllfn,oalfn[count]);
 
 				if(FileConfirm(dllfn))final_filename=dllfn;else
@@ -145,7 +145,7 @@ namespace openal
 
 			if(result&&(*result))
 			{
-				hgl::strcpy(name,result);
+				hgl::strcpy(name,AL_DEVICE_NAME_MAX_LEN,result);
 				return(true);
 			}
 		}
@@ -161,8 +161,8 @@ namespace openal
         if(!device)
             return(false);
 
-        hgl::strcpy(dev.name,device_name);
-        hgl::strcpy(dev.specifier,alcGetString(device,ALC_DEVICE_SPECIFIER));
+        hgl::strcpy(dev.name,       AL_DEVICE_NAME_MAX_LEN,device_name);
+        hgl::strcpy(dev.specifier,  AL_DEVICE_NAME_MAX_LEN,alcGetString(device,ALC_DEVICE_SPECIFIER));
 
         alcGetIntegerv(device,ALC_MAJOR_VERSION,sizeof(int),&dev.major);
 
@@ -277,7 +277,7 @@ namespace openal
     	bool default_device=false;
 
 		if(device_name)
-			hgl::strcpy(AudioDeviceName,device_name);
+			hgl::strcpy(AudioDeviceName,AL_DEVICE_NAME_MAX_LEN,device_name);
 		else
 		{
 			alcGetDefaultDeviceName(AudioDeviceName);

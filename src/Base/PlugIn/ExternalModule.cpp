@@ -138,10 +138,10 @@ namespace hgl
 
 			if(func)return(func);
 
-			char _name[1024];
+			char _name[HGL_MAX_PATH];
 
 			_name[0]='_';
-			strcpy(_name+1,name);
+			strcpy(_name+1,HGL_MAX_PATH-1,name);
 
 			func=pi_get(fp,_name);
 

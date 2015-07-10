@@ -853,9 +853,9 @@ namespace hgl
 		if(!func)return(-1);
 
 		if(!folder_name||!(*folder_name))
-			strcpy(fullname,OS_TEXT("."));
+			strcpy(fullname,HGL_MAX_PATH,OS_TEXT("."));
 		else
-			strcpy(fullname,folder_name);
+			strcpy(fullname,HGL_MAX_PATH,folder_name);
 
 		DIR *dir;
 		struct_dirent64 *entry;
@@ -907,7 +907,7 @@ namespace hgl
 					{
 						char child_name[HGL_MAX_PATH];
 
-						strcpy(child_name,folder_name);
+						strcpy(child_name,HGL_MAX_PATH,folder_name);
 
 						if(folder_name[strlen(folder_name)-1]!=HGL_DIRECTORY_SEPARATOR)
 							strcat(child_name,HGL_DIRECTORY_SEPARATOR);
@@ -933,11 +933,11 @@ namespace hgl
 
 			if(!folder_name||!(*folder_name))
 			{
-            	strcpy(fi.fullname,fi.name);
+            	strcpy(fi.fullname,HGL_MAX_PATH,fi.name);
 			}
 			else
 			{
-				strcpy(fi.fullname,folder_name);
+				strcpy(fi.fullname,HGL_MAX_PATH,folder_name);
 
 				if(folder_name[strlen(folder_name)-1]!=HGL_DIRECTORY_SEPARATOR)
 					strcat(fi.fullname,HGL_DIRECTORY_SEPARATOR);
