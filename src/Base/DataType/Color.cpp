@@ -3,7 +3,19 @@
 namespace hgl
 {
 	#undef DEF_COLOR
-	#define	DEF_COLOR(name,red,green,blue,chn_name)	{red,green,blue,U16_TEXT(chn_name)},
+	#define	DEF_COLOR(name,red,green,blue,chn_name)	{   \
+                                                        red,    \
+                                                        green,  \
+                                                        blue,   \
+                                                        int(double(red)*0.299+double(green)*0.587+double(blue)*0.114), \
+                                                        \
+                                                        float(double(red)*0.299),   \
+                                                        float(double(green)*0.587), \
+                                                        float(double(blue)*0.114),  \
+                                                        float((double(red)*0.299+double(green)*0.587+double(blue)*0.114)/255.0f),\
+                                                        \
+                                                        U16_TEXT(chn_name)  \
+                                                    },
 
 	COLOR_DEF prv_color[ceEnd+1]=
 	{

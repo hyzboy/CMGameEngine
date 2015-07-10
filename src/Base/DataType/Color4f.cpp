@@ -4,9 +4,9 @@ namespace hgl
 {
 	void Color4f::Use(COLOR_ENUM ce,float ta)
 	{
-		r=double(prv_color[ce].red)/255.0f;
-		g=double(prv_color[ce].green)/255.0f;
-		b=double(prv_color[ce].blue)/255.0f;
+        r=prv_color[ce].r;
+        g=prv_color[ce].g;
+        b=prv_color[ce].b;
 		a=ta;
 	}
 

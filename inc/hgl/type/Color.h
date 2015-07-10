@@ -10,8 +10,12 @@ namespace hgl
 	struct COLOR_DEF			///颜色数据定义
 	{
 		int red,green,blue;		///<三原色
+		int yum;                ///<亮度
 
-		u16char	name[16];	///<中文名称
+		float r,g,b;            ///<三原色浮点值
+        float y;                ///<亮度浮点值
+
+		u16char	name[16];	    ///<中文名称
 	};
 
 	/**
