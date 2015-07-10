@@ -63,16 +63,16 @@ namespace hgl
 				free(buf);
 			#endif//HGL_OS == HGL_OS_Windows
 
-				strcat(fn,HGL_DIRECTORY_SEPARATOR);
-				strcat(fn,OS_TEXT(".cmgdk"));
+				strcat(fn,HGL_MAX_PATH,HGL_DIRECTORY_SEPARATOR);
+				strcat(fn,HGL_MAX_PATH,OS_TEXT(".cmgdk"),6);
 				MakePath(fn);
 
-				strcat(fn,HGL_DIRECTORY_SEPARATOR);
+				strcat(fn,HGL_MAX_PATH,HGL_DIRECTORY_SEPARATOR);
 
 #if HGL_OS == HGL_OS_Windows
 				strcat(fn,u8_to_u16(project_code.c_str()));
 #else
-				strcat(fn,project_code.c_str());
+				strcat(fn,HGL_MAX_PATH,project_code);
 #endif//HGL_OS == HGL_OS_Windows
 
 				for(uint i=0;i<=0xFFFF;i++)
@@ -82,10 +82,10 @@ namespace hgl
 					if(i)
 					{
 						utos(num+1,14,i);
-						strcat(filename,num);
+						strcat(filename,HGL_MAX_PATH,num,sizeof(num));
 					}
 
-					strcat(filename,OS_TEXT(".Loginfo"));
+					strcat(filename,HGL_MAX_PATH,OSString(".Loginfo"));
 
 					if(fos.Create(filename))//创建成功
 					{

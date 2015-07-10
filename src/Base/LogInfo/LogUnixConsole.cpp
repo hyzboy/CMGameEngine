@@ -8,8 +8,10 @@ namespace hgl
 {
 	namespace logger
 	{
+    #define LOG_BUF_SIZE    4096
+
 #ifndef LOGINFO_THREAD_MUTEX
-		static HGL_THREAD char log_buf[4096];		//HGL_THREAD关键字代表使用thread-local storage，即这个数据会每个线程有一份，所以无需加锁
+		static HGL_THREAD char log_buf[HGL_MAX_PATH];		//HGL_THREAD关键字代表使用thread-local storage，即这个数据会每个线程有一份，所以无需加锁
 #endif//LOGINFO_THREAD_MUTEX
 
 		/**
@@ -20,7 +22,7 @@ namespace hgl
 			char endline;
 
 #ifdef LOGINFO_THREAD_MUTEX
-			char log_buf[4096];
+			char log_buf[HGL_MAX_PATH];
 			ThreadMutex mutex;
 #endif//LOGINFO_THREAD_MUTEX
 
@@ -45,7 +47,7 @@ namespace hgl
 				int size;
 
 				htos(log_buf+8,128-9,pthread_self());
-				strcat(log_buf,"]");
+				strcat(log_buf,HGL_MAX_PATH,']');
 
 				write(STDOUT_FILENO,log_buf,strlen(log_buf));
 			}
@@ -57,7 +59,7 @@ namespace hgl
 				memcpy(log_buf,"[Time:",6);
 
 				ftos(log_buf+6,128-strlen(log_buf),GetDoubleTime());
-				strcat(log_buf,"]");
+				strcat(log_buf,HGL_MAX_PATH,']');
 
 				write(STDOUT_FILENO,log_buf,strlen(log_buf));
 			}

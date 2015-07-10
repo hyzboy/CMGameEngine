@@ -853,9 +853,14 @@ namespace hgl
 		if(!func)return(-1);
 
 		if(!folder_name||!(*folder_name))
-			strcpy(fullname,HGL_MAX_PATH,OS_TEXT("."));
+        {
+            fullname[0]='.';
+            fullname[1]=0;
+        }
 		else
+        {
 			strcpy(fullname,HGL_MAX_PATH,folder_name);
+        }
 
 		DIR *dir;
 		struct_dirent64 *entry;
@@ -910,7 +915,7 @@ namespace hgl
 						strcpy(child_name,HGL_MAX_PATH,folder_name);
 
 						if(folder_name[strlen(folder_name)-1]!=HGL_DIRECTORY_SEPARATOR)
-							strcat(child_name,HGL_DIRECTORY_SEPARATOR);
+							strcat(child_name,HGL_MAX_PATH,HGL_DIRECTORY_SEPARATOR);
 
 						const int child_len=strlen(child_name);
 
@@ -940,9 +945,9 @@ namespace hgl
 				strcpy(fi.fullname,HGL_MAX_PATH,folder_name);
 
 				if(folder_name[strlen(folder_name)-1]!=HGL_DIRECTORY_SEPARATOR)
-					strcat(fi.fullname,HGL_DIRECTORY_SEPARATOR);
+					strcat(fi.fullname,HGL_MAX_PATH,HGL_DIRECTORY_SEPARATOR);
 
-				strcat(fi.fullname,fi.name);
+				strcat(fi.fullname,HGL_MAX_PATH,fi.name,HGL_MAX_PATH);
 			}
 
 			func(data,fi);

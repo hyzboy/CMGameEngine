@@ -21,7 +21,7 @@ namespace hgl
 		memset(home_path,0,sizeof(home_path));
 
 		strcpy(home_path,HGL_MAX_PATH,pwd->pw_dir);
-		strcat(home_path,"/cmgdk");
+		strcat(home_path,HGL_MAX_PATH,"/cmgdk",6);
 
 		if(IsDirectory(home_path))
 		{

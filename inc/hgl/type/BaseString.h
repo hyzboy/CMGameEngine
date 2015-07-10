@@ -1094,5 +1094,17 @@ namespace hgl
 	{
 		return PointerToHexString<u16char>(value);
 	}
+
+	template<typename T>
+	inline void strcpy(T *dst,int max_count,const BaseString<T> &src)
+    {
+        hgl::strcpy(dst,max_count,src.c_str(),src.Length());
+    }
+
+    template<typename T>
+    inline void strcat(T *dst,int max_count,const BaseString<T> &src)
+    {
+        hgl::strcat(dst,max_count,src.c_str(),src.Length());
+    }
 }//namespace hgl
 #endif//HGL_TYPE_BASE_STRING_INCLUDE

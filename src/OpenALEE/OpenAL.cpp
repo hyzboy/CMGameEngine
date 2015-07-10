@@ -64,12 +64,12 @@ namespace openal
 		if(filename)
 		{
 			hgl::strcpy(dllfn,HGL_MAX_PATH,hgl::info::GetString(hgl::info::hfsOSLibraryPath).c_str());
-			hgl::strcat(dllfn,HGL_DIRECTORY_SEPARATOR);
-			hgl::strcat(dllfn,filename);
+			hgl::strcat(dllfn,HGL_MAX_PATH,HGL_DIRECTORY_SEPARATOR);
+			hgl::strcat(dllfn,HGL_MAX_PATH,filename,HGL_MAX_PATH);
 
 			hgl::strcpy(pifn,HGL_MAX_PATH,pi_path);
-			hgl::strcat(pifn,HGL_DIRECTORY_SEPARATOR);
-			hgl::strcat(pifn,filename);
+			hgl::strcat(pifn,HGL_MAX_PATH,HGL_DIRECTORY_SEPARATOR);
+			hgl::strcat(pifn,HGL_MAX_PATH,filename,HGL_MAX_PATH);
 
 			if(FileConfirm(filename ))final_filename=(os_char *)filename;else
 			if(FileConfirm(dllfn    ))final_filename=dllfn;else
@@ -82,10 +82,10 @@ namespace openal
 			do
 			{
 				hgl::strcpy(pifn,HGL_MAX_PATH,pi_path);
-				hgl::strcat(pifn,oalfn[count]);
+				hgl::strcat(pifn,HGL_MAX_PATH,oalfn[count],HGL_MAX_PATH);
 
 				hgl::strcpy(dllfn,HGL_MAX_PATH,hgl::info::GetString(hgl::info::hfsOSLibraryPath).c_str());
-				hgl::strcat(dllfn,oalfn[count]);
+				hgl::strcat(dllfn,HGL_MAX_PATH,oalfn[count],HGL_MAX_PATH);
 
 				if(FileConfirm(dllfn))final_filename=dllfn;else
 				if(FileConfirm(pifn ))final_filename=pifn;else

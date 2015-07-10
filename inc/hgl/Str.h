@@ -376,60 +376,52 @@ namespace hgl
 	/**
 	* 复制一个字符到当前字符串后面
 	* @param dst 目标字符串
-	* @param src 源字符
+    * @param max_count 目标字符串最大长度
+	* @param ch 源字符
 	*/
 	template<typename T>
-	void strcat(T *dst,const T ch)
+	void strcat(T *dst,int max_count,const T ch)
 	{
 		if(!dst||!ch)return;
 
-		while(*dst)
+		while(*dst&&max_count)
+        {
 			++dst;			//找到结束
+			--max_count;
+        }
 
-		*dst++=ch;
-		*dst=0;
-	}
-
-	/**
-	* 复制一个字符串到当前字符串后面
-	* @param dst 目标字符串
-	* @param src 源字符串
-	*/
-	template<typename T>
-	void strcat(T *dst,const T *src)
-	{
-		if(!dst||!src||!(*src))return;
-
-		while(*dst)
-			++dst;			//找到结束
-
-		while(*src)
-		{
-			*dst=*src;
-			++dst;
-			++src;
-		}
-
-		*dst=0;
+        if(max_count>0)
+        {
+            *dst++=ch;
+            *dst=0;
+        }
 	}
 
 	/**
 	* 复制一个字符串到当前字符串后面，并指定最大长度
+    * @param dst 目标字符串
+    * @param max_count 目标字符串最大长度
+    * @param src 要追加的源字符串
+    * @param count 源字符串最大长度
 	*/
 	template<typename T>
-	void strcat(T *dst,const T *src,int count)
+	void strcat(T *dst,int max_count,const T *src,int count)
 	{
 		if(!dst||!src||!(*src)||count<=0)return;
 
-		while(*dst)
+		while(*dst&&max_count)
+        {
 			++dst;          //找到结束
+			--max_count;
+        };
 
-		while(*src&&count)
+		while(*src&&max_count&&count)
 		{
 			*dst=*src;
 			++dst;
 			++src;
 			--count;
+            --max_count;
 		}
 
 		if(count)

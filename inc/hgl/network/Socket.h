@@ -61,6 +61,8 @@ namespace hgl
 
 	namespace network																					///网络相关处理模块名字空间
 	{
+        #define HGL_IPV4_STRING_MAX         21          ///<IPv4字符串最大长度(255.255.255.255:65535)
+
 		#define HGL_NETWORK_MAX_PORT		65535		///<最大端口号
 		#define HGL_NETWORK_IPv4_STR_MIN	7			///<IPv4字符串最小字符数
 
@@ -145,7 +147,7 @@ namespace hgl
 		* @param port 是否包含port
 		*/
 		template<typename T>
-		void SockToStr(const uint32 addr,const uint16 port,T *name,bool inc_port)
+		void SockToStr(const uint32 addr,const uint16 port,T name[HGL_IPV4_STRING_MAX+1],bool inc_port)
 		{
 			uint8 *p=(uint8 *)&addr;
 
@@ -153,28 +155,28 @@ namespace hgl
 
 			utos(str,8,*p++);
 			strcpy(name,3,str);
-			strcat(name,(T)'.');
+			strcat(name,4,(T)'.');
 
 			utos(str,8,*p++);
-			strcat(name,str);
-			strcat(name,(T)'.');
+			strcat(name,HGL_IPV4_STRING_MAX,str,3);
+			strcat(name,8,(T)'.');
 
 			utos(str,8,*p++);
-			strcat(name,str);
-			strcat(name,(T)'.');
+			strcat(name,HGL_IPV4_STRING_MAX,str,3);
+			strcat(name,12,(T)'.');
 
 			utos(str,8,*p);
-			strcat(name,str);
+			strcat(name,HGL_IPV4_STRING_MAX,str,3);
 
 			if(inc_port)
 			{
-				strcat(name,(T)':');
+				strcat(name,16,(T)':');
 			#if HGL_ENDIAN == HGL_LITTLE_ENDIAN
 				utos(str,8,((port&0xFF00)>>8)|((port&0xFF)<<8));		//port永远为big endian,即使os/cpu为little endian,不过似乎win下会转换一下
 			#else
 				utos(str,8,port);
 			#endif//little endian
-				strcat(name,str);
+				strcat(name,HGL_IPV4_STRING_MAX,str,5);
 			}
 		}
 
