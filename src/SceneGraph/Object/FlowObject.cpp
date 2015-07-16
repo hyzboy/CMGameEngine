@@ -42,7 +42,7 @@ namespace hgl
 		bool result=Control.Proc_CursorPos(x,y);
 
 		if(OnCursorPos!=nullptr)
-			return CallEvent(OnCursorPos,(x,y));
+			return OnCursorPos(x,y);
 
 		return(result);
 	}
@@ -52,7 +52,7 @@ namespace hgl
 													if(Control.Proc_##name(v1,v2))return(true);	\
 												\
 													if(On##name!=nullptr)	\
-														return CallEvent(On##name,(v1,v2));	\
+														return On##name(v1,v2);	\
 												\
 													return(false);	\
 												}
@@ -68,7 +68,7 @@ namespace hgl
 		if(Control.Proc_Char(ch))return(true);
 
 		if(OnChar!=nullptr)
-			return CallEvent(OnChar,(ch));
+			return OnChar(ch);
 
 		return(false);
 	}

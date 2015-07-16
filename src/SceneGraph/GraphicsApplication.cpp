@@ -307,7 +307,7 @@ namespace hgl
 		{
 			if(OnClose!=nullptr)
 			{
-				bool result=CallEvent(OnClose,());
+				bool result=OnClose();
 
 				if(!result)
 					return(false);

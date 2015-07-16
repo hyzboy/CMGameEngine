@@ -40,7 +40,7 @@ GLboolean glewGetExtension(const char *name)
 
 	return(GL_FALSE);
 }
-
+/*
 #define OPENGL_ARB_TO_STANDARD(name)		if(!gl##name)	\
 											{	\
 												if(gl##name##ARB)gl##name=gl##name##ARB;	\
@@ -73,25 +73,25 @@ void OpenGL_Ext_DSA()
 		OPENGL_EXT_TO_STANDARD(TextureParameteri)
 		return;
 	}
-}
+}*/
 
 //void glBindTexturesSOFTWARE(GLuint first, GLsizei count, const GLuint *textures)
 //{
-//	for (i = 0; i < count; i++) 
+//	for (i = 0; i < count; i++)
 //	{
 //		GLuint texture;
-//		if (textures == NULL) 
+//		if (textures == NULL)
 //		{
 //			texture = 0;
 //		}
-//		else 
+//		else
 //		{
 //			texture = textures[i];
 //		}
 //
 //		glActiveTexture(GL_TEXTURE0 + first + i);
 //
-//		if (texture != 0) 
+//		if (texture != 0)
 //		{
 //			GLenum target = /* target of textures[i] */;
 //			glBindTexture(target, textures[i]);
@@ -119,7 +119,7 @@ void InitOpenGLCoreExtensions()
 	for (i = 0; i < opengl_core_ext_number; i++)
 		opengl_core_ext_string[i] = (char *)getfunc(GL_EXTENSIONS, i);
 
-	OpenGL_Ext_DSA();
+// 	OpenGL_Ext_DSA();
 }
 
 void ClearOpenGLCoreExtension()

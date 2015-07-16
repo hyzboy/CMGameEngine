@@ -86,7 +86,7 @@ namespace hgl
 
 		Shader *CreateShader(Renderable *,bool,RenderState *
 #ifdef _DEBUG
-			,const u16char *
+			,const os_char *
 #endif//_DEBUG
 		);
 	}//namespace graph
@@ -237,7 +237,7 @@ namespace hgl
 
 		Shader *OpenGLCoreRenderable::AutoCreateShader(bool mvp
 #ifdef _DEBUG
-			,const u16char *shader_filename
+			,const os_char *shader_filename
 #endif//_DEBUG
 		)
 		{

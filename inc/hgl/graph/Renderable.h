@@ -106,7 +106,7 @@ namespace hgl
 			*/
 			virtual Shader *					AutoCreateShader	(bool mvp=true															///<自动创建着色程序
 #ifdef _DEBUG
-																	,const u16char *filename=nullptr
+																	,const os_char *filename=nullptr
 #endif//_DEBUG
 			)=0;
 

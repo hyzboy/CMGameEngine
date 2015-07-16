@@ -37,7 +37,7 @@ namespace hgl
 			}
 
 	#ifdef _DEBUG	//debug模式下将shader保存成文件
-			grid->AutoCreateShader(true,L"PlaneGrid");			//自动创建shader
+			grid->AutoCreateShader(true,U16_TEXT("PlaneGrid"));			//自动创建shader
 	#else
 			grid->AutoCreateShader(true);						//自动创建shader
 	#endif//_DEBUG

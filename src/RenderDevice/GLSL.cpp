@@ -33,40 +33,48 @@ namespace hgl
 		struct RenderState;
 
 #ifdef _DEBUG
-		char *MakeVertexShader(Renderable *,bool,RenderState *,const u16char *save_filename=0);
-		char *MakeFragmentShader(Renderable *,RenderState *,const u16char *save_filename=0);
+		char *MakeVertexShader(Renderable *,bool,RenderState *,const os_char *save_filename=0);
+		char *MakeFragmentShader(Renderable *,RenderState *,const os_char *save_filename=0);
 #else
 		char *MakeVertexShader(Renderable *,bool,RenderState *);
 		char *MakeFragmentShader(Renderable *,RenderState *);
 #endif//_DEBUG
 
-// 		Shader *CreateShader(	const char *vertex_shader,
-// 								const char *control_shader,
-// 								const char *evaluation_shader,
-// 								const char *geometry_shader,
-// 								const char *fragment_shader)
-// 		{
-// 			GLSL *glsl=new GLSL;
-//
-// 			if(glsl->Compile(vertex_shader,control_shader,evaluation_shader,geometry_shader,fragment_shader))
-// 				return glsl;
-//
-// 			delete glsl;
-// 			return(0);
-// 		}
+		Shader *CreateShader(	const char *vertex_shader,
+								const char *control_shader,
+								const char *evaluation_shader,
+								const char *geometry_shader,
+								const char *fragment_shader)
+		{
+            if(!vertex_shader||!fragment_shader)return(nullptr);            //opengl core时代不可能没有vs/fs
+
+			GLSL *glsl=new GLSL;
+
+            if(vertex_shader    ){if(!glsl->AddShader(stVertex,     vertex_shader       )){delete glsl;return(nullptr);}}
+            if(control_shader   ){if(!glsl->AddShader(stTessControl,control_shader      )){delete glsl;return(nullptr);}}
+            if(evaluation_shader){if(!glsl->AddShader(stTessEval,   evaluation_shader   )){delete glsl;return(nullptr);}}
+            if(geometry_shader  ){if(!glsl->AddShader(stGeometry,   geometry_shader     )){delete glsl;return(nullptr);}}
+            if(fragment_shader  ){if(!glsl->AddShader(stFragment,   fragment_shader     )){delete glsl;return(nullptr);}}
+
+            if(glsl->Build())
+                return(glsl);
+
+            delete glsl;
+            return(nullptr);
+		}
 
 #ifdef _DEBUG
-		Shader *CreateShader(Renderable *able,bool mvp,RenderState *state,const u16char *save_filename)
+		Shader *CreateShader(Renderable *able,bool mvp,RenderState *state,const os_char *save_filename)
 		{
 			char *vs,*fs;
 
 			if(save_filename)
 			{
-				u16char vs_filename[1024];
-				u16char fs_filename[1024];
+				os_char vs_filename[HGL_MAX_PATH];
+				os_char fs_filename[HGL_MAX_PATH];
 
-				strcpy(vs_filename,save_filename);strcat(vs_filename,U16_TEXT(".vs"));
-				strcpy(fs_filename,save_filename);strcat(fs_filename,U16_TEXT(".fs"));
+				strcpy(vs_filename,HGL_MAX_PATH,save_filename);strcat(vs_filename,HGL_MAX_PATH,OS_TEXT(".vs"),3);
+				strcpy(fs_filename,HGL_MAX_PATH,save_filename);strcat(fs_filename,HGL_MAX_PATH,OS_TEXT(".fs"),3);
 
 				vs=MakeVertexShader(able,mvp,state,vs_filename);
 				fs=MakeFragmentShader(able,state,fs_filename);
