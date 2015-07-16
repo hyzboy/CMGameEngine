@@ -390,7 +390,7 @@ namespace hgl
 			--max_count;
         }
 
-        if(max_count>0)
+        if(max_count>=0)
         {
             *dst++=ch;
             *dst=0;
@@ -424,7 +424,7 @@ namespace hgl
             --max_count;
 		}
 
-		if(count)
+		if(count>=0)
 			*dst=0;
 	}
 

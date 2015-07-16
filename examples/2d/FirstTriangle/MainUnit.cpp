@@ -6,50 +6,10 @@
 using namespace hgl;
 using namespace hgl::graph;
 
-const char vertex_shader[]=		"#version 330\n"
-								"\n"
-								"in vec4 vertex;\n"
-								"in vec4 color;\n"
-								"\n"
-								"out vec4 fragment_color;\n"
-								"\n"
-								"void main(void)\n"
-								"{\n"
-								"	gl_Position = vertex;\n"
-								"	fragment_color=color;\n"
-								"}";
-
-const char fragment_shader[]=	"#version 330\n"
-								"\n"
-								"in vec4 fragment_color;\n"
-								"\n"
-								"layout(location = 0, index = 0) out vec4 fragColor;\n"
-								"\n"
-								"void main(void)\n"
-								"{\n"
-								"	fragColor = fragment_color;\n"
-								"}";
-
-// Points of a triangle.
-float points[]={0.0f, 0.0f, 0.0f,1.0f,
-				0.5f, 0.0f, 0.0f,1.0f,
-				0.0f, 0.5f, 0.0f,1.0f};
-
-float colors[]={1.0f, 0.0f, 0.0f, 1.0f,
-				0.0f, 1.0f, 0.0f, 1.0f,
-				0.0f, 0.0f, 1.0f, 1.0f};
-
 class TestObject:public FlowObject
 {
-	Shader *shader;
-
-	uint vao;
-
-	uint vertex_vbo;
-	uint color_vbo;
-
-	int vertex_location;
-	int color_location;
+    Renderable *triangle;
+    Material *mtl;
 
 public:
 
@@ -57,53 +17,39 @@ public:
 	{
 		SetClearColor(0,0,0);
 
-		shader=CreateShader(vertex_shader,fragment_shader);
+        triangle=CreateRenderable();
+        mtl=CreateMaterial();
 
-        if(!shader)
-        {
-            fos=fosExitGame;
-            return;
-        }
+        mtl->SetColorMaterial(false);           //不使用材质中的颜色
+        triangle->SetMaterial(mtl,true);
 
-		glGenVertexArrays(1,&vao);
-		glBindVertexArray(vao);
+        triangle->SetPrimitive(HGL_PRIM_TRIANGLES);
 
-		vertex_location=shader->GetAttribLocation("vertex");
-		color_location=shader->GetAttribLocation("color");
+        VB2f *vertex=new VB2f(3);
+        VB3f *color=new VB3f(3);
 
-		shader->Use();
+        vertex->Begin();color->Begin();
+            vertex->Write(0.0,0.0);   color->Write(1,0,0);
+            vertex->Write(100,0.0);   color->Write(0,1,0);
+            vertex->Write(100,100);   color->Write(0,0,1);
+        vertex->End();color->End();
 
-		glGenBuffers(1,&vertex_vbo);
-		glBindBuffer(GL_ARRAY_BUFFER,vertex_vbo);
+        triangle->SetVertex(vertex);
+        triangle->SetColor(color,HGL_COLOR_RGB);
 
-		glBufferData(GL_ARRAY_BUFFER, 3*4*sizeof(float), (float *)points, GL_STATIC_DRAW);
-
-		glVertexAttribPointer(vertex_location, 4, GL_FLOAT, GL_FALSE, 0, 0);
-		glEnableVertexAttribArray(vertex_location);
-
-		glGenBuffers(1,&color_vbo);
-		glBindBuffer(GL_ARRAY_BUFFER,color_vbo);
-
-		glBufferData(GL_ARRAY_BUFFER, 3*4*sizeof(float), (float *)colors, GL_STATIC_DRAW);
-
-		glVertexAttribPointer(color_location, 4, GL_FLOAT, GL_FALSE, 0, 0);
-		glEnableVertexAttribArray(color_location);
+        triangle->AutoCreateShader(true,OS_TEXT("FirstTriangle"));
 	}
 
 	~TestObject()
 	{
-		glDeleteBuffers(1,&color_vbo);
-		glDeleteBuffers(1,&vertex_vbo);
-		glDeleteVertexArrays(1,&vao);
-
-		delete shader;
+        delete triangle;
 	}
 
 	void Draw()
 	{
 		ClearScreen();
 
-		glDrawArrays(GL_TRIANGLES,0,3);
+		DirectRender2D(triangle);
 	}
 };//class TestObject
 
