@@ -35,13 +35,18 @@ namespace hgl
 					func=p;
 				}
 
+				~PBItem()
+				{
+					SAFE_CLEAR(ml);
+				}
+
 				const bool operator == (const PBItem &pbi)
 				{
 					return(ml==pbi.ml);
 				}
 			};//struct PBItem
 
-			Map<int,PBItem> ml_list;
+			MapObject<int,PBItem> ml_list;
 
 			int start_cmd_pb;
 			int end_cmd_pb;
@@ -82,7 +87,7 @@ namespace hgl
 				if(!ml)RETURN_FALSE;
 				if(!func)RETURN_FALSE;
 
-				if(!ml_list.Add(id,PBItem(ml,func)))
+				if(!ml_list.Add(id, new PBItem(ml,func)))
 				{
 					LOG_ERROR(OS_TEXT("repeat add MessageLite,ID:")+OSString(id));
 					RETURN_FALSE;
@@ -99,7 +104,7 @@ namespace hgl
 					RETURN_FALSE;
 				}
 
-				PBItem pb_item;
+				PBItem* pb_item;
 
 				if(!ml_list.Get(id,pb_item))
 				{
@@ -107,15 +112,15 @@ namespace hgl
 					RETURN_FALSE;
 				}
 
-				pb_item.ml->Clear();
+				pb_item->ml->Clear();
 
-				if(!pb_item.ml->ParseFromArray(data,size))
+				if(!pb_item->ml->ParseFromArray(data,size))
 				{
 					LOG_ERROR(OS_TEXT("Msg Parse error,MsgID:")+OSString(id));
 					RETURN_FALSE;
 				}
 
-				return pb_item.func(pb_item.ml);
+				return pb_item->func(pb_item->ml);
 			}
 		};//class PBMessageProc
 
