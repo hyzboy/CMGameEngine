@@ -81,6 +81,7 @@ examples/2d/FirstTriangle/CMakeFiles/FirstTriangle.dir/MainUnit.cpp.o: inc/hgl/e
 examples/2d/FirstTriangle/CMakeFiles/FirstTriangle.dir/MainUnit.cpp.o: inc/hgl/graph/ColorFormat.h
 examples/2d/FirstTriangle/CMakeFiles/FirstTriangle.dir/MainUnit.cpp.o: inc/hgl/graph/Font.Attrib.h
 examples/2d/FirstTriangle/CMakeFiles/FirstTriangle.dir/MainUnit.cpp.o: inc/hgl/graph/Font.h
+examples/2d/FirstTriangle/CMakeFiles/FirstTriangle.dir/MainUnit.cpp.o: inc/hgl/graph/InlineRenderable.h
 examples/2d/FirstTriangle/CMakeFiles/FirstTriangle.dir/MainUnit.cpp.o: inc/hgl/graph/Material.h
 examples/2d/FirstTriangle/CMakeFiles/FirstTriangle.dir/MainUnit.cpp.o: inc/hgl/graph/Render.h
 examples/2d/FirstTriangle/CMakeFiles/FirstTriangle.dir/MainUnit.cpp.o: inc/hgl/graph/Renderable.h

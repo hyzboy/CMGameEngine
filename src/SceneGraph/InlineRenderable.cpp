@@ -94,9 +94,10 @@ namespace hgl
 
 		/**
 		/* 创建一个画坐标轴的可渲染数据(尺寸为1)
+         * @param size 坐标轴尺寸
 		/* @return 可渲染数据
 		/*/
-		Renderable *CreateRenderableAxis()
+		Renderable *CreateRenderableAxis(const float size)
 		{
 			Renderable *obj=CreateRenderable();
 			Material *mtl=CreateMaterial();
@@ -114,9 +115,9 @@ namespace hgl
 
 			color->Begin();
 			vertex->Begin();
-				color->Write(1,0,0);vertex->Write(0,0,0);color->Write(1,0,0);vertex->Write(1,0,0);
-				color->Write(0,1,0);vertex->Write(0,0,0);color->Write(0,1,0);vertex->Write(0,1,0);
-				color->Write(0,0,1);vertex->Write(0,0,0);color->Write(0,0,1);vertex->Write(0,0,1);
+				color->Write(1,0,0);vertex->Write(0,0,0);color->Write(1,0,0);vertex->Write(size,0,0);
+				color->Write(0,1,0);vertex->Write(0,0,0);color->Write(0,1,0);vertex->Write(0,size,0);
+				color->Write(0,0,1);vertex->Write(0,0,0);color->Write(0,0,1);vertex->Write(0,0,size);
 			vertex->End();
 			color->End();
 
@@ -244,7 +245,7 @@ namespace hgl
 			obj->SetMaterial(mtl,true);				//设置材质
 
 			//设置图元类型
-			obj->SetPrimitive(HGL_PRIM_LINES);		//设置为画三角形
+			obj->SetPrimitive(HGL_PRIM_LINES);		//设置为画线条
 
 			obj->SetVertex(new VB3f(8,points));
 			obj->SetIndex(new VB1ui(12*2,indices));

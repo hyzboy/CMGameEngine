@@ -173,7 +173,7 @@ namespace hgl
 
 			graph::InitRender();
 			graph::SetViewport(0,0,_sii->graphics.Width,_sii->graphics.Height);
-            graph::Ortho2DMatrix=ortho2(_sii->graphics.Width,_sii->graphics.Height);
+            graph::Ortho2DMatrix=ortho2d(_sii->graphics.Width,_sii->graphics.Height);
 
 			FPS=_sii->graphics.FPS;
 
@@ -297,7 +297,7 @@ namespace hgl
 		{
 			graph::SetViewport(0,0,w,h);
 
-			graph::Ortho2DMatrix=ortho2(w,h);
+			graph::Ortho2DMatrix=ortho2d(w,h);
 
 			SafeCallEvent(OnResize,(w,h));
 

@@ -15,6 +15,8 @@ hgl/graph/Shader.h
 -
 hgl/object/FlowObject.h
 -
+hgl/graph/InlineRenderable.h
+-
 
 /home/hyzboy/workspace/CM/src/Platform/UNIX/UnixOpenGL.cpp
 hgl/Graphics.h
@@ -531,6 +533,8 @@ MathNamespace.h
 3rdpty/MathGeoLib/src/Math/MathNamespace.h
 ../MathGeoLibFwd.h
 3rdpty/MathGeoLib/src/MathGeoLibFwd.h
+myassert.h
+3rdpty/MathGeoLib/src/Math/myassert.h
 
 3rdpty/MathGeoLib/src/Math/SSEMath.h
 ../MathBuildConfig.h
@@ -874,6 +878,14 @@ hgl/type/Color4f.h
 hgl/type/BaseString.h
 -
 hgl/graph/Font.Attrib.h
+-
+
+inc/hgl/graph/InlineRenderable.h
+hgl/VectorMath.h
+-
+hgl/type/Color4f.h
+-
+hgl/graph/Render.h
 -
 
 inc/hgl/graph/Material.h

@@ -38,7 +38,7 @@
 
 // If MATH_ENABLE_WINXP_SUPPORT is defined, we avoid using Windows symbols that require Vista or newer (e.g. GetTickCount64)
 #if !defined(WIN8) /* Win8 cannot build with XP support - GetTickCount() doesn't exist. */
-#define MATH_ENABLE_WINXP_SUPPORT
+//#define MATH_ENABLE_WINXP_SUPPORT
 #endif
 
 // If MATH_ASSERT_ON_ASSUME is defined, assume() resolves directly to assert().
@@ -109,7 +109,7 @@
 #endif
 // If MATH_USE_OPENGL is defined, the Frustum class defaults to creating Frustums with projectiveSpace = FrustumSpaceGL.
 #ifndef MATH_USE_OPENGL
-//#define MATH_USE_OPENGL
+#define MATH_USE_OPENGL
 #endif
 
 // If MATH_LEFTHANDED_CAMERA is defined, the Frustum class defaults to creating Frustums with handedness = FrustumLeftHanded.
@@ -118,7 +118,7 @@
 #endif
 // If MATH_RIGHTHANDED_CAMERA is defined, the Frustum class defaults to creating Frustums with handedness = FrustumRightHanded.
 #ifndef MATH_RIGHTHANDED_CAMERA
-//#define MATH_RIGHTHANDED_CAMERA
+#define MATH_RIGHTHANDED_CAMERA
 #endif
 
 #if defined(MATH_USE_DIRECT3D) && defined(MATH_USE_OPENGL)
@@ -133,7 +133,7 @@
 //#define MATH_AVX
 //#define MATH_SSE41
 //#define MATH_SSE3
-#define MATH_SSE2
+//#define MATH_SSE2
 //#define MATH_SSE // SSE1.
 
 ///\todo Test iOS support.

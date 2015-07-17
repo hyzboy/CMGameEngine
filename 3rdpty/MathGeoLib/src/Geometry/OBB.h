@@ -312,7 +312,10 @@ public:
 			This pointer may be left null, if this information is of no interest.
 		@param idxLargest [out] The index of the largest point along the given direction will be received here.
 			This pointer may be left null, if this information is of no interest. */
-	static void ExtremePointsAlongDirection(const vec &dir, const vec *pointArray, int numPoints, int &idxSmallest, int &idxLargest);
+	static void ExtremePointsAlongDirection(const vec &dir, const vec *pointArray, int numPoints, int &idxSmallest, int &idxLargest) { float smallestD, largestD; ExtremePointsAlongDirection(dir, pointArray, numPoints, idxSmallest, idxLargest, smallestD, largestD); }
+	/** @param smallestD [out] Receives the minimum projection distance along the given direction.
+		@param largestD [out] Receives the maximum projection distance along the given direction. */
+	static void ExtremePointsAlongDirection(const vec &dir, const vec *pointArray, int numPoints, int &idxSmallest, int &idxLargest, float &smallestD, float &largestD);
 
 #if 0
 	/// Generates an OBB that encloses the given point set.
@@ -324,8 +327,25 @@ public:
 	static OBB PCAEnclosingOBB(const vec *pointArray, int numPoints);
 #endif
 
-	///\todo This function is strongly WIP! (Works, but is very very slow!)
+	/// Computes the smallest OBB by volume that encloses the given point set.
+	/** This function implements the algorithm from the paper
+		An Exact Algorithm for Finding Minimum Oriented Bounding Boxes, Jukka Jylänki, 2015. Available at http://clb.demon.fi/minobb/ */
 	static OBB OptimalEnclosingOBB(const vec *pointArray, int numPoints);
+	static OBB OptimalEnclosingOBB(const Polyhedron &convexPolyhedron);
+
+	static OBB BruteEnclosingOBB(const vec *pointArray, int numPoints);
+	static OBB BruteEnclosingOBB(const Polyhedron &convexPolyhedron);
+
+	static OBB Brute2EnclosingOBB(const Polyhedron &convexPolyhedron);
+#if defined(_MSC_VER) && defined(MATH_SSE) && _MSC_VER < 1800 // < VS2013
+	// Work around a VS2010 bug "error C2719: 'q': formal parameter with __declspec(align('16')) won't be aligned"
+	static OBB Brute3EnclosingOBB(const Polyhedron &convexPolyhedron, const Quat &q);
+#else
+	static OBB Brute3EnclosingOBB(const Polyhedron &convexPolyhedron, Quat q);
+#endif
+
+	/// Returns an OBB that is oriented to the coordinate frame specified by vectors dir0 and dir1 and encloses the given point set.
+	static OBB FixedOrientationEnclosingOBB(const vec *pointArray, int numPoints, const vec &dir0, const vec &dir1);
 
 	/// Generates a random point inside this OBB.
 	/** The points are distributed uniformly.

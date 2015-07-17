@@ -60,6 +60,7 @@ static const simd4f simd4fSignBit = set1_ps(-0.f); // -0.f = 1 << 31
 #define load_ps _mm_load_ps
 #define load1_ps _mm_load1_ps
 #define stream_ps _mm_stream_ps
+#define neg_ps(x) xor_ps((x), simd4fSignBit)
 
 #if defined(MATH_SSE2) && !defined(MATH_AVX) // We can use the pshufd instruction, which was introduced in SSE2 32-bit integer ops.
 /// Swizzles/permutes a single SSE register into another SSE register. Requires SSE2.
@@ -72,6 +73,61 @@ static const simd4f simd4fSignBit = set1_ps(-0.f); // -0.f = 1 << 31
 #define yyyy_ps(x) shuffle1_ps((x), _MM_SHUFFLE(1,1,1,1))
 #define zzzz_ps(x) shuffle1_ps((x), _MM_SHUFFLE(2,2,2,2))
 #define wwww_ps(x) shuffle1_ps((x), _MM_SHUFFLE(3,3,3,3))
+
+#ifdef MATH_SSE3
+// _mm_moveldup_ps and _mm_movehdup_ps are better than shuffle, since they don't destroy the input operands (under non-AVX).
+#define zzxx_ps(x) _mm_moveldup_ps((x))
+#define wwyy_ps(x) _mm_movehdup_ps((x))
+#else
+#define zzxx_ps(x) shuffle1_ps((x), _MM_SHUFFLE(2,2,0,0))
+#define wwyy_ps(x) shuffle1_ps((x), _MM_SHUFFLE(3,3,1,1))
+#endif
+
+#ifdef MATH_SSE2
+#define simd2d __m128d
+
+#define add_pd _mm_add_pd
+#define sub_pd _mm_sub_pd
+#define mul_pd _mm_mul_pd
+#define div_pd _mm_div_pd
+#define set1_pd _mm_set1_pd
+/// Sets the vector in order (y, x).
+#define set_pd _mm_set_pd
+static const simd2d simd2dSignBit = set1_pd(-0.f); // -0.f = 1 << 31
+#define abs_pd(x) _mm_andnot_pd(simd2dSignBit, (x))
+#define zero_pd() _mm_setzero_pd()
+#define min_pd _mm_min_pd
+#define max_pd _mm_max_pd
+#define s2d_to_s4i(s2d) _mm_castpd_si128((s4f))
+#define s4i_to_s2d(s2i) _mm_castsi128_pd((s4i))
+#define and_pd _mm_and_pd
+#define andnot_pd _mm_andnot_pd
+#define or_pd _mm_or_pd
+#define xor_pd _mm_xor_pd
+#define storeu_pd _mm_storeu_pd
+#define store_pd _mm_store_pd
+#define loadu_pd _mm_loadu_pd
+#define load_pd _mm_load_pd
+#ifdef MATH_SSE3
+// _mm_loaddup_pd == movddup, single instruction
+#define load1_pd _mm_loaddup_pd
+#else
+// _mm_load1_pd == movaps + shuffle, two instructions
+#define load1_pd _mm_load1_pd
+#endif
+#define stream_pd _mm_stream_pd
+#define neg_pd(x) xor_pd((x), simd2dSignBit)
+
+#define shuffle1_pd(reg, shuffle) _mm_shuffle_pd((reg), (reg), (shuffle))
+#ifdef MATH_SSE3
+// _mm_movedup_pd is better than _mm_unpacklo_pd, since it does not destroy the source operand (under non-AVX).
+#define xx_pd(x) _mm_movedup_pd((x))
+#else
+#define xx_pd(x) _mm_unpacklo_pd((x), (x))
+#endif
+#define yy_pd(x) _mm_unpackhi_pd((x), (x))
+#define yx_pd(x) shuffle1_pd((x), _MM_SHUFFLE2(0, 1))
+#endif
 
 #ifdef MATH_SSE41
 #define allzero_ps(x) _mm_testz_si128(_mm_castps_si128((x)), _mm_castps_si128((x)))
@@ -151,11 +207,45 @@ static inline __m128 rsqrt_ps(__m128 x)
 #define s4f_w(s4f) _mm_cvtss_f32(shuffle1_ps((s4f), _MM_SHUFFLE(3,3,3,3)))
 
 #ifdef MATH_SSE2
+
+#define s2d_x(s2d) _mm_cvtsd_f64((s2d))
+#define s2d_y(s2d) _mm_cvtsd_f64(_mm_unpackhi_pd((s2d), (s2d)))
+
+// Given a 4-channel single-precision simd4f variable [w z y x], returns the second channel 'y' as a float.
+#define s4f_y(s4f) _mm_cvtss_f32(shuffle1_ps((s4f), _MM_SHUFFLE(1,1,1,1)))
+
 #define set_ps_hex(w, z, y, x) _mm_castsi128_ps(_mm_set_epi32(w, z, y, x))
 #define set1_ps_hex(x) _mm_castsi128_ps(_mm_set1_epi32(x))
+
+#elif defined(__EMSCRIPTEN__)
+// Workaround a JS engine limitation that it's not possible to store arbitrary bit patterns in floats since JS engines destroy them while canonicalizing NaNs.
+FORCE_INLINE __m128 set_ps_hex(u32 w, u32 z, u32 y, u32 x)
+{
+	union {
+		u32 v[4];
+		__m128 m;
+	} u;
+	u.v[0] = x;
+	u.v[1] = y;
+	u.v[2] = z;
+	u.v[3] = w;
+	return u.m;
+}
+FORCE_INLINE __m128 set1_ps_hex(u32 x)
+{
+	union {
+		u32 v[4];
+		__m128 m;
+	} u;
+	u.v[0] = u.v[1] = u.v[2] = u.v[3] = x;
+	return u.m;
+}
+
 #else
+
 #define set_ps_hex(w, z, y, x) _mm_set_ps(ReinterpretAsFloat(w), ReinterpretAsFloat(z), ReinterpretAsFloat(y), ReinterpretAsFloat(x))
 #define set1_ps_hex(x) _mm_set1_ps(ReinterpretAsFloat(x))
+
 #endif
 
 /// Returns the simd vector [_, _, _, f], that is, a SSE variable with the given float f in the lowest index.
@@ -169,7 +259,7 @@ FORCE_INLINE simd4f setx_ps(float f)
 	// On VS2010+AVX generates vmovss+vxorps+vmovss
 	// return _mm_load_ss(&f);
 
-#if _MSC_VER < 1700 // == VS2012
+#if _MSC_VER < 1700 // < VS2012
 	// On VS2010+AVX generates vmovss+vshufps (to broadcast the single element to all channels). Best performance so far for VS2010.
 	// On VS2013 generates a vbroadcastss instruction.
 	return set1_ps(f);
@@ -365,9 +455,8 @@ FORCE_INLINE simd4f cmov_ps(simd4f a, simd4f b, simd4f mask)
 #endif
 }
 
-static const float andMaskOneF = ReinterpretAsFloat(0xFFFFFFFFU);
 /// A SSE mask register with x = y = z = 0xFFFFFFFF and w = 0x0.
-static const simd4f sseMaskXYZ = set_ps(0.f, andMaskOneF, andMaskOneF, andMaskOneF);
+static const simd4f sseMaskXYZ = set_ps_hex(0, 0xFFFFFFFFU, 0xFFFFFFFFU, 0xFFFFFFFFU);
 static const simd4f sseSignMask3 = set_ps(0.f, -0.f, -0.f, -0.f); // -0.f = 1 << 31
 static const simd4f sseSignMask = set_ps(-0.f, -0.f, -0.f, -0.f); // -0.f = 1 << 31
 #ifdef MATH_AVX

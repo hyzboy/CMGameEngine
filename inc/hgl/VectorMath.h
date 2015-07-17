@@ -131,9 +131,17 @@ namespace hgl
 		return Matrix4f::OpenGLPerspProjRH(znear,zfar,width,height);
 	}
 
-	inline Matrix4f ortho2(float width,float height,float znear=0,float zfar=1)
+	inline Matrix4f ortho2d(float width,float height,float znear=0,float zfar=1)
 	{
-		return Matrix4f::OpenGLOrthoProjRH(znear,zfar,width,height);
+        Matrix4f trans;
+
+        trans.Translate(-(width/2),-(height/2),0);
+
+        //MathGeoLib生成的2D正交矩阵中心是0,0，所以需要偏移
+
+        Matrix4f result=Matrix4f::OpenGLOrthoProjRH(znear,zfar,width,height)*Matrix4f::Scale(Vector3f(1,-1,1),Vector3f::zero);
+
+        return result*trans;
 	}
 
 	//inline Matrix4f ortho4(float left,float right,float bottom,float top,float znear=0,float zfar=1);
@@ -147,7 +155,7 @@ namespace hgl
 	{
 		Matrix4f result;
 
-		result.SetTranslatePart(v);
+		result.Translate(v);
 
 		return result;
 	}
@@ -156,7 +164,7 @@ namespace hgl
 	{
 		Matrix4f result;
 
-		result.SetTranslatePart(x,y,z);
+		result.Translate(x,y,z);
 
 		return result;
 	}

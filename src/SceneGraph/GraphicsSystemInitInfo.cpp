@@ -57,8 +57,8 @@ namespace hgl
 				graphics.gl.major=4;
 				graphics.gl.minor=5;
 #else
-				graphics.gl.major=3;
-				graphics.gl.minor=3;
+				graphics.gl.major=4;
+				graphics.gl.minor=5;
 #endif//HGL_OPENGL_USE_DSA
 
 				graphics.gl.debug=false;

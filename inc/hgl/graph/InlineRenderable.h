@@ -16,7 +16,7 @@ namespace hgl
 
 		Renderable *CreateRenderableLine(const Vector3f &,const Vector3f &,const Color4f &);		///<创建一条线的可渲染数据
 
-		Renderable *CreateRenderableAxis();															///<创建一个坐标轴的可渲染数据
+		Renderable *CreateRenderableAxis(const float size=1);										///<创建一个坐标轴的可渲染数据
 
 		Renderable *CreateRenderablePlaneGrid(	const Vector3f &,									///<创建一个平面网格的可渲染数据
 												const Vector3f &,
