@@ -121,11 +121,11 @@ namespace hgl
 			RedisDB(redisContext *);
 			~RedisDB();
 
-			bool Info(char *);																		///<取得数据库信息
+			bool Info(UTF8String &);																///<取得数据库信息
 
 			bool SelectDB(int);																		///<选择一个DB
 			int	 DBSize();																			///<取得数据库中数据的数量
-			bool Ping(char *);																		///<ping
+			bool Ping(UTF8String &);																///<ping
 			void Save();																			///<保存数据到磁盘上
 			void BGSave();																			///<异步保存数据到磁盘上
 

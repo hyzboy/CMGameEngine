@@ -23,7 +23,7 @@ namespace hgl
 			char *p;
 			int len;
 
-			strcpy(str+5,set);
+			strcpy(str+5,1024-5,set);
 
 			p=str+strlen(str);
 

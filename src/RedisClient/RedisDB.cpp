@@ -20,14 +20,14 @@ namespace hgl
 				redisFree(con);
 		}
 
-		bool RedisDB::Info(char *result)
+		bool RedisDB::Info(UTF8String &result)
 		{
 			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"INFO");
 
 			if(!r)return(false);
 			if(r->type!=REDIS_REPLY_STRING)return(false);
 
-			strcpy(result,r->str);
+            result.Set(r->str,r->len);
 			return(true);
 		}
 
@@ -51,7 +51,7 @@ namespace hgl
 			return_integer;
 		}
 
-		bool RedisDB::Ping(char *result)
+		bool RedisDB::Ping(UTF8String &result)
 		{
 			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),"PING");
 
@@ -59,7 +59,7 @@ namespace hgl
 
 			if(r->type!=REDIS_REPLY_STATUS)return(false);
 
-			strcpy(result,r->str);
+			result.Set(r->str,r->len);
 			return(true);
 		}
 
