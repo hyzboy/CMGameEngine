@@ -42,6 +42,15 @@ namespace hgl
 	//	125	}
 	//	126	~
 
+    /**
+     * 测试字符是否是emoji表情
+     */
+    template<typename T>
+    bool isemoji(const T ch)
+    {
+        return(ch>=0xE63E&&ch<=0xE757);
+    }
+
 	/**
 	* 测试当前字符是否为小写字母
 	*/
