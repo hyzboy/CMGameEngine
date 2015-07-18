@@ -8,6 +8,10 @@
 #include<hgl/type/DataType.h>
 #include<MathGeoLib.h>
 
+
+//注：GLM/CML(OpenGLMode)是列矩阵,计算坐标matrix*pos
+//   而MGL是行矩阵，需要反过来pos*matrix
+
 /**
  * MathGeoLib
  * Game Math and Geometry Library
@@ -133,15 +137,9 @@ namespace hgl
 
 	inline Matrix4f ortho2d(float width,float height,float znear=0,float zfar=1)
 	{
-        Matrix4f trans;
-
-        trans.Translate(-(width/2),-(height/2),0);
-
         //MathGeoLib生成的2D正交矩阵中心是0,0，所以需要偏移
 
-        Matrix4f result=Matrix4f::OpenGLOrthoProjRH(znear,zfar,width,height)*Matrix4f::Scale(Vector3f(1,-1,1),Vector3f::zero);
-
-        return result*trans;
+        return Matrix4f::OpenGLOrthoProjRH(znear,zfar,width,height)*Matrix4f::Scale(1,-1,1)*Matrix4f::Translate(-(width/2.0f),-(height/2.0f),0);
 	}
 
 	//inline Matrix4f ortho4(float left,float right,float bottom,float top,float znear=0,float zfar=1);
