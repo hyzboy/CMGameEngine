@@ -131,6 +131,11 @@ namespace hgl
 
 		DEF_COLOR(ceNavajoWhite,			255,222,173,"纳瓦白")
 		DEF_COLOR(ceNavy,					  0,  0,128,"海军色")
+
+        DEF_COLOR(ceNiveaBlue,                0, 19,111,"妮维雅蓝")     //取自妮维雅蓝国际官网
+
+        DEF_COLOR(ceNokiaBlue,               18, 65,145,"诺基亚蓝")     //取自诺基亚官网
+
 		DEF_COLOR(ceOldLace,				253,245,230,"老花色")
 		DEF_COLOR(ceOlive,					128,128,  0,"橄榄色")
 		DEF_COLOR(ceOlivedrab,				107,142, 35,"深绿褐色")
@@ -153,6 +158,9 @@ namespace hgl
 		DEF_COLOR(ceRoyalBlue,				 65,105,225,"皇家蓝")
 		DEF_COLOR(ceSaddleBrown,			139, 69, 19,"重褐色")
 		DEF_COLOR(ceSalmon,					250,128,114,"鲜肉色")
+
+        DEF_COLOR(ceSamsungBlue,             20, 40,160,"三星蓝")          //取自三星官网
+
 		DEF_COLOR(ceSandyBrown,				244,164, 96,"沙褐色")
 		DEF_COLOR(ceSeaGreen,				 46,139, 87,"海绿色")
 		DEF_COLOR(ceSeaShell,				255,245,238,"海贝色")
@@ -168,6 +176,9 @@ namespace hgl
 		DEF_COLOR(ceTan,					210,180,140,"茶色")
 		DEF_COLOR(ceTeal,					  0,128,128,"水鸭色")
 		DEF_COLOR(ceThistle,				216,191,216,"蓟色")
+
+        DEF_COLOR(ceTiffanyBlue,            129,216,208,"蒂芙尼蓝")     //取自zh.wikipedia.org/zh-cn/蒂芙尼蓝
+
 		DEF_COLOR(ceTomato,					255, 99, 71,"西红柿色")
 		DEF_COLOR(ceTurquoise,				 64,224,208,"青绿色")
 		DEF_COLOR(ceViolet,					238,130,238,"紫罗兰色")

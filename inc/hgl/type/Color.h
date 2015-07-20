@@ -30,7 +30,7 @@ namespace hgl
 		ceAqua,					///<浅绿色
 		ceAquaMarine,			///<碧绿色
 
-		ceArdenRed,				///<雅顿红
+		ceArdenRed,				///<雅顿红(注：商业使用需获得Elizabeth Arden公司授权)
 
 		ceAzure,				///<天蓝色
 		ceBeige,				///<米色
@@ -135,6 +135,11 @@ namespace hgl
 
 		ceNavajoWhite,			///<纳瓦白
 		ceNavy,					///<海军色
+
+        ceNiveaBlue,            ///<妮维雅蓝(注：商业使用需获得Beiersdorf AG授权)
+
+        ceNokiaBlue,            ///<诺基亚蓝
+
 		ceOldLace,				///<老花色
 		ceOlive,				///<橄榄色
 		ceOlivedrab,			///<深绿褐色
@@ -157,6 +162,9 @@ namespace hgl
 		ceRoyalBlue,			///<皇家蓝
 		ceSaddleBrown,			///<重褐色
 		ceSalmon,				///<鲜肉色
+
+        ceSamsungBlue,          ///<三星蓝
+
 		ceSandyBrown,			///<沙褐色
 		ceSeaGreen,				///<海绿色
 		ceSeaShell,				///<海贝色
@@ -172,6 +180,9 @@ namespace hgl
 		ceTan,					///<茶色
 		ceTeal,					///<水鸭色
 		ceThistle,				///<蓟色
+
+        ceTiffanyBlue,          ///<蒂芙尼蓝(知更鸟蛋蓝/勿忘我蓝)(注：商业使用需获取Tiffany公司授权)
+
 		ceTomato,				///<西红柿色
 		ceTurquoise,			///<青绿色
 		ceViolet,				///<紫罗兰色
