@@ -10,11 +10,11 @@ namespace hgl
 
 		class PlaneGrid
 		{
-			Renderable *grid;
+			Renderable *grid[3];
 
 		public:
 
-			PlaneGrid(int,int,bool YUp=true);
+			PlaneGrid(int,int);
 			~PlaneGrid();
 
 			void Render(const Matrix4f *,const Matrix4f *);

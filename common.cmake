@@ -44,6 +44,7 @@ ELSE(WIN32)
 	OPTION(X86_USE_SSE41            "Use SSE41"             TRUE    )
 	OPTION(X86_USE_SSE42            "Use SSE42"             TRUE    )
 	OPTION(X86_USE_AVX              "Use AVX"               FALSE   )
+
 ENDIF(WIN32)
 
 IF(USE_LLVM_CLANG)

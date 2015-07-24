@@ -21,9 +21,6 @@ OPTION(LOG_CDB_LOADER_LOG		"Output CDBLoader log"						FALSE	)
 
 IF(BUILD_OPENGL_LIB)
 
-    ADD_DEFINITIONS("-DMATH_USE_OPENGL")
-    ADD_DEFINITIONS("-DMATH_RIGHTHANDED_CAMERA")
-
 	IF(UNIX)
 		OPTION(OPENGL_USE_EGL		"Use EGL"				FALSE)
 		OPTION(OPENGL_USE_WAYLAND	"Use Wayland-EGL"		FALSE)
@@ -125,12 +122,33 @@ endif(LOG_CDB_LOADER_LOG)
 
 INCLUDE_DIRECTORIES(${CMGDK_PATH}/inc)
 INCLUDE_DIRECTORIES(${CMGDK_PATH}/3rdpty)
-INCLUDE_DIRECTORIES(${CMGDK_PATH}/3rdpty/MathGeoLib/src)
 
-IF(WIN32)
-	link_directories(${CMGDK_PATH}/3rdpty/MathGeoLib/${CMGDK_BUILD_TYPE})
+OPTION(MATH_USE_GLM             "Use OpenGL Mathematics"                TRUE    )
+OPTION(MATH_USE_CML             "Use Configurable Math Library"         FALSE   )
+OPTION(MATH_USE_MGL             "Use Game Math and Geometry Library"    FALSE   )
+
+IF(MATH_USE_GLM)
+    add_definitions(-DMATH_USE_GLM)
+
+    INCLUDE_DIRECTORIES(${CMGDK_PATH}/3rdpty/glm)
 ELSE()
-	link_directories(${CMGDK_PATH}/3rdpty/MathGeoLib)
+    IF(MATH_USE_CML)
+        add_definitions(-DMATH_USE_CML)
+    ELSE()
+        IF(MATH_USE_MGL)
+            add_definitions(-DMATH_USE_MGL)
+            ADD_DEFINITIONS("-DMATH_USE_OPENGL")
+            ADD_DEFINITIONS("-DMATH_RIGHTHANDED_CAMERA")
+
+            INCLUDE_DIRECTORIES(${CMGDK_PATH}/3rdpty/MathGeoLib/src)
+
+            IF(WIN32)
+                link_directories(${CMGDK_PATH}/3rdpty/MathGeoLib/${CMGDK_BUILD_TYPE})
+            ELSE()
+                link_directories(${CMGDK_PATH}/3rdpty/MathGeoLib)
+            ENDIF()
+        ENDIF()
+    ENDIF()
 ENDIF()
 
 IF(UNIX)

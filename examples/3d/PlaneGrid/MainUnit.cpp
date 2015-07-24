@@ -22,11 +22,13 @@ class TestObject:public FlowObject
 	Matrix4f proj;
 	Matrix4f look;
 
+    double start_time;
+
 private:
 
 	void SetCamera()
 	{
-		cam.yfov=45.0f;
+		cam.fov=45.0f;
 		cam.znear=4.0f;
 		cam.zfar=1000.0f;
 
@@ -43,21 +45,13 @@ public:
 
 	TestObject()
 	{
-		SetClearColor(0,0,0);
-
-		grid=new PlaneGrid(100,40);
+		grid=new PlaneGrid(100,25);
 
 		SetCamera();
 
 		MakeCameraMatrix(&proj,&look,&cam);
 
-		Vector4f pos(100.0f,100.0f,0.0f,1.0f);
-		Vector4f fin1,fin2,fin3,fin4;
-
-		fin1=proj*look*pos;
-		fin2=(proj*look)*pos;
-		fin3=proj*(look*pos);
-		fin4=(look*proj)*pos;
+        start_time=GetDoubleTime();
 	}
 
 	~TestObject()

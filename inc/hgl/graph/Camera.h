@@ -14,7 +14,7 @@ namespace hgl
 			float width;				///<视图宽
 			float height;				///<视图高
 
-			float yfov;					///<Y
+			float fov;		            ///<水平FOV
 			float znear,zfar;			///<Z轴上离眼睛的距离
 
 			Vector3f eye;				///<眼睛坐标

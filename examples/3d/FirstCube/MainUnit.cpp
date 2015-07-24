@@ -28,7 +28,7 @@ private:
 
 	void SetCamera()
 	{
-		cam.yfov=45.0f;
+		cam.fov=45.0f;
 		cam.znear=4.0f;
 		cam.zfar=1000.0f;
 
@@ -62,8 +62,8 @@ private:
 		cube2=CreateCube(0,0,1);
 
 #ifdef _DEBUG	//debug模式下将shader保存成文件
-		cube1->AutoCreateShader(true,u"Cube1");
-		cube2->AutoCreateShader(true,u"Cube2");
+		cube1->AutoCreateShader(true,OS_TEXT("Cube1"));
+		cube2->AutoCreateShader(true,OS_TEXT("Cube2"));
 #else
 		cube1->AutoCreateShader();		//默认参数是true,true
 		cube2->AutoCreateShader();

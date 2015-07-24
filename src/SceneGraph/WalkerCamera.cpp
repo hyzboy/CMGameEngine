@@ -93,6 +93,8 @@ namespace hgl
 
 		void WalkerCamera::Distance(float pos)
 		{
+            if(pos==1.0)return;
+
 			eye=center+(eye-center)*pos;
 		}
 	}//namespace graph
