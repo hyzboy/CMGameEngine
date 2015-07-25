@@ -11,8 +11,8 @@ using namespace hgl::graph;
 
 const Vector3f	eye(100,70,80),
 				center(0,0,0),
-				upvector(0,1,0),
-				forvector(0,0,1);
+                up_vector(0,0,1),
+                forward_vector(0,1,0);
 
 class TestObject:public FlowObject
 {
@@ -37,8 +37,9 @@ private:
 
 		cam.eye=eye;
 		cam.center=center;
-		cam.up_vector=upvector;
-		cam.forward_vector=forvector;
+        cam.local_up_vector=up_vector;
+        cam.world_up_vector=up_vector;
+        cam.forward_vector=forward_vector;
 	}
 
 	Renderable *CreateCube(float r,float g,float b)

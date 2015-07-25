@@ -7,14 +7,22 @@
 //   而MGL是行矩阵，需要反过来pos*matrix
 
 #ifdef MATH_USE_MGL
-   #include<hgl/MathMGL.h>             // Game Math and Geometry Library
-#else
-    #ifdef MATH_USE_CML
-        #include<hgl/MathCML.h>        // Configurable Math Library
-    #else
-        #include<hgl/MathGLM.h>        // OpenGL mathematics
-    #endif//MATH_USE_CML
+    #include<hgl/MathMGL.h>        // Game Math and Geometry Library
+
+    #define HGL_MATRIX_RIGHT        //矩阵使用右乘
 #endif//MATH_USE_MGL
+
+#ifdef MATH_USE_CML
+    #include<hgl/MathCML.h>        // Configurable Math Library
+
+    #define HGL_MATRIX_LEFT        //矩阵使用左乘
+#endif//MATH_USE_CML
+
+#ifdef MATH_USE_GLM
+    #include<hgl/MathGLM.h>        // OpenGL mathematics
+
+    #define HGL_MATRIX_LEFT        //矩阵使用左乘
+#endif//MATH_USE_GLM
 
 namespace hgl
 {

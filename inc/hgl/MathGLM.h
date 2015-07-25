@@ -1,5 +1,5 @@
-#ifndef HGL_VECTOR_MATH_GLM_INCLUDE
-#define HGL_VECTOR_MATH_MGL_INCLUDE
+﻿#ifndef HGL_VECTOR_MATH_GLM_INCLUDE
+#define HGL_VECTOR_MATH_GLM_INCLUDE
 
 #ifdef _MSC_VER
 #pragma warning(disable:4244)           // double -> int 精度丢失警告
@@ -156,7 +156,7 @@ namespace hgl
 
     inline Matrix4f perspective_yfov(float fovy,float aspect,float znear,float zfar)
     {
-        return glm::perspective(fovy,aspect,znear,zfar);
+        return glm::perspectiveRH(fovy,aspect,znear,zfar);
     }
 
 //     inline Matrix4f perspective_wh(float width,float height,float znear,float zfar)
@@ -171,7 +171,7 @@ namespace hgl
 
     //inline Matrix4f ortho4(float left,float right,float bottom,float top,float znear=0,float zfar=1);
 
-    inline Matrix4f lookAt(const Vector3f &eye,const Vector3f &target,const Vector3f &forward,const Vector3f &up)
+    inline Matrix4f lookAt(const Vector3f &eye,const Vector3f &target,const Vector3f &up)
     {
         return glm::lookAt(eye,target,up);
     }
@@ -240,4 +240,4 @@ namespace hgl
         return glm::dot(v1,v2);
     }
 }//namespace hgl
-#endif//HGL_VECTOR_MATH_MGL_INCLUDE
+#endif//HGL_VECTOR_MATH_GLM_INCLUDE

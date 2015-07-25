@@ -21,7 +21,7 @@ SOURCE_GROUP("Application" FILES ${GRAPHICS_APPLICATION_SOURCE})
 
 SET(CM_SCENE_GRAPH_ALL_SOURCE    Camera.cpp
                                 WalkerCamera.cpp
-#                                 AABox.cpp
+                                AABox.cpp
 #                                 Frustum.cpp
 #                                 Plane.cpp
 #                                 Ray.cpp

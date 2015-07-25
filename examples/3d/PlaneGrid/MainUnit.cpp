@@ -8,7 +8,7 @@
 using namespace hgl;
 using namespace hgl::graph;
 
-const Vector3f	eye(0,0,1000),
+const Vector3f  eye(100,70,80),
 				center(0,0,0),
 				up_vector(0,0,1),
 				forward_vector(0,1,0);
@@ -28,20 +28,19 @@ private:
 
 	void SetCamera()
 	{
-		cam.fov=45.0f;
-		cam.znear=4.0f;
-		cam.zfar=1000.0f;
+        cam.fov=45.0f;
+        cam.znear=4.0f;
+        cam.zfar=1000.0f;
 
 		cam.width=GetScreenWidth();
 		cam.height=GetScreenHeight();
 
 		cam.eye=eye;
 		cam.center=center;
-		cam.local_up_vector=up_vector;
         cam.world_up_vector=up_vector;
-		cam.forward_vector=forward_vector;
 
-        MakeCameraMatrix(&proj,&mv,&cam);
+		cam.local_up_vector=Vector3f(0,1,0);
+		cam.local_forward_vector=Vector3f(0,0,1);
 	}
 
 public:
@@ -50,7 +49,7 @@ public:
 	{
 		SetClearColor(0,0,0);
 
-		grid=new PlaneGrid(1000,500);
+		grid=new PlaneGrid(120,50,true,true,false);
 
 		SetCamera();
 
@@ -68,9 +67,11 @@ public:
 
         const double gap_time=GetDoubleTime()-start_time;
 
-        Matrix4f result=mv*rotate(gap_time,0,0,100);
+        cam.eye.z=gap_time;
 
-		grid->Render(&proj,&result);
+        MakeCameraMatrix(&proj,&mv,&cam);
+
+		grid->Render(&proj,&mv);
 	}
 };//class TestObject
 

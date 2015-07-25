@@ -49,6 +49,7 @@ namespace hgl
  */
 
 #include<iconv.h>
+#include<errno.h>
 namespace hgl
 {
 	template<typename T,typename S>

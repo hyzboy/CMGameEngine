@@ -48,7 +48,7 @@ public:
             triangle->SetColor(new VB3f(3,color),HGL_COLOR_RGB);
         }
 
-        triangle->AutoCreateShader(true);
+        triangle->AutoCreateShader(true,OS_TEXT("FirstTriangle"));
 	}
 
 	~TestObject()

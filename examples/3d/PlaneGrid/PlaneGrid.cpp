@@ -2,13 +2,17 @@
 #include<hgl/graph/Render.h>
 #include<hgl/graph/Material.h>			//Material
 #include<hgl/graph/Renderable.h>		//Renderable
-#include<hgl/graph/InlineRenderable.h>	//CreateRenderableCube
+#include<hgl/graph/InlineRenderable.h>	//CreateRenderablePlaneGrid
 namespace hgl
 {
 	namespace graph
 	{
-		PlaneGrid::PlaneGrid(int size,int num)
+		PlaneGrid::PlaneGrid(int size,int num,bool view_x,bool view_y,bool view_z)
 		{
+            x=view_x;
+            y=view_y;
+            z=view_z;
+
 			Vector3f v[3][4];
             Color4f c[3]={Color4f(1,0,0,1),Color4f(0,1,0,1),Color4f(0,0,1,1)};
 
@@ -52,9 +56,9 @@ namespace hgl
 
 		void PlaneGrid::Render(const Matrix4f *proj,const Matrix4f *mv)
 		{
-			DirectRender(grid[0],proj,mv);
-            DirectRender(grid[1],proj,mv);
-            DirectRender(grid[2],proj,mv);
+			if(x)DirectRender(grid[0],proj,mv);
+            if(y)DirectRender(grid[1],proj,mv);
+            if(z)DirectRender(grid[2],proj,mv);
 		}
 	}//namespace graph
 }//namespace hgl

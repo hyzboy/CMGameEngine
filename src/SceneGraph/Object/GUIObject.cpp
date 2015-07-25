@@ -171,7 +171,7 @@ namespace hgl
 			{
 				bool result=false;
 
-				mouse_coord.Set(x,y);
+				mouse_coord=Vector2f(x,y);
 
 				if(move&&mouse_down[mbLeft])		//可以拖动
 				{

@@ -188,7 +188,6 @@ namespace hgl
 
 			void SetLight			(bool l)							{Light=l;}										///<设置是否承接光照
 			void SetLightPosition	(const Vector3f &lp)				{LightPosition=lp;}								///<设置光源位置
-			void SetLightPosition	(float x,float y,float z)			{LightPosition.Set(x,y,z);}						///<设置光源位置
 			void SetGlobalLightIntensity(float gli)						{GlobalLightIntensity=gli;}						///<设置全局环境光强度
 
 		public:
@@ -197,11 +196,6 @@ namespace hgl
 			void SetAmbient			(const Color4f &c)					{Ambient=c;}
 			void SetDiffuse			(const Color4f &c)					{Diffuse=c;}
 			void SetSpecular		(const Color4f &c)					{Specular=c;}
-
-			void SetEmission		(float r,float g,float b,float a)	{Emission.Set(r,g,b,a);}
-			void SetAmbient			(float r,float g,float b,float a)	{Ambient.Set(r,g,b,a);}
-			void SetDiffuse			(float r,float g,float b,float a)	{Diffuse.Set(r,g,b,a);}
-			void SetSpecular		(float r,float g,float b,float a)	{Specular.Set(r,g,b,a);}
 
 			void SetEmission		(const float c[4])					{Emission.Set(c[0],c[1],c[2],c[3]);}
 			void SetAmbient			(const float c[4])					{Ambient.Set(c[0],c[1],c[2],c[3]);}
