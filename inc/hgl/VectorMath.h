@@ -152,20 +152,12 @@ namespace hgl
 
 	inline Matrix4f translate(const Vector3f &v)
 	{
-		Matrix4f result;
-
-		result.Translate(v);
-
-		return result;
+		return Matrix4f::Translate(v);
 	}
 
 	inline Matrix4f translate(float x,float y,float z)
 	{
-		Matrix4f result;
-
-		result.Translate(x,y,z);
-
-		return result;
+		return Matrix4f::Translate(x,y,z);
 	}
 
 	inline Matrix4f scale(const Vector3f &v)
@@ -185,11 +177,7 @@ namespace hgl
 
 	inline Matrix4f rotate(float angle,const Vector3f &axis)
 	{
-		Matrix4f result;
-
-		result.SetRotatePart(axis,angle);
-
-		return result;
+        return Matrix4f::RotateAxisAngle(axis.Normalized(),angle);
 	}
 
 	inline Matrix4f rotate(float angle,float x,float y,float z)
@@ -199,7 +187,7 @@ namespace hgl
 
 	inline Matrix4f rotate(float angle,const Vector4f &axis)
 	{
-		return rotate(angle,axis.x,axis.y,axis.z);
+		return rotate(angle,Vector3f(axis.x,axis.y,axis.z));
 	}
 
 	template<typename T>
@@ -211,7 +199,7 @@ namespace hgl
 	template<typename T>
 	inline void normalize(T &v)
 	{
-		v=v.Normalized();
+		v.Normalize();
 	}
 
 	template<typename T1,typename T2>

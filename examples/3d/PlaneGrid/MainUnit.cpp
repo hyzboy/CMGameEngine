@@ -8,7 +8,7 @@
 using namespace hgl;
 using namespace hgl::graph;
 
-const Vector3f	eye(100,70,80),
+const Vector3f	eye(0,0,1000),
 				center(0,0,0),
 				up_vector(0,0,1),
 				forward_vector(0,1,0);
@@ -20,7 +20,9 @@ class TestObject:public FlowObject
 	Camera cam;
 
 	Matrix4f proj;
-	Matrix4f look;
+	Matrix4f mv;
+
+    double start_time;
 
 private:
 
@@ -38,6 +40,8 @@ private:
 		cam.local_up_vector=up_vector;
         cam.world_up_vector=up_vector;
 		cam.forward_vector=forward_vector;
+
+        MakeCameraMatrix(&proj,&mv,&cam);
 	}
 
 public:
@@ -46,11 +50,11 @@ public:
 	{
 		SetClearColor(0,0,0);
 
-		grid=new PlaneGrid(100,40);
+		grid=new PlaneGrid(1000,500);
 
 		SetCamera();
 
-		MakeCameraMatrix(&proj,&look,&cam);
+        start_time=GetDoubleTime();
 	}
 
 	~TestObject()
@@ -62,7 +66,11 @@ public:
 	{
 		ClearScreen();
 
-		grid->Render(&proj,&look);
+        const double gap_time=GetDoubleTime()-start_time;
+
+        Matrix4f result=mv*rotate(gap_time,0,0,100);
+
+		grid->Render(&proj,&result);
 	}
 };//class TestObject
 
