@@ -261,7 +261,7 @@ namespace hgl
 
 			Shader *new_shader;
 
-//			if(!ShaderStorage.Get(state,new_shader))			//如果仓库中有状态一样的，则直接从仓库中取，而不重新创建
+			if(!ShaderStorage.Get(state,new_shader))			//如果仓库中有状态一样的，则直接从仓库中取，而不重新创建
 			{
 				new_shader=CreateShader(this,mvp,&state
 	#ifdef _DEBUG
