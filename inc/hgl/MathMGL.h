@@ -135,9 +135,9 @@ namespace hgl
 
     //inline Matrix4f ortho4(float left,float right,float bottom,float top,float znear=0,float zfar=1);
 
-    inline Matrix4f lookAt(const Vector3f &eye,const Vector3f &target,const Vector3f &forward,const Vector3f &local_up,const Vector3f &world_up)
+    inline Matrix4f lookAt(const Vector3f &eye,const Vector3f &target,const Vector3f &local_forward,const Vector3f &local_up,const Vector3f &world_up)
     {
-        return Matrix4f::LookAt(eye,target,forward,local_up,world_up);
+        return Matrix4f::LookAt(eye,target,local_forward,local_up,world_up);
     }
 
     inline Matrix4f translate(const Vector3f &v)

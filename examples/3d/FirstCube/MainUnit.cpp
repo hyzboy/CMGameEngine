@@ -37,9 +37,9 @@ private:
 
 		cam.eye=eye;
 		cam.center=center;
+        cam.local_forward_vector=forward_vector;
         cam.local_up_vector=up_vector;
         cam.world_up_vector=up_vector;
-        cam.forward_vector=forward_vector;
 	}
 
 	Renderable *CreateCube(float r,float g,float b)

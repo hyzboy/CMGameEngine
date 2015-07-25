@@ -17,23 +17,23 @@ namespace hgl
             Color4f c[3]={Color4f(1,0,0,1),Color4f(0,1,0,1),Color4f(0,0,1,1)};
 
             {
-                v[0][0]=Vector3f(-size,0,-size);
-                v[0][1]=Vector3f( size,0,-size);
-                v[0][2]=Vector3f( size,0, size);
-                v[0][3]=Vector3f(-size,0, size);
+                v[0][0]=Vector3f(0,-size,-size);
+                v[0][1]=Vector3f(0, size,-size);
+                v[0][2]=Vector3f(0, size, size);
+                v[0][3]=Vector3f(0,-size, size);
+            }
+            {
+                v[1][0]=Vector3f(-size,0,-size);
+                v[1][1]=Vector3f( size,0,-size);
+                v[1][2]=Vector3f( size,0, size);
+                v[1][3]=Vector3f(-size,0, size);
             }
 			{
-				v[1][0]=Vector3f(-size,-size,0);
-				v[1][1]=Vector3f( size,-size,0);
-				v[1][2]=Vector3f( size, size,0);
-				v[1][3]=Vector3f(-size, size,0);
+				v[2][0]=Vector3f(-size,-size,0);
+				v[2][1]=Vector3f( size,-size,0);
+				v[2][2]=Vector3f( size, size,0);
+				v[2][3]=Vector3f(-size, size,0);
 			}
-			{
-                v[2][0]=Vector3f(0,-size,-size);
-                v[2][1]=Vector3f(0, size,-size);
-                v[2][2]=Vector3f(0, size, size);
-                v[2][3]=Vector3f(0,-size, size);
-            }
 
             for(int i=0;i<3;i++)
             {

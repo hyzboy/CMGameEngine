@@ -49,7 +49,7 @@ public:
 	{
 		SetClearColor(0,0,0);
 
-		grid=new PlaneGrid(120,50,true,true,false);
+		grid=new PlaneGrid(120,50,false,false,true);
 
 		SetCamera();
 
