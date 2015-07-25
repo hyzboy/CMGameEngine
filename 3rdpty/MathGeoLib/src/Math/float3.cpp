@@ -462,12 +462,12 @@ float float3::Dot(const float3 &rhs) const
 /** dst = A x B - The standard cross product:
 \code
 		|a cross b| = |a||b|sin(alpha)
-	
+
 		i		j		k		i		j		k		units (correspond to x,y,z)
 		a		b		c		a		b		c		this vector
 		d		e		f		d		e		f		vector v
 		-cei	-afj	-bdk	bfi	cdj	aek	result
-	
+
 		x = bfi - cei = (bf-ce)i;
 		y = cdj - afj = (cd-af)j;
 		z - aek - bdk = (ae-bd)k;
@@ -782,7 +782,7 @@ bool float3::Equals(float x_, float y_, float z_, float epsilon) const
 bool float3::BitEquals(const float3 &other) const
 {
 	return ReinterpretAsU32(x) == ReinterpretAsU32(other.x) &&
-		ReinterpretAsU32(y) == ReinterpretAsU32(other.y) && 
+		ReinterpretAsU32(y) == ReinterpretAsU32(other.y) &&
 		ReinterpretAsU32(z) == ReinterpretAsU32(other.z);
 }
 

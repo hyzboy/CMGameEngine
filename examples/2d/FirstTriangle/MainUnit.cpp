@@ -1,4 +1,4 @@
-#include<hgl/Graphics.h>				//GraphicsApplication,SystemInitInfo
+﻿#include<hgl/Graphics.h>				//GraphicsApplication,SystemInitInfo
 #include<hgl/graph/Render.h>			//SetClearColor,ClearScreen
 #include<hgl/graph/Shader.h>			//Shader
 #include<hgl/object/FlowObject.h>		//FlowObject
@@ -6,7 +6,7 @@
 using namespace hgl;
 using namespace hgl::graph;
 
-const float vertex[]={0.0,0.0,  100,0.0,    100,100 };
+const float vertex[]={0.0,0.0,  200,0.0,    100,100 };
 const float color []={1,0,0,    0,1,0,      0,0,1   };
 
 class TestObject:public FlowObject
