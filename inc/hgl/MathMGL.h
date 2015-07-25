@@ -1,4 +1,4 @@
-#ifndef HGL_VECTOR_MATH_MGL_INCLUDE
+﻿#ifndef HGL_VECTOR_MATH_MGL_INCLUDE
 #define HGL_VECTOR_MATH_MGL_INCLUDE
 
 #ifdef _MSC_VER
@@ -135,27 +135,19 @@ namespace hgl
 
     //inline Matrix4f ortho4(float left,float right,float bottom,float top,float znear=0,float zfar=1);
 
-    inline Matrix4f lookAt(const Vector3f &eye,const Vector3f &target,const Vector3f &forward,const Vector3f &up)
+    inline Matrix4f lookAt(const Vector3f &eye,const Vector3f &target,const Vector3f &forward,const Vector3f &local_up,const Vector3f &world_up)
     {
-        return Matrix4f::LookAt(eye,target,forward,up,up);
+        return Matrix4f::LookAt(eye,target,forward,local_up,world_up);
     }
 
     inline Matrix4f translate(const Vector3f &v)
     {
-        Matrix4f result;
-
-        result.Translate(v);
-
-        return result;
+        return Matrix4f::Translate(v);
     }
 
     inline Matrix4f translate(float x,float y,float z)
     {
-        Matrix4f result;
-
-        result.Translate(x,y,z);
-
-        return result;
+        return Matrix4f::Translate(x,y,z);
     }
 
     inline Matrix4f scale(const Vector3f &v)
@@ -175,11 +167,7 @@ namespace hgl
 
     inline Matrix4f rotate(float angle,const Vector3f &axis)
     {
-        Matrix4f result;
-
-        result.SetRotatePart(axis,angle);
-
-        return result;
+        return Matrix4f::RotateAxisAngle(axis.Normalized(),angle);
     }
 
     inline Matrix4f rotate(float angle,float x,float y,float z)
@@ -189,7 +177,7 @@ namespace hgl
 
     inline Matrix4f rotate(float angle,const Vector4f &axis)
     {
-        return rotate(angle,axis.x,axis.y,axis.z);
+        return rotate(angle,Vector3f(axis.x,axis.y,axis.z));
     }
 
     template<typename T>
@@ -201,7 +189,7 @@ namespace hgl
     template<typename T>
     inline void normalize(T &v)
     {
-        v=v.Normalized();
+        v.Normalize();
     }
 
     template<typename T1,typename T2>
