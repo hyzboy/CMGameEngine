@@ -11,9 +11,9 @@ namespace hgl
 		{
 			Vector3f off(center-eye);
 
-			Vector3f right=cross(off,up_vector);
+			Vector3f right=cross(off,world_up_vector);
 
-			Vector3f dist=cross(right,up_vector)*step;
+			Vector3f dist=cross(right,world_up_vector)*step;
 
 			eye+=dist;
 			center+=dist;
@@ -27,7 +27,7 @@ namespace hgl
 		{
 			float len=length(eye,center)*step;
 
-			Vector3f off=up_vector*len;
+			Vector3f off=world_up_vector*len;
 
 			eye+=off;
 			center=off;
@@ -41,7 +41,7 @@ namespace hgl
 		{
 			Vector3f off(center-eye);
 
-			Vector3f dist=cross(off,up_vector)*step;
+			Vector3f dist=cross(off,world_up_vector)*step;
 
 			eye+=dist;
 			center+=dist;
@@ -51,7 +51,7 @@ namespace hgl
 		{
 			Vector3f off(center-eye);								//算出以眼为中心的向量
 
-			Vector3f axis=cross(off,up_vector);						//使用叉积求出垂直向量做为旋转轴
+			Vector3f axis=cross(off,world_up_vector);						//使用叉积求出垂直向量做为旋转轴
 
 			normalize(axis);
 
@@ -64,7 +64,7 @@ namespace hgl
 		{
 			Vector4f off(center-eye,1.0f);							//算出偏移向量
 
-			Vector4f new_off=off*rotate(ang,up_vector);				//以上向轴为旋转轴
+			Vector4f new_off=off*rotate(ang,world_up_vector);				//以上向轴为旋转轴
 
 			center=eye+Vector3f(new_off[0],new_off[1],new_off[2]);
 		}
@@ -73,7 +73,7 @@ namespace hgl
 		{
 			Vector3f off(eye-center);								//算出偏移向量
 
-			Vector3f axis=cross(off,up_vector);						//使用叉积求出垂直向量做为旋转轴
+			Vector3f axis=cross(off,world_up_vector);						//使用叉积求出垂直向量做为旋转轴
 
 			normalize(axis);										//CML必须做这一步，不解
 
@@ -86,7 +86,7 @@ namespace hgl
 		{
 			Vector4f off(eye-center,1.0f);							//算出偏移向量
 
-			Vector4f new_off=off*rotate(ang,up_vector);
+			Vector4f new_off=off*rotate(ang,world_up_vector);
 
 			eye=center+Vector3f(new_off[0],new_off[1],new_off[2]);
 		}

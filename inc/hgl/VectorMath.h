@@ -5,9 +5,10 @@
 #pragma warning(disable:4244)			// double -> int 精度丢失警告
 #endif//_MSC_VER
 
+#define MATH_USE_MGL
+
 #include<hgl/type/DataType.h>
 #include<MathGeoLib.h>
-
 
 //注：GLM/CML(OpenGLMode)是列矩阵,计算坐标matrix*pos
 //   而MGL是行矩阵，需要反过来pos*matrix
@@ -144,9 +145,9 @@ namespace hgl
 
 	//inline Matrix4f ortho4(float left,float right,float bottom,float top,float znear=0,float zfar=1);
 
-	inline Matrix4f lookAt(const Vector3f &eye,const Vector3f &target,const Vector3f &forward,const Vector3f &up)
+	inline Matrix4f lookAt(const Vector3f &eye,const Vector3f &target,const Vector3f &forward,const Vector3f &local_up,const Vector3f &world_up)
 	{
-		return Matrix4f::LookAt(eye,target,forward,up,up);
+		return Matrix4f::LookAt(eye,target,forward,local_up,world_up);
 	}
 
 	inline Matrix4f translate(const Vector3f &v)

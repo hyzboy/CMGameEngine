@@ -10,8 +10,8 @@ using namespace hgl::graph;
 
 const Vector3f	eye(100,70,80),
 				center(0,0,0),
-				up_vector(0,1,0),
-				forward_vector(0,0,1);
+				up_vector(0,0,1),
+				forward_vector(0,1,0);
 
 class TestObject:public FlowObject
 {
@@ -35,7 +35,8 @@ private:
 
 		cam.eye=eye;
 		cam.center=center;
-		cam.up_vector=up_vector;
+		cam.local_up_vector=up_vector;
+        cam.world_up_vector=up_vector;
 		cam.forward_vector=forward_vector;
 	}
 
@@ -50,14 +51,6 @@ public:
 		SetCamera();
 
 		MakeCameraMatrix(&proj,&look,&cam);
-
-		Vector4f pos(100.0f,100.0f,0.0f,1.0f);
-		Vector4f fin1,fin2,fin3,fin4;
-
-		fin1=proj*look*pos;
-		fin2=(proj*look)*pos;
-		fin3=proj*(look*pos);
-		fin4=(look*proj)*pos;
 	}
 
 	~TestObject()

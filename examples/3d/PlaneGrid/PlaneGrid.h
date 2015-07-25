@@ -14,7 +14,7 @@ namespace hgl
 
 		public:
 
-			PlaneGrid(int,int,bool YUp=true);
+			PlaneGrid(int,int);
 			~PlaneGrid();
 
 			void Render(const Matrix4f *,const Matrix4f *);
