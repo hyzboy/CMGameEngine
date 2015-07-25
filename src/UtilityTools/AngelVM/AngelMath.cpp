@@ -1,6 +1,7 @@
 ﻿#include"angelscript.h"
 #include<hgl/VectorMath.h>
 #include<assert.h>
+#include<new>
 
 namespace hgl
 {

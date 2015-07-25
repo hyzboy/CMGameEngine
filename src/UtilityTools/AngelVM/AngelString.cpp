@@ -1,7 +1,8 @@
-#include<hgl/script/AngelVM.h>
+﻿#include<hgl/script/AngelVM.h>
 #include<angelscript.h>
 #include<hgl/type/BaseString.h>
 #include<assert.h>
+#include<new>
 
 namespace hgl
 {
