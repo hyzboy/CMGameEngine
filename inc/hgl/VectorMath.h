@@ -114,7 +114,7 @@ namespace hgl
 
     inline float ray_angle_cos(const Vector3f &ray_dir,const Vector3f &ray_pos,const Vector3f &pos)
     {
-        normalized(dot(ray_dir,pos-ray_pos));
+        return dot(ray_dir,normalized(pos-ray_pos));
     }
 
     /**

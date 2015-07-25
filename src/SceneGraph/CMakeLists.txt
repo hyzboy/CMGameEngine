@@ -19,12 +19,13 @@ SET(GRAPHICS_APPLICATION_SOURCE
 
 SOURCE_GROUP("Application" FILES ${GRAPHICS_APPLICATION_SOURCE})
 
-SET(CM_SCENE_GRAPH_ALL_SOURCE   AABox.cpp
-                                Frustum.cpp
-                                Plane.cpp
-                                Ray.cpp
-                                Camera.cpp
-                                WalkerCamera.cpp)
+SET(CM_SCENE_GRAPH_ALL_SOURCE    Camera.cpp
+                                WalkerCamera.cpp
+#                                 AABox.cpp
+#                                 Frustum.cpp
+#                                 Plane.cpp
+#                                 Ray.cpp
+                                )
 
 IF(WIN32)
 	add_library(CM.SceneGraph STATIC ${CM_SCENE_GRAPH_ALL_SOURCE})

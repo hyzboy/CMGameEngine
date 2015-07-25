@@ -1,4 +1,4 @@
-#ifndef HGL_GRAPH_CLIP_PLANE_INCLUDE
+﻿#ifndef HGL_GRAPH_CLIP_PLANE_INCLUDE
 #define HGL_GRAPH_CLIP_PLANE_INCLUDE
 
 #include<hgl/VectorMath.h>
@@ -24,7 +24,7 @@ namespace hgl
 
             void Set(const float *p)
             {
-                normal.set(p[0],p[1],p[2]);
+                normal=Vector3f(p[0],p[1],p[2]);
                 d=p[3];
             }
 

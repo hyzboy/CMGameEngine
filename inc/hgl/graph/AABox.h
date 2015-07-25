@@ -1,4 +1,4 @@
-#ifndef HGL_GRAPH_AABOX_INCLUDE
+﻿#ifndef HGL_GRAPH_AABOX_INCLUDE
 #define HGL_GRAPH_AABOX_INCLUDE
 
 #include<hgl/VectorMath.h>
@@ -23,8 +23,8 @@ namespace hgl
             void SetCornerLength(const Vector3f &c,float x,float y,float z)     ///<按顶角和长度设置盒子范围
             {
                 corner=c;
-                length.set(x,y,z);
-                corner_max.set(c[0]+x,c[1]+y,c[2]+z);
+                length=Vector3f(x,y,z);
+                corner_max=Vector3f(c[0]+x,c[1]+y,c[2]+z);
                 center=(corner+corner_max)/2.0f;
             }
 

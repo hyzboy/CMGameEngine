@@ -28,7 +28,7 @@ private:
 
 	void SetCamera()
 	{
-		cam.yfov=45.0f;
+		cam.fov=45.0f;
 		cam.znear=4.0f;
 		cam.zfar=1000.0f;
 
