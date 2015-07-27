@@ -37,7 +37,7 @@ namespace hgl
 				SAFE_CLEAR(tos);
 			}
 
-			bool Create(const UTF8String &project_code)
+			bool Create(const OSString &project_code)
 			{
 				os_char filename[HGL_MAX_PATH];
 				os_char fn[HGL_MAX_PATH];
@@ -70,7 +70,7 @@ namespace hgl
 				strcat(fn,HGL_MAX_PATH,HGL_DIRECTORY_SEPARATOR);
 
 #if HGL_OS == HGL_OS_Windows
-				strcat(fn,u8_to_u16(project_code.c_str()));
+				strcat(fn, HGL_MAX_PATH,project_code);
 #else
 				strcat(fn,HGL_MAX_PATH,project_code);
 #endif//HGL_OS == HGL_OS_Windows

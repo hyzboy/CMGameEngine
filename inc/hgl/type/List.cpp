@@ -527,7 +527,7 @@ namespace hgl
 	{
 		ClearData();
 
-		SetCount(l.size());
+		SetCount((int)l.size());
 
 		memcpy(items,l.begin(),count*sizeof(T));
 	}

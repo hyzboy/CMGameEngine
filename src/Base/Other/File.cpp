@@ -469,7 +469,7 @@ namespace hgl
 		os_char *sp;
 
 #if HGL_OS == HGL_OS_Windows
-		strcpy(str,dirname.c_str());
+		strcpy(str,HGL_MAX_PATH,dirname.c_str());
 
 		if(str[1]==OS_TEXT(':'))sp=str+3;
 				   else sp=str;
@@ -701,7 +701,7 @@ namespace hgl
 		lfi->Add(fi);
 	}
 
-	List<FileInfo> GetlistFiles(const os_char *folder_name,bool proc_folder,bool proc_file,bool sub_folder)
+	List<FileInfo> GetListFiles(const OSString &folder_name,bool proc_folder,bool proc_file,bool sub_folder)
 	{
 		List<FileInfo> fi_list;
 		EnumFile(folder_name,&fi_list,folder_name,proc_file,sub_folder,(void (*)(void *,hgl::FileInfo &))AddToList);
@@ -720,9 +720,9 @@ namespace hgl
 	* @param func 回调函数
 	* @return 查找到文件数据,-1表示失败
 	*/
-	int EnumFile(const u16char *folder_name,const u16char *find_name,void *data,bool proc_folder,bool proc_file,bool sub_folder,EnumFileFunc func)
+	int EnumFile(const OSString &folder_name,const OSString &find_name,void *data,bool proc_folder,bool proc_file,bool sub_folder,EnumFileFunc func)
 	{
-		u16char full_name[HGL_MAX_PATH];
+		OSString full_name;
 		int count=0;
 
 		if(!func)return(-1);
@@ -732,16 +732,16 @@ namespace hgl
 
 		if(!folder_name||!(*folder_name))
 		{
-			strcpy(full_name,find_name);
+			full_name=find_name;
 		}
 		else
 		{
-			strcpy(full_name,folder_name);
+			full_name=folder_name;
 
-			if(folder_name[strlen(folder_name)-1]!=HGL_DIRECTORY_SEPARATOR)
-                strcat(full_name,HGL_DIRECTORY_SEPARATOR);
+			if(folder_name.GetEndChar()!=HGL_DIRECTORY_SEPARATOR)
+                full_name+=HGL_DIRECTORY_SEPARATOR;
 
-			strcat(full_name,find_name);
+			full_name+=find_name;
 		}
 
 		WIN32_FIND_DATA FindFileData;
@@ -754,7 +754,7 @@ namespace hgl
 		do
 		{
 			if(strcmp(FindFileData.cFileName,OS_TEXT("."))==0
-			|| strcmp(FindFileData.cFileName, OS_TEXT("..")) == 0)
+			|| strcmp(FindFileData.cFileName,OS_TEXT("..")) == 0)
 			{
 				continue;
 			}
@@ -765,14 +765,12 @@ namespace hgl
 				{
 					if(sub_folder)
 					{
-						u16char child_name[HGL_MAX_PATH];
+						OSString child_name=folder_name;
 
-						strcpy(child_name,folder_name);
+						if(folder_name.GetEndChar()!=HGL_DIRECTORY_SEPARATOR)
+							child_name+=HGL_DIRECTORY_SEPARATOR;
 
-						if(folder_name[strlen(folder_name)-1]!=HGL_DIRECTORY_SEPARATOR)
-							strcat(child_name,HGL_DIRECTORY_SEPARATOR);
-
-						strcat(child_name,FindFileData.cFileName);
+						child_name+=FindFileData.cFileName;
 						count+=EnumFile(child_name,find_name,data,proc_folder,proc_file,true,func);
 					}
 				}
@@ -789,25 +787,25 @@ namespace hgl
 			FileInfo fi;
 			memset(&fi,0,sizeof(FileInfo));
 
-			strcpy(fi.name,FindFileData.cFileName);
+			strcpy(fi.name,HGL_MAX_PATH,FindFileData.cFileName);
 
 			if(!folder_name||!(*folder_name))
 			{
-            	strcpy(fi.fullname,fi.name);
+            	strcpy(fi.fullname, HGL_MAX_PATH, fi.name);
 			}
 			else
 			{
-				strcpy(fi.fullname,folder_name);
+				strcpy(fi.fullname, HGL_MAX_PATH, folder_name);
 
-				if(folder_name[strlen(folder_name)-1]!=HGL_DIRECTORY_SEPARATOR)
-					strcat(fi.fullname,HGL_DIRECTORY_SEPARATOR);
+				if(folder_name.GetEndChar()!=HGL_DIRECTORY_SEPARATOR)
+					strcat(fi.fullname, HGL_MAX_PATH, HGL_DIRECTORY_SEPARATOR);
 
-				const u16char *rp=hgl::strchr(find_name,HGL_DIRECTORY_SEPARATOR);		//防止查询名称内仍有路径
+				const int rp = find_name.FindChar(HGL_DIRECTORY_SEPARATOR);//防止查询名称内仍有路径
 
-				if(rp)
-					strcat(fi.fullname,find_name,rp-find_name+1);
+				if(rp!=-1)
+					strcat(fi.fullname, HGL_MAX_PATH, find_name.c_str(),rp);
 
-				strcat(fi.fullname,fi.name);
+				strcat(fi.fullname, HGL_MAX_PATH, fi.name, HGL_MAX_PATH);
 			}
 			fi.size_high=FindFileData.nFileSizeHigh;
 			fi.size_low =FindFileData.nFileSizeLow;
@@ -1007,8 +1005,8 @@ namespace hgl
 
 			path_name[length]=0;
 
-			strcpy(vi.name,volume_name);
-			strcpy(vi.path,path_name);
+			strcpy(vi.name, HGL_MAX_PATH,volume_name);
+			strcpy(vi.path, HGL_MAX_PATH,path_name);
 
 			UINT type=GetDriveType(path_name);
 

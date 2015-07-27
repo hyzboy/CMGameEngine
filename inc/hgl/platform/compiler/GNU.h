@@ -105,13 +105,13 @@
 #define HGL_CPP11_INT128
 #define HGL_FORCE_INLINE __inline __attribute__ ((always_inline))
 
-#include<hgl/platform/compiler/DataTypeGNU.h>
-#include<hgl/platform/compiler/Property.h>
-
 #define HGL_THREAD		__thread
 //--------------------------------------------------------------------------------------------------
 #define HGL_LIB_FRONT	HGL_LIB_OS "_" HGL_LIB_COMPILER_NAME "_" HGL_LIB_DEBUG_NAME "_"
 
 #define HGL_LIB_END		".a"
+//--------------------------------------------------------------------------------------------------
+#include<hgl/platform/compiler/DataTypeGNU.h>
+#include<hgl/platform/compiler/Property.h>
 //--------------------------------------------------------------------------------------------------
 #endif//HGL_COMPILER_GNU_INCLUDE

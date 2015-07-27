@@ -98,20 +98,20 @@ namespace hgl
 	#define HGL_SIZE_1ZB	(HGL_SIZE_1EB*1024LL)
 	#define HGL_SIZE_1YB	(HGL_SIZE_1ZB*1024LL)
 
-	#define HGL_U8_MAX		0xFF
-	#define HGL_U16_MAX		0xFFFF
-	#define HGL_U32_MAX		0xFFFFFFFF
-	#define HGL_U64_MAX		0xFFFFFFFFFFFFFFFFLL
+	const uint8		HGL_U8_MAX		=0xFF;
+	const uint16	HGL_U16_MAX		=0xFFFF;
+	const uint32	HGL_U32_MAX		=0xFFFFFFFF;
+	const uint64	HGL_U64_MAX		=0xFFFFFFFFFFFFFFFFUL;
 
-	#define HGL_S8_MAX		0x7F
-	#define HGL_S16_MAX		0x7FFF
-	#define HGL_S32_MAX		0x7FFFFFFF
-	#define HGL_S64_MAX		0x7FFFFFFFFFFFFFFFLL
+	const int8		HGL_S8_MAX		=0x7F;
+	const int16		HGL_S16_MAX		=0x7FFF;
+	const int32		HGL_S32_MAX		=0x7FFFFFFF;
+	const int64		HGL_S64_MAX		=0x7FFFFFFFFFFFFFFFLL;
 
-	#define HGL_S8_MIN		-0x80
-	#define HGL_S16_MIN		-0x8000
-	#define HGL_S32_MIN		-0x80000000
-	#define HGL_S64_MIN		-0x8000000000000000LL
+	const int8		HGL_S8_MIN		=(-0x80);
+	const int16		HGL_S16_MIN		=(-0x8000);
+	const int32		HGL_S32_MIN		=(-0x80000000i32);
+	const int64		HGL_S64_MIN		=(-0x8000000000000000LL);
 
 	template<typename T> T HGL_INTEGER_MAX();
 	template<typename T> T HGL_INTEGER_MIN();

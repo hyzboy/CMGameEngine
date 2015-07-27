@@ -26,15 +26,18 @@ namespace hgl
         * @param email 电子邮件地址
         * @param subject 邮件主题
         */
-        void PopupEmailClient(const u16char *email,const u16char *subject)
+        void PopupEmailClient(const OSString &email,const OSString &subject)
         {
             u16char url[4096]=U16_TEXT("mailto:");
 
-			strcat(url,email);
+			strcat(url, 4096, email);
 
-			strcat(url, U16_TEXT("?Subject=\""));
-			strcat(url,subject);
-			strcat(url, U16_TEXT("\""));
+			const u16char subject_header[] = U16_TEXT("?Subject=\"");
+			const size_t subject_header_size = sizeof(subject_header)/sizeof(u16char);
+
+			strcat(url, 4096, subject_header, subject_header_size);
+			strcat(url, 4096, subject);
+			strcat(url, 4096, U16_TEXT('\"'));
 
             ShellExecute(nullptr,nullptr,url,nullptr,nullptr,0);
 		}

@@ -35,28 +35,20 @@
 #endif//_MSC_VER
 
 //--------------------------------------------------------------------------------------------------
-#include<hgl/platform/compiler/DataTypeTypedef.h>
-#include<hgl/platform/compiler/Property.h>
+#if _MSC_VER>=1800
+	#define HGL_VARIADIC_TEMPLATES				//变长参数模板
+	#define HGL_INITIALIZER_LIST				//初始化列表
+#endif//VC2013
 
-#ifdef HGL_CPP11
-	#if _MSC_VER>=1800
-		#define HGL_VARIADIC_TEMPLATES				//变长参数模板
-		#define HGL_INITIALIZER_LIST				//初始化列表
-	#endif//VC2013
-
-	#if _MSC_VER>=1700
+#if _MSC_VER>=1700
 // 		#define HGL_ATOMIC_CPP11					//C++11原子模板
-		#define HGL_CONSTRUCTION_REUSE				//构造函数复用
-		#define HGL_DEFAULT_MEMFUNC 	=default
-		#define HGL_OVERRIDE			override
-	#else
-		#define HGL_DEFAULT_MEMFUNC		{}
-		#define HGL_OVERRIDE
-	#endif//VC2012
+	#define HGL_CONSTRUCTION_REUSE				//构造函数复用
+	#define HGL_DEFAULT_MEMFUNC 	=default
+	#define HGL_OVERRIDE			override
 #else
-	#define HGL_DEFAULT_MEMFUNC			{}
+	#define HGL_DEFAULT_MEMFUNC		{}
 	#define HGL_OVERRIDE
-#endif//C++11
+#endif//VC2012
 
 #if _MSC_VER < 1700 // VC2012
 	#define _mm_set_ss set1_ps
@@ -107,6 +99,9 @@
 #define HGL_LIB_FRONT	HGL_LIB_OS "_" HGL_LIB_COMPILER_NAME "_" HGL_LIB_DEBUG_NAME "_" HGL_LIB_CRT "_"
 
 #define HGL_LIB_END		".LIB"
+//--------------------------------------------------------------------------------------------------
+#include<hgl/platform/compiler/DataTypeTypedef.h>
+#include<hgl/platform/compiler/Property.h>
 //--------------------------------------------------------------------------------------------------
 #endif//HGL_COMPILER_MICROSOFT_INCLUDE
 
