@@ -10,8 +10,7 @@ using namespace hgl::graph;
 
 const Vector3f  eye(100,70,80),
 				center(0,0,0),
-				up_vector(0,0,1),
-				forward_vector(0,1,0);
+				up_vector(0,0,1);
 
 class TestObject:public FlowObject
 {
@@ -38,9 +37,6 @@ private:
 		cam.eye=eye;
 		cam.center=center;
         cam.world_up_vector=up_vector;
-
-		cam.local_up_vector=Vector3f(0,1,0);
-		cam.local_forward_vector=Vector3f(0,0,1);
 	}
 
 public:
@@ -67,7 +63,7 @@ public:
 
         const double gap_time=GetDoubleTime()-start_time;
 
-        cam.eye.z=gap_time;
+        cam.eye=rotate(eye,gap_time,up_vector);
 
         MakeCameraMatrix(&proj,&mv,&cam);
 

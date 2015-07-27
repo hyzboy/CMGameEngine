@@ -19,9 +19,9 @@ namespace hgl
 
 			Vector3f eye;                   ///<眼睛坐标
 			Vector3f center;                ///<视点坐标
+            Vector3f world_up_vector;       ///<世界向上量
 			Vector3f local_up_vector;       ///<本地向上量
             Vector3f local_forward_vector;  ///<本地向前量
-			Vector3f world_up_vector;       ///<世界向上量
 		};//struct Camera
 
 		void MakeCameraMatrix(Matrix4f *proj,Matrix4f *mv,const Camera *cam);

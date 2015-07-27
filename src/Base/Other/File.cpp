@@ -630,7 +630,6 @@ namespace hgl
 
 		char *fb;
 
-
 		if(buf)
 			fb=(char *)buf;
 		else
