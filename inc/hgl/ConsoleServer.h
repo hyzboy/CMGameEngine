@@ -11,7 +11,7 @@ namespace hgl
 																									\
 																									HGL_CONSOLE_MAIN_FUNC()\
 																									{	\
-																										sii.info.ProjectName=OS_TEXT(name);	\
+																										sii.info.ProjectName=U8_TEXT(name);	\
 																										sii.info.ProjectCode=OS_TEXT(code);	\
 																										\
 																										if(!app.Init(&sii))	\

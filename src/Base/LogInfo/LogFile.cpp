@@ -1,4 +1,4 @@
-#include<hgl/Logger.h>
+﻿#include<hgl/Logger.h>
 #include<hgl/File.h>
 #include<hgl/Other.h>
 #include<hgl/thread/ThreadMutex.h>
@@ -126,7 +126,7 @@ namespace hgl
 			}
 		};//class LogFile
 
-		Logger *CreateLoggerFile(const UTF8String &pc,LogLevel ll)
+		Logger *CreateLoggerFile(const OSString &pc,LogLevel ll)
 		{
 			if(ll<llError)
 				return(nullptr);

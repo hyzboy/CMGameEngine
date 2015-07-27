@@ -34,7 +34,7 @@
 													HGL_GRAPHICS_MAIN_FUNC()\
 													{	\
 														sii.info.ProjectName=U8_TEXT(name);	\
-														sii.info.ProjectCode=U8_TEXT(code);	\
+														sii.info.ProjectCode=OS_TEXT(code);	\
 														\
 														sii.win.Name=U8_TEXT(name);	\
 														\
