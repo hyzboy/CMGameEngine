@@ -230,8 +230,8 @@ namespace hgl
 	/**
 	* 复制字符串，并指定最大长度
 	* @param dst 目标字符串
+    * @param dst_count 目标字符串最大多少个字符
 	* @param src 源字符串
-	* @param count 最多复制多少个字符
 	*/
 	template<typename T>
 	void strcpy(T *dst,int count,const T *src)
@@ -249,34 +249,36 @@ namespace hgl
             return;
 
 		if(!src||!(*src))
+        {
 			*dst=0;
-		else
-		{
-			while(*src&&count)
-			{
-				*dst=*src;
-				++dst;
-				++src;
-				--count;
-			}
+            return;
+        }
 
-			if(count)
-				*dst=0;
-		}
+        while(*src&&count)
+        {
+            *dst=*src;
+            ++dst;
+            ++src;
+            --count;
+        }
+
+        if(count)
+            *dst=0;
 	}
 
 	/**
 	* 复制字符串，并指定最大长度
 	* @param dst 目标字符串
+    * @param dst_count 目标字符串最大多少个字符
 	* @param src 源字符串
 	* @param count 最多复制多少个字符
 	*/
 	template<typename T>
-	void strcpy(T *dst,const T *src,int count)
+	void strcpy(T *dst,int dst_count,const T *src,int count)
 	{
 		if(!dst)return;
 
-		if(!src||!(*src)||count<=0)
+		if(!src||!(*src)||dst_count<=0||count<=0)
 		{
 			//没什么好复制的
 			*dst=0;
@@ -286,15 +288,16 @@ namespace hgl
         if(dst==src)
             return;
 
-		while(*src&&count)
+		while(*src&&dst_count&&count)
 		{
 			*dst=*src;
 			++dst;
 			++src;
+            --dst_count;
 			--count;
 		}
 
-		if(count)
+		if(dst_count&&count)
 			*dst=0;
 	}
 

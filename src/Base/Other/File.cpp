@@ -843,21 +843,20 @@ namespace hgl
 	* @param func 回调函数
 	* @return 查找到文件数据,-1表示失败
 	*/
-	int EnumFile(const char *folder_name,void *data,bool proc_folder,bool proc_file,bool sub_folder,EnumFileFunc func)
+	int EnumFile(const OSString &folder_name,void *data,bool proc_folder,bool proc_file,bool sub_folder,EnumFileFunc func)
 	{
-		char fullname[HGL_MAX_PATH];
+		OSString fullname;
 		int count=0;
 
 		if(!func)return(-1);
 
-		if(!folder_name||!(*folder_name))
+		if(folder_name.IsEmpty())
         {
-            fullname[0]='.';
-            fullname[1]=0;
+            fullname='.';
         }
 		else
         {
-			strcpy(fullname,HGL_MAX_PATH,folder_name);
+			fullname=folder_name;
         }
 
 		DIR *dir;
@@ -912,7 +911,7 @@ namespace hgl
 
 						strcpy(child_name,HGL_MAX_PATH,folder_name);
 
-						if(folder_name[strlen(folder_name)-1]!=HGL_DIRECTORY_SEPARATOR)
+						if(folder_name.GetEndChar()!=HGL_DIRECTORY_SEPARATOR)
 							strcat(child_name,HGL_MAX_PATH,HGL_DIRECTORY_SEPARATOR);
 
 						const int child_len=strlen(child_name);
@@ -942,7 +941,7 @@ namespace hgl
 			{
 				strcpy(fi.fullname,HGL_MAX_PATH,folder_name);
 
-				if(folder_name[strlen(folder_name)-1]!=HGL_DIRECTORY_SEPARATOR)
+				if(folder_name.GetEndChar()!=HGL_DIRECTORY_SEPARATOR)
 					strcat(fi.fullname,HGL_MAX_PATH,HGL_DIRECTORY_SEPARATOR);
 
 				strcat(fi.fullname,HGL_MAX_PATH,fi.name,HGL_MAX_PATH);

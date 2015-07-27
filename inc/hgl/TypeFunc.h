@@ -110,8 +110,14 @@ namespace hgl
 
 	const int8		HGL_S8_MIN		=(-0x80);
 	const int16		HGL_S16_MIN		=(-0x8000);
+
+#ifdef _MSC_VER
 	const int32		HGL_S32_MIN		=(-0x80000000i32);
-	const int64		HGL_S64_MIN		=(-0x8000000000000000LL);
+    const int64     HGL_S64_MIN     =(-0x8000000000000000i64);
+#else
+    const int32     HGL_S32_MIN     =(-0x80000000L);
+    const int64     HGL_S64_MIN     =(-0x8000000000000000LL);
+#endif//_MSC_VER
 
 	template<typename T> T HGL_INTEGER_MAX();
 	template<typename T> T HGL_INTEGER_MIN();
