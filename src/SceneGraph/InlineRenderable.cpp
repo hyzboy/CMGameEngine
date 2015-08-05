@@ -10,7 +10,9 @@ namespace hgl
 {
 	namespace graph
 	{
-		Texture2D *BlackWhiteGrid		=nullptr;
+		Texture2D *BlackWhiteGrid	    =nullptr;
+        Texture2D *GrayWhiteGrid        =nullptr;
+        Texture2D *BlueWhiteGrid        =nullptr;
 
 		Renderable *SolidCube	=nullptr;
 		Renderable *WireCube	=nullptr;
