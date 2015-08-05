@@ -45,10 +45,13 @@ namespace hgl
                 grid[i]->AutoCreateShader(true);						//自动创建shader
         #endif//_DEBUG
             }
+
+            axis=CreateRenderableAxis(size);
 		}
 
 		PlaneGrid::~PlaneGrid()
 		{
+            delete axis;
 			delete grid[0];
             delete grid[1];
             delete grid[2];
@@ -56,9 +59,14 @@ namespace hgl
 
 		void PlaneGrid::Render(const Matrix4f *proj,const Matrix4f *mv)
 		{
+            OpenDepthTest(true);
+            
 			if(x)DirectRender(grid[0],proj,mv);
             if(y)DirectRender(grid[1],proj,mv);
             if(z)DirectRender(grid[2],proj,mv);
+
+            CloseDepthTest();
+            DirectRender(axis,proj,mv);
 		}
 	}//namespace graph
 }//namespace hgl

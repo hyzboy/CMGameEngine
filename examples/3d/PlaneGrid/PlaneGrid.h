@@ -12,6 +12,7 @@ namespace hgl
 		{
             bool x,y,z;
 			Renderable *grid[3];
+            Renderable *axis;
 
 		public:
 
