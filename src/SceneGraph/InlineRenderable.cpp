@@ -124,6 +124,8 @@ namespace hgl
 			obj->SetVertex(vertex);
 			obj->SetColor(color,HGL_COLOR_RGB);
 
+            obj->AutoCreateShader();
+
 			return(obj);
 		}
 
@@ -379,17 +381,33 @@ namespace hgl
 
 	namespace graph
 	{
-		void CreateBlackWhiteGridTexture()
+		void CreateInlineTexture()
 		{
 			const uint8 black_white_grid[4]={0xFF,0x00,0x00,0xFF};
 
 			BlackWhiteGrid=CreateTexture2D();
 			BlackWhiteGrid->SetImage(2,2,(void *)black_white_grid,4,HGL_SF_R8,HGL_R8);
+
+            const uint8 gray_white_grid[4]={0xFF,0x7F,0x7F,0xFF};
+
+            GrayWhiteGrid=CreateTexture2D();
+            GrayWhiteGrid->SetImage(2,2,(void *)gray_white_grid,4,HGL_SF_R8,HGL_R8);
+
+            const uint8 blue_white_grid[4][3]=
+            {
+                255,255,255,
+                 61,174,233,
+                 61,174,233,
+                255,255,255
+            };
+
+            BlueWhiteGrid=CreateTexture2D();
+            BlueWhiteGrid->SetImage(2,2,(void *)blue_white_grid,4,HGL_SF_RGB8,HGL_RGB8);
 		}
 
 		void InitInlineRenderable()
 		{
-			CreateBlackWhiteGridTexture();
+			CreateInlineTexture();
 
 			SolidCube=CreateRenderableCube();
 			WireCube=CreateRenderableWireCube();
@@ -414,6 +432,8 @@ namespace hgl
 			SAFE_CLEAR(WireCube);
 			SAFE_CLEAR(SolidCube);
 
+            SAFE_CLEAR(BlueWhiteGrid);
+            SAFE_CLEAR(GrayWhiteGrid);
 			SAFE_CLEAR(BlackWhiteGrid);
 		}
 	}//namespace graph

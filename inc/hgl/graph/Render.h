@@ -191,6 +191,8 @@ namespace hgl
 		//位于InlineRenderable.CPP中
 
 		extern Texture2D *BlackWhiteGrid;															///<黑白格贴图
+		extern Texture2D *GrayWhiteGrid;                                                            ///<灰白格贴图
+		extern Texture2D *BlueWhiteGrid;                                                            ///<蓝白格贴图
 
 		extern Renderable *SolidCube;																///<实心立方体
 		extern Renderable *WireCube;																///<白色线框立方体
