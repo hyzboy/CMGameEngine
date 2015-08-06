@@ -13,7 +13,6 @@ namespace hgl
 			"Specular",
 			"Normal",
             "Tangent",
-            "Bitangent",
 			"Light",
 			"Alpha",
 			"Shadow",

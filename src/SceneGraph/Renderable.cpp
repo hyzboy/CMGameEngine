@@ -12,6 +12,7 @@ namespace hgl
 			"Vertex",
 			"Color",
 			"Normal",
+            "Tangent",
 			"SecondColor",
 			"FogCoord",
 
@@ -162,6 +163,7 @@ namespace hgl
 		{
 			if(mtc<mtcDiffuse||mtc>=mtcMax
 			 ||mtc==mtcNormal					//法线贴图不需要指定坐标
+			 ||mtc==mtcTangent                  //切线贴图不需要指定坐标
 			 ||mtc==mtcPalette					//调色板不需要指定坐标
 			 ||mtc==mtcShadow)					//阴影贴图不需要指定坐标
 			 return(false);

@@ -22,6 +22,7 @@ namespace hgl
 			vbtVertex,
 			vbtColor,
 			vbtNormal,
+            vbtTangent,
 			vbtSecondColor,
 			vbtFogCoord,
 
@@ -31,6 +32,7 @@ namespace hgl
 			vbtDiffuseTexCoord,		//漫反射纹理坐标
 			vbtAlphaTexCoord,		//透明度纹理坐标
 			vbtNormalTexCoord,		//法线纹理坐标
+            vbtTangentTexCoord,     //切线纹理坐标
 			vbtAmbientTexCoord,		//环境光颜色纹理坐标
 			vbtSpecularTexCoord,	//镜面光颜色纹理坐标
 

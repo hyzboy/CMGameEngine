@@ -22,8 +22,7 @@ namespace hgl
 			mtcAmbient,					///<环境光
 			mtcSpecular,				///<镜面光
 			mtcNormal,					///<法线
-            mtcTangents,                ///<切线
-            mtcBitangents,              ///<双切线
+            mtcTangent,                 ///<切线
 			mtcLight,					///<光照贴图
 			mtcAlpha,					///<透明度贴图
 			mtcShadow,					///<阴影
