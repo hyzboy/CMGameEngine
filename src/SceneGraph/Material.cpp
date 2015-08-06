@@ -12,6 +12,8 @@ namespace hgl
 			"Ambient",
 			"Specular",
 			"Normal",
+            "Tangent",
+            "Bitangent",
 			"Light",
 			"Alpha",
 			"Shadow",
