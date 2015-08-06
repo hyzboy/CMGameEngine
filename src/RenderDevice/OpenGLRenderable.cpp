@@ -200,9 +200,11 @@ namespace hgl
 
 			state.vertex_normal			=GetVertexBuffer(vbtNormal);
 			state.vertex_color			=GetVertexBuffer(vbtColor);
+            state.vertex_tangent        =GetVertexBuffer(vbtTangent);
 
 			state.diffuse_map			=GetTexCoord(mtcDiffuse);
 			state.normal_map			=GetTexCoord(mtcNormal);
+            state.tangent_map           =GetTexCoord(mtcTangent);
 
 			state.color_material		=material->GetColorMaterial();
 			state.alpha_test			=material->GetAlphaTest()>0;

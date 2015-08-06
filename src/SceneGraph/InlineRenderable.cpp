@@ -194,9 +194,12 @@ namespace hgl
 
 		/**
 		* 创建一个立方体的可渲染数据
+        * @param use_normal 是否使用法线数据(默认不使用)
+        * @param use_tangent 是否使用切线数据(默认不使用)
+        * @param tex_coord_vbt 纹理坐标数据所对应的顶点缓冲区类型(默认不使用)
 		* @return 可渲染数据
 		*/
-		Renderable *CreateRenderableCube()
+		Renderable *CreateRenderableCube(bool use_normal,bool use_tangent,const VertexBufferType tex_coord_vbt)
 		{								// Points of a cube.
 			/*     4            5 */	const float points[]={	-0.5f, -0.5f, -0.5f,	-0.5f, -0.5f, +0.5f,	+0.5f, -0.5f, +0.5f,	+0.5f, -0.5f, -0.5f,	-0.5f, +0.5f, -0.5f,	-0.5f, +0.5f, +0.5f,
 			/* 	   *------------* */							+0.5f, +0.5f, +0.5f,	+0.5f, +0.5f, -0.5f,	-0.5f, -0.5f, -0.5f,	-0.5f, +0.5f, -0.5f,	+0.5f, +0.5f, -0.5f,	+0.5f, -0.5f, -0.5f,
@@ -210,6 +213,14 @@ namespace hgl
 			/*  |/          2|/	  */	// The associated indices.
 			/* 3*------------*	  */	const uint indices[]={	0,	2,	1,	0,	3,	2,	4,	5,	6,	4,	6,	7,	8,	9,	10,	8,	10,	11, 12,	15,	14,	12,	14,	13, 16,	17,	18,	16,	18,	19, 20,	23,	22,	20,	22,	21	};
 
+            const float tangents[] = {  +1.0f, 0.0f, 0.0f, +1.0f, 0.0f, 0.0f, +1.0f, 0.0f, 0.0f, +1.0f, 0.0f, 0.0f, +1.0f, 0.0f, 0.0f, +1.0f, 0.0f, 0.0f, +1.0f, 0.0f, 0.0f, +1.0f, 0.0f, 0.0f,
+                                        -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, +1.0f, 0.0f, 0.0f, +1.0f, 0.0f, 0.0f, +1.0f, 0.0f, 0.0f, +1.0f, 0.0f, 0.0f,
+                                        0.0f, 0.0f, +1.0f, 0.0f, 0.0f, +1.0f, 0.0f, 0.0f, +1.0f, 0.0f, 0.0f, +1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f };
+
+            const float tex_coords[] ={ 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+                                        1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+                                        0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f };
+
 			Renderable *obj=CreateRenderable();
 			Material *mtl=CreateMaterial();
 
@@ -219,8 +230,12 @@ namespace hgl
 			obj->SetPrimitive(HGL_PRIM_TRIANGLES);	//设置为画三角形
 
 			obj->SetVertex(new VB3f(24,points));
-			obj->SetNormal(new VB3f(24,normals));
-			obj->SetIndex(new VB1ui(6*2*3,indices));
+
+            if(use_normal)              obj->SetNormal(new VB3f(24,normals));
+            if(use_tangent)             obj->SetTangents(new VB3f(24,tangents));
+            if(tex_coord_vbt!=vbtNone)  obj->SetVertexBuffer(tex_coord_vbt,new VB2f(24,tex_coords));
+
+            obj->SetIndex(new VB1ui(6*2*3,indices));
 
 			return(obj);
 		}
@@ -411,7 +426,7 @@ namespace hgl
 		{
 			CreateInlineTexture();
 
-			SolidCube=CreateRenderableCube();
+			SolidCube=CreateRenderableCube(false,false,vbtNone);
 			WireCube=CreateRenderableWireCube();
 
 			SolidRect=CreateRenderableRect();

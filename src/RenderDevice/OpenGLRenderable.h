@@ -15,9 +15,11 @@ namespace hgl
 
 			bool vertex_color;			//是否包含顶点颜色
 			bool vertex_normal;			//是否包含顶点法线
+			bool vertex_tangent;        //是否包含顶点切线
 
 			bool diffuse_map;			//是否包含漫反射贴图
 			bool normal_map;			//是否包含法线贴图
+			bool tangent_map;           //是否包含切线贴图
 
 			bool color_material;		//是否包含颜色材质
 			bool alpha_test;			//是否使用Alpha测试

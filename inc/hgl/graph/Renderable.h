@@ -15,8 +15,10 @@ namespace hgl
 		/**
 		* 顶点缓冲区类型描述
 		*/
-		enum VertexBufferType:uint
+		enum VertexBufferType:int
 		{
+            vbtNone=-1,
+
 			vbtIndex=0,
 
 			vbtVertex,
@@ -188,6 +190,7 @@ namespace hgl
 				return(true);
 			}
 			virtual bool						SetNormal			(VertexBufferBase *vb){return SetVertexBuffer(vbtNormal,vb);}			///<设置渲染顶点法线数据
+			virtual bool                        SetTangents         (VertexBufferBase *vb){return SetVertexBuffer(vbtTangent,vb);}          ///<设置渲染顶点切线数据
 			virtual bool						SetSecondColor		(VertexBufferBase *vb){return SetVertexBuffer(vbtSecondColor,vb);}		///<设置顶点第二颜色数据
 			virtual bool						SetFogCoord			(VertexBufferBase *vb){return SetVertexBuffer(vbtFogCoord,vb);}			///<设置顶点雾数据
 		};//class Renderable

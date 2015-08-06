@@ -22,6 +22,7 @@ namespace hgl
 			"TexCoord_Diffuse",
 			"TexCoord_Alpha",
 			"TexCoord_Normal",
+            "TexCoord_Tangent",
 			"TexCoord_Ambient",
 			"TexCoord_Specular",
 
