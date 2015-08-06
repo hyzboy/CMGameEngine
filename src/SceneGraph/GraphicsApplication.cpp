@@ -281,7 +281,7 @@ namespace hgl
                 {
                     glDebugMessageCallbackARB(opengl_debug_message::OpenGLDebugProc,nullptr);
 
-                     glDebugMessageControlARB(GL_DEBUG_SOURCE_API_ARB, GL_DEBUG_TYPE_OTHER_ARB, GL_DEBUG_SEVERITY_NOTIFICATION, 0,nullptr,GL_FALSE);
+                    glDebugMessageControlARB(GL_DEBUG_SOURCE_API_ARB, GL_DEBUG_TYPE_OTHER_ARB, GL_DEBUG_SEVERITY_NOTIFICATION, 0,nullptr,GL_FALSE);
                 }
                 else
                 if(GLEW_AMD_debug_output)

@@ -103,6 +103,15 @@ namespace hgl
 			return(true);
 		}
 
+		bool BindTextures(int first_active,int count,unsigned int *texture_index)
+        {
+            if(count<=0||!texture_index)
+                return(false);
+
+            glBindTextures(first_active,count,texture_index);
+            return(true);
+        }
+
 		namespace OpenGLCore
 		{
 			void InitTexture()
