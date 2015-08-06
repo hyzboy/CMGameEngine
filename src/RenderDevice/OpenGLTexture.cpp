@@ -169,8 +169,6 @@ namespace hgl
 
 			const bool gen_mip=ltp&ltGenMipmaps;			//取得是否创建mipmaps
 
-			glGetError();			//清除错误
-
 			#ifndef HGL_OPENGL_USE_DSA
 				BindTexture(0,GL_TEXTURE_2D,index);				//4.5之后提交纹理不用bind
 			#endif//HGL_OPENGL_USE_DSA
@@ -191,13 +189,6 @@ namespace hgl
 			#else
 				glTexImage2D(GL_TEXTURE_2D,0,vf,w,h,0,sfmt->format,sfmt->type,data);
 			#endif//HGL_OPENGL_USE_DSA
-			}
-
-			const GLenum gl_error=glGetError();
-			if(gl_error!=GL_NO_ERROR)
-			{
-				LOG_ERROR(OS_TEXT("创建贴图出错,GL_ERROR=")+OSString(gl_error));
-				return(false);
 			}
 
 			if(gen_mip)
