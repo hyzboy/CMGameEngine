@@ -61,7 +61,12 @@ namespace hgl
 				graphics.gl.minor=5;
 #endif//HGL_OPENGL_USE_DSA
 
+#ifdef _DEBUG
+                graphics.gl.debug=true;
+#else
 				graphics.gl.debug=false;
+#endif//_DEBUG
+
 				graphics.gl.opengl_es=false;
 			}
 
