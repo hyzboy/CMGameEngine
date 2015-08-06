@@ -59,13 +59,13 @@ namespace hgl
 
 		void PlaneGrid::Render(const Matrix4f *proj,const Matrix4f *mv)
 		{
-            OpenDepthTest(true);
-            
+            OpenDepthTest(HGL_DEPTH_GREATER);
+
 			if(x)DirectRender(grid[0],proj,mv);
             if(y)DirectRender(grid[1],proj,mv);
             if(z)DirectRender(grid[2],proj,mv);
 
-            CloseDepthTest();
+            OpenDepthTest(HGL_DEPTH_ALWAYS);
             DirectRender(axis,proj,mv);
 		}
 	}//namespace graph

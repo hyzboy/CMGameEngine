@@ -39,7 +39,7 @@ namespace hgl
             "Undefined Behavior",
             "Portability",
             "Performance",
-            "Other"
+            "Other",
             "Marker",
             "Push Group",
             "Pop Group",
@@ -270,17 +270,26 @@ namespace hgl
 
             if(_sii->graphics.gl.debug)     //如果是OpenGL调试模式
             {
-                if(GLEW_VERSION_4_3)
+                if(GLEW_VERSION_4_3||GLEW_KHR_debug)
+                {
                     glDebugMessageCallback(opengl_debug_message::OpenGLDebugProc,nullptr);
+
+                    glDebugMessageControl(GL_DEBUG_SOURCE_API, GL_DEBUG_TYPE_OTHER, GL_DEBUG_SEVERITY_NOTIFICATION, 0,nullptr,GL_FALSE);
+                }
                 else
                 if(GLEW_ARB_debug_output)
+                {
                     glDebugMessageCallbackARB(opengl_debug_message::OpenGLDebugProc,nullptr);
-                else
-                if(GLEW_KHR_debug)
-                    glDebugMessageCallback(opengl_debug_message::OpenGLDebugProc,nullptr);
+
+                     glDebugMessageControlARB(GL_DEBUG_SOURCE_API_ARB, GL_DEBUG_TYPE_OTHER_ARB, GL_DEBUG_SEVERITY_NOTIFICATION, 0,nullptr,GL_FALSE);
+                }
                 else
                 if(GLEW_AMD_debug_output)
+                {
                     glDebugMessageCallbackAMD(opengl_debug_message_amd::OpenGLDebugProc,nullptr);
+
+                    glDebugMessageEnableAMD(GL_DEBUG_CATEGORY_API_ERROR_AMD, GL_DEBUG_LOGGED_MESSAGES_AMD, 0,nullptr,GL_FALSE);
+                }
             }
 
 			graph::InitRender();
