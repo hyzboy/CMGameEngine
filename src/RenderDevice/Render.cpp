@@ -31,7 +31,6 @@ namespace hgl
 
 		void InitVertexBuffer();	//初始化顶点缓冲区
 		bool BindTexture(int active,unsigned int type,unsigned int index);
-		bool DisableTexture(int active);
 		void InitShaderStorage();
 		void ClearShaderStorage();
 // 		void InitFontStorage();
@@ -208,10 +207,6 @@ namespace hgl
 					tex_count++;
 				}
 			}
-
-			//关闭其它通道的贴图
-			for(int i=tex_count;i<HGL_MAX_TEXTURE_UNITS;i++)
-				DisableTexture(i);
 
 			return(true);
 		}

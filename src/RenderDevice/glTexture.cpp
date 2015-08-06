@@ -93,41 +93,12 @@ namespace hgl
 				}
 
 				if(texture_state_format[active]!=type)					//如果格式和之前不一样
-				{
-					if(texture_state_format[active])					//如果之前有另一个格式
-						glDisable(texture_state_format[active]);		//解除旧的贴图格式
-
-					glEnable(type);										//开启新的格式
-					texture_state_format[active]=type;
-				}
+                    texture_state_format[active]=type;
 
 				glBindTexture(type,index);
 #endif//HGL_OPENGL_USE_DSA
 
 			texture_index[active]=index;
-
-			return(true);
-		}
-
-		/**
-		* 关闭贴图
-		* @param active 活动贴图编号
-		*/
-		bool DisableTexture(int active)
-		{
-			if(active<0||active>=HGL_MAX_TEXTURE_UNITS)return(false);
-
-			if(texture_state_format[active]==0)return(true);		//本身就没开启
-
-			if(current_active_texture!=active)						//如果活动贴图编号不一致
-			{
-				glActiveTexture(GL_TEXTURE0+active);				//切换活动贴图
-
-				current_active_texture=active;
-			}
-
-			glDisable(texture_state_format[active]);
-			texture_state_format[active]=0;
 
 			return(true);
 		}
