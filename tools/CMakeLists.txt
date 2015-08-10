@@ -8,3 +8,7 @@ add_subdirectory(TextExchange)
 IF(BUILD_GUI_TOOLS)
 	add_subdirectory(CDBTableViewer)
 ENDIF()
+
+IF(BUILD_OPENGL_LIB)
+    add_subdirectory(TexConv)
+ENDIF()

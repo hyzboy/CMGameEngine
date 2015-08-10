@@ -251,9 +251,9 @@
 	#error Property,PropertyRead,PropertyWrite 其中之一已经定义
 #endif//
 
-#ifndef UNICODE
-	#define UNICODE                     //定义使用UNICODE编码
-#endif//UNICODE
+// #ifndef UNICODE
+// 	#define UNICODE                     //定义使用UNICODE编码
+// #endif//UNICODE
 
 #if HGL_OS == HGL_OS_Windows
 

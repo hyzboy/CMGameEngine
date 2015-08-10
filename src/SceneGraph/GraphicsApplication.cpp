@@ -333,6 +333,11 @@ namespace hgl
 // 			SetPointer(hfpFlow,fo);
 		}
 
+        void GraphicsApplication::SwapBuffer()
+        {
+            glfwSwapBuffers(glfw_win);              //交换缓冲区
+        }
+
 		void GraphicsApplication::WaitActive()
 		{
 			if(wait_active)
@@ -365,7 +370,7 @@ namespace hgl
 						flow->Draw(&mv);						//调用流程绘制代码
 						flow->ProcCurState();					//处理流程状态
 
-						glfwSwapBuffers(glfw_win);				//交换缓冲区
+                        SwapBuffer();                           //交换缓冲区
 					}
 				}
 				else

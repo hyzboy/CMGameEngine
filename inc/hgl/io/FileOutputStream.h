@@ -56,6 +56,11 @@ namespace hgl
 
 		public:
 
+            OpenFileOutputStream()
+            {
+                fos=nullptr;
+            }
+
 			/**
 			 * 打开一个文件输出流构造函数
 			 * @param filename 文件名
@@ -71,7 +76,7 @@ namespace hgl
 
 			~OpenFileOutputStream()
 			{
-				if(fos)delete fos;
+				SAFE_CLEAR(fos);
 			}
 
 			operator FileOutputStream *(){return fos;}

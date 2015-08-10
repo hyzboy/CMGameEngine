@@ -23,9 +23,6 @@ namespace hgl
 
 			#include<hgl/object/Object.ProcEvent.h>
 
-			virtual void ProcResize(int,int);
-			virtual bool ProcClose();
-
 		protected:
 
 			FlowControl *flow;                                                       					///<流程控制器
@@ -36,7 +33,6 @@ namespace hgl
 			double interval_time;
 
 		protected:
-
 
 			virtual void ProcActiveObject(FlowObject *);
 
@@ -56,6 +52,9 @@ namespace hgl
 
 		public:	//事件
 
+            virtual bool ProcClose();
+            virtual void ProcResize(int,int);
+
 			DefEvent(void,OnResize,(int,int));															///<窗口大小被调整了
 			DefEvent(bool,OnClose,());																	///<窗口被关闭了
 
@@ -72,9 +71,10 @@ namespace hgl
 
 			virtual void ExitGame(){if(flow)flow->ExitGame();}											///<退出游戏
 
+            virtual void SwapBuffer();                                                                  ///<刷新一帧
 			virtual void WaitActive();																	///<等待活动
 
-	//		virtual bool ToMinimize();																	///<窗口最小化(全屏模式无效)
+    //		virtual bool ToMinimize();																	///<窗口最小化(全屏模式无效)
 	//		virtual bool ToMaximize();																	///<窗口最大化(全屏模式无效)
 		};//GraphicsApplication
 	}//namespace graph

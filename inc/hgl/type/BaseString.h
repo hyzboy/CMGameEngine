@@ -532,7 +532,7 @@ namespace hgl
 				return bs.Length();
 			}
 
-			if(bs.Length<=0)
+			if(bs.Length()<=0)
 				return 1;
 
 			return data->Comp(bs.data->c_str(),num);

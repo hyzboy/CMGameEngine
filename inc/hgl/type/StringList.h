@@ -32,7 +32,7 @@ namespace hgl
 		{
 			Clear();
 
-			const int n=sl.Count;
+			const int n=sl.GetCount();
 
 			for(int i=0;i<n;i++)
 				Add(new T(sl[i]));
@@ -111,7 +111,7 @@ namespace hgl
 
 		/**
 		* 查找字符串
-		* @param str 要指找的字符串
+		* @param str 要查找的字符串
 		* @return 查找到的字符串的索引,未找到返回-1
 		*/
 		int  Find(const T &str) const																///<查找字符串,未找到返回-1
@@ -140,6 +140,40 @@ namespace hgl
 
 			return(-1);
 		}
+
+		/**
+        * 查找字符串，并指定最大比较长度
+        * @param str 要查找的字符串
+        * @param cn 限定的要查找字符串的最大长度
+        * @return 查找到的字符串的索引,未找到返回-1
+        */
+        int  Find(const T &str,const int cn) const                                                               ///<查找字符串,未找到返回-1
+        {
+            const int count=Items.GetCount();
+
+            for(int i=0;i<count;i++)
+                if(Items[i]->Comp(str,cn)==0)
+                    return(i);
+
+            return(-1);
+        }
+
+        /**
+        * 查找字符串,英文无视大小写，并指定最大比较长度
+        * @param str 要指找的字符串
+        * @param cn 限定的要查找字符串的最大长度
+        * @return 查找到的字符串的索引,未找到返回-1
+        */
+        int  CaseFind(const T &str,const int cn) const                                                           ///<查找字符串,英文无视大小写,未找到返回-1
+        {
+            const int count=Items.GetCount();
+
+            for(int i=0;i<count;i++)
+                if(Items[i]->CaseComp(str,cn)==0)
+                    return(i);
+
+            return(-1);
+        }
 
 		/**
 		* 在指定位置插入一个字符串

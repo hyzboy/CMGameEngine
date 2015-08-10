@@ -70,6 +70,7 @@ SET(ut_files
 	TaskManager/TaskManager.cpp
 	Timer/Timer.cpp
 	XML/XMLParse.cpp
+	Parse/CmdParse.cpp
 )
 
 SET(CDB_FILES

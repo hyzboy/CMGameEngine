@@ -875,25 +875,26 @@ namespace hgl
 	* 给一个文件名更改扩展名
 	* @param old_filename 原始文件名称
 	* @param new_filename 新文件名称
+    * @param max_len 文件名最大长度以
 	* @param new_extname 新扩展名(不带.)
 	*/
 	template<typename T>
-	void replace_extname(const T *old_filename,T *new_filename,const T *new_extname)
+	void replace_extname(const T *old_filename,T *new_filename,int max_len,const T *new_extname)
 	{
 		const T *p=strrchr(old_filename,'.');
 
 		if(p)
 		{
-			strcpy(new_filename,old_filename,p-old_filename+1);
-			strcpy(new_filename+(p-old_filename+1),new_extname);
+			strcpy(new_filename,max_len,old_filename,p-old_filename+1);
+			strcpy(new_filename+(p-old_filename+1),max_len,new_extname);
 		}
 		else
 		{
 			const int l=strlen(old_filename);
 
-			strcpy(new_filename,old_filename,l);
+			strcpy(new_filename,max_len,old_filename,l);
 			new_filename[l]='.';
-			strcpy(new_filename+l+1,new_extname);
+			strcpy(new_filename+l+1,max_len-1,new_extname);
 		}
 	}
 
