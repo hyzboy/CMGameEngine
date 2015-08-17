@@ -7,9 +7,9 @@ namespace hgl
 	namespace graph
 	{
 		//贴图数量
-			  int	HGL_MAX_TEXTURE_UNITS			=1;							//最大贴图数量
-			  int	HGL_MAX_TEXTURE_SIZE			=256;						//最大贴图尺寸
-			  int	HGL_MAX_CUBE_MAP_TEXTURE_SIZE	=256;						//最大CubeMap贴图尺寸
+        int	HGL_MAX_TEXTURE_UNITS			=1;							//最大贴图数量
+        int	HGL_MAX_TEXTURE_SIZE			=256;						//最大贴图尺寸
+        int	HGL_MAX_CUBE_MAP_TEXTURE_SIZE	=256;						//最大CubeMap贴图尺寸
 
 		namespace
 		{

@@ -53,7 +53,6 @@ private:
 			mtl->SetColorMaterial(true);		//使用Material中的颜色
 			mtl->SetColor(r,g,b,1.0);
 		}
-
 		return(obj);
 	}
 

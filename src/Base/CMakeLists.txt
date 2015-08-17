@@ -26,7 +26,8 @@ SET(BASE_OTHER_SOURCE
 
 IF(UNIX)
 	SET(BASE_OTHER_SOURCE ${BASE_OTHER_SOURCE}	Other/TimePOSIX.cpp
-												Other/MemoryPool.cpp)
+												Other/MemoryPool.cpp
+												Other/ExitUnix.cpp)
 ENDIF(UNIX)
 
 SOURCE_GROUP("Other"				FILES ${BASE_OTHER_SOURCE})

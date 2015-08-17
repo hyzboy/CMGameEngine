@@ -23,8 +23,8 @@ namespace hgl
 		{
 			graphics.FPS=60;
 
-			graphics.Width=640;
-			graphics.Height=480;
+			graphics.Width=1280;
+			graphics.Height=720;
 
 			graphics.Bit=32;
 			graphics.VSync=75;
@@ -32,8 +32,8 @@ namespace hgl
 			graphics.FullScreen=false;
 
 			{
-				graphics.safe.Width=640;
-				graphics.safe.Height=480;
+				graphics.safe.Width=1280;
+				graphics.safe.Height=720;
 			}
 
 			{
