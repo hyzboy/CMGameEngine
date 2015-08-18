@@ -155,6 +155,29 @@ namespace hgl
 		weekEnd
 	};
 
+    /**
+     * 月份枚举
+     */
+    enum Month
+    {
+        monthNone=0,
+
+        monthJanuary,   ///<一月
+        monthFebruary,  ///<二月
+        monthMarch,     ///<三月
+        monthApril,     ///<四月
+        monthMay,       ///<五月
+        monthJune,      ///<六月
+        monthJuly,      ///<七月
+        monthAugust,    ///<八月
+        monthSeptember, ///<九月
+        monthOctober,   ///<十月
+        monthNovember,  ///<十一月
+        monthDecember,  ///<十二月
+
+        monthEnd
+    };
+
 	#define	HGL_TIME_ONE_SECOND		1
 	#define	HGL_TIME_HALF_MINUTE	30
 	#define	HGL_TIME_ONE_MINUTE		60
