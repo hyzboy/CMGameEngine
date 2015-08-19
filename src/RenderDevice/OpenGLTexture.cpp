@@ -183,11 +183,27 @@ namespace hgl
 			}
 			else					//正常非压缩格式
 			{
-			#ifdef HGL_OPENGL_USE_DSA
-				glTextureStorage2D(index,1,vf,w,h);
-				glTextureSubImage2D(index,0,0,0,w,h,sfmt->format,sfmt->type,data);
-			#else
-				glTexImage2D(GL_TEXTURE_2D,0,vf,w,h,0,sfmt->format,sfmt->type,data);
+#ifdef HGL_OPENGL_USE_DSA
+				glTextureStorage2D(index, 1, vf, w, h);
+				glTextureSubImage2D(index, 0, 0, 0, w, h, sfmt->format, sfmt->type, data);
+#else
+				if (use_pbo)
+				{
+					glGenBuffers(1, &pbo);
+					glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo);
+//					glBufferData(GL_PIXEL_UNPACK_BUFFER, w*h*sfmt->source_bytes, 0, GL_STREAM_DRAW);
+
+//					void *ptr = glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY);
+//					memcpy(ptr, w*h*sfmt->source_bytes, data);
+//					glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
+					glBufferDATA(GL_PIXEL_UNPACK_BUFFER, w*h*sfmt->source_bytes, data, GL_STREAM_DRAW);		//此句与上面的对应，是不是可以这么用，有待测试
+
+					glTexImage2D(GL_TEXTURE_2D, 0, vf, w, h, 0, sfmt->format, sfmt->type, nullptr);
+				}
+				else
+				{
+					glTexImage2D(GL_TEXTURE_2D, 0, vf, w, h, 0, sfmt->format, sfmt->type, data);
+				}
 			#endif//HGL_OPENGL_USE_DSA
 			}
 
