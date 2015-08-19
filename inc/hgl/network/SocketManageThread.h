@@ -13,10 +13,10 @@ namespace hgl
 	namespace network
 	{
 		class Socket;
-		class SocketManageBase;
+		class OnewaySocketManageBase;
 
-		SocketManageBase *CreateRecvSocketManage(int max_user);										///<创建一个只处理读取的Socket管理器
-		SocketManageBase *CreateSendSocketManage(int max_user);										///<创建一个只处理发送的Socket管理器
+		OnewaySocketManageBase *CreateRecvSocketManage(int max_user);										///<创建一个只处理读取的Socket管理器
+		OnewaySocketManageBase *CreateSendSocketManage(int max_user);										///<创建一个只处理发送的Socket管理器
 
 		/**
 		 * Socket管理线程
@@ -25,7 +25,7 @@ namespace hgl
 		{
 		protected:
 
-			SocketManageBase *sock_manage;															///<Socket管理器
+			OnewaySocketManageBase *sock_manage;															///<Socket管理器
 
 			ThreadMutexObject<Map<int,IOSocket *>> sock_set;										///<Socket合集
 

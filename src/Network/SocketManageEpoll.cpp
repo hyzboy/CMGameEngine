@@ -11,15 +11,18 @@ namespace hgl
 	{
 		namespace
 		{
-			class SocketManageBaseEpoll:public SocketManageBase
+            template<typename SMB,uint EVENT> class SocketManageEpoll:public SMB
 			{
-				int					epoll_fd;
-				epoll_event *		event_list;
+            private:
 
-				uint				event;
+				int					epoll_fd;
 
 				int					max_connect;
 				int					cur_count;
+
+            protected:
+
+                epoll_event *       event_list;
 
 			private:
 
@@ -30,7 +33,7 @@ namespace hgl
 					memset(&ev,0,sizeof(epoll_event));
 
 					ev.data.fd=	sock;
-					ev.events=	event		//要处理的事件
+					ev.events=	EVENT       //要处理的事件
 								|EPOLLET	//边缘模式(即读/写时，需要一直读/写直到出错为止；相对LT模式是只要有数据就会一直通知)
 								|EPOLLERR	//出错
 								|EPOLLRDHUP	//对方挂断
@@ -49,7 +52,7 @@ namespace hgl
 
 			public:
 
-				SocketManageBaseEpoll(int mc,int epfd,uint ev)
+				SocketManageEpoll(int mc,int epfd)
 				{
 					cur_count=0;
 					max_connect=mc;
@@ -57,11 +60,9 @@ namespace hgl
 					epoll_fd=epfd;
 
 					event_list=new epoll_event[max_connect];
-
-					event=ev;
 				}
 
-				~SocketManageBaseEpoll()
+				SocketManageEpoll()
 				{
 					delete[] event_list;
 
@@ -178,10 +179,17 @@ namespace hgl
 
 					return num;
 				}
+            };//class SocketManageEpoll
+
+            template<uint EVENT> class OnewaySocketManageEpoll:public SocketManageEpoll<OnewaySocketManageBase,EVENT>
+            {
+            public:
+
+                using SocketManageEpoll<OnewaySocketManageBase,EVENT>::SocketManageEpoll;
 
 				int Update(List<SocketEvent> &sock_list,List<SocketEvent> &error_list,double time_out)
 				{
-					const int num=Update(time_out);
+					const int num=SocketManageEpoll<OnewaySocketManageBase,EVENT>::Update(time_out);
 
 					if(num<=0)
 						return num;
@@ -189,7 +197,7 @@ namespace hgl
 					sock_list.SetCount(num);
 					error_list.SetCount(num);
 
-					epoll_event *ee=event_list;
+					epoll_event *ee=this->event_list;
 
 					SocketEvent *sp=sock_list.GetData();
 					SocketEvent *ep=error_list.GetData();
@@ -211,7 +219,7 @@ namespace hgl
 							++error_num;
 						}
 						else
-						if(ee->events&event)				//有事件了
+						if(ee->events&EVENT)				//有事件了
 						{
 							sp->sock=ee->data.fd;
 							sp->size=-1;
@@ -227,10 +235,17 @@ namespace hgl
 
 					return(num);
 				}
+            };//class OnewaySocketManageEpoll
+
+            class TwowaySocketManageEpoll:public SocketManageEpoll<TwowaySocketManageBase,EPOLLIN|EPOLLOUT>
+            {
+            public:
+
+                using SocketManageEpoll<TwowaySocketManageBase,EPOLLIN|EPOLLOUT>::SocketManageEpoll;
 
 				int Update(List<SocketEvent> &recv_list,List<SocketEvent> &send_list,List<SocketEvent> &error_list,double time_out)
 				{
-					const int num=Update(time_out);
+					const int num=SocketManageEpoll<TwowaySocketManageBase,EPOLLIN|EPOLLOUT>::Update(time_out);
 
 					if(num<=0)
 						return num;
@@ -239,7 +254,7 @@ namespace hgl
 					send_list.SetCount(num);
 					error_list.SetCount(num);
 
-					epoll_event *ee=event_list;
+					epoll_event *ee=this->event_list;
 
 					SocketEvent *rp=recv_list.GetData();
 					SocketEvent *sp=send_list.GetData();
@@ -288,9 +303,10 @@ namespace hgl
 
 					return(num);
 				}
-			};//class SocketManageBaseEpoll
+			};//class class TwowaySocketManageEpoll
 
-			SocketManageBase *CreateSocketManageBaseEpoll(int max_user,uint event)
+			template<typename SMB>
+			SMB *CreateSocketManageBaseEpoll(int max_user)
 			{
 				int epoll_fd=epoll_create(max_user);
 
@@ -300,23 +316,23 @@ namespace hgl
 					return(nullptr);
 				}
 
-				return(new SocketManageBaseEpoll(max_user,epoll_fd,event));
+				return(new SMB(max_user,epoll_fd));
 			}
 		}//namespace
 
-		SocketManageBase *CreateRecvSocketManage(int max_user)
+		OnewaySocketManageBase *CreateRecvSocketManage(int max_user)
 		{
-			return CreateSocketManageBaseEpoll(max_user,EPOLLIN);
+			return CreateSocketManageBaseEpoll<OnewaySocketManageEpoll<EPOLLIN>>(max_user);
 		}
 
-		SocketManageBase *CreateSendSocketManage(int max_user)
+		OnewaySocketManageBase *CreateSendSocketManage(int max_user)
 		{
-			return CreateSocketManageBaseEpoll(max_user,EPOLLOUT);
+			return CreateSocketManageBaseEpoll<OnewaySocketManageEpoll<EPOLLOUT>>(max_user);
 		}
 
-		SocketManageBase *CreateSocketManage(int max_user)
+		TwowaySocketManageBase *CreateSocketManage(int max_user)
 		{
-			return CreateSocketManageBaseEpoll(max_user,EPOLLIN|EPOLLOUT);
+			return CreateSocketManageBaseEpoll<TwowaySocketManageEpoll>(max_user);
 		}
 	}//namespace network
 }//namespace hgl

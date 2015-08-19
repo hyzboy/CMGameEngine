@@ -82,25 +82,25 @@
 	#define enum_uint(name)	enum name:uint
 #endif//GCC 4.6
 
-#ifdef HGL_CPP11
-	#if (__GNUC__>4)||(__GNUC__==4&&__GNUC_MINOR__>6)
+// #ifdef HGL_CPP11
+// 	#if (__GNUC__>4)||(__GNUC__==4&&__GNUC_MINOR__>6)
 // 	#define HGL_ATOMIC_CPP11					//C++11原子模板
 	#define HGL_VARIADIC_TEMPLATES				//变长参数模板
 	#define HGL_INITIALIZER_LIST				//初始化列表
-	#endif//GCC 4.7
+// 	#endif//GCC 4.7
 
-	#if (__GNUC__<4)||(__GNUC__==4&&__GNUC_MINOR__<8)
-		#define HGL_DEFAULT_MEMFUNC		{}
-		#define HGL_OVERRIDE
-	#else
+// 	#if (__GNUC__<4)||(__GNUC__==4&&__GNUC_MINOR__<8)
+// 		#define HGL_DEFAULT_MEMFUNC		{}
+// 		#define HGL_OVERRIDE
+// 	#else
 		#define HGL_CONSTRUCTION_REUSE			//构造函数复用
 		#define HGL_DEFAULT_MEMFUNC 	=default
 		#define HGL_OVERRIDE			override
-	#endif//GCC 4.8
-#else
-	#define HGL_DEFAULT_MEMFUNC			{}
-	#define HGL_OVERRIDE
-#endif//C++11
+// 	#endif//GCC 4.8
+// #else
+// 	#define HGL_DEFAULT_MEMFUNC			{}
+// 	#define HGL_OVERRIDE
+// #endif//C++11
 
 #define HGL_CPP11_INT128
 #define HGL_FORCE_INLINE __inline __attribute__ ((always_inline))
