@@ -38,7 +38,7 @@ namespace hgl
 
 		const	int		GetCount()const{return data_list.GetCount();}								///<取得数据总量
 
-		IDItem *		Add(const F &,const T &);													///<添加一个数据
+		IDItem *		Add(const F &,const T &);													///<添加一个数据，数果索引已存在，返回nullptr
 				T &  	Add(const F &);																///<添加一个数据
 				void    Add(IDItem *);																///<添加一个数据
 				bool	FindPos(const F &,int &)const;												///<查找数据如果插入后，会所在的位置，返回是否存在这个数据

@@ -167,7 +167,8 @@ namespace hgl
 
 		int pos;
 
-		FindPos(flag,pos);
+        if(FindPos(flag,pos))
+            return(nullptr);
 
         data_list.Insert(pos,ds);
 

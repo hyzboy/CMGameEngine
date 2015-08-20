@@ -25,7 +25,7 @@ namespace hgl
 		{
 		protected:
 
-			OnewaySocketManageBase *sock_manage;															///<Socket管理器
+			OnewaySocketManageBase *sock_manage;													///<Socket管理器
 
 			ThreadMutexObject<Map<int,IOSocket *>> sock_set;										///<Socket合集
 
@@ -55,7 +55,7 @@ namespace hgl
 
 			virtual bool Execute()HGL_OVERRIDE;														///<本线程刷新函数
 
-			virtual bool ProcStartThread()HGL_OVERRIDE=0;
+			virtual bool ProcStartThread()=0;
 			virtual void ProcError(IOSocket **,const int)=0;										///<处理错误Socket列表函数
 			virtual bool ProcEvent(IOSocket *,int)=0;												///<处理事件Socket列表函数(需使用者自行重载处理)
 
@@ -80,19 +80,19 @@ namespace hgl
 
 			RecvSocketManageThread(int _max_user):SocketManageThread(),max_user(_max_user){}
 
-			virtual bool ProcStartThread()HGL_OVERRIDE
+			virtual bool ProcStartThread()
 			{
 				this->sock_manage=CreateRecvSocketManage(max_user);
 
 				return(this->sock_manage);
 			}
 
-			virtual bool ProcEvent(IOSocket *sock,int size)HGL_OVERRIDE								///<处理Socket接收事件函数
+			virtual bool ProcEvent(IOSocket *sock,int size)								            ///<处理Socket接收事件函数
 			{
 				return(sock->ProcRecv(size)>=0);
 			}
 
-			virtual void ProcError(IOSocket **,const int)HGL_OVERRIDE=0;							///<处理Socket出错事件函数
+			virtual void ProcError(IOSocket **,const int)=0;							            ///<处理Socket出错事件函数
 		};//class RecvSocketManageThread
 
 		/**
@@ -106,21 +106,21 @@ namespace hgl
 
 			SendSocketManageThread(int _max_user):SocketManageThread(),max_user(_max_user){}
 
-			virtual bool ProcStartThread()HGL_OVERRIDE
+			virtual bool ProcStartThread()
 			{
 				this->sock_manage=CreateSendSocketManage(max_user);
 
 				return(this->sock_manage);
 			}
 
-			virtual bool ProcEvent(IOSocket *sock,int size)HGL_OVERRIDE								///<处理Socket发送事件函数
+			virtual bool ProcEvent(IOSocket *sock,int size)                                         ///<处理Socket发送事件函数
 			{
 				int left_bytes;
 
 				return(sock->ProcSend(size,left_bytes)>=0);
 			}
 
-			virtual void ProcError(IOSocket **,const int)HGL_OVERRIDE=0;							///<处理Socket出错事件函数
+			virtual void ProcError(IOSocket **,const int)=0;							            ///<处理Socket出错事件函数
 		};//class SendSocketManageThread
 	}//namespace network
 }//namespace hgl
