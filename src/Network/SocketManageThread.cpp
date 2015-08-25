@@ -172,7 +172,7 @@ namespace hgl
 				for(int i=0;i<count;i++)
 				{
 					if(sock_set->Get(se_list->sock,obj))
-						error_ios_list.Add(obj);
+						error_socket_list.Add(obj);
 
 					delete_list.Add(se_list->sock);
 
@@ -181,7 +181,7 @@ namespace hgl
 
 				error_list.ClearData();
 
-				ProcError(error_ios_list.GetData(),error_ios_list.GetCount());
+				ProcError(error_socket_list.GetData(),error_socket_list.GetCount());
 			}
 
 			return(true);

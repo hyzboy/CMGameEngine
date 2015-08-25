@@ -32,7 +32,7 @@ namespace hgl
 			List<SocketEvent> event_list;															///<Socket事件列表
 			List<SocketEvent> error_list;															///<Socket错误列表
 
-			List<IOSocket *> error_ios_list;
+			List<IOSocket *> error_socket_list;
 
 			Set<int> delete_list;
 
