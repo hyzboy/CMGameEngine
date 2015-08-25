@@ -15,7 +15,9 @@ namespace hgl
 
 		public:
 
+#if HGL_OS != HGL_OS_Windows
 			void SetDeferAccept(const int);															///<设置推迟Accept
+#endif//HGL_OS != HGL_OS_Windows
 		};//class TCPServer
 	}//namespace network
 

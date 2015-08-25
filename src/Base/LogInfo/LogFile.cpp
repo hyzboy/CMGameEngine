@@ -44,7 +44,7 @@ namespace hgl
 				os_char num[16]={'.',0};
 
 			#if HGL_OS == HGL_OS_Windows
-				SHGetFolderPath(nullptr,CSIDL_LOCAL_APPDATA,nullptr,0,fn);
+				SHGetFolderPathW(nullptr,CSIDL_LOCAL_APPDATA,nullptr,0,fn);
 			#else
 				struct passwd pwd;
 				struct passwd *result;
@@ -85,7 +85,7 @@ namespace hgl
 						strcat(filename,HGL_MAX_PATH,num,sizeof(num));
 					}
 
-					strcat(filename,HGL_MAX_PATH,OSString(".Loginfo"));
+					strcat(filename,HGL_MAX_PATH,OS_TEXT(".Loginfo"),8);
 
 					if(fos.Create(filename))//创建成功
 					{

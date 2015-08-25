@@ -18,7 +18,7 @@ namespace hgl
         */
         void PopupWebBrowser(const u16char *url)
         {
-            ShellExecute(nullptr,nullptr,url,nullptr,nullptr,0);
+            ShellExecuteW(nullptr,nullptr,url,nullptr,nullptr,0);
         }
 
         /**
@@ -39,7 +39,7 @@ namespace hgl
 			strcat(url, 4096, subject);
 			strcat(url, 4096, U16_TEXT('\"'));
 
-            ShellExecute(nullptr,nullptr,url,nullptr,nullptr,0);
+            ShellExecuteW(nullptr,nullptr,url,nullptr,nullptr,0);
 		}
 
 		/**
