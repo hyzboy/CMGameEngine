@@ -1704,7 +1704,7 @@ namespace hgl
 	template<typename T,typename V>
 	bool int_to_size(T *str,int size,V value)
 	{
-		const T name[]={'K','M','G','T','P','E','Z','Y',0};
+		const T name[]={'K','M','G','T','P','E','Z','Y','B',0};
 
 		//ps2014,现有磁带机单机柜容量百PB，按组破EB。以每十年破一个的速度，2034年将接近使用Y。届时将按条件扩大。
 

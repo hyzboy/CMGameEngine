@@ -7,7 +7,7 @@ else()
 endif()
 
 IF(CMGDK_DEBUG)
-	add_definitions(-ggdb3 -D_DEBUG)
+	add_definitions(-D_DEBUG)
 ENDIF()
 
 IF(WIN32)

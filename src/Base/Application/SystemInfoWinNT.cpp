@@ -14,19 +14,19 @@ namespace hgl
 		DWORD type;
 		unsigned long size=1024;
 
-		LONG result = RegOpenKeyEx(HKEY_CURRENT_USER,L"Environment",0,KEY_READ,&hKey);
+		LONG result = RegOpenKeyExW(HKEY_CURRENT_USER,L"Environment",0,KEY_READ,&hKey);
 
 		if(result==ERROR_SUCCESS)
 		{
 			u16char temp[1024];
 
-			result = RegQueryValueEx( hKey,L"TEMP", NULL, &type, (LPBYTE)temp, &size );
+			result = RegQueryValueExW( hKey,L"TEMP", NULL, &type, (LPBYTE)temp, &size );
 
 			RegCloseKey(hKey);
 
 			if(result==ERROR_SUCCESS)
 			{
-				ExpandEnvironmentStrings(temp,path,s);
+				ExpandEnvironmentStringsW(temp,path,s);
 				return(true);
 			}
 		}
@@ -42,11 +42,11 @@ namespace hgl
 		u16char path[HGL_MAX_PATH];
 		unsigned long size=HGL_MAX_PATH;
 
-		LONG result = RegOpenKeyEx(HKEY_CURRENT_USER,L"Environment",0,KEY_READ,&hKey);
+		LONG result = RegOpenKeyExW(HKEY_CURRENT_USER,L"Environment",0,KEY_READ,&hKey);
 
 		if(result==ERROR_SUCCESS)
 		{
-			result = RegQueryValueEx( hKey,L"CMGDK", NULL, &type, (LPBYTE)path, &size );
+			result = RegQueryValueExW( hKey,L"CMGDK", NULL, &type, (LPBYTE)path, &size );
 
 			RegCloseKey(hKey);
 
@@ -62,7 +62,7 @@ namespace hgl
 	{
 		u16char path[HGL_MAX_PATH];
 
-		#define GET_FOLDER(str,attrib)	SHGetFolderPath(nullptr,attrib,nullptr,0,path);	\
+		#define GET_FOLDER(str,attrib)	SHGetFolderPathW(nullptr,attrib,nullptr,0,path);	\
 										cp.str=path;
 
 		GET_FOLDER(	os			,CSIDL_WINDOWS	);

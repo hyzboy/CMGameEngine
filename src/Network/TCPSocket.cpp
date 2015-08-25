@@ -107,14 +107,20 @@ namespace hgl
 		{
 			int flag=(keep_alive?1:0);
 
+#if HGL_OS != HGL_OS_Windows
 			setsockopt(ThisSocket,SOL_SOCKET,SO_KEEPALIVE,&flag,sizeof(flag));
+#else
+			setsockopt(ThisSocket, SOL_SOCKET, SO_KEEPALIVE, (const char *)&flag, sizeof(flag));
+#endif//windows
 
 			if(!flag)
 				return;
 
+#if HGL_OS != HGL_OS_Windows		//windows不支持
 			setsockopt(ThisSocket,IPPROTO_TCP,TCP_KEEPIDLE,	&idle,		sizeof(int));
 			setsockopt(ThisSocket,IPPROTO_TCP,TCP_KEEPINTVL,&interval,	sizeof(int));
 			setsockopt(ThisSocket,IPPROTO_TCP,TCP_KEEPCNT,	&count,		sizeof(int));
+#endif//HGL_OS_Windows
 		}
 
 		/**

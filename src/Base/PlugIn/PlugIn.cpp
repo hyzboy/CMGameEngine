@@ -170,9 +170,13 @@ namespace hgl
 			if(Load())
 			{
 				#ifdef _DEBUG
-				LOG_INFO(OS_TEXT("Load Plug-in <")+plugin_name+OS_TEXT(">:<")+filename+OS_TEXT("> ok,Plug-In intro:")+to_oschar(intro));
+					#if HGL_OS == HGL_OS_Windows
+						LOG_INFO(OS_TEXT("Load Plug-in <") + plugin_name + OS_TEXT(">:<") + filename + OS_TEXT("> ok,Plug-In intro:") + OSString(intro));
+					#else
+						LOG_INFO(OS_TEXT("Load Plug-in <") + plugin_name + OS_TEXT(">:<") + filename + OS_TEXT("> ok,Plug-In intro:") + to_oschar(intro));
+					#endif//windows
 				#else
-				LOG_INFO(OS_TEXT("Load Plug-in <")+plugin_name+OS_TEXT(">:<")+filename+OS_TEXT("> ok"));
+					LOG_INFO(OS_TEXT("Load Plug-in <")+plugin_name+OS_TEXT(">:<")+filename+OS_TEXT("> ok"));
 				#endif//_DEBUG
 
 				InitPlugInPROC InitPlugIn;

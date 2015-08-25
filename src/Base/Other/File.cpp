@@ -42,7 +42,7 @@ namespace hgl
 	bool FileCopy(const OSString &sourcename,const OSString &targetname)
 	{
 #if HGL_OS == HGL_OS_Windows
-		return(::CopyFile(sourcename,targetname,false));
+		return(::CopyFileW(sourcename,targetname,false));
 #else
 		io::FileInputStream fis;
 		io::FileOutputStream fos;
@@ -89,7 +89,7 @@ namespace hgl
 	bool FileDelete(const OSString &filename)
 	{
 #if HGL_OS == HGL_OS_Windows
-		return(::DeleteFile(filename));
+		return(::DeleteFileW(filename));
 #else
 		return(unlink(filename.c_str())==0);
 #endif//HGL_OS == HGL_OS_Windows
@@ -104,7 +104,7 @@ namespace hgl
 	bool FileMove(const OSString &sourcename,const OSString &targetname)
 	{
 #if HGL_OS == HGL_OS_Windows
-		return(::MoveFile(sourcename,targetname));
+		return(::MoveFileW(sourcename,targetname));
 #else
 		if(FileCopy(sourcename,targetname))
 			return FileDelete(sourcename);
@@ -122,7 +122,7 @@ namespace hgl
 	bool FileRename(const OSString &oldname,const OSString &newname)
 	{
 #if HGL_OS == HGL_OS_Windows
-		return(::MoveFile(oldname,newname));
+		return(::MoveFileW(oldname,newname));
 #else
 		return(rename(oldname.c_str(),
 					  newname.c_str())==0);
@@ -446,7 +446,7 @@ namespace hgl
 	inline bool MakeDirectory(const OSString &name)
 	{
 #if HGL_OS == HGL_OS_Windows
-		if(::CreateDirectory(name,nullptr))return(true);
+		if(::CreateDirectoryW(name,nullptr))return(true);
 #else
 		if(!mkdir(name,S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH))return(true);
 #endif//HGL_OS == HGL_OS_Windows
@@ -582,7 +582,7 @@ namespace hgl
 		os_char *path=new os_char[HGL_MAX_PATH];
 
 #if HGL_OS == HGL_OS_Windows
-		GetModuleFileName(nullptr,path,HGL_MAX_PATH);
+		GetModuleFileNameW(nullptr,path,HGL_MAX_PATH);
 
 		result = path;
 		delete[] path;
@@ -743,10 +743,10 @@ namespace hgl
 			full_name+=find_name;
 		}
 
-		WIN32_FIND_DATA FindFileData;
+		WIN32_FIND_DATAW FindFileData;
 		HANDLE hFind;
 
-		hFind = FindFirstFile(full_name, &FindFileData);
+		hFind = FindFirstFileW(full_name, &FindFileData);
 		if (hFind == INVALID_HANDLE_VALUE)
 			return(-1);
 
@@ -825,7 +825,7 @@ namespace hgl
 
 			func(data,fi);
 		}
-		while(FindNextFile(hFind, &FindFileData));
+		while(FindNextFileW(hFind, &FindFileData));
 
 		FindClose(hFind);
 
@@ -987,7 +987,7 @@ namespace hgl
 		u16char path_name[HGL_MAX_PATH];
 		int count=0;
 
-		handle=FindFirstVolume(volume_name,HGL_MAX_PATH);
+		handle=FindFirstVolumeW(volume_name,HGL_MAX_PATH);
 
 		if(handle==INVALID_HANDLE_VALUE)return(-1);
 
@@ -999,14 +999,14 @@ namespace hgl
 
 			DWORD length;
 
-			GetVolumePathNamesForVolumeName(volume_name,path_name,HGL_MAX_PATH,&length);				//这个函数要win xp/2003才能用
+			GetVolumePathNamesForVolumeNameW(volume_name,path_name,HGL_MAX_PATH,&length);				//这个函数要win xp/2003才能用
 
 			path_name[length]=0;
 
 			strcpy(vi.name, HGL_MAX_PATH,volume_name);
 			strcpy(vi.path, HGL_MAX_PATH,path_name);
 
-			UINT type=GetDriveType(path_name);
+			UINT type=GetDriveTypeW(path_name);
 
 			if(type==DRIVE_REMOVABLE){if(!check_removable)continue;	vi.driver_type=hgl::VolumeInfo::dtRemovable;}else
 			if(type==DRIVE_FIXED	){								vi.driver_type=hgl::VolumeInfo::dtFixed;	}else
@@ -1017,7 +1017,7 @@ namespace hgl
 
 			uint32 file_system_flags;
 
-			if(GetVolumeInformation(path_name,
+			if(GetVolumeInformationW(path_name,
 									vi.volume_label,
 									255,
 									(unsigned long *)&vi.serial,
@@ -1031,7 +1031,7 @@ namespace hgl
 			else
 				LOG_PROBLEM(U16_TEXT("取得卷<") + UTF16String(path_name) + U16_TEXT(">信息失败！Windows错误编号: ") + UTF16String((uint)GetLastError()));
 
-			if(GetDiskFreeSpaceEx(	path_name,
+			if(GetDiskFreeSpaceExW(	path_name,
 									(ULARGE_INTEGER *)&vi.available_space,
 									(ULARGE_INTEGER *)&vi.total_space,
 									(ULARGE_INTEGER *)&vi.free_space))
@@ -1043,7 +1043,7 @@ namespace hgl
 
 			count++;
 
-		}while(FindNextVolume(handle,volume_name,HGL_MAX_PATH));
+		}while(FindNextVolumeW(handle,volume_name,HGL_MAX_PATH));
 
 		FindVolumeClose(handle);
 
