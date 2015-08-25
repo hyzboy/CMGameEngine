@@ -87,7 +87,7 @@ namespace hgl
 			}
 
 			virtual uint	GetDataType()const=0;														///<取得数据类型
-			virtual uint	GetDataBytes()const=0;														///<取得每数据字节数
+			virtual size_t	GetDataBytes()const=0;														///<取得每数据字节数
 					int		GetComponent()const	{	return dc_num;	}									///<取数缓冲区元数据数量
 					int		GetCount()const		{	return count;	}									///<取得数据数量
 					void *	GetData()const		{	return mem_data;}									///<取得数据指针
@@ -131,7 +131,7 @@ namespace hgl
 
 			virtual ~VertexBuffer()HGL_DEFAULT_MEMFUNC;
 
-			uint GetDataBytes()const
+			size_t GetDataBytes()const
 			{
 				return sizeof(T);
 			}

@@ -216,6 +216,13 @@ namespace hgl
         return glm::rotate(Matrix4f(1.0f),angle,Vector3f(axis.x,axis.y,axis.z));
     }
 
+	inline Vector3f rotate(const Vector3f &v3f, float angle, const Vector3f &axis)
+	{
+		Vector4f result = rotate(angle, axis)*Vector4f(v3f, 1.0f);
+
+		return Vector3f(result.x,result.y,result.z);
+	}
+
     template<typename T>
     inline T normalized(const T &v)
     {

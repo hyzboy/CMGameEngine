@@ -11808,7 +11808,7 @@ GLboolean GLEWAPIENTRY wglewGetExtension (const char* name)
   if (start == 0)
     return GL_FALSE;
   end = start + _glewStrLen(start);
-  return glewGetExtension(name, start, end);
+  return glewGetExtension(name);
 }
 
 #ifdef GLEW_MX

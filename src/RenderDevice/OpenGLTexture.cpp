@@ -187,7 +187,7 @@ namespace hgl
 				glTextureStorage2D(index, 1, vf, w, h);
 				glTextureSubImage2D(index, 0, 0, 0, w, h, sfmt->format, sfmt->type, data);
 #else
-				if (use_pbo)
+/*				if (use_pbo)
 				{
 					glGenBuffers(1, &pbo);
 					glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo);
@@ -200,7 +200,7 @@ namespace hgl
 
 					glTexImage2D(GL_TEXTURE_2D, 0, vf, w, h, 0, sfmt->format, sfmt->type, nullptr);
 				}
-				else
+				else*/
 				{
 					glTexImage2D(GL_TEXTURE_2D, 0, vf, w, h, 0, sfmt->format, sfmt->type, data);
 				}

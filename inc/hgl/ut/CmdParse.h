@@ -1,4 +1,4 @@
-#ifndef HGL_COMMAND_LINE_PARSE_INCLUDE
+﻿#ifndef HGL_COMMAND_LINE_PARSE_INCLUDE
 #define HGL_COMMAND_LINE_PARSE_INCLUDE
 
 #include<hgl/type/StringList.h>

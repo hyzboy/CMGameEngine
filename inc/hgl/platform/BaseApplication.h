@@ -53,7 +53,7 @@ namespace hgl
 	public: //需要用户在启动游戏前设置的数据
 
 		UTF8String							ProjectName;											///<游戏名称
-		UTF8String							ProjectCode;											///<游戏代码
+		OSString							ProjectCode;											///<游戏代码
 
 	public: //属性
 

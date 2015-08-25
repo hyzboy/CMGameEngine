@@ -60,7 +60,7 @@ namespace hgl
             {0,"unkown"}
         };
 
-        void GLAPIENTRY OpenGLDebugProc(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void */*userParam*/)
+        void GLAPIENTRY OpenGLDebugProc(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void * /*userParam*/)
         {
             UTF8String severity_string;
 
@@ -105,7 +105,7 @@ namespace hgl
             "low"
         };
 
-        void GLAPIENTRY OpenGLDebugProc(GLuint id, GLenum category, GLenum severity, GLsizei length, const GLchar* message, void */*userParam*/)
+        void GLAPIENTRY OpenGLDebugProc(GLuint id, GLenum category, GLenum severity, GLsizei length, const GLchar* message, void * /*userParam*/)
         {
             LOG_INFO(U8_TEXT("OpenGL DebugMessage: id[")
                     +UTF8String(id)

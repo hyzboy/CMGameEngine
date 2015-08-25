@@ -43,7 +43,7 @@ namespace hgl
 			}
 		};//class LogWinDialog
 
-		Logger *CreateLoggerDialog(const UTF8String &,LogLevel ll)
+		Logger *CreateLoggerDialog(const OSString &,LogLevel ll)
 		{
 			return(new LogWinDialog(ll));
 		}
