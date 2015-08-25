@@ -16,6 +16,7 @@
 			Render.cpp
 # 			ScreenShot.cpp
 			ShaderStringList.cpp
+			ShaderLight.cpp
 			UBO.cpp
 			${GLEW_SOURCE})
 
