@@ -6,7 +6,7 @@
 using namespace hgl;
 using namespace hgl::graph;
 
-const float vertex[]={0.0,0.0,  200,0.0,    100,100 };
+const float vertex[]={100,100,  200,100,    200,200 };
 const float color []={1,0,0,    0,1,0,      0,0,1   };
 
 class TestObject:public FlowObject
