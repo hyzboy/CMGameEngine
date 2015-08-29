@@ -48,7 +48,7 @@ namespace hgl
 			{
 			protected:
 
-				UTF8String str;
+				UTF8String shader_string;
 
 			public:
 
@@ -57,10 +57,10 @@ namespace hgl
 
 				char *end_get()
 				{
-					return str.Discard();
+					return shader_string.Discard();
 				}
 
-				void add(const char *line="\n"){str.Strcat(line,::strlen(line));}
+				void add(const char *line="\n"){shader_string.Strcat(line,::strlen(line));}
 
 				void debug_out(const os_char *filename);
 
@@ -90,7 +90,7 @@ namespace hgl
 
 			public:
 
-				void add_version(int=330);
+				void add_version(int=440);
 				void add_main_begin();
 				void add_main_end();
 			};//struct shader_stringlist

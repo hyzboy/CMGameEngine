@@ -36,12 +36,12 @@ namespace hgl
 			{
 				if(!filename)return;
 
-				SaveMemoryToFile(filename,str.c_str(),str.Length());
+				SaveMemoryToFile(filename,shader_string.c_str(),shader_string.Length());
 			}
 
 			void shader_stringlist::add_version(int ver)
 			{
-				add("#version "+UTF8String(ver)+"\n\n");
+				add("#version "+UTF8String(ver)+" core\n\n");
 			}
 
 			void shader_stringlist::add_main_begin()

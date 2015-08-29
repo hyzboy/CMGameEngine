@@ -37,6 +37,10 @@ namespace hgl
 
 				Axis height_axis;				//高度图所用轴
 
+            protected:
+
+                void add_layout_in(int vb,const char *name,int num);
+
 			protected:
 
 				int SetVertexColorFormat(ColorFormat);

@@ -46,18 +46,33 @@ namespace hgl
 				mvp_matrix=true;
 			}
 
+            void vs::add_layout_in(int vb_index,const char *name,int num)
+            {
+//                 UTF8String str="#define VB_"+UTF8String(VertexBufferName[vb_index])+UTF8String("\t")+UTF8String(vb_index)+UTF8String("\n");
+//
+//                 add(str);
+
+//                 add("layout(location=VB_");
+//                 add(VertexBufferName[vb_index]);
+
+                add("layout(location=");
+                add(UTF8String(vb_index));
+                add(") ");
+                add_in_fv(name,num);
+            }
+
 			void vs::add_in_vertex(int num)
 			{
 				vertex_type=num;
 
-				add_in_fv(HGL_VS_VERTEX,num);
+				add_layout_in(vbtIndex,HGL_VS_VERTEX,num);
 
 				in_vertex_buffer[vbtVertex]=true;
 			}
 
 			void vs::add_in_normal()
 			{
-				add_in_vec3(HGL_VS_NORMAL);
+				add_layout_in(vbtNormal,HGL_VS_NORMAL,3);
 				//add_out_vec3(HGL_FS_NORMAL);
 				add_uniform_float(HGL_VS_GLOBAL_LIGHT_INTENSITY);
 				add_out_float(HGL_FS_LIGHT_INTENSITY);
@@ -101,7 +116,7 @@ namespace hgl
 
 				in_vertex_color=sitVertexAttrib;
 
-				add_in_fv(HGL_VS_COLOR,num);
+				add_layout_in(vbtColor,HGL_VS_COLOR,num);
 				add_out_fv(HGL_FS_COLOR,4);
 
 				in_vertex_buffer[vbtColor]=true;
@@ -323,7 +338,7 @@ namespace hgl
 
 			shadergen::vs code;
 
-			code.add_version(330);		//OpenGL 3.3
+			code.add_version(440);		//OpenGL 4.4
 
 			if(state->mvp)
 			{
