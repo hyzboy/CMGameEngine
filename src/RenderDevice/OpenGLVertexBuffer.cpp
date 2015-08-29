@@ -31,10 +31,14 @@ namespace hgl
 
 			video_buffer_type=type;
 
-			glGenBuffers(1,&video_buffer_index);
+// 			glGenBuffers(1,&video_buffer_index);
+//
+// 			glBindBuffer(video_buffer_type,video_buffer_index);
+// 			glBufferData(video_buffer_type,bytes,mem_data,data_level);
 
-			glBindBuffer(video_buffer_type,video_buffer_index);
-			glBufferData(video_buffer_type,bytes,mem_data,data_level);
+            glCreateBuffers(1,&video_buffer_index);
+            glNamedBufferData(video_buffer_index,bytes,mem_data,data_level);
+            //glNamedBufferStorage(video_buffer_index,bytes,mem_data,0);
 
 			return(true);
 		}
@@ -43,8 +47,10 @@ namespace hgl
 		{
 			if(!video_buffer_type)return;
 
-			glBindBuffer(video_buffer_type,video_buffer_index);
-			glBufferSubData(video_buffer_type,start,size,data);
+// 			glBindBuffer(video_buffer_type,video_buffer_index);
+// 			glBufferSubData(video_buffer_type,start,size,data);
+
+            glNamedBufferSubData(video_buffer_index,start,size,data);
 		}
 
 		void VertexBufferBase::BindVertexBuffer()

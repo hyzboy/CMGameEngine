@@ -98,6 +98,7 @@ namespace hgl
 					bool	CreateVertexBuffer(uint type);
 					void	ChangeVertexBuffer(int,int,void *);
 					void	BindVertexBuffer();
+                    int     GetBufferIndex()const{return video_buffer_index;}                           ///<取得缓冲区索引
 					void	CloseVertexBuffer();
 		};//class VertexBufferBase
 

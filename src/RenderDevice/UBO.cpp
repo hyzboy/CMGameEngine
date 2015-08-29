@@ -25,9 +25,9 @@
  *          glGenBuffer(1,&buffer_id);
  *          glBindBufferBase(GL_UNIFORM_BUFFER,bind_point,buffer_id);
  *
- *
- *
  */
+
+//注：较大数据请使用SSBO
 
 namespace hgl
 {
