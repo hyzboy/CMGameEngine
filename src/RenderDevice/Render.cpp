@@ -34,6 +34,7 @@ namespace hgl
         void BindTextures(int first_active,int count,unsigned int *texture_index);
 		void InitShaderStorage();
 		void ClearShaderStorage();
+        void InitUBO();
 // 		void InitFontStorage();
 // 		void ClearFontStorage();
 
@@ -53,6 +54,7 @@ namespace hgl
 
 			InitVertexBuffer();
 
+            InitUBO();
 			InitShaderStorage();
 // 			InitFontStorage();
 

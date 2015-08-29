@@ -48,6 +48,29 @@ namespace hgl
 			return result;
 		}
 
+		/**
+        * 取得一个变量的地址块索引
+        * @param name 变量名称
+        * @return 地址块索引
+        * @return -1 出错
+        */
+        int Shader::GetUniformBlockIndex(const char *name)                                                    ///<取得一个变量的地址
+        {
+            if(!name)return(-1);
+
+            int result;
+
+            //if(!uniform_block_index.Get(name,result))
+            {
+                result=_GetUniformBlockIndex(name);
+
+                //uniform_block_index.Add(name,result);
+            }
+
+            return result;
+        }
+
+
 		#define HGL_GLSL_SetUniform1234(func,type)	bool Shader::SetUniform1##func(const char *uniform_name,type v0)	\
 													{	\
 														const int location=GetUniformLocation(uniform_name);	\
@@ -136,5 +159,30 @@ namespace hgl
 		HGL_GLSL_SetUniformMatrixPointer(4x3fv);
 
 		#undef HGL_GLSL_SetUniformMatrixPointer
+
+        bool Shader::BindUniformBlock(const char *name,const int block_binding)
+        {
+            if(!name||!(*name))
+            {
+                LOG_ERROR(U8_TEXT("ShaderDataBlock name error:"));
+                return(false);
+            }
+
+            if(block_binding<=0)
+            {
+                LOG_ERROR(U8_TEXT("ShaderDataBlock BlockBinding error,name:")+UTF8String(name));
+                return(false);
+            }
+
+            const int block_index=_GetUniformBlockIndex(name);
+
+            if(block_index<=0)
+            {
+                LOG_ERROR(U8_TEXT("ShaderDataBlock name error:")+UTF8String(name));
+                return(false);
+            }
+
+            return _BindUniformBlock(block_index,block_binding);
+        }
 	}//namespace graph
 }//namespace hgl

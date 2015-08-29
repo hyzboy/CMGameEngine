@@ -433,5 +433,36 @@ namespace hgl
 		HGL_GLSL_SetUniformMatrixPointer(4x3fv);
 
 		#undef HGL_GLSL_SetUniformMatrixPointer
+
+        int GLSL::_GetUniformBlockIndex(const char *uniform_block_name)
+        {
+            if(!program)
+            {
+                LOG_ERROR(u8"GLSL::BindUniformBlock("+UTF8String(uniform_block_name)+") program=0");
+                return(false);
+            }
+
+            const int index=glGetUniformBlockIndex(program,uniform_block_name);
+
+            if(index<0)
+            {
+                LOG_ERROR(u8"GLSL::BindUniformBlock("+UTF8String(uniform_block_name)+") block_index error");
+                return(false);
+            }
+
+            return index;
+        }
+
+        bool GLSL::_BindUniformBlock(int block_index,int block_binding)
+        {
+            if(!program)
+            {
+                LOG_ERROR(u8"GLSL::BindUniformBlock("+UTF8String(block_index)+","+UTF8String(block_binding)+") program=0");
+                return(false);
+            }
+
+            glUniformBlockBinding(program,block_index,block_binding);
+            return(true);
+        }
 	}//namespace graph
 }//namespace hgl

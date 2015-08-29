@@ -10,6 +10,32 @@ namespace hgl
 	{
 		#define HGL_MAX_SHADER_NAME_LENGTH	128									///<最大Shader名称长度
 
+        int GetMaxShaderBlockBinding();             ///<取得最大绑定点数量
+        int GetMaxShaderBlockSize();                ///<取得最大绑定点尺寸
+        int AcquireShaderBlockBinding();            ///<申请一个绑定点
+        void ReleaseShaderBlockBinding(int);        ///<释放一个绑定点
+
+        /**
+        * Shader数据块，用于跨Shader提供数据或是大批量提供数据
+        */
+        class ShaderDataBlock                                                                       ///Shader数据块
+        {
+        protected:
+
+            char shader_name[HGL_MAX_SHADER_NAME_LENGTH];                                           ///<数据块在Shader中的名称
+            int block_size;                                                                         ///<数据块长度
+
+        public:
+
+            ShaderDataBlock(const char *,int);
+            virtual ~ShaderDataBlock()HGL_DEFAULT_MEMFUNC;
+
+            virtual bool SetData(void *)=0;                                                         ///<设置数据块内容
+            virtual bool ChangeData(void *,int,int)=0;                                              ///<更改数据块内容
+
+            virtual void Binding(int)=0;                                                            ///<绑定
+        };//class ShaderDataBlock
+
 		/**
 		 * 着色程序类型枚举
 		 */
@@ -36,9 +62,12 @@ namespace hgl
 
 			Map<UTF8String,int> attrib_location;
 			Map<UTF8String,int> uniform_location;
+            Map<UTF8String,int> uniform_block_index;
 
 			virtual int _GetAttribLocation(const char *)=0;																///<取得指定属性地址
 			virtual int _GetUniformLocation(const char *)=0;															///<取得一个变量的地址
+			virtual int _GetUniformBlockIndex(const char *)=0;                                                          ///<取得一个数据块的地址索引
+            virtual bool _BindUniformBlock(int,int)=0;                                                                  ///<绑定一个数据块
 
 		public:
 
@@ -67,6 +96,7 @@ namespace hgl
 
 			virtual int GetAttribLocation(const char *);																///<取得指定属性地址
 			virtual int GetUniformLocation(const char *);																///<取得一个变量的地址
+            virtual int GetUniformBlockIndex(const char *);                                                             ///<取得一个数据块索引
 
 			//bool SetAttrib1f(int,float);
 			//bool GetAttrib1f(int,float &);
@@ -166,26 +196,11 @@ namespace hgl
 			bool SetUniformMatrix4x2fv(const char *,const float *);
 			bool SetUniformMatrix3x4fv(const char *,const float *);
 			bool SetUniformMatrix4x3fv(const char *,const float *);
+
+        public: //Uniform Block
+
+            virtual bool BindUniformBlock(const char *,const int);
 		};//class Shader
-
-		/**
-		* Shader数据块，用于跨Shader提供数据或是大批量提供数据
-		*/
-		class ShaderDataBlock																		///Shader数据块
-		{
-		protected:
-
-			char shader_name[HGL_MAX_SHADER_NAME_LENGTH];											///<数据块在Shader中的名称
-			int block_size;																			///<数据块长度
-
-		public:
-
-			ShaderDataBlock(const char *,int);
-			virtual ~ShaderDataBlock()HGL_DEFAULT_MEMFUNC;
-
-			virtual void SetData(void *)=0;															///<设置数据块内容
-			virtual void ChangeData(void *,int,int)=0;												///<更改数据块内容
-		};//class ShaderDataBlock
 	}//namespace graph
 }//namespace hgl
 #endif//HGL_GRAPH_SHADER_INCLUDE

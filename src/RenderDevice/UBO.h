@@ -13,7 +13,7 @@ namespace hgl
 		{
 		protected:
 
-			unsigned int buffer_id;
+			uint buffer_id;
 			int update_level;
 
 		public:
@@ -21,8 +21,9 @@ namespace hgl
 			UBO(const char *,int,int);
 			~UBO();
 
-			void SetData(void *);
-			void ChangeData(void *,int,int);
+			bool SetData(void *);
+			bool ChangeData(void *,int,int);
+            void Binding(int);
 		};//class UBO
 	}//namespace graph
 }//namespace hgl

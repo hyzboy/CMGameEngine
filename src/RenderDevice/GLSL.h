@@ -52,6 +52,8 @@ namespace hgl
 
 			int _GetAttribLocation(const char *);																		///<取得指定属性地址
 			int _GetUniformLocation(const char *);																		///<取得一个变量的地址
+            int _GetUniformBlockIndex(const char *);                                                                    ///<取得一个块的绑定点
+            bool _BindUniformBlock(int,int);
 
 		public:
 
