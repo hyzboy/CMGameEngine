@@ -95,7 +95,8 @@ namespace hgl
 	{
 		OpenGLCoreRenderable::OpenGLCoreRenderable()
 		{
-			glGenVertexArrays(1,&vao);
+			//glGenVertexArrays(1,&vao);
+            glCreateVertexArrays(1,&vao);
 
 			location=new int[HGL_MAX_VERTEX_ATTRIBS];
 
@@ -147,13 +148,13 @@ namespace hgl
 
 		void OpenGLCoreRenderable::ClearShaderLocation()
 		{
-			glBindVertexArray(vao);
+			//glBindVertexArray(vao);
 
 			for(int i=vbtIndex;i<HGL_MAX_VERTEX_ATTRIBS;i++)
 			{
 				if(location[i]==-1)continue;
 
-				glDisableVertexAttribArray(location[i]);
+                glDisableVertexArrayAttrib(vao,i);
 				location[i]=-1;
 			}
 		}
@@ -162,7 +163,7 @@ namespace hgl
 		{
 			if(!vao)return(false);
 
-			glBindVertexArray(vao);
+            int stream=0;
 
 			for(int i=vbtVertex;i<HGL_MAX_VERTEX_ATTRIBS;i++)
 			{
@@ -174,14 +175,37 @@ namespace hgl
 					return(false);
 				}
 
-				vertex_buffer[i]->BindVertexBuffer();
-				glVertexAttribPointer(location[i],vertex_buffer[i]->GetComponent(),vertex_buffer[i]->GetDataType(),GL_FALSE,0,0);
-				glEnableVertexAttribArray(location[i]);
-			}
 
-			if(vertex_buffer[vbtIndex])
-				vertex_buffer[vbtIndex]->BindVertexBuffer();
+                glVertexArrayAttribBinding(vao,                                             //vao obj
+                                           location[i],                                     //attrib index
+                                           stream);                                         //binding index
 
+                if(vertex_buffer[i]->GetDataType()==HGL_INT)    glVertexArrayAttribIFormat(  vao,location[i],vertex_buffer[i]->GetComponent(),vertex_buffer[i]->GetDataType(),0);else
+                if(vertex_buffer[i]->GetDataType()==HGL_DOUBLE) glVertexArrayAttribLFormat(  vao,location[i],vertex_buffer[i]->GetComponent(),vertex_buffer[i]->GetDataType(),0);else
+                                                                glVertexArrayAttribFormat(   vao,                                   //vao obj
+                                                                                             location[i],                           //attrib index
+                                                                                             vertex_buffer[i]->GetComponent(),      //size
+                                                                                             vertex_buffer[i]->GetDataType(),       //type
+                                                                                             GL_FALSE,                              //normalized
+                                                                                             0);                                    //relative offset
+
+                glEnableVertexArrayAttrib(vao,                                          //vao obj
+                                          location[i]);                                 //attrib index
+
+                glVertexArrayVertexBuffer(vao,                                          //vao obj
+                                          stream,                                       //binding index
+                                          vertex_buffer[i]->GetBufferIndex(),           //buffer
+                                          0,                                            //offset
+                                          vertex_buffer[i]->GetStride());               //stride
+
+                    ++stream;
+            }
+
+ 			if(vertex_buffer[vbtIndex])
+                 glVertexArrayElementBuffer(vao,                                         //vao obj
+                                            vertex_buffer[vbtIndex]->GetBufferIndex());  //buffer
+
+            glBindVertexArray(vao);
 			return(true);
 		}
 
@@ -271,7 +295,7 @@ namespace hgl
 	#endif//_DEBUG
 				);
 
-				ShaderStorage.Add(state,new_shader);			//加入到仓库
+                ShaderStorage.Add(state,new_shader);			//加入到仓库
 			}
 
 			shader=new_shader;

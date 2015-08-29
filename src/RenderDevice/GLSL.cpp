@@ -150,6 +150,8 @@ namespace hgl
 
 				delete[] log;
 
+                LOG_ERROR(shader_source);
+
 				glDeleteShader(shader);
 
 				return(0);
