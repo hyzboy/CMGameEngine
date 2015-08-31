@@ -62,6 +62,8 @@ namespace hgl
 
 			void Clear();																								///<清除着色程序
 
+			uint GetID()const { return program; }																		///<取得shader id
+
 			bool AddShader(const int,const char *shader_code);															///<添加一段着色程序
 			bool Build();																								///<构建现有的着色程序
 

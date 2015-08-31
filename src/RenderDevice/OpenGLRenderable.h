@@ -49,9 +49,11 @@ namespace hgl
 		{
 			unsigned int vao;
 
-			int *location;		//shader绑定变量地址
+			int *location;				//shader绑定变量地址
 
 			RenderState state;			//渲染状态
+
+			int glsl;
 
 		private:
 
@@ -67,7 +69,9 @@ namespace hgl
 			bool SetShaderLocation(VertexBufferType,unsigned int);							///<设定与Shader变量的关联
 			void ClearShaderLocation();														///<清除与Shader变量的关联
 
-			bool Bind();																	///<使用这个VAO
+			bool Bind(int);																	///<绑定VAO数据
+			int GetBindShader()const { return glsl; }										///<取得绑定的shader
+			bool Use();																		///<使用这个VAO
 
 			const RenderState *GetRenderState()const{return &state;}						///<取得渲染状态
 

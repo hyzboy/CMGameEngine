@@ -34,7 +34,7 @@ namespace hgl
         void BindTextures(int first_active,int count,unsigned int *texture_index);
 		void InitShaderStorage();
 		void ClearShaderStorage();
-        void InitUBO();
+        bool InitUBO();
 // 		void InitFontStorage();
 // 		void ClearFontStorage();
 
@@ -129,32 +129,37 @@ namespace hgl
 
 		bool BindShaderVertexAttrib(OpenGLCoreRenderable *obj,GLSL *glsl,const RenderState *state)
 		{
-			//本来这段可以写到OpenGLCoreRenderable类中的，为了一些变数，写在这里
-			obj->ClearShaderLocation();														//清除原有shader与顶点缓冲区的绑定
-
-			//非贴图坐标数据
-			for(int i=vbtVertex;i<vbtDiffuseTexCoord;i++)
+			if (obj->GetBindShader() != glsl->GetID())
 			{
-				if(i==vbtNormal
-				&&!state->lighting)continue;												//有法线但确定不用光照，则不传递法线
+				//本来这段可以写到OpenGLCoreRenderable类中的，为了一些变数，写在这里
+				obj->ClearShaderLocation();														//清除原有shader与顶点缓冲区的绑定
 
-				if(!BindShaderVertexAttrib(obj,glsl,i))
+				//非贴图坐标数据
+				for (int i = vbtVertex; i < vbtDiffuseTexCoord; i++)
 				{
-					LOG_PROBLEM(OS_TEXT("BindShaderVertexAttrib error,vbt=")+OSString(i));
-					return(false);
+					if (i == vbtNormal
+						&&!state->lighting)continue;												//有法线但确定不用光照，则不传递法线
+
+					if (!BindShaderVertexAttrib(obj, glsl, i))
+					{
+						LOG_PROBLEM(OS_TEXT("BindShaderVertexAttrib error,vbt=") + OSString(i));
+						return(false);
+					}
 				}
+
+				//设置贴图坐标数据
+				for (int i = 0; i < mtcMax; i++)
+				{
+					VertexBufferType vbt;
+
+					if (obj->GetTexCoord(i, &vbt))
+						BindShaderVertexAttrib(obj, glsl, vbt);
+				}
+
+				obj->Bind(glsl->GetID());																	//缓定glsl与缓冲区
 			}
 
-			//设置贴图坐标数据
-			for(int i=0;i<mtcMax;i++)
-			{
-				VertexBufferType vbt;
-
-				if(obj->GetTexCoord(i,&vbt))
-					BindShaderVertexAttrib(obj,glsl,vbt);
-			}
-
-			obj->Bind();																	//缓定glsl与缓冲区
+			obj->Use();
 
 			return(true);
 		}
@@ -184,8 +189,7 @@ namespace hgl
 
 			return(true);
 		}
-
-
+		
 		bool BindShaderTexture(Renderable *able,GLSL *glsl)
 		{
 			Material *mat=able->GetMaterial();
