@@ -189,7 +189,7 @@ namespace hgl
 
 			return(true);
 		}
-		
+
 		bool BindShaderTexture(Renderable *able,GLSL *glsl)
 		{
 			Material *mat=able->GetMaterial();
@@ -304,21 +304,7 @@ namespace hgl
 
 			VertexBufferBase *vb_index=obj->GetVertexBuffer(vbtIndex);
 
-			//确认绘制数据量
-			/*if(vb_index)		//使用索引绘制
-			{
-				draw_count=vb_index->GetCount();					//取得所需绘制的顶点数
-			}
-			else
-			{
-				VertexBufferBase *vb=obj->GetVertexBuffer(vbtVertex);
-
-				if(!vb)return(false);
-
-				draw_count=vb->GetCount();							//取得所需绘制的顶点数
-			}*/
-
-			obj->GetDrawCount(draw_start,draw_count);
+			obj->GetDrawCount(draw_start,draw_count);               //取得所需绘制的顶点数
 
 			if(draw_count<=0)return(false);							//如果数量为0
 
