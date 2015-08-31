@@ -69,6 +69,9 @@ namespace hgl
 		*/
 		class Renderable
 		{
+			friend class OpenGLCoreRenderable;
+			friend class OpenGLCoreRenderableBinding;
+
 		protected:
 
 			Material *material;																							///<材质
@@ -79,8 +82,6 @@ namespace hgl
 			VertexBufferType TextureChannels[mtcMax];																	///<贴图通道对应表
 
 			ColorFormat vb_color_format;																				///<颜色顶点属性格式
-
-			Shader *shader;																								///<着色程序
 
 			AABox BoundingBox;																							///<绑定盒
 
@@ -100,20 +101,6 @@ namespace hgl
 
 			virtual void						SetMaterial			(Material *,bool);														///<设置材质数据
 			virtual Material * 					GetMaterial			()const						{return material;}							///<取得材质指针
-
-//			virtual void						SetShader			(Shader *s)					{shader=s;}									///<设置着色程序
-			virtual Shader *					GetShader			()const						{return shader;}							///<取得着色程序
-
-			/**
-			* 自动创建生成shader
-			* @param mvp 渲染时是否使用projection矩阵与modelview矩阵
-			* @return 创建好的shader程序
-			*/
-			virtual Shader *					AutoCreateShader	(bool mvp=true															///<自动创建着色程序
-#ifdef _DEBUG
-																	,const os_char *filename=nullptr
-#endif//_DEBUG
-			)=0;
 
 			virtual bool						SetVertexBuffer		(VertexBufferType,VertexBufferBase *);									///<设置顶点缓冲区数据
 			virtual bool						ClearVertexBuffer	(VertexBufferType);														///<清除顶点缓冲区数据

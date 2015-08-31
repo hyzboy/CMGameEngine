@@ -69,40 +69,43 @@ namespace hgl
 
 	namespace graph
 	{
-		OpenGLCoreRenderable::OpenGLCoreRenderable()
-		{
-			//glGenVertexArrays(1,&vao);
-            glCreateVertexArrays(1,&vao);
-
-			location=new int[HGL_MAX_VERTEX_ATTRIBS];
-
-			for(int i=0;i<HGL_MAX_VERTEX_ATTRIBS;i++)
-				location[i]=-1;
-
-			glsl = -1;
-		}
-
-		OpenGLCoreRenderable::~OpenGLCoreRenderable()
-		{
-			delete[] location;
-
-			glDeleteVertexArrays(1,&vao);
-		}
-
 		/**
 		* 设置顶点缓冲区数据
 		* @param vbt 顶点缓冲区类型
 		* @param vb 数据缓冲区
 		* @return 是否设置成功
 		*/
-		bool OpenGLCoreRenderable::SetVertexBuffer(VertexBufferType vbt,VertexBufferBase *vb)
+		bool OpenGLCoreRenderable::SetVertexBuffer(VertexBufferType vbt, VertexBufferBase *vb)
 		{
-			if(!Renderable::SetVertexBuffer(vbt,vb))
+			if (!Renderable::SetVertexBuffer(vbt, vb))
 				return(false);
 
-			vb->CreateVertexBuffer(vbt==vbtIndex?GL_ELEMENT_ARRAY_BUFFER:GL_ARRAY_BUFFER);
+			vb->CreateVertexBuffer(vbt == vbtIndex ? GL_ELEMENT_ARRAY_BUFFER : GL_ARRAY_BUFFER);
 
 			return(true);
+		}
+	}//namespace graph
+
+	namespace graph
+	{
+		OpenGLCoreRenderableBinding::OpenGLCoreRenderableBinding(OpenGLCoreRenderable *r, GLSL *g)
+		{
+			renderable = r;
+			shader=g
+
+            glCreateVertexArrays(1,&vao);
+
+			location=new int[HGL_MAX_VERTEX_ATTRIBS];
+
+			for(int i=0;i<HGL_MAX_VERTEX_ATTRIBS;i++)
+				location[i]=-1;
+		}
+
+		OpenGLCoreRenderableBinding::~OpenGLCoreRenderableBinding()
+		{
+			delete[] location;
+
+			glDeleteVertexArrays(1,&vao);
 		}
 
 		/**
@@ -111,7 +114,7 @@ namespace hgl
 		* @param shader_locaiton shader变量地址
 		* @param enabled 是否立即启用
 		*/
-		bool OpenGLCoreRenderable::SetShaderLocation(VertexBufferType vbt,unsigned int shader_location)
+		bool OpenGLCoreRenderableBinding::SetShaderLocation(VertexBufferType vbt,unsigned int shader_location)
 		{
 			if(vbt<vbtVertex||vbt>=HGL_MAX_VERTEX_ATTRIBS)
 			{
@@ -124,7 +127,7 @@ namespace hgl
 			return(true);
 		}
 
-		void OpenGLCoreRenderable::ClearShaderLocation()
+		void OpenGLCoreRenderableBinding::ClearShaderLocation()
 		{
 			for(int i=vbtIndex;i<HGL_MAX_VERTEX_ATTRIBS;i++)
 			{
@@ -135,7 +138,7 @@ namespace hgl
 			}
 		}
 
-		bool OpenGLCoreRenderable::Bind(int shader)
+		bool OpenGLCoreRenderableBinding::Bind(int shader)
 		{
 			if(!vao)return(false);
 
@@ -184,7 +187,7 @@ namespace hgl
 			return(true);
 		}
 
-		bool OpenGLCoreRenderable::Use()
+		bool OpenGLCoreRenderableBinding::Use()
 		{
 			if(!vao)return(false);
 
@@ -195,9 +198,9 @@ namespace hgl
 		/**
 		* 生成渲染状态
 		*/
-		bool OpenGLCoreRenderable::MakeRenderState(bool mvp)
+		bool OpenGLCoreRenderableBinding::MakeRenderState(bool mvp)
 		{
-			VertexBufferBase *vb_vertex	=GetVertexBuffer(vbtVertex);
+			VertexBufferBase *vb_vertex	=renderable->GetVertexBuffer(vbtVertex);
 
 			if(!vb_vertex)return(false);						//没顶点，画不了
 
@@ -205,46 +208,46 @@ namespace hgl
 
 			state.mvp=mvp;
 
-			state.vertex_normal			=GetVertexBuffer(vbtNormal);
-			state.vertex_color			=GetVertexBuffer(vbtColor);
-            state.vertex_tangent        =GetVertexBuffer(vbtTangent);
+			state.vertex_normal			= renderable->GetVertexBuffer(vbtNormal);
+			state.vertex_color			= renderable->GetVertexBuffer(vbtColor);
+            state.vertex_tangent        = renderable->GetVertexBuffer(vbtTangent);
 
-			state.diffuse_map			=GetTexCoord(mtcDiffuse);
-			state.normal_map			=GetTexCoord(mtcNormal);
-            state.tangent_map           =GetTexCoord(mtcTangent);
+			state.diffuse_map			= renderable->GetTexCoord(mtcDiffuse);
+			state.normal_map			= renderable->GetTexCoord(mtcNormal);
+            state.tangent_map           = renderable->GetTexCoord(mtcTangent);
 
-			state.color_material		=material->GetColorMaterial();
-			state.alpha_test			=material->GetAlphaTest()>0;
-			state.outside_discard		=material->GetOutsideDiscard();
+			state.color_material		= renderable->material->GetColorMaterial();
+			state.alpha_test			= renderable->material->GetAlphaTest()>0;
+			state.outside_discard		= renderable->material->GetOutsideDiscard();
 
-			state.vertex_color_format	=GetVertexColorFormat();
-			state.vertex_coord			=vb_vertex->GetComponent();
+			state.vertex_color_format	= renderable->GetVertexColorFormat();
+			state.vertex_coord			= vb_vertex->GetComponent();
 
-			state.height_map			=material->GetTexture(mtcHeight);
+			state.height_map			= renderable->material->GetTexture(mtcHeight);
 
 			for(int i=0;i<mtcMax;i++)
 			{
-				if(material->GetTexture(i))
+				if(renderable->material->GetTexture(i))
 					state.tex[i]=true;
 
-				VertexBufferBase *vb=GetTexCoord(i,0);
+				VertexBufferBase *vb= renderable->GetTexCoord(i,0);
 
 				if(vb)
 					state.tex_coord[i]=vb->GetComponent();
 			}
 
-			state.lighting				=material->GetLight();
+			state.lighting				= renderable->material->GetLight();
 
-			if(!CheckPrim(prim))
+			if(!CheckPrim(renderable->GetPrimitive()))
 			{
-				LOG_ERROR(OS_TEXT("错误的图元类型：")+OSString(prim));
+				LOG_ERROR(OS_TEXT("错误的图元类型：")+OSString(renderable->GetPrimitive()));
 				return(false);
 			}
 
 			return(true);
 		}
 
-		Shader *OpenGLCoreRenderable::AutoCreateShader(bool mvp
+		Shader *OpenGLCoreRenderableBinding::AutoCreateShader(bool mvp
 #ifdef _DEBUG
 			,const os_char *shader_filename
 #endif//_DEBUG

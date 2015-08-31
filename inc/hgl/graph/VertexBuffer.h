@@ -90,7 +90,7 @@ namespace hgl
 			virtual size_t	GetDataBytes()const=0;														///<取得每数据字节数
 					int		GetComponent()const	{	return dc_num;	}									///<取数缓冲区元数据数量
 					int		GetCount()const		{	return count;	}									///<取得数据数量
-					int     GetStride()const    {   return dc_num*GetDataBytes();}                      ///<取得每一组数据字节数
+					size_t  GetStride()const    {   return dc_num*GetDataBytes();}                      ///<取得每一组数据字节数
 					void *	GetData()const		{	return mem_data;}									///<取得数据指针
 					int		GetBytes()const		{	return bytes;	}									///<取得数据字节数
 

@@ -45,42 +45,51 @@ namespace hgl
 			CompOperator(const RenderState &,Comp);
 		};//RenderState
 
+		/**
+		* OpenGL Core 可渲染数据
+		*/
 		class OpenGLCoreRenderable:public Renderable
 		{
-			unsigned int vao;
+		public:
 
-			int *location;				//shader绑定变量地址
+			bool SetVertexBuffer(VertexBufferType,VertexBufferBase *);						///<设置顶点缓冲区数据
+		};//class OpenGLCoreRenderable
 
-			RenderState state;			//渲染状态
+		/**
+		* OpenGL Core 可渲染对象
+		*/
+		class OpenGLCoreRenderableBinding
+		{
+			OpenGLCoreRenderable *renderable;			///<可渲染数据
 
-			int glsl;
+			uint vao;
+			int *location;								///<shader绑定变量地址
+			RenderState state;							///<渲染状态
+			GLSL *shader;								///<对应shader
 
 		private:
 
-			bool MakeRenderState(bool);	//生成渲染状态
+			bool MakeRenderState(bool);														///<生成渲染状态
 
 		public:
 
-			OpenGLCoreRenderable();
-			virtual ~OpenGLCoreRenderable();
+			OpenGLCoreRenderableBinding(OpenGLCoreRenderable *, GLSL *glsl=nullptr);
+			~OpenGLCoreRenderableBinding();
 
-			bool SetVertexBuffer(VertexBufferType,VertexBufferBase *);						///<设置顶点缓冲区数据
-
-			bool SetShaderLocation(VertexBufferType,unsigned int);							///<设定与Shader变量的关联
+			bool SetShaderLocation(VertexBufferType, unsigned int);							///<设定与Shader变量的关联
 			void ClearShaderLocation();														///<清除与Shader变量的关联
 
 			bool Bind(int);																	///<绑定VAO数据
-			int GetBindShader()const { return glsl; }										///<取得绑定的shader
-			bool Use();																		///<使用这个VAO
+			bool Use();																		///<使用这个VAO+Shader渲染
 
-			const RenderState *GetRenderState()const{return &state;}						///<取得渲染状态
+			const RenderState *GetRenderState()const { return &state; }						///<取得渲染状态
 
 #ifdef _DEBUG
-			Shader *AutoCreateShader	(bool mvp=true,const os_char *filename=nullptr);	///<自动创建着色程序
+			Shader *AutoCreateShader(bool mvp = true, const os_char *filename = nullptr);	///<自动创建着色程序
 #else
-			Shader *AutoCreateShader	(bool mvp=true);									///<自动创建着色程序
+			Shader *AutoCreateShader(bool mvp = true);										///<自动创建着色程序
 #endif//_DEBUG
-		};//class OpenGLCoreRenderable
+		};//class OpenGLCoreRenderableBinding
 	}//namespace graph
 }//namespace hgl
 #endif//HGL_GRAPH_OPENGL_CORE_RENDERABLE_INCLUDE
