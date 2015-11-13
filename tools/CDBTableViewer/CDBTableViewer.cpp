@@ -13,6 +13,9 @@ CDBTableViewer::~CDBTableViewer()
 
 void CDBTableViewer::Load(const hgl::OSString &filename)
 {
+    if(filename.IsEmpty())
+        return;
+    
 	hgl::db::CDBTable tab;
 
 	if(!tab.Load(filename))return;

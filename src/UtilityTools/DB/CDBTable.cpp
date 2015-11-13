@@ -86,6 +86,9 @@ namespace hgl
 
 		bool CDBTable::Load(const OSString &filename)
 		{
+            if(filename.IsEmpty())
+                return(false);
+
 			io::FileInputStream fis;
 
 			if(!fis.Open(filename))
