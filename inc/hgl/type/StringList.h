@@ -15,6 +15,8 @@ namespace hgl
 	*/
 	template<typename T> class StringList															///字符串列表处理类
 	{
+        static T NullString;
+
 	protected:
 
 		ObjectList<T> Items;
@@ -26,7 +28,18 @@ namespace hgl
 
 	public:	//操作符重载
 
-		T &operator[](int n)const{return *(Items[n]);}
+		T &operator[](int n)const
+		{
+            if(n<0||n>=Items.GetCount())
+                return NullString;
+
+            T *result=Items[n];
+
+            if(result)
+                return(*result);
+            else
+                return NullString;
+        }
 
 		StringList<T> &operator = (const StringList<T> &sl)
 		{
@@ -199,6 +212,8 @@ namespace hgl
 		T &GetString(int n)const{return *(Items[n]);}												///<取得指定行字符串
 	};//template<typename T> class StringList
 
+    template<typename T> T StringList<T>::NullString;
+
 	/**
 	 * 以指定字符为分隔拆解一个字符串到一个字符串列表
 	 * @param sl 字符串列表处理类
@@ -316,6 +331,7 @@ namespace hgl
 
 		return count;
 	}//int SplitToStringList
+
 	template<typename T> int SplitToStringList(StringList<BaseString<T> > &sl,const BaseString<T> &str,const T &split_char,int maxSize)
 	{
 		return SplitToStringList<T>(sl,str.c_str(),str.Length(),split_char,maxSize);
