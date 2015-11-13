@@ -1,4 +1,4 @@
-#include<hgl/io/FileInputStream.h>
+﻿#include<hgl/io/FileInputStream.h>
 namespace hgl
 {
 	namespace io
@@ -20,6 +20,9 @@ namespace hgl
 		bool FileInputStream::Open(const OSString &filename)
 		{
 			Close();
+
+            if(filename.IsEmpty())
+                return(false);
 
 			file=new FileAccess();
 

@@ -1,4 +1,4 @@
-#include<hgl/io/FileAccess.h>
+﻿#include<hgl/io/FileAccess.h>
 #include<hgl/LogInfo.h>
 #if HGL_OS == HGL_OS_Windows
 	#include<io.h>
@@ -54,6 +54,12 @@ namespace hgl
 		bool FileAccess::Open(const OSString &fn,FileOpenMode fom)
 		{
 			Close();
+
+            if(fn.IsEmpty())
+            {
+                LOG_ERROR(OS_TEXT("Error,filename is NULL"));
+                return(false);
+            }
 
 #if HGL_OS == HGL_OS_Windows
 			errno_t result;

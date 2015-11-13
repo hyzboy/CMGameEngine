@@ -21,6 +21,9 @@ namespace hgl
 		{
 			Close();
 
+            if(filename.IsEmpty())
+                return(false);
+
 			file=new FileAccess();
 
 			if(!file->Open(filename,mode))
