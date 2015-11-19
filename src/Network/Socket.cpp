@@ -526,6 +526,8 @@ namespace hgl
 
 				do
 				{
+                    shutdown(ThisSocket,SHUT_RDWR);     //终止读写操作
+
 					result=close(ThisSocket);
 
 					LOG_INFO(OS_TEXT("CloseSocket: ")+OSString(ThisSocket)+OS_TEXT(",result:")+OSString(result)+OS_TEXT(",errno: ")+OSString(errno));

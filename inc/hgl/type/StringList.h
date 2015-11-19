@@ -55,7 +55,7 @@ namespace hgl
 
 	public: //方法
 
-		StringList()HGL_DEFAULT_MEMFUNC;																		///<本类构造函数
+		StringList()HGL_DEFAULT_MEMFUNC;															///<本类构造函数
 		StringList(const T &list){operator=(&list);}												///<本类构造函数
 		StringList(const T *list){operator=(list);}													///<本类构造函数
 		virtual ~StringList(){Clear();}																///<本类析构函数
@@ -212,7 +212,7 @@ namespace hgl
 		T &GetString(int n)const{return *(Items[n]);}												///<取得指定行字符串
 	};//template<typename T> class StringList
 
-    template<typename T> T StringList<T>::NullString;
+    template<typename T> T StringList<T>::NullString;                                               ///<空字符串实例
 
 	/**
 	 * 以指定字符为分隔拆解一个字符串到一个字符串列表
