@@ -49,7 +49,12 @@ ENDIF(WIN32)
 
 IF(USE_LLVM_CLANG)
 OPTION(USE_LLVM_CLANG_STATIC_ANALYZER	"the static analyzer"				OFF		)
+OPTION(USE_LLVM_SAFECode                "use LLVM SAFECode"                 OFF     )
 ENDIF(USE_LLVM_CLANG)
+
+IF(USE_LLVM_SAFECode)
+	add_definitions("-fmemsafety")
+ENDIF(USE_LLVM_SAFECode)
 
 IF(WIN32)
 	IF(USE_64_BIT)
