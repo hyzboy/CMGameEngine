@@ -2,6 +2,7 @@
 #define HGL_TYPE_FUNC_INCLUDE
 
 #include<hgl/platform/Platform.h>
+#include<math.h>
 namespace hgl
 {
 	#define HGL_CONVER_TO_MEM_ALIGN(x)		((((x)+HGL_MEM_ALIGN-1)/HGL_MEM_ALIGN)*HGL_MEM_ALIGN)					//内存对齐转换宏
@@ -338,28 +339,36 @@ namespace hgl
 		return rad*(180.0f/HGL_PI);
 	}
 
+	/**
+     * 浮点数截取小数点后指定位度
+     * @param value 要截取的浮点数
+     * @param num 要截取的位数
+     */
 	template<typename T>
-	inline T hgl_clip(const T value,const int num)
+	inline T hgl_clip_float(const T value,const int num)
 	{
 		if(num<=0)
 			return int64(value);
 
 		if(value==0)return(0);
 
-		double per=1;
+		double per=pow(10,num);
 
-		for(int i=0;i<num;i++)
-			per*=10;
-
-		return double(int64(value*per))/per;
+		return double(floor(value*per))/per;
 	}
 
+	/**
+     * 等值类型复制
+     */
 	template<typename T>
 	inline void hgl_equcpy(T &dst,const T &src)
 	{
 		memcpy(&dst,&src,sizeof(T));
 	}
 
+	/**
+     * 不同类型数据块复制
+     */
 	template<typename S,typename D>
 	inline void hgl_cpy(D *dst,const S *src,const size_t count)
 	{
@@ -371,18 +380,27 @@ namespace hgl
 		}
 	}
 
+	/**
+     * 同类型数据块复制
+     */
 	template<typename T>
 	inline void hgl_typecpy(T *dst,const T *src,const size_t count)
 	{
 		memcpy(dst,src,count*sizeof(T));
 	}
 
+	/**
+     * 同类型数据块移动
+     */
 	template<typename T>
 	inline void hgl_typemove(T *dst,const T *src,const size_t count)
 	{
 		memmove(dst,src,count*sizeof(T));
 	}
 
+	/**
+     * 指定类型数据块赋值
+     */
 	template<typename T>
 	inline void hgl_set(T *data,const T value,const size_t count)
 	{
@@ -393,12 +411,18 @@ namespace hgl
 		}
 	}
 
+	/**
+     * 指定类型数据块清0
+     */
 	template<typename T>
 	inline void hgl_zero(T *data,const size_t count)
 	{
 		memset(data,0,count*sizeof(T));
 	}
 
+	/**
+     * 指定类型数据清0
+     */
 	template<typename T>
 	inline void hgl_zero(T &data)
 	{
