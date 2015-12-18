@@ -17,18 +17,18 @@ extern "C" int WINAPI WinMain(HINSTANCE,HINSTANCE,char *,int)
 	try
 	{
 #endif//_DEBUG
+        GraphicsSystemInitInfo sii;
+        GraphicsApplication app;
+        StringList<WideString> sl;
+
 		wchar_t **argv;
 		int argc;
 
 		argv = CommandLineToArgvW(GetCommandLineW(), &argc);
-		
-		StringList<WideString> sl;
 
 		for(int i=0;i<argc;i++)
 			sl.Add(argv[i]);
 
-		GraphicsSystemInitInfo sii;
-		GraphicsApplication app;
 
 		return GraphicsAppMain(sii,app,sl);
 #ifdef _DEBUG
