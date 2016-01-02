@@ -3,7 +3,6 @@
 #include<hgl/PlugIn.h>
 #include<hgl/Info.h>
 #include<hgl/Other.h>
-#include<apr_general.h>
 
 #if HGL_OS == HGL_OS_Windows
 #include<wchar.h>
@@ -74,9 +73,6 @@ namespace hgl
 #if HGL_OS == HGL_OS_Windows
 		srand(GetMicroTime());
 #else
-		apr_initialize();			//初始化apr
-		InitMemoryPool();			//初始化内存池
-
 		srand48(GetMicroTime());
 		srand(lrand48());
 #endif//
@@ -103,10 +99,5 @@ namespace hgl
 		ClearAllPlugIn();
 
 		CloseLog();
-
-#if HGL_OS != HGL_OS_Windows
-		ClearMemoryPool();
-		apr_terminate();		//终止apr
-#endif//HGL_OS != HGL_OS_Windows
 	}
 }//namespace hgl

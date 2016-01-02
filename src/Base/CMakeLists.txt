@@ -26,7 +26,6 @@ SET(BASE_OTHER_SOURCE
 
 IF(UNIX)
 	SET(BASE_OTHER_SOURCE ${BASE_OTHER_SOURCE}	Other/TimePOSIX.cpp
-												Other/MemoryPool.cpp
 												Other/ExitUnix.cpp)
 ENDIF(UNIX)
 
@@ -114,10 +113,6 @@ SET(BASE_MULTI_THREAD_SOURCE
 # 	MultiThread/ASyncThread.cpp)
 
 IF(UNIX)
-	SET(BASE_MULTI_PROCESS_SOURCE
-		MultiProcess/SharedMemory.cpp
-		MultiProcess/ProcMutexAPR.cpp)
-
 	SET(BASE_MULTI_THREAD_SOURCE ${BASE_MULTI_THREAD_SOURCE}
 		MultiThread/Posix/CondVarPOSIX.cpp
 		MultiThread/Posix/RWLockPOSIX.cpp
@@ -125,15 +120,14 @@ IF(UNIX)
 		MultiThread/Posix/ThreadPOSIX.cpp
 		MultiThread/Posix/ThreadMutexPOSIX.cpp)
 
-	SET(BASE_MULTI_PROCESS_SOURCE ${BASE_MULTI_PROCESS_SOURCE}
+	SET(BASE_MULTI_PROCESS_SOURCE
 		MultiProcess/ProcessPOSIX.cpp
 		MultiProcess/Pipe.cpp
 		MultiProcess/Fifo.cpp)
 ENDIF(UNIX)
 
 IF(WIN32)
-	SET(BASE_MULTI_PROCESS_SOURCE
-		MultiProcess/ProcMutexNT4.cpp)
+	SET(BASE_MULTI_PROCESS_SOURCE)
 
 	SET(BASE_MULTI_THREAD_SOURCE ${BASE_MULTI_THREAD_SOURCE}
 		MultiThread/WinNT/CondVarNT6.cpp
