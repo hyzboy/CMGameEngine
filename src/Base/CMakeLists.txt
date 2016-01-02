@@ -121,13 +121,15 @@ IF(UNIX)
 		MultiThread/Posix/ThreadMutexPOSIX.cpp)
 
 	SET(BASE_MULTI_PROCESS_SOURCE
+		MultiProcess/ProcMutexPOSIX.cpp
 		MultiProcess/ProcessPOSIX.cpp
 		MultiProcess/Pipe.cpp
 		MultiProcess/Fifo.cpp)
 ENDIF(UNIX)
 
 IF(WIN32)
-	SET(BASE_MULTI_PROCESS_SOURCE)
+	SET(BASE_MULTI_PROCESS_SOURCE
+		MultiProcess/ProcMutexNT4.cpp)
 
 	SET(BASE_MULTI_THREAD_SOURCE ${BASE_MULTI_THREAD_SOURCE}
 		MultiThread/WinNT/CondVarNT6.cpp
