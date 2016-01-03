@@ -105,9 +105,9 @@ namespace hgl
 			*/
 			static int	Domain2IP(const UTF8String &domain,List<InAddr> &addr_list,int socktype=0,int protocol=0)					///<转换域名到IP地址
 			{
-				if (name.Length() <= 0)return(-1);
+				if (domain.Length() <= 0)return(-1);
 
-				return GetIPList(name.c_str(),addr_list,socktype,protocol);
+				return GetIPList(domain.c_str(),addr_list,socktype,protocol);
 			}
 
 			/**
@@ -130,7 +130,6 @@ namespace hgl
 				if (bind(ThisSocket, (SockAddr *)&addr, sizeof(SockAddrIn)))
 				{
 					LOG_ERROR(OS_TEXT("Bind Socket Error! errno: ") + OSString(GetLastSocketError()));
-					std::cerr << "Bind Socket Error! errno: " << GetLastSocketError() << std::endl;
 					return(false);
 				}
 
@@ -172,17 +171,17 @@ namespace hgl
 		using ipv4 = ip_tool<AF_INET,	struct in_addr,	struct sockaddr,	struct sockaddr_in	>;
 		using ipv6 = ip_tool<AF_INET6,	struct in6_addr,struct sockaddr6,	struct sockaddr_in6	>;
 
-		template<> void ipv4::AddAddrToList(List<in_addr> &addr_list, const sockaddr_in *sai)
+		template<> inline void ipv4::AddAddrToList(List<in_addr> &addr_list, const sockaddr_in *sai)
 		{
 			addr_list.Add(sai->sin_addr);
 		}
 
-		template<> void ipv6::AddAddrToList(List<in6_addr> &addr_list, const sockaddr_in6 *sai)
+		template<> inline void ipv6::AddAddrToList(List<in6_addr> &addr_list, const sockaddr_in6 *sai)
 		{
 			addr_list.Add(sai->sin6_addr);
 		}
 
-		template<> void ipv4::FillAddrByAny(struct sockaddr_in &addr, ushort port)
+		template<> inline void ipv4::FillAddrByAny(struct sockaddr_in &addr, ushort port)
 		{
 			hgl_zero(addr);
 
@@ -190,7 +189,7 @@ namespace hgl
 			addr.sin_port = htons(port);
 		}
 
-		template<> void ipv6::FillAddrByAny(struct sockaddr_in6 &addr, ushort port)
+		template<> inline void ipv6::FillAddrByAny(struct sockaddr_in6 &addr, ushort port)
 		{
 			hgl_zero(addr);
 
