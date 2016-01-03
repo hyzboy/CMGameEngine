@@ -1,7 +1,54 @@
-#ifndef HGL_NETWORK_IP_TOOL_INCLUDE
-#define HGL_NETWORK_IP_TOOL_INCLUDE
+#ifndef HGL_NETWORK_IP_INCLUDE
+#define HGL_NETWORK_IP_INCLUDE
 
+#include<hgl/type/DataType.h>
 #include<hgl/type/List.h>
+#include<hgl/type/BaseString.h>
+#include<hgl/Str.h>
+
+#if HGL_OS == HGL_OS_Windows
+    #include<winsock2.h>
+    #include<ws2tcpip.h>
+
+    #if SOMAXCONN == 5
+    #error Please use <winsock2.h>
+    #endif//
+
+    typedef int socklen_t;
+    typedef ULONG in_addr_t;
+
+    #define GetLastSocketError() WSAGetLastError()
+#else
+    #include<errno.h>
+    #include<sys/types.h>
+    #include<sys/ioctl.h>
+    #include<sys/socket.h>
+    #include<unistd.h>
+    #include<netdb.h>
+    #include<arpa/inet.h>
+    #include<netinet/in.h>
+
+    #define GetLastSocketError() (errno)
+
+    #if HGL_OS == HGL_OS_Linux
+        #include<sys/sendfile.h>
+
+        inline int sendfile(int tfd,int sfd,size_t size)
+        {
+            return sendfile(tfd,sfd,nullptr,size);
+        }
+    #endif//HGL_OS == HGL_OS_Linux
+
+    #if HGL_OS == HGL_OS_FreeBSD
+        #include<sys/uio.h>
+
+        inline int sendfile(int tfd,int sfd,size_t size)
+        {
+            return sendfile(tfd,sfd,0,size,nullptr,nullptr,0);
+        }
+    #endif//HGL_OS == HGL_OS_FreeBSD
+#endif//HGL_OS == HGL_OS_Windows
+
 namespace hgl
 {
 	namespace network
@@ -69,7 +116,7 @@ namespace hgl
 			{
 				const int val = reuse;
 
-#if HGL_OS == HGL_OS_Windows				
+#if HGL_OS == HGL_OS_Windows
 				setsockopt(ThisSocket, SOL_SOCKET, SO_REUSEADDR, (const char *)&val, sizeof(BOOL));		//win下的BOOL本质也是int，所以唯一区分只在于val的传入类型
 #else
 				setsockopt(ThisSocket, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(int));
@@ -112,7 +159,7 @@ namespace hgl
 		{
 			addr_list.Add(sai->sin_addr);
 		}
-		
+
 		template<> void ipv6::AddAddrToList(List<in6_addr> &addr_list, const sockaddr_in6 *sai)
 		{
 			addr_list.Add(sai->sin6_addr);

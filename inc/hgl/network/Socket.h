@@ -1,59 +1,12 @@
 ﻿#ifndef HGL_SOCKET_INCLUDE
 #define HGL_SOCKET_INCLUDE
 
-#include<hgl/type/DataType.h>
-#include<hgl/type/BaseString.h>
-#include<hgl/Str.h>
-
-#if HGL_OS == HGL_OS_Windows
-	#include<winsock2.h>
-	#include<ws2tcpip.h>
-
-	#if SOMAXCONN == 5
-	#error Please use <winsock2.h>
-	#endif//
-
-	typedef int socklen_t;
-	typedef ULONG in_addr_t;
-
-	#define GetLastSocketError() WSAGetLastError()
-#else
-	#include<errno.h>
-	#include<sys/types.h>
-	#include<sys/ioctl.h>
-	#include<sys/socket.h>
-	#include<unistd.h>
-	#include<netdb.h>
-	#include<arpa/inet.h>
-	#include<netinet/in.h>
-
-	#define GetLastSocketError() (errno)
-
-	#if HGL_OS == HGL_OS_Linux
-		#include<sys/sendfile.h>
-
-		inline int sendfile(int tfd,int sfd,size_t size)
-		{
-			return sendfile(tfd,sfd,nullptr,size);
-		}
-	#endif//HGL_OS == HGL_OS_Linux
-
-	#if HGL_OS == HGL_OS_FreeBSD
-		#include<sys/uio.h>
-
-		inline int sendfile(int tfd,int sfd,size_t size)
-		{
-			return sendfile(tfd,sfd,0,size,nullptr,nullptr,0);
-		}
-	#endif//HGL_OS == HGL_OS_FreeBSD
-#endif//HGL_OS == HGL_OS_Windows
+#include<hgl/network/IP.h>
 
 //#define HGL_RECV_BYTE_COUNT			///<接收字节数统计(调试用)
 //#define HGL_SEND_BYTE_COUNT			///<发送字节数统计(调试用)
 
 //#define HGL_SOCKET_SEND_LIMIT_SIZE	///<发送限制包尺寸,默认为不限制
-
-#include<hgl/network/ip_tool.h>
 
 namespace hgl
 {
