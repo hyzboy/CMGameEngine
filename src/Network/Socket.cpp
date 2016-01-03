@@ -342,69 +342,6 @@ namespace hgl
 		}
 
 		/**
-		* 将指定域名/IPv4地址和port填充到SockAddr结构中
-		* @param addr netaddr结构
-		* @param name 域名或IPv4地址
-		* @param port 端口
-		* @return 是否成功
-		*/
-		bool FillAddr(sockaddr_in *addr,const UTF8String &name,int port)
-		{
-			if(!addr)return(false);
-
-			if(name.Length()<=0
-			 ||name=="0.0.0.0")
-			{
-				addr->sin_family     =AF_INET;
-				addr->sin_addr.s_addr=INADDR_ANY;
-				addr->sin_port       =htons(port);
-			}
-			else
-			{
-				in_addr_t saddr=inet_addr(name);
-
-#if HGL_OS == HGL_OS_Windows
-				hostent *HostEntry;
-
-				if(saddr==INADDR_NONE)HostEntry=gethostbyname(name);
-								 else HostEntry=gethostbyaddr((char *)&saddr,sizeof(in_addr_t),AF_INET);
-
-				if(HostEntry)addr->sin_addr.s_addr=((in_addr *)*HostEntry->h_addr_list)->s_addr;
-						else addr->sin_addr.s_addr=saddr;
-#else
-				//手册讲gethostbyaddr_r和gethostbyname_r线程安全，但valgrind-helgrind会报错
-				hostent hostbuf;
-				hostent *res=nullptr;
-				char buf[8192];
-				int err=0;
-
-				if(saddr==INADDR_NONE)
-				{
-					gethostbyname_r(name,
-									&hostbuf,buf,sizeof(buf),
-									&res,&err);
-				}
-				else
-				{
-					gethostbyaddr_r((char *)&saddr,sizeof(in_addr_t),AF_INET,
-									&hostbuf,buf,sizeof(buf),
-									&res,&err);
-				}
-
-				if(res)
-					addr->sin_addr.s_addr=((in_addr *)*(hostbuf.h_addr_list))->s_addr;
-				else
-					addr->sin_addr.s_addr=saddr;
-#endif//HGL_OS == HGL_OS_Windows
-
-				addr->sin_family    =AF_INET;
-				addr->sin_port      =htons(port);
-			}
-
-			return(true);
-		}
-		
-		/**
 		* @param ThisSocket 要关闭的socket
 		*/
 		void CloseSocket(int ThisSocket)

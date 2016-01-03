@@ -60,12 +60,14 @@ namespace hgl
 
 			static void AddAddrToList(List<InAddr> &addr_list, const SockAddrIn *sai);
 
-			static int GetIPList(const char *addr_string, List<InAddr> &addr_list)
+			static int GetIPList(const char *addr_string, List<InAddr> &addr_list,int socktype,int protocol)
 			{
 				struct addrinfo hints, *answer, *ptr;
 
 				hgl_zero(hints);
 				hints.ai_family = FAMILY;
+                hints.ai_socktype=socktype;
+                hints.ai_protocol=protocol;
 
 				if (getaddrinfo(addr_string, nullptr, &hints, &answer))			//此函数最低Windows 2003/Vista
 					return(-1);
@@ -77,6 +79,7 @@ namespace hgl
 					++count;
 				}
 
+				freeaddrinfo(answer);
 				return(count);
 			}
 
@@ -96,13 +99,15 @@ namespace hgl
 			* 将一个域名转换成IP(IP格式)
 			* @param domain 域名
 			* @param addr_list IP地址列表
+            * @param socktype Socket类型(可以为SOCK_STREAM、SOCK_DGRAM、SOCK_RAW、SOCK_RDM、SOCK_SEQPACKET等值),默认为所有类型。
+            * @param protocol 协议类型(可以为IPPROTO_TCP、IPPROTO_UDP、IPPROTO_SCTP),默认为所有类型。
 			* @return IP地址数量,-1表示失败
 			*/
-			static int	Domain2IP(const UTF8String &domain,List<InAddr> &addr_list)					///<转换域名到IP地址
+			static int	Domain2IP(const UTF8String &domain,List<InAddr> &addr_list,int socktype=0,int protocol=0)					///<转换域名到IP地址
 			{
 				if (name.Length() <= 0)return(-1);
 
-				return GetIPList(name.c_str(), addr_list);
+				return GetIPList(name.c_str(),addr_list,socktype,protocol);
 			}
 
 			/**
@@ -132,9 +137,21 @@ namespace hgl
 				return(true);
 			}
 
-			static bool FillAddr(SockAddrIn *addr, const UTF8String &addr_string, ushort port)		///<将指定域名或地址填充到sockaddr_in结构中
+			static bool FillAddr(SockAddrIn *addr, const UTF8String &addr_string, ushort port,int socktype,int protocol)		///<将指定域名或地址填充到sockaddr_in结构中
 			{
+                struct addrinfo hints, *answer, *ptr;
 
+                hgl_zero(hints);
+                hints.ai_family = FAMILY;
+                hints.ai_socktype=socktype;
+                hints.ai_protocol=protocol;
+
+                if (getaddrinfo(addr_string, nullptr, &hints, &answer))         //此函数最低Windows 2003/Vista
+                    RETURN_FALSE;
+
+                memcpy(addr,answer->ai_addr,sizeof(SockAddrIn));
+                freeaddrinfo(answer);
+                return(true);
 			}
 
 			static bool	BindAddr(int ThisSocket, const char *name, int port)
