@@ -334,76 +334,11 @@ namespace hgl
 		}
 
 		/**
-		* 取得本机IP地址
-		* @param address 本机IP地址存放指针(如果取得成功，需要手动delete[]掉)
-		* @param hostname 本机hostname,必须不得少于256字节
-		* @return 本机IP地址数据,-1表示失败
+		* 取得本机的主机名称
 		*/
-		int GetLocalIP(in_addr **address,char *hostname)
+		bool GetHostname(char hostname[256])
 		{
-			if (gethostname(hostname, 256) !=0)
-				return(-1);
-
-			hostent *phe = gethostbyname(hostname);
-
-			int count=0;
-
-			for (int i = 0; phe->h_addr_list[i] != 0; ++i)
-				count++;
-
-			*address=new in_addr[count];
-
-			for(int i=0;i<count;i++)
-				memcpy(&((*address)[i]), phe->h_addr_list[i], sizeof(in_addr));
-
-			return(count);
-		}
-
-		/**
-		* 将一个域名转换成IP(IPv4格式)
-		* @param name 域名
-		* @param address 本机IP地址存放指针(如果取得成功，需要手动delete[]掉)
-		* @return 本机IP地址数据,-1表示失败
-		*/
-		int Domain2IP(const UTF8String &name,in_addr **address)
-		{
-			if(name.Length()<=0)return(-1);
-
-			int result=-1;
-			in_addr iaHost;
-			hostent *HostEntry;
-
-			memset(&iaHost,0,sizeof(in_addr));
-
-			iaHost.s_addr=inet_addr(name);
-
-			if(iaHost.s_addr==INADDR_NONE)HostEntry=gethostbyname(name);
-									 else HostEntry=gethostbyaddr((char *)&iaHost,sizeof(in_addr),AF_INET);
-
-			if(HostEntry)
-			{
-				int count=0;
-
-				for (int i = 0; HostEntry->h_addr_list[i] != 0; ++i)
-					count++;
-
-				*address=new in_addr[count];
-
-				for(int i=0;i<count;i++)
-					memcpy(&((*address)[i]), HostEntry->h_addr_list[i], sizeof(in_addr));
-
-				result=count;
-			}
-			else
-			{
-				*address=new in_addr[1];
-
-				*((uint32 *)(*address))=inet_addr(name);
-
-				result=1;
-			}
-
-			return(result);
+			return !gethostname(hostname, 256);
 		}
 
 		/**
@@ -468,48 +403,7 @@ namespace hgl
 
 			return(true);
 		}
-
-		/**
-		* 绑定指定域名/IP和port到当前socket
-		* @param addr 指定的ip/port
-		* @return 是否成功
-		*/
-		bool BindAddr(int ThisSocket,const sockaddr_in &addr)
-		{
-#if HGL_OS == HGL_OS_Windows
-			const BOOL val=true;
-
-			setsockopt(ThisSocket,SOL_SOCKET,SO_REUSEADDR,(const char *)&val,sizeof(BOOL));
-#else
-			const int val=1;
-			setsockopt(ThisSocket,SOL_SOCKET,SO_REUSEADDR,&val,sizeof(int));
-#endif//HGL_OS == HGL_OS_Windows
-
-			if(bind(ThisSocket,(sockaddr *)&addr,sizeof(sockaddr_in)))
-			{
-				LOG_ERROR(OS_TEXT("Bind Socket Error! errno: ")+OSString(GetLastSocketError()));
-				std::cerr<<"Bind Socket Error! errno: "<<GetLastSocketError()<<std::endl;
-				return(false);
-			}
-
-			return(true);
-		}
-
-		/**
-		* 绑定指定域名/IP和port到当前socket
-		* @param name 域名或IP
-		* @param port 端口
-		* @return 是否成功
-		*/
-		bool BindAddr(int ThisSocket,const char *name,int port)
-		{
-			sockaddr_in addr;
-
-			if(!FillAddr(&addr,name,port))return(false);
-
-			return BindAddr(ThisSocket,addr);
-		}
-
+		
 		/**
 		* @param ThisSocket 要关闭的socket
 		*/

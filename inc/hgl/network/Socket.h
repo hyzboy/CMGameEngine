@@ -7,6 +7,7 @@
 
 #if HGL_OS == HGL_OS_Windows
 	#include<winsock2.h>
+	#include<ws2tcpip.h>
 
 	#if SOMAXCONN == 5
 	#error Please use <winsock2.h>
@@ -18,6 +19,7 @@
 	#define GetLastSocketError() WSAGetLastError()
 #else
 	#include<errno.h>
+	#include<sys/types.h>
 	#include<sys/ioctl.h>
 	#include<sys/socket.h>
 	#include<unistd.h>
@@ -50,6 +52,8 @@
 //#define HGL_SEND_BYTE_COUNT			///<发送字节数统计(调试用)
 
 //#define HGL_SOCKET_SEND_LIMIT_SIZE	///<发送限制包尺寸,默认为不限制
+
+#include<hgl/network/ip_tool.h>
 
 namespace hgl
 {
@@ -125,11 +129,8 @@ namespace hgl
 
 	namespace network
 	{
-		int  GetLocalIP(in_addr **,char *);															///<取得本机IP
-		int	 Domain2IP(const UTF8String &,in_addr **);												///<转换域名到IPv4地址
-		bool FillAddr(sockaddr_in *,const UTF8String &,int);										///<将指定域名或IPv4地址填充到sockaddr_in结构中
-		bool BindAddr(int ThisSocket,const sockaddr_in &addr);
-		bool BindAddr(int ThisSocket,const char *name,int port);
+		bool GetHostname(UTF8String &hostname);														///<取得本机主机名称
+
 		void CloseSocket(int);																		///<关闭socket
 		void SetSocketBlock(int ThisSocket,bool block,double send_time_out=HGL_NETWORK_TIME_OUT,
 													double recv_time_out=HGL_NETWORK_TIME_OUT);		///<设置socket是否使用阻塞方式
