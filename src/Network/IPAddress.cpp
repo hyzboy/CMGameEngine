@@ -100,6 +100,8 @@ namespace hgl
         bool IPv4Address::Bind(int ThisSocket,int reuse)const{return BindAddr<sockaddr,sockaddr_in>(ThisSocket,addr,reuse);}
         const ushort IPv4Address::GetPort()const{return addr.sin_port;}
 
+        void IPv4Address::ToString(char *str)const{inet_ntop(AF_INET,&addr,str,INET_ADDRSTRLEN);}
+
         /**
         * 取得指定域名的IPv4地址列表
         * @param addr_list 存放结果的地址列表
@@ -146,6 +148,8 @@ namespace hgl
         }
         bool IPv6Address::Bind(int ThisSocket,int reuse)const{return BindAddr<sockaddr,sockaddr_in6>(ThisSocket,addr,reuse);}
         const ushort IPv6Address::GetPort()const{return addr.sin6_port;}
+
+        void IPv6Address::ToString(char *str)const{inet_ntop(AF_INET6,&addr,str,INET6_ADDRSTRLEN);}
 
         /**
         * 取得指定域名的IPv6地址列表

@@ -154,7 +154,7 @@ namespace hgl
 
             const ushort GetPort()const;
 
-            void ToString(char *str)const{inet_ntop(AF_INET,&addr,str,INET_ADDRSTRLEN);}
+            void ToString(char *str)const;
 
             int GetDomainIPList(List<in_addr> &addr_list,const char *domain,int _socktype,int _protocol);
             int GetLocalIPList(List<in_addr> &addr_list,int _socktype,int _protocol);
@@ -202,7 +202,7 @@ namespace hgl
             sockaddr *GetSockAddr(){return (sockaddr *)&addr;}
             const ushort GetPort()const;
 
-            void ToString(char *str)const{inet_ntop(AF_INET6,&addr,str,INET6_ADDRSTRLEN);}
+            void ToString(char *str)const;
             int GetDomainIPList(List<in6_addr> &addr_list,const char *domain,int _socktype,int _protocol);
             int GetLocalIPList(List<in6_addr> &addr_list,int _socktype,int _protocol);
 
