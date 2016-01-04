@@ -14,6 +14,8 @@ namespace hgl
 			io::InputStream *sis;
 			io::OutputStream *sos;
 
+			char *ipstr;
+
 		public:
 
 			double Heart;																				///<心跳间隔时间(单位:秒，默认参见HGL_TCP_HEART_TIME)

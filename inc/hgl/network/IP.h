@@ -1,4 +1,4 @@
-#ifndef HGL_NETWORK_IP_INCLUDE
+﻿#ifndef HGL_NETWORK_IP_INCLUDE
 #define HGL_NETWORK_IP_INCLUDE
 
 #include<hgl/type/DataType.h>

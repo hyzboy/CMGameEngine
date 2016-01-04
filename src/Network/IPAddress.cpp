@@ -1,4 +1,4 @@
-#include<hgl/network/IP.h>
+﻿#include<hgl/network/IP.h>
 
 namespace hgl
 {
@@ -7,7 +7,7 @@ namespace hgl
         template<int FAMILY,typename SockAddrIn>
         bool FillAddr(SockAddrIn &addr, const char *name, ushort port,int socktype,int protocol)        ///<将指定域名或地址填充到sockaddr_in结构中
         {
-            struct addrinfo hints, *answer, *ptr;
+            struct addrinfo hints, *answer;
 
             hgl_zero(hints);
             hints.ai_family = FAMILY;
