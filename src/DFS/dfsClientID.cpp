@@ -77,8 +77,7 @@ namespace hgl
 		{
 			UTF8String set_name;
 
-			UTF8String ip;
-			uint port;
+			IPAddress *ip_addr;
 			UTF8String node_name;
 			int64 node_id;
 
@@ -90,7 +89,7 @@ namespace hgl
 
 				obj->SetName(set_name);
 
-				if(!obj->Init(ip,port,node_name,node_id))
+				if(!obj->Init(ip_addr,node_name,node_id))
 				{
 					delete obj;
 					return NULL;
@@ -101,12 +100,11 @@ namespace hgl
 
 		public:
 
-			dfsClientIDConnectPool(const UTF8String &sn,const UTF8String &i,uint p,const UTF8String &nn,int64 ni)
+			dfsClientIDConnectPool(const UTF8String &sn,const IPAddress *addr,const UTF8String &nn,int64 ni)
 			{
 				set_name	=sn;
 
-				ip			=i;
-				port		=p;
+				ip_addr     =addr->CreateCopy();
 				node_name	=nn;
 				node_id		=ni;
 			}
@@ -230,11 +228,11 @@ namespace hgl
 			SAFE_CLEAR(conn_pool);
 		}
 
-		bool dfsClientID::Init(const UTF8String &ipstr,uint p,const UTF8String &n,const int64 id)
+		bool dfsClientID::Init(const IPAddress *addr,const UTF8String &n,const int64 id)
 		{
-			if(!dfsClientConnect::Init(ipstr,p,n,id))RETURN_FALSE;
+			if(!dfsClientConnect::Init(addr,n,id))RETURN_FALSE;
 
-			conn_pool=new dfsClientIDConnectPool(set_name,ipstr,p,n,id);
+			conn_pool=new dfsClientIDConnectPool(set_name,addr,n,id);
 
 			return(true);
 		}
