@@ -8,11 +8,11 @@ namespace hgl
 		lock = nullptr;
 	}
 
-	bool ProcMutex::Create(const char *name)
+	bool ProcMutex::Create(const os_char *name)
 	{
 		if (lock != nullptr)return(false);
 
-		lock = CreateMutexA(NULL, FALSE, name);
+		lock = CreateMutexW(NULL, FALSE, name);
 
 		if(!lock)
 			return(true);
