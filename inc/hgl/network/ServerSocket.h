@@ -23,7 +23,8 @@ namespace hgl
 			ServerSocket();
 			virtual ~ServerSocket();
 
-            const IPAddress *GetServerAddress()const{return server_address;}                        ///<取得服务器IP地址
+            const   IPAddress *GetServerAddress()const{return server_address;}                      ///<取得服务器IP地址
+                    IPAddress *CreateIPAddress()const{return server_address->Create();}             ///<创建一个空的IP地址
 
 			virtual bool CreateServer(const IPAddress *,const uint ml=HGL_SERVER_LISTEN_COUNT,bool reuse=true);	         ///<创建服务器
 			virtual void CloseServer();                                                                                  ///<关闭服务器

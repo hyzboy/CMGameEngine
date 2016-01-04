@@ -116,6 +116,8 @@ namespace hgl
 
 			ThisSocket=sock;
 
+            SAFE_CLEAR(ThisAddr);
+
 			if(addr)
                 ThisAddr=addr->CreateCopy();
 			else

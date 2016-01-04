@@ -92,8 +92,8 @@ namespace hgl
 
 		#define GetLastSocketErrorString() GetSocketString(GetLastSocketError())
 
-		bool Read(io::DataInputStream *dis,sockaddr_in &addr);
-		bool Write(io::DataOutputStream *dos,const sockaddr_in &addr);
+		bool Read(io::DataInputStream *dis,IPAddress *addr);
+		bool Write(io::DataOutputStream *dos,const IPAddress *addr);
 
 		/**
 		* 所有Socket通信类的基类
@@ -109,9 +109,6 @@ namespace hgl
 			int socket_protocols;																		///<Socket协议
 
 			bool CreateSocket(int,int,int);																///<创建Socket
-
-			bool bindaddr(const sockaddr_in &);															///<绑定指定域名/IP和PORT到当前socket
-			bool bindaddr(const char *,int);                                                            ///<绑定指定域名/IP和PORT到当前socket
 
 		public: //属性
 

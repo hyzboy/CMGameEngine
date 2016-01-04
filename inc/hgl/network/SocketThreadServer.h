@@ -17,11 +17,11 @@ namespace hgl
 
 		public:
 
-			SocketThreadServer(const char *ip,const uint16 port)
+			SocketThreadServer(const IPAddress *addr)
 			{
 				server	=new S();
 
-				if(!server->CreateServer(ip,port))
+				if(!server->CreateServer(addr))
 				{
 					LOG_ERROR(OS_TEXT("Create SocketThreadServer failed!"));
 					this->fos=fosExitGame;
@@ -45,12 +45,15 @@ namespace hgl
 
 			void Update()
 			{
-				sockaddr_in sa;
+				IPAddress *sa=server->CreateIPAddress();
+
 				const int sock=server->Accept(sa);							//接入一个连接
 
 				if(sock<0)		//出错
 				{
-					this->fos=fosExitGame;
+                    delete sa;
+                    
+                    this->fos=fosExitGame;
 
 					LOG_INFO(OS_TEXT("SocketThreadrServer Accept error!"));
 				}
