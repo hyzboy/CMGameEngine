@@ -156,32 +156,8 @@ namespace hgl
 
             void ToString(char *str)const{inet_ntop(AF_INET,&addr,str,INET_ADDRSTRLEN);}
 
-            /**
-             * 取得指定域名的IPv4地址列表
-             * @param addr_list 存放结果的地址列表
-             * @param domain 域名或地址字符串
-             * @param _socktype Socket类型(可以为SOCK_STREAM、SOCK_DGRAM、SOCK_RAW、SOCK_RDM、SOCK_SEQPACKET等值),默认为所有类型。
-             * @param _protocol 协议类型(可以为IPPROTO_TCP、IPPROTO_UDP、IPPROTO_SCTP),默认为所有类型。
-             * @return 地址个数,-1表示出错
-             */
             int GetDomainIPList(List<in_addr> &addr_list,const char *domain,int _socktype,int _protocol);
-
-            /**
-             * 取得本机的IPv4地址列表
-             * @param addr_list 存放结果的地址列表
-             * @param _socktype Socket类型(可以为SOCK_STREAM、SOCK_DGRAM、SOCK_RAW、SOCK_RDM、SOCK_SEQPACKET等值),默认为所有类型。
-             * @param _protocol 协议类型(可以为IPPROTO_TCP、IPPROTO_UDP、IPPROTO_SCTP),默认为所有类型。
-             * @return 地址个数,-1表示出错
-             */
-            int GetLocalIPList(List<in_addr> &addr_list,int _socktype,int _protocol)
-            {
-                char hostname[256];
-
-                if(gethostname(hostname, 256))
-                    return(-1);
-
-                return GetDomainIPList(addr_list,hostname,_socktype,_protocol);
-            }
+            int GetLocalIPList(List<in_addr> &addr_list,int _socktype,int _protocol);
 
             IPAddress *CreateCopy()const
             {
@@ -227,33 +203,8 @@ namespace hgl
             const ushort GetPort()const;
 
             void ToString(char *str)const{inet_ntop(AF_INET6,&addr,str,INET6_ADDRSTRLEN);}
-
-            /**
-             * 取得指定域名的IPv6地址列表
-             * @param addr_list 存放结果的地址列表
-             * @param domain 域名或地址字符串
-             * @param _socktype Socket类型(可以为SOCK_STREAM、SOCK_DGRAM、SOCK_RAW、SOCK_RDM、SOCK_SEQPACKET等值),默认为所有类型。
-             * @param _protocol 协议类型(可以为IPPROTO_TCP、IPPROTO_UDP、IPPROTO_SCTP),默认为所有类型。
-             * @return 地址个数,-1表示出错
-             */
             int GetDomainIPList(List<in6_addr> &addr_list,const char *domain,int _socktype,int _protocol);
-
-            /**
-             * 取得本机的IPv6地址列表
-             * @param addr_list 存放结果的地址列表
-             * @param _socktype Socket类型(可以为SOCK_STREAM、SOCK_DGRAM、SOCK_RAW、SOCK_RDM、SOCK_SEQPACKET等值),默认为所有类型。
-             * @param _protocol 协议类型(可以为IPPROTO_TCP、IPPROTO_UDP、IPPROTO_SCTP),默认为所有类型。
-             * @return 地址个数,-1表示出错
-             */
-            int GetLocalIPList(List<in6_addr> &addr_list,int _socktype,int _protocol)
-            {
-                char hostname[256];
-
-                if(gethostname(hostname, 256))
-                    return(-1);
-
-                return GetDomainIPList(addr_list,hostname,_socktype,_protocol);
-            }
+            int GetLocalIPList(List<in6_addr> &addr_list,int _socktype,int _protocol);
 
             IPAddress *CreateCopy()const
             {
