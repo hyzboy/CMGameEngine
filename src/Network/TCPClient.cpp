@@ -47,6 +47,8 @@ namespace hgl
 
 			sis=new SocketInputStream();
 			sos=new SocketOutputStream();
+
+			ipstr = nullptr;
 		}
 
 		TCPClient::~TCPClient()
@@ -74,11 +76,12 @@ namespace hgl
 
 			if(connect(ThisSocket,(sockaddr *)&addr,sizeof(addr)))
 			{
-				os_char ipstr[addr->GetIPStringMaxSize()+1];
+				SAFE_CLEAR(ipstr);
+				ipstr=new char[addr->GetIPStringMaxSize()+1];
 
                 addr->ToString(ipstr);
 
-				LOG_HINT(OS_TEXT("Don't Connect to TCPServer ")+OSString(ipstr));
+				LOG_HINT(U8_TEXT("Don't Connect to TCPServer ")+UTF8String(ipstr));
 				CloseSocket();
 				return(false);
 			}
@@ -97,6 +100,7 @@ namespace hgl
 		*/
 		void TCPClient::Disconnect()
 		{
+			SAFE_CLEAR(ipstr);
 			if(ThisSocket==-1)
 				return;
 

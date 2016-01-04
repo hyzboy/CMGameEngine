@@ -16,8 +16,6 @@ namespace hgl
 		{
 			socklen_t sockaddr_size=server_address->GetSockAddrInSize();
 
-            os_char sock_str[server_address->GetIPStringMaxSize()+1];
-
 			int new_sock=accept(ThisSocket,addr->GetSockAddr(),&sockaddr_size);
 
 			if(new_sock<0)
@@ -42,9 +40,11 @@ namespace hgl
 				return(-1);
 			}
 
-			addr->ToString(sock_str);
+			if(!ipstr)ipstr=new char[server_address->GetIPStringMaxSize() + 1];
 
-			LOG_INFO(OS_TEXT("AcceptServer Accept IP:")+OSString(sock_str)+OS_TEXT(" ,sock:")+OSString(new_sock));
+			addr->ToString(ipstr);
+
+			LOG_INFO(U8_TEXT("AcceptServer Accept IP:")+UTF8String(ipstr)+U8_TEXT(" ,sock:")+UTF8String(new_sock));
 
 			return(new_sock);
 		}

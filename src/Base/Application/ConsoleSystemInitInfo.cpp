@@ -63,7 +63,7 @@ namespace hgl
 		if(MultiStartup)
 			return(true);	//允许，不做处理
 
-		const char *mutex_name=(char *)(info.ProjectCode.c_str());
+		const os_char *mutex_name=(os_char *)(info.ProjectCode.c_str());
 
 		if(mutex->Create(mutex_name))
 		{
