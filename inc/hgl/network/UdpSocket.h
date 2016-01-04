@@ -12,8 +12,8 @@ namespace hgl
 		*/
 		class UDPSocket:public Socket                                                               ///UDP通信类
 		{
-			uint bind_port;
-			sockaddr_in *tar_addr;
+            IPAddress *bind_addr;
+			IPAddress *tar_addr;
 
 		public:	//事件函数
 
@@ -25,18 +25,16 @@ namespace hgl
 			UDPSocket();                                                                            ///<本类构造函数
 			~UDPSocket();                                                                           ///<本类析构函数
 
-			bool Create(const char *,const uint);                                                   ///<创建一个udp,并绑定一个IP地址与指定端口
-			bool Create(const uint port){return Create(nullptr,port);}									///<创建一个udp,并绑定本机所有地址与指定端口
-			bool Create();                                                                          ///<创建一个udp
+			bool Create(const IPAddress *);                                                         ///<创建一个udp,并绑定一个IP地址与指定端口
+			bool Create(int family);                                                                ///<创建一个udp
 
-			uint GetBindPort()const{return bind_port;}												///<取得绑定端口
+			uint GetBindPort()const{return bind_addr->GetPort();}									///<取得绑定端口
 
-			void SetSendAddr(const char *,const uint);                                              ///<设定发送地址
-			void SetSendAddr(sockaddr_in &);                                                        ///<设定发送地址
+			void SetSendAddr(const IPAddress *);                                                    ///<设定发送地址
 
 			int SendPacket(const void *,int);                                                       ///<发送数据包
-			int SendPacket(sockaddr_in &,const void *,int);                                         ///<向指定地址发送数据包
-			int RecvPacket(void *,int,sockaddr_in *);                                               ///<接收数据包
+			int SendPacket(IPAddress *,const void *,int);                                     ///<向指定地址发送数据包
+			int RecvPacket(void *,int,IPAddress *);                                                 ///<接收数据包
 		};//class UDPSocket
 
 		/**

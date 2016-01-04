@@ -53,149 +53,218 @@ namespace hgl
 {
 	namespace network
 	{
-		template<int FAMILY,typename InAddr, typename SockAddr, typename SockAddrIn>
-		struct ip_tool
+		/**
+         * IP地址类
+         */
+		class IPAddress
 		{
-		private:
+        protected:
 
-			static void AddAddrToList(List<InAddr> &addr_list, const SockAddrIn *sai);
+            int socktype;
+            int protocol;
 
-			static int GetIPList(const char *addr_string, List<InAddr> &addr_list,int socktype,int protocol)
-			{
-				struct addrinfo hints, *answer, *ptr;
+        public:
 
-				hgl_zero(hints);
-				hints.ai_family = FAMILY;
-                hints.ai_socktype=socktype;
-                hints.ai_protocol=protocol;
+            IPAddress();
 
-				if (getaddrinfo(addr_string, nullptr, &hints, &answer))			//�˺������Windows 2003/Vista
-					return(-1);
+            virtual const int GetFamily()const=0;                                                           ///<返回网络家族
+                    const int GetSocketType()const{return socktype;}                                        ///<返回Socket类型
+                    const int GetProtocol()const{return protocol;}                                          ///<返回协议类型
+            virtual const int GetSockAddrInSize()const=0;                                                   ///<取得SockAddrIn变量长度
+            virtual const int GetIPStringMaxSize()const=0;                                                  ///<取得IP字符串最大长度
 
-				int count = 0;
-				for (ptr = answer; ptr; ptr = ptr->ai_next)
-				{
-					AddAddrToList(addr_list,(SockAddrIn *)(ptr->ai_addr));
-					++count;
-				}
+            /**
+             * 设置IP地址
+             * @param _name 域名或地址字符串
+             * @param _port 端口号
+             * @param socktype Socket类型(可以为SOCK_STREAM、SOCK_DGRAM、SOCK_RAW、SOCK_RDM、SOCK_SEQPACKET等值),默认为所有类型。
+             * @param protocol 协议类型(可以为IPPROTO_TCP、IPPROTO_UDP、IPPROTO_SCTP),默认为所有类型。
+             */
+            virtual bool Set(const char *_name,ushort _port,int socktype,int protocol)=0;
 
-				freeaddrinfo(answer);
-				return(count);
-			}
+                    bool SetTCP (const char *_name,ushort _port){return Set(_name,_port,SOCK_STREAM,    IPPROTO_TCP );}
+                    bool SetUDP (const char *_name,ushort _port){return Set(_name,_port,SOCK_DGRAM,     IPPROTO_UDP );}
+                    bool SetSCTP(const char *_name,ushort _port){return Set(_name,_port,SOCK_SEQPACKET, IPPROTO_SCTP);}
 
-		public:
+            /**
+             * 设置一个仅有端口号的地址，一般用于服务器监听本机所有地址
+             */
+            virtual void Set(ushort port)=0;
 
-			/**
-			* ȡ�ñ���IP��ַ
-			* @param addr_list ����IP��ַ�б�
-			* @return ����IP��ַ����,-1��ʾʧ��
-			*/
-			static int	GetLocalIP(List<InAddr> &addr_list)											///<ȡ�ñ���IP��ַ�б�
-			{
-				return GetIPList("localhost", addr_list);
-			}
+            /**
+             * 绑定当前IP地址到一个socket上
+             * @param ThisSocket Socket号
+             * @param reuse 是否可以复用这个IP，默认为true
+             */
+            virtual bool Bind(int ThisSocket,int reuse=1)const=0;
 
-			/**
-			* ��һ������ת����IP(IP��ʽ)
-			* @param domain ����
-			* @param addr_list IP��ַ�б�
-            * @param socktype Socket����(����ΪSOCK_STREAM��SOCK_DGRAM��SOCK_RAW��SOCK_RDM��SOCK_SEQPACKET��ֵ),Ĭ��Ϊ�������͡�
-            * @param protocol Э������(����ΪIPPROTO_TCP��IPPROTO_UDP��IPPROTO_SCTP),Ĭ��Ϊ�������͡�
-			* @return IP��ַ����,-1��ʾʧ��
-			*/
-			static int	Domain2IP(const UTF8String &domain,List<InAddr> &addr_list,int socktype=0,int protocol=0)					///<ת��������IP��ַ
-			{
-				if (domain.Length() <= 0)return(-1);
+            virtual sockaddr *GetSockAddr()=0;
 
-				return GetIPList(domain.c_str(),addr_list,socktype,protocol);
-			}
+            /**
+             * 取得当前地址的端口号
+             */
+            virtual const ushort GetPort()const=0;
 
-			/**
-			* ��ָ������/IP��port����ǰsocket
-			* @param ThisSocket Ҫָ���ĵ�ǰsocket
-			* @param addr ָ����ip/port
-			* @param reuse �Ƿ��õ�ǰ��ַ,Ĭ��Ϊ1
-			* @return �Ƿ�ɹ�
-			*/
-			static bool	BindAddr(int ThisSocket,const SockAddrIn &addr,int reuse=1)
-			{
-				const int val = reuse;
+            /**
+             * 转换当前地址到一个可视字符串,字符串所需长度请使用GetIPStringMaxSize()获取
+             */
+            virtual void ToString(char *)const=0;
 
-#if HGL_OS == HGL_OS_Windows
-				setsockopt(ThisSocket, SOL_SOCKET, SO_REUSEADDR, (const char *)&val, sizeof(BOOL));		//win�µ�BOOL����Ҳ��int������Ψһ����ֻ����val�Ĵ�������
-#else
-				setsockopt(ThisSocket, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(int));
-#endif//HGL_OS == HGL_OS_Windows
+            /**
+             * 创建一个当前地址的副本
+             */
+            virtual IPAddress *CreateCopy()const=0;
 
-				if (bind(ThisSocket, (SockAddr *)&addr, sizeof(SockAddrIn)))
-				{
-					LOG_ERROR(OS_TEXT("Bind Socket Error! errno: ") + OSString(GetLastSocketError()));
-					return(false);
-				}
+            /**
+             * 创建一个空的IP地址副本
+             */
+            virtual IPAddress *Create()const=0;
+        };//class IPAddress
 
-				return(true);
-			}
+        /**
+         * IPv4地址
+         */
+        class IPv4Address:public IPAddress
+        {
+            sockaddr_in addr;
 
-			static bool FillAddr(SockAddrIn *addr, const UTF8String &addr_string, ushort port,int socktype,int protocol)		///<��ָ���������ַ��䵽sockaddr_in�ṹ��
-			{
-                struct addrinfo hints, *answer, *ptr;
+        public:
 
-                hgl_zero(hints);
-                hints.ai_family = FAMILY;
-                hints.ai_socktype=socktype;
-                hints.ai_protocol=protocol;
+            IPv4Address(){hgl_zero(addr);}
+            IPv4Address(const char *name,ushort port,int _socktype,int _protocol)
+            {
+                Set(name,port,_socktype,_protocol);
+            }
+            IPv4Address(const IPv4Address *src)
+            {
+                hgl_cpy(addr,src->addr);
+                socktype=src->socktype;
+                protocol=src->protocol;
+            }
 
-                if (getaddrinfo(addr_string, nullptr, &hints, &answer))         //�˺������Windows 2003/Vista
-                    RETURN_FALSE;
+            const int GetFamily()const{return AF_INET;}
+            const int GetSockAddrInSize()const{return sizeof(sockaddr_in);}
+            const int GetIPStringMaxSize()const{return INET_ADDRSTRLEN;}
 
-                memcpy(addr,answer->ai_addr,sizeof(SockAddrIn));
-                freeaddrinfo(answer);
-                return(true);
-			}
+            bool Set(const char *name,ushort port,int _socktype,int _protocol);
+            void Set(ushort port);
+            bool Bind(int ThisSocket,int reuse=1)const;
 
-			static bool	BindAddr(int ThisSocket, const char *name, int port)
-			{
-				SockAddrIn addr;
+            sockaddr *GetSockAddr(){return (sockaddr *)&addr;}
 
-				if (!FillAddr(&addr, name, port))return(false);
+            const ushort GetPort()const;
 
-				return BindAddr(ThisSocket, addr);
-			}
+            void ToString(char *str)const{inet_ntop(AF_INET,&addr,str,INET_ADDRSTRLEN);}
 
-			/**
-			* ��乩������ʹ�õ������ַ��ṹ
-			*/
-			static void FillAddrByAny(SockAddrIn &addr, ushort port);
-		};
+            /**
+             * 取得指定域名的IPv4地址列表
+             * @param addr_list 存放结果的地址列表
+             * @param domain 域名或地址字符串
+             * @param _socktype Socket类型(可以为SOCK_STREAM、SOCK_DGRAM、SOCK_RAW、SOCK_RDM、SOCK_SEQPACKET等值),默认为所有类型。
+             * @param _protocol 协议类型(可以为IPPROTO_TCP、IPPROTO_UDP、IPPROTO_SCTP),默认为所有类型。
+             * @return 地址个数,-1表示出错
+             */
+            int GetDomainIPList(List<in_addr> &addr_list,const char *domain,int _socktype,int _protocol);
 
-		using ipv4 = ip_tool<AF_INET,	struct in_addr,	struct sockaddr,	struct sockaddr_in	>;
-		using ipv6 = ip_tool<AF_INET6,	struct in6_addr,struct sockaddr6,	struct sockaddr_in6	>;
+            /**
+             * 取得本机的IPv4地址列表
+             * @param addr_list 存放结果的地址列表
+             * @param _socktype Socket类型(可以为SOCK_STREAM、SOCK_DGRAM、SOCK_RAW、SOCK_RDM、SOCK_SEQPACKET等值),默认为所有类型。
+             * @param _protocol 协议类型(可以为IPPROTO_TCP、IPPROTO_UDP、IPPROTO_SCTP),默认为所有类型。
+             * @return 地址个数,-1表示出错
+             */
+            int GetLocalIPList(List<in_addr> &addr_list,int _socktype,int _protocol)
+            {
+                char hostname[256];
 
-		template<> inline void ipv4::AddAddrToList(List<in_addr> &addr_list, const sockaddr_in *sai)
-		{
-			addr_list.Add(sai->sin_addr);
-		}
+                if(gethostname(hostname, 256))
+                    return(-1);
 
-		template<> inline void ipv6::AddAddrToList(List<in6_addr> &addr_list, const sockaddr_in6 *sai)
-		{
-			addr_list.Add(sai->sin6_addr);
-		}
+                return GetDomainIPList(addr_list,hostname,_socktype,_protocol);
+            }
 
-		template<> inline void ipv4::FillAddrByAny(struct sockaddr_in &addr, ushort port)
-		{
-			hgl_zero(addr);
+            IPAddress *CreateCopy()const
+            {
+                return(new IPv4Address(this));
+            }
 
-			addr.sin_family = AF_INET;
-			addr.sin_port = htons(port);
-		}
+            virtual IPAddress *Create()const
+            {
+                return(new IPv4Address());
+            }
+        };//class IPv4Address
 
-		template<> inline void ipv6::FillAddrByAny(struct sockaddr_in6 &addr, ushort port)
-		{
-			hgl_zero(addr);
+        /**
+         * IPv6地址
+         */
+        class IPv6Address:public IPAddress
+        {
+            sockaddr_in6 addr;
 
-			addr.sin6_family = AF_INET6;
-			addr.sin6_port = htons(port);
-		}
+        public:
+
+            IPv6Address(){hgl_zero(addr);}
+            IPv6Address(const char *name,ushort port,int _socktype,int _protocol)
+            {
+                Set(name,port,_socktype,_protocol);
+            }
+            IPv6Address(const IPv6Address *src)
+            {
+                hgl_cpy(addr,src->addr);
+                socktype=src->socktype;
+                protocol=src->protocol;
+            }
+
+            const int GetFamily()const{return AF_INET6;}
+            const int GetSockAddrInSize()const{return sizeof(sockaddr_in6);}
+            const int GetIPStringMaxSize()const{return INET6_ADDRSTRLEN;}
+
+            bool Set(const char *name,ushort port,int _socktype,int _protocol);
+            void Set(ushort port);
+            bool Bind(int ThisSocket,int reuse=1)const;
+
+            sockaddr *GetSockAddr(){return (sockaddr *)&addr;}
+            const ushort GetPort()const;
+
+            void ToString(char *str)const{inet_ntop(AF_INET6,&addr,str,INET6_ADDRSTRLEN);}
+
+            /**
+             * 取得指定域名的IPv6地址列表
+             * @param addr_list 存放结果的地址列表
+             * @param domain 域名或地址字符串
+             * @param _socktype Socket类型(可以为SOCK_STREAM、SOCK_DGRAM、SOCK_RAW、SOCK_RDM、SOCK_SEQPACKET等值),默认为所有类型。
+             * @param _protocol 协议类型(可以为IPPROTO_TCP、IPPROTO_UDP、IPPROTO_SCTP),默认为所有类型。
+             * @return 地址个数,-1表示出错
+             */
+            int GetDomainIPList(List<in6_addr> &addr_list,const char *domain,int _socktype,int _protocol);
+
+            /**
+             * 取得本机的IPv6地址列表
+             * @param addr_list 存放结果的地址列表
+             * @param _socktype Socket类型(可以为SOCK_STREAM、SOCK_DGRAM、SOCK_RAW、SOCK_RDM、SOCK_SEQPACKET等值),默认为所有类型。
+             * @param _protocol 协议类型(可以为IPPROTO_TCP、IPPROTO_UDP、IPPROTO_SCTP),默认为所有类型。
+             * @return 地址个数,-1表示出错
+             */
+            int GetLocalIPList(List<in6_addr> &addr_list,int _socktype,int _protocol)
+            {
+                char hostname[256];
+
+                if(gethostname(hostname, 256))
+                    return(-1);
+
+                return GetDomainIPList(addr_list,hostname,_socktype,_protocol);
+            }
+
+            IPAddress *CreateCopy()const
+            {
+                return(new IPv6Address(this));
+            }
+
+            virtual IPAddress *Create()const
+            {
+                return(new IPv6Address());
+            }
+        };//class IPv6Address
 	}//namespace network
 }//namespace hgl
 #endif//HGL_NETWORK_IP_TOOL_INCLUDE

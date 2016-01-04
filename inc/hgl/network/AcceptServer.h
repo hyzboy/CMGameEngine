@@ -28,7 +28,7 @@ namespace hgl
 
 			virtual ~AcceptServer()HGL_DEFAULT_MEMFUNC;
 
-			virtual int Accept(sockaddr_in &);														///<接入一个socket连接
+			virtual int Accept(IPAddress *);														///<接入一个socket连接
 		};//class AcceptServer
 	}//namespace network
 }//namespace hgl

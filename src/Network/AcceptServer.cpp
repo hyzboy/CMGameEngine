@@ -12,13 +12,13 @@ namespace hgl
 		* @return =0 正常，但无用户接入
 		* @return <0 出错
 		*/
-		int AcceptServer::Accept(sockaddr_in &addr)
+		int AcceptServer::Accept(IPAddress *addr)
 		{
-			socklen_t sockaddr_size=sizeof(sockaddr_in);
+			socklen_t sockaddr_size=server_address->GetSockAddrInSize();
 
-            os_char sock_str[64];
+            os_char sock_str[server_address->GetIPStringMaxSize()+1];
 
-			int new_sock=accept(ThisSocket,(sockaddr *)&addr,&sockaddr_size);
+			int new_sock=accept(ThisSocket,addr->GetSockAddr(),&sockaddr_size);
 
 			if(new_sock<0)
 			{
@@ -42,7 +42,7 @@ namespace hgl
 				return(-1);
 			}
 
-			SockToStr(addr,sock_str,true);
+			addr->ToString(sock_str);
 
 			LOG_INFO(OS_TEXT("AcceptServer Accept IP:")+OSString(sock_str)+OS_TEXT(" ,sock:")+OSString(new_sock));
 

@@ -82,8 +82,6 @@ namespace hgl
 
 	namespace network
 	{
-		bool GetHostname(UTF8String &hostname);														///<取得本机主机名称
-
 		void CloseSocket(int);																		///<关闭socket
 		void SetSocketBlock(int ThisSocket,bool block,double send_time_out=HGL_NETWORK_TIME_OUT,
 													double recv_time_out=HGL_NETWORK_TIME_OUT);		///<设置socket是否使用阻塞方式
@@ -93,58 +91,6 @@ namespace hgl
 		const os_char *GetSocketString(int);
 
 		#define GetLastSocketErrorString() GetSocketString(GetLastSocketError())
-
-		/**
-		* 将一个IPv4 地址转换成字符串
-		* @param addr 要转换的地址32位数
-		* @param name 转换后的域名或IP字符串,请不要少于20个字节(ex:123.456.789.012:65535)
-		* @param port 是否包含port
-		*/
-		template<typename T>
-		void SockToStr(const uint32 addr,const uint16 port,T name[HGL_IPV4_STRING_MAX+1],bool inc_port)
-		{
-			uint8 *p=(uint8 *)&addr;
-
-			T str[8];
-
-			utos(str,8,*p++);
-			strcpy(name,3,str);
-			strcat(name,4,(T)'.');
-
-			utos(str,8,*p++);
-			strcat(name,HGL_IPV4_STRING_MAX,str,3);
-			strcat(name,8,(T)'.');
-
-			utos(str,8,*p++);
-			strcat(name,HGL_IPV4_STRING_MAX,str,3);
-			strcat(name,12,(T)'.');
-
-			utos(str,8,*p);
-			strcat(name,HGL_IPV4_STRING_MAX,str,3);
-
-			if(inc_port)
-			{
-				strcat(name,16,(T)':');
-			#if HGL_ENDIAN == HGL_LITTLE_ENDIAN
-				utos(str,8,((port&0xFF00)>>8)|((port&0xFF)<<8));		//port永远为big endian,即使os/cpu为little endian,不过似乎win下会转换一下
-			#else
-				utos(str,8,port);
-			#endif//little endian
-				strcat(name,HGL_IPV4_STRING_MAX,str,5);
-			}
-		}
-
-		/**
-		* 将一个IPv4 SockAddr转换成字符串
-		* @param sock 要转换的SockAddr结构
-		* @param name 转换后的域名或IP字符串,请不要少于20个字节(ex:123.456.789.012:65535)
-		* @param port 是否包含port
-		*/
-		template<typename T>
-		void SockToStr(const sockaddr_in &sock,T *name,bool port)
-		{
-			return SockToStr<T>(sock.sin_addr.s_addr,sock.sin_port,name,port);
-		}
 
 		bool Read(io::DataInputStream *dis,sockaddr_in &addr);
 		bool Write(io::DataOutputStream *dos,const sockaddr_in &addr);

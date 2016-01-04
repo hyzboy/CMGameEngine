@@ -17,11 +17,11 @@ namespace hgl
 		* TCP连接处理基类<br>
 		* 提供统一的Recv/Send函数以及缓冲区，但请注意这个recv/send都只是针对缓冲区的，真正的send/recv在各自的派生类中。
 		*/
-		class TCPSocket:public IOSocket                                                               ///TCP连接处理基类
+		class TCPSocket:public IOSocket                                                             ///TCP连接处理基类
 		{
 		protected:
 
-			sockaddr_in ThisAddr;																	///<当前socket对应的地址
+			IPAddress *ThisAddr;																	///<当前socket对应的地址
 
 			timeval time_out;
 			fd_set local_set,recv_set,err_set;
@@ -30,23 +30,22 @@ namespace hgl
 
 		public: //被动事件函数
 
-			virtual void ProcDisconnect()HGL_OVERRIDE{}													///<断线事件处理函数
-			virtual int ProcRecv(int recv_buf_size=-1,const double cur_time=0)HGL_OVERRIDE				///<接收数据事件处理函数
+			virtual void ProcDisconnect()HGL_OVERRIDE{}												///<断线事件处理函数
+			virtual int ProcRecv(int recv_buf_size=-1,const double cur_time=0)HGL_OVERRIDE			///<接收数据事件处理函数
 						{return IOSocket::ProcRecv(recv_buf_size,cur_time);}
-			virtual int ProcSend(int,int &left_bytes)HGL_OVERRIDE{return -1;}							///<发送数据事件处理函数
+			virtual int ProcSend(int,int &left_bytes)HGL_OVERRIDE{return -1;}						///<发送数据事件处理函数
 
 		public: //方法
 
 			TCPSocket();                                                                            ///<本类构造函数
-			TCPSocket(int);                                                                         ///<本类构造函数
-			TCPSocket(int,const sockaddr_in *);														///<本类构造函数
+			TCPSocket(int,const IPAddress *);                                                       ///<本类构造函数
 			virtual ~TCPSocket();																	///<本类析构函数
 
-			const sockaddr_in &GetAddr()const{return ThisAddr;}										///<取得当前socket地址
+			const IPAddress *GetAddr()const{return ThisAddr;}										///<取得当前socket地址
 			bool SetNodelay(bool);																	///<设置是否使用无延迟方式
 			void SetKeepAlive(bool,const int=7200,const int=75,const int=9);						///<设置自动保持连接机制
 
-			virtual void UseSocket(int,const sockaddr_in *addr=0);									///<使用指定socket
+			virtual void UseSocket(int,const IPAddress *);                                           ///<使用指定socket
 
 			virtual bool IsConnect();																///<当前socket是否在连接状态
 			virtual bool ReConnect();																///<重新连接
@@ -77,8 +76,7 @@ namespace hgl
 		public:
 
 			TCPSocketCB(){InitPrivate();}															///<本类构造函数
-			TCPSocketCB(int s):TCPSocket(s){InitPrivate();}											///<本类构造函数
-			TCPSocketCB(int s,const sockaddr_in *addr):TCPSocket(s,addr){InitPrivate();}			///<本类构造函数
+			TCPSocketCB(int s,const IPAddress *addr):TCPSocket(s,addr){InitPrivate();}			    ///<本类构造函数
 			virtual ~TCPSocketCB()HGL_DEFAULT_MEMFUNC;
 
 			virtual void ProcDisconnect() HGL_OVERRIDE
@@ -141,11 +139,10 @@ namespace hgl
 		public:
 
 			TCPSocketRB();																			///<本类构造函数
-			TCPSocketRB(int s);																		///<本类构造函数
-			TCPSocketRB(int s,const sockaddr_in *addr);												///<本类构造函数
+			TCPSocketRB(int s,const IPAddress *addr);												///<本类构造函数
 			virtual ~TCPSocketRB();
 
-			virtual void UseSocket(int,const sockaddr_in *addr=0)HGL_OVERRIDE;						///<使用指定socket
+			virtual void UseSocket(int,const IPAddress *addr=0)HGL_OVERRIDE;						///<使用指定socket
 			virtual io::InputStream *GetInputStream(){return ris;}									///<取得输入流
 			virtual io::OutputStream *GetOutputStream(){return ros;}								///<取得输出流
 

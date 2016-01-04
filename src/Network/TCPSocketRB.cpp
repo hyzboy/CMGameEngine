@@ -23,13 +23,7 @@ namespace hgl
 			InitPrivate();
 		}
 
-		TCPSocketRB::TCPSocketRB(int s):TCPSocket()
-		{
-			InitPrivate();
-			UseSocket(s);
-		}
-
-		TCPSocketRB::TCPSocketRB(int s,const sockaddr_in *addr):TCPSocket()
+		TCPSocketRB::TCPSocketRB(int s,const IPAddress *addr):TCPSocket()
 		{
 			InitPrivate();
 			UseSocket(s,addr);
@@ -47,7 +41,7 @@ namespace hgl
 			delete ris;
 		}
 
-		void TCPSocketRB::UseSocket(int sock,const sockaddr_in *addr)
+		void TCPSocketRB::UseSocket(int sock,const IPAddress *addr)
 		{
 			TCPSocket::UseSocket(sock,addr);
 

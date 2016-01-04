@@ -334,14 +334,6 @@ namespace hgl
 		}
 
 		/**
-		* 取得本机的主机名称
-		*/
-		bool GetHostname(char hostname[256])
-		{
-			return !gethostname(hostname, 256);
-		}
-
-		/**
 		* @param ThisSocket 要关闭的socket
 		*/
 		void CloseSocket(int ThisSocket)

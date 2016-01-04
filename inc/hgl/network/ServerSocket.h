@@ -14,6 +14,7 @@ namespace hgl
 		protected:
 
 			int ThisSocket;
+            IPAddress *server_address;
 
 			virtual int CreateServerSocket()=0;														///<创建Server Socket
 
@@ -22,12 +23,10 @@ namespace hgl
 			ServerSocket();
 			virtual ~ServerSocket();
 
-			virtual bool CreateServer(const sockaddr_in &,const uint ml=HGL_SERVER_LISTEN_COUNT);	///<创建服务器
-					bool CreateServer(const char *,uint,const uint ml=HGL_SERVER_LISTEN_COUNT);		///<创建服务器
-					bool CreateServer(uint port,const uint ml=HGL_SERVER_LISTEN_COUNT)				///<创建服务器
-					{return CreateServer(nullptr,port,ml);}
+            const IPAddress *GetServerAddress()const{return server_address;}                        ///<取得服务器IP地址
 
-			virtual void CloseServer();																///<关闭服务器
+			virtual bool CreateServer(const IPAddress *,const uint ml=HGL_SERVER_LISTEN_COUNT,bool reuse=true);	         ///<创建服务器
+			virtual void CloseServer();                                                                                  ///<关闭服务器
 
 					/**
 					* 设置是否使用堵塞方式传输
