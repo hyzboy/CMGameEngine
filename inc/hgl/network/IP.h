@@ -1,4 +1,4 @@
-#ifndef HGL_NETWORK_IP_INCLUDE
+﻿#ifndef HGL_NETWORK_IP_INCLUDE
 #define HGL_NETWORK_IP_INCLUDE
 
 #include<hgl/type/DataType.h>
@@ -65,7 +65,11 @@ namespace hgl
 
         public:
 
-            IPAddress();
+            IPAddress()
+            {
+                socktype=0;
+                protocol=0;
+            }
 
             virtual const int GetFamily()const=0;                                                           ///<返回网络家族
                     const int GetSocketType()const{return socktype;}                                        ///<返回Socket类型
@@ -119,6 +123,11 @@ namespace hgl
              * 创建一个空的IP地址副本
              */
             virtual IPAddress *Create()const=0;
+
+            /**
+             * 与较与另一个IP地址是否一样
+             */
+            virtual bool Comp(const IPAddress *)const=0;
         };//class IPAddress
 
         /**
@@ -135,6 +144,7 @@ namespace hgl
             {
                 Set(name,port,_socktype,_protocol);
             }
+
             IPv4Address(const IPv4Address *src)
             {
                 hgl_cpy(addr,src->addr);
@@ -156,18 +166,15 @@ namespace hgl
 
             void ToString(char *str)const;
 
-            int GetDomainIPList(List<in_addr> &addr_list,const char *domain,int _socktype,int _protocol);
-            int GetLocalIPList(List<in_addr> &addr_list,int _socktype,int _protocol);
+            static int GetDomainIPList(List<in_addr> &addr_list,const char *domain,int _socktype,int _protocol);        ///<取得当指定域名的IPv4地址列表
+            static int GetLocalIPList(List<in_addr> &addr_list,int _socktype,int _protocol);                            ///<取得本机的IPv4地址列表
 
-            IPAddress *CreateCopy()const
-            {
-                return(new IPv4Address(this));
-            }
+            static void ToString(char str[INET_ADDRSTRLEN],const in_addr &);                                            ///<转换一个IPv4地址到字符串
 
-            virtual IPAddress *Create()const
-            {
-                return(new IPv4Address());
-            }
+            IPAddress *CreateCopy()const{return(new IPv4Address(this));}
+            IPAddress *Create()const{return(new IPv4Address());}
+
+            bool Comp(const IPAddress *ipa)const;
         };//class IPv4Address
 
         /**
@@ -184,6 +191,7 @@ namespace hgl
             {
                 Set(name,port,_socktype,_protocol);
             }
+
             IPv6Address(const IPv6Address *src)
             {
                 hgl_cpy(addr,src->addr);
@@ -203,18 +211,15 @@ namespace hgl
             const ushort GetPort()const;
 
             void ToString(char *str)const;
-            int GetDomainIPList(List<in6_addr> &addr_list,const char *domain,int _socktype,int _protocol);
-            int GetLocalIPList(List<in6_addr> &addr_list,int _socktype,int _protocol);
+            static int GetDomainIPList(List<in6_addr> &addr_list,const char *domain,int _socktype,int _protocol);       ///<取得指定域名的IPv6地址列表
+            static int GetLocalIPList(List<in6_addr> &addr_list,int _socktype,int _protocol);                           ///<取得本机的IPv6地址列表
 
-            IPAddress *CreateCopy()const
-            {
-                return(new IPv6Address(this));
-            }
+            static void ToString(char str[INET6_ADDRSTRLEN],const in6_addr &);                                          ///<转换一个IPv6地址到字符串
 
-            virtual IPAddress *Create()const
-            {
-                return(new IPv6Address());
-            }
+            IPAddress *CreateCopy()const{return(new IPv6Address(this));}
+            IPAddress *Create()const{return(new IPv6Address());}
+
+            bool Comp(const IPAddress *ipa)const;
         };//class IPv6Address
 	}//namespace network
 }//namespace hgl
