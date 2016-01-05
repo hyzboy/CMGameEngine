@@ -36,8 +36,7 @@ namespace hgl
 		{
 			UTF8String group_name;
 
-			UTF8String ip;
-			uint port;
+			IPAddress *addr;
 			uint64 node_id;
 
 			dfsClientConnect *con;
@@ -51,7 +50,7 @@ namespace hgl
 
 		public:
 
-			dfsClientSaveThread(const UTF8String &g,const UTF8String &,const uint,const uint64);
+			dfsClientSaveThread(const UTF8String &g,const IPAddress *,const uint64);
 			~dfsClientSaveThread();
 
 			void Add(dfsClientSaveItem &);
