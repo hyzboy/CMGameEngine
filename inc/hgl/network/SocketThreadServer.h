@@ -19,6 +19,14 @@ namespace hgl
 
 			SocketThreadServer(const IPAddress *addr)
 			{
+                if(!addr)
+                {
+                    server=nullptr;
+                    LOG_ERROR(OS_TEXT("Create SocketThreadServer failed! no address"));
+                    this->fos=fosExitGame;
+                    return;
+                }
+
 				server	=new S();
 
 				if(!server->CreateServer(addr))
@@ -27,10 +35,6 @@ namespace hgl
 					this->fos=fosExitGame;
 					return;
 				}
-			}
-
-			SocketThreadServer(const uint16 port):SocketThreadServer("0.0.0.0",port)
-			{
 			}
 
 			~SocketThreadServer()
@@ -52,7 +56,7 @@ namespace hgl
 				if(sock<0)		//出错
 				{
                     delete sa;
-                    
+
                     this->fos=fosExitGame;
 
 					LOG_INFO(OS_TEXT("SocketThreadrServer Accept error!"));

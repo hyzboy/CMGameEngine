@@ -37,14 +37,14 @@ namespace hgl
 		public: //方法
 
 			TCPSocket();                                                                            ///<本类构造函数
-			TCPSocket(int,const IPAddress *);                                                       ///<本类构造函数
+			TCPSocket(int,IPAddress *);                                                             ///<本类构造函数
 			virtual ~TCPSocket();																	///<本类析构函数
 
 			const IPAddress *GetAddr()const{return ThisAddr;}										///<取得当前socket地址
 			bool SetNodelay(bool);																	///<设置是否使用无延迟方式
 			void SetKeepAlive(bool,const int=7200,const int=75,const int=9);						///<设置自动保持连接机制
 
-			virtual void UseSocket(int,const IPAddress *);                                          ///<使用指定socket
+			virtual void UseSocket(int,IPAddress *);                                                ///<使用指定socket
 
 			virtual bool IsConnect();																///<当前socket是否在连接状态
 			virtual bool ReConnect();																///<重新连接
@@ -75,7 +75,7 @@ namespace hgl
 		public:
 
 			TCPSocketCB(){InitPrivate();}															///<本类构造函数
-			TCPSocketCB(int s,const IPAddress *addr):TCPSocket(s,addr){InitPrivate();}			    ///<本类构造函数
+			TCPSocketCB(int s,IPAddress *addr):TCPSocket(s,addr){InitPrivate();}			        ///<本类构造函数
 			virtual ~TCPSocketCB()HGL_DEFAULT_MEMFUNC;
 
 			virtual void ProcDisconnect() HGL_OVERRIDE
@@ -138,10 +138,10 @@ namespace hgl
 		public:
 
 			TCPSocketRB();																			///<本类构造函数
-			TCPSocketRB(int s,const IPAddress *addr);												///<本类构造函数
+			TCPSocketRB(int s,IPAddress *addr);												        ///<本类构造函数
 			virtual ~TCPSocketRB();
 
-			virtual void UseSocket(int,const IPAddress *addr=0)HGL_OVERRIDE;						///<使用指定socket
+			virtual void UseSocket(int,IPAddress *addr)HGL_OVERRIDE;						        ///<使用指定socket
 			virtual io::InputStream *GetInputStream(){return ris;}									///<取得输入流
 			virtual io::OutputStream *GetOutputStream(){return ros;}								///<取得输出流
 

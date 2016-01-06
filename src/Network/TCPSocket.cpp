@@ -55,7 +55,7 @@ namespace hgl
 		* @param sock socket号
 		* @param addr socket地址
 		*/
-		TCPSocket::TCPSocket(int sock,const IPAddress *addr)
+		TCPSocket::TCPSocket(int sock,IPAddress *addr)
 		{
 			InitPrivate();
 
@@ -110,24 +110,16 @@ namespace hgl
 		* @param sock 指定socket编号
 		* @param addr socket地址
 		*/
-		void TCPSocket::UseSocket(int sock,const IPAddress *addr)
+		void TCPSocket::UseSocket(int sock,IPAddress *addr)
 		{
 			if(sock==-1)return;
+            if(!addr)return;
 
 			ThisSocket=sock;
 
             SAFE_CLEAR(ThisAddr);
 
-			if(addr)
-                ThisAddr=addr->CreateCopy();
-			else
-			{
-                ThisAddr=addr->Create();
-
-				socklen_t len=sizeof(ThisAddr->GetSockAddrInSize());
-
-				getpeername(sock,ThisAddr->GetSockAddr(),&len);
-			}
+            ThisAddr=addr;
 
 			FD_ZERO(&local_set);
 			FD_SET(sock,&local_set);
