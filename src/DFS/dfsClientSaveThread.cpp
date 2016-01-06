@@ -8,23 +8,23 @@ namespace hgl
 {
 	namespace dfs
 	{
-		dfsClientSaveThread::dfsClientSaveThread(const UTF8String &gn,const UTF8String &i,const uint p,const uint64 n)
+		dfsClientSaveThread::dfsClientSaveThread(const UTF8String &gn,const IPAddress *_addr,const uint64 n)
 		{
 			group_name=gn;
 
-			ip=ip;
-			port=p;
+			addr = _addr->CreateCopy();
 			node_id=n;
 
 			con=new dfsClientConnect;
 
-			con->Init(i,p,"dfsClientSaveThread",node_id);
+			con->Init(addr,"dfsClientSaveThread",node_id);
 
 			fb_sem=new Semaphore(1024);
 		}
 
 		dfsClientSaveThread::~dfsClientSaveThread()
 		{
+			SAFE_CLEAR(addr);
 			delete con;
 		}
 
