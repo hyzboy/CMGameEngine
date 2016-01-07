@@ -52,7 +52,7 @@ namespace hgl
 
 		dfsClientConnect::dfsClientConnect()
 		{
-			port=0;
+            ip_addr=nullptr;
 			node_id=-1;
 
 			lock=new ThreadMutex;
@@ -64,26 +64,25 @@ namespace hgl
 		{
 			SAFE_CLEAR(tcp);
 			SAFE_CLEAR(lock);
+            SAFE_CLEAR(ip_addr);
 		}
 
-		bool dfsClientConnect::Init(const UTF8String &ipstr,uint p,const UTF8String &n,const int64 id)
+		bool dfsClientConnect::Init(const IPAddress *ia,const UTF8String &n,const int64 id)
 		{
-			if(ipstr.Length()<HGL_NETWORK_IPv4_STR_MIN)RETURN_FALSE;
-			if(p<=0||p>=HGL_NETWORK_MAX_PORT)RETURN_FALSE;
+			if(!ia)RETURN_FALSE;
 			if(n.IsEmpty())RETURN_FALSE;
 
 			if(tcp)	//重复初始化
 			{
-				if(ip!=ipstr)RETURN_FALSE;
-				if(port!=p)RETURN_FALSE;
+                if(!ip_addr->Comp(ia))RETURN_FALSE;
 				if(node_id!=id)RETURN_FALSE;
 				if(node_name!=n)RETURN_FALSE;
 
 				return(true);
 			}
 
-			ip=ipstr;
-			port=p;
+			SAFE_CLEAR(ip_addr);
+			ip_addr=ia->CreateCopy();
 
 			node_id=id;
 			node_name=n;
@@ -104,7 +103,7 @@ namespace hgl
 		{
 			tcp->tcp->Disconnect();
 
-			if(!tcp->tcp->Connect(ip,port))RETURN_FALSE;
+			if(!tcp->tcp->Connect(ip_addr))RETURN_FALSE;
 
 			if(!tcp->dos->WriteInt32(tdsLogin))RETURN_FALSE;
 			if(!tcp->dos->WriteInt64(node_id))RETURN_FALSE;

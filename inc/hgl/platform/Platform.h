@@ -11,6 +11,7 @@
 
 #define HGL_OS_Windows				HGL_MERGE32('W','i','n',' ')
 #define HGL_OS_XBOX360				HGL_MERGE32('X','3','6','0')
+#define HGL_OS_XBOX1				HGL_MERGE32('X','B','1',' ')
 #define HGL_OS_OS2					HGL_MERGE32('O','S','/','2')
 #define HGL_OS_NetWare				HGL_MERGE32('N','e','t','W')
 #define HGL_OS_MacOSX				HGL_MERGE32('M','a','c','X')
@@ -24,6 +25,7 @@
 #define HGL_OS_PS2					HGL_MERGE32('P','S','2',' ')
 #define HGL_OS_PSP					HGL_MERGE32('P','S','P',' ')
 #define HGL_OS_PS3					HGL_MERGE32('P','S','3',' ')
+#define HGL_OS_PS4					HGL_MERGE32('P','S','4',' ')
 #define HGL_OS_PSV					HGL_MERGE32('P','S','V',' ')
 #define HGL_OS_PS4					HGL_MERGE32('P','S','4',' ')
 #define HGL_OS_AIX					HGL_MERGE32('A','I','X',' ')

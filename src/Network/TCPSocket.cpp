@@ -14,32 +14,23 @@ namespace hgl
 		/**
 		 * 创建一个TCP连接
 		 */
-		int CreateTCPConnect(const sockaddr_in &addr)
+		int CreateTCPConnect(IPAddress *addr)
 		{
-			int sock=socket(AF_INET,SOCK_STREAM,IPPROTO_TCP);
+            if(!addr)return(-1);
+            if(addr->GetSocketType()!=SOCK_STREAM)return(-1);
+            if(addr->GetProtocol()!=IPPROTO_TCP)return(-1);
+
+			int sock=socket(addr->GetFamily(),SOCK_STREAM,IPPROTO_TCP);
 
 			if(sock<0)return(-1);
 
-			if(connect(sock,(sockaddr *)&addr,sizeof(addr)))
+			if(connect(sock,addr->GetSockAddr(),addr->GetSockAddrInSize()))
 			{
 				CloseSocket(sock);
 				return(-1);
 			}
 
 			return sock;
-		}
-
-		/**
-		 * 创建一个TCP连接
-		 */
-		int CreateTCPConnect(const UTF8String &ip,const uint port)
-		{
-			sockaddr_in addr;
-
-			if(!FillAddr(&addr,ip,port))
-				return(false);
-
-			return CreateTCPConnect(addr);
 		}
 	}//namespace network
 
@@ -48,6 +39,7 @@ namespace hgl
 		void TCPSocket::InitPrivate()
 		{
 			socket_protocols=IPPROTO_TCP;
+            ThisAddr=nullptr;
 		}
 
 		/**
@@ -60,21 +52,10 @@ namespace hgl
 
 		/**
 		* 构造函数
-		* @param sock Socket号
-		*/
-		TCPSocket::TCPSocket(int sock)
-		{
-			InitPrivate();
-
-			UseSocket(sock);
-		}
-
-		/**
-		* 构造函数
 		* @param sock socket号
 		* @param addr socket地址
 		*/
-		TCPSocket::TCPSocket(int sock,const sockaddr_in *addr)
+		TCPSocket::TCPSocket(int sock,IPAddress *addr)
 		{
 			InitPrivate();
 
@@ -83,6 +64,7 @@ namespace hgl
 
 		TCPSocket::~TCPSocket()
 		{
+            SAFE_CLEAR(ThisAddr);
 		}
 
 		/**
@@ -128,20 +110,16 @@ namespace hgl
 		* @param sock 指定socket编号
 		* @param addr socket地址
 		*/
-		void TCPSocket::UseSocket(int sock,const sockaddr_in *addr)
+		void TCPSocket::UseSocket(int sock,IPAddress *addr)
 		{
 			if(sock==-1)return;
+            if(!addr)return;
 
 			ThisSocket=sock;
 
-			if(addr)
-				memcpy(&ThisAddr,addr,sizeof(sockaddr_in));
-			else
-			{
-				socklen_t len=sizeof(sockaddr_in);
+            SAFE_CLEAR(ThisAddr);
 
-				getpeername(sock,(sockaddr *)&ThisAddr,&len);
-			}
+            ThisAddr=addr;
 
 			FD_ZERO(&local_set);
 			FD_SET(sock,&local_set);

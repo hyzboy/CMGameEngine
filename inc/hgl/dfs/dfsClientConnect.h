@@ -2,6 +2,7 @@
 #define HGL_DFS_CLIENT_CONNECT_INCLUDE
 
 #include<hgl/type/BaseString.h>
+#include<hgl/network/IP.h>
 
 namespace hgl
 {
@@ -15,6 +16,7 @@ namespace hgl
 	}
 
 	using namespace io;
+    using namespace network;
 
 	class ThreadMutex;
 
@@ -29,8 +31,7 @@ namespace hgl
 		{
 		protected:
 
-			UTF8String ip;
-			uint port;
+			IPAddress *ip_addr;
 
 			int64 node_id;
 			UTF8String node_name;
@@ -54,10 +55,9 @@ namespace hgl
 			dfsClientConnect();
 			virtual ~dfsClientConnect();
 
-			virtual bool Init(const UTF8String &,uint,const UTF8String &,const int64 _node_id=-1);	///<初始化dfs客户端连接
+			virtual bool Init(const IPAddress *,const UTF8String &,const int64 _node_id=-1);	///<初始化dfs客户端连接
 
-			const	UTF8String &GetIP		()const{return ip;}
-					uint		GetPort		()const{return port;}
+			const    IPAddress *GetIPAddress()const{return ip_addr;}
 			const	UTF8String &GetNodeName	()const{return node_name;}
 					int64		GetNodeID	()const{return node_id;}
 

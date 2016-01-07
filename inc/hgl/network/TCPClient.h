@@ -14,6 +14,8 @@ namespace hgl
 			io::InputStream *sis;
 			io::OutputStream *sos;
 
+			char *ipstr;
+
 		public:
 
 			double Heart;																				///<心跳间隔时间(单位:秒，默认参见HGL_TCP_HEART_TIME)
@@ -24,10 +26,9 @@ namespace hgl
 			TCPClient();																				///<本类构造函数
 			virtual ~TCPClient();																		///<本类析构函数
 
-			virtual bool Connect(const sockaddr_in &);													///<连接到服务器
-					bool Connect(const char *,int);														///<接连到服务器
+			virtual bool Connect(const IPAddress *);													///<连接到服务器
 			virtual void Disconnect();																	///<断开连接
-			virtual void UseSocket(int,const sockaddr_in *addr=0);										///<使用指定socket
+			virtual void UseSocket(int,const IPAddress *addr=0);										///<使用指定socket
 
 		public:
 

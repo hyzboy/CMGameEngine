@@ -1,50 +1,7 @@
 ﻿#ifndef HGL_SOCKET_INCLUDE
 #define HGL_SOCKET_INCLUDE
 
-#include<hgl/type/DataType.h>
-#include<hgl/type/BaseString.h>
-#include<hgl/Str.h>
-
-#if HGL_OS == HGL_OS_Windows
-	#include<winsock2.h>
-
-	#if SOMAXCONN == 5
-	#error Please use <winsock2.h>
-	#endif//
-
-	typedef int socklen_t;
-	typedef ULONG in_addr_t;
-
-	#define GetLastSocketError() WSAGetLastError()
-#else
-	#include<errno.h>
-	#include<sys/ioctl.h>
-	#include<sys/socket.h>
-	#include<unistd.h>
-	#include<netdb.h>
-	#include<arpa/inet.h>
-	#include<netinet/in.h>
-
-	#define GetLastSocketError() (errno)
-
-	#if HGL_OS == HGL_OS_Linux
-		#include<sys/sendfile.h>
-
-		inline int sendfile(int tfd,int sfd,size_t size)
-		{
-			return sendfile(tfd,sfd,nullptr,size);
-		}
-	#endif//HGL_OS == HGL_OS_Linux
-
-	#if HGL_OS == HGL_OS_FreeBSD
-		#include<sys/uio.h>
-
-		inline int sendfile(int tfd,int sfd,size_t size)
-		{
-			return sendfile(tfd,sfd,0,size,nullptr,nullptr,0);
-		}
-	#endif//HGL_OS == HGL_OS_FreeBSD
-#endif//HGL_OS == HGL_OS_Windows
+#include<hgl/network/IP.h>
 
 //#define HGL_RECV_BYTE_COUNT			///<接收字节数统计(调试用)
 //#define HGL_SEND_BYTE_COUNT			///<发送字节数统计(调试用)
@@ -125,11 +82,6 @@ namespace hgl
 
 	namespace network
 	{
-		int  GetLocalIP(in_addr **,char *);															///<取得本机IP
-		int	 Domain2IP(const UTF8String &,in_addr **);												///<转换域名到IPv4地址
-		bool FillAddr(sockaddr_in *,const UTF8String &,int);										///<将指定域名或IPv4地址填充到sockaddr_in结构中
-		bool BindAddr(int ThisSocket,const sockaddr_in &addr);
-		bool BindAddr(int ThisSocket,const char *name,int port);
 		void CloseSocket(int);																		///<关闭socket
 		void SetSocketBlock(int ThisSocket,bool block,double send_time_out=HGL_NETWORK_TIME_OUT,
 													double recv_time_out=HGL_NETWORK_TIME_OUT);		///<设置socket是否使用阻塞方式
@@ -140,60 +92,8 @@ namespace hgl
 
 		#define GetLastSocketErrorString() GetSocketString(GetLastSocketError())
 
-		/**
-		* 将一个IPv4 地址转换成字符串
-		* @param addr 要转换的地址32位数
-		* @param name 转换后的域名或IP字符串,请不要少于20个字节(ex:123.456.789.012:65535)
-		* @param port 是否包含port
-		*/
-		template<typename T>
-		void SockToStr(const uint32 addr,const uint16 port,T name[HGL_IPV4_STRING_MAX+1],bool inc_port)
-		{
-			uint8 *p=(uint8 *)&addr;
-
-			T str[8];
-
-			utos(str,8,*p++);
-			strcpy(name,3,str);
-			strcat(name,4,(T)'.');
-
-			utos(str,8,*p++);
-			strcat(name,HGL_IPV4_STRING_MAX,str,3);
-			strcat(name,8,(T)'.');
-
-			utos(str,8,*p++);
-			strcat(name,HGL_IPV4_STRING_MAX,str,3);
-			strcat(name,12,(T)'.');
-
-			utos(str,8,*p);
-			strcat(name,HGL_IPV4_STRING_MAX,str,3);
-
-			if(inc_port)
-			{
-				strcat(name,16,(T)':');
-			#if HGL_ENDIAN == HGL_LITTLE_ENDIAN
-				utos(str,8,((port&0xFF00)>>8)|((port&0xFF)<<8));		//port永远为big endian,即使os/cpu为little endian,不过似乎win下会转换一下
-			#else
-				utos(str,8,port);
-			#endif//little endian
-				strcat(name,HGL_IPV4_STRING_MAX,str,5);
-			}
-		}
-
-		/**
-		* 将一个IPv4 SockAddr转换成字符串
-		* @param sock 要转换的SockAddr结构
-		* @param name 转换后的域名或IP字符串,请不要少于20个字节(ex:123.456.789.012:65535)
-		* @param port 是否包含port
-		*/
-		template<typename T>
-		void SockToStr(const sockaddr_in &sock,T *name,bool port)
-		{
-			return SockToStr<T>(sock.sin_addr.s_addr,sock.sin_port,name,port);
-		}
-
-		bool Read(io::DataInputStream *dis,sockaddr_in &addr);
-		bool Write(io::DataOutputStream *dos,const sockaddr_in &addr);
+		bool Read(io::DataInputStream *dis,IPAddress *addr);
+		bool Write(io::DataOutputStream *dos,const IPAddress *addr);
 
 		/**
 		* 所有Socket通信类的基类
@@ -209,9 +109,6 @@ namespace hgl
 			int socket_protocols;																		///<Socket协议
 
 			bool CreateSocket(int,int,int);																///<创建Socket
-
-			bool bindaddr(const sockaddr_in &);															///<绑定指定域名/IP和PORT到当前socket
-			bool bindaddr(const char *,int);                                                            ///<绑定指定域名/IP和PORT到当前socket
 
 		public: //属性
 

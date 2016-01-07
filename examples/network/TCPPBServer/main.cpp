@@ -32,7 +32,7 @@ private:
 
 public:
 
-	UserThread(int sock,const sockaddr_in &sa)
+	UserThread(int sock,const IPAddress *sa)
 		:UserThreadBASE(sock,sa)							//基类，用当前工作类名称+BASE做为基类名称
 	{
 		mp.Init(c2s_login::id,				//结起消息ID

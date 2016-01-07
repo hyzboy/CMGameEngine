@@ -13,7 +13,7 @@ class WorkThread:public Thread
 
 public:
 
-	WorkThread(int s,const sockaddr_in &)
+	WorkThread(int s,const IPAddress *)
 	{
 		sock=s;
 	}

@@ -27,7 +27,7 @@ namespace hgl
 		protected:
 
 			int sock;
-			sockaddr_in addr;
+			IPAddress *addr;
 			S *s;
 			SocketInputStream *sis;
 			SocketOutputStream *sos;
@@ -44,10 +44,10 @@ namespace hgl
 
 		public:
 
-			DirectSocketIOUserThread(int s,const sockaddr_in &sa)
+			DirectSocketIOUserThread(int s,const IPAddress *sa)
 			{
 				sock=s;
-				addr=sa;
+				addr=sa->CreateCopy();
 
 				block=true;
 				block_recv_time=1;
@@ -72,6 +72,7 @@ namespace hgl
 
 			virtual ~DirectSocketIOUserThread()
 			{
+                SAFE_CLEAR(addr);
 				SAFE_CLEAR(dis);
 				SAFE_CLEAR(dos);
 				SAFE_CLEAR(sos);

@@ -361,7 +361,7 @@ namespace hgl
      * 等值类型复制
      */
 	template<typename T>
-	inline void hgl_equcpy(T &dst,const T &src)
+	inline void hgl_cpy(T &dst,const T &src)
 	{
 		memcpy(&dst,&src,sizeof(T));
 	}

@@ -35,8 +35,7 @@ namespace hgl
 		{
 			UTF8String set_name;
 
-			UTF8String ip;
-			uint port;
+			IPAddress *addr;
 			UTF8String node_name;
 			int64 node_id;
 
@@ -48,7 +47,7 @@ namespace hgl
 
 				obj->SetName(set_name);
 
-				if(!obj->Init(ip,port,node_name,node_id))
+				if(!obj->Init(addr,node_name,node_id))
 				{
 					delete obj;
 					return NULL;
@@ -59,14 +58,18 @@ namespace hgl
 
 		public:
 
-			dfsClientFileConnectPool(const UTF8String &sn,const UTF8String &i,uint p,const UTF8String &nn,int64 ni)
+			dfsClientFileConnectPool(const UTF8String &sn,const IPAddress *a,const UTF8String &nn,int64 ni)
 			{
 				set_name	=sn;
 
-				ip			=i;
-				port		=p;
+				addr		=a->CreateCopy();
 				node_name	=nn;
 				node_id		=ni;
+			}
+
+			~dfsClientFileConnectPool()
+			{
+				SAFE_CLEAR(addr);
 			}
 		};//class dfsClientFileConnectPool
 	}//namespace dfs

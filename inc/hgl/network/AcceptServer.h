@@ -11,6 +11,8 @@ namespace hgl
 		 */
 		class AcceptServer:public ServerSocket														///使用Accept创建接入的服务器基类
 		{
+			char *ipstr;
+
 		protected:
 
 			virtual int CreateServerSocket()=0;														///<创建Server Socket
@@ -24,11 +26,12 @@ namespace hgl
 			AcceptServer()
 			{
 				overload_wait=HGL_SERVER_OVERLOAD_RESUME_TIME;
+				ipstr = nullptr;
 			}
 
-			virtual ~AcceptServer()HGL_DEFAULT_MEMFUNC;
+			virtual ~AcceptServer(){SAFE_CLEAR(ipstr);}
 
-			virtual int Accept(sockaddr_in &);														///<接入一个socket连接
+			virtual int Accept(IPAddress *);														///<接入一个socket连接
 		};//class AcceptServer
 	}//namespace network
 }//namespace hgl

@@ -85,7 +85,7 @@ namespace hgl
 			dfsClientID(const UTF8String &);
 			~dfsClientID();
 
-			bool Init(const UTF8String &,uint,const UTF8String &,const int64 _node_id=-1);			///<初始化dfs id客户端连接
+			bool Init(const IPAddress *,const UTF8String &,const int64 _node_id=-1);			  ///<初始化dfs id客户端连接
 
 			int64 CreateID();																		///<单纯产生一个ID
 

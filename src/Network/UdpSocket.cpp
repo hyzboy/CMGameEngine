@@ -19,8 +19,8 @@ namespace hgl
 		UDPSocket::UDPSocket()
 		{
 			ThisSocket=-1;
-			bind_port=0;
-			tar_addr=new sockaddr_in;
+			bind_addr=nullptr;
+			tar_addr=nullptr;
 		}
 
 		/**
@@ -30,30 +30,33 @@ namespace hgl
 		{
 			CloseSocket();
 
-			delete tar_addr;
+			SAFE_CLEAR(tar_addr);
+            SAFE_CLEAR(bind_addr);
 		}
 
 		/**
 		* 创建一个UDP连接，使用指定的IP地址和端口
-		* @param host 服务器所使用的IP地址,如果host==nullptr则表示使用本机的所有地址
-		* @param port 服务器所需监听的端口
+		* @param addr 地址
 		* @return true 创建服务器成功
 		* @return false 创建服务器失败
 		*/
-		bool UDPSocket::Create(const char *host,const uint port)
+		bool UDPSocket::Create(const IPAddress *addr)
 		{
-			if(!CreateSocket(AF_INET,SOCK_DGRAM,IPPROTO_UDP))
-				return(false);
+            if(!addr)RETURN_FALSE;
+
+            if(addr->GetSocketType()!=SOCK_DGRAM)RETURN_FALSE;
+            if(addr->GetProtocol()!=IPPROTO_UDP)RETURN_FALSE;
+
+			if(!CreateSocket(addr->GetFamily(),SOCK_DGRAM,IPPROTO_UDP))
+				RETURN_FALSE;
 
 			socket_protocols=IPPROTO_UDP;
 
-			if(!BindAddr(ThisSocket,host,port))
+            if(!addr->Bind(ThisSocket))
 			{
 				hgl::CloseSocket(ThisSocket);
 				return(false);
 			}
-
-			bind_port=port;
 
 			SetBlock(false);
 			return(true);
@@ -62,9 +65,11 @@ namespace hgl
 		/**
 		* 创建一个UDP连接
 		*/
-		bool UDPSocket::Create()
+		bool UDPSocket::Create(int family)
 		{
-			if((ThisSocket=socket(AF_INET,SOCK_DGRAM,IPPROTO_UDP))<0)
+            if(family!=AF_INET&&family!=AF_INET6)RETURN_FALSE;
+
+			if((ThisSocket=socket(family,SOCK_DGRAM,IPPROTO_UDP))<0)
 			{
 				LOG_ERROR(U16_TEXT("创建Socket失败！errno:")+UTF16String(GetLastSocketError()));
 				return(false);
@@ -77,22 +82,13 @@ namespace hgl
 		}
 
 		/**
-		* 设定发送数据时，接收数据方的IP地址和端口号
-		* @param host 接收方的主机或IP地址
-		* @param port 接收方的端口号
-		*/
-		void UDPSocket::SetSendAddr(const char *host,const uint port)
-		{
-			FillAddr(tar_addr,host,port);
-		}
-
-		/**
 		* 设定发送数据时，接收数据方的地址
 		* @param addr 接收方的地址
 		*/
-		void UDPSocket::SetSendAddr(sockaddr_in &addr)
+		void UDPSocket::SetSendAddr(const IPAddress *addr)
 		{
-			memcpy(tar_addr,&addr,sizeof(sockaddr_in));
+            SAFE_CLEAR(tar_addr);
+			tar_addr=addr->CreateCopy();
 		}
 
 		/**
@@ -110,7 +106,7 @@ namespace hgl
 				return(-1);
 			}
 	#endif//
-			return(sendto(ThisSocket,(char *)data,size,0,(sockaddr *)tar_addr,sizeof(sockaddr_in)));
+			return(sendto(ThisSocket,(char *)data,size,0,tar_addr->GetSockAddr(),tar_addr->GetSockAddrInSize()));
 		}
 
 		/**
@@ -120,7 +116,7 @@ namespace hgl
 		* @param size 数据长度
 		* @return 已发送的数据字节数
 		*/
-		int UDPSocket::SendPacket(sockaddr_in &addr,const void *data,int size)
+		int UDPSocket::SendPacket(IPAddress *addr,const void *data,int size)
 		{
 	#ifdef _DEBUG
 			if(ThisSocket==-1)
@@ -129,7 +125,7 @@ namespace hgl
 				return(-1);
 			}
 	#endif//
-			return(sendto(ThisSocket,(char *)data,size,0,(sockaddr *)&addr,sizeof(sockaddr_in)));
+			return(sendto(ThisSocket,(char *)data,size,0,addr->GetSockAddr(),addr->GetSockAddrInSize()));
 		}
 
 		/**
@@ -139,7 +135,7 @@ namespace hgl
 		* @param remote_addr 发送方的地址
 		* @return 接收到的数据长度
 		*/
-		int UDPSocket::RecvPacket(void *buf,int size,sockaddr_in *remote_addr)
+		int UDPSocket::RecvPacket(void *buf,int size,IPAddress *remote_addr)
 		{
 	#ifdef _DEBUG
 			if(ThisSocket==-1)
@@ -156,9 +152,9 @@ namespace hgl
 	#else
 			socklen_t
 	#endif//
-			sas=sizeof(sockaddr_in);
+			sas=remote_addr->GetSockAddrInSize();
 
-			return(recvfrom(ThisSocket,(char *)buf,size,0,(sockaddr *)remote_addr,&sas));
+			return(recvfrom(ThisSocket,(char *)buf,size,0,remote_addr->GetSockAddr(),&sas));
 		}
 	}//namespace network
 }//namespace hgl

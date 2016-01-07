@@ -47,6 +47,8 @@ namespace hgl
 
 			sis=new SocketInputStream();
 			sos=new SocketOutputStream();
+
+			ipstr = nullptr;
 		}
 
 		TCPClient::~TCPClient()
@@ -61,20 +63,25 @@ namespace hgl
 		 * @param addr 服务器地址
 		 * @return 是否连接成功
 		 */
-		bool TCPClient::Connect(const sockaddr_in &addr)
+		bool TCPClient::Connect(const IPAddress *addr)
 		{
+            if(!addr)RETURN_FALSE;
 			Disconnect();
 
-			if(!CreateSocket(AF_INET,SOCK_STREAM,IPPROTO_TCP))
-				return(false);
+            if(addr->GetSocketType()!=SOCK_STREAM)RETURN_FALSE;
+            if(addr->GetProtocol()!=IPPROTO_TCP)RETURN_FALSE;
+
+			if(!CreateSocket(addr->GetFamily(),SOCK_STREAM,IPPROTO_TCP))
+				RETURN_FALSE;
 
 			if(connect(ThisSocket,(sockaddr *)&addr,sizeof(addr)))
 			{
-				os_char ipstr[32];
+				SAFE_CLEAR(ipstr);
+				ipstr=new char[addr->GetIPStringMaxSize()+1];
 
-				SockToStr(addr,ipstr,true);
+                addr->ToString(ipstr);
 
-				LOG_HINT(OS_TEXT("Don't Connect to TCPServer ")+OSString(ipstr));
+				LOG_HINT(U8_TEXT("Don't Connect to TCPServer ")+UTF8String(ipstr));
 				CloseSocket();
 				return(false);
 			}
@@ -83,29 +90,9 @@ namespace hgl
 
 			SetBlock(true,TimeOut);	//阻塞模式
 
-            UseSocket(ThisSocket);
+            UseSocket(ThisSocket,addr);
 
 			return(true);
-		}
-
-		/**
-		* 连接到服务器
-		* @param host 服务器地址
-		* @param port 端口
-		* @return 是否连接成功
-		*/
-		bool TCPClient::Connect(const char *host,int port)
-		{
-			sockaddr_in addr;
-
-			if(FillAddr(&addr,host,port)==false)
-			{
-				LOG_HINT(U8_TEXT("TCPClient::Connect FillAddr error in ")+UTF8String(host)+U8_TEXT(":")+UTF8String(port));
-				CloseSocket();
-				return(false);
-			}
-
-			return Connect(addr);
 		}
 
 		/**
@@ -113,6 +100,7 @@ namespace hgl
 		*/
 		void TCPClient::Disconnect()
 		{
+			SAFE_CLEAR(ipstr);
 			if(ThisSocket==-1)
 				return;
 
@@ -125,7 +113,7 @@ namespace hgl
 		 * @param sock 指定socket编号
 		 * @param addr socket地址
 		 */
-		void TCPClient::UseSocket(int sock,const sockaddr_in *addr)
+		void TCPClient::UseSocket(int sock,const IPAddress *addr)
 		{
 			TCPSocket::UseSocket(sock,addr);
 

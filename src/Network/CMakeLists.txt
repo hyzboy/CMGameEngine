@@ -1,4 +1,5 @@
 ﻿SET(NETWORK_BASE_SOURCE
+    IPAddress.cpp
 	Socket.cpp
 	ServerSocket.cpp
 	AcceptServer.cpp
