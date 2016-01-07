@@ -14,6 +14,8 @@
 			OpenGLTexture.cpp
 			OpenGLVertexBuffer.cpp
 			Render.cpp
+			RenderDevice.cpp
+			RenderDeviceOpenGLCore.cpp
 # 			ScreenShot.cpp
 			ShaderStringList.cpp
 			ShaderLight.cpp

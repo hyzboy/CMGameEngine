@@ -5,12 +5,11 @@ namespace hgl
 {
 	namespace graph
 	{
-		Renderable::Renderable()
+		Renderable::Renderable(RenderableData *rd)
 		{
-            data=nullptr;
+            data=rd;
 
 			material=nullptr;
-			shader=nullptr;
 
 			DrawStart=-1;
 			DrawCount=-1;

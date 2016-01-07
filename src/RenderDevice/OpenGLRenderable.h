@@ -48,19 +48,19 @@ namespace hgl
 		/**
 		* OpenGL Core 可渲染数据
 		*/
-		class OpenGLCoreRenderable:public Renderable
+		class OpenGLCoreRenderableData:public RenderableData
 		{
 		public:
 
-			bool SetVertexBuffer(VertexBufferType,VertexBufferBase *);						///<设置顶点缓冲区数据
+			bool SetVertexBuffer(VertexBufferType,VertexBufferBase *)HGL_OVERRIDE;					///<设置顶点缓冲区数据
 		};//class OpenGLCoreRenderable
 
 		/**
 		* OpenGL Core 可渲染对象
 		*/
-		class OpenGLCoreRenderableBinding
+		class OpenGLCoreRenderable
 		{
-			OpenGLCoreRenderable *renderable;			///<可渲染数据
+			OpenGLCoreRenderableData *renderable;		///<可渲染数据
 
 			uint vao;
 			int *location;								///<shader绑定变量地址
@@ -73,8 +73,8 @@ namespace hgl
 
 		public:
 
-			OpenGLCoreRenderableBinding(OpenGLCoreRenderable *, GLSL *glsl=nullptr);
-			~OpenGLCoreRenderableBinding();
+			OpenGLCoreRenderable(OpenGLCoreRenderableData *, GLSL *glsl=nullptr);
+			~OpenGLCoreRenderable();
 
 			bool SetShaderLocation(VertexBufferType, unsigned int);							///<设定与Shader变量的关联
 			void ClearShaderLocation();														///<清除与Shader变量的关联
@@ -84,12 +84,15 @@ namespace hgl
 
 			const RenderState *GetRenderState()const { return &state; }						///<取得渲染状态
 
+            void                        SetShader           (Shader *);                     ///<设置着色程序
+            Shader *                    GetShader           ()const{return shader;}         ///<取得着色程序
+
 #ifdef _DEBUG
 			Shader *AutoCreateShader(bool mvp = true, const os_char *filename = nullptr);	///<自动创建着色程序
 #else
 			Shader *AutoCreateShader(bool mvp = true);										///<自动创建着色程序
 #endif//_DEBUG
-		};//class OpenGLCoreRenderableBinding
+		};//class OpenGLCoreRenderable
 	}//namespace graph
 }//namespace hgl
 #endif//HGL_GRAPH_OPENGL_CORE_RENDERABLE_INCLUDE

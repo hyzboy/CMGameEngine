@@ -27,9 +27,14 @@ namespace hgl
 
 			int DrawStart,DrawCount;																					///<可绘制数量
 
+        private:
+
+            friend Renderable *CreateRenderable(RenderableData *);
+
+            Renderable(RenderableData *);                   //请通过CreateRenderableData来创建可渲染对像,函数在Render.h中定义
+
 		public:
 
-			Renderable();					//请通过CreateRenderable来创建可渲染对像,函数在Render.h中定义
 			virtual ~Renderable();
 
 		public:
@@ -45,14 +50,23 @@ namespace hgl
 			virtual bool		                GetDrawCount		(int &,int &);															///<取得指定的要绘制的数据数量
 
 			virtual bool						SetTexCoord			(int mtc,VertexBufferType);												///<设定贴图坐标对应缓冲区
-					bool						SetTexCoord			(int mtc,VertexBufferType vbt,VertexBufferBase *vb)						///<设定贴图坐标对应缓冲区
-			{
-				if(!SetTexCoord(mtc,vbt))return(false);
-
-				return SetVertexBuffer(vbt,vb);
-			}
-
 			virtual VertexBufferBase *			GetTexCoord			(int mtc,VertexBufferType *vbt=0);										///<取得贴图坐标对应的缓冲区
+
+        public: //着色程序
+
+            virtual void                        SetShader           (Shader *)=0;                                                           ///<设置着色程序
+            virtual Shader *                    GetShader           ()const=0;                                                              ///<取得着色程序
+
+            /**
+            * 自动创建生成shader
+            * @param mvp 渲染时是否使用projection矩阵与modelview矩阵
+            * @return 创建好的shader程序
+            */
+            virtual Shader *                    AutoCreateShader    (bool mvp=true                                                          ///<自动创建着色程序
+    #ifdef _DEBUG
+                                                                    ,const os_char *filename=nullptr
+    #endif//_DEBUG
+            )=0;
 		};//class Renderable
 	}//namespace graph
 }//namespace hgl

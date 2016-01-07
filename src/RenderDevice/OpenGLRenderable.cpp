@@ -17,8 +17,6 @@ namespace hgl
 			GL_TRIANGLES,
 			GL_TRIANGLE_STRIP,
 			GL_TRIANGLE_FAN,
-//			GL_QUADS,
-//			GL_QUAD_STRIP,
 			GL_LINES_ADJACENCY,
 			GL_LINE_STRIP_ADJACENCY,
 			GL_TRIANGLES_ADJACENCY,
@@ -36,11 +34,6 @@ namespace hgl
 				if(*p++==prim)return(true);
 
 			return(false);
-		}
-
-		Renderable *CreateRenderable()
-		{
-			return(new OpenGLCoreRenderable);
 		}
 	}//namespace graph
 
@@ -75,7 +68,7 @@ namespace hgl
 		* @param vb 数据缓冲区
 		* @return 是否设置成功
 		*/
-		bool OpenGLCoreRenderable::SetVertexBuffer(VertexBufferType vbt, VertexBufferBase *vb)
+		bool OpenGLCoreRenderableData::SetVertexBuffer(VertexBufferType vbt, VertexBufferBase *vb)
 		{
 			if (!Renderable::SetVertexBuffer(vbt, vb))
 				return(false);
@@ -88,20 +81,19 @@ namespace hgl
 
 	namespace graph
 	{
-		OpenGLCoreRenderableBinding::OpenGLCoreRenderableBinding(OpenGLCoreRenderable *r, GLSL *g)
+		OpenGLCoreRenderable::OpenGLCoreRenderable(OpenGLCoreRenderableData *rd, GLSL *g):Renderable(rd)
 		{
-			renderable = r;
+			renderable = rd;
 			shader=g
 
             glCreateVertexArrays(1,&vao);
 
 			location=new int[HGL_MAX_VERTEX_ATTRIBS];
 
-			for(int i=0;i<HGL_MAX_VERTEX_ATTRIBS;i++)
-				location[i]=-1;
+            hgl_set(location,-1,HGL_MAX_VERTEX_ATTRIBS);
 		}
 
-		OpenGLCoreRenderableBinding::~OpenGLCoreRenderableBinding()
+		OpenGLCoreRenderable::~OpenGLCoreRenderable()
 		{
 			delete[] location;
 
@@ -114,7 +106,7 @@ namespace hgl
 		* @param shader_locaiton shader变量地址
 		* @param enabled 是否立即启用
 		*/
-		bool OpenGLCoreRenderableBinding::SetShaderLocation(VertexBufferType vbt,unsigned int shader_location)
+		bool OpenGLCoreRenderable::SetShaderLocation(VertexBufferType vbt,unsigned int shader_location)
 		{
 			if(vbt<vbtVertex||vbt>=HGL_MAX_VERTEX_ATTRIBS)
 			{
@@ -127,7 +119,7 @@ namespace hgl
 			return(true);
 		}
 
-		void OpenGLCoreRenderableBinding::ClearShaderLocation()
+		void OpenGLCoreRenderable::ClearShaderLocation()
 		{
 			for(int i=vbtIndex;i<HGL_MAX_VERTEX_ATTRIBS;i++)
 			{
@@ -138,7 +130,7 @@ namespace hgl
 			}
 		}
 
-		bool OpenGLCoreRenderableBinding::Bind(int shader)
+		bool OpenGLCoreRenderable::Bind(int shader)
 		{
 			if(!vao)return(false);
 
@@ -187,7 +179,7 @@ namespace hgl
 			return(true);
 		}
 
-		bool OpenGLCoreRenderableBinding::Use()
+		bool OpenGLCoreRenderable::Use()
 		{
 			if(!vao)return(false);
 
@@ -198,7 +190,7 @@ namespace hgl
 		/**
 		* 生成渲染状态
 		*/
-		bool OpenGLCoreRenderableBinding::MakeRenderState(bool mvp)
+		bool OpenGLCoreRenderable::MakeRenderState(bool mvp)
 		{
 			VertexBufferBase *vb_vertex	=renderable->GetVertexBuffer(vbtVertex);
 
@@ -247,7 +239,7 @@ namespace hgl
 			return(true);
 		}
 
-		Shader *OpenGLCoreRenderableBinding::AutoCreateShader(bool mvp
+		Shader *OpenGLCoreRenderable::AutoCreateShader(bool mvp
 #ifdef _DEBUG
 			,const os_char *shader_filename
 #endif//_DEBUG
