@@ -9,6 +9,16 @@ namespace hgl
 	{
 		class Bitmap2D;
 
+        extern int HGL_MAX_VS_TEXTURE_UNITS;        ///<Vertex Shader中的最大纹理单元
+        extern int HGL_MAX_FS_TEXTURE_UNITS;        ///<Fragment Shader中的最大纹理单元
+        extern int HGL_MAX_GS_TEXTURE_UNITS;        ///<Geometry Shader中的最大纹理单元
+        extern int HGL_MAX_TCS_TEXTURE_UNITS;       ///<Tess Control Shader中的最大纹理单元
+        extern int HGL_MAX_TES_TEXTURE_UNITS;       ///<Tess Evaluation Shader中的最大纹理单元
+        extern int HGL_MAX_CS_TEXTURE_UNITS;        ///<Compute Shader中的最大纹理单元
+
+        extern int HGL_MAX_TEXTURE_SIZE;            ///<最大纹理尺寸
+        extern int HGL_MAX_CUBE_MAP_SIZE;           ///<最大CubeMap纹理尺寸
+
 		/**
 		* 贴图类
 		*/
@@ -26,7 +36,7 @@ namespace hgl
 
 		protected:
 
-			uint index;																				///<索引
+			uint texture_id;																		///<纹理ID
 
 			uint type;																				///<贴图类型
 
@@ -43,7 +53,7 @@ namespace hgl
 
 		public:
 
-					int		GetIndex		()const{return index;}									///<取得索引
+					int		GetID		    ()const{return texture_id;}								///<取得纹理ID
 					uint	GetType			()const{return type;}									///<取得类型
 			virtual uint	GetCoordNumber	()const=0;												///<取得坐标数量
 					uint	GetVideoFormat	()const{return video_format;}							///<取得显存中的颜色格式
@@ -54,24 +64,24 @@ namespace hgl
 			virtual void	SetMagFilter	(uint f){mag_filter=f;}									///<设置放大过滤
 		};//class Texture
 
-		/**
-		* 1D贴图
-		*/
-		class Texture1D:public Texture
-		{
-			int length;																									///<长
-
-		public:	//
-
-					uint	GetCoordNumber	()const{return 1;}
-					int		GetLength		()const{return length;}
-
-		public:
-
-					//bool	LoadFile		(const u16char *,uint vf=0,uint ltp=0);										///<从文件加载一个贴图
-
-			virtual bool	SetImage		(uint l,void *data,uint size,uint sf,uint vf=0);							///<创建1D贴图数据
-		};//class Texture1D
+// 		/**
+// 		* 1D贴图
+// 		*/
+// 		class Texture1D:public Texture
+// 		{
+// 			int length;																									///<长
+//
+// 		public:	//
+//
+// 					uint	GetCoordNumber	()const{return 1;}
+// 					int		GetLength		()const{return length;}
+//
+// 		public:
+//
+// 					//bool	LoadFile		(const u16char *,uint vf=0,uint ltp=0);										///<从文件加载一个贴图
+//
+// 			virtual bool	SetImage		(uint l,void *data,uint size,uint sf,uint vf=0);							///<创建1D贴图数据
+// 		};//class Texture1D
 
 		/**
 		* 2D贴图
@@ -92,7 +102,7 @@ namespace hgl
 		public:
 
 							Texture2D();
-							virtual ~Texture2D()HGL_DEFAULT_MEMFUNC;
+							~Texture2D();
 
 					bool	LoadFile		(const OSString &,uint vf=0,uint ltp=0);									///<从文件加载一个贴图
 
@@ -112,6 +122,12 @@ namespace hgl
 			virtual void	SetWrapS		(uint)=0;																	///<设置横向寻址方式
 			virtual void	SetWrapT		(uint)=0;																	///<设置纵向寻址方式
 		};//class Texture2D
+
+		class Texture1DArray:public Texture{};
+        class Texture2DArray:public Texture{};
+        class Texture3D:public Texture{};
+        class TextureCubeMap:public Texture{};
+        class TextureCubeMapArray:public Texture{};
 
 // 		class Texture3D:public Texture
 // 		{

@@ -5,6 +5,7 @@
 #include<hgl/graph/Material.h>
 #include<hgl/graph/Primivate.h>
 #include<hgl/graph/RenderableData.h>
+#include<hgl/graph/RenderState.h>
 namespace hgl
 {
 	namespace graph
@@ -14,59 +15,79 @@ namespace hgl
 		*/
 		class Renderable
 		{
+            void Init();
+            void Clear();
+
 		protected:
 
-            RenderableData *data;                                                                                       ///<数据
+            RenderableData *data;                                                                                           ///<数据
 
-			Material *material;																							///<材质
-			bool mtl_private;																							///<材质是否私有
+			Material *material;																							    ///<材质
+			bool mtl_private;																							    ///<材质是否私有
 
-			VertexBufferType TextureChannels[mtcMax];																	///<贴图通道对应表
+			VertexBufferType TextureChannels[mtcMax];																	    ///<贴图通道对应表
 
-			uint prim;																									///<绘制的图元类型
+			int DrawStart,DrawCount;																					    ///<可绘制数量
 
-			int DrawStart,DrawCount;																					///<可绘制数量
+        protected:
 
-        private:
+            uint        vao;
+            int *       location;                                                                                           ///<shader绑定变量地址
+            RenderState state;                                                                                              ///<渲染状态
+            Shader *    shader;                                                                                             ///<对应shader
 
-            friend Renderable *CreateRenderable(RenderableData *);
+            Shader *    bind_shader;                                                                                        ///<上一次绑定的shader
 
-            Renderable(RenderableData *);                   //请通过CreateRenderableData来创建可渲染对像,函数在Render.h中定义
+            bool        MakeRenderState(bool);                                                                              ///<生成渲染状态
+
 
 		public:
 
-			virtual ~Renderable();
+            Renderable(RenderableData *,Shader *s=nullptr);
+			~Renderable();
 
 		public:
 
-			virtual void						SetPrimitive		(uint dp)					{prim=dp;}									///<设置的绘制的图元类型
-			virtual uint						GetPrimitive		()const						{return prim;}								///<取得要绘制的图元类型
+			uint				GetPrimitive		()const						{return data?data->GetPrimitive():0;}		///<取得要绘制的图元类型
 
-			virtual bool						SetMaterial			(Material *,bool);														///<设置材质数据
-			virtual Material * 					GetMaterial			()const						{return material;}							///<取得材质指针
+			bool				SetMaterial			(Material *,bool);														///<设置材质数据
+			Material * 			GetMaterial			()const						{return material;}							///<取得材质指针
 
+            VertexBufferBase *  GetVertexBuffer     (VertexBufferType vbt){return data?data->GetVertexBuffer(vbt):nullptr;} ///<取得对应顶点缓冲区数据
 
-			virtual bool						SetDrawCount		(int,int);																///<设置要绘制的数据数量
-			virtual bool		                GetDrawCount		(int &,int &);															///<取得指定的要绘制的数据数量
+            int                 GetVertexCompoment  ()const{return data?data->GetVertexCompoment():0;}                      ///<取得顶点数据坐标轴数
+            ColorFormat         GetVertexColorFormat()const{return data?data->GetVertexColorFormat():HGL_COLOR_NONE;}       ///<取得顶点色属性格式
 
-			virtual bool						SetTexCoord			(int mtc,VertexBufferType);												///<设定贴图坐标对应缓冲区
-			virtual VertexBufferBase *			GetTexCoord			(int mtc,VertexBufferType *vbt=0);										///<取得贴图坐标对应的缓冲区
+			bool				SetDrawCount		(int,int);																///<设置要绘制的数据数量
+			bool		        GetDrawCount		(int &,int &);															///<取得指定的要绘制的数据数量
+
+			bool				SetTexCoord			(int mtc,VertexBufferType);												///<设定贴图坐标对应缓冲区
+			VertexBufferBase *	GetTexCoord			(int mtc,VertexBufferType *vbt=0);										///<取得贴图坐标对应的缓冲区
 
         public: //着色程序
 
-            virtual void                        SetShader           (Shader *)=0;                                                           ///<设置着色程序
-            virtual Shader *                    GetShader           ()const=0;                                                              ///<取得着色程序
+            void                SetShader           (Shader *);                                                             ///<设置着色程序
+            Shader *            GetShader           ()const;                                                                ///<取得着色程序
+
+            bool                SetShaderLocation   (VertexBufferType, unsigned int);                                       ///<设定与Shader变量的关联
+            void                ClearShaderLocation ();                                                                     ///<清除与Shader变量的关联
+
+            bool                Bind                (Shader *);                                                             ///<绑定VAO数据
+            Shader *            GetBindShader       ()const{return bind_shader;}                                            ///<取得上一次绑定的shader
+            bool                Use                 ();                                                                     ///<使用这个VAO+Shader渲染
+
+            const RenderState * GetRenderState      ()const { return &state; }                                              ///<取得渲染状态
 
             /**
             * 自动创建生成shader
             * @param mvp 渲染时是否使用projection矩阵与modelview矩阵
             * @return 创建好的shader程序
             */
-            virtual Shader *                    AutoCreateShader    (bool mvp=true                                                          ///<自动创建着色程序
     #ifdef _DEBUG
-                                                                    ,const os_char *filename=nullptr
+            Shader *            AutoCreateShader    (bool mvp=true,const os_char *filename=nullptr);                        ///<自动创建着色程序
+    #else
+            Shader *            AutoCreateShader    (bool mvp=true);                                                        ///<自动创建着色程序
     #endif//_DEBUG
-            )=0;
 		};//class Renderable
 	}//namespace graph
 }//namespace hgl

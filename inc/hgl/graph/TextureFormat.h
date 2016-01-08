@@ -1,4 +1,4 @@
-﻿#ifndef HGL_GRAPH_TEXTURE_FORMAT_INCLUDE
+#ifndef HGL_GRAPH_TEXTURE_FORMAT_INCLUDE
 #define HGL_GRAPH_TEXTURE_FORMAT_INCLUDE
 
 #include<hgl/type/DataType.h>
@@ -7,11 +7,6 @@ namespace hgl
 {
 	namespace graph
 	{
-		//贴图尺寸
-		extern int HGL_MAX_TEXTURE_UNITS;					//最大贴图数量
-		extern int HGL_MAX_TEXTURE_SIZE;					//最大贴图尺寸
-		extern int HGL_MAX_CUBE_MAP_TEXTURE_SIZE;			//最大CubeMap贴图尺寸
-
 		//贴图类型,核心模式，肯定支持array/cubemap
 		#define HGL_TEXTURE_1D					GL_TEXTURE_1D
 		#define HGL_TEXTURE_2D					GL_TEXTURE_2D
@@ -186,6 +181,29 @@ namespace hgl
 		};//enum TextureSourceFormat
 
 		typedef TextureSourceFormat TSF;
+
+        struct TextureFormat
+        {
+            TextureSourceFormat tsf;    //数据源格式枚举
+
+            char name[16];              //简写名称
+
+            bool compress;              //是否压缩格式
+            uint index;                 //索引色数量
+
+            uint internalFormat;        //显存格式
+
+            uint format;                //格式
+            uint type;                  //类型
+
+            uint source_bytes;          //原始格式字节数
+            uint video_bytes;           //显存格式字节数
+        };
+
+        //贴图数据源格式信息
+        extern const TextureFormat TextureFormatInfoList[HGL_SF_END];
+
+        TSF GetColorFormat(const char *);       //根据简写名称取得对应的TextureSourceFormat
 	}//namespace graph
 }//namespace hgl
 #endif//HGL_GRAPH_TEXTURE_FORMAT_INCLUDE

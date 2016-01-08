@@ -1,4 +1,4 @@
-#ifndef HGL_GRAPH_PRIMIVATE_INCLUDE
+﻿#ifndef HGL_GRAPH_PRIMIVATE_INCLUDE
 #define HGL_GRAPH_PRIMIVATE_INCLUDE
 
 #include<glew/include/GL/glew.h>

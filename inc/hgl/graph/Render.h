@@ -8,7 +8,6 @@
 #include<hgl/graph/Material.h>
 #include<hgl/graph/VertexBuffer.h>
 #include<hgl/graph/Renderable.h>
-#include<hgl/graph/RenderDevice.h>
 namespace hgl
 {
 	namespace graph
@@ -202,6 +201,26 @@ namespace hgl
 		extern Renderable *TextureRect;																///<带贴图的2D矩形
 		extern Renderable *SolidCircle;																///<实心圆
 		extern Renderable *WireCircle;																///<空心圆
+
+        class RenderableList:public CusObjectList<Renderable>
+        {
+            Renderable *CreateObject()
+            {
+                return(CreateRenderable());
+            }
+
+            void DeleteObject(Renderable *obj)
+            {
+                delete obj;
+            }
+
+        public:
+
+            virtual ~RenderableList()
+            {
+                Clear();
+            }
+        };//class RenderableList
 
 				bool DirectRender(Renderable *obj,const Matrix4f *proj,const Matrix4f *mv);			///<直接渲染一个可渲染数据
 
