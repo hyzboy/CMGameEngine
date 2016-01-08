@@ -5,9 +5,11 @@ namespace hgl
 {
 	namespace graph
 	{
-		Renderable::Renderable(RenderableData *rd)
+		Renderable::Renderable(RenderableData *rd,Shader *s)
 		{
             data=rd;
+            shader=s;
+            bind_shader=nullptr;
 
 			material=nullptr;
 
@@ -16,7 +18,7 @@ namespace hgl
 
             hgl_set(TextureChannels,vbtEnd,mtcMax);
 
-			prim=0xFFFFFFFF;
+            Init();
 		}
 
 		Renderable::~Renderable()
@@ -25,6 +27,8 @@ namespace hgl
 				delete material;
 
 			material=nullptr;
+
+            Clear();
 		}
 
 		/**

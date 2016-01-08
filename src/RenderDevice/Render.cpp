@@ -1,12 +1,12 @@
 ﻿#include<glew/include/GL/glew.h>
-#include"GLSL.h"
+#include"GLSL/GLSL.h"
 #include<hgl/graph/Render.h>
 #include<hgl/graph/Texture.h>
 #include<hgl/graph/Material.h>
 #include<hgl/graph/VertexBuffer.h>
 #include<hgl/graph/InlineRenderable.h>
 #include<hgl/LogInfo.h>
-#include"OpenGLRenderable.h"
+#include<hgl/graph/Renderable.h>
 namespace hgl
 {
 	/**
@@ -108,7 +108,7 @@ namespace hgl
 			}
 		}
 
-		bool BindShaderVertexAttrib(OpenGLCoreRenderable *obj,GLSL *glsl,int vbt)
+		bool BindShaderVertexAttrib(Renderable *obj,Shader *glsl,int vbt)
 		{
 			VertexBufferBase *vb=obj->GetVertexBuffer((VertexBufferType)vbt);				//取得缓冲区
 
@@ -127,9 +127,9 @@ namespace hgl
 			return(true);
 		}
 
-		bool BindShaderVertexAttrib(OpenGLCoreRenderable *obj,GLSL *glsl,const RenderState *state)
+		bool BindShaderVertexAttrib(Renderable *obj,Shader *glsl,const RenderState *state)
 		{
-			if (obj->GetBindShader() != glsl->GetID())
+			if (obj->GetBindShader() != glsl)
 			{
 				//本来这段可以写到OpenGLCoreRenderable类中的，为了一些变数，写在这里
 				obj->ClearShaderLocation();														//清除原有shader与顶点缓冲区的绑定
@@ -156,7 +156,7 @@ namespace hgl
 						BindShaderVertexAttrib(obj, glsl, vbt);
 				}
 
-				obj->Bind(glsl->GetID());																	//缓定glsl与缓冲区
+				obj->Bind(glsl);																	//缓定glsl与缓冲区
 			}
 
 			obj->Use();
@@ -164,7 +164,7 @@ namespace hgl
 			return(true);
 		}
 
-		bool BindShaderUniform(Renderable *able,GLSL *glsl,const Matrix4f *modelview,const RenderState *state)
+		bool BindShaderUniform(Renderable *able,Shader *glsl,const Matrix4f *modelview,const RenderState *state)
 		{
 			const Material *mat=able->GetMaterial();
 
@@ -190,7 +190,7 @@ namespace hgl
 			return(true);
 		}
 
-		bool BindShaderTexture(Renderable *able,GLSL *glsl)
+		bool BindShaderTexture(Renderable *able,Shader *glsl)
 		{
 			Material *mat=able->GetMaterial();
 
@@ -204,7 +204,7 @@ namespace hgl
 
 					if(!tex)continue;													//贴图不存在
 
-					BindTexture(tex_count,tex->GetType(),tex->GetIndex());				//绑定贴图
+					BindTexture(tex_count,tex->GetType(),tex->GetID());			        //绑定贴图
 
 					if(!glsl->Shader::SetUniform1i(MaterialTextureName[i],tex_count))	//设定贴图对应索引
 					{
@@ -219,7 +219,7 @@ namespace hgl
 			return(true);
 		}
 
-		bool BindShaderMatrix(GLSL *glsl,const Matrix4f *projection,const Matrix4f *modelview,const RenderState *state)
+		bool BindShaderMatrix(Shader *glsl,const Matrix4f *projection,const Matrix4f *modelview,const RenderState *state)
 		{
 			if(!state->mvp)
 				return(true);
@@ -294,7 +294,7 @@ namespace hgl
 		{
 			if(!obj)return(false);
 
-			GLSL *		glsl		=(GLSL *)obj->GetShader();	//取得glsl
+			Shader *	glsl		=obj->GetShader();	        //取得glsl
 			Material *	mtl			=obj->GetMaterial();		//取得材质
 			uint		draw_prim	=obj->GetPrimitive();		//取得图元类型
 			int			draw_start;
@@ -312,11 +312,11 @@ namespace hgl
 
 			//绑定shader
 			{
-				const RenderState *state=((OpenGLCoreRenderable *)obj)->GetRenderState();		//渲染状态
+				const RenderState *state=(obj)->GetRenderState();		                        //渲染状态
 
 				glsl->Use();																	//启用glsl
 
-				if(!BindShaderVertexAttrib((OpenGLCoreRenderable *)obj,glsl,state))				//绑定shader顶点属性
+				if(!BindShaderVertexAttrib(obj,glsl,state))				                        //绑定shader顶点属性
 				{
 					LOG_PROBLEM(OS_TEXT("BindShaderVertexAttrib error"));
 					return(false);

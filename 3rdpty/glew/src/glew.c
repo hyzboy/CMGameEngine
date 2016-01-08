@@ -15889,7 +15889,7 @@ GLboolean glxewGetExtension (const char* name)
   start = (const GLubyte*)glXGetClientString(glXGetCurrentDisplay(), GLX_EXTENSIONS);
   if (0 == start) return GL_FALSE;
   end = start + _glewStrLen(start);
-  return glewGetExtension(name, start, end);
+  return glewGetExtension(name);
 }
 
 GLenum glxewInit ()

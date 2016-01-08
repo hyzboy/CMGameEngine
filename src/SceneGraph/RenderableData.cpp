@@ -1,11 +1,13 @@
-#include<hgl/graph/RenderableData.h>
+﻿#include<hgl/graph/RenderableData.h>
 
 namespace hgl
 {
     namespace graph
     {
-        RenderableData::RenderableData()
+        RenderableData::RenderableData(uint prim)
         {
+            primitive=prim;
+            
             vb_color_format=HGL_COLOR_NONE;
 
             NEW_NULL_ARRAY(vertex_buffer,VertexBufferBase *,vbtEnd);
@@ -13,7 +15,7 @@ namespace hgl
 
         RenderableData::~RenderableData()
         {
-            SAFE_CLEAR_ARRAY_OBJECT(vertex_buffer,vbtEnd);
+            SAFE_CLEAR_OBJECT_ARRAY(vertex_buffer,vbtEnd);
         }
 
         /**
@@ -39,6 +41,8 @@ namespace hgl
             }
 
             vertex_buffer[vbt]=vb;
+
+            _SetVertexBuffer(vbt,vb);       //各种真实渲染器处理
 
             return(true);
         }
@@ -74,7 +78,6 @@ namespace hgl
 
             return(vertex_buffer[vbt]);
         }
-
 
         /**
         * 取得可绘制数据数量

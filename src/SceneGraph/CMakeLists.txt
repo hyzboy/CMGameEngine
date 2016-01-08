@@ -48,8 +48,6 @@ IF(BUILD_OPENGL_LIB)
 		SceneGlobalState.cpp
 		SceneNode.cpp
 		SceneOrient.cpp
-		Shader.cpp
-		ShaderDataBlock.cpp
 		SkyLight.cpp
 		Texture.cpp
 		TileData.cpp

@@ -7,9 +7,17 @@ namespace hgl
 	namespace graph
 	{
 		//贴图数量
-        int	HGL_MAX_TEXTURE_UNITS			=1;							//最大贴图数量
-        int	HGL_MAX_TEXTURE_SIZE			=256;						//最大贴图尺寸
-        int	HGL_MAX_CUBE_MAP_TEXTURE_SIZE	=256;						//最大CubeMap贴图尺寸
+        int HGL_MAX_TEXTURE_UNITS	=0;		//最大贴图数量
+
+        int HGL_MAX_VS_TEXTURE_UNITS =0;     ///<Vertex Shader中的最大纹理单元
+        int HGL_MAX_FS_TEXTURE_UNITS =0;     ///<Fragment Shader中的最大纹理单元
+        int HGL_MAX_GS_TEXTURE_UNITS =0;     ///<Geometry Shader中的最大纹理单元
+        int HGL_MAX_TCS_TEXTURE_UNITS=0;     ///<Tess Control Shader中的最大纹理单元
+        int HGL_MAX_TES_TEXTURE_UNITS=0;     ///<Tess Evaluation Shader中的最大纹理单元
+        int HGL_MAX_CS_TEXTURE_UNITS =0;     ///<Compute Shader中的最大纹理单元
+
+        int HGL_MAX_TEXTURE_SIZE     =0;     ///<最大纹理尺寸
+        int HGL_MAX_CUBE_MAP_SIZE    =0;     ///<最大CubeMap纹理尺寸
 
 		namespace
 		{
@@ -116,21 +124,25 @@ namespace hgl
 		{
 			void InitTexture()
 			{
-				int v,f,g;
 
-				glGetIntegerv(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS,&v);		//vertex shader 可用最大数量
-				glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS,&f);				//fragment shader 可用最大数量
-				glGetIntegerv(GL_MAX_GEOMETRY_TEXTURE_IMAGE_UNITS,&g);		//geometry shader 可用最大数量,OpenGL 3.2
+                glGetIntegerv(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS,            &HGL_MAX_VS_TEXTURE_UNITS);         //vertex shader 可用最大纹理数量
+                glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS,                   &HGL_MAX_FS_TEXTURE_UNITS);         //fragment shader 可用最大纹理数量
+                glGetIntegerv(GL_MAX_GEOMETRY_TEXTURE_IMAGE_UNITS,          &HGL_MAX_GS_TEXTURE_UNITS);         //geometry shader 可用最大纹理数量,OpenGL 3.2
 
-				HGL_MAX_TEXTURE_UNITS=f>v?v:f;
+                glGetIntegerv(GL_MAX_TESS_CONTROL_TEXTURE_IMAGE_UNITS,      &HGL_MAX_TCS_TEXTURE_UNITS);        //tess control shader 可用最大纹理数量,OpenGL 4
+                glGetIntegerv(GL_MAX_TESS_EVALUATION_TEXTURE_IMAGE_UNITS,   &HGL_MAX_TES_TEXTURE_UNITS);        //tess evaluation shader 可用最大纹理数量,OpenGL 4
+
+                glGetIntegerv(GL_MAX_COMPUTE_TEXTURE_IMAGE_UNITS,           &HGL_MAX_CS_TEXTURE_UNITS);         //compute shader 可用最大纹理数量,OpenGL 4.3
+
+                glGetIntegerv(GL_MAX_TEXTURE_SIZE,                          &HGL_MAX_TEXTURE_SIZE);             //最大贴图尺寸
+                glGetIntegerv(GL_MAX_CUBE_MAP_TEXTURE_SIZE,                 &HGL_MAX_CUBE_MAP_SIZE);            //最大CubeMap贴图尺寸
+
+				glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS,          &HGL_MAX_TEXTURE_UNITS);
 
 				texture_state_format=new uint[HGL_MAX_TEXTURE_UNITS];
 				texture_index=new uint[HGL_MAX_TEXTURE_UNITS];
 
 				InitStateTexture(HGL_MAX_TEXTURE_UNITS);										//初始化状态机
-
-				glGetIntegerv(GL_MAX_TEXTURE_SIZE,			&HGL_MAX_TEXTURE_SIZE);				//最大贴图尺寸
-				glGetIntegerv(GL_MAX_CUBE_MAP_TEXTURE_SIZE,	&HGL_MAX_CUBE_MAP_TEXTURE_SIZE);	//最大CubeMap贴图尺寸
 
 				glHint(GL_TEXTURE_COMPRESSION_HINT,GL_NICEST);									//压缩贴图时用最佳质量
 			}

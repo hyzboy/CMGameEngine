@@ -1,6 +1,6 @@
 ﻿#include"GenVertexShader.h"
-#include"OpenGLRenderable.h"
-#include"GLSL.h"
+#include<hgl/graph/Renderable.h>
+#include"../GLSL/GLSL.h"
 #include<hgl/graph/Render.h>
 #include<hgl/LogInfo.h>
 #include<stdio.h>
@@ -346,11 +346,11 @@ namespace hgl
 				code.add();
 			}
 
-			VertexBufferBase *vb_vertex=able->GetVertexBuffer(vbtVertex);
+			int vertex_component=able->GetVertexCompoment();
 
 			//顶点
 			{
-				code.add_in_vertex(vb_vertex->GetComponent());
+				code.add_in_vertex(vertex_component);
 				code.add();
 			}
 
@@ -388,7 +388,7 @@ namespace hgl
 				//高度图
 				if(state->height_map)					//如果是高度图，则是拿vertex当高度图坐标、以及各种纹理坐标
 				{										//高度图网格永远画在(0,0)-(1,1)的范围内，所以这个坐标同时可以直接用于高图度的纹理坐标，以及漫反射、法线、光照、阴影等贴图上。
-					if(vb_vertex->GetComponent()!=2)
+					if(vertex_component!=2)
 					{
 						LOG_ERROR(OS_TEXT("使用高度图，但传入的顶点坐标不是2维数据."));
 						return(nullptr);
