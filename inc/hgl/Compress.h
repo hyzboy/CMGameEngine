@@ -1,4 +1,4 @@
-#ifndef HGL_COMPRESS_INCLUDE
+﻿#ifndef HGL_COMPRESS_INCLUDE
 #define HGL_COMPRESS_INCLUDE
 
 #include<hgl/type/BaseString.h>
@@ -29,10 +29,10 @@ namespace hgl
     typedef CompressAlgorithm CA;		///<压缩算法枚举定义
 
 	const UTF16String CAToName(CA);																		///<压缩法算枚举到名称转换
-	CA NameToCA(const UTF16String &);                       												///<名称到压缩算法枚举转换
+	CA NameToCA(const UTF16String &);                       											///<名称到压缩算法枚举转换
 
-	uint32 Compress(const UTF16String &,void *,uint32,void *,uint32,float=1);   							///<压缩数据
-	uint32 Decompress(const UTF16String &,void *,uint32,void *,uint32); 									///<解压缩数据
+	uint32 Compress(const UTF16String &,void *,uint32,void *,uint32,float=1);   						///<压缩数据
+	uint32 Decompress(const UTF16String &,void *,uint32,void *,uint32); 								///<解压缩数据
 
 	uint32 ImageCompress(const UTF16String &,void *,uint32,void *,int,int,int,float=1);					///<压缩图像数据
 	uint32 ImageDecompress(const UTF16String &,void *,void *,uint32,int,int,int); 						///<解压缩图像数据
@@ -79,10 +79,10 @@ namespace hgl
 	* @param width 图像宽
 	* @param height 图像高
 	* @param channels 图像通道数
-	* @param level 压缩级别(0:不压缩,9:最大压缩比)
+	* @param level 压缩级别(0:不压缩,1:最大压缩比)
 	* @return 压缩后的数据大小
 	*/
-	uint32 __inline ImageCompress(CA ca,void *buffer,uint32 buffer_size,void *data,int width,int height,int channels,int level)
+	uint32 __inline ImageCompress(CA ca,void *buffer,uint32 buffer_size,void *data,int width,int height,int channels,float level=0)
 	{
         return ImageCompress(CAToName(ca),buffer,buffer_size,data,width,height,channels,level);
 	}

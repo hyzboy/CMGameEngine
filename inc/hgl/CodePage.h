@@ -1,5 +1,4 @@
-﻿
-#ifndef HGL_CODE_PAGE_INCLUDE
+﻿#ifndef HGL_CODE_PAGE_INCLUDE
 #define HGL_CODE_PAGE_INCLUDE
 
 #include<hgl/platform/Platform.h>
@@ -257,4 +256,3 @@ namespace hgl
 	//utf32<->utf16互转请使用hgl_equcpy,代码在datatype.h
 }//namespace hgl
 #endif//HGL_CODE_PAGE_INCLUDE
-

@@ -40,7 +40,6 @@ namespace hgl
 
             bool        MakeRenderState(bool);                                                                              ///<生成渲染状态
 
-
 		public:
 
             Renderable(RenderableData *,Shader *s=nullptr);
