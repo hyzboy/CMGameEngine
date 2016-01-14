@@ -1,5 +1,5 @@
-﻿#ifndef HGL_FINANCE_INCLUDE
-#define HGL_FINANCE_INCLUDE
+﻿#ifndef HGL_FINANCE_CURRENCY_INCLUDE
+#define HGL_FINANCE_CURRENCY_INCLUDE
 
 namespace hgl
 {
@@ -196,4 +196,4 @@ namespace hgl
 // 			float GetStock(
 	}//namespace finance
 }//namespace hgl
-#endif//HGL_FINANCE_INCLUDE
+#endif//HGL_FINANCE_CURRENCY_INCLUDE
