@@ -6,8 +6,8 @@ namespace hgl
 	namespace finance
 	{
 		/**
-			* 以下为ISO 4217标准所有国家货币代码与使用国列表
-			* 但请注意：并不是所有货币之间都可以直接进行转换
+		* 以下为ISO 4217标准所有国家货币代码与使用国列表
+		* 但请注意：并不是所有货币之间都可以直接进行转换
 
 		AED        United Arab Emirates Dirham
 		AFN        Afghanistan Afghani
@@ -173,12 +173,12 @@ namespace hgl
 		ZWD        Zimbabwe Dollar	*/
 
 		/**
-			* 取得货币转换汇率
-			* @parget 目标货币代码
-			* @source 原始货币代码
-			* @return 1原始货币换成目标货币后的金额
-			* @return 0失败
-			*/
+		* 取得货币转换汇率(注：此功能需要联网)
+		* @parget 目标货币代码
+		* @source 原始货币代码
+		* @return 原始货币换成目标货币在当前时间的汇率
+		* @return 0失败
+		*/
 		float GetCurrencyExchangeRate(const char target[4],const char source[4]);
 
 // 			/**
