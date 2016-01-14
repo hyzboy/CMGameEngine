@@ -32,7 +32,8 @@ SET(NETWORK_SCTP_SOURCE
 SET(NETWORK_HTTP_SOURCE
 # 	HTTPInputStream.cpp
 # 	HTTPOutputStream.cpp
-	HTTPTools.cpp)
+	HTTPTools.cpp
+	WebApi_Currency.cpp)
 
 SOURCE_GROUP("Base"						FILES ${NETWORK_BASE_SOURCE})
 SOURCE_GROUP("Transport\\UDP"			FILES ${NETWORK_UDP_SOURCE})
