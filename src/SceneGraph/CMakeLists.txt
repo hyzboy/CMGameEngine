@@ -38,6 +38,8 @@ IF(BUILD_OPENGL_LIB)
 		${BASE_GRAPH_OBJECT_SOURCE}
 		${GRAPHICS_APPLICATION_SOURCE}
 	# 	HeightMapTerrain.cpp
+        VertexBufferType.cpp
+        RenderableData.cpp
 		Image.cpp
 		InlineRenderable.cpp
 		Material.cpp
@@ -46,8 +48,6 @@ IF(BUILD_OPENGL_LIB)
 		SceneGlobalState.cpp
 		SceneNode.cpp
 		SceneOrient.cpp
-		Shader.cpp
-		ShaderDataBlock.cpp
 		SkyLight.cpp
 		Texture.cpp
 		TileData.cpp

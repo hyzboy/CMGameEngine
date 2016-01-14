@@ -3,183 +3,90 @@
 
 #include<hgl/graph/Shader.h>
 #include<hgl/graph/Material.h>
-#include<hgl/graph/VertexBuffer.h>
-#include<hgl/graph/ColorFormat.h>
-#include<hgl/graph/AABox.h>
+#include<hgl/graph/Primivate.h>
+#include<hgl/graph/RenderableData.h>
+#include<hgl/graph/RenderState.h>
 namespace hgl
 {
 	namespace graph
 	{
-		enum ColorFormat;
-
 		/**
-		* 顶点缓冲区类型描述
-		*/
-		enum VertexBufferType:int
-		{
-            vbtNone=-1,
-
-			vbtIndex=0,
-
-			vbtVertex,
-			vbtColor,
-			vbtNormal,
-            vbtTangent,
-			vbtSecondColor,
-			vbtFogCoord,
-
-			vbtAmbient,				//环境光颜色
-			vbtSpecular,			//镜面光颜色
-
-			vbtDiffuseTexCoord,		//漫反射纹理坐标
-			vbtAlphaTexCoord,		//透明度纹理坐标
-			vbtNormalTexCoord,		//法线纹理坐标
-            vbtTangentTexCoord,     //切线纹理坐标
-			vbtAmbientTexCoord,		//环境光颜色纹理坐标
-			vbtSpecularTexCoord,	//镜面光颜色纹理坐标
-
-			vbtTexCoord0,	vbtTexCoord1,	vbtTexCoord2,	vbtTexCoord3,	vbtTexCoord4,	vbtTexCoord5,	vbtTexCoord6,	vbtTexCoord7,
-			vbtTexCoord8,	vbtTexCoord9,	vbtTexCoord10,	vbtTexCoord11,	vbtTexCoord12,	vbtTexCoord13,	vbtTexCoord14,	vbtTexCoord15,
-			vbtTexCoord16,	vbtTexCoord17,	vbtTexCoord18,	vbtTexCoord19,	vbtTexCoord20,	vbtTexCoord21,	vbtTexCoord22,	vbtTexCoord23,
-			vbtTexCoord24,	vbtTexCoord25,	vbtTexCoord26,	vbtTexCoord27,	vbtTexCoord28,	vbtTexCoord29,	vbtTexCoord30,	vbtTexCoord31,
-
-			vbtEnd
-		};//enum VertexBufferType
-
-		extern int HGL_MAX_VERTEX_ATTRIBS;					///<最大顶点属性数量
-
-		extern const char VertexBufferName[vbtEnd][32];		///<顶点缓冲区类型名称字串
-
-		//可绘制的图元
-		#define HGL_PRIM_POINTS						GL_POINTS					///<点
-		#define HGL_PRIM_LINES						GL_LINES					///<线
-		#define HGL_PRIM_LINE_STRIP					GL_LINE_STRIP				///<连续线
-		#define HGL_PRIM_LINE_LOOP					GL_LINE_LOOP				///<线圈
-		#define HGL_PRIM_TRIANGLES					GL_TRIANGLES				///<三角形
-		#define HGL_PRIM_TRIANGLE_STRIP				GL_TRIANGLE_STRIP			///<三角形条
-		#define HGL_PRIM_TRIANGLE_FAN				GL_TRIANGLE_FAN				///<扇形
-		#define HGL_PRIM_LINES_ADJACENCY			GL_LINES_ADJACENCY			///<代表一個有四個頂點的Primitive,其中第二個點與第三個點會形成線段,而第一個點與第四個點則用來提供2,3鄰近點的資訊.
-		#define HGL_PRIM_LINE_STRIP_ADJACENCY		GL_LINE_STRIP_ADJACENCY		///<與GL_LINES_ADJACENCY類似,第一個點跟最後一個點提供資訊,剩下的點則跟Line Strip一樣形成線段.
-		#define HGL_PRIM_TRIANGLES_ADJACENCY		GL_TRIANGLES_ADJACENCY		///<代表一個有六個頂點的Primitive,其中第1,3,5個點代表一個Triangle,而地2,4,6個點提供鄰近資訊.(由1起算)
-		#define HGL_PRIM_TRIANGLE_STRIP_ADJACENCY	GL_TRIANGLE_STRIP_ADJACENCY	///<4+2N個Vertices代表N個Primitive,其中1,3,5,7,9...代表原本的Triangle strip形成Triangle,而2,4,6,8,10...代表鄰近提供資訊的點.(由1起算)
-		#define HGL_PRIM_PATCHES					GL_PATCHES
-
-		/**
-		* 可渲染数据
+		* 可渲染对象
 		*/
 		class Renderable
 		{
-			friend class OpenGLCoreRenderable;
-			friend class OpenGLCoreRenderableBinding;
+            void Init();
+            void Clear();
 
 		protected:
 
-			Material *material;																							///<材质
-			bool mtl_private;																							///<材质是否私有
+            RenderableData *data;                                                                                           ///<数据
 
-			VertexBufferBase *vertex_buffer[vbtEnd];																	///<顶点数据缓冲区
+			Material *material;																							    ///<材质
+			bool mtl_private;																							    ///<材质是否私有
 
-			VertexBufferType TextureChannels[mtcMax];																	///<贴图通道对应表
+			VertexBufferType TextureChannels[mtcMax];																	    ///<贴图通道对应表
 
-			ColorFormat vb_color_format;																				///<颜色顶点属性格式
+			int DrawStart,DrawCount;																					    ///<可绘制数量
 
-			AABox BoundingBox;																							///<绑定盒
+        protected:
 
-			uint prim;																									///<绘制的图元类型
+            uint        vao;
+            int *       location;                                                                                           ///<shader绑定变量地址
+            RenderState state;                                                                                              ///<渲染状态
+            Shader *    shader;                                                                                             ///<对应shader
 
-			int DrawStart,DrawCount;																					///<可绘制数量
+            Shader *    bind_shader;                                                                                        ///<上一次绑定的shader
+
+            bool        MakeRenderState(bool);                                                                              ///<生成渲染状态
 
 		public:
 
-			Renderable();					//请通过CreateRenderable来创建可渲染对像,函数在Render.H中定义
-			virtual ~Renderable();
+            Renderable(RenderableData *,Shader *s=nullptr);
+			~Renderable();
 
 		public:
 
-			virtual void						SetPrimitive		(uint dp)					{prim=dp;}									///<设置的绘制的图元类型
-			virtual uint						GetPrimitive		()const						{return prim;}								///<取得要绘制的图元类型
+			uint				GetPrimitive		()const						{return data?data->GetPrimitive():0;}		///<取得要绘制的图元类型
 
-			virtual void						SetMaterial			(Material *,bool);														///<设置材质数据
-			virtual Material * 					GetMaterial			()const						{return material;}							///<取得材质指针
+			bool				SetMaterial			(Material *,bool);														///<设置材质数据
+			Material * 			GetMaterial			()const						{return material;}							///<取得材质指针
 
-			virtual bool						SetVertexBuffer		(VertexBufferType,VertexBufferBase *);									///<设置顶点缓冲区数据
-			virtual bool						ClearVertexBuffer	(VertexBufferType);														///<清除顶点缓冲区数据
-			virtual VertexBufferBase *			GetVertexBuffer		(VertexBufferType);														///<取得顶点缓冲区数据
+            VertexBufferBase *  GetVertexBuffer     (VertexBufferType vbt){return data?data->GetVertexBuffer(vbt):nullptr;} ///<取得对应顶点缓冲区数据
 
-			virtual bool						SetDrawCount		(int,int);																///<设置要绘制的数据数量
-			virtual void						GetDrawCount		(int &,int &);															///<取得指定的要绘制的数据数量
-			virtual int							GetDrawCount		();																		///<取得可绘制的数据总数量
+            int                 GetVertexCompoment  ()const{return data?data->GetVertexCompoment():0;}                      ///<取得顶点数据坐标轴数
+            ColorFormat         GetVertexColorFormat()const{return data?data->GetVertexColorFormat():HGL_COLOR_NONE;}       ///<取得顶点色属性格式
 
-			virtual void						SetVertexColorFormat(ColorFormat fmt)	{vb_color_format=fmt;}								///<设置颜色顶点属性格式
-			virtual ColorFormat					GetVertexColorFormat()const				{return vb_color_format;}							///<取得颜色顶点属性格式
+			bool				SetDrawCount		(int,int);																///<设置要绘制的数据数量
+			bool		        GetDrawCount		(int &,int &);															///<取得指定的要绘制的数据数量
 
-			virtual bool						SetTexCoord			(int mtc,VertexBufferType);												///<设定贴图坐标对应缓冲区
-					bool						SetTexCoord			(int mtc,VertexBufferType vbt,VertexBufferBase *vb)						///<设定贴图坐标对应缓冲区
-			{
-				if(!SetTexCoord(mtc,vbt))return(false);
+			bool				SetTexCoord			(int mtc,VertexBufferType);												///<设定贴图坐标对应缓冲区
+			VertexBufferBase *	GetTexCoord			(int mtc,VertexBufferType *vbt=0);										///<取得贴图坐标对应的缓冲区
 
-				return SetVertexBuffer(vbt,vb);
-			}
+        public: //着色程序
 
-			virtual VertexBufferBase *			GetTexCoord			(int mtc,VertexBufferType *vbt=0);										///<取得贴图坐标对应的缓冲区
+            void                SetShader           (Shader *);                                                             ///<设置着色程序
+            Shader *            GetShader           ()const;                                                                ///<取得着色程序
 
-			virtual void						SetBoundingBox		(const AABox &box)	{BoundingBox=box;}									///<设置绑定盒
-			virtual void						GetBoundingBox		(AABox &box)		{box=BoundingBox;}										///<取得绑定盒
+            bool                SetShaderLocation   (VertexBufferType, unsigned int);                                       ///<设定与Shader变量的关联
+            void                ClearShaderLocation ();                                                                     ///<清除与Shader变量的关联
 
-			virtual const Vector3f 				GetCenter			()const																	///<取得中心点
-			{
-// 				Vector3f result;
-//
-// 				result.x=(BoundingBox.minPoint.x+BoundingBox.maxPoint.x)/2.0f;
-// 				result.y=(BoundingBox.minPoint.y+BoundingBox.maxPoint.y)/2.0f;
-// 				result.z=(BoundingBox.minPoint.z+BoundingBox.maxPoint.z)/2.0f;
+            bool                Bind                (Shader *);                                                             ///<绑定VAO数据
+            Shader *            GetBindShader       ()const{return bind_shader;}                                            ///<取得上一次绑定的shader
+            bool                Use                 ();                                                                     ///<使用这个VAO+Shader渲染
 
-//				return result;
+            const RenderState * GetRenderState      ()const { return &state; }                                              ///<取得渲染状态
 
-                return BoundingBox.center;
-			}
-
-			virtual void						GetMinMaxVertex		(Vector3f &min_v,Vector3f &max_v)										///<取得最小顶点和最大顶点
-			{
-// 				min_v=POINT_TO_FLOAT3(BoundingBox.minPoint);
-// 				max_v=POINT_TO_FLOAT3(BoundingBox.maxPoint);
-                min_v=BoundingBox.corner;
-                max_v=BoundingBox.corner_max;
-			}
-
-			template<typename T>
-					bool						SetVertex			(VertexBuffer3<T> *vb)													///<设定顶点数据
-			{
-				if(!vb)return(false);
-
-				Vector3f min_v,max_v,len;
-
-				vb->GetBoundingBox(min_v,max_v);
-
-// 				BoundingBox.minPoint=POINT_VEC(min_v);
-// 				BoundingBox.maxPoint=POINT_VEC(max_v);
-
-                BoundingBox.SetMinMax(min_v,max_v);
-
-				return SetVertexBuffer(vbtVertex,vb);
-			}
-
-			template<typename T>
-					bool						SetVertex			(VertexBuffer2<T> *vb){return SetVertexBuffer(vbtVertex,vb);}			///<设定顶点数据
-
-			virtual bool						SetIndex			(VertexBufferBase *vb){return SetVertexBuffer(vbtIndex,vb);}			///<设置渲染数据索引
-			virtual bool						SetColor			(VertexBufferBase *vb,ColorFormat cf)									///<设置顶点颜色数据
-			{
-				if(!SetVertexBuffer(vbtColor,vb))
-					return(false);
-
-				SetVertexColorFormat(cf);
-				return(true);
-			}
-			virtual bool						SetNormal			(VertexBufferBase *vb){return SetVertexBuffer(vbtNormal,vb);}			///<设置渲染顶点法线数据
-			virtual bool                        SetTangents         (VertexBufferBase *vb){return SetVertexBuffer(vbtTangent,vb);}          ///<设置渲染顶点切线数据
-			virtual bool						SetSecondColor		(VertexBufferBase *vb){return SetVertexBuffer(vbtSecondColor,vb);}		///<设置顶点第二颜色数据
-			virtual bool						SetFogCoord			(VertexBufferBase *vb){return SetVertexBuffer(vbtFogCoord,vb);}			///<设置顶点雾数据
+            /**
+            * 自动创建生成shader
+            * @param mvp 渲染时是否使用projection矩阵与modelview矩阵
+            * @return 创建好的shader程序
+            */
+    #ifdef _DEBUG
+            Shader *            AutoCreateShader    (bool mvp=true,const os_char *filename=nullptr);                        ///<自动创建着色程序
+    #else
+            Shader *            AutoCreateShader    (bool mvp=true);                                                        ///<自动创建着色程序
+    #endif//_DEBUG
 		};//class Renderable
 	}//namespace graph
 }//namespace hgl

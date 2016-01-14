@@ -194,36 +194,15 @@ namespace hgl
 		extern Texture2D *GrayWhiteGrid;                                                            ///<灰白格贴图
 		extern Texture2D *BlueWhiteGrid;                                                            ///<蓝白格贴图
 
-		extern Renderable *SolidCube;																///<实心立方体
-		extern Renderable *WireCube;																///<白色线框立方体
-		extern Renderable *SolidRect;																///<实心块2D矩形
-		extern Renderable *WireRect;																///<线框2D矩形
-		extern Renderable *TextureRect;																///<带贴图的2D矩形
-		extern Renderable *SolidCircle;																///<实心圆
-		extern Renderable *WireCircle;																///<空心圆
+        extern RenderableData *WireCube;                                                            ///<白色线框立方体
+        extern RenderableData *WireRect;                                                            ///<线框2D矩形
+        extern RenderableData *WireCircle;                                                          ///<空心圆
 
-		//直接渲染
-		Renderable *CreateRenderable();																///<创建一个可渲染对象
+        extern RenderableData *SolidCube;															///<实心立方体
+		extern RenderableData *SolidRect;															///<实心块2D矩形
+		extern RenderableData *SolidCircle;															///<实心圆
 
-		class RenderableList:public CusObjectList<Renderable>
-		{
-			Renderable *CreateObject()
-			{
-				return(CreateRenderable());
-			}
-
-			void DeleteObject(Renderable *obj)
-			{
-				delete obj;
-			}
-
-		public:
-
-			virtual ~RenderableList()
-			{
-				Clear();
-			}
-		};//class TextureList
+        extern RenderableData *TextureRect;                                                         ///<带贴图的2D矩形
 
 				bool DirectRender(Renderable *obj,const Matrix4f *proj,const Matrix4f *mv);			///<直接渲染一个可渲染数据
 

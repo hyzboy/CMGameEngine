@@ -1,0 +1,282 @@
+﻿#include<hgl/graph/Renderable.h>
+#include"../GLSL/GLSL.h"
+#include<hgl/type/Smart.h>
+#include<hgl/type/Map.h>
+#include<glew/include/GL/glew.h>
+
+namespace hgl
+{
+	namespace graph
+	{
+		const uint OpenGLCorePrim[]=
+		{
+			GL_POINTS,
+			GL_LINES,
+			GL_LINE_STRIP,
+			GL_LINE_LOOP,
+			GL_TRIANGLES,
+			GL_TRIANGLE_STRIP,
+			GL_TRIANGLE_FAN,
+			GL_LINES_ADJACENCY,
+			GL_LINE_STRIP_ADJACENCY,
+			GL_TRIANGLES_ADJACENCY,
+			GL_TRIANGLE_STRIP_ADJACENCY,
+			GL_PATCHES
+		};//const uint OpenGLCorePrim[]
+
+		const int OpenGLCorePrimCount=sizeof(OpenGLCorePrim)/sizeof(uint);
+
+		bool CheckPrim(uint prim)
+		{
+			const uint *p=OpenGLCorePrim;
+
+			for(int i=0;i<OpenGLCorePrimCount;i++)
+				if(*p++==prim)return(true);
+
+			return(false);
+		}
+	}//namespace graph
+
+	namespace graph
+	{
+		//shader 仓库管理
+		//1.永不释放
+
+		MapObject<RenderState,Shader> ShaderStorage;						///<shader仓库
+
+		void InitShaderStorage()
+		{
+		}
+
+		void ClearShaderStorage()
+		{
+			ShaderStorage.Clear();
+		}
+
+		Shader *CreateShader(Renderable *,bool,RenderState *
+#ifdef _DEBUG
+			,const os_char *
+#endif//_DEBUG
+		);
+	}//namespace graph
+
+	namespace graph
+	{
+		/**
+		* 设置顶点缓冲区数据
+		* @param vbt 顶点缓冲区类型
+		* @param vb 数据缓冲区
+		* @return 是否设置成功
+		*/
+		bool RenderableData::_SetVertexBuffer(VertexBufferType vbt, VertexBufferBase *vb)
+		{
+			vb->CreateVertexBuffer(vbt == vbtIndex ? GL_ELEMENT_ARRAY_BUFFER : GL_ARRAY_BUFFER);
+
+			return(true);
+		}
+	}//namespace graph
+
+	namespace graph
+	{
+		void Renderable::Init()
+		{
+            glCreateVertexArrays(1,&vao);
+
+			location=new int[HGL_MAX_VERTEX_ATTRIBS];
+
+            hgl_set(location,-1,HGL_MAX_VERTEX_ATTRIBS);
+		}
+
+		Renderable::~Renderable()
+		{
+			delete[] location;
+
+			glDeleteVertexArrays(1,&vao);
+		}
+
+		/**
+		* 设置缓冲区对应的shader变量
+		* @param vbt 顶点缓冲区类型
+		* @param shader_locaiton shader变量地址
+		* @param enabled 是否立即启用
+		*/
+		bool Renderable::SetShaderLocation(VertexBufferType vbt,unsigned int shader_location)
+		{
+			if(vbt<vbtVertex||vbt>=HGL_MAX_VERTEX_ATTRIBS)
+			{
+				LOG_ERROR(OS_TEXT("Renderable::SetShaderLocation设置的数据类型错误：")+OSString(vbt));
+				return(false);
+			}
+
+			location[vbt]=shader_location;
+
+			return(true);
+		}
+
+		void Renderable::ClearShaderLocation()
+		{
+			for(int i=vbtIndex;i<HGL_MAX_VERTEX_ATTRIBS;i++)
+			{
+				if(location[i]==-1)continue;
+
+                glDisableVertexArrayAttrib(vao,i);
+				location[i]=-1;
+			}
+		}
+
+		bool Renderable::Bind(Shader *new_shader)
+		{
+			if(!vao)return(false);
+
+            int stream=0;
+
+			for(int i=vbtVertex;i<HGL_MAX_VERTEX_ATTRIBS;i++)
+			{
+				if(location[i]==-1)continue;
+
+                VertexBufferBase *vb=data->GetVertexBuffer((VertexBufferType)i);
+
+				if(!vb)
+				{
+					LOG_ERROR(OS_TEXT("Shader Location <")+OSString(i)+OS_TEXT(">要求的缓冲区没有数据"));
+					return(false);
+				}
+
+                glVertexArrayAttribBinding(vao,                                             //vao obj
+                                           location[i],                                     //attrib index
+                                           stream);                                         //binding index
+
+                if(vb->GetDataType()==HGL_INT   )   glVertexArrayAttribIFormat( vao,location[i],vb->GetComponent(),vb->GetDataType(),0);else
+                if(vb->GetDataType()==HGL_DOUBLE)   glVertexArrayAttribLFormat( vao,location[i],vb->GetComponent(),vb->GetDataType(),0);else
+                                                    glVertexArrayAttribFormat(  vao,                     //vao obj
+                                                                                location[i],             //attrib index
+                                                                                vb->GetComponent(),      //size
+                                                                                vb->GetDataType(),       //type
+                                                                                GL_FALSE,                //normalized
+                                                                                0);                      //relative offset
+
+                glEnableVertexArrayAttrib(vao,                            //vao obj
+                                          location[i]);                   //attrib index
+
+                glVertexArrayVertexBuffer(vao,                            //vao obj
+                                          stream,                         //binding index
+                                          vb->GetBufferIndex(),           //buffer
+                                          0,                              //offset
+                                          vb->GetStride());               //stride
+
+                ++stream;
+            }
+
+            VertexBufferBase *vb_index=data->GetVertexBuffer(vbtIndex);
+
+ 			if(vb_index)
+                 glVertexArrayElementBuffer(vao,                          //vao obj
+                                            vb_index->GetBufferIndex());  //buffer
+
+			bind_shader = new_shader;
+			return(true);
+		}
+
+		bool Renderable::Use()
+		{
+			if(!vao)return(false);
+
+            glBindVertexArray(vao);
+			return(true);
+		}
+
+		/**
+		* 生成渲染状态
+		*/
+		bool Renderable::MakeRenderState(bool mvp)
+		{
+			VertexBufferBase *vb_vertex	=data->GetVertexBuffer(vbtVertex);
+
+			if(!vb_vertex)return(false);						//没顶点，画不了
+
+			memset(&state,0,sizeof(state));
+
+			state.mvp=mvp;
+
+			state.vertex_normal			= data->GetVertexBuffer(vbtNormal);
+			state.vertex_color			= data->GetVertexBuffer(vbtColor);
+            state.vertex_tangent        = data->GetVertexBuffer(vbtTangent);
+
+			state.diffuse_map			= GetTexCoord(mtcDiffuse);
+			state.normal_map			= GetTexCoord(mtcNormal);
+            state.tangent_map           = GetTexCoord(mtcTangent);
+
+			state.color_material		= material->GetColorMaterial();
+			state.alpha_test			= material->GetAlphaTest()>0;
+			state.outside_discard		= material->GetOutsideDiscard();
+
+			state.vertex_color_format	= data->GetVertexColorFormat();
+			state.vertex_coord			= vb_vertex->GetComponent();
+
+			state.height_map			= material->GetTexture(mtcHeight);
+
+			for(int i=0;i<mtcMax;i++)
+			{
+				if(material->GetTexture(i))
+					state.tex[i]=true;
+
+				VertexBufferBase *vb= GetTexCoord(i,0);
+
+				if(vb)
+					state.tex_coord[i]=vb->GetComponent();
+			}
+
+			state.lighting				= material->GetLight();
+
+			if(!CheckPrim(GetPrimitive()))
+			{
+				LOG_ERROR(OS_TEXT("错误的图元类型：")+OSString(GetPrimitive()));
+				return(false);
+			}
+
+			return(true);
+		}
+
+		Shader *Renderable::AutoCreateShader(bool mvp
+#ifdef _DEBUG
+			,const os_char *shader_filename
+#endif//_DEBUG
+		)
+		{
+			if(shader)											//如果有shader存在
+			{
+				RenderState back_state=state;					//备份旧状态
+
+				if(!MakeRenderState(mvp))						//生成新的状态
+					return(nullptr);
+
+				if(back_state==state)							//如果新旧状态一样
+					return(shader);
+
+				shader=0;										//清除旧的shader
+			}
+			else
+			{
+				if(!MakeRenderState(mvp))						//生成新的状态
+					return(nullptr);
+			}
+
+			Shader *new_shader;
+
+			if(!ShaderStorage.Get(state,new_shader))			//如果仓库中有状态一样的，则直接从仓库中取，而不重新创建
+			{
+				new_shader=CreateShader(this,mvp,&state
+	#ifdef _DEBUG
+					,shader_filename
+	#endif//_DEBUG
+				);
+
+                ShaderStorage.Add(state,new_shader);			//加入到仓库
+			}
+
+			shader=new_shader;
+
+			return shader;
+		}
+	}//namespace graph
+}//namespace hgl

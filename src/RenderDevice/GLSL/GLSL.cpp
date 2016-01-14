@@ -1,4 +1,5 @@
 ﻿#include"GLSL.h"
+#include<hgl/graph/Shader.h>
 #include<hgl/LogInfo.h>
 #include<hgl/Other.h>
 #include<hgl/type/Smart.h>
@@ -48,18 +49,18 @@ namespace hgl
 		{
             if(!vertex_shader||!fragment_shader)return(nullptr);            //opengl core时代不可能没有vs/fs
 
-			GLSL *glsl=new GLSL;
+			Shader *shader=new Shader;
 
-            if(vertex_shader    ){if(!glsl->AddShader(stVertex,     vertex_shader       )){delete glsl;return(nullptr);}}
-            if(control_shader   ){if(!glsl->AddShader(stTessControl,control_shader      )){delete glsl;return(nullptr);}}
-            if(evaluation_shader){if(!glsl->AddShader(stTessEval,   evaluation_shader   )){delete glsl;return(nullptr);}}
-            if(geometry_shader  ){if(!glsl->AddShader(stGeometry,   geometry_shader     )){delete glsl;return(nullptr);}}
-            if(fragment_shader  ){if(!glsl->AddShader(stFragment,   fragment_shader     )){delete glsl;return(nullptr);}}
+            if(vertex_shader    ){if(!shader->AddShader(stVertex,     vertex_shader       )){delete shader;return(nullptr);}}
+            if(control_shader   ){if(!shader->AddShader(stTessControl,control_shader      )){delete shader;return(nullptr);}}
+            if(evaluation_shader){if(!shader->AddShader(stTessEval,   evaluation_shader   )){delete shader;return(nullptr);}}
+            if(geometry_shader  ){if(!shader->AddShader(stGeometry,   geometry_shader     )){delete shader;return(nullptr);}}
+            if(fragment_shader  ){if(!shader->AddShader(stFragment,   fragment_shader     )){delete shader;return(nullptr);}}
 
-            if(glsl->Build())
-                return(glsl);
+            if(shader->Build())
+                return(shader);
 
-            delete glsl;
+            delete shader;
             return(nullptr);
 		}
 
@@ -91,25 +92,25 @@ namespace hgl
 			char *fs=MakeFragmentShader(able,state);
 #endif//_DEBUG
 
-			GLSL *glsl=nullptr;
+			Shader *shader=nullptr;
 
 			if(vs&&fs)
 			{
-				glsl=new GLSL;
+				shader=new Shader;
 
-				if(!glsl->AddVertexShader(vs)
-				 ||!glsl->AddFragmentShader(fs)
-				 ||!glsl->Build())
+				if(!shader->AddVertexShader(vs)
+				 ||!shader->AddFragmentShader(fs)
+				 ||!shader->Build())
 				{
-					delete glsl;
-					glsl=nullptr;
+					delete shader;
+					shader=nullptr;
 				}
 			}
 
 			delete[] vs;		//delete[] nullptr不是个错误，所以不用检测
 			delete[] fs;
 
-			return(glsl);
+			return(shader);
 		}
 
 		namespace
@@ -158,7 +159,7 @@ namespace hgl
 			}
 		}//namespace
 
-		void GLSL::Clear()
+		void Shader::Clear()
 		{
 			for(int i=0;i<ShaderType::stEnd;i++)
 				if(shader_index[i])
@@ -180,7 +181,7 @@ namespace hgl
 		* @param shader_code 着色程序代码
 		* @return 是否添加编程成功
 		*/
-		bool GLSL::AddShader(const int shader_type,const char *shader_codes)
+		bool Shader::AddShader(const int shader_type,const char *shader_codes)
 		{
 			if(shader_type<0||shader_type>=ShaderType::stEnd)return(false);
 			if(shader_index[shader_type])return(false);
@@ -196,7 +197,7 @@ namespace hgl
 			return(true);
 		}
 
-		bool GLSL::Build()
+		bool Shader::Build()
 		{
 			program=glCreateProgram();
 
@@ -207,7 +208,7 @@ namespace hgl
 			return(Link());
 		}
 
-		bool GLSL::Link()
+		bool Shader::Link()
 		{
 			if(!program)return(false);
 
@@ -237,7 +238,7 @@ namespace hgl
 			return(false);
 		}
 
-		bool GLSL::Use()																				///<使用当前着色程序
+		bool Shader::Use()																				///<使用当前着色程序
 		{
 			if(!program)
 				return(false);
@@ -252,7 +253,7 @@ namespace hgl
 		* @return 索引地址
 		* @return -1 出错
 		*/
-		int GLSL::_GetAttribLocation(const char *name)
+		int Shader::_GetAttribLocation(const char *name)
 		{
 			if(!program)
 			{
@@ -263,7 +264,7 @@ namespace hgl
 			return glGetAttribLocation(program,name);
 		}
 
-		//bool GLSL::SetAttrib1f(int location,float value)
+		//bool Shader::SetAttrib1f(int location,float value)
 		//{
 		//	if(!program)
 		//		return(false);
@@ -273,7 +274,7 @@ namespace hgl
 		//	return(true);
 		//}
 
-		//bool GLSL::GetAttrib1f(int location,float &value)
+		//bool Shader::GetAttrib1f(int location,float &value)
 		//{
 		//	if(!program)
 		//		return(false);
@@ -289,7 +290,7 @@ namespace hgl
 		* @return 地址
 		* @return -1 出错
 		*/
-		int GLSL::_GetUniformLocation(const char *name)													///<取得一个变量的地址
+		int Shader::_GetUniformLocation(const char *name)													///<取得一个变量的地址
 		{
 			if(!program)
 			{
@@ -311,17 +312,17 @@ namespace hgl
 
 		#define HGL_GLSL_CHECK_PROGRAM_AND_LOCATION(func)	if(!program)	\
 															{	\
-																LOG_ERROR(u8"GLSL::SetUniform" #func ",program=0");	\
+																LOG_ERROR(u8"Shader::SetUniform" #func ",program=0");	\
 																return(false);	\
 															}	\
 															\
 															if(location<0)	\
 															{	\
-																LOG_ERROR(u8"GLSL::SetUniform" #func ",location="+UTF8String(location));	\
+																LOG_ERROR(u8"Shader::SetUniform" #func ",location="+UTF8String(location));	\
 																return(false);	\
 															}
 
-		#define HGL_GLSL_SetUniform1234(func,type)	bool GLSL::SetUniform1##func(int location,type v0)	\
+		#define HGL_GLSL_SetUniform1234(func,type)	bool Shader::SetUniform1##func(int location,type v0)	\
 													{	\
 														HGL_GLSL_CHECK_PROGRAM_AND_LOCATION(1##func)	\
 													\
@@ -329,7 +330,7 @@ namespace hgl
 														return(true);	\
 													}	\
 													\
-													bool GLSL::SetUniform2##func(int location,type v0,type v1)	\
+													bool Shader::SetUniform2##func(int location,type v0,type v1)	\
 													{	\
 														HGL_GLSL_CHECK_PROGRAM_AND_LOCATION(2##func)	\
 													\
@@ -337,7 +338,7 @@ namespace hgl
 														return(true);	\
 													}	\
 													\
-													bool GLSL::SetUniform3##func(int location,type v0,type v1,type v2)	\
+													bool Shader::SetUniform3##func(int location,type v0,type v1,type v2)	\
 													{	\
 														HGL_GLSL_CHECK_PROGRAM_AND_LOCATION(3##func)	\
 													\
@@ -345,7 +346,7 @@ namespace hgl
 														return(true);	\
 													}	\
 													\
-													bool GLSL::SetUniform4##func(int location,type v0,type v1,type v2,type v3)	\
+													bool Shader::SetUniform4##func(int location,type v0,type v1,type v2,type v3)	\
 													{	\
 														HGL_GLSL_CHECK_PROGRAM_AND_LOCATION(4##func)	\
 													\
@@ -358,23 +359,23 @@ namespace hgl
 
 		#undef HGL_GLSL_SetUniform1234
 
-		#define HGL_GLSL_SetUniformPointer(func,type)	bool GLSL::SetUniform##func(int location,const type *value)	\
+		#define HGL_GLSL_SetUniformPointer(func,type)	bool Shader::SetUniform##func(int location,const type *value)	\
 														{	\
 															if(!program)	\
 															{	\
-																LOG_ERROR(u8"GLSL::SetUniform" #func ",program=0");	\
+																LOG_ERROR(u8"Shader::SetUniform" #func ",program=0");	\
 																return(false);	\
 															}	\
 														\
 															if(location<0)	\
 															{	\
-																LOG_ERROR(u8"GLSL::SetUniform" #func ",location="+UTF8String(location));	\
+																LOG_ERROR(u8"Shader::SetUniform" #func ",location="+UTF8String(location));	\
 																return(false);	\
 															}	\
 														\
 															if(!value)	\
 															{	\
-																LOG_ERROR(u8"GLSL::SetUniform" #func ",value=nullptr");	\
+																LOG_ERROR(u8"Shader::SetUniform" #func ",value=nullptr");	\
 																return(false);	\
 															}	\
 														\
@@ -399,23 +400,23 @@ namespace hgl
 
 		#undef HGL_GLSL_SetUniformPointer
 
-		#define HGL_GLSL_SetUniformMatrixPointer(func)	bool GLSL::SetUniformMatrix##func(int location,const float *mat)	\
+		#define HGL_GLSL_SetUniformMatrixPointer(func)	bool Shader::SetUniformMatrix##func(int location,const float *mat)	\
 														{	\
 															if(!program)	\
 															{	\
-																LOG_ERROR(u8"GLSL::SetUniformMatrix" #func ",program=0");	\
+																LOG_ERROR(u8"Shader::SetUniformMatrix" #func ",program=0");	\
 																return(false);	\
 															}	\
 														\
 															if(location<0)	\
 															{	\
-																LOG_ERROR(u8"GLSL::SetUniformMatrix" #func ",location="+UTF8String(location));	\
+																LOG_ERROR(u8"Shader::SetUniformMatrix" #func ",location="+UTF8String(location));	\
 																return(false);	\
 															}	\
 														\
 															if(!mat)	\
 															{	\
-																LOG_ERROR(u8"GLSL::SetUniformMatrix" #func ",mat=nullptr");	\
+																LOG_ERROR(u8"Shader::SetUniformMatrix" #func ",mat=nullptr");	\
 																return(false);	\
 															}	\
 														\
@@ -436,11 +437,11 @@ namespace hgl
 
 		#undef HGL_GLSL_SetUniformMatrixPointer
 
-        int GLSL::_GetUniformBlockIndex(const char *uniform_block_name)
+        int Shader::_GetUniformBlockIndex(const char *uniform_block_name)
         {
             if(!program)
             {
-                LOG_ERROR(u8"GLSL::BindUniformBlock("+UTF8String(uniform_block_name)+") program=0");
+                LOG_ERROR(u8"Shader::BindUniformBlock("+UTF8String(uniform_block_name)+") program=0");
                 return(false);
             }
 
@@ -448,18 +449,18 @@ namespace hgl
 
             if(index<0)
             {
-                LOG_ERROR(u8"GLSL::BindUniformBlock("+UTF8String(uniform_block_name)+") block_index error");
+                LOG_ERROR(u8"Shader::BindUniformBlock("+UTF8String(uniform_block_name)+") block_index error");
                 return(false);
             }
 
             return index;
         }
 
-        bool GLSL::_BindUniformBlock(int block_index,int block_binding)
+        bool Shader::_BindUniformBlock(int block_index,int block_binding)
         {
             if(!program)
             {
-                LOG_ERROR(u8"GLSL::BindUniformBlock("+UTF8String(block_index)+","+UTF8String(block_binding)+") program=0");
+                LOG_ERROR(u8"Shader::BindUniformBlock("+UTF8String(block_index)+","+UTF8String(block_binding)+") program=0");
                 return(false);
             }
 

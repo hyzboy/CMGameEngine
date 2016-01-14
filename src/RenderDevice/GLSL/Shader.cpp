@@ -16,11 +16,11 @@ namespace hgl
 
 			int result;
 
-			//if(!attrib_location.Get(name,result))
+			if(!attrib_location.Get(name,result))
 			{
 				result=_GetAttribLocation(name);
 
-				//attrib_location.Add(name,result);
+				attrib_location.Add(name,result);
 			}
 
 			return result;
@@ -38,11 +38,11 @@ namespace hgl
 
 			int result;
 
-			//if(!uniform_location.Get(name,result))
+			if(!uniform_location.Get(name,result))
 			{
 				result=_GetUniformLocation(name);
 
-				//uniform_location.Add(name,result);
+				uniform_location.Add(name,result);
 			}
 
 			return result;
@@ -60,11 +60,11 @@ namespace hgl
 
             int result;
 
-            //if(!uniform_block_index.Get(name,result))
+            if(!uniform_block_index.Get(name,result))
             {
                 result=_GetUniformBlockIndex(name);
 
-                //uniform_block_index.Add(name,result);
+                uniform_block_index.Add(name,result);
             }
 
             return result;

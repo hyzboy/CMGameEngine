@@ -1,0 +1,47 @@
+﻿#ifndef HGL_GRAPH_RENDER_STATE_INCLUDE
+#define HGL_GRAPH_RENDER_STATE_INCLUDE
+
+#include<hgl/graph/TextureChannels.h>
+#include<string.h>
+namespace hgl
+{
+    namespace graph
+    {
+        struct RenderState
+        {
+            bool mvp;                   //是否包含MVP矩阵
+
+            bool vertex_color;          //是否包含顶点颜色
+            bool vertex_normal;         //是否包含顶点法线
+            bool vertex_tangent;        //是否包含顶点切线
+
+            bool diffuse_map;           //是否包含漫反射贴图
+            bool normal_map;            //是否包含法线贴图
+            bool tangent_map;           //是否包含切线贴图
+
+            bool color_material;        //是否包含颜色材质
+            bool alpha_test;            //是否使用Alpha测试
+            bool outside_discard;       //是否使用出界放弃
+
+            bool height_map;            //是否是高度图
+
+            uint8 vertex_color_format;  //顶点色格式
+            uint8 vertex_coord;         //顶点坐标维数
+            bool  tex[mtcMax];          //这一通道是否有贴图
+            uint8 tex_coord[mtcMax];    //这一通道是贴图坐标维数
+
+            //仅测试用
+            bool lighting;              //是否有光照
+
+        public:
+
+            int Comp(const RenderState &rs)const
+            {
+                return memcmp(this,&rs,sizeof(RenderState));
+            }
+
+            CompOperator(const RenderState &,Comp);
+        };//RenderState
+    }//namespace graph
+}//namespace hgl
+#endif//HGL_GRAPH_RENDER_STATE_INCLUDE

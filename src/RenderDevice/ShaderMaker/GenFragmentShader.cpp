@@ -1,6 +1,6 @@
 ﻿#include"GenFragmentShader.h"
-#include"OpenGLRenderable.h"
-#include"GLSL.h"
+#include<hgl/graph/Renderable.h>
+#include"../GLSL/GLSL.h"
 #include<hgl/graph/Texture.h>
 #include<hgl/LogInfo.h>
 #include<stdio.h>

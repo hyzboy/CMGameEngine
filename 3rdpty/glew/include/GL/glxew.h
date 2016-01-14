@@ -451,8 +451,8 @@ typedef GLXContext ( * PFNGLXCREATECONTEXTATTRIBSARBPROC) (Display* dpy, GLXFBCo
 #ifndef GLX_ARB_fbconfig_float
 #define GLX_ARB_fbconfig_float 1
 
-#define GLX_RGBA_FLOAT_BIT 0x00000004
-#define GLX_RGBA_FLOAT_TYPE 0x20B9
+#define GLX_RGBA_FLOAT_BIT_ARB 0x00000004
+#define GLX_RGBA_FLOAT_TYPE_ARB 0x20B9
 
 #define GLXEW_ARB_fbconfig_float GLXEW_GET_VAR(__GLXEW_ARB_fbconfig_float)
 
@@ -1500,13 +1500,8 @@ typedef int ( * PFNGLXVIDEORESIZESUNPROC) (Display* display, GLXDrawable window,
 
 /* ------------------------------------------------------------------------- */
 
-#ifdef GLEW_MX
-#define GLXEW_FUN_EXPORT GLEW_FUN_EXPORT
-#define GLXEW_VAR_EXPORT
-#else
 #define GLXEW_FUN_EXPORT GLEW_FUN_EXPORT
 #define GLXEW_VAR_EXPORT GLEW_VAR_EXPORT
-#endif /* GLEW_MX */
 
 GLXEW_FUN_EXPORT PFNGLXGETCURRENTDISPLAYPROC __glewXGetCurrentDisplay;
 
@@ -1741,27 +1736,11 @@ GLXEW_VAR_EXPORT GLboolean __GLXEW_SUN_video_resize;
 
 /* ------------------------------------------------------------------------ */
 
-#ifdef GLEW_MX
-
-typedef struct GLXEWContextStruct GLXEWContext;
-GLEWAPI GLenum GLEWAPIENTRY glxewContextInit (GLXEWContext *ctx);
-GLEWAPI GLboolean GLEWAPIENTRY glxewContextIsSupported (const GLXEWContext *ctx, const char *name);
-
-#define glxewInit() glxewContextInit(glxewGetContext())
-#define glxewIsSupported(x) glxewContextIsSupported(glxewGetContext(), x)
-
-#define GLXEW_GET_VAR(x) (*(const GLboolean*)&(glxewGetContext()->x))
-#define GLXEW_GET_FUN(x) x
-
-#else /* GLEW_MX */
-
 GLEWAPI GLenum GLEWAPIENTRY glxewInit ();
 GLEWAPI GLboolean GLEWAPIENTRY glxewIsSupported (const char *name);
 
 #define GLXEW_GET_VAR(x) (*(const GLboolean*)&x)
 #define GLXEW_GET_FUN(x) x
-
-#endif /* GLEW_MX */
 
 GLEWAPI GLboolean GLEWAPIENTRY glxewGetExtension (const char *name);
 

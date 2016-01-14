@@ -39,7 +39,7 @@ namespace hgl
 		/**
 		* 旋转变换
 		*/
-		class TransformRotate
+		class TransformRotate:public Transform
 		{
 		public: //属性
 
