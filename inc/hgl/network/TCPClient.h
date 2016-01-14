@@ -26,9 +26,9 @@ namespace hgl
 			TCPClient();																				///<本类构造函数
 			virtual ~TCPClient();																		///<本类析构函数
 
-			virtual bool Connect(const IPAddress *);													///<连接到服务器
+			virtual bool Connect(IPAddress *);													          ///<连接到服务器
 			virtual void Disconnect();																	///<断开连接
-			virtual void UseSocket(int,const IPAddress *addr=0);										///<使用指定socket
+			virtual void UseSocket(int,IPAddress *addr=0);										         ///<使用指定socket
 
 		public:
 

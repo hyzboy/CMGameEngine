@@ -63,7 +63,7 @@ namespace hgl
 		 * @param addr 服务器地址
 		 * @return 是否连接成功
 		 */
-		bool TCPClient::Connect(const IPAddress *addr)
+		bool TCPClient::Connect(IPAddress *addr)
 		{
             if(!addr)RETURN_FALSE;
 			Disconnect();
@@ -101,6 +101,7 @@ namespace hgl
 		void TCPClient::Disconnect()
 		{
 			SAFE_CLEAR(ipstr);
+
 			if(ThisSocket==-1)
 				return;
 
@@ -113,7 +114,7 @@ namespace hgl
 		 * @param sock 指定socket编号
 		 * @param addr socket地址
 		 */
-		void TCPClient::UseSocket(int sock,const IPAddress *addr)
+		void TCPClient::UseSocket(int sock,IPAddress *addr)
 		{
 			TCPSocket::UseSocket(sock,addr);
 
