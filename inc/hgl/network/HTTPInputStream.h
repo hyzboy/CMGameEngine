@@ -2,11 +2,12 @@
 #define HGL_NETWORK_HTTP_INPUT_STREAM_INCLUDE
 
 #include<hgl/io/InputStream.h>
-#include "TCPClient.h"
 namespace hgl
 {
 	namespace network
 	{
+		class TCPClient;
+
 		/**
 		* HTTPInputStream流是一个针对HTTP服务器的流式访问类，用它可以从HTTP服务器上下载文件，它从InputStream类派生。<br>
 		* 需要注意的是，这个类只能读，不能写。Position和Size也只能读不能修改<br>

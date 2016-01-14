@@ -20,12 +20,12 @@ namespace hgl
 
 			int post(io::OutputStream *,const char *,const void *,const int);				///<http/htpps post
 
-			int post(io::OutputStream *os,const char *url,const UTF8String &post_data)
+			inline int post(io::OutputStream *os,const char *url,const UTF8String &post_data)
 			{
 				return post(os,url,post_data.c_str(),post_data.Length());
 			}
 
-			int post(io::OutputStream *os,const UTF8String &url,const UTF8String &post_data)
+			inline int post(io::OutputStream *os,const UTF8String &url,const UTF8String &post_data)
 			{
 				return post(os,url.c_str(),post_data.c_str(),post_data.Length());
 			}
