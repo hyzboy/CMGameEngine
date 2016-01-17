@@ -80,7 +80,7 @@ namespace hgl
 
 		ResItem *obj=items.GetItem(index);
 
-		if(--obj->count<=0)       //正常应该==0
+		if(--obj->count==0)
 		{
 			Clear(obj->second);
 
@@ -98,15 +98,6 @@ namespace hgl
 	void ResManage<F,T>::Release(T *td)
 	{
 		ReleaseBySerial(items.FindByData(td));
-	}
-}//namespace hgl
-
-namespace hgl
-{
-	template<typename T>
-	T *ResManageByName<T>::Create(const UTF16String &name)
-	{
-		return(new T(name));
 	}
 }//namespace hgl
 #endif//HGL_RES_MANAGE_CPP

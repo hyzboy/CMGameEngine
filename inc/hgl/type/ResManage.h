@@ -1,4 +1,4 @@
-#ifndef HGL_RES_MANAGE_INCLUDE
+﻿#ifndef HGL_RES_MANAGE_INCLUDE
 #define HGL_RES_MANAGE_INCLUDE
 
 #include<hgl/object/Object.h>
@@ -7,7 +7,7 @@ namespace hgl
 {
 	template<typename F,typename T> struct RefFlagData:public Pair<F,T *>
 	{
-		int count;
+		uint count;
 
 	public:
 
@@ -49,13 +49,6 @@ namespace hgl
 		void Release(const F &);												///<释放一个数据
 		void Release(T *);														///<释放一个数据
 	};//template<typename F,typename T> class ResManage
-
-	template<typename T> class ResManageByName:public ResManage<UTF16String,T>
-	{
-	protected:
-
-		virtual T *Create(const UTF16String &);
-	};//template<typename T> class ResManageByName:public ResManage<UTF16String,T>
 }//namespace hgl
 #include<hgl/type/ResManage.cpp>
 #endif//HGL_RES_MANAGE_INCLUDE
