@@ -134,7 +134,7 @@ namespace hgl
 			{
 				if(location[i]==-1)continue;
 
-                VertexBufferBase *vb=data->GetVertexBuffer((VertexBufferType)i);
+                VertexBufferBase *vb=va->GetVertexBuffer((VertexBufferType)i);
 
 				if(!vb)
 				{
@@ -167,7 +167,7 @@ namespace hgl
                 ++stream;
             }
 
-            VertexBufferBase *vb_index=data->GetVertexBuffer(vbtIndex);
+            VertexBufferBase *vb_index=va->GetVertexBuffer(vbtIndex);
 
  			if(vb_index)
                  glVertexArrayElementBuffer(vao,                          //vao obj
@@ -190,7 +190,7 @@ namespace hgl
 		*/
 		bool Renderable::MakeRenderState(bool mvp)
 		{
-			VertexBufferBase *vb_vertex	=data->GetVertexBuffer(vbtVertex);
+			VertexBufferBase *vb_vertex	=va->GetVertexBuffer(vbtVertex);
 
 			if(!vb_vertex)return(false);						//没顶点，画不了
 
@@ -198,9 +198,9 @@ namespace hgl
 
 			state.mvp=mvp;
 
-			state.vertex_normal			= data->GetVertexBuffer(vbtNormal);
-			state.vertex_color			= data->GetVertexBuffer(vbtColor);
-            state.vertex_tangent        = data->GetVertexBuffer(vbtTangent);
+			state.vertex_normal			= va->GetVertexBuffer(vbtNormal);
+			state.vertex_color			= va->GetVertexBuffer(vbtColor);
+            state.vertex_tangent        = va->GetVertexBuffer(vbtTangent);
 
 			state.diffuse_map			= GetTexCoord(mtcDiffuse);
 			state.normal_map			= GetTexCoord(mtcNormal);
@@ -210,7 +210,7 @@ namespace hgl
 			state.alpha_test			= material->GetAlphaTest()>0;
 			state.outside_discard		= material->GetOutsideDiscard();
 
-			state.vertex_color_format	= data->GetVertexColorFormat();
+			state.vertex_color_format	= va->GetVertexColorFormat();
 			state.vertex_coord			= vb_vertex->GetComponent();
 
 			state.height_map			= material->GetTexture(mtcHeight);

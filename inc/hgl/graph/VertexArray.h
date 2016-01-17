@@ -19,7 +19,8 @@ namespace hgl
 
             VertexBufferBase **vertex_buffer;                                                                                       ///<顶点数据缓冲区
 
-			AABB BoundingBox;                                                                                                      	///<绑定盒
+			AABB aabb;                                                                                                      		///<AABB绑定盒
+			OBB obb;																												///<OBB绑定盒
 
             ColorFormat vb_color_format;                                                                                            ///<颜色顶点属性格式
 
@@ -63,8 +64,10 @@ namespace hgl
 
                 vb->GetBoundingBox(min_v,max_v);
 
-				BoundingBox.minPoint=min_v;
-				BoundingBox.maxPoint=max_v;
+				aabb.minPoint=min_v;
+				aabb.maxPoint=max_v;
+
+				obb.SetFrom(aabb);
 
                 return SetVertexBuffer(vbtVertex,vb);
             }
@@ -88,18 +91,18 @@ namespace hgl
 
         public: //绑定盒相关
 
-            void                        SetBoundingBox      (const AABB &box)  {BoundingBox=box;}                                  	///<设置绑定盒
-            void                        GetBoundingBox      (AABB &box)        {box=BoundingBox;}                                  	///<取得绑定盒
+            const AABB &				GetAABB				()const{return aabb;}													///<取得AABB绑定盒
+            const OBB &					GetOBB				()const{return obb;}													///<取得OBB绑定盒
 
             const Vector3f              GetCenter           ()const                                                                 ///<取得中心点
             {
-				return POINT_TO_FLOAT3(BoundingBox.CenterPoint());
+				return POINT_TO_FLOAT3(obb.CenterPoint());
             }
 
             void                        GetMinMaxVertex     (Vector3f &min_v,Vector3f &max_v)                                       ///<取得最小顶点和最大顶点
             {
-				min_v=POINT_TO_FLOAT3(BoundingBox.minPoint);
-				max_v=POINT_TO_FLOAT3(BoundingBox.maxPoint);
+				min_v=POINT_TO_FLOAT3(aabb.minPoint);
+				max_v=POINT_TO_FLOAT3(aabb.maxPoint);
             }
 
         public:
