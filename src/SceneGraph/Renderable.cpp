@@ -7,7 +7,7 @@ namespace hgl
 	{
 		Renderable::Renderable(VertexArray *rd,Shader *s)
 		{
-            data=rd;
+            va=rd;
             shader=s;
             bind_shader=nullptr;
 
@@ -38,7 +38,7 @@ namespace hgl
 		*/
 		bool Renderable::SetMaterial(Material *m,bool mp)
 		{
-            if(!data)return(false);
+            if(!va)return(false);
 
 			if(material&&mtl_private)
 				delete material;
@@ -50,7 +50,7 @@ namespace hgl
 
 		VertexBufferBase *Renderable::GetTexCoord(int mtc,VertexBufferType *vbt)				///<取得贴图坐标对应的缓冲区
 		{
-            if(!data)return(nullptr);
+            if(!va)return(nullptr);
 			if(mtc<mtcDiffuse||mtc>=mtcMax)return(nullptr);
 
 			int index=TextureChannels[mtc];
@@ -71,7 +71,7 @@ namespace hgl
 
 		bool Renderable::SetTexCoord(int mtc,VertexBufferType vbt)
 		{
-            if(!data)return(false);
+            if(!va)return(false);
 
 			if(mtc<mtcDiffuse||mtc>=mtcMax
 			 ||mtc==mtcNormal					//法线贴图不需要指定坐标
@@ -91,11 +91,11 @@ namespace hgl
 
 		bool Renderable::SetDrawCount(int start,int count)
 		{
-            if(!data)return(false);
+            if(!va)return(false);
 
 			if(start<0||count<=0)return(false);
 
-			const int max_count=data->GetDrawCount();
+			const int max_count=va->GetDrawCount();
 
 			if(start+count>max_count)return(false);
 
@@ -110,7 +110,7 @@ namespace hgl
 		*/
 		bool Renderable::GetDrawCount(int &start,int &count)
 		{
-            if(!data)return(false);
+            if(!va)return(false);
 
 			if(DrawStart==-1
 			 ||DrawCount==-1)

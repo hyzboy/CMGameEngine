@@ -1,4 +1,4 @@
-#ifndef HGL_GRAPH_RENDERABLE_INCLUDE
+﻿#ifndef HGL_GRAPH_RENDERABLE_INCLUDE
 #define HGL_GRAPH_RENDERABLE_INCLUDE
 
 #include<hgl/graph/Shader.h>
@@ -20,7 +20,7 @@ namespace hgl
 
 		protected:
 
-            VertexArray *data;                                                                                           ///<数据
+            VertexArray *va;                                                                                           		///<顶点数据
 
 			Material *material;																							    ///<材质
 			bool mtl_private;																							    ///<材质是否私有
@@ -47,15 +47,15 @@ namespace hgl
 
 		public:
 
-			uint				GetPrimitive		()const						{return data?data->GetPrimitive():0;}		///<取得要绘制的图元类型
+			uint				GetPrimitive		()const					{return va?va->GetPrimitive():0;}				///<取得要绘制的图元类型
 
 			bool				SetMaterial			(Material *,bool);														///<设置材质数据
-			Material * 			GetMaterial			()const						{return material;}							///<取得材质指针
+			Material * 			GetMaterial			()const					{return material;}								///<取得材质指针
 
-            VertexBufferBase *  GetVertexBuffer     (VertexBufferType vbt){return data?data->GetVertexBuffer(vbt):nullptr;} ///<取得对应顶点缓冲区数据
+            VertexBufferBase *  GetVertexBuffer     (VertexBufferType vbt)	{return va?va->GetVertexBuffer(vbt):nullptr;} 	///<取得对应顶点缓冲区数据
 
-            int                 GetVertexCompoment  ()const{return data?data->GetVertexCompoment():0;}                      ///<取得顶点数据坐标轴数
-            ColorFormat         GetVertexColorFormat()const{return data?data->GetVertexColorFormat():HGL_COLOR_NONE;}       ///<取得顶点色属性格式
+            int                 GetVertexCompoment  ()const{return va?va->GetVertexCompoment():0;}                      	///<取得顶点数据坐标轴数
+            ColorFormat         GetVertexColorFormat()const{return va?va->GetVertexColorFormat():HGL_COLOR_NONE;}       	///<取得顶点色属性格式
 
 			bool				SetDrawCount		(int,int);																///<设置要绘制的数据数量
 			bool		        GetDrawCount		(int &,int &);															///<取得指定的要绘制的数据数量
