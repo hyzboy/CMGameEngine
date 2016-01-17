@@ -140,11 +140,15 @@ namespace hgl
 
 			void vs::add_in_texture(const char *vb_name,int coord_num,int mtc_index)
 			{
-				add_sampler(MaterialTextureName[mtc_index],coord_num);
+				MATERIAL_TEXTURE_CHANNEL_NAME mtc_name;
+
+				GetMaterialTextureName(mtc_name,mtc_index);
+
+				add_sampler(mtc_name,coord_num);
 
 				tex_sampler[mtc_index].Strcat(shader_get_sampler_color[coord_num-1]);
 				tex_sampler[mtc_index].Strcat("(");
-				tex_sampler[mtc_index].Strcat(MaterialTextureName[mtc_index]);
+				tex_sampler[mtc_index].Strcat(mtc_name);
 				tex_sampler[mtc_index].Strcat(",");
 				tex_sampler[mtc_index].Strcat(vb_name);
 				tex_sampler[mtc_index].Strcat(")");
@@ -185,11 +189,15 @@ namespace hgl
 			{
 				if(mtc_index<0||mtc_index>=HGL_MAX_TEX_COORD)return;
 
+				MATERIAL_TEXTURE_CHANNEL_NAME mtc_name;
+
+				GetMaterialTextureName(mtc_name,mtc_index);
+
 				out_texcoord_count++;
 				out_texcoord[mtc_index]=true;
 
 				out_texcoord_name[mtc_index].Strcat(HGL_FS_TEXCOORD);
-				out_texcoord_name[mtc_index].Strcat(MaterialTextureName[mtc_index]);
+				out_texcoord_name[mtc_index].Strcat(mtc_name);
 
 				out_texcoord_source[mtc_index].Strcat(source);
 

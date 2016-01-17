@@ -129,7 +129,7 @@ namespace hgl
 
 		protected:
 
-			double point_size;																		///<点尺寸
+			double		point_size;																	///<点尺寸
 
 		public:
 

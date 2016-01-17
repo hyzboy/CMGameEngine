@@ -74,6 +74,10 @@ namespace hgl
 			*/
 			void fs::add_in_texture(int mtc_index,int coord_num,const char *source)
 			{
+				MATERIAL_TEXTURE_CHANNEL_NAME mtc_name;
+
+				GetMaterialTextureName(mtc_name,mtc_index);
+
 				mtc[mtc_index]=coord_num;
 
 				tex_coord[mtc_index].Strcat(HGL_FS_TEXCOORD);
@@ -81,13 +85,13 @@ namespace hgl
 
 				tex_sampler[mtc_index].Strcat(shader_get_sampler_color[coord_num-1]);
 				tex_sampler[mtc_index].Strcat("(");
-				tex_sampler[mtc_index].Strcat(MaterialTextureName[mtc_index]);
+				tex_sampler[mtc_index].Strcat(mtc_name);
 				tex_sampler[mtc_index].Strcat(",");
 				tex_sampler[mtc_index].Strcat(HGL_FS_TEXCOORD);
 				tex_sampler[mtc_index].Strcat(source);
 				tex_sampler[mtc_index].Strcat(")");
 
-				add_sampler(MaterialTextureName[mtc_index],coord_num);
+				add_sampler(mtc_name,coord_num);
 			}
 
 			/**
@@ -242,9 +246,12 @@ namespace hgl
 			{
  				int count=0;
 
+				MATERIAL_TEXTURE_CHANNEL_NAME mtc_name,mtc_name_height;
+
 				if(state->height_map)							//有高度图的处理方式
 				{
-					code.add_in_texcoord(2,MaterialTextureName[mtcHeight]);		//从高度图输入各种坐标
+					GetMaterialTextureName(mtc_name_height,mtcHeight);
+					code.add_in_texcoord(2,mtc_name_height);		//从高度图输入各种坐标
 				}
 
 				for(int mtc=0;mtc<mtcMax;mtc++)
@@ -256,14 +263,16 @@ namespace hgl
 					if(state->height_map
 					&&(mtc>=mtcDiffuse&&mtc<mtcPalette))		//使用高度图时，这一部分贴图无需贴图坐标
 					{
-						code.add_in_texture(mtc,state->tex[mtc],MaterialTextureName[mtcHeight]);				//加入贴图，从高度图顶点得来的纹理坐标
+						code.add_in_texture(mtc,state->tex[mtc],mtc_name_height);				//加入贴图，从高度图顶点得来的纹理坐标
 					}
 					else
 					{
 						if(!state->tex[mtc])continue;
 
-						code.add_in_texture(mtc,state->tex[mtc],MaterialTextureName[mtc]);						//从对应通道得来的纹理
-						code.add_in_texcoord(state->vbc[mtc],MaterialTextureName[mtc]);							//从对应通道得来的纹理坐标
+						GetMaterialTextureName(mtc_name,mtc);
+
+						code.add_in_texture(mtc,state->tex[mtc],mtc_name);						//从对应通道得来的纹理
+						code.add_in_texcoord(state->vbc[mtc],mtc_name);							//从对应通道得来的纹理坐标
 					}
 
 					count++;

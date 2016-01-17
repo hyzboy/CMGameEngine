@@ -4,27 +4,30 @@ namespace hgl
 {
     namespace graph
     {
-        const VERTEX_BUFFER_NAME VertexBufferName[vbtEnd]=
-        {
-            "Index",
+		namespace
+		{
+			const VERTEX_BUFFER_NAME VertexBufferName[vbtEnd]=
+			{
+				"Index",
 
-            "Vertex",
-            "Color",
-            "Normal",
-            "Tangent",
-            "SecondColor",
-            "FogCoord",
+				"Vertex",
+				"Color",
+				"Normal",
+				"Tangent",
+				"SecondColor",
+				"FogCoord",
 
-            "Ambient",
-            "Specular",
+				"Ambient",
+				"Specular",
 
-            "TexCoord_Diffuse",
-            "TexCoord_Alpha",
-            "TexCoord_Normal",
-            "TexCoord_Tangent",
-            "TexCoord_Ambient",
-            "TexCoord_Specular",
-        };//const char VertexBufferName
+				"TexCoord_Diffuse",
+				"TexCoord_Alpha",
+				"TexCoord_Normal",
+				"TexCoord_Tangent",
+				"TexCoord_Ambient",
+				"TexCoord_Specular",
+			};//const VERTEX_BUFFER_NAME VertexBufferName
+		}//namespace
 
 		bool GetVertexBufferName(VERTEX_BUFFER_NAME &vbn,int index)				///<获取顶点缓冲区类型名称字串
 		{

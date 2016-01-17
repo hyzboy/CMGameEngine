@@ -202,6 +202,8 @@ namespace hgl
 
 			if(mat->GetTextureNumber())					//如果有贴图
 			{
+				MATERIAL_TEXTURE_CHANNEL_NAME mtc_name;
+
 				for(int i=0;i<mtcMax;i++)
 				{
 					Texture *tex=mat->GetTexture(i);									//取指定通道贴图
@@ -210,9 +212,11 @@ namespace hgl
 
 					BindTexture(tex_count,tex->GetType(),tex->GetID());			        //绑定贴图
 
-					if(!glsl->Shader::SetUniform1i(MaterialTextureName[i],tex_count))	//设定贴图对应索引
+					GetMaterialTextureName(mtc_name,i);
+
+					if(!glsl->Shader::SetUniform1i(mtc_name,tex_count))	//设定贴图对应索引
 					{
-						LOG_PROBLEM(u8"attach Shader sampler \""+UTF8String(MaterialTextureName[i])+u8"\" to texture "+UTF8String(tex_count)+u8" error!");
+						LOG_PROBLEM(u8"attach Shader sampler \""+UTF8String(mtc_name)+u8"\" to texture "+UTF8String(tex_count)+u8" error!");
 						return(false);
 					}
 

@@ -10,6 +10,8 @@ namespace hgl
         */
         enum MaterialTextureChannels
         {
+			mtcNone=-1,
+			
             mtcDiffuse=0,               ///<漫反射
             mtcAmbient,                 ///<环境光
             mtcSpecular,                ///<镜面光
@@ -27,7 +29,11 @@ namespace hgl
             mtcMax                      ///<最大贴图通道
         };//enum MaterialTextureChannels
 
-        extern const char MaterialTextureName[mtcMax][32];  //贴图通道名称(用在fragment shader中)
+		const int MATERIAL_TEXTURE_CHANNEL_NAME_MAX_SIZE=32;
+
+		using MATERIAL_TEXTURE_CHANNEL_NAME=char[MATERIAL_TEXTURE_CHANNEL_NAME_MAX_SIZE];
+
+        void GetMaterialTextureName(MATERIAL_TEXTURE_CHANNEL_NAME,int);  ///<获取贴图通道名称
     }//namespace graph
 }//namespace hgl
 #endif//HGL_GRAPH_TEXTURE_CHANNELS_INCLUDE
