@@ -124,11 +124,8 @@ namespace hgl
 
 			bool		Light;																		///<承接光照(默认开)
 
-			//测试用
-			Vector3f	LightPosition;																///<光源位置
-			float		GlobalLightIntensity;														///<全局环境光强度
-
 			Texture	*	texture_list[mtcMax];														///<贴图
+			int			texture_count;																///<贴图数量
 
 		protected:
 
@@ -165,8 +162,6 @@ namespace hgl
 			void SetColorMaterial	(bool cm)							{color_material=cm;}							///<设置是否使用颜色追踪材质
 
 			void SetLight			(bool l)							{Light=l;}										///<设置是否承接光照
-			void SetLightPosition	(const Vector3f &lp)				{LightPosition=lp;}								///<设置光源位置
-			void SetGlobalLightIntensity(float gli)						{GlobalLightIntensity=gli;}						///<设置全局环境光强度
 
 		public:
 
@@ -208,8 +203,6 @@ namespace hgl
 			bool			GetColorMaterial()const				{return color_material;}			///<读取是否使用颜色追踪材质
 
 			bool			GetLight()const						{return Light;}						///<读取是否承接光照
-			const Vector3f &GetLightPosition()const				{return LightPosition;}				///<读取光源位置
-			float			GetGlobalLightIntensity()const		{return GlobalLightIntensity;}		///<读取全局环境光强度
 
 		public:
 
@@ -221,16 +214,7 @@ namespace hgl
 			const float	&	GetShininess()const					{return Shininess;}
 			const float	&	GetTransparency()const				{return Transparency;}
 
-			int GetTextureNumber()const
-			{
-				int count=0;
-
-				for(int i=mtcDiffuse;i<mtcMax;i++)
-					if(texture_list[i])
-						count++;
-
-				return(count);
-			}
+			const int		GetTextureNumber()const				{return texture_count;}
 
 			Texture *GetTexture(int mtc)const
 			{

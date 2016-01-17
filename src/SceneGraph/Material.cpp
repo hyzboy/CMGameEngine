@@ -57,7 +57,6 @@ namespace hgl
 			color_material=true;
 
 			Light=false;
-			LightPosition=Vector3f(0,0,0);
 
 			Emission.Set(0.0f,0.0f,0.0f,1.0f);
 			Ambient.Set(0.25f,0.25f,0.25f,1.0f);
@@ -67,8 +66,8 @@ namespace hgl
 			Shininess=40.0f;
 			Transparency=1.0f;
 
-			for(int i=0;i<mtcMax;i++)
-				texture_list[i]=0;
+			hgl_set(texture_list,0,mtcMax);
+			texture_count=0;
 		}
 
 		Material::~Material()
@@ -104,14 +103,15 @@ namespace hgl
 			if(!texture_list[n])return(false);
 
 			texture_list[n]=nullptr;
+			--texture_count;
 
 			return(true);
 		}
 
 		void Material::ClearTexture()
 		{
-			for(int i=0;i<mtcMax;i++)
-				texture_list[i]=nullptr;
+			hgl_set(texture_list,0,mtcMax);
+			texture_count=0;
 		}
 
 		bool Material::SetTexture(int n,Texture *tex)
@@ -128,6 +128,7 @@ namespace hgl
 			}
 
 			texture_list[n]=tex;
+			++texture_count;
 
 			return(true);
 		}
