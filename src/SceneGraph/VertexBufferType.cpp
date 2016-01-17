@@ -1,9 +1,10 @@
-#include<hgl/graph/VertexBufferType.h>
+﻿#include<hgl/graph/VertexBufferType.h>
+#include<string.h>
 namespace hgl
 {
     namespace graph
     {
-        const char VertexBufferName[vbtEnd][32]=
+        const VERTEX_BUFFER_NAME VertexBufferName[vbtEnd]=
         {
             "Index",
 
@@ -23,11 +24,29 @@ namespace hgl
             "TexCoord_Tangent",
             "TexCoord_Ambient",
             "TexCoord_Specular",
-
-            "TexCoord0",    "TexCoord1",    "TexCoord2",    "TexCoord3",    "TexCoord4",    "TexCoord5",    "TexCoord6",    "TexCoord7",
-            "TexCoord8",    "TexCoord9",    "TexCoord10",   "TexCoord11",   "TexCoord12",   "TexCoord13",   "TexCoord14",   "TexCoord15",
-            "TexCoord16",   "TexCoord17",   "TexCoord18",   "TexCoord19",   "TexCoord20",   "TexCoord21",   "TexCoord22",   "TexCoord23",
-            "TexCoord24",   "TexCoord25",   "TexCoord26",   "TexCoord27",   "TexCoord28",   "TexCoord29",   "TexCoord30",   "TexCoord31"
         };//const char VertexBufferName
+
+		bool GetVertexBufferName(VERTEX_BUFFER_NAME &vbn,int index)				///<获取顶点缓冲区类型名称字串
+		{
+			if(index<=vbtNone)return(false);
+			if(index>=vbtEnd+100)return(false);
+
+			if(index<vbtEnd)
+			{
+				memcpy(vbn,VertexBufferName[index],VERTEX_BUFFER_NAME_MAX_SIZE);
+			}
+			else
+			{
+				memcpy(vbn,"CusTexCoord_",12);
+
+				index-=vbtEnd;
+
+				vbn[12]='0'+(index/10);
+				vbn[13]='0'+(index%10);
+				vbn[14]=0;
+			}
+
+			return(true);
+		}
     }//namespace graph
 }//namespace hgl

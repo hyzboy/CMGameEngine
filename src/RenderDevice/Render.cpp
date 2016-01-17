@@ -114,11 +114,15 @@ namespace hgl
 
 			if(!vb)return(true);															//没有这个缓冲区
 
-			int location=glsl->GetAttribLocation(VertexBufferName[vbt]);					//取得缓冲区对应shader属性地址
+			VERTEX_BUFFER_NAME vertex_buffer_name;
+
+			if(!GetVertexBufferName(vertex_buffer_name,vbt))return(false);
+
+			int location=glsl->GetAttribLocation(vertex_buffer_name);					//取得缓冲区对应shader属性地址
 
 			if(location==-1)																//如果取得地址失败
 			{
-				LOG_HINT(u8"buffer \""+UTF8String(VertexBufferName[vbt])+u8"\" attrib location =-1");
+				LOG_HINT(u8"buffer \""+UTF8String(vertex_buffer_name)+u8"\" attrib location =-1");
 				return(false);
 			}
 

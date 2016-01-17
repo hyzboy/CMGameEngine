@@ -377,6 +377,7 @@ namespace hgl
 			if(state->tex_number)					//如果有贴图
 			{
 				int tex_count=0;
+				VERTEX_BUFFER_NAME vbn;
 
 				//高度图
 				if(state->height_map)					//如果是高度图，则是拿vertex当高度图坐标、以及各种纹理坐标
@@ -389,16 +390,18 @@ namespace hgl
 
 					int hm_map_count=0;
 
-					code.add_in_texture(VertexBufferName[vbtVertex],2,mtcHeight);
+					GetVertexBufferName(vbn,vbtVertex);
+
+					code.add_in_texture(vbn,2,mtcHeight);
 
 					if(state.tex[mtcDiffuse])					//漫反射，绘制坐标即贴图坐标
 					{
-						code.add_in_texcoord(vbtVertex,VertexBufferName[vbtVertex],2,mtcDiffuse);
+						code.add_in_texcoord(vbtVertex,vbn,2,mtcDiffuse);
 						hm_map_count++;
 					}
 
 					if(hm_map_count)
-						code.add_out_texcoord(2,mtcHeight,VertexBufferName[vbtVertex]);		//将顶点坐标传给漫反射、镜片光、高光等纹理坐标
+						code.add_out_texcoord(2,mtcHeight,vbn);		//将顶点坐标传给漫反射、镜片光、高光等纹理坐标
 
 					code.add();
 
@@ -411,7 +414,8 @@ namespace hgl
 
 					const VertexBufferType	vbt	=state->vbt[i];			//当前通道顶点缓冲区类型
 					const uint8				vbc	=state->vbc[i];			//当前通道顶点缓冲区坐标维数
-					const char *			vbn	=VertexBufferName[vbt];
+
+					GetVertexBufferName(vbn,vbt);
 
 					code.add_in_texcoord(vbt,vbn,vbc,i);	//第一个参数用vbt而不用i是为了让shader中的texcoord?编号与程序中填写的缓冲区编号一致，便于调试查看
 					code.add_out_texcoord(vbc,i,vbn);		//一般是输出到fragment shader用

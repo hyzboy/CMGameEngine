@@ -1,4 +1,4 @@
-#ifndef HGL_GRAPH_VERTEX_BUFFER_TYPE_INCLUDE
+﻿#ifndef HGL_GRAPH_VERTEX_BUFFER_TYPE_INCLUDE
 #define HGL_GRAPH_VERTEX_BUFFER_TYPE_INCLUDE
 
 #include<glew/include/GL/glew.h>
@@ -47,17 +47,16 @@ namespace hgl
             vbtAmbientTexCoord,     //环境光颜色纹理坐标
             vbtSpecularTexCoord,    //镜面光颜色纹理坐标
 
-            vbtTexCoord0,   vbtTexCoord1,   vbtTexCoord2,   vbtTexCoord3,   vbtTexCoord4,   vbtTexCoord5,   vbtTexCoord6,   vbtTexCoord7,
-            vbtTexCoord8,   vbtTexCoord9,   vbtTexCoord10,  vbtTexCoord11,  vbtTexCoord12,  vbtTexCoord13,  vbtTexCoord14,  vbtTexCoord15,
-            vbtTexCoord16,  vbtTexCoord17,  vbtTexCoord18,  vbtTexCoord19,  vbtTexCoord20,  vbtTexCoord21,  vbtTexCoord22,  vbtTexCoord23,
-            vbtTexCoord24,  vbtTexCoord25,  vbtTexCoord26,  vbtTexCoord27,  vbtTexCoord28,  vbtTexCoord29,  vbtTexCoord30,  vbtTexCoord31,
-
             vbtEnd
         };//enum VertexBufferType
 
         extern int HGL_MAX_VERTEX_ATTRIBS;                  ///<最大顶点属性数量
 
-        extern const char VertexBufferName[vbtEnd][32];     ///<顶点缓冲区类型名称字串
+		const int VERTEX_BUFFER_NAME_MAX_SIZE=32;
+
+		using VERTEX_BUFFER_NAME=char[VERTEX_BUFFER_NAME_MAX_SIZE];
+
+		bool GetVertexBufferName(VERTEX_BUFFER_NAME &,int);		///<获取顶点缓冲区类型名称字串
     }//namespace graph
 }//namespace hgl
 #endif//HGL_GRAPH_VERTEX_BUFFER_TYPE_INCLUDE
