@@ -68,7 +68,7 @@ namespace hgl
         public: //着色程序
 
             void                SetShader           (Shader *);                                                             ///<设置着色程序
-            Shader *            GetShader           ()const;                                                                ///<取得着色程序
+            Shader *            GetShader           ()const{return shader;}                                                 ///<取得着色程序
 
             bool                SetShaderLocation   (VertexBufferType, unsigned int);                                       ///<设定与Shader变量的关联
             void                ClearShaderLocation ();                                                                     ///<清除与Shader变量的关联

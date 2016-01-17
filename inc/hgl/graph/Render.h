@@ -62,9 +62,6 @@ namespace hgl
 	//贴图函数
 	namespace graph
 	{
-//		Texture1D *CreateTexture1D();							//创建1D贴图
-		Texture2D *CreateTexture2D();							//创建2D贴图
-
 		/**
 		* 创建2D贴图
 		* @param width 宽
@@ -73,7 +70,7 @@ namespace hgl
 		*/
 		inline Texture2D *CreateTexture2D(int width,int height,uint video_format)
 		{
-			Texture2D *tex=CreateTexture2D();
+			Texture2D *tex=new Texture2D;
 
 			tex->SetImage(width,height,0,0,HGL_SF_NONE,video_format);
 
@@ -84,7 +81,7 @@ namespace hgl
 		{
 			Texture2D *CreateObject()
 			{
-				return(CreateTexture2D());
+				return(new Texture2D);
 			}
 
 			void DeleteObject(Texture2D *tex)

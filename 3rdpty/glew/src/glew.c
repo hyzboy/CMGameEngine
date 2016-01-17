@@ -13197,14 +13197,6 @@ static const char *_glewNextNonSpace(const char *i)
   return j;
 }
 
-GLboolean GLEWAPIENTRY glewGetExtension (const char* name)
-{
-  GLboolean *enable = _glewGetExtensionString(name);
-  if (enable)
-    return *enable;
-  return GL_FALSE;
-}
-
 /* ------------------------------------------------------------------------- */
 
 static GLenum GLEWAPIENTRY glewContextInit ()

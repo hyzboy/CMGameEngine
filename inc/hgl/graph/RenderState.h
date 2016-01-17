@@ -2,6 +2,8 @@
 #define HGL_GRAPH_RENDER_STATE_INCLUDE
 
 #include<hgl/graph/Axis.h>
+#include<hgl/graph/ColorFormat.h>
+#include<hgl/graph/VertexBufferType.h>
 #include<hgl/graph/TextureChannels.h>
 #include<string.h>
 namespace hgl

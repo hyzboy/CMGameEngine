@@ -297,10 +297,5 @@ namespace hgl
 				glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,wrap_t);
 			#endif//HGL_OPENGL_USE_DSA
 		}
-
-		Texture2D *CreateTexture2D()
-		{
-			return(new glTexture2D);
-		}
 	}//namespace graph
 }//namespace hgl

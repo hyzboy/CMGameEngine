@@ -1,4 +1,4 @@
-﻿#include<hgl/Graphics.h>
+#include<hgl/Graphics.h>
 
 #include<hgl/graph/Render.h>			//SetClearColor,ClearScreen
 #include<hgl/graph/Shader.h>			//GLSL
@@ -567,7 +567,7 @@ HGL_GRAPHICS_MAIN(sii,app,args)
 	render_obj->SetVertexBuffer(vbtVertex,vertex=new VB2f(6,0,HGL_DYNAMIC_DRAW));
 	render_obj->SetVertexBuffer(vbtDiffuseTexCoord,new VB2f(6,texcoord));
 
-	tex=CreateTexture2D();
+	tex=new Texture2D;
 
 	mtl=CreateMaterial();
 

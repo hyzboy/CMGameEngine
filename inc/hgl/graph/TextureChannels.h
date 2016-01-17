@@ -33,7 +33,7 @@ namespace hgl
 
 		using MATERIAL_TEXTURE_CHANNEL_NAME=char[MATERIAL_TEXTURE_CHANNEL_NAME_MAX_SIZE];
 
-        bool GetMaterialTextureName(MATERIAL_TEXTURE_CHANNEL_NAME,int);  ///<获取贴图通道名称
+        bool GetMaterialTextureName(MATERIAL_TEXTURE_CHANNEL_NAME &,int);  ///<获取贴图通道名称
     }//namespace graph
 }//namespace hgl
 #endif//HGL_GRAPH_TEXTURE_CHANNELS_INCLUDE

@@ -196,9 +196,9 @@ namespace hgl
 		* @return NULL 生成失败
 		*/
 #ifdef _DEBUG
-		char *MakeFragmentShader(RenderState *state,const os_char *filename)
+		char *MakeFragmentShader(const RenderState *state,const os_char *filename)
 #else
-		char *MakeFragmentShader(RenderState *state)
+		char *MakeFragmentShader(const RenderState *state)
 #endif//_DEBUG
 		{
 			if(!state)return(nullptr);

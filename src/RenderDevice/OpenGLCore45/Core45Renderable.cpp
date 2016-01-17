@@ -65,7 +65,7 @@ namespace hgl
             hgl_set(location,-1,HGL_MAX_VERTEX_ATTRIBS);
 		}
 
-		Renderable::~Renderable()
+		void Renderable::Clear()
 		{
 			delete[] location;
 

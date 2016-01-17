@@ -5,11 +5,11 @@ namespace hgl
 	namespace graph
 	{
 #ifdef _DEBUG
-		char *MakeVertexShader(RenderState *,const os_char *save_filename=nullptr);
-		char *MakeFragmentShader(RenderState *,const os_char *save_filename=nullptr);
+		char *MakeVertexShader(const RenderState *,const os_char *save_filename=nullptr);
+		char *MakeFragmentShader(const RenderState *,const os_char *save_filename=nullptr);
 #else
-		char *MakeVertexShader(bool,RenderState *);
-		char *MakeFragmentShader(RenderState *);
+		char *MakeVertexShader(bool,const RenderState *);
+		char *MakeFragmentShader(const RenderState *);
 #endif//_DEBUG
 
 		Shader *CreateShader(	const char *vertex_shader,
@@ -36,7 +36,7 @@ namespace hgl
 		}
 
 #ifdef _DEBUG
-		Shader *CreateShader(RenderState *state,const os_char *save_filename)
+		Shader *CreateShader(const RenderState *state,const os_char *save_filename)
 		{
 			char *vs,*fs;
 
@@ -57,7 +57,7 @@ namespace hgl
 				fs=MakeFragmentShader(state);
 			}
 #else
-		Shader *CreateShader(RenderState *state)
+		Shader *CreateShader(const RenderState *state)
 		{
 			char *vs=MakeVertexShader(state);
 			char *fs=MakeFragmentShader(state);
@@ -86,7 +86,11 @@ namespace hgl
 
 		Shader *ShaderStorage::Create(const RenderState &state)
 		{
+#ifdef _DEBUG
+			return CreateShader(&state,nullptr);
+#else
 			return CreateShader(&state);
+#endif//_DEBUG
 		}
 
 		ShaderStorage *global_shader_storage=nullptr;

@@ -1,4 +1,4 @@
-﻿#include"OpenGLTexture.h"
+#include"OpenGLTexture.h"
 #include<glew/include/GL/glew.h>
 #include<hgl/graph/Render.h>
 
@@ -298,7 +298,7 @@ namespace hgl
 			#endif//HGL_OPENGL_USE_DSA
 		}
 
-		Texture2D *CreateTexture2D()
+		Texture2D *new Texture2D
 		{
 			return(new glTexture2D);
 		}

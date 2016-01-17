@@ -332,9 +332,9 @@ namespace hgl
 		* @return NULL 生成失身为
 		*/
 #ifdef _DEBUG
-		char *MakeVertexShader(RenderState *state,const os_char *filename)
+		char *MakeVertexShader(const RenderState *state,const os_char *filename)
 #else
-		char *MakeVertexShader(RenderState *state)
+		char *MakeVertexShader(const RenderState *state)
 #endif//
 		{
 			if(!state)return(nullptr);
