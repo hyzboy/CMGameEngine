@@ -54,7 +54,7 @@ namespace hgl
 				graphics.gl.multi_texture=true;
 
 				graphics.gl.major=3;
-				graphics.gl.minor=0;
+				graphics.gl.minor=3;
 
 				graphics.gl.egl=false;
 
