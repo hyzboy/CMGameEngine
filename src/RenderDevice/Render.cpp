@@ -32,8 +32,8 @@ namespace hgl
 		void InitVertexBuffer();	//初始化顶点缓冲区
 		bool BindTexture(int active,unsigned int type,unsigned int texture_index);
         void BindTextures(int first_active,int count,unsigned int *texture_index);
-		void InitShaderStorage();
-		void ClearShaderStorage();
+		void InitGlobalShaderStorage();
+		void ClearGlobalShaderStorage();
         bool InitUBO();
 // 		void InitFontStorage();
 // 		void ClearFontStorage();
@@ -55,7 +55,7 @@ namespace hgl
 			InitVertexBuffer();
 
             InitUBO();
-			InitShaderStorage();
+			InitGlobalShaderStorage();
 // 			InitFontStorage();
 
 			InitInlineRenderable();
@@ -66,7 +66,7 @@ namespace hgl
 			ClearInlineRenderable();
 
 // 			ClearFontStorage();
-			ClearShaderStorage();
+			ClearGlobalShaderStorage();
 			CloseTexture();
 		}
 	}//namespace graph

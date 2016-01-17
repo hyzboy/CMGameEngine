@@ -18,6 +18,8 @@ namespace hgl
 			virtual Shader *Create(const RenderState &);						///<资源创建虚拟函数无实现，请特例化实现
 			virtual void Clear(Shader *obj){delete obj;}						///<资源释放虚拟函数(缺省为直接delete对象)
 		};//class ShaderStorage
+
+		extern ShaderStorage *global_shader_storage;							///<全局Shader仓库
 	}//namespace graph
 }//namespace hgl
 #endif//HGL_GRAPH_SHADER_STORAGE_INCLUDE

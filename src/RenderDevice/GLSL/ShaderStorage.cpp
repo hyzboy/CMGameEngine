@@ -4,8 +4,6 @@ namespace hgl
 {
 	namespace graph
 	{
-		struct RenderState;
-
 #ifdef _DEBUG
 		char *MakeVertexShader(RenderState *,const os_char *save_filename=nullptr);
 		char *MakeFragmentShader(RenderState *,const os_char *save_filename=nullptr);
@@ -89,6 +87,18 @@ namespace hgl
 		Shader *ShaderStorage::Create(const RenderState &state)
 		{
 			return CreateShader(&state);
+		}
+
+		ShaderStorage *global_shader_storage=nullptr;
+
+		void InitGlobalShaderStorage()
+		{
+			global_shader_storage=new ShaderStorage;
+		}
+
+		void ClearGlobalShaderStorage()
+		{
+			SAFE_CLEAR(global_shader_storage);
 		}
 	}//namespace graph
 }//namespace hgl
