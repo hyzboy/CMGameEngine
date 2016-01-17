@@ -1,17 +1,17 @@
-﻿#ifndef HGL_GRAPH_RENDERABLE_DATA_INCLUDE
-#define HGL_GRAPH_RENDERABLE_DATA_INCLUDE
+﻿#ifndef HGL_GRAPH_VERTEX_ARRAY_INCLUDE
+#define HGL_GRAPH_VERTEX_ARRAY_INCLUDE
 
 #include<hgl/graph/VertexBuffer.h>
 #include<hgl/graph/ColorFormat.h>
-#include<hgl/graph/AABox.h>
+#include<hgl/VectorMath.h>
 namespace hgl
 {
     namespace graph
     {
         /**
-         * 可渲染对象数据
+         * 顶点阵列数据
          */
-        class RenderableData
+        class VertexArray
         {
         protected:
 
@@ -19,7 +19,7 @@ namespace hgl
 
             VertexBufferBase **vertex_buffer;                                                                                       ///<顶点数据缓冲区
 
-            AABox BoundingBox;                                                                                                      ///<绑定盒
+			AABB BoundingBox;                                                                                                      	///<绑定盒
 
             ColorFormat vb_color_format;                                                                                            ///<颜色顶点属性格式
 
@@ -29,8 +29,8 @@ namespace hgl
 
         public:
 
-            RenderableData(uint prim);
-            ~RenderableData();
+            VertexArray(uint prim);
+            ~VertexArray();
 
             uint                        GetPrimitive        ()const{return primitive;}                                              ///<取得要绘制的图元类型
 
@@ -63,7 +63,8 @@ namespace hgl
 
                 vb->GetBoundingBox(min_v,max_v);
 
-                BoundingBox.SetMinMax(min_v,max_v);
+				BoundingBox.minPoint=min_v;
+				BoundingBox.maxPoint=max_v;
 
                 return SetVertexBuffer(vbtVertex,vb);
             }
@@ -87,34 +88,24 @@ namespace hgl
 
         public: //绑定盒相关
 
-            void                        SetBoundingBox      (const AABox &box)  {BoundingBox=box;}                                  ///<设置绑定盒
-            void                        GetBoundingBox      (AABox &box)        {box=BoundingBox;}                                  ///<取得绑定盒
+            void                        SetBoundingBox      (const AABB &box)  {BoundingBox=box;}                                  	///<设置绑定盒
+            void                        GetBoundingBox      (AABB &box)        {box=BoundingBox;}                                  	///<取得绑定盒
 
             const Vector3f              GetCenter           ()const                                                                 ///<取得中心点
             {
-//              Vector3f result;
-//
-//              result.x=(BoundingBox.minPoint.x+BoundingBox.maxPoint.x)/2.0f;
-//              result.y=(BoundingBox.minPoint.y+BoundingBox.maxPoint.y)/2.0f;
-//              result.z=(BoundingBox.minPoint.z+BoundingBox.maxPoint.z)/2.0f;
-
-//              return result;
-
-                return BoundingBox.center;
+				return POINT_TO_FLOAT3(BoundingBox.CenterPoint());
             }
 
             void                        GetMinMaxVertex     (Vector3f &min_v,Vector3f &max_v)                                       ///<取得最小顶点和最大顶点
             {
-//              min_v=POINT_TO_FLOAT3(BoundingBox.minPoint);
-//              max_v=POINT_TO_FLOAT3(BoundingBox.maxPoint);
-                min_v=BoundingBox.corner;
-                max_v=BoundingBox.corner_max;
+				min_v=POINT_TO_FLOAT3(BoundingBox.minPoint);
+				max_v=POINT_TO_FLOAT3(BoundingBox.maxPoint);
             }
 
         public:
 
             int                         GetDrawCount     ();                                                                        ///<取得可绘制的数据总数量
-        };//class RenderableData
+        };//class VertexArray
     }//namespace graph
 }//namespace hgl
-#endif//HGL_GRAPH_RENDERABLE_DATA_INCLUDE
+#endif//HGL_GRAPH_VERTEX_ARRAY_INCLUDE

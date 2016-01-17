@@ -1,11 +1,11 @@
-﻿#include<hgl/graph/Renderable.h>
+#include<hgl/graph/Renderable.h>
 #include<hgl/graph/Render.h>
 
 namespace hgl
 {
 	namespace graph
 	{
-		Renderable::Renderable(RenderableData *rd,Shader *s)
+		Renderable::Renderable(VertexArray *rd,Shader *s)
 		{
             data=rd;
             shader=s;

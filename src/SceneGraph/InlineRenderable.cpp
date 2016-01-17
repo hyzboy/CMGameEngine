@@ -1,5 +1,5 @@
-﻿#include<hgl/graph/VertexBuffer.h>
-#include<hgl/graph/RenderableData.h>
+#include<hgl/graph/VertexBuffer.h>
+#include<hgl/graph/VertexArray.h>
 #include<hgl/graph/Material.h>
 #include<hgl/graph/Render.h>
 #include<hgl/graph/Shader.h>
@@ -14,15 +14,15 @@ namespace hgl
         Texture2D *GrayWhiteGrid        =nullptr;
         Texture2D *BlueWhiteGrid        =nullptr;
 
-		RenderableData *SolidCube	=nullptr;
-		RenderableData *WireCube	=nullptr;
+		VertexArray *SolidCube	=nullptr;
+		VertexArray *WireCube	=nullptr;
 
-		RenderableData *SolidRect	=nullptr;
-		RenderableData *WireRect	=nullptr;
-		RenderableData *TextureRect	=nullptr;
+		VertexArray *SolidRect	=nullptr;
+		VertexArray *WireRect	=nullptr;
+		VertexArray *TextureRect	=nullptr;
 
-		RenderableData *SolidCircle	=nullptr;
-		RenderableData *WireCircle	=nullptr;
+		VertexArray *SolidCircle	=nullptr;
+		VertexArray *WireCircle	=nullptr;
 	}//namespace graph
 
 	namespace graph
@@ -34,9 +34,9 @@ namespace hgl
 		//* @param size 点尺寸
 		//* return 可渲染数据
 		//*/
-		//RenderableData *CreateRenderablePoint(const Vector3f &vertex,const Color4f &color,double size)
+		//VertexArray *CreateRenderablePoint(const Vector3f &vertex,const Color4f &color,double size)
 		//{
-		//	RenderableData *obj=CreateRenderable();
+		//	VertexArray *obj=CreateRenderable();
 		//	Material *mtl=CreateMaterial();
 
 		//	//设置材质
@@ -67,9 +67,9 @@ namespace hgl
 		* @param end 线条终点
 		* @param color 线条颜色
 		*/
-		RenderableData *CreateRenderableLine(const Vector3f &start,const Vector3f &end,const Color4f &color)
+		VertexArray *CreateRenderableLine(const Vector3f &start,const Vector3f &end,const Color4f &color)
 		{
-			RenderableData *obj=CreateRenderable();
+			VertexArray *obj=CreateRenderable();
 			Material *mtl=CreateMaterial();
 
 			//设置材质
@@ -99,9 +99,9 @@ namespace hgl
          * @param size 坐标轴尺寸
 		/* @return 可渲染数据
 		/*/
-		RenderableData *CreateRenderableAxis(const float size)
+		VertexArray *CreateRenderableAxis(const float size)
 		{
-			RenderableData *obj=CreateRenderable();
+			VertexArray *obj=CreateRenderable();
 			Material *mtl=CreateMaterial();
 
 			//设置材质
@@ -142,7 +142,7 @@ namespace hgl
 		* @param color 颜色
 		* @return 可渲染数据
 		*/
-		RenderableData *CreateRenderablePlaneGrid(	const Vector3f &v0,														///<创建一个平面网格的可渲染数据
+		VertexArray *CreateRenderablePlaneGrid(	const Vector3f &v0,														///<创建一个平面网格的可渲染数据
 												const Vector3f &v1,
 												const Vector3f &v2,
 												const Vector3f &v3,
@@ -150,7 +150,7 @@ namespace hgl
 												int step12,
 												const Color4f &color)
 		{
-			RenderableData *obj=CreateRenderable();
+			VertexArray *obj=CreateRenderable();
 			Material *mtl=CreateMaterial();
 
 			//设置材质
@@ -199,7 +199,7 @@ namespace hgl
         * @param tex_coord_vbt 纹理坐标数据所对应的顶点缓冲区类型(默认不使用)
 		* @return 可渲染数据
 		*/
-		RenderableData *CreateRenderableCube(bool use_normal,bool use_tangent,const VertexBufferType tex_coord_vbt)
+		VertexArray *CreateRenderableCube(bool use_normal,bool use_tangent,const VertexBufferType tex_coord_vbt)
 		{								// Points of a cube.
 			/*     4            5 */	const float points[]={	-0.5f, -0.5f, -0.5f,	-0.5f, -0.5f, +0.5f,	+0.5f, -0.5f, +0.5f,	+0.5f, -0.5f, -0.5f,	-0.5f, +0.5f, -0.5f,	-0.5f, +0.5f, +0.5f,
 			/* 	   *------------* */							+0.5f, +0.5f, +0.5f,	+0.5f, +0.5f, -0.5f,	-0.5f, -0.5f, -0.5f,	-0.5f, +0.5f, -0.5f,	+0.5f, +0.5f, -0.5f,	+0.5f, -0.5f, -0.5f,
@@ -221,7 +221,7 @@ namespace hgl
                                         1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
                                         0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f };
 
-			RenderableData *obj=CreateRenderable();
+			VertexArray *obj=CreateRenderable();
 			Material *mtl=CreateMaterial();
 
 			obj->SetMaterial(mtl,true);				//设置材质
@@ -244,7 +244,7 @@ namespace hgl
 		* 创建一个线框立方体的可渲染数据
 		* @return 可渲染数据
 		*/
-		RenderableData *CreateRenderableWireCube()
+		VertexArray *CreateRenderableWireCube()
 		{								// Points of a cube.
 			/*     4            5 */	const float points[]={	-0.5f, +0.5f, -0.5f,	//	0
 			/* 	   *------------* */							+0.5f, +0.5f, -0.5f,	//	1
@@ -258,7 +258,7 @@ namespace hgl
 			/*  |/          2|/	  */	// The associated indices.
 			/* 3*------------*	  */	const uint indices[]={	0,1,1,2,2,3,3,0,	0,4,1,5,2,6,3,7,	4,5,5,6,6,7,7,4};
 
-			RenderableData *obj=CreateRenderable();
+			VertexArray *obj=CreateRenderable();
 			Material *mtl=CreateMaterial();
 
 			obj->SetMaterial(mtl,true);				//设置材质
@@ -276,9 +276,9 @@ namespace hgl
 
 		const float RectVertex[8]={0,0, 1,0, 1,1, 0,1};
 
-		RenderableData *CreateRenderableRect(uint prim)
+		VertexArray *CreateRenderableRect(uint prim)
 		{
-			RenderableData *obj=CreateRenderable();
+			VertexArray *obj=CreateRenderable();
 			Material *mtl=CreateMaterial();
 
 			obj->SetMaterial(mtl,true);
@@ -295,7 +295,7 @@ namespace hgl
 		/**
 		* 创建一个2D矩形的可渲染数据
 		*/
-		RenderableData *CreateRenderableRect()
+		VertexArray *CreateRenderableRect()
 		{
 			return CreateRenderableRect(HGL_PRIM_TRIANGLE_FAN);
 		}
@@ -303,14 +303,14 @@ namespace hgl
 		/**
 		* 创建一个2D线框矩形的可渲染数据
 		*/
-		RenderableData *CreateRenderableWireRect()
+		VertexArray *CreateRenderableWireRect()
 		{
 			return CreateRenderableRect(HGL_PRIM_LINE_LOOP);
 		}
 
-		RenderableData *CreateRenderableTextureRect()
+		VertexArray *CreateRenderableTextureRect()
 		{
-			RenderableData *obj=CreateRenderableRect(HGL_PRIM_TRIANGLE_FAN);
+			VertexArray *obj=CreateRenderableRect(HGL_PRIM_TRIANGLE_FAN);
 			Material *mtl=obj->GetMaterial();
 
 			obj->SetTexCoord(mtcDiffuse,vbtDiffuseTexCoord,new VB2f(4,RectVertex));
@@ -327,12 +327,12 @@ namespace hgl
 		* 创建一个2D空心圆,圆心为0,0,半径为1
 		* @param edge 边数
 		*/
-		RenderableData *CreateRenderableWireCircle(int edge)
+		VertexArray *CreateRenderableWireCircle(int edge)
 		{
 			const Vector4f start(1,0,0,1);
 			const Vector3f axis(0,0,1);
 
-			RenderableData *obj=CreateRenderable();
+			VertexArray *obj=CreateRenderable();
 			Material *mtl=CreateMaterial();
 			VB2f *vertex=new VB2f(edge);
 
@@ -362,12 +362,12 @@ namespace hgl
 		* 创建一个2D实心圆,圆心为0,0,半径为1
 		* @param edge 边数
 		*/
-		RenderableData *CreateRenderableCircle(int edge)
+		VertexArray *CreateRenderableCircle(int edge)
 		{
 			const Vector4f start(1,0,0,1);
 			const Vector3f axis(0,0,1);
 
-			RenderableData *obj=CreateRenderable();
+			VertexArray *obj=CreateRenderable();
 			Material *mtl=CreateMaterial();
 			VB2f *vertex=new VB2f(edge+2);
 

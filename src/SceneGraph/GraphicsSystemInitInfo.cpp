@@ -53,8 +53,10 @@ namespace hgl
 				graphics.gl.glsl=true;
 				graphics.gl.multi_texture=true;
 
-				graphics.gl.major=4;
-				graphics.gl.minor=5;
+				graphics.gl.major=3;
+				graphics.gl.minor=0;
+
+				graphics.gl.egl=false;
 
 #ifdef _DEBUG
                 graphics.gl.debug=true;

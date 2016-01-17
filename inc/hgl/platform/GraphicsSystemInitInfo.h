@@ -58,6 +58,7 @@ namespace hgl
 
 				bool debug;																			///<产生硬件Debug信息(默认不产生，并且此功能不对所有显卡以及驱动有效)
 				bool opengl_es;																		///<使用OpenGL ES模式
+				bool egl;																			///<使用EGL模式
 			}gl;
 
 			struct GUI

@@ -21,7 +21,7 @@ SOURCE_GROUP("Application" FILES ${GRAPHICS_APPLICATION_SOURCE})
 
 SET(CM_SCENE_GRAPH_SOURCE    Camera.cpp
                                 WalkerCamera.cpp
-                                AABox.cpp
+#                                 AABox.cpp
 #                                 Frustum.cpp
 #                                 Plane.cpp
 #                                 Ray.cpp
@@ -39,7 +39,7 @@ IF(BUILD_OPENGL_LIB)
 		${GRAPHICS_APPLICATION_SOURCE}
 	# 	HeightMapTerrain.cpp
         VertexBufferType.cpp
-        RenderableData.cpp
+        VertexArray.cpp
 		Image.cpp
 		InlineRenderable.cpp
 		Material.cpp

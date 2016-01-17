@@ -1,19 +1,19 @@
-﻿#include<hgl/graph/RenderableData.h>
+﻿#include<hgl/graph/VertexArray.h>
 
 namespace hgl
 {
     namespace graph
     {
-        RenderableData::RenderableData(uint prim)
+        VertexArray::VertexArray(uint prim)
         {
             primitive=prim;
-            
+
             vb_color_format=HGL_COLOR_NONE;
 
             NEW_NULL_ARRAY(vertex_buffer,VertexBufferBase *,vbtEnd);
         }
 
-        RenderableData::~RenderableData()
+        VertexArray::~VertexArray()
         {
             SAFE_CLEAR_OBJECT_ARRAY(vertex_buffer,vbtEnd);
         }
@@ -24,11 +24,11 @@ namespace hgl
         * @param vb 数据缓冲区
         * @return 是否设置成功
         */
-        bool RenderableData::SetVertexBuffer(VertexBufferType vbt,VertexBufferBase *vb)
+        bool VertexArray::SetVertexBuffer(VertexBufferType vbt,VertexBufferBase *vb)
         {
             if(vbt<0||vbt>=vbtEnd)
             {
-                LOG_ERROR(OS_TEXT("RenderableData::SetVertexBuffer设置的数据类型错误：")+OSString(vbt));
+                LOG_ERROR(OS_TEXT("VertexArray::SetVertexBuffer设置的数据类型错误：")+OSString(vbt));
                 return(false);
             }
 
@@ -36,7 +36,7 @@ namespace hgl
             {
                 if(vertex_buffer[vbt]==vb)return(true); //有重复设的情况
 
-                LOG_ERROR(OS_TEXT("RenderableData::SetVertexBuffer设置的数据缓冲区已有数据"));
+                LOG_ERROR(OS_TEXT("VertexArray::SetVertexBuffer设置的数据缓冲区已有数据"));
                 return(false);
             }
 
@@ -52,17 +52,17 @@ namespace hgl
         * @param vbt 要清除的数据缓冲区类型
         * @return 是否清除成功
         */
-        bool RenderableData::ClearVertexBuffer(VertexBufferType vbt)
+        bool VertexArray::ClearVertexBuffer(VertexBufferType vbt)
         {
             if(vbt<0||vbt>=vbtEnd)
             {
-                LOG_ERROR(OS_TEXT("RenderableData::ClearVertexBuffer要清除的数据类型错误：")+OSString(vbt));
+                LOG_ERROR(OS_TEXT("VertexArray::ClearVertexBuffer要清除的数据类型错误：")+OSString(vbt));
                 return(false);
             }
 
             if(!vertex_buffer[vbt])
             {
-                LOG_ERROR(OS_TEXT("RenderableData::ClearVertexBuffer要清除的数据缓冲区没有数据：")+OSString(vbt));
+                LOG_ERROR(OS_TEXT("VertexArray::ClearVertexBuffer要清除的数据缓冲区没有数据：")+OSString(vbt));
                 return(false);
             }
 
@@ -72,7 +72,7 @@ namespace hgl
             return(true);
         }
 
-        VertexBufferBase *RenderableData::GetVertexBuffer(VertexBufferType vbt)                     ///<取得顶点缓冲区数据
+        VertexBufferBase *VertexArray::GetVertexBuffer(VertexBufferType vbt)                     ///<取得顶点缓冲区数据
         {
             if(vbt<0||vbt>=vbtEnd)return(nullptr);
 
@@ -84,7 +84,7 @@ namespace hgl
         * @return 可绘制数量数量
         * @return -1 出错
         */
-        int RenderableData::GetDrawCount()
+        int VertexArray::GetDrawCount()
         {
             if(vertex_buffer[vbtIndex])
                 return vertex_buffer[vbtIndex]->GetCount();

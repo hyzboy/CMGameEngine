@@ -68,7 +68,7 @@ namespace hgl
 		* @param vb 数据缓冲区
 		* @return 是否设置成功
 		*/
-		bool RenderableData::_SetVertexBuffer(VertexBufferType vbt, VertexBufferBase *vb)
+		bool VertexArray::_SetVertexBuffer(VertexBufferType vbt, VertexBufferBase *vb)
 		{
 			vb->CreateVertexBuffer(vbt == vbtIndex ? GL_ELEMENT_ARRAY_BUFFER : GL_ARRAY_BUFFER);
 

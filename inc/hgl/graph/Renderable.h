@@ -1,10 +1,10 @@
-﻿#ifndef HGL_GRAPH_RENDERABLE_INCLUDE
+#ifndef HGL_GRAPH_RENDERABLE_INCLUDE
 #define HGL_GRAPH_RENDERABLE_INCLUDE
 
 #include<hgl/graph/Shader.h>
 #include<hgl/graph/Material.h>
 #include<hgl/graph/Primivate.h>
-#include<hgl/graph/RenderableData.h>
+#include<hgl/graph/VertexArray.h>
 #include<hgl/graph/RenderState.h>
 namespace hgl
 {
@@ -20,7 +20,7 @@ namespace hgl
 
 		protected:
 
-            RenderableData *data;                                                                                           ///<数据
+            VertexArray *data;                                                                                           ///<数据
 
 			Material *material;																							    ///<材质
 			bool mtl_private;																							    ///<材质是否私有
@@ -42,7 +42,7 @@ namespace hgl
 
 		public:
 
-            Renderable(RenderableData *,Shader *s=nullptr);
+            Renderable(VertexArray *,Shader *s=nullptr);
 			~Renderable();
 
 		public:
