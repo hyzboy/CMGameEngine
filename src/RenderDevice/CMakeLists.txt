@@ -12,6 +12,7 @@ set(CM_GLSL_SHADER_MAKER_SOURCE     ShaderMaker/ShaderStringList.cpp
 
 set(CM_GLSL_SOURCE                  GLSL/Shader.cpp
                                     GLSL/GLSL.cpp
+                                    GLSL/ShaderStorage.cpp
                                     GLSL/ShaderDataBlock.cpp
                                     GLSL/UBO.cpp)
 

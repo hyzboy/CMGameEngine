@@ -319,8 +319,7 @@ namespace hgl
 
 		/**
 		* 生成Vertex Shader代码
-		* @param able 可渲染数据指针
-		* @param mvp 是否有mvp矩阵
+		* @param state 渲染状态
 		* @return 生成的Vertex Shader代码
 		* @return NULL 生成失身为
 		*/
@@ -330,6 +329,8 @@ namespace hgl
 		char *MakeVertexShader(RenderState *state)
 #endif//
 		{
+			if(!state)return(nullptr);
+
 			shadergen::vs code;
 
 			code.add_version(330);		//OpenGL 3.3
@@ -406,14 +407,14 @@ namespace hgl
 
 				for(int i=0;i<mtcMax;i++)							//增加贴图坐标
 				{
-					if(!state->tex_coord[i])continue;
+					if(!state->vbc[i])continue;
 
-					const VertexBufferType	vbt	=state->tex_vbt[i];
-					const int				vc	=state->tex_coord[i];
+					const VertexBufferType	vbt	=state->vbt[i];			//当前通道顶点缓冲区类型
+					const uint8				vbc	=state->vbc[i];			//当前通道顶点缓冲区坐标维数
 					const char *			vbn	=VertexBufferName[vbt];
 
-					code.add_in_texcoord(vbt,vbn,vc,i);		//第一个参数用vbt而不用i是为了让shader中的texcoord?编号与程序中填写的缓冲区编号一致，便于调试查看
-					code.add_out_texcoord(vc,i,vbn);		//一般是输出到fragment shader用
+					code.add_in_texcoord(vbt,vbn,vbc,i);	//第一个参数用vbt而不用i是为了让shader中的texcoord?编号与程序中填写的缓冲区编号一致，便于调试查看
+					code.add_out_texcoord(vbc,i,vbn);		//一般是输出到fragment shader用
 
 					tex_count++;
 				}

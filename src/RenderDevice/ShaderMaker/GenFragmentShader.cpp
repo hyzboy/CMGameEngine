@@ -69,7 +69,7 @@ namespace hgl
 			/**
 			* 增加一张贴图
 			* @param mtc_index 成份索引
-			* @param num 坐标维数
+			* @param coord_num 坐标维数
 			* @param source 数据源名称
 			*/
 			void fs::add_in_texture(int mtc_index,int coord_num,const char *source)
@@ -187,21 +187,17 @@ namespace hgl
 
 		/**
 		* 生成Fragment Shader代码
-		* @param able 可渲染数据指针
+		* @param state 渲染状态
 		* @return 生成的Fragment Shader代码
 		* @return NULL 生成失败
 		*/
 #ifdef _DEBUG
-		char *MakeFragmentShader(Renderable *able,RenderState *state,const os_char *filename)
+		char *MakeFragmentShader(RenderState *state,const os_char *filename)
 #else
-		char *MakeFragmentShader(Renderable *able,RenderState *state)
+		char *MakeFragmentShader(RenderState *state)
 #endif//_DEBUG
 		{
-			if(!able)return(nullptr);
-
-			Material *mat=able->GetMaterial();
-
-			if(!mat)return(nullptr);
+			if(!state)return(nullptr);
 
 			shadergen::fs code;
 
@@ -242,7 +238,7 @@ namespace hgl
 //				}
 			}
 
-			if(mat->GetTextureNumber())							//如果有贴图
+			if(state->tex_number)							//如果有贴图
 			{
  				int count=0;
 
@@ -255,23 +251,19 @@ namespace hgl
 				{
 					if(mtc==mtcHeight)continue;					//高度图不在fs处理
 
-					Texture *tex=mat->GetTexture(mtc);			//取一下测试无指定坐标贴图是否存在
-
-					if(!tex)continue;
+					if(!state->vbc[mtc])continue;
 
 					if(state->height_map
 					&&(mtc>=mtcDiffuse&&mtc<mtcPalette))		//使用高度图时，这一部分贴图无需贴图坐标
 					{
-						code.add_in_texture(mtc,tex->GetCoordNumber(),MaterialTextureName[mtcHeight]);			//加入贴图，从高度图顶点得来的纹理坐标
+						code.add_in_texture(mtc,state->tex[mtc],MaterialTextureName[mtcHeight]);				//加入贴图，从高度图顶点得来的纹理坐标
 					}
 					else
 					{
-						VertexBufferBase *vb=able->GetTexCoord(mtc);											//普通方式，必须在对应通道有数据,虽然有不需要数据的情况，但我们暂时不处理
+						if(!state->tex[mtc])continue;
 
-						if(!vb)continue;
-
-						code.add_in_texture(mtc,tex->GetCoordNumber(),MaterialTextureName[mtc]);				//从对应通道得来的纹理坐标
-						code.add_in_texcoord(vb->GetComponent(),MaterialTextureName[mtc]);
+						code.add_in_texture(mtc,state->tex[mtc],MaterialTextureName[mtc]);						//从对应通道得来的纹理
+						code.add_in_texcoord(state->vbc[mtc],MaterialTextureName[mtc]);							//从对应通道得来的纹理坐标
 					}
 
 					count++;
@@ -302,6 +294,6 @@ namespace hgl
 #endif//_DEBUG
 
 			return code.end_get();
-		}//char *MakeFragmentShader(Renderable *able)
+		}//char *MakeFragmentShader(RenderState *state)
 	}//namespace graph
 }//namespace hgl

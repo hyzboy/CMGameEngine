@@ -79,7 +79,7 @@ namespace hgl
 
             const RenderState * GetRenderState      ()const { return &state; }                                              ///<取得渲染状态
 
-            bool				AutoCreateShader	(ShaderStorage *,bool mvp);												///<自动创建Shader
+            Shader *			AutoCreateShader	(ShaderStorage *,bool mvp);												///<自动创建Shader
 		};//class Renderable
 	}//namespace graph
 }//namespace hgl

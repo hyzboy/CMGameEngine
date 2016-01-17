@@ -172,7 +172,7 @@ namespace hgl
 
 			if(!vb_vertex)return(false);						//没顶点，画不了
 
-			memset(&state,0,sizeof(state));
+			hgl_zero(state);
 
 			state.mvp					=mvp;
 			state.axis					=material->GetHeightAxis();
@@ -196,9 +196,11 @@ namespace hgl
 
 			for(int i=0;i<mtcMax;i++)
 			{
-				if(material->GetTexture(i))
+				Texture *tex=material->GetTexture(i);
+
+				if(tex)
 				{
-					state.tex[i]=true;
+					state.tex[i]=tex->GetCoordNumber();
 					++state.tex_number;
 				}
 
@@ -207,8 +209,8 @@ namespace hgl
 
 				if(vb)
 				{
-					state.tex_coord[i]=vb->GetComponent();
-					state.tex_vbt[i]=vbt;
+					state.vbc[i]=vb->GetComponent();
+					state.vbt[i]=vbt;
 				}
 			}
 
@@ -245,20 +247,7 @@ namespace hgl
 					return(nullptr);
 			}
 
-			Shader *new_shader;
-
-			if(!storage->Get(state,new_shader))			//如果仓库中有状态一样的，则直接从仓库中取，而不重新创建
-			{
-				new_shader=CreateShader(this,mvp,state
-	#ifdef _DEBUG
-					,shader_filename
-	#endif//_DEBUG
-				);
-
-                storage->Add(state,new_shader);			//加入到仓库
-			}
-
-			shader=new_shader;
+			shader=storage->Get(state);
 
 			return shader;
 		}

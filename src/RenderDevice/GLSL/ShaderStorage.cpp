@@ -1,0 +1,94 @@
+﻿#include<hgl/graph/ShaderStorage.h>
+
+namespace hgl
+{
+	namespace graph
+	{
+		struct RenderState;
+
+#ifdef _DEBUG
+		char *MakeVertexShader(RenderState *,const os_char *save_filename=nullptr);
+		char *MakeFragmentShader(RenderState *,const os_char *save_filename=nullptr);
+#else
+		char *MakeVertexShader(bool,RenderState *);
+		char *MakeFragmentShader(RenderState *);
+#endif//_DEBUG
+
+		Shader *CreateShader(	const char *vertex_shader,
+								const char *control_shader,
+								const char *evaluation_shader,
+								const char *geometry_shader,
+								const char *fragment_shader)
+		{
+            if(!vertex_shader||!fragment_shader)return(nullptr);            //opengl core时代不可能没有vs/fs
+
+			Shader *shader=new Shader;
+
+            if(vertex_shader    ){if(!shader->AddShader(stVertex,     vertex_shader       )){delete shader;return(nullptr);}}
+            if(control_shader   ){if(!shader->AddShader(stTessControl,control_shader      )){delete shader;return(nullptr);}}
+            if(evaluation_shader){if(!shader->AddShader(stTessEval,   evaluation_shader   )){delete shader;return(nullptr);}}
+            if(geometry_shader  ){if(!shader->AddShader(stGeometry,   geometry_shader     )){delete shader;return(nullptr);}}
+            if(fragment_shader  ){if(!shader->AddShader(stFragment,   fragment_shader     )){delete shader;return(nullptr);}}
+
+            if(shader->Build())
+                return(shader);
+
+            delete shader;
+            return(nullptr);
+		}
+
+#ifdef _DEBUG
+		Shader *CreateShader(RenderState *state,const os_char *save_filename)
+		{
+			char *vs,*fs;
+
+			if(save_filename)
+			{
+				os_char vs_filename[HGL_MAX_PATH];
+				os_char fs_filename[HGL_MAX_PATH];
+
+				strcpy(vs_filename,HGL_MAX_PATH,save_filename);strcat(vs_filename,HGL_MAX_PATH,OS_TEXT(".vs"),3);
+				strcpy(fs_filename,HGL_MAX_PATH,save_filename);strcat(fs_filename,HGL_MAX_PATH,OS_TEXT(".fs"),3);
+
+				vs=MakeVertexShader(state,vs_filename);
+				fs=MakeFragmentShader(state,fs_filename);
+			}
+			else
+			{
+				vs=MakeVertexShader(state);
+				fs=MakeFragmentShader(state);
+			}
+#else
+		Shader *CreateShader(RenderState *state)
+		{
+			char *vs=MakeVertexShader(state);
+			char *fs=MakeFragmentShader(state);
+#endif//_DEBUG
+
+			Shader *shader=nullptr;
+
+			if(vs&&fs)
+			{
+				shader=new Shader;
+
+				if(!shader->AddVertexShader(vs)
+				 ||!shader->AddFragmentShader(fs)
+				 ||!shader->Build())
+				{
+					delete shader;
+					shader=nullptr;
+				}
+			}
+
+			delete[] vs;		//delete[] nullptr不是个错误，所以不用检测
+			delete[] fs;
+
+			return(shader);
+		}
+
+		Shader *ShaderStorage::Create(const RenderState &state)
+		{
+			return CreateShader(&state);
+		}
+	}//namespace graph
+}//namespace hgl
