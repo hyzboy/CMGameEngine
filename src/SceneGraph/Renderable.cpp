@@ -1,4 +1,4 @@
-#include<hgl/graph/Renderable.h>
+﻿#include<hgl/graph/Renderable.h>
 #include<hgl/graph/Render.h>
 
 namespace hgl
@@ -66,7 +66,7 @@ namespace hgl
 			if(vbt)
 				*vbt=(VertexBufferType)index;
 
-			return(vertex_buffer[index]);
+			return va->GetVertexBuffer(*vbt);
 		}
 
 		bool Renderable::SetTexCoord(int mtc,VertexBufferType vbt)
@@ -80,8 +80,7 @@ namespace hgl
 			 ||mtc==mtcShadow)					//阴影贴图不需要指定坐标
 			 return(false);
 
-			if(vbt<vbtDiffuseTexCoord
-			 ||vbt>=vbtDiffuseTexCoord+HGL_MAX_TEXTURE_UNITS)	//超出最大贴图数量
+			if(vbt<vbtDiffuseTexCoord)	//超出最大贴图数量
 			 return(false);
 
 			TextureChannels[mtc]=vbt;
@@ -116,9 +115,9 @@ namespace hgl
 			 ||DrawCount==-1)
 			{
 				start=0;
-				count=GetDrawCount();
+				count=va->GetDrawCount();
 
-				return;
+				return(false);
 			}
 
 			start=DrawStart;

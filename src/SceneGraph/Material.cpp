@@ -49,7 +49,7 @@ namespace hgl
 			Shininess=40.0f;
 			Transparency=1.0f;
 
-			hgl_set(texture_list,0,mtcMax);
+			hgl_zero(texture_list);
 			texture_count=0;
 		}
 
@@ -93,7 +93,7 @@ namespace hgl
 
 		void Material::ClearTexture()
 		{
-			hgl_set(texture_list,0,mtcMax);
+			hgl_zero(texture_list);
 			texture_count=0;
 		}
 

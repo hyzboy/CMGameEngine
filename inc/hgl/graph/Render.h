@@ -4,7 +4,7 @@
 #include<hgl/type/List.h>
 #include<hgl/type/ResManage.h>
 #include<hgl/VectorMath.h>
-#include<hgl/graph/Texture.h>
+#include<hgl/graph/Texture2D.h>
 #include<hgl/graph/Material.h>
 #include<hgl/graph/VertexBuffer.h>
 #include<hgl/graph/Renderable.h>
