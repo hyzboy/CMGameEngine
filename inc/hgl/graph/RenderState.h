@@ -1,6 +1,7 @@
 ﻿#ifndef HGL_GRAPH_RENDER_STATE_INCLUDE
 #define HGL_GRAPH_RENDER_STATE_INCLUDE
 
+#include<hgl/graph/Axis.h>
 #include<hgl/graph/TextureChannels.h>
 #include<string.h>
 namespace hgl
@@ -10,7 +11,7 @@ namespace hgl
         struct RenderState
         {
             bool mvp;                   //是否包含MVP矩阵
-            uint8 axis;					//高度轴方向
+            Axis axis;					//高度轴方向
 
             bool vertex_color;          //是否包含顶点颜色
             bool vertex_normal;         //是否包含顶点法线
@@ -26,13 +27,13 @@ namespace hgl
 
             bool height_map;            //是否是高度图
 
-            uint8 vertex_color_format;  //顶点色格式
+            ColorFormat vertex_color_format;  //顶点色格式
             uint8 vertex_coord;         //顶点坐标维数
 
             uint8 tex_number;			//贴图数量
             uint8 tex[mtcMax];          //通道纹理坐标维数(未来改成纹理类型)
             uint8 vbc[mtcMax];    		//通道顶点坐标维数
-            uint8 vbt[mtcMax];			//通道对应的顶点缓冲区类型
+            VertexBufferType vbt[mtcMax];			//通道对应的顶点缓冲区类型
 
             //仅测试用
             bool lighting;              //是否有光照

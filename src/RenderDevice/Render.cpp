@@ -187,8 +187,6 @@ namespace hgl
 			//灯光
 			if(state->lighting)
 			{
-				glsl->Shader::SetUniform3fv(HGL_VS_LIGHT_POSITION,mat->GetLightPosition());
-				glsl->Shader::SetUniform1f(HGL_VS_GLOBAL_LIGHT_INTENSITY,mat->GetGlobalLightIntensity());
 			}
 
 			return(true);

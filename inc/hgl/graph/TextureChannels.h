@@ -11,7 +11,7 @@ namespace hgl
         enum MaterialTextureChannels
         {
 			mtcNone=-1,
-			
+
             mtcDiffuse=0,               ///<漫反射
             mtcAmbient,                 ///<环境光
             mtcSpecular,                ///<镜面光
@@ -33,7 +33,7 @@ namespace hgl
 
 		using MATERIAL_TEXTURE_CHANNEL_NAME=char[MATERIAL_TEXTURE_CHANNEL_NAME_MAX_SIZE];
 
-        void GetMaterialTextureName(MATERIAL_TEXTURE_CHANNEL_NAME,int);  ///<获取贴图通道名称
+        bool GetMaterialTextureName(MATERIAL_TEXTURE_CHANNEL_NAME,int);  ///<获取贴图通道名称
     }//namespace graph
 }//namespace hgl
 #endif//HGL_GRAPH_TEXTURE_CHANNELS_INCLUDE

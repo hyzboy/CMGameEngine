@@ -194,15 +194,15 @@ namespace hgl
 		extern Texture2D *GrayWhiteGrid;                                                            ///<灰白格贴图
 		extern Texture2D *BlueWhiteGrid;                                                            ///<蓝白格贴图
 
-        extern VertexArray *WireCube;                                                            ///<白色线框立方体
-        extern VertexArray *WireRect;                                                            ///<线框2D矩形
-        extern VertexArray *WireCircle;                                                          ///<空心圆
-
-        extern VertexArray *SolidCube;															///<实心立方体
-		extern VertexArray *SolidRect;															///<实心块2D矩形
-		extern VertexArray *SolidCircle;															///<实心圆
-
-        extern VertexArray *TextureRect;                                                         ///<带贴图的2D矩形
+//         extern VertexArray *WireCube;                                                            ///<白色线框立方体
+//         extern VertexArray *WireRect;                                                            ///<线框2D矩形
+//         extern VertexArray *WireCircle;                                                          ///<空心圆
+//
+//         extern VertexArray *SolidCube;															///<实心立方体
+// 		extern VertexArray *SolidRect;															///<实心块2D矩形
+// 		extern VertexArray *SolidCircle;															///<实心圆
+//
+//         extern VertexArray *TextureRect;                                                         ///<带贴图的2D矩形
 
 				bool DirectRender(Renderable *obj,const Matrix4f *proj,const Matrix4f *mv);			///<直接渲染一个可渲染数据
 
@@ -269,107 +269,107 @@ namespace hgl
 			return DirectRender(obj,&Ortho2DMatrix,&fin);
 		}
 
-		/**
-		* 渲染一个贴图在2D空间中
-		* @param l 左边界
-		* @param t 上边界
-		* @param w 宽度
-		* @param h 高度
-		* @param color 颜色系数
-		* @return 是否成功
-		*/
-		inline bool Render2DRGBTextureRect	(Texture2D *tex,float l,float t,float w,float h,const Color4f &color=Color4f(1,1,1,1))				///<渲染一个2DRGB贴图
-		{
-			if(!TextureRect||!tex||!w||!h)return(false);
-
-			Material *mtl=TextureRect->GetMaterial();
-
-			mtl->SetTexture(mtcDiffuse,tex);
-
-			if(color.a>=1.0f)
-				mtl->SetBlend(false);
-			else
-			{
-				mtl->SetBlend(true);
-				mtl->SetBlend(HGL_BLEND_SRC_ALPHA,HGL_BLEND_ONE_MINUS_SRC_ALPHA);
-			}
-
-			mtl->SetColor(color);
-
-			TextureRect->AutoCreateShader(true);
-
-			const Matrix4f mat=translate(l,t,0)*scale(w,h,1.0f);
-
-			const bool result=DirectRender2D(TextureRect,mat);
-
-			mtl->ClearTexture(mtcDiffuse);
-
-			return result;
-		}
-
-		/**
-		* 渲染一个贴图在2D空间中
-		* @param l 左边界
-		* @param t 上边界
-		* @param w 宽度
-		* @param h 高度
-		* @param color 颜色系数
-		* @return 是否成功
-		*/
-		inline bool Render2DRGBATextureRect(Texture2D *tex,float l,float t,float w,float h,const Color4f &color=Color4f(1,1,1,1))				///<渲染一个2DRGBA贴图
-		{
-			if(!TextureRect||!tex||!w||!h)return(false);
-
-			Material *mtl=TextureRect->GetMaterial();
-
-			mtl->SetTexture(mtcDiffuse,tex);
-
-			mtl->SetBlend(true);
-			mtl->SetBlend(HGL_BLEND_SRC_ALPHA,HGL_BLEND_ONE_MINUS_SRC_ALPHA);
-			mtl->SetColor(color);
-
-			TextureRect->AutoCreateShader(true);
-
-			const Matrix4f mat=translate(l,t,0)*scale(w,h,1.0f);
-
-			const bool result=DirectRender2D(TextureRect,mat);
-
-			mtl->ClearTexture(mtcDiffuse);
-
-			return result;
-		}
-
-		/**
-		* 渲染一个贴图在2D空间中
-		* @param l 左边界
-		* @param t 上边界
-		* @param sw 宽度缩放比
-		* @param sh 高度缩放比
-		* @param color 颜色系数
-		* @return 是否成功
-		*/
-		inline bool Render2DTextureRGB		(Texture2D *tex,float l,float t,float sw=1.0f,float sh=1.0f,const Color4f &color=Color4f(1,1,1,1))				///<渲染一个2DRGB贴图
-		{
-			if(!tex||!sw||!sh)return(false);
-
-			return Render2DRGBTextureRect(tex,l,t,float(tex->GetWidth())*sw,float(tex->GetHeight())*sh,color);
-		}
-
-		/**
-		* 渲染一个贴图在2D空间中
-		* @param l 左边界
-		* @param t 上边界
-		* @param sw 宽度缩放比
-		* @param sh 高度缩放比
-		* @param color 颜色系数
-		* @return 是否成功
-		*/
-		inline bool Render2DTextureRGBA	(Texture2D *tex,float l,float t,float sw=1.0f,float sh=1.0f,const Color4f &color=Color4f(1,1,1,1))				///<渲染一个2DRGBA贴图
-		{
-			if(!tex||!sw||!sh)return(false);
-
-			return Render2DRGBATextureRect(tex,l,t,float(tex->GetWidth())*sw,float(tex->GetHeight())*sh,color);
-		}
+// 		/**
+// 		* 渲染一个贴图在2D空间中
+// 		* @param l 左边界
+// 		* @param t 上边界
+// 		* @param w 宽度
+// 		* @param h 高度
+// 		* @param color 颜色系数
+// 		* @return 是否成功
+// 		*/
+// 		inline bool Render2DRGBTextureRect	(Texture2D *tex,float l,float t,float w,float h,const Color4f &color=Color4f(1,1,1,1))				///<渲染一个2DRGB贴图
+// 		{
+// 			if(!TextureRect||!tex||!w||!h)return(false);
+//
+// 			Material *mtl=TextureRect->GetMaterial();
+//
+// 			mtl->SetTexture(mtcDiffuse,tex);
+//
+// 			if(color.a>=1.0f)
+// 				mtl->SetBlend(false);
+// 			else
+// 			{
+// 				mtl->SetBlend(true);
+// 				mtl->SetBlend(HGL_BLEND_SRC_ALPHA,HGL_BLEND_ONE_MINUS_SRC_ALPHA);
+// 			}
+//
+// 			mtl->SetColor(color);
+//
+// 			TextureRect->AutoCreateShader(true);
+//
+// 			const Matrix4f mat=translate(l,t,0)*scale(w,h,1.0f);
+//
+// 			const bool result=DirectRender2D(TextureRect,mat);
+//
+// 			mtl->ClearTexture(mtcDiffuse);
+//
+// 			return result;
+// 		}
+//
+// 		/**
+// 		* 渲染一个贴图在2D空间中
+// 		* @param l 左边界
+// 		* @param t 上边界
+// 		* @param w 宽度
+// 		* @param h 高度
+// 		* @param color 颜色系数
+// 		* @return 是否成功
+// 		*/
+// 		inline bool Render2DRGBATextureRect(Texture2D *tex,float l,float t,float w,float h,const Color4f &color=Color4f(1,1,1,1))				///<渲染一个2DRGBA贴图
+// 		{
+// 			if(!TextureRect||!tex||!w||!h)return(false);
+//
+// 			Material *mtl=TextureRect->GetMaterial();
+//
+// 			mtl->SetTexture(mtcDiffuse,tex);
+//
+// 			mtl->SetBlend(true);
+// 			mtl->SetBlend(HGL_BLEND_SRC_ALPHA,HGL_BLEND_ONE_MINUS_SRC_ALPHA);
+// 			mtl->SetColor(color);
+//
+// 			TextureRect->AutoCreateShader(true);
+//
+// 			const Matrix4f mat=translate(l,t,0)*scale(w,h,1.0f);
+//
+// 			const bool result=DirectRender2D(TextureRect,mat);
+//
+// 			mtl->ClearTexture(mtcDiffuse);
+//
+// 			return result;
+// 		}
+//
+// 		/**
+// 		* 渲染一个贴图在2D空间中
+// 		* @param l 左边界
+// 		* @param t 上边界
+// 		* @param sw 宽度缩放比
+// 		* @param sh 高度缩放比
+// 		* @param color 颜色系数
+// 		* @return 是否成功
+// 		*/
+// 		inline bool Render2DTextureRGB		(Texture2D *tex,float l,float t,float sw=1.0f,float sh=1.0f,const Color4f &color=Color4f(1,1,1,1))				///<渲染一个2DRGB贴图
+// 		{
+// 			if(!tex||!sw||!sh)return(false);
+//
+// 			return Render2DRGBTextureRect(tex,l,t,float(tex->GetWidth())*sw,float(tex->GetHeight())*sh,color);
+// 		}
+//
+// 		/**
+// 		* 渲染一个贴图在2D空间中
+// 		* @param l 左边界
+// 		* @param t 上边界
+// 		* @param sw 宽度缩放比
+// 		* @param sh 高度缩放比
+// 		* @param color 颜色系数
+// 		* @return 是否成功
+// 		*/
+// 		inline bool Render2DTextureRGBA	(Texture2D *tex,float l,float t,float sw=1.0f,float sh=1.0f,const Color4f &color=Color4f(1,1,1,1))				///<渲染一个2DRGBA贴图
+// 		{
+// 			if(!tex||!sw||!sh)return(false);
+//
+// 			return Render2DRGBATextureRect(tex,l,t,float(tex->GetWidth())*sw,float(tex->GetHeight())*sh,color);
+// 		}
 
 		//渲染列表渲染
 		class SceneNode;

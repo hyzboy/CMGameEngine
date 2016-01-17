@@ -74,8 +74,8 @@ namespace hgl
 			{
 				add_layout_in(vbtNormal,HGL_VS_NORMAL,3);
 				//add_out_vec3(HGL_FS_NORMAL);
-				add_uniform_float(HGL_VS_GLOBAL_LIGHT_INTENSITY);
-				add_out_float(HGL_FS_LIGHT_INTENSITY);
+//				add_uniform_float(HGL_VS_GLOBAL_LIGHT_INTENSITY);
+//				add_out_float(HGL_FS_LIGHT_INTENSITY);
 
 				in_normal=sitVertexAttrib;
 
@@ -310,15 +310,15 @@ namespace hgl
 
 				if(in_normal)
 				{
-#ifdef HGL_MATRIX_LEFT
-                    add("\n\tVP=normalize(" HGL_VS_LIGHT_POSITION "-" HGL_VS_NORMAL_MATRIX "*Position);\n");
-					add("\tMVNormal=normalize(" HGL_VS_NORMAL_MATRIX "*" HGL_VS_NORMAL ");\n\n");
-#else
-                    add("\n\tVP=normalize(" HGL_VS_LIGHT_POSITION "-Position*" HGL_VS_NORMAL_MATRIX ");\n");
-                    add("\tMVNormal=normalize(" HGL_VS_NORMAL "*" HGL_VS_NORMAL_MATRIX ");\n\n");
-#endif//HGL_MATRIX_LEFT
-
-					add("\t" HGL_FS_LIGHT_INTENSITY "=" HGL_VS_GLOBAL_LIGHT_INTENSITY "+max(0.0,dot(MVNormal,VP));\n");
+// #ifdef HGL_MATRIX_LEFT
+//                     add("\n\tVP=normalize(" HGL_VS_LIGHT_POSITION "-" HGL_VS_NORMAL_MATRIX "*Position);\n");
+// 					add("\tMVNormal=normalize(" HGL_VS_NORMAL_MATRIX "*" HGL_VS_NORMAL ");\n\n");
+// #else
+//                     add("\n\tVP=normalize(" HGL_VS_LIGHT_POSITION "-Position*" HGL_VS_NORMAL_MATRIX ");\n");
+//                     add("\tMVNormal=normalize(" HGL_VS_NORMAL "*" HGL_VS_NORMAL_MATRIX ");\n\n");
+// #endif//HGL_MATRIX_LEFT
+//
+// 					add("\t" HGL_FS_LIGHT_INTENSITY "=" HGL_VS_GLOBAL_LIGHT_INTENSITY "+max(0.0,dot(MVNormal,VP));\n");
 				}
 
 				return(true);
@@ -370,7 +370,7 @@ namespace hgl
 			//灯光
 			if(state->lighting)
 			{
-				code.add_uniform_vec3(HGL_VS_LIGHT_POSITION);
+//				code.add_uniform_vec3(HGL_VS_LIGHT_POSITION);
 				code.add();
 
 				//法线
@@ -402,7 +402,7 @@ namespace hgl
 
 					code.add_in_texture(vbn,2,mtcHeight);
 
-					if(state.tex[mtcDiffuse])					//漫反射，绘制坐标即贴图坐标
+					if(state->tex[mtcDiffuse])					//漫反射，绘制坐标即贴图坐标
 					{
 						code.add_in_texcoord(vbtVertex,vbn,2,mtcDiffuse);
 						hm_map_count++;

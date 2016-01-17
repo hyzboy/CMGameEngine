@@ -3,26 +3,12 @@
 
 //#include<hgl/type/List.h>
 #include<hgl/VectorMath.h>
+#include<hgl/graph/Axis.h>
 //#include<hgl/graph/Transform.h>
 namespace hgl
 {
 	namespace graph
 	{
-		/**
-		* 轴枚举
-		*/
-		enum Axis
-		{
-			HGL_AXIS_NONE=0,
-
-			HGL_AXIS_X,
-			HGL_AXIS_Y,
-			HGL_AXIS_Z,
-
-			HGL_AXIS_END
-
-		};//enum Axis
-
 		/**
 		* 方向定位数据基类
 		*/

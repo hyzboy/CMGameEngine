@@ -24,7 +24,7 @@ namespace hgl
 			};
 		}//namespace
 
-        void GetMaterialTextureName(MATERIAL_TEXTURE_CHANNEL_NAME &mtc_name,int index)
+        bool GetMaterialTextureName(MATERIAL_TEXTURE_CHANNEL_NAME &mtc_name,int index)
 		{
 			if(index<=mtcNone)return(false);
 			if(index>=mtcMax+100)return(false);

@@ -19,9 +19,6 @@ namespace hgl
 		#define HGL_VS_COLOR					"Color"
 		#define HGL_VS_VERTEX					"Vertex"
 
-		#define HGL_VS_LIGHT_POSITION			"LightPosition"			//光源位置
-		#define HGL_VS_GLOBAL_LIGHT_INTENSITY	"GlobalLightIntensity"	//全局环境光强度
-
 		//fragment shader 部分
 		#define HGL_FS_NORMAL					"FragmentNormal"
 		#define HGL_FS_COLOR					"FragmentColor"
