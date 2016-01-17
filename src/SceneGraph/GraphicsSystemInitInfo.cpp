@@ -53,13 +53,8 @@ namespace hgl
 				graphics.gl.glsl=true;
 				graphics.gl.multi_texture=true;
 
-#ifdef HGL_OPENGL_USE_DSA
 				graphics.gl.major=4;
 				graphics.gl.minor=5;
-#else
-				graphics.gl.major=4;
-				graphics.gl.minor=5;
-#endif//HGL_OPENGL_USE_DSA
 
 #ifdef _DEBUG
                 graphics.gl.debug=true;

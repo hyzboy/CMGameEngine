@@ -28,15 +28,23 @@ SET(CM_SCENE_GRAPH_ALL_SOURCE    Camera.cpp
                                 )
 
 IF(WIN32)
-	add_library(CM.SceneGraph STATIC ${CM_SCENE_GRAPH_ALL_SOURCE})
+	add_library(CM.SceneGraph STATIC ${CM_SCENE_GRAPH_SOURCE})
 ELSE()
-	add_library(CM.SceneGraph SHARED ${CM_SCENE_GRAPH_ALL_SOURCE})
+	add_library(CM.SceneGraph SHARED ${CM_SCENE_GRAPH_SOURCE})
 ENDIF()
 
 IF(BUILD_OPENGL_LIB)
-	SET(CM_SCENE_GRAPH_RENDER_ALL_SOURCE
-		${BASE_GRAPH_OBJECT_SOURCE}
-		${GRAPHICS_APPLICATION_SOURCE}
+
+
+	SET(CM_OPENGL_SOURCE
+		OpenGLCore45/Core45Renderable.cpp
+		OpenGLCore45/Core45Texture1D.cpp
+		OpenGLCore45/Core45Texture2D.cpp
+		OpenGLCore45/Core45Texture3D.cpp
+		OpenGLCore45/Core45VertexBuffer.cpp
+	)
+
+	SET(CM_SCENE_GRAPH_RENDER_SOURCE
 	# 	HeightMapTerrain.cpp
         VertexBufferType.cpp
         RenderableData.cpp
@@ -50,13 +58,14 @@ IF(BUILD_OPENGL_LIB)
 		SceneOrient.cpp
 		SkyLight.cpp
 		Texture.cpp
+		Texture2D.cpp
 		TileData.cpp
 		Transform.cpp
 	)
 
-IF(WIN32)
-	add_library(CM.SceneGraphRender STATIC ${CM_SCENE_GRAPH_RENDER_ALL_SOURCE})
-ELSE()
-	add_library(CM.SceneGraphRender SHARED ${CM_SCENE_GRAPH_RENDER_ALL_SOURCE})
-ENDIF()
+	IF(WIN32)
+		add_library(CM.SceneGraphRender STATIC ${CM_SCENE_GRAPH_SOURCE} ${CM_SCENE_GRAPH_RENDER_SOURCE} ${BASE_GRAPH_OBJECT_SOURCE} ${GRAPHICS_APPLICATION_SOURCE})
+	ELSE()
+		add_library(CM.SceneGraphRender SHARED ${CM_SCENE_GRAPH_SOURCE} ${CM_SCENE_GRAPH_RENDER_SOURCE} ${BASE_GRAPH_OBJECT_SOURCE} ${GRAPHICS_APPLICATION_SOURCE})
+	ENDIF()
 ENDIF(BUILD_OPENGL_LIB)
