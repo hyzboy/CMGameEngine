@@ -325,20 +325,14 @@ namespace hgl
 		* @return NULL 生成失身为
 		*/
 #ifdef _DEBUG
-		char *MakeVertexShader(Renderable *able,bool mvp,RenderState *state,const os_char *filename)
+		char *MakeVertexShader(RenderState *state,const os_char *filename)
 #else
-		char *MakeVertexShader(Renderable *able,bool mvp,RenderState *state)
+		char *MakeVertexShader(RenderState *state)
 #endif//
 		{
-			if(!able)return(nullptr);
-
-			Material *mat=able->GetMaterial();
-
-			if(!mat)return(nullptr);
-
 			shadergen::vs code;
 
-			code.add_version(440);		//OpenGL 4.4
+			code.add_version(330);		//OpenGL 3.3
 
 			if(state->mvp)
 			{
@@ -346,18 +340,16 @@ namespace hgl
 				code.add();
 			}
 
-			int vertex_component=able->GetVertexCompoment();
-
 			//顶点
 			{
-				code.add_in_vertex(vertex_component);
+				code.add_in_vertex(state->vertex_coord);
 				code.add();
 			}
 
 			//颜色
 			if(state->vertex_color)					//使用顶点颜色
 			{
-				code.add_in_color(able->GetVertexColorFormat());
+				code.add_in_color(state->vertex_color_format);
 				code.add();
 			}
 //				else
@@ -381,14 +373,14 @@ namespace hgl
 			}
 
 			//纹理
-			if(mat->GetTextureNumber())					//如果有贴图
+			if(state->tex_number)					//如果有贴图
 			{
 				int tex_count=0;
 
 				//高度图
 				if(state->height_map)					//如果是高度图，则是拿vertex当高度图坐标、以及各种纹理坐标
 				{										//高度图网格永远画在(0,0)-(1,1)的范围内，所以这个坐标同时可以直接用于高图度的纹理坐标，以及漫反射、法线、光照、阴影等贴图上。
-					if(vertex_component!=2)
+					if(state->vertex_coord!=2)
 					{
 						LOG_ERROR(OS_TEXT("使用高度图，但传入的顶点坐标不是2维数据."));
 						return(nullptr);
@@ -398,7 +390,7 @@ namespace hgl
 
 					code.add_in_texture(VertexBufferName[vbtVertex],2,mtcHeight);
 
-					if(mat->GetTexture(mtcDiffuse))					//漫反射，绘制坐标即贴图坐标
+					if(state.tex[mtcDiffuse])					//漫反射，绘制坐标即贴图坐标
 					{
 						code.add_in_texcoord(vbtVertex,VertexBufferName[vbtVertex],2,mtcDiffuse);
 						hm_map_count++;
@@ -409,19 +401,19 @@ namespace hgl
 
 					code.add();
 
-					code.set_height_axis(mat->GetHeightAxis());
+					code.set_height_axis(state->axis);
 				}
 
 				for(int i=0;i<mtcMax;i++)							//增加贴图坐标
 				{
-					VertexBufferType vbt;
-					VertexBufferBase *vb=able->GetTexCoord(i,&vbt);
+					if(!state->tex_coord[i])continue;
 
-					if(!vb)continue;
+					const VertexBufferType	vbt	=state->tex_vbt[i];
+					const int				vc	=state->tex_coord[i];
+					const char *			vbn	=VertexBufferName[vbt];
 
-					code.add_in_texcoord(vbt,VertexBufferName[vbt],vb->GetComponent(),i);		//第一个参数用vbt而不用i是为了让shader中的texcoord?编号与程序中填写的缓冲区编号一致，便于调试查看
-
-					code.add_out_texcoord(vb->GetComponent(),i,VertexBufferName[vbt]);			//一般是输出到fragment shader用
+					code.add_in_texcoord(vbt,vbn,vc,i);		//第一个参数用vbt而不用i是为了让shader中的texcoord?编号与程序中填写的缓冲区编号一致，便于调试查看
+					code.add_out_texcoord(vc,i,vbn);		//一般是输出到fragment shader用
 
 					tex_count++;
 				}

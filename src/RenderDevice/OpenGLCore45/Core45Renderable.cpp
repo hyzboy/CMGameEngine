@@ -1,4 +1,5 @@
 ﻿#include<hgl/graph/Renderable.h>
+#include<hgl/graph/ShaderStorage.h>
 #include"../GLSL/GLSL.h"
 #include<hgl/type/Smart.h>
 #include<hgl/type/Map.h>
@@ -35,29 +36,6 @@ namespace hgl
 
 			return(false);
 		}
-	}//namespace graph
-
-	namespace graph
-	{
-		//shader 仓库管理
-		//1.永不释放
-
-		MapObject<RenderState,Shader> ShaderStorage;						///<shader仓库
-
-		void InitShaderStorage()
-		{
-		}
-
-		void ClearShaderStorage()
-		{
-			ShaderStorage.Clear();
-		}
-
-		Shader *CreateShader(Renderable *,bool,RenderState *
-#ifdef _DEBUG
-			,const os_char *
-#endif//_DEBUG
-		);
 	}//namespace graph
 
 	namespace graph
@@ -196,7 +174,8 @@ namespace hgl
 
 			memset(&state,0,sizeof(state));
 
-			state.mvp=mvp;
+			state.mvp					=mvp;
+			state.axis					=material->GetHeightAxis();
 
 			state.vertex_normal			= va->GetVertexBuffer(vbtNormal);
 			state.vertex_color			= va->GetVertexBuffer(vbtColor);
@@ -218,12 +197,19 @@ namespace hgl
 			for(int i=0;i<mtcMax;i++)
 			{
 				if(material->GetTexture(i))
+				{
 					state.tex[i]=true;
+					++state.tex_number;
+				}
 
-				VertexBufferBase *vb= GetTexCoord(i,0);
+				VertexBufferType vbt;
+				VertexBufferBase *vb= GetTexCoord(i,&vbt);
 
 				if(vb)
+				{
 					state.tex_coord[i]=vb->GetComponent();
+					state.tex_vbt[i]=vbt;
+				}
 			}
 
 			state.lighting				= material->GetLight();
@@ -237,12 +223,10 @@ namespace hgl
 			return(true);
 		}
 
-		Shader *Renderable::AutoCreateShader(bool mvp
-#ifdef _DEBUG
-			,const os_char *shader_filename
-#endif//_DEBUG
-		)
+		Shader *Renderable::AutoCreateShader(ShaderStorage *storage,bool mvp)
 		{
+			if(!storage)return(nullptr);
+
 			if(shader)											//如果有shader存在
 			{
 				RenderState back_state=state;					//备份旧状态
@@ -263,15 +247,15 @@ namespace hgl
 
 			Shader *new_shader;
 
-			if(!ShaderStorage.Get(state,new_shader))			//如果仓库中有状态一样的，则直接从仓库中取，而不重新创建
+			if(!storage->Get(state,new_shader))			//如果仓库中有状态一样的，则直接从仓库中取，而不重新创建
 			{
-				new_shader=CreateShader(this,mvp,&state
+				new_shader=CreateShader(this,mvp,state
 	#ifdef _DEBUG
 					,shader_filename
 	#endif//_DEBUG
 				);
 
-                ShaderStorage.Add(state,new_shader);			//加入到仓库
+                storage->Add(state,new_shader);			//加入到仓库
 			}
 
 			shader=new_shader;

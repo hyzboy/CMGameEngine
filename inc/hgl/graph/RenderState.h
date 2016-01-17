@@ -10,6 +10,7 @@ namespace hgl
         struct RenderState
         {
             bool mvp;                   //是否包含MVP矩阵
+            uint8 axis;					//高度轴方向
 
             bool vertex_color;          //是否包含顶点颜色
             bool vertex_normal;         //是否包含顶点法线
@@ -27,8 +28,11 @@ namespace hgl
 
             uint8 vertex_color_format;  //顶点色格式
             uint8 vertex_coord;         //顶点坐标维数
+
+            uint8 tex_number;			//贴图数量
             bool  tex[mtcMax];          //这一通道是否有贴图
             uint8 tex_coord[mtcMax];    //这一通道是贴图坐标维数
+            uint8 tex_vbt[mtcMax];		//这一通道对应的顶点缓冲区类型
 
             //仅测试用
             bool lighting;              //是否有光照

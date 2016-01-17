@@ -10,6 +10,8 @@ namespace hgl
 {
 	namespace graph
 	{
+		class ShaderStorage;
+
 		/**
 		* 可渲染对象
 		*/
@@ -77,16 +79,7 @@ namespace hgl
 
             const RenderState * GetRenderState      ()const { return &state; }                                              ///<取得渲染状态
 
-            /**
-            * 自动创建生成shader
-            * @param mvp 渲染时是否使用projection矩阵与modelview矩阵
-            * @return 创建好的shader程序
-            */
-    #ifdef _DEBUG
-            Shader *            AutoCreateShader    (bool mvp=true,const os_char *filename=nullptr);                        ///<自动创建着色程序
-    #else
-            Shader *            AutoCreateShader    (bool mvp=true);                                                        ///<自动创建着色程序
-    #endif//_DEBUG
+            bool				AutoCreateShader	(ShaderStorage *,bool mvp);												///<自动创建Shader
 		};//class Renderable
 	}//namespace graph
 }//namespace hgl
