@@ -8,6 +8,8 @@ namespace hgl
     {
         Texture2D::Texture2D()
         {
+            type=HGL_TEXTURE_2D;
+			width=height=wrap_s=wrap_t=0;
             glCreateTextures(GL_TEXTURE_2D,1,&texture_id);
         }
 
@@ -37,7 +39,6 @@ namespace hgl
                 }
             }
 
-            type=HGL_TEXTURE_2D;
             width=w;
             height=h;
 

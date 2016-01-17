@@ -7,11 +7,6 @@ namespace hgl
 {
 	namespace graph
 	{
-		Texture2D::Texture2D()
-		{
-			width=height=wrap_s=wrap_t=0;
-		}
-
 		/**
 		* 根据位图设置一个贴图
 		* @param bmp 位图指针
