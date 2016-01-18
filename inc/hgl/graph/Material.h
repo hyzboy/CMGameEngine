@@ -219,6 +219,8 @@ namespace hgl
 			bool			ClearTexture(int mtc)				{return TextureList.Clear(mtc);}	///<清除指定贴图
 			void			ClearAllTexture()					{return TextureList.ClearAll();}	///<清除所有贴图
 		};//class Material
+
+		extern Material *default_material;					///<缺省材质
 	}//namespace graph
 }//namespace hgl
 #endif//HGL_GRAPH_MATERIAL_INCLUDE

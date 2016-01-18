@@ -16,6 +16,8 @@ namespace hgl
 			{
 				vertex_format=0;
 
+				color_material=false;
+
 				mvp_matrix=false;
 
 				in_normal=sitNone;
@@ -94,14 +96,21 @@ namespace hgl
 			{
 				if(fmt<=HGL_COLOR_NONE||fmt>=HGL_COLOR_END)return(0);
 
-				if(fmt==HGL_COLOR_ALPHA				){vertex_color_to_vec4="vec4(1.0,1.0,1.0," HGL_VS_COLOR ");";return(1);}
-				if(fmt==HGL_COLOR_LUMINANCE			){vertex_color_to_vec4="vec4(vec3(" HGL_VS_COLOR "),1.0);";return(1);}
-				if(fmt==HGL_COLOR_LUMINANCE_ALPHA	){vertex_color_to_vec4="vec4(vec3(" HGL_VS_COLOR ".x)," HGL_VS_COLOR ".y);";return(2);}
-				if(fmt==HGL_COLOR_RGB				){vertex_color_to_vec4="vec4(" HGL_VS_COLOR ",1.0);";return(3);}
-				if(fmt==HGL_COLOR_RGBA				){vertex_color_to_vec4=HGL_VS_COLOR ";";return(4);}
+				if(fmt==HGL_COLOR_ALPHA				){vertex_color_to_vec4="vec4(1.0,1.0,1.0," HGL_VS_COLOR ")";return(1);}
+				if(fmt==HGL_COLOR_LUMINANCE			){vertex_color_to_vec4="vec4(vec3(" HGL_VS_COLOR "),1.0)";return(1);}
+				if(fmt==HGL_COLOR_LUMINANCE_ALPHA	){vertex_color_to_vec4="vec4(vec3(" HGL_VS_COLOR ".x)," HGL_VS_COLOR ".y)";return(2);}
+				if(fmt==HGL_COLOR_RGB				){vertex_color_to_vec4="vec4(" HGL_VS_COLOR ",1.0)";return(3);}
+				if(fmt==HGL_COLOR_RGBA				){vertex_color_to_vec4=HGL_VS_COLOR;return(4);}
 
 				LOG_ERROR(OS_TEXT("输入的颜色格式无法处理：")+OSString(fmt));
 				return(0);
+			}
+
+			void vs::set_color_material()
+			{
+				color_material=true;
+
+				add_uniform_vec4(HGL_MATERIAL_COLOR);
 			}
 
 			void vs::add_in_color(ColorFormat fmt)
@@ -216,7 +225,15 @@ namespace hgl
 
 				if(in_vertex_color)		//有顶点颜色
 				{
-					add(U8_TEXT("\n\t" HGL_FS_COLOR "=")+vertex_color_to_vec4+U8_TEXT("\n"));
+					if(!color_material)
+						add(U8_TEXT("\n\t" HGL_FS_COLOR "=")+vertex_color_to_vec4+U8_TEXT(";\n"));
+					else
+						add(U8_TEXT("\n\t" HGL_FS_COLOR "=")+vertex_color_to_vec4+U8_TEXT("*" HGL_MATERIAL_COLOR ";\n"));
+				}
+				else
+				if(color_material)	//有材质颜色
+				{
+					add(U8_TEXT("\n\t" HGL_FS_COLOR "=" HGL_MATERIAL_COLOR ";\n"));
 				}
 
 				if(out_texcoord_count)	//有纹理坐标需要输出到fs
@@ -361,11 +378,11 @@ namespace hgl
 				code.add_in_color(state->vertex_color_format);
 				code.add();
 			}
-//				else
-//				if(state->color_material)				//使用独立颜色传入
-//				{
-//					code.add_uniform_color(4);			//使用uniform传入颜色
-//				}	//
+
+			if(state->color_material)				//使用颜色材质传入
+			{
+				code.set_color_material();
+			}
 
 			//灯光
 			if(state->lighting)
@@ -446,6 +463,6 @@ namespace hgl
 #endif//_DEBUG
 
 			return code.end_get();
-		}//char *MakeVertexShader(Renderable *able,bool ltw)
+		}//char *MakeVertexShader(Renderable *able)
 	}//namespace graph
 }//namespace hgl

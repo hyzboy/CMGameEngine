@@ -15,7 +15,7 @@ namespace hgl
 		{
 		protected:
 
-			virtual Shader *Create(const RenderState &);
+			Shader *Create(const RenderState &) HGL_OVERRIDE;
 		};//class ShaderStorage
 
 		extern ShaderStorage *global_shader_storage;							///<全局Shader仓库

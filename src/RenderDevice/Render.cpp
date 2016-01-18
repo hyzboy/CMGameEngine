@@ -35,6 +35,9 @@ namespace hgl
 
 		void InitPrimaryRenderBuffer();
 		void ClosePrimaryRenderBuffer();
+
+		void InitDefaultMaterial();
+		void ClearDefaultMaterial();
 		void InitGlobalShaderStorage();
 		void ClearGlobalShaderStorage();
         bool InitUBO();
@@ -58,6 +61,7 @@ namespace hgl
 			InitVertexBuffer();
 
             InitUBO();
+			InitDefaultMaterial();
 			InitGlobalShaderStorage();
 			InitPrimaryRenderBuffer();
 // 			InitFontStorage();
@@ -70,6 +74,7 @@ namespace hgl
 			ClearInlineRenderable();
 
 // 			ClearFontStorage();
+			ClearDefaultMaterial();
 			ClearGlobalShaderStorage();
 			CloseTexture();
 			ClosePrimaryRenderBuffer();
@@ -180,7 +185,7 @@ namespace hgl
 			//颜色
 			if(state->color_material)
 			{
-				glsl->Shader::SetUniform4fv(HGL_FS_COLOR,mat->GetColor());
+				glsl->Shader::SetUniform4fv(HGL_MATERIAL_COLOR,mat->GetColor());
 			}
 
 			//AlphaTest

@@ -15,6 +15,8 @@ namespace hgl
 				shader_in_type in_normal;
 				shader_in_type in_vertex_color;
 
+				bool color_material;
+
 				UTF8String vertex_color_to_vec4;
 
 				int vertex_type;
@@ -67,6 +69,8 @@ namespace hgl
 				void add_uniform_normal();
 
 			public:		//颜色
+
+				void set_color_material();
 
 				void add_in_color(ColorFormat fmt);
 				void add_uniform_color(ColorFormat fmt);

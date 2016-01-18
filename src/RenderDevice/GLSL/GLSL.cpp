@@ -221,7 +221,7 @@ namespace hgl
 			{
 				const int gl_error=glGetError();
 
-				LOG_ERROR(u8"GetUniformLocation("+UTF8String(name)+u8"),program="+UTF8String(program)+u8"result=-1,gl_error="+UTF8String(gl_error));
+				LOG_ERROR(u8"GetUniformLocation("+UTF8String(name)+u8"),program="+UTF8String(program)+u8",result=-1,gl_error="+UTF8String(gl_error));
 			}
 
 			return(result);

@@ -12,7 +12,6 @@ const float color []={1,0,0,    0,1,0,      0,0,1   };
 class TestObject:public FlowObject
 {
 	VertexArray *vertex_data;		///<三角形顶点数据
-    Material *material;				///<材质
     Renderable *triangle;			///<三角形可渲染对象
 
 public:
@@ -46,15 +45,8 @@ public:
 			}
 		}
 
-		//创建材质
 		{
-			material=new Material();
-
-			material->SetColorMaterial(false);           //不使用材质中的颜色
-		}
-
-		{
-			triangle=new Renderable(vertex_data,material);						///<创建
+			triangle=new Renderable(vertex_data);								///<创建可渲染对象
 
 #ifdef _DEBUG
 			triangle->AutoCreateShader(true,nullptr,"triangle");				///<自动创建shader，DEBUG模式下如果是新生成shader，输出成指定文件名的文件
@@ -67,7 +59,6 @@ public:
 	~TestObject()
 	{
         delete triangle;
-		delete material;
 		delete vertex_data;
 	}
 

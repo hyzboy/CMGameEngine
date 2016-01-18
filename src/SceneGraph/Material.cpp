@@ -6,6 +6,18 @@ namespace hgl
 {
 	namespace graph
 	{
+		Material *default_material=nullptr;
+
+		void InitDefaultMaterial()
+		{
+			default_material=new Material;
+		}
+
+		void ClearDefaultMaterial()
+		{
+			SAFE_CLEAR(default_material);
+		}
+
 		Material::Material()
 		{
 			Color.Set(1.0f,1.0f,1.0f,1.0f);
@@ -29,7 +41,7 @@ namespace hgl
 
 			height_axis=HGL_AXIS_Y;
 
-			color_material=true;
+			color_material=false;
 
 			Light=false;
 

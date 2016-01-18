@@ -23,6 +23,8 @@ namespace hgl
 		#define HGL_FS_NORMAL					"FragmentNormal"
 		#define HGL_FS_COLOR					"FragmentColor"
 
+		#define HGL_MATERIAL_COLOR				"MaterialColor"
+
 		#define HGL_FS_LIGHT_INTENSITY			"LightIntensity"		//灯光强度
 
 		#define HGL_FS_FRAG_COLOR				"FragColor"

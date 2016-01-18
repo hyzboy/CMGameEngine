@@ -39,16 +39,16 @@ namespace hgl
 
 		virtual ~ResManage();
 
-		void Clear();															///<清除所有数据
+		virtual void		Clear();											///<清除所有数据
 
-		const int GetCount()const{return items.GetCount();}						///<取得数据数量
+				const int	GetCount()const{return items.GetCount();}			///<取得数据数量
 
-		bool Add(const F &,T *);												///<添加一个数据
-		T *Find(const F &);														///<查找一个数据
-		T *Get(const F &);														///<取得一个数据，如不存在则创建
+		virtual bool		Add(const F &,T *);									///<添加一个数据
+		virtual T *			Find(const F &);									///<查找一个数据
+		virtual T *			Get(const F &);										///<取得一个数据，如不存在则创建
 
-		void Release(const F &);												///<释放一个数据
-		void Release(T *);														///<释放一个数据
+		virtual void		Release(const F &);									///<释放一个数据
+		virtual void		Release(T *);										///<释放一个数据
 	};//template<typename F,typename T> class ResManage
 }//namespace hgl
 #include<hgl/type/ResManage.cpp>

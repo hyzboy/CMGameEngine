@@ -11,7 +11,10 @@ namespace hgl
             shader=nullptr;
             bind_shader=nullptr;
 
-			material=m;
+			if(m)
+				material=m;
+			else
+				material=default_material;
 
 			DrawStart=-1;
 			DrawCount=-1;

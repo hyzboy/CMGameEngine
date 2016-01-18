@@ -43,7 +43,7 @@ namespace hgl
 
 		public:
 
-            Renderable(VertexArray *,Material *);
+            Renderable(VertexArray *,Material *mtl=nullptr);
 			~Renderable();
 
 		public:
