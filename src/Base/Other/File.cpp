@@ -321,7 +321,7 @@ namespace hgl
 	{
 		io::FileOutputStream fs;
 
-		if(!fs.Create(filename))
+		if(!fs.CreateTrunc(filename))
 			return(-1);
 
 		return fs.Write(buf,size);
