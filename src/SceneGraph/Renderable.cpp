@@ -8,11 +8,10 @@ namespace hgl
 		Renderable::Renderable(VertexArray *rd,Material *m)
 		{
             va=rd;
-			material=m;
-            shader=s;
+            shader=nullptr;
             bind_shader=nullptr;
 
-			material=nullptr;
+			material=m;
 
 			DrawStart=-1;
 			DrawCount=-1;
