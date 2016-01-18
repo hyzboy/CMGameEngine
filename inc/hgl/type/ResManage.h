@@ -43,6 +43,7 @@ namespace hgl
 
 		const int GetCount()const{return items.GetCount();}						///<取得数据数量
 
+		bool Add(const F &,T *);												///<添加一个数据
 		T *Find(const F &);														///<查找一个数据
 		T *Get(const F &);														///<取得一个数据，如不存在则创建
 

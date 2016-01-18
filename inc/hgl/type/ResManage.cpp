@@ -26,6 +26,18 @@ namespace hgl
 	}
 
 	template<typename F,typename T>
+	bool ResManage<F,T>::Add(const F &flag,T *obj)
+	{
+		if(!obj)return(false);
+
+		if(items.Find(flag)!=-1)
+			return(false);
+
+		items.Add(flag,obj);
+		return(true);
+	}
+
+	template<typename F,typename T>
 	T *ResManage<F,T>::Find(const F &flag)
 	{
 		int index=items.Find(flag);

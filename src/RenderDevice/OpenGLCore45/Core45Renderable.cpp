@@ -225,7 +225,14 @@ namespace hgl
 			return(true);
 		}
 
+#ifdef _DEBUG
+
+		Shader *CreateShader(const RenderState *state,const os_char *save_filename);
+
+		Shader *Renderable::AutoCreateShader(bool mvp,ShaderStorage *storage,const os_char *debug_outname)
+#else
 		Shader *Renderable::AutoCreateShader(bool mvp,ShaderStorage *storage)
+#endif//_DEBUG
 		{
 			if(!storage)storage=global_shader_storage;			//使用全局Shader仓库
 
@@ -247,7 +254,21 @@ namespace hgl
 					return(nullptr);
 			}
 
+#ifdef _DEBUG
+			shader=storage->Find(state);
+
+			if(!shader)
+			{
+				shader=CreateShader(&state,debug_outname);
+
+				if(!shader)
+					return(nullptr);
+
+				storage->Add(state,shader);
+			}
+#else
 			shader=storage->Get(state);
+#endif//_DEBUG
 
 			return shader;
 		}
