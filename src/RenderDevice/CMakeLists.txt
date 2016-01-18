@@ -30,6 +30,7 @@ set(CM_RENDER_DEVICE_SOURCE         ${CM_OPENGL_CORE_45_SOURCE}
                                     glTexture.cpp
                                     glViewport.cpp
                                     Render.cpp
+                                    RenderBuffer.cpp
                                     TextureChannels.cpp
                                     TextureFormat.cpp
                         # 			ScreenShot.cpp

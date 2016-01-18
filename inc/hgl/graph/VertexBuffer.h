@@ -11,7 +11,6 @@ namespace hgl
 {
 	namespace graph
 	{
-
 		class VertexBufferBase
 		{
 			void *mem_data;																				///<内存中的数据
