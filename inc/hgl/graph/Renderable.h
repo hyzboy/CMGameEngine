@@ -25,7 +25,6 @@ namespace hgl
             VertexArray *va;                                                                                           		///<顶点数据
 
 			Material *material;																							    ///<材质
-			bool mtl_private;																							    ///<材质是否私有
 
 			VertexBufferType TextureChannels[mtcMax];																	    ///<贴图通道对应表
 
@@ -44,14 +43,12 @@ namespace hgl
 
 		public:
 
-            Renderable(VertexArray *,Shader *s=nullptr);
+            Renderable(VertexArray *,Material *);
 			~Renderable();
 
 		public:
 
-			uint				GetPrimitive		()const					{return va?va->GetPrimitive():0;}				///<取得要绘制的图元类型
-
-			bool				SetMaterial			(Material *,bool);														///<设置材质数据
+			bool				SetMaterial			(Material *);															///<设置材质数据
 			Material * 			GetMaterial			()const					{return material;}								///<取得材质指针
 
             VertexBufferBase *  GetVertexBuffer     (VertexBufferType vbt)	{return va?va->GetVertexBuffer(vbt):nullptr;} 	///<取得对应顶点缓冲区数据

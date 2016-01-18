@@ -5,9 +5,10 @@ namespace hgl
 {
 	namespace graph
 	{
-		Renderable::Renderable(VertexArray *rd,Shader *s)
+		Renderable::Renderable(VertexArray *rd,Material *m)
 		{
             va=rd;
+			material=m;
             shader=s;
             bind_shader=nullptr;
 
@@ -23,28 +24,18 @@ namespace hgl
 
 		Renderable::~Renderable()
 		{
-			if(material&&mtl_private)
-				delete material;
-
-			material=nullptr;
-
             Clear();
 		}
 
 		/**
 		* 设置材质数据
 		* @param m 材质指针
-		* @param mp 是否为私有(即不会在其它地方使用，本对像被清除时会连带清除这个材质)
 		*/
-		bool Renderable::SetMaterial(Material *m,bool mp)
+		bool Renderable::SetMaterial(Material *m)
 		{
             if(!va)return(false);
 
-			if(material&&mtl_private)
-				delete material;
-
 			material=m;
-			mtl_private=mp;
             return(true);
 		}
 
