@@ -13,9 +13,9 @@
 SOURCE_GROUP("Object" FILES ${BASE_GRAPH_OBJECT_SOURCE})
 
 SET(GRAPHICS_APPLICATION_SOURCE
-		GraphicsApplication.cpp
-		GraphicsApplicationEvent.cpp
-		GraphicsSystemInitInfo.cpp)
+		Application/GraphicsApplication.cpp
+		Application/GraphicsApplicationEvent.cpp
+		Application/GraphicsSystemInitInfo.cpp)
 
 SOURCE_GROUP("Application" FILES ${GRAPHICS_APPLICATION_SOURCE})
 
