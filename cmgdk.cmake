@@ -114,9 +114,9 @@ endif(LOG_CDB_LOADER_LOG)
 INCLUDE_DIRECTORIES(${CMGDK_PATH}/inc)
 INCLUDE_DIRECTORIES(${CMGDK_PATH}/3rdpty)
 
-OPTION(MATH_USE_GLM             "Use OpenGL Mathematics"                TRUE    )
+OPTION(MATH_USE_GLM             "Use OpenGL Mathematics"                FALSE	)
 OPTION(MATH_USE_CML             "Use Configurable Math Library"         FALSE   )
-OPTION(MATH_USE_MGL             "Use Game Math and Geometry Library"    FALSE   )
+OPTION(MATH_USE_MGL             "Use Game Math and Geometry Library"    TRUE	)
 
 IF(MATH_USE_GLM)
     add_definitions(-DMATH_USE_GLM)
