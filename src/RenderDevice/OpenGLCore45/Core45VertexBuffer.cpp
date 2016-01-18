@@ -53,11 +53,11 @@ namespace hgl
             glNamedBufferSubData(video_buffer_index,start,size,data);
 		}
 
-		void VertexBufferBase::BindVertexBuffer()
-		{
-			if(!video_buffer_type)return;
-
-			glBindBuffer(video_buffer_type,video_buffer_index);
-		}
+// 		void VertexBufferBase::BindVertexBuffer()
+// 		{
+// 			if(!video_buffer_type)return;
+//
+// 			glBindBuffer(video_buffer_type,video_buffer_index);
+// 		}
 	}//namespace graph
 }//namespace hgl
