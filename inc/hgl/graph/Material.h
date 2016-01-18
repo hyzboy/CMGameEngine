@@ -83,8 +83,6 @@ namespace hgl
 		*/
 		class Material
 		{
-			friend Material *CreateMaterial();
-
 		protected:
 
 			Color4f		Color;																		///<颜色

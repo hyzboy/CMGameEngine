@@ -48,6 +48,8 @@ namespace hgl
 
 		public:
 
+			uint				GetPrimitive		()const					{return va?va->GetPrimitive():0;}				///<取得要绘制的图元类型
+
 			bool				SetMaterial			(Material *);															///<设置材质数据
 			Material * 			GetMaterial			()const					{return material;}								///<取得材质指针
 
