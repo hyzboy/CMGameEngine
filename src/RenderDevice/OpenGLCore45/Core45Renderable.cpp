@@ -225,9 +225,9 @@ namespace hgl
 			return(true);
 		}
 
-		Shader *Renderable::AutoCreateShader(ShaderStorage *storage,bool mvp)
+		Shader *Renderable::AutoCreateShader(bool mvp,ShaderStorage *storage)
 		{
-			if(!storage)return(nullptr);
+			if(!storage)storage=global_shader_storage;			//使用全局Shader仓库
 
 			if(shader)											//如果有shader存在
 			{
