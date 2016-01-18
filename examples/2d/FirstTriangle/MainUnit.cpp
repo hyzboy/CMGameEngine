@@ -24,24 +24,23 @@ public:
 		{
 			vertex_data=new VertexArray(HGL_PRIM_TRIANGLES);			///<创建新的顶点数据对象，图元类型为三角形
 
-//         {
+			{	//传统风格
 //             VB2f *vertex=new VB2f(3);
 //             VB3f *color=new VB3f(3);
 //
 //             vertex->Begin();color->Begin();
-//                 vertex->Write(0.0,0.0);   color->Write(1,0,0);
-//                 vertex->Write(100,0.0);   color->Write(0,1,0);
-//                 vertex->Write(100,100);   color->Write(0,0,1);
+//                 vertex->Write(100,100);   color->Write(1,0,0);
+//                 vertex->Write(200,100);   color->Write(0,1,0);
+//                 vertex->Write(200,200);   color->Write(0,0,1);
 //             vertex->End();color->End();
 //
 //             triangle->SetVertex(vertex);
 //             triangle->SetColor(color,HGL_COLOR_RGB);
-//         }
+			}
 
-        //下面这段代码与上面这段等价
-			{
-				vertex_data->SetVertex(new VB2f(3,vertex));				///<设定顶点数据
-				vertex_data->SetColor(new VB3f(3,color),HGL_COLOR_RGB);	///<设定颜色数据
+			{	//直接传送风格，这两行与上面整段结果一致
+				vertex_data->SetVertex(new VB2f(3,vertex));				///<设定3个顶点的坐标数据
+				vertex_data->SetColor(new VB3f(3,color),HGL_COLOR_RGB);	///<设定3个顶点的颜色数据
 			}
 		}
 
