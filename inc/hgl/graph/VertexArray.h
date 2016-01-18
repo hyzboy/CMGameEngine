@@ -1,6 +1,7 @@
 ﻿#ifndef HGL_GRAPH_VERTEX_ARRAY_INCLUDE
 #define HGL_GRAPH_VERTEX_ARRAY_INCLUDE
 
+#include<hgl/type/FixedArray.h>
 #include<hgl/graph/VertexBuffer.h>
 #include<hgl/graph/ColorFormat.h>
 #include<hgl/VectorMath.h>
@@ -17,7 +18,7 @@ namespace hgl
 
             uint primitive;                                                                                                         ///<绘制的图元类型
 
-            VertexBufferBase **vertex_buffer;                                                                                       ///<顶点数据缓冲区
+            ObjectFixedArray<VertexBufferBase,vbtEnd> vertex_buffer;                                                              	///<顶点数据缓冲区
 
 			AABB aabb;                                                                                                      		///<AABB绑定盒
 			OBB obb;																												///<OBB绑定盒
@@ -26,20 +27,21 @@ namespace hgl
 
         private:
 
-            bool                        _SetVertexBuffer     (VertexBufferType,VertexBufferBase *);                                 ///<设置顶点缓冲区数据
+            bool                        _SetVertexBuffer     (VertexBufferType,VertexBufferBase *);                                 ///<真实设置顶点缓冲区数据
 
         public:
 
             VertexArray(uint prim);
-            ~VertexArray();
+            ~VertexArray()HGL_DEFAULT_MEMFUNC;
 
             uint                        GetPrimitive        ()const{return primitive;}                                              ///<取得要绘制的图元类型
 
         public: //通用顶点缓冲区设置
 
             bool                        SetVertexBuffer     (VertexBufferType,VertexBufferBase *);                                  ///<设置顶点缓冲区数据
-            bool                        ClearVertexBuffer   (VertexBufferType);                                                     ///<清除顶点缓冲区数据
-            VertexBufferBase *          GetVertexBuffer     (VertexBufferType);                                                     ///<取得顶点缓冲区数据
+            VertexBufferBase *          GetVertexBuffer     (VertexBufferType vbt){return vertex_buffer[vbt];}                      ///<取得顶点缓冲区数据
+            bool                        ClearVertexBuffer   (VertexBufferType vbt){return vertex_buffer.Clear(vbt);}				///<清除顶点缓冲区数据
+            void						ClearAllVertexBuffer(){vertex_buffer.ClearAll();}											///<清除所有顶点缓冲区数据
 
         public: //顶点格式相关
 

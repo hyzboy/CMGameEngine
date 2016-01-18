@@ -3,6 +3,7 @@
 
 #include<hgl/VectorMath.h>
 #include<hgl/type/DataType.h>
+#include<hgl/type/FixedArray.h>
 #include<hgl/type/Color4f.h>
 #include<hgl/graph/Texture.h>
 #include<hgl/graph/TextureChannels.h>
@@ -124,8 +125,7 @@ namespace hgl
 
 			bool		Light;																		///<承接光照(默认开)
 
-			Texture	*	texture_list[mtcMax];														///<贴图
-			int			texture_count;																///<贴图数量
+			ObjectFixedArray<Texture,mtcMax> TextureList;											///<贴图
 
 		protected:
 
@@ -133,8 +133,8 @@ namespace hgl
 
 		public:
 
-			Material();				//请使用函数CreateMaterial来创建材质，函数在Render.H中定义
-			virtual ~Material();
+			Material();
+			virtual ~Material()HGL_DEFAULT_MEMFUNC;
 
 		public:
 
@@ -178,7 +178,7 @@ namespace hgl
 			void SetShininess		(float s)							{Shininess=s;}
 			void SetTransparency	(float t)							{Transparency=t;}
 
-			bool SetTexture			(int mtc,Texture *);
+			bool SetTexture			(int mtc,Texture *tex)				{return TextureList.Set(mtc,tex);}				///<在设定通道设定纹理
 
 		public:	//读取方法
 
@@ -214,18 +214,12 @@ namespace hgl
 			const float	&	GetShininess()const					{return Shininess;}
 			const float	&	GetTransparency()const				{return Transparency;}
 
-			const int		GetTextureNumber()const				{return texture_count;}
+			const int		GetTextureNumber()const				{return TextureList.GetCount();}
 
-			Texture *GetTexture(int mtc)const
-			{
-				if(mtc<mtcDiffuse||mtc>=mtcMax)
-					return(0);
+			Texture *		GetTexture(int mtc)const			{return TextureList[mtc];}
 
-				return(texture_list[mtc]);
-			}
-
-			bool ClearTexture(int mtc);																///<清除指定贴图
-			void ClearTexture();																	///<清除所有贴图
+			bool			ClearTexture(int mtc)				{return TextureList.Clear(mtc);}	///<清除指定贴图
+			void			ClearAllTexture()					{return TextureList.ClearAll();}	///<清除所有贴图
 		};//class Material
 	}//namespace graph
 }//namespace hgl

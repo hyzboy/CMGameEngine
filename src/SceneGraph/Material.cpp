@@ -6,14 +6,6 @@ namespace hgl
 {
 	namespace graph
 	{
-		Material *CreateMaterial()
-		{
-			return(new Material);
-		}
-	}//namespace graph
-
-	namespace graph
-	{
 		Material::Material()
 		{
 			Color.Set(1.0f,1.0f,1.0f,1.0f);
@@ -48,14 +40,6 @@ namespace hgl
 
 			Shininess=40.0f;
 			Transparency=1.0f;
-
-			hgl_zero(texture_list);
-			texture_count=0;
-		}
-
-		Material::~Material()
-		{
-			ClearTexture();
 		}
 
 		/**
@@ -76,44 +60,6 @@ namespace hgl
 			bm.alpha.func=HGL_BLEND_ADD;
 
 			SetBlend(bm);
-		}
-
-		bool Material::ClearTexture(int n)
-		{
-			if(n<0||n>=mtcMax)
-				return(false);
-
-			if(!texture_list[n])return(false);
-
-			texture_list[n]=nullptr;
-			--texture_count;
-
-			return(true);
-		}
-
-		void Material::ClearTexture()
-		{
-			hgl_zero(texture_list);
-			texture_count=0;
-		}
-
-		bool Material::SetTexture(int n,Texture *tex)
-		{
-			if(n<0||n>=mtcMax)return(false);
-
-			if(texture_list[n])
-			{
-				if(texture_list[n]==tex)
-					return(true);
-
-				LOG_ERROR(OS_TEXT("Material::SetTexture(")+OSString(n)+OS_TEXT(")已有贴图，不可再次设置"));
-				return(false);
-			}
-
-			texture_list[n]=tex;
-			++texture_count;
-
-			return(true);
 		}
 	}//namespace graph
 }//namespace hgl

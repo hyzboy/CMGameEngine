@@ -9,13 +9,6 @@ namespace hgl
             primitive=prim;
 
             vb_color_format=HGL_COLOR_NONE;
-
-            NEW_NULL_ARRAY(vertex_buffer,VertexBufferBase *,vbtEnd);
-        }
-
-        VertexArray::~VertexArray()
-        {
-            SAFE_CLEAR_OBJECT_ARRAY(vertex_buffer,vbtEnd);
         }
 
         /**
@@ -26,57 +19,11 @@ namespace hgl
         */
         bool VertexArray::SetVertexBuffer(VertexBufferType vbt,VertexBufferBase *vb)
         {
-            if(vbt<0||vbt>=vbtEnd)
-            {
-                LOG_ERROR(OS_TEXT("VertexArray::SetVertexBuffer设置的数据类型错误：")+OSString(vbt));
-                return(false);
-            }
-
-            if(vertex_buffer[vbt])
-            {
-                if(vertex_buffer[vbt]==vb)return(true); //有重复设的情况
-
-                LOG_ERROR(OS_TEXT("VertexArray::SetVertexBuffer设置的数据缓冲区已有数据"));
-                return(false);
-            }
-
-            vertex_buffer[vbt]=vb;
+            if(!vertex_buffer.Set(vbt,vb))return(false);
 
             _SetVertexBuffer(vbt,vb);       //各种真实渲染器处理
 
             return(true);
-        }
-
-        /**
-        * 清除顶点缓冲区数据
-        * @param vbt 要清除的数据缓冲区类型
-        * @return 是否清除成功
-        */
-        bool VertexArray::ClearVertexBuffer(VertexBufferType vbt)
-        {
-            if(vbt<0||vbt>=vbtEnd)
-            {
-                LOG_ERROR(OS_TEXT("VertexArray::ClearVertexBuffer要清除的数据类型错误：")+OSString(vbt));
-                return(false);
-            }
-
-            if(!vertex_buffer[vbt])
-            {
-                LOG_ERROR(OS_TEXT("VertexArray::ClearVertexBuffer要清除的数据缓冲区没有数据：")+OSString(vbt));
-                return(false);
-            }
-
-            delete vertex_buffer[vbt];
-            vertex_buffer[vbt]=nullptr;
-
-            return(true);
-        }
-
-        VertexBufferBase *VertexArray::GetVertexBuffer(VertexBufferType vbt)                     ///<取得顶点缓冲区数据
-        {
-            if(vbt<0||vbt>=vbtEnd)return(nullptr);
-
-            return(vertex_buffer[vbt]);
         }
 
         /**
