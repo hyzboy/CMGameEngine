@@ -1,4 +1,4 @@
-namespace hgl
+﻿namespace hgl
 {
 	namespace graph
 	{
@@ -111,7 +111,7 @@ namespace hgl
 					"   Specular += gl_LightSource[i].specular * pf * attenuation;\n\n"
 					"}\n";
 
-			const char glsl_light_spot_direction[]=
+			const char glsl_light_infinite_spot[]=
 					"void infiniteSpotLight(in int i, in vec3 normal)\n"
 					"{\n"
 					"   float nDotVP;         // normal . light direction\n"

@@ -1,4 +1,4 @@
-#ifndef HGL_GRAPH_GEN_SHADER_LIGHT_INCLUDE
+﻿#ifndef HGL_GRAPH_GEN_SHADER_LIGHT_INCLUDE
 #define HGL_GRAPH_GEN_SHADER_LIGHT_INCLUDE
 
 namespace hgl
@@ -10,7 +10,7 @@ namespace hgl
 			extern const char glsl_light_directional[];
 			extern const char glsl_light_point[];
 			extern const char glsl_light_spot[];
-			extern const char glsl_light_spot_direction[];
+			extern const char glsl_light_infinite_spot[];
 		}//namespace shadergen
 	}//namespace graph
 }//namespace hgl
