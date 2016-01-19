@@ -52,18 +52,18 @@ namespace hgl
 				in_normal=sitVertexAttrib;
 			}
 
+			void fs::set_color_material()
+			{
+				color_material=true;
+
+				add_uniform_vec4(HGL_MATERIAL_COLOR);
+			}
+
 			void fs::add_in_color()
 			{
 				in_color=sitVertexAttrib;
 
 				add_in_fv(HGL_FS_COLOR,4);
-			}
-
-			void fs::add_uniform_color()
-			{
-				in_color=sitUniform;
-
-				add_uniform_fv(HGL_FS_COLOR,4);
 			}
 
 			/**
@@ -136,16 +136,36 @@ namespace hgl
 					//}
 
 					if(in_color)	//还有顶点颜色传入
-						fin_color=HGL_FS_DIFFUSE_COLOR "*" HGL_FS_COLOR ";\n\n";
+					{
+						if(color_material)
+							fin_color=HGL_FS_DIFFUSE_COLOR "*" HGL_FS_COLOR "*" HGL_MATERIAL_COLOR ";\n\n";
+						else
+							fin_color=HGL_FS_DIFFUSE_COLOR "*" HGL_FS_COLOR ";\n\n";
+					}
 					else
-						fin_color=HGL_FS_DIFFUSE_COLOR ";\n\n";
+					{
+						if(color_material)
+							fin_color=HGL_FS_DIFFUSE_COLOR "*" HGL_MATERIAL_COLOR ";\n\n";
+						else
+							fin_color=HGL_FS_DIFFUSE_COLOR ";\n\n";
+					}
 				}
 				else	//无漫反射贴图
 				{
-					if(!in_color)		//也无顶点颜色
-						return(false);	//即使有其它贴图，也必须有颜色
+					if(!in_color)			//无顶点颜色
+					{
+						if(!color_material)	//无材质颜色
+							return(false);	//即使有其它贴图，也必须有颜色
 
-					fin_color=HGL_FS_COLOR;
+						fin_color=HGL_MATERIAL_COLOR;
+					}
+					else
+					{
+						if(color_material)
+							fin_color=HGL_FS_COLOR "*" HGL_MATERIAL_COLOR;
+						else
+							fin_color=HGL_FS_COLOR;
+					}
 				}
 
 				if(mtc[mtcAlpha]!=-1)				//透明贴图
@@ -217,7 +237,7 @@ namespace hgl
 				else
 				if(state->color_material)				//使用独立颜色传入
 				{
-					code.add_uniform_color();			//使用uniform传入颜色
+					code.set_color_material();			//使用材质颜色
 					code.add();
 				}
 			}

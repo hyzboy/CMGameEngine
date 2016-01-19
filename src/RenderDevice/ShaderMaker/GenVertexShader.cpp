@@ -131,22 +131,6 @@ namespace hgl
 				in_vertex_buffer[vbtColor]=true;
 			}
 
-			void vs::add_uniform_color(ColorFormat fmt)
-			{
-				const int num=SetVertexColorFormat(fmt);
-
-				if(num<=0)
-				{
-					LOG_ERROR(OS_TEXT("顶点色输入无格式信息或格式信息错误"));
-					return;
-				}
-
-				in_vertex_color=sitUniform;
-
-				add_uniform_fv(HGL_VS_COLOR,num);
-				add_out_fv(HGL_FS_COLOR,4);
-			}
-
 			void vs::add_in_texture(const char *vb_name,int coord_num,int mtc_index)
 			{
 				MATERIAL_TEXTURE_CHANNEL_NAME mtc_name;
@@ -229,11 +213,6 @@ namespace hgl
 						add(U8_TEXT("\n\t" HGL_FS_COLOR "=")+vertex_color_to_vec4+U8_TEXT(";\n"));
 					else
 						add(U8_TEXT("\n\t" HGL_FS_COLOR "=")+vertex_color_to_vec4+U8_TEXT("*" HGL_MATERIAL_COLOR ";\n"));
-				}
-				else
-				if(color_material)	//有材质颜色
-				{
-					add(U8_TEXT("\n\t" HGL_FS_COLOR "=" HGL_MATERIAL_COLOR ";\n"));
 				}
 
 				if(out_texcoord_count)	//有纹理坐标需要输出到fs
@@ -377,11 +356,11 @@ namespace hgl
 			{
 				code.add_in_color(state->vertex_color_format);
 				code.add();
-			}
 
-			if(state->color_material)				//使用颜色材质传入
-			{
-				code.set_color_material();
+				if(state->color_material)			//使用颜色材质传入,没顶点颜色,也无需使用材质颜色
+				{
+					code.set_color_material();
+				}
 			}
 
 			//灯光

@@ -17,6 +17,7 @@ const Vector3f	eye(100,70,80),
 class TestObject:public FlowObject
 {
 	VertexArray *cube_data;				///<立方体顶点数据
+	Material *mtl1,*mtl2;				///<两个材质
 	Renderable *cube1,*cube2;			///<两个渲染对象
 
 	Camera cam;
@@ -43,28 +44,25 @@ private:
         cam.world_up_vector=up_vector;
 	}
 
-	Renderable *CreateCube(float r,float g,float b)
+	Renderable *CreateCube(Material *mtl,float r,float g,float b)
 	{
-		Renderable *obj=CreateRenderableCube();
-
 		//创建材质
-		{
-			Material *mtl=obj->GetMaterial();
+		mtl->SetColorMaterial(true);		//使用Material中的颜色
+		mtl->SetColor(r,g,b,1.0);
 
-			mtl->SetColorMaterial(true);		//使用Material中的颜色
-			mtl->SetColor(r,g,b,1.0);
-		}
-		return(obj);
+		return(new Renderable(cube_data,mtl));
 	}
 
 	void CreateDualCube()
 	{
-		cube1=CreateCube(1,0,0);
-		cube2=CreateCube(0,0,1);
+		cube_data=CreateRenderableCube();					///<创建一个CUBE的顶点数据
+
+		cube1=CreateCube(mtl1=new Material,1,0,0);			///<创建一个CUBE的可渲染数据
+		cube2=CreateCube(mtl2=new Material,0,0,1);
 
 #ifdef _DEBUG	//debug模式下将shader保存成文件
-		cube1->AutoCreateShader(true,OS_TEXT("Cube1"));
-		cube2->AutoCreateShader(true,OS_TEXT("Cube2"));
+		cube1->AutoCreateShader(true,nullptr,OS_TEXT("Cube1"));
+		cube2->AutoCreateShader(true,nullptr,OS_TEXT("Cube2"));
 #else
 		cube1->AutoCreateShader();		//默认参数是true,true
 		cube2->AutoCreateShader();
@@ -75,7 +73,7 @@ public:
 
 	TestObject()
 	{
-		SetClearColor(0.7f,0.7f,0.9f);
+		SetClearColor(0.1f,0.1f,0.1f);
 
 		CreateDualCube();
 		SetCamera();
@@ -90,6 +88,9 @@ public:
 	{
 		delete cube1;
 		delete cube2;
+
+		delete mtl1;
+		delete mtl2;
 	}
 
 	void Draw()

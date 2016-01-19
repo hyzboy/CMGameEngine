@@ -15,6 +15,8 @@ namespace hgl
 				shader_in_type in_normal;
 				shader_in_type in_color;
 
+				bool color_material;
+				
 				int mtc[mtcMax];
 				UTF8String tex_sampler[mtcMax];
 				UTF8String tex_coord[mtcMax];
@@ -37,8 +39,9 @@ namespace hgl
 
 			public:		//颜色
 
+				void set_color_material();
+
 				void add_in_color();
-				void add_uniform_color();
 
 			public:		//贴图
 

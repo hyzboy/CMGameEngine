@@ -62,7 +62,7 @@ namespace hgl
             {
                 if(!vb)return(false);
 
-                Vector3f min_v,max_v,len;
+                vec min_v,max_v,len;
 
                 vb->GetBoundingBox(min_v,max_v);
 

@@ -73,7 +73,6 @@ namespace hgl
 				void set_color_material();
 
 				void add_in_color(ColorFormat fmt);
-				void add_uniform_color(ColorFormat fmt);
 
 			public:		//纹理
 

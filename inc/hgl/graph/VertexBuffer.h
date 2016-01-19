@@ -461,7 +461,8 @@ namespace hgl
 			* @param corner 一个顶角的坐标
 			* @param lanegth 每条边的长
 			*/
-			void GetBoundingBox(Vector3f &min_vertex,Vector3f &max_vertex)
+			template<typename V>
+			void GetBoundingBox(V &min_vertex,V &max_vertex)
 			{
 				T *p=this->mem_type;
 
