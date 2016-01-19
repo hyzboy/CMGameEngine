@@ -31,6 +31,10 @@ namespace hgl
 			LightType	type;			///<光源类型
 
 			bool		enabled;		///<是否开启
+
+			Vector4f	ambient;		///<环境光
+			Vector4f	specular;		///<镜面光
+			Vector4f	diffuse;		///<漫反射
 		};//struct Light
 
 		/**
@@ -40,7 +44,7 @@ namespace hgl
 		{
 			Vector3f	position;				///<光源位置
 
-			Vector3f	attenuation;			//constant,linear,quadratic
+			Vector3f	attenuation;			///<constant,linear,quadratic
 		};//struct PointLight
 
 		/**
@@ -57,7 +61,7 @@ namespace hgl
 		struct SpotLight:public Light
 		{
 			Vector3f	position;				///<位置
-			Vector3f	attenuation;			//constant,linear,quadratic
+			Vector3f	attenuation;			///<constant,linear,quadratic
 			Vector3f	direction;
 			float		coscutoff;
 			float		exponent;
