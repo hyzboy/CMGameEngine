@@ -47,10 +47,10 @@ private:
 	Renderable *CreateCube(Material *mtl,float r,float g,float b)
 	{
 		//创建材质
-		mtl->SetColorMaterial(true);		//使用Material中的颜色
-		mtl->SetColor(r,g,b,1.0);
+		mtl->SetColorMaterial(true);						///<设定使用Material中的颜色
+		mtl->SetColor(r,g,b,1.0);							///<设定颜色
 
-		return(new Renderable(cube_data,mtl));
+		return(new Renderable(cube_data,mtl));				///<两个立方体使用同一个顶点数据
 	}
 
 	void CreateDualCube()
