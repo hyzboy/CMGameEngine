@@ -97,7 +97,7 @@ namespace hgl
 			{
 				if(location[i]==-1)continue;
 
-                glDisableVertexArrayAttrib(vao,i);
+                glDisableVertexArrayAttrib(vao,location[i]);
 				location[i]=-1;
 			}
 		}
