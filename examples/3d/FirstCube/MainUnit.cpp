@@ -16,7 +16,8 @@ const Vector3f	eye(100,70,80),
 
 class TestObject:public FlowObject
 {
-	Renderable *cube1,*cube2;
+	VertexArray *cube_data;				///<立方体顶点数据
+	Renderable *cube1,*cube2;			///<两个渲染对象
 
 	Camera cam;
 

@@ -15,6 +15,10 @@ namespace hgl
 
 			ltPoint,			///<点光源
 			ltDirection,		///<方向光
+			ltSpot,				///<聚光灯
+			ltInfiniteSpotLight,///<无尽聚光灯
+
+			ltAreaQuad,			///<四边形面光源
 
 			ltEnd				///<结束定义，无意义
 		};//enum LightType
@@ -36,12 +40,38 @@ namespace hgl
 		{
 			Vector3f	position;				///<光源位置
 
-			Vector4f	ambient;
-			Vector4f	specular;
-			Vector4f	diffuse;
-
 			Vector3f	attenuation;			//constant,linear,quadratic
 		};//struct PointLight
+
+		/**
+		 * 方向光
+		 */
+		struct DirectionLight:public Light
+		{
+			Vector3f	direction;				///<方向
+		};//struct DirectionLight
+
+		/**
+		 * 聚光灯
+		 */
+		struct SpotLight:public Light
+		{
+			Vector3f	position;				///<位置
+			Vector3f	attenuation;			//constant,linear,quadratic
+			Vector3f	direction;
+			float		coscutoff;
+			float		exponent;
+		};//struct SpotLight
+
+		/**
+		 * 无尽聚光灯
+		 */
+		struct InfiniteSpotLight:public Light
+		{
+			Vector3f	position;
+			Vector3f	direction;
+			Vector3f	exponent;
+		};//struct InfiniteSpotLight
 
 		/**
 		* 场景全局状态
