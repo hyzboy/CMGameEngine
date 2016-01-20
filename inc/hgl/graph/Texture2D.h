@@ -27,7 +27,7 @@ namespace hgl
 		public:
 
 							Texture2D();
-							~Texture2D();
+			virtual			~Texture2D();
 
 					bool	LoadFile		(const OSString &,uint vf=0,uint ltp=0);									///<从文件加载一个贴图
 
@@ -37,12 +37,7 @@ namespace hgl
 					bool	SetImage		(Bitmap2D *,uint vf=0,uint ltp=0);											///<从位图创建一个贴图
 					bool	ChangeImage		(Bitmap2D *,uint l,uint t);													///<更改贴图数据
 
-			virtual void	GetMipmapLevel	(int &,int &);																///<取得贴图mipmaps级别
-
 			virtual int		GetImage		(void *data_pointer,TSF fmt,int level=0);									///<取得2D贴图数据
-
-			virtual void	SetMinFilter	(uint);																		///<设置缩小过滤
-			virtual void	SetMagFilter	(uint);																		///<设置放大过滤
 
 			virtual void	SetWrapS		(uint);																		///<设置横向寻址方式
 			virtual void	SetWrapT		(uint);																		///<设置纵向寻址方式

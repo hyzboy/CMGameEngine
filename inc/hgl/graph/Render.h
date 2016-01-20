@@ -4,6 +4,7 @@
 #include<hgl/type/List.h>
 #include<hgl/type/ResManage.h>
 #include<hgl/VectorMath.h>
+#include<hgl/graph/Texture1D.h>
 #include<hgl/graph/Texture2D.h>
 #include<hgl/graph/Material.h>
 #include<hgl/graph/VertexBuffer.h>
@@ -186,6 +187,8 @@ namespace hgl
 		extern Matrix4f Ortho2DMatrix;																///<全局2D视图矩阵
 
 		//位于InlineRenderable.CPP中
+
+		extern Texture1D *WhiteLine;																///<白线背景
 
 		extern Texture2D *BlackWhiteGrid;															///<黑白格贴图
 		extern Texture2D *GrayWhiteGrid;                                                            ///<灰白格贴图

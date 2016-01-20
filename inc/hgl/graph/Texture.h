@@ -62,8 +62,10 @@ namespace hgl
 
 		public:
 
-			virtual void	SetMinFilter	(uint f){min_filter=f;}									///<设置缩小过滤
-			virtual void	SetMagFilter	(uint f){mag_filter=f;}									///<设置放大过滤
+			virtual void	SetMinFilter	(uint);													///<设置缩小过滤
+			virtual void	SetMagFilter	(uint);													///<设置放大过滤
+
+			virtual void	GetMipmapLevel	(int &,int &);											///<取得贴图mipmaps级别
 		};//class Texture
 	}//namespace graph
 }//namespace hgl

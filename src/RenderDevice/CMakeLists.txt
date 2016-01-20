@@ -1,4 +1,4 @@
-﻿set(CM_OPENGL_CORE_45_SOURCE        #OpenGLCore45/Core45Texture1D.cpp
+﻿set(CM_OPENGL_CORE_45_SOURCE        OpenGLCore45/Core45Texture1D.cpp
                                     OpenGLCore45/Core45Texture2D.cpp
                                     #OpenGLCore45/Core45Texture3D.cpp
                                     OpenGLCore45/Core45Renderable.cpp

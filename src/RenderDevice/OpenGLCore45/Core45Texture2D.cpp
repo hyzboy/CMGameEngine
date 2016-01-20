@@ -88,12 +88,6 @@ namespace hgl
             return(true);
         }
 
-        void Texture2D::GetMipmapLevel(int &base_level,int &max_level)
-        {
-            glGetTextureParameteriv(texture_id,GL_TEXTURE_BASE_LEVEL,&base_level);
-            glGetTextureParameteriv(texture_id,GL_TEXTURE_MAX_LEVEL,&max_level);
-        }
-
         int Texture2D::GetImage(void *data_pointer,TSF fmt,int level)
         {
             if(fmt<=HGL_SF_NONE
@@ -135,7 +129,10 @@ namespace hgl
 
         bool Texture2D::ChangeImage(uint l,uint t,uint w,uint h,void *data,uint bytes,TSF sf)
         {
-            if(!w||!h||!data
+            if(	l>width||t>height
+				||!w||w>width-l
+				||!h||h>height-t
+			||!data
             ||sf<=HGL_SF_NONE
             ||sf>=HGL_SF_END
             ||sf==HGL_SF_UNCOMPRESSED
@@ -154,24 +151,6 @@ namespace hgl
                 glTextureSubImage2D(texture_id,0,l,t,w,h,sfmt->format,sfmt->type,data);
 
             return(true);
-        }
-
-        void Texture2D::SetMinFilter(uint mf)
-        {
-            if(min_filter==mf)return;
-
-            min_filter=mf;
-
-            glTextureParameteri(texture_id,GL_TEXTURE_MIN_FILTER,min_filter);
-        }
-
-        void Texture2D::SetMagFilter(uint mf)
-        {
-            if(mag_filter==mf)return;
-
-            mag_filter=mf;
-
-            glTextureParameteri(texture_id,GL_TEXTURE_MAG_FILTER,mag_filter);
         }
 
         void Texture2D::SetWrapS(uint wrap)
