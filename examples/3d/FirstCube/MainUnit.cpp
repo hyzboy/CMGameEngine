@@ -47,17 +47,17 @@ private:
 	Renderable *CreateCube(Material *mtl,float r,float g,float b)
 	{
 		//创建材质
-		mtl->SetColorMaterial(true);						///<设定使用Material中的颜色
+		mtl->SetColorMaterial(true);						///<设定使用材质中的颜色
 		mtl->SetColor(r,g,b,1.0);							///<设定材质颜色
 
-		return(new Renderable(cube_data,mtl));				///<两个立方体使用同一个顶点数据
+		return(new Renderable(cube_data,mtl));				///<两个可渲染对像使用同一个顶点数据
 	}
 
 	void CreateDualCube()
 	{
 		cube_data=CreateRenderableCube();					///<创建一个Cube的顶点数据
 
-		cube1=CreateCube(mtl1=new Material,1,0,0);			///<创建一个Cube的可渲染数据
+		cube1=CreateCube(mtl1=new Material,1,0,0);			///<创建一个Cube的可渲染对像
 		cube2=CreateCube(mtl2=new Material,0,0,1);
 
 #ifdef _DEBUG	//debug模式下将shader保存成文件
@@ -72,7 +72,7 @@ public:
 
 	TestObject()
 	{
-		SetClearColor(0.1f,0.1f,0.1f);
+		SetClearColor(0.2f,0.2f,0.2f);
 
 		CreateDualCube();
 		SetCamera();
