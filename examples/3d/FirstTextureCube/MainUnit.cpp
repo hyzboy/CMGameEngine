@@ -47,8 +47,6 @@ private:
     Renderable *CreateCube(Material *mtl,float r,float g,float b,Texture2D *tex)
     {
         //创建材质
-// 		mtl->SetColorMaterial(true);						///<设定使用材质中的颜色
-// 		mtl->SetColor(r,g,b,1.0);							///<设定材质颜色
 		mtl->SetTexture(mtcDiffuse,tex);
 
 		Renderable *obj=new Renderable(cube_data,mtl);		///<两个可渲染对像使用同一个顶点数据
