@@ -26,6 +26,7 @@ namespace hgl
 			{
 				in_normal=sitNone;
 				in_color=sitNone;
+				color_material=false;
 
 				hgl_set(mtc,-1,mtcMax);
 
