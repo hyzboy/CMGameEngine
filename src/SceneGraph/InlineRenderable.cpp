@@ -237,7 +237,10 @@ namespace hgl
 					float *p=(float *)(vb_tex->GetData());
 
 					for(int i=0;i<48;i++)
-						*p++=*p*tex_scale;
+					{
+						*p=(*p)*tex_scale;
+						++p;
+					}
 				}
 
 				obj->SetVertexBuffer(tex_coord_vbt,vb_tex);
@@ -412,11 +415,13 @@ namespace hgl
 
 			BlackWhiteGrid=new Texture2D;
 			BlackWhiteGrid->SetImage(2,2,(void *)black_white_grid,4,HGL_SF_R8,HGL_R8);
+			BlackWhiteGrid->SetMagFilter(HGL_FILTER_NEAREST);
 
             const uint8 gray_white_grid[4]={0xFF,0x7F,0x7F,0xFF};
 
             GrayWhiteGrid=new Texture2D;
             GrayWhiteGrid->SetImage(2,2,(void *)gray_white_grid,4,HGL_SF_R8,HGL_R8);
+			GrayWhiteGrid->SetMagFilter(HGL_FILTER_NEAREST);
 
             const uint8 blue_white_grid[4][3]=
             {
@@ -427,7 +432,8 @@ namespace hgl
             };
 
             BlueWhiteGrid=new Texture2D;
-            BlueWhiteGrid->SetImage(2,2,(void *)blue_white_grid,4,HGL_SF_RGB8,HGL_RGB8);
+            BlueWhiteGrid->SetImage(2,2,(void *)blue_white_grid,12,HGL_SF_RGB8,HGL_RGB8);
+			BlueWhiteGrid->SetMagFilter(HGL_FILTER_NEAREST);
 		}
 
 		void InitInlineRenderable()
