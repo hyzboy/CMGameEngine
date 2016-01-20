@@ -139,16 +139,16 @@ namespace hgl
 					if(in_color)	//还有顶点颜色传入
 					{
 						if(color_material)
-							fin_color=HGL_FS_DIFFUSE_COLOR "*" HGL_FS_COLOR "*" HGL_MATERIAL_COLOR ";\n\n";
+							fin_color=HGL_FS_DIFFUSE_COLOR "*" HGL_FS_COLOR "*" HGL_MATERIAL_COLOR;
 						else
-							fin_color=HGL_FS_DIFFUSE_COLOR "*" HGL_FS_COLOR ";\n\n";
+							fin_color=HGL_FS_DIFFUSE_COLOR "*" HGL_FS_COLOR;
 					}
 					else
 					{
 						if(color_material)
-							fin_color=HGL_FS_DIFFUSE_COLOR "*" HGL_MATERIAL_COLOR ";\n\n";
+							fin_color=HGL_FS_DIFFUSE_COLOR "*" HGL_MATERIAL_COLOR;
 						else
-							fin_color=HGL_FS_DIFFUSE_COLOR ";\n\n";
+							fin_color=HGL_FS_DIFFUSE_COLOR;
 					}
 				}
 				else	//无漫反射贴图
