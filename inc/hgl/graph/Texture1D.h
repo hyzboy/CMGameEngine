@@ -19,8 +19,8 @@ namespace hgl
 
 		public:	//
 
-					uint	GetCoordNumber	()const{return 1;}
-					int		GetLength		()const{return length;}
+					uint	GetCoordNumber	()const{return 1;}															///<取得坐标数量
+					int		GetLength		()const{return length;}														///<取得纹理长度
 
 		public:
 
@@ -28,11 +28,11 @@ namespace hgl
 			virtual 		~Texture1D();
 
 			virtual bool	SetImage		(uint l,void *data,uint size,TSF sf,uint vf=0,uint ltp=0);					///<创建1D贴图数据
-			virtual bool	ChangeImage		(uint s,uint l,void *data,uint size,TSF sf);
+			virtual bool	ChangeImage		(uint s,uint l,void *data,uint size,TSF sf);								///<更改1D贴图数据
 
-			virtual int		GetImage		(void *data_pointer,TSF fmt,int level=0);									///<取得2D贴图数据
+			virtual int		GetImage		(void *data_pointer,TSF fmt,int level=0);									///<取得1D贴图数据
 
-			virtual void	SetWrap			(uint);
+			virtual void	SetWrap			(uint);																		///<设置寻址方式
 		};//class Texture1D
 	}//namespace graph
 }//namespace hgl
