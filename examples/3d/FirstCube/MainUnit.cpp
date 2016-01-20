@@ -63,8 +63,9 @@ private:
 #ifdef _DEBUG	//debug模式下将shader保存成文件
 		cube1->AutoCreateShader(true,nullptr,OS_TEXT("Cube"));					///<自动生成Cube1渲染所需的shader
 #else
-		cube1->AutoCreateShader();		//默认参数是true,true
+		cube1->AutoCreateShader();		//默认参数是true,nullptr
 #endif//_DEBUG
+
 		cube2->AutoCreateShader();												///<自动生成Cube2的shader，但由于材质和数据与Cube1相同，所以本质上不会重新生成，而是重用Cube1所产生的shader
 	}
 
