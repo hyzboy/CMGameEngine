@@ -19,9 +19,9 @@ namespace hgl
 
 		VertexArray *SolidRect	=nullptr;
 		VertexArray *WireRect	=nullptr;
-		VertexArray *TextureRect	=nullptr;
+		VertexArray *TextureRect=nullptr;
 
-		VertexArray *SolidCircle	=nullptr;
+		VertexArray *SolidCircle=nullptr;
 		VertexArray *WireCircle	=nullptr;
 	}//namespace graph
 

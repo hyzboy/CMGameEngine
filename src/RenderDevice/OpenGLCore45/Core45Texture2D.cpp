@@ -59,6 +59,9 @@ namespace hgl
                 glTextureSubImage2D(texture_id, 0, 0, 0, w, h, sfmt->format, sfmt->type, data);
             }
 
+            video_format=vf;
+            color_format=sfmt->format;
+
             if(gen_mip)
             {
                 glGenerateTextureMipmap(texture_id);

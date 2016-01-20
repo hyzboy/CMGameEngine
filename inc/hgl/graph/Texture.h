@@ -40,6 +40,7 @@ namespace hgl
 
 			uint type;																				///<贴图类型
 
+			uint color_format;																		///<色彩格式(如RED,RG,RGB,RGBA,SRGB,SRGBA之类)
 			uint video_format;																		///<显存格式
 
 			uint min_filter,mag_filter;																///<放大和缩小过滤方式
@@ -56,7 +57,8 @@ namespace hgl
 					int		GetID		    ()const{return texture_id;}								///<取得纹理ID
 					uint	GetType			()const{return type;}									///<取得类型
 			virtual uint	GetCoordNumber	()const=0;												///<取得坐标数量
-					uint	GetVideoFormat	()const{return video_format;}							///<取得显存中的颜色格式
+					uint	GetColorFormat	()const{return color_format;}							///<取得颜色格式
+					uint	GetVideoFormat	()const{return video_format;}							///<取得显存中的数据格式
 
 		public:
 

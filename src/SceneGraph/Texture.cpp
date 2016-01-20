@@ -6,7 +6,7 @@ namespace hgl
 	{
 		Texture::Texture()
 		{
-			texture_id=type=video_format=0;
+			texture_id=type=color_format=video_format=0;
 
 			bitmap_data=0;
 
