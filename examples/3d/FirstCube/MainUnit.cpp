@@ -48,25 +48,24 @@ private:
 	{
 		//创建材质
 		mtl->SetColorMaterial(true);						///<设定使用Material中的颜色
-		mtl->SetColor(r,g,b,1.0);							///<设定颜色
+		mtl->SetColor(r,g,b,1.0);							///<设定材质颜色
 
 		return(new Renderable(cube_data,mtl));				///<两个立方体使用同一个顶点数据
 	}
 
 	void CreateDualCube()
 	{
-		cube_data=CreateRenderableCube();					///<创建一个CUBE的顶点数据
+		cube_data=CreateRenderableCube();					///<创建一个Cube的顶点数据
 
-		cube1=CreateCube(mtl1=new Material,1,0,0);			///<创建一个CUBE的可渲染数据
+		cube1=CreateCube(mtl1=new Material,1,0,0);			///<创建一个Cube的可渲染数据
 		cube2=CreateCube(mtl2=new Material,0,0,1);
 
 #ifdef _DEBUG	//debug模式下将shader保存成文件
-		cube1->AutoCreateShader(true,nullptr,OS_TEXT("Cube1"));
-		cube2->AutoCreateShader(true,nullptr,OS_TEXT("Cube2"));
+		cube1->AutoCreateShader(true,nullptr,OS_TEXT("Cube"));					///<自动生成Cube1渲染所需的shader
 #else
 		cube1->AutoCreateShader();		//默认参数是true,true
-		cube2->AutoCreateShader();
 #endif//_DEBUG
+		cube2->AutoCreateShader();												///<自动生成Cube2的shader，但由于材质和数据与Cube1相同，所以本质上不会重新生成，而是重用Cube1所产生的shader
 	}
 
 public:

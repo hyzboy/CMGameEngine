@@ -80,8 +80,9 @@ namespace hgl
 
 #ifdef _DEBUG
 			Shader *			AutoCreateShader	(bool mvp=true,ShaderStorage *storage=nullptr,const os_char *debug_outname=nullptr);
-#endif//_DEBUG
+#else
             Shader *			AutoCreateShader	(bool mvp=true,ShaderStorage *storage=nullptr);							///<自动创建Shader
+#endif//#endif//_DEBUG
 		};//class Renderable
 	}//namespace graph
 }//namespace hgl
