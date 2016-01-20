@@ -202,6 +202,8 @@ namespace hgl
 				{
 					state.tex[i]=tex->GetCoordNumber();
 					++state.tex_number;
+
+					state.tex_color[i]=tex->GetColorFormat();
 				}
 
 				VertexBufferType vbt;
