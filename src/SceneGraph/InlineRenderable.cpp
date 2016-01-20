@@ -197,9 +197,10 @@ namespace hgl
         * @param use_normal 是否使用法线数据(默认不使用)
         * @param use_tangent 是否使用切线数据(默认不使用)
         * @param tex_coord_vbt 纹理坐标数据所对应的顶点缓冲区类型(默认不使用)
+		* @param tex_scale 纹理坐标缩放倍率(默认为1)
 		* @return 可渲染数据
 		*/
-		VertexArray *CreateRenderableCube(bool use_normal,bool use_tangent,const VertexBufferType tex_coord_vbt)
+		VertexArray *CreateRenderableCube(bool use_normal,bool use_tangent,const VertexBufferType tex_coord_vbt,const float tex_scale)
 		{								// Points of a cube.
 			/*     4            5 */	const float points[]={	-0.5f, -0.5f, -0.5f,	-0.5f, -0.5f, +0.5f,	+0.5f, -0.5f, +0.5f,	+0.5f, -0.5f, -0.5f,	-0.5f, +0.5f, -0.5f,	-0.5f, +0.5f, +0.5f,
 			/* 	   *------------* */							+0.5f, +0.5f, +0.5f,	+0.5f, +0.5f, -0.5f,	-0.5f, -0.5f, -0.5f,	-0.5f, +0.5f, -0.5f,	+0.5f, +0.5f, -0.5f,	+0.5f, -0.5f, -0.5f,
@@ -227,7 +228,20 @@ namespace hgl
 
             if(use_normal)              obj->SetNormal(new VB3f(24,normals));
             if(use_tangent)             obj->SetTangents(new VB3f(24,tangents));
-            if(tex_coord_vbt!=vbtNone)  obj->SetVertexBuffer(tex_coord_vbt,new VB2f(24,tex_coords));
+            if(tex_coord_vbt!=vbtNone)
+			{
+				VB2f *vb_tex=new VB2f(24,tex_coords);
+
+				if(tex_scale!=1)
+				{
+					float *p=(float *)(vb_tex->GetData());
+
+					for(int i=0;i<48;i++)
+						*p++=*p*tex_scale;
+				}
+
+				obj->SetVertexBuffer(tex_coord_vbt,vb_tex);
+			}
 
             obj->SetIndex(new VB1u8(6*2*3,indices));
 
