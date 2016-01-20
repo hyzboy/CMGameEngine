@@ -28,11 +28,7 @@ namespace hgl
 
             if(data)        //无DATA数据时不用关心源格式
             {
-                if(sf<=HGL_SF_NONE
-                ||sf>=HGL_SF_END
-                ||sf==HGL_SF_UNCOMPRESSED
-                ||sf==HGL_SF_INDEX
-                ||sf==HGL_SF_COMPRESSED)
+				if(!TextureSourceFormatCheck(sf))
                 {
                     LOG_ERROR(OS_TEXT("sf error =")+OSString(sf));
                     return(false);
@@ -77,8 +73,6 @@ namespace hgl
                 //未来使用Sampler Object，则不再需要以下部分
                 glTextureParameteri(texture_id,GL_TEXTURE_MIN_FILTER,min_filter);
                 glTextureParameteri(texture_id,GL_TEXTURE_MAG_FILTER,mag_filter);
-                //glTextureParameteri(texture_id,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
-                //glTextureParameteri(texture_id,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
                 glTextureParameteri(texture_id,GL_TEXTURE_WRAP_S,GL_REPEAT);
             }
 
@@ -87,11 +81,7 @@ namespace hgl
 
         int Texture1D::GetImage(void *data_pointer,TSF fmt,int level)
         {
-            if(fmt<=HGL_SF_NONE
-            ||fmt>=HGL_SF_END
-            ||fmt==HGL_SF_UNCOMPRESSED
-            ||fmt==HGL_SF_INDEX
-            ||fmt==HGL_SF_COMPRESSED)
+			if(!TextureSourceFormatCheck(fmt))
             {
                 LOG_ERROR(OS_TEXT("glTexture1D::GetImage,fmt error =")+OSString(fmt));
                 return(-1);
@@ -129,11 +119,7 @@ namespace hgl
             if(s>=length
 			||!l||l>length-s
 			||!data
-            ||sf<=HGL_SF_NONE
-            ||sf>=HGL_SF_END
-            ||sf==HGL_SF_UNCOMPRESSED
-            ||sf==HGL_SF_INDEX
-            ||sf==HGL_SF_COMPRESSED)
+			||!TextureSourceFormatCheck(sf))
             {
                 LOG_ERROR(OS_TEXT("fmt error =")+OSString(sf));
                 return(false);

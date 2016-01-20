@@ -83,6 +83,18 @@ namespace hgl
 
         const int TextureFormatCount=sizeof(TextureFormatInfoList)/sizeof(TextureFormat);
 
+		bool TextureSourceFormatCheck(const TextureSourceFormat &tsf)
+		{
+			if(tsf<=HGL_SF_NONE
+			 ||tsf>=HGL_SF_END
+			 ||tsf==HGL_SF_UNCOMPRESSED
+			 ||tsf==HGL_SF_INDEX
+			 ||tsf==HGL_SF_COMPRESSED)
+				return(false);
+
+			return(true);
+		}
+
         TSF GetColorFormat(const char *str)
         {
             char fmt[17];
