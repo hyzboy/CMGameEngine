@@ -150,6 +150,7 @@ namespace hgl
 	// 		SetPointer(hfpRootFlowControl,flow);
 
 			hglSetProperty(		FPS, this,GraphicsApplication::GetFPS,GraphicsApplication::SetFPS);
+			cur_fps=0;
 
 			glfw_win=nullptr;
 			wait_active=true;

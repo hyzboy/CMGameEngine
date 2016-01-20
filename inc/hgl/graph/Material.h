@@ -123,7 +123,7 @@ namespace hgl
 
 			bool		Light;																		///<承接光照(默认开)
 
-			ObjectFixedArray<Texture,mtcMax> TextureList;											///<贴图
+			FixedArray<Texture *,mtcMax,nullptr> TextureList;										///<贴图
 
 		protected:
 

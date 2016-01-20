@@ -59,7 +59,7 @@ namespace hgl
 			if(vbt)
 				*vbt=(VertexBufferType)index;
 
-			return va->GetVertexBuffer(*vbt);
+			return va->GetVertexBuffer((VertexBufferType)index);
 		}
 
 		bool Renderable::SetTexCoord(int mtc,VertexBufferType vbt)
