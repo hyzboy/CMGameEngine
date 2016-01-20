@@ -411,28 +411,34 @@ namespace hgl
 	{
 		void CreateInlineTexture()
 		{
-			const uint8 black_white_grid[4]={0xFF,0x00,0x00,0xFF};
+			const uint8 black_white_grid[16]={	0xFF,0xFF,0x00,0x00,
+												0xFF,0xFF,0x00,0x00,
+												0x00,0x00,0xFF,0xFF,
+												0x00,0x00,0xFF,0xFF};
 
 			BlackWhiteGrid=new Texture2D;
-			BlackWhiteGrid->SetImage(2,2,(void *)black_white_grid,4,HGL_SF_R8,HGL_R8);
+			BlackWhiteGrid->SetImage(4,4,(void *)black_white_grid,16,HGL_SF_R8,HGL_R8);
 			BlackWhiteGrid->SetMagFilter(HGL_FILTER_NEAREST);
 
-            const uint8 gray_white_grid[4]={0xFF,0x7F,0x7F,0xFF};
+            const uint8 gray_white_grid[16]={	0xFF,0xFF,0x7F,0x7F,
+												0xFF,0xFF,0x7F,0x7F,
+												0x7F,0x7F,0xFF,0xFF,
+												0x7F,0x7F,0xFF,0xFF};
 
             GrayWhiteGrid=new Texture2D;
-            GrayWhiteGrid->SetImage(2,2,(void *)gray_white_grid,4,HGL_SF_R8,HGL_R8);
+            GrayWhiteGrid->SetImage(4,4,(void *)gray_white_grid,16,HGL_SF_R8,HGL_R8);
 			GrayWhiteGrid->SetMagFilter(HGL_FILTER_NEAREST);
 
-            const uint8 blue_white_grid[4][3]=
+            const uint8 blue_white_grid[16][3]=
             {
-                255,255,255,
-                 61,174,233,
-                 61,174,233,
-                255,255,255
+                255,255,255,	255,255,255,	61,174,233,		61,174,233,
+				255,255,255,	255,255,255,	61,174,233,		61,174,233,
+                 61,174,233,	61,174,233,		255,255,255,	255,255,255,
+				 61,174,233,	61,174,233,		255,255,255,	255,255,255
             };
 
             BlueWhiteGrid=new Texture2D;
-            BlueWhiteGrid->SetImage(2,2,(void *)blue_white_grid,12,HGL_SF_RGB8,HGL_RGB8);
+            BlueWhiteGrid->SetImage(4,4,(void *)blue_white_grid,48,HGL_SF_RGB8,HGL_RGB8);
 			BlueWhiteGrid->SetMagFilter(HGL_FILTER_NEAREST);
 		}
 
