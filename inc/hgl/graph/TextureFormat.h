@@ -145,6 +145,14 @@ namespace hgl
 			HGL_SF_RG11F_B10F,
 			HGL_SF_RGB9_E5,
 
+			HGL_SF_DEPTH,			//无用，做为深度分隔
+
+			HGL_SF_DEPTH16,
+			HGL_SF_DEPTH24,
+			HGL_SF_DEPTH32,
+
+			HGL_SF_DEPTH32F,
+
 			HGL_SF_INDEX,			//无用，做为索引色分隔
 
 			HGL_SF_INDEX_16_RGB,

@@ -55,7 +55,7 @@ namespace hgl
 		{
 		protected:
 
-			uint fbo_depth;
+			uint fbo;
 			uint rb_depth;
 			Texture2D *tex_depth;
 

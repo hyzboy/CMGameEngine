@@ -43,6 +43,14 @@ namespace hgl
             {HGL_SF_RG11F_B10F,     "RG11F_B10F",   false,  0,  GL_R11F_G11F_B10F,                              GL_RGB,         GL_UNSIGNED_INT_10F_11F_11F_REV ,4,4},
             {HGL_SF_RGB9_E5,        "RGB9_E5",      false,  0,  GL_RGB9_E5,                                     GL_RGB,         GL_UNSIGNED_INT_5_9_9_9_REV ,4,4},
 
+			{HGL_SF_DEPTH,          "",             false,  0,  0,                                              0,              0                           ,0,0},
+
+			{HGL_SF_DEPTH16,		"DEPTH16",		false,	0,	GL_DEPTH_COMPONENT16,							GL_DEPTH,		GL_UNSIGNED_SHORT			,2,2},
+			{HGL_SF_DEPTH24,		"DEPTH24",		false,	0,	GL_DEPTH_COMPONENT24,							GL_DEPTH,		GL_UNSIGNED_BYTE			,3,3},
+			{HGL_SF_DEPTH32,		"DEPTH32",		false,	0,	GL_DEPTH_COMPONENT32,							GL_DEPTH,		GL_UNSIGNED_INT				,4,4},
+
+			{HGL_SF_DEPTH32F,		"DEPTH32F",		false,	0,	GL_DEPTH_COMPONENT32F,							GL_DEPTH,		GL_FLOAT					,4,4},
+
             {HGL_SF_INDEX,          "",             false,  0,  0,                                              0,              0                           ,0,0},
 
             {HGL_SF_INDEX_16_RGB,   "16RGB",        false,  16, GL_LUMINANCE4,                                  GL_RGB,         GL_UNSIGNED_BYTE            ,0,0},
