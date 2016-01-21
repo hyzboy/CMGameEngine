@@ -22,7 +22,7 @@ namespace hgl
 		VertexArray *CreateRenderableRect(const RectScope2f &);										///<创建一个2D平面矩形的可渲染数据
 
 		VertexArray *CreateRenderableRect(const RectScope2f &,
-										  const VertexBufferType tex_coord_vbt,
+										  const VertexBufferType &,
 										  const RectScope2f &);										///<创建一个带纹理的2D平面矩形的可渲染数据
 
 		VertexArray *CreateRenderablePlaneGrid(	const Vector3f &,									///<创建一个平面网格的可渲染数据

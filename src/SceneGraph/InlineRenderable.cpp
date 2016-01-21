@@ -134,11 +134,11 @@ namespace hgl
 		/**
 		 * 画一个2D平面矩形
 		 */
-		VertexArray *CreateRenderableRect2D(const RectScope2f &rs)
+		VertexArray *CreateRenderableRect(const RectScope2f &rs)
 		{
 			VertexArray *obj=new VertexArray(HGL_PRIM_TRIANGLE_FAN);
 
-			VB2f *vertex=new VB2f(4);
+			VB2f *vertex=new VB2f(6);
 
 			vertex->Begin();
 				vertex->WriteRect(rs.Left,rs.Top,rs.Width,rs.Height);
@@ -152,12 +152,12 @@ namespace hgl
 		/**
 		 * 画一个带纹理的2D平面矩形
 		 */
-		VertexArray *CreateRenderableRect2D(const RectScope2f &rs,const VertexBufferType &tex_coord_vbt,const RectScope2f &ts)
+		VertexArray *CreateRenderableRect(const RectScope2f &rs,const VertexBufferType &tex_coord_vbt,const RectScope2f &ts)
 		{
 			VertexArray *obj=new VertexArray(HGL_PRIM_TRIANGLE_FAN);
 
-			VB2f *vertex=new VB2f(4);
-			VB2f *texcoord=new VB2f(4);
+			VB2f *vertex=new VB2f(6);
+			VB2f *texcoord=new VB2f(6);
 
 			vertex->Begin();
 				vertex->WriteRect(rs.Left,rs.Top,rs.Width,rs.Height);
