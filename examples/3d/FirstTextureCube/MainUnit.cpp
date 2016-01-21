@@ -92,6 +92,8 @@ public:
 	{
 		delete cube1;
 		delete cube2;
+		
+		delete cube_data;
 
 		delete mtl1;
 		delete mtl2;

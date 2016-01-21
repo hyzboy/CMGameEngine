@@ -6,17 +6,19 @@ namespace hgl
 {
 	namespace graph
 	{
+		class VertexArray;
+		class Material;
 		class Renderable;
 
 		class PlaneGrid
 		{
-            bool x,y,z;
-			Renderable *grid[3];
-            Renderable *axis;
+			VertexArray *grid_data;
+			Material *mtl;
+			Renderable *grid;
 
 		public:
 
-			PlaneGrid(int,int,bool,bool,bool);
+			PlaneGrid(int,int);
 			~PlaneGrid();
 
 			void Render(const Matrix4f *,const Matrix4f *);

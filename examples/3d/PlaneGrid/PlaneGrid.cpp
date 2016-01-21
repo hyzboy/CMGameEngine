@@ -7,66 +7,50 @@ namespace hgl
 {
 	namespace graph
 	{
-		PlaneGrid::PlaneGrid(int size,int num,bool view_x,bool view_y,bool view_z)
+		PlaneGrid::PlaneGrid(int size,int num)
 		{
-            x=view_x;
-            y=view_y;
-            z=view_z;
-
-			Vector3f v[3][4];
-            Color4f c[3]={Color4f(1,0,0,1),Color4f(0,1,0,1),Color4f(0,0,1,1)};
-
-            {
-                v[0][0]=Vector3f(0,-size,-size);
-                v[0][1]=Vector3f(0, size,-size);
-                v[0][2]=Vector3f(0, size, size);
-                v[0][3]=Vector3f(0,-size, size);
-            }
-            {
-                v[1][0]=Vector3f(-size,0,-size);
-                v[1][1]=Vector3f( size,0,-size);
-                v[1][2]=Vector3f( size,0, size);
-                v[1][3]=Vector3f(-size,0, size);
-            }
+			//创建顶点数据
 			{
-				v[2][0]=Vector3f(-size,-size,0);
-				v[2][1]=Vector3f( size,-size,0);
-				v[2][2]=Vector3f( size, size,0);
-				v[2][3]=Vector3f(-size, size,0);
+				Vector3f v[4];
+
+				{
+					v[0]=Vector3f(-size,-size,0);
+					v[1]=Vector3f( size,-size,0);
+					v[2]=Vector3f( size, size,0);
+					v[3]=Vector3f(-size, size,0);
+				}
+
+				grid_data=CreateRenderablePlaneGrid(v[0],v[1],v[2],v[3],num,num);
 			}
 
-            for(int i=0;i<3;i++)
-            {
-                grid[i]=CreateRenderablePlaneGrid(v[i][0],v[i][1],v[i][2],v[i][3],num,num,c[i]);
+			//创建材质数据
+			{
+				mtl=new Material;
 
-        #ifdef _DEBUG	//debug模式下将shader保存成文件
-                grid[i]->AutoCreateShader(true,OS_TEXT("PlaneGrid"));			//自动创建shader
-        #else
-                grid[i]->AutoCreateShader(true);						//自动创建shader
-        #endif//_DEBUG
-            }
+				mtl->SetColorMaterial(true);
+				mtl->SetColor(1,1,1,1);
+			}
 
-            axis=CreateRenderableAxis(size);
+			//创建可渲染对象
+			grid=new Renderable(grid_data,mtl);
+
+	#ifdef _DEBUG	//debug模式下将shader保存成文件
+			grid->AutoCreateShader(true,nullptr,OS_TEXT("PlaneGrid"));			//自动创建shader
+	#else
+			grid->AutoCreateShader();						//自动创建shader
+	#endif//_DEBUG
 		}
 
 		PlaneGrid::~PlaneGrid()
 		{
-            delete axis;
-			delete grid[0];
-            delete grid[1];
-            delete grid[2];
+			delete grid;
+			delete mtl;
+			delete grid_data;
 		}
 
 		void PlaneGrid::Render(const Matrix4f *proj,const Matrix4f *mv)
 		{
-            OpenDepthTest(HGL_DEPTH_GREATER);
-
-			if(x)DirectRender(grid[0],proj,mv);
-            if(y)DirectRender(grid[1],proj,mv);
-            if(z)DirectRender(grid[2],proj,mv);
-
-            OpenDepthTest(HGL_DEPTH_ALWAYS);
-            DirectRender(axis,proj,mv);
+			DirectRender(grid,proj,mv);
 		}
 	}//namespace graph
 }//namespace hgl

@@ -79,6 +79,21 @@ namespace hgl
 		};//struct BlendMode
 
 		/**
+		 * 纹理材质项
+		 */
+		struct MaterialTexture
+		{
+			Texture *tex;			///<纹理
+
+			Color4f color;			///<颜色强弱系数
+			uint8 blend[2];			///<混合方式(同photoshop图层一样的各种混合指定)
+			float scale;			///<缩放系数
+			float rotate;			///<旋转系数
+			float blur[4];			///<模糊系数(平面模糊，径向模糊，运动模糊,.....等等)
+			uint8 mosic;			///<马赛克化
+		};//struct MaterialTexture
+
+		/**
 		* 材质
 		*/
 		class Material
@@ -123,7 +138,7 @@ namespace hgl
 
 			bool		Light;																		///<承接光照(默认开)
 
-			FixedArray<Texture *,mtcMax,nullptr> TextureList;										///<贴图
+			FixedArray<Texture *,mtcMax,nullptr> TextureList;										///<贴图,(未来将会使用MaterialTexture代替Texture，以支持每一层独立变换)
 
 		protected:
 

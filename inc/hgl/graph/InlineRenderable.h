@@ -22,14 +22,13 @@ namespace hgl
 												const Vector3f &,
 												const Vector3f &,
 												const Vector3f &,
-												int,int,
-												const Color4f &color=Color4f(0.75f,0.75f,0.75f,1.0f));
+												int,int);
 
 		VertexArray *CreateRenderableCube(	bool use_normal=false,
 											bool use_tangent=false,
 											const VertexBufferType tex_coord_vbt=vbtNone,
 											const float tex_scale=1.0);								///<创建一个立方体的可渲染数据,尺寸为1,中心为0,0,0
-		
+
 		VertexArray *CreateRenderableWireCube();													///<创建一个线框立方体的可渲染数据,尺寸为1,中心为0,0,0
 
 		VertexArray *CreateRenderableWireRect();													///<创建一个2D线框的可渲染数据

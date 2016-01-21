@@ -132,67 +132,56 @@ namespace hgl
 // 			return(obj);
 // 		}
 //
-// 		/**
-// 		* 画一个平面网格
-// 		* @param v0 网格顶点0
-// 		* @param v1 网格顶点1
-// 		* @param v2 网格顶点2
-// 		* @param v3 网格顶点3
-// 		* @param step01 顶点0至1之间的格数
-// 		* @param step12 顶点2至3之间的格数
-// 		* @param color 颜色
-// 		* @return 可渲染数据
-// 		*/
-// 		VertexArray *CreateRenderablePlaneGrid(	const Vector3f &v0,														///<创建一个平面网格的可渲染数据
-// 												const Vector3f &v1,
-// 												const Vector3f &v2,
-// 												const Vector3f &v3,
-// 												int step01,
-// 												int step12,
-// 												const Color4f &color)
-// 		{
-// 			VertexArray *obj=CreateRenderable();
-// 			Material *mtl=CreateMaterial();
-//
-// 			//设置材质
-// 			mtl->SetColorMaterial(true);			//使用颜色追踪材质
-// 			mtl->SetColor(color);					//设置颜色
-//
-// 			obj->SetMaterial(mtl,true);				//设置材质
-//
-// 			//设置图元类型
-// 			obj->SetPrimitive(HGL_PRIM_LINES);		//设置为画线
-//
-// 			//创建顶点缓冲区
-// 			VB3f *vertex=new VB3f(((step01+1)+(step12+1))*2);				//创建一个3D坐标点、浮点数据的缓冲区
-//
-// 			vertex->Begin();
-// 				for(int row=0;row<=step01;row++)
-// 				{
-// 					float pos=float(row)/float(step01);
-//
-// 					Vector3f start	=to(v0,v1,pos);
-// 					Vector3f end	=to(v3,v2,pos);
-//
-// 					vertex->WriteLine(start,end);
-// 				}
-//
-// 				for(int col=0;col<=step12;col++)
-// 				{
-// 					float pos=float(col)/float(step12);
-//
-// 					Vector3f start	=to(v1,v2,pos);
-// 					Vector3f end	=to(v0,v3,pos);
-//
-// 					vertex->WriteLine(start,end);
-// 				}
-// 			vertex->End();
-//
-// 			obj->SetVertex(vertex);
-//
-// 			return(obj);
-// 		}
-//
+		/**
+		* 画一个平面网格
+		* @param v0 网格顶点0
+		* @param v1 网格顶点1
+		* @param v2 网格顶点2
+		* @param v3 网格顶点3
+		* @param step01 顶点0至1之间的格数
+		* @param step12 顶点2至3之间的格数
+		* @param color 颜色
+		* @return 可渲染数据
+		*/
+		VertexArray *CreateRenderablePlaneGrid(	const Vector3f &v0,														///<创建一个平面网格的可渲染数据
+												const Vector3f &v1,
+												const Vector3f &v2,
+												const Vector3f &v3,
+												int step01,
+												int step12)
+		{
+			VertexArray *obj=new VertexArray(HGL_PRIM_LINES);
+
+			//创建顶点缓冲区
+			VB3f *vertex=new VB3f(((step01+1)+(step12+1))*2);				//创建一个3D坐标点、浮点数据的缓冲区
+
+			vertex->Begin();
+				for(int row=0;row<=step01;row++)
+				{
+					float pos=float(row)/float(step01);
+
+					Vector3f start	=to(v0,v1,pos);
+					Vector3f end	=to(v3,v2,pos);
+
+					vertex->WriteLine(start,end);
+				}
+
+				for(int col=0;col<=step12;col++)
+				{
+					float pos=float(col)/float(step12);
+
+					Vector3f start	=to(v1,v2,pos);
+					Vector3f end	=to(v0,v3,pos);
+
+					vertex->WriteLine(start,end);
+				}
+			vertex->End();
+
+			obj->SetVertex(vertex);
+
+			return(obj);
+		}
+
 		/**
 		* 创建一个立方体的可渲染数据
         * @param use_normal 是否使用法线数据(默认不使用)
