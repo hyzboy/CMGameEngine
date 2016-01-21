@@ -31,6 +31,10 @@ namespace hgl
 			return LocalToWorldMatrix;
 		}
 
+		/**
+		 * 刷新世界矩阵
+		 * @param 上一级local to world矩阵
+		 */
 		void SceneOrient::RefreshLocalToWorldMatrix(const Matrix4f *m)
 		{
 			SetLocalToWorldMatrix((*m)*LocalMatrix);

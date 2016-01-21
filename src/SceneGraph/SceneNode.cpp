@@ -5,29 +5,9 @@ namespace hgl
 {
 	namespace graph
 	{
-		SceneNode::SceneNode()
-		{
-		}
-
-		SceneNode::~SceneNode()
-		{
-			ClearSubNode();
-			Clear();
-		}
-
-		void SceneNode::Clear()
-		{
-			SubData.Clear();
-		}
-
-		void SceneNode::ClearSubNode()
-		{
-			SubNode.Clear();
-		}
-
 		/**
-		* ˢ������任����
-		* @param root ���ڵ�����
+		* 刷新矩阵
+		* @param root 根矩阵
 		*/
 		void SceneNode::RefreshMatrix(const Matrix4f *root_matrix)
 		{
@@ -49,7 +29,7 @@ namespace hgl
 		}
 
 		/**
-		* ˢ�°󶨺�
+		* 刷新绑定盒
 		*/
 		void SceneNode::RefreshBoundingBox()
 		{
@@ -62,7 +42,7 @@ namespace hgl
 			{
 				(*sub)->RefreshBoundingBox();
 
-				if(i==0)	//��һ��
+				if(i==0)
 				{
 //					min_v=(*sub)->GetBounding();
 				}
@@ -72,29 +52,29 @@ namespace hgl
 		}
 
 		/**
-		* չ������Ⱦ�б�
-		* @param rl ��Ⱦ�б�
-		* @param func �ڵ����˺���
-		* @param func_data �������˺����ĸ�������
-		* @return չ���Ƿ��ɹ�
+		* 从当前节点展开输出到一个渲染列表
+		* @param rl 渲染列表
+		* @param func 过滤函数
+		* @param func_data 过滤函数用辅助数据
+		* @return 成功与否
 		*/
 		bool SceneNode::ExpendToList(RenderList *rl,FilterSceneNodeFunc func,void *func_data)const
 		{
 			if(!rl)return(false);
 
-			if(func)	//�����й��˺���
+			if(func)
 				if(!func(this,func_data))
 					return(false);
 
 			if(SubData.GetCount())
-				rl->Add(this);											//���ӵ�ǰ�ڵ�
+				rl->Add(this);											//增加当前节点
 
 			int count=SubNode.GetCount();
 			SceneNode **sub=SubNode.GetData();
 
 			for(int i=0;i<count;i++)
 			{
-				(*sub)->ExpendToList(rl,func,func_data);				//չ���ӽڵ�
+				(*sub)->ExpendToList(rl,func,func_data);				//展开子节点
 
 				sub++;
 			}
@@ -102,11 +82,18 @@ namespace hgl
 			return(true);
 		}
 
+		bool SceneNode::ExpendToList(RenderList *rl,const Matrix4f &proj,const Matrix4f &mv,RenderListCompFunc comp_func)const
+		{
+			if(!rl)return(false);
+
+			
+		}
+
 		/**
-		* չ������Ⱦ�б�(ʹ��������ƽ��ͷ�ü�������)
-		* @param rl ��Ⱦ�б�
-		* @param cam ������
-		* @param comp_func �����ñȽϺ���
+		* 从当前节点展开输出到一个渲染列表
+		* @param rl 渲染列表
+		* @param cam 摄像机
+		* @param comp_func 渲染列表远近比较函数
 		*/
 		bool SceneNode::ExpendToList(RenderList *rl,Camera *cam,RenderListCompFunc comp_func)const
 		{
@@ -122,7 +109,6 @@ namespace hgl
 
 			if(comp_func)
 			{
-				//����
 			}
 
 			return(true);

@@ -45,11 +45,15 @@ namespace hgl
 
 		public:
 
-			SceneNode();
-			virtual ~SceneNode();
+			SceneNode()HGL_DEFAULT_MEMFUNC;
+			virtual ~SceneNode()
+			{
+				ClearSubNode();
+				ClearRenderable();
+			}
 
 			void		Add(Renderable *r){if(r)SubData.Add(r);}														///<增加一个可渲染数据
-			void		Clear();																						///<清除可渲染数据
+			void		ClearRenderable(){SubData.Clear();}																///<清除可渲染数据
 
 			void		AddSubNode(SceneNode *n){if(n)SubNode.Add(n);}													///<增加一个子节点
 			SceneNode *	CreateSubNode()																					///<创建一个子节点
@@ -59,7 +63,17 @@ namespace hgl
 				return sn;
 			}
 
-			void		ClearSubNode();																					///<清除子节点
+			SceneNode *	AddSubNode(Renderable *r,const Matrix4f &m)
+			{
+				if(!r)return(nullptr);
+
+				SceneNode *sn=CreateSubNode();
+				sn->Add(r);
+				sn->SetLocalMatrix(m);
+				return sn;
+			}
+
+			void		ClearSubNode(){SubNode.Clear();}																///<清除子节点
 
 		public:	//坐标相关方法
 
@@ -80,6 +94,7 @@ namespace hgl
 					bool ExpendToList(RenderList *rl,Frustum *f)const													///<展开到渲染列表(使用平截头裁剪)
 						{return ExpendToList(rl,FrustumClipFilter,f);}
 
+					bool ExpendToList(RenderList *,const Matrix4f &,const Matrix4f &,RenderListCompFunc=nullptr)const;	///<展开到渲染列表(使用平截头裁剪并排序)
 					bool ExpendToList(RenderList *,Camera *,RenderListCompFunc=nullptr)const;							///<展开到渲染列表(使用摄像机平截头裁剪并排序)
 		};//class SceneNode
 	}//namespace graph

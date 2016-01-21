@@ -2,3 +2,4 @@
 add_subdirectory(FirstCube)
 add_subdirectory(FirstTextureCube)
 add_subdirectory(SpiralCube)
+add_subdirectory(SpiralCubeScene)
