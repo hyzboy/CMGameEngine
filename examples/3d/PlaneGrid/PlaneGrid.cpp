@@ -28,7 +28,7 @@ namespace hgl
 				mtl=new Material;
 
 				mtl->SetColorMaterial(true);
-				mtl->SetColor(1,1,1,1);
+				mtl->SetColor(0.5,0.5,0.5,1);
 			}
 
 			//创建可渲染对象
