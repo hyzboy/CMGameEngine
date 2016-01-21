@@ -172,4 +172,75 @@ namespace hgl
 			glViewport(viewport[0],viewport[1],viewport[2],viewport[3]);
 		}
 	}//namespace graph
+
+	namespace graph
+	{
+		RenderToTextureColorDepth::RenderToTextureColorDepth(uint width,uint height,const TextureSourceFormat &color_tsf,const TextureSourceFormat &depth_tsf,const Color3f &bc,const float id)
+		{
+			if(width<=0||height<=0||!TextureSourceFormatCheck(color_tsf)||!TextureSourceFormatCheck(depth_tsf))
+			{
+				tex_color=nullptr;
+				tex_depth=nullptr;
+				return;
+			}
+
+			{
+				tex_color=new Texture2D();
+
+				tex_color->SetImage(width,height,nullptr,0,color_tsf,0,0);
+			}
+
+			{
+				tex_depth=new Texture2D();
+
+				tex_depth->SetImage(width,height,nullptr,0,depth_tsf,0,0);
+			}
+
+			back_color=bc;
+			init_depth=id;
+
+			draw_buffers=GL_COLOR_ATTACHMENT0;
+
+			glCreateFramebuffers(1,&fbo);
+
+			glNamedFramebufferTexture(fbo, GL_COLOR_ATTACHMENT0, tex_color->GetID(), 0);
+			CheckFrameBufferStatus(fbo);
+			glNamedFramebufferTexture(fbo, GL_DEPTH_ATTACHMENT, tex_depth->GetID(), 0);
+			CheckFrameBufferStatus(fbo);
+		}
+
+		RenderToTextureColorDepth::~RenderToTextureColorDepth()
+		{
+			if(tex_color)
+			{
+				glDeleteFramebuffers(1,&fbo);
+
+				delete tex_depth;
+				delete tex_color;
+			}
+		}
+
+		bool RenderToTextureColorDepth::Begin()
+		{
+			if(!tex_color)return(false);
+
+			glGetIntegerv(GL_VIEWPORT,this->viewport);
+
+			glBindFramebuffer(GL_FRAMEBUFFER,fbo);
+			CheckFrameBufferStatus(fbo);
+			glDrawBuffers(1,&draw_buffers);
+
+			glViewport(0,0,tex_color->GetWidth(),tex_color->GetHeight());
+			glClearBufferfv(GL_COLOR,0,(float *)&back_color);
+			glClearBufferfv(GL_DEPTH,0,&init_depth);
+		}
+
+		void RenderToTextureColorDepth::End()
+		{
+			if(!tex_color)return;
+
+			glBindFramebuffer(GL_FRAMEBUFFER,0);
+			glViewport(viewport[0],viewport[1],viewport[2],viewport[3]);
+		}
+	}//namespace graph
 }//namespace hgl

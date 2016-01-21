@@ -108,4 +108,4 @@ public:
 	}
 };//class TestObject
 
-HGL_GRAPHICS_APPLICATION("渲染到纹理(仅颜色)","RTTCOlor",new TestObject());
+HGL_GRAPHICS_APPLICATION("渲染到纹理(仅颜色)","RTTColor",new TestObject());

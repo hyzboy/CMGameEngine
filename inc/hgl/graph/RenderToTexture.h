@@ -73,10 +73,27 @@ namespace hgl
 
 		class RenderToTextureColorDepth:public RenderToTexture
 		{
+		protected:
+
+			uint fbo;
+			Texture2D *tex_color;
+			Texture2D *tex_depth;
+
+			GLenum draw_buffers;
+
+			Color3f back_color;
+			float init_depth;
 
 		public:
 
-			RenderToTextureColorDepth(uint width, uint height);
+			RenderToTextureColorDepth(uint width,uint height,const TextureSourceFormat &color_tsf,const TextureSourceFormat &depth_tsf,const Color3f &bc=Color3f(0,0,0),const float id=1.0f);
+			virtual ~RenderToTextureColorDepth();
+
+			Texture2D *GetColorTexture(){return tex_color;}
+			Texture2D *GetDepthTexture(){return tex_depth;}
+
+			bool Begin();
+			void End();
 		};//class RenderToTextureColorDepth
 
 		class RenderToTextureCubeMap:public RenderToTexture
