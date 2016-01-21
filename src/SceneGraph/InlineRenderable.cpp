@@ -1,10 +1,9 @@
-﻿#include<hgl/graph/VertexBuffer.h>
+﻿#include<hgl/graph/InlineRenderable.h>
+#include<hgl/graph/VertexBuffer.h>
 #include<hgl/graph/VertexArray.h>
 #include<hgl/graph/Material.h>
-#include<hgl/graph/Render.h>
 #include<hgl/graph/Shader.h>
 #include<hgl/graph/TextureFormat.h>
-#include<hgl/type/Color4f.h>
 
 namespace hgl
 {
@@ -132,6 +131,48 @@ namespace hgl
 // 			return(obj);
 // 		}
 //
+		/**
+		 * 画一个2D平面矩形
+		 */
+		VertexArray *CreateRenderableRect2D(const RectScope2f &rs)
+		{
+			VertexArray *obj=new VertexArray(HGL_PRIM_TRIANGLE_FAN);
+
+			VB2f *vertex=new VB2f(4);
+
+			vertex->Begin();
+				vertex->WriteRect(rs.Left,rs.Top,rs.Width,rs.Height);
+			vertex->End();
+
+			obj->SetVertex(vertex);
+
+			return obj;
+		}
+
+		/**
+		 * 画一个带纹理的2D平面矩形
+		 */
+		VertexArray *CreateRenderableRect2D(const RectScope2f &rs,const VertexBufferType &tex_coord_vbt,const RectScope2f &ts)
+		{
+			VertexArray *obj=new VertexArray(HGL_PRIM_TRIANGLE_FAN);
+
+			VB2f *vertex=new VB2f(4);
+			VB2f *texcoord=new VB2f(4);
+
+			vertex->Begin();
+				vertex->WriteRect(rs.Left,rs.Top,rs.Width,rs.Height);
+			vertex->End();
+
+			texcoord->Begin();
+				texcoord->WriteRect(ts.Left,ts.Top,ts.Width,ts.Height);
+			texcoord->End();
+
+			obj->SetVertex(vertex);
+			obj->SetVertexBuffer(tex_coord_vbt,texcoord);
+
+			return obj;
+		}
+
 		/**
 		* 画一个平面网格
 		* @param v0 网格顶点0
