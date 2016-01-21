@@ -97,9 +97,10 @@ namespace hgl
 
 				if(color_format!=GL_RGBA)
 				{
-					if(color_format==GL_RED	)tex_sampler[mtc_index].Strcat(".rrr,1)");else
-					if(color_format==GL_RG	)tex_sampler[mtc_index].Strcat(".rrr,b)");else		//一般是luminance+a
-					if(color_format==GL_RGB	)tex_sampler[mtc_index].Strcat(".rgb,1)");else
+					if(color_format==GL_DEPTH	)tex_sampler[mtc_index].Strcat(".rrr,1)");else
+					if(color_format==GL_RED		)tex_sampler[mtc_index].Strcat(".rrr,1)");else
+					if(color_format==GL_RG		)tex_sampler[mtc_index].Strcat(".rrr,b)");else		//一般是luminance+a
+					if(color_format==GL_RGB		)tex_sampler[mtc_index].Strcat(".rgb,1)");else
 					{
 						//还有srgb,srgba就暂时不知道了如果处理了
 					}

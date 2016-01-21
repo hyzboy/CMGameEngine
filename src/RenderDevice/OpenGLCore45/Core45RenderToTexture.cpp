@@ -54,7 +54,7 @@ namespace hgl
 	{
 		RenderToTextureColor::RenderToTextureColor(uint width,uint height,const TextureSourceFormat &tsf,const Color3f &bc,const float id)
 		{
-			if(!TextureSourceFormatCheck(tsf))
+			if(width<=0||height<=0||!TextureSourceFormatCheck(tsf))
 			{
 				tex_color=nullptr;
 				return;
@@ -102,7 +102,6 @@ namespace hgl
 			glBindFramebuffer(GL_FRAMEBUFFER,fbo);
 			CheckFrameBufferStatus(fbo);
 			glDrawBuffers(1,&draw_buffers);
-			CheckFrameBufferStatus(fbo);
 
 			glViewport(0,0,tex_color->GetWidth(),tex_color->GetHeight());
 			glClearBufferfv(GL_COLOR,0,(float *)&back_color);
@@ -112,6 +111,62 @@ namespace hgl
 		void RenderToTextureColor::End()
 		{
 			if(!tex_color)return;
+
+			glBindFramebuffer(GL_FRAMEBUFFER,0);
+			glViewport(viewport[0],viewport[1],viewport[2],viewport[3]);
+		}
+	}//namespace graph
+
+	namespace graph
+	{
+		RenderToTextureDepth::RenderToTextureDepth(uint width,uint height,const TextureSourceFormat &tsf,const float id)
+		{
+			if(width<=0||height<=0||!TextureSourceFormatDepthCheck(tsf))
+			{
+				tex_depth=nullptr;
+				return;
+			}
+
+			{
+				tex_depth=new Texture2D();
+
+				tex_depth->SetImage(width,height,nullptr,0,tsf,0,0);
+			}
+
+			init_depth=id;
+
+			glCreateFramebuffers(1,&fbo);
+			glNamedFramebufferTexture(fbo, GL_DEPTH_ATTACHMENT, tex_depth->GetID(), 0);
+			CheckFrameBufferStatus(fbo);
+		}
+
+		RenderToTextureDepth::~RenderToTextureDepth()
+		{
+			if(tex_depth)
+			{
+				glDeleteFramebuffers(1,&fbo);
+				delete tex_depth;
+			}
+		}
+
+		bool RenderToTextureDepth::Begin()
+		{
+			if(!tex_depth)return(false);
+
+			glGetIntegerv(GL_VIEWPORT,this->viewport);
+
+			glBindFramebuffer(GL_FRAMEBUFFER,fbo);
+			CheckFrameBufferStatus(fbo);
+			glDrawBuffer(GL_NONE);
+			glReadBuffer(GL_NONE);
+
+			glViewport(0,0,tex_depth->GetWidth(),tex_depth->GetHeight());
+			glClearBufferfv(GL_DEPTH,0,&init_depth);
+		}
+
+		void RenderToTextureDepth::End()
+		{
+			if(!tex_depth)return;
 
 			glBindFramebuffer(GL_FRAMEBUFFER,0);
 			glViewport(viewport[0],viewport[1],viewport[2],viewport[3]);

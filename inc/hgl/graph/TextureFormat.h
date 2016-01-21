@@ -196,6 +196,7 @@ namespace hgl
 		typedef TextureSourceFormat TSF;
 
 		bool TextureSourceFormatCheck(const TextureSourceFormat &);
+		bool TextureSourceFormatDepthCheck(const TextureSourceFormat &);
 
         struct TextureFormat
         {

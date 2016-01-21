@@ -103,6 +103,11 @@ namespace hgl
 			return(true);
 		}
 
+		bool TextureSourceFormatDepthCheck(const TextureSourceFormat &tsf)
+		{
+			return (tsf>HGL_SF_DEPTH&&tsf<HGL_SF_INDEX);
+		}
+
         TSF GetColorFormat(const char *str)
         {
             char fmt[17];

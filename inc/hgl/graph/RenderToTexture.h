@@ -56,13 +56,19 @@ namespace hgl
 		protected:
 
 			uint fbo;
-			uint rb_depth;
 			Texture2D *tex_depth;
+
+			float init_depth;
 
 		public:
 
-			RenderToTextureDepth(uint width,uint height,uint depth=32);
+			RenderToTextureDepth(uint width,uint height,const TextureSourceFormat &,const float id=1.0f);
 			virtual ~RenderToTextureDepth();
+
+			Texture2D *GetTexture(){return tex_depth;}
+
+			bool Begin();
+			void End();
 		};//class RenderToTextureDepth
 
 		class RenderToTextureColorDepth:public RenderToTexture
