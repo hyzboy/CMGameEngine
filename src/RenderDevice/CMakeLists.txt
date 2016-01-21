@@ -3,6 +3,7 @@
                                     #OpenGLCore45/Core45Texture3D.cpp
                                     OpenGLCore45/Core45Renderable.cpp
                                     OpenGLCore45/Core45VertexBuffer.cpp
+                                    OpenGLCore45/Core45RenderToTexture.cpp
                                     OpenGLCoreExtensions.c)
 
 set(CM_GLSL_SHADER_MAKER_SOURCE     ShaderMaker/ShaderStringList.cpp

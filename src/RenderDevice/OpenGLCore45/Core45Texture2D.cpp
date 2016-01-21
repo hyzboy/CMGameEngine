@@ -47,11 +47,14 @@ namespace hgl
 
             if(sfmt->compress)      //原本就是压缩格式
             {
+				if(data)
                 glCompressedTextureSubImage2D(texture_id,0,0,0,w,h,vf,image_size,data);
             }
             else                    //正常非压缩格式
             {
                 glTextureStorage2D(texture_id, 1, vf, w, h);
+
+				if(data)
                 glTextureSubImage2D(texture_id, 0, 0, 0, w, h, sfmt->format, sfmt->type, data);
             }
 
