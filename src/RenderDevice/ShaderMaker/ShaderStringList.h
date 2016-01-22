@@ -40,8 +40,9 @@ namespace hgl
 			};
 
 			extern const char shader_float_type[4][8];
-			extern const char shader_sampler[3][16];
-			extern const char shader_sampler_shadow[2][16];
+
+			const char *get_sampler_by_tex_type(uint);
+			const char *get_sampler_shadow_by_tex_type(uint);
 
 			struct shader_stringlist
 			{
@@ -84,8 +85,8 @@ namespace hgl
 				void add_out_fv			(const char *name,int num){add("out "		);add(shader_float_type[num-1]);add(" ");add(name);add(";\n");}
 				void add_uniform_fv		(const char *name,int num){add("uniform "	);add(shader_float_type[num-1]);add(" ");add(name);add(";\n");}
 
-				void add_sampler		(const char *name,int num){add("uniform "	);add(shader_sampler		[num-1]);add(" ");add(name);add(";\n");}
-				void add_sampler_shadow	(const char *name,int num){add("uniform "	);add(shader_sampler_shadow	[num-1]);add(" ");add(name);add(";\n");}
+				void add_sampler		(const char *name,uint tex_type){add("uniform "	);add(get_sampler_by_tex_type(tex_type));add(" ");add(name);add(";\n");}
+				void add_sampler_shadow	(const char *name,uint tex_type){add("uniform "	);add(get_sampler_shadow_by_tex_type(tex_type));add(" ");add(name);add(";\n");}
 
 			public:
 

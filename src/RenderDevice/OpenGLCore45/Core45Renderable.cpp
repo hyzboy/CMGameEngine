@@ -200,7 +200,7 @@ namespace hgl
 
 				if(tex)
 				{
-					state.tex[i]=tex->GetCoordNumber();
+					state.tex_type[i]=tex->GetType();
 					++state.tex_number;
 
 					state.tex_color[i]=tex->GetColorFormat();

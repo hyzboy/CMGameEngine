@@ -131,13 +131,13 @@ namespace hgl
 				in_vertex_buffer[vbtColor]=true;
 			}
 
-			void vs::add_in_texture(const char *vb_name,int coord_num,uint color_format,int mtc_index)
+			void vs::add_in_texture(const char *vb_name,uint tex_type,uint color_format,int mtc_index)
 			{
 				MATERIAL_TEXTURE_CHANNEL_NAME mtc_name;
 
 				GetMaterialTextureName(mtc_name,mtc_index);
 
-				add_sampler(mtc_name,coord_num);
+				add_sampler(mtc_name,tex_type);
 
 				if(color_format!=GL_RGBA)
 					tex_sampler[mtc_index].Strcat("vec4(");
@@ -409,9 +409,9 @@ namespace hgl
 
 					GetVertexBufferName(vbn,vbtVertex);
 
-					code.add_in_texture(vbn,2,GL_RG,mtcHeight);
+					code.add_in_texture(vbn,HGL_TEXTURE_2D,GL_RG,mtcHeight);
 
-					if(state->tex[mtcDiffuse])					//漫反射，绘制坐标即贴图坐标
+					if(state->tex_type[mtcDiffuse]!=HGL_TEXTURE_2D)					//漫反射，绘制坐标即贴图坐标
 					{
 						code.add_in_texcoord(vbtVertex,vbn,2,mtcDiffuse);
 						hm_map_count++;

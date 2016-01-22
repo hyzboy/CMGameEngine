@@ -76,7 +76,7 @@ namespace hgl
 
 			public:		//纹理
 
-				void add_in_texture(const char *,int,uint,int mtc);
+				void add_in_texture(const char *,uint,uint,int mtc);
 				void add_in_texcoord(int,const char *,int,int mtc);
 				void add_out_texcoord(int,int mtc,const char *);
 

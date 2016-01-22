@@ -21,7 +21,7 @@ namespace hgl
 				in_color=sitNone;
 				color_material=false;
 
-				hgl_set(mtc,-1,mtcMax);
+				hgl_zero(mtc_tex_type);
 
 				alpha_test=false;
 				outside_discard=false;
@@ -63,16 +63,17 @@ namespace hgl
 			/**
 			* 增加一张贴图
 			* @param mtc_index 成份索引
-			* @param coord_num 坐标维数
+			* @param tex_type 纹理类型
+			* @param color_format 颜色格式
 			* @param source 数据源名称
 			*/
-			void fs::add_in_texture(int mtc_index,int coord_num,uint color_format,const char *source)
+			void fs::add_in_texture(int mtc_index,uint tex_type,uint color_format,const char *source)
 			{
 				MATERIAL_TEXTURE_CHANNEL_NAME mtc_name;
 
 				GetMaterialTextureName(mtc_name,mtc_index);
 
-				mtc[mtc_index]=coord_num;
+				mtc_tex_type[mtc_index]=tex_type;
 
 				tex_coord[mtc_index].Strcat(HGL_FS_TEXCOORD);
 				tex_coord[mtc_index].Strcat(source);
@@ -98,7 +99,7 @@ namespace hgl
 					}
 				}
 
-				add_sampler(mtc_name,coord_num);
+				add_sampler(mtc_name,tex_type);
 			}
 
 			/**
@@ -120,7 +121,7 @@ namespace hgl
 			{
 				UTF8String fin_color;
 
-				if(mtc[mtcDiffuse]!=-1)		//如果漫反射贴图也为否，则完全无色彩信息，退出
+				if(mtc_tex_type[mtcDiffuse])		//如果漫反射贴图也为否，则完全无色彩信息，退出
 				{
 					if(outside_discard)		//有出界放弃处理
 					{
@@ -175,7 +176,7 @@ namespace hgl
 					}
 				}
 
-				if(mtc[mtcAlpha]!=-1)				//透明贴图
+				if(mtc_tex_type[mtcAlpha])				//透明贴图
 				{
 					add(U8_TEXT("\tfloat tex_alpha=")+tex_sampler[mtcAlpha]+U8_TEXT(";\n\n"));
 
@@ -186,7 +187,7 @@ namespace hgl
 
 				if(alpha_test)		//alpha test
 				{
-					if(mtc[mtcAlpha]!=-1)
+					if(mtc_tex_type[mtcAlpha])
 						add("\tif("+fin_color+U8_TEXT(".a*tex_alpha<" HGL_FS_ALPHA_TEST ")discard;\n"));
 					else
 						add("\tif("+fin_color+U8_TEXT(".a<" HGL_FS_ALPHA_TEST ")discard;\n"));
@@ -199,14 +200,14 @@ namespace hgl
 //					add_format("\tfloat normal_instensity=max(dot(%s,vec3(0.0,0.0,1.0)),0.0);\n",HGL_FS_NORMAL);
 //					add();
 
-					if(mtc[mtcAlpha]!=-1)
+					if(mtc_tex_type[mtcAlpha])
 						add(U8_TEXT("\t" HGL_FS_FRAG_COLOR "=")+fin_color+U8_TEXT("*vec4(vec3(" HGL_FS_LIGHT_INTENSITY ")," HGL_FS_ALPHA ");\n"));
 					else
 						add(U8_TEXT("\t" HGL_FS_FRAG_COLOR "=")+fin_color+U8_TEXT("*vec4(vec3(" HGL_FS_LIGHT_INTENSITY "),1.0);\n"));
 				}
 				else
 				{
-					if(mtc[mtcAlpha]!=-1)
+					if(mtc_tex_type[mtcAlpha])
 						add(U8_TEXT("\t" HGL_FS_FRAG_COLOR "=vec4(")+fin_color+U8_TEXT(".rgb,")+fin_color+U8_TEXT(".a*" HGL_FS_ALPHA ");\n"));
 					else
 						add(U8_TEXT("\t" HGL_FS_FRAG_COLOR "=")+fin_color+U8_TEXT(";\n"));
@@ -290,15 +291,15 @@ namespace hgl
 					if(state->height_map
 					&&(mtc>=mtcDiffuse&&mtc<mtcPalette))		//使用高度图时，这一部分贴图无需贴图坐标
 					{
-						code.add_in_texture(mtc,state->tex[mtc],state->tex_color[mtc],mtc_name_height);				//加入贴图，从高度图顶点得来的纹理坐标
+						code.add_in_texture(mtc,state->tex_type[mtc],state->tex_color[mtc],mtc_name_height);				//加入贴图，从高度图顶点得来的纹理坐标
 					}
 					else
 					{
-						if(!state->tex[mtc])continue;
+						if(!state->tex_type[mtc])continue;
 
 						GetMaterialTextureName(mtc_name,mtc);
 
-						code.add_in_texture(mtc,state->tex[mtc],state->tex_color[mtc],mtc_name);						//从对应通道得来的纹理
+						code.add_in_texture(mtc,state->tex_type[mtc],state->tex_color[mtc],mtc_name);						//从对应通道得来的纹理
 						code.add_in_texcoord(state->vbc[mtc],mtc_name);													//从对应通道得来的纹理坐标
 					}
 

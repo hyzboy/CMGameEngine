@@ -17,7 +17,7 @@ namespace hgl
 
 				bool color_material;
 
-				int mtc[mtcMax];
+				uint32 mtc_tex_type[mtcMax];
 				UTF8String tex_sampler[mtcMax];
 				UTF8String tex_coord[mtcMax];
 
@@ -45,7 +45,7 @@ namespace hgl
 
 			public:		//贴图
 
-				void add_in_texture(int,int,uint,const char *source);
+				void add_in_texture(int,uint,uint,const char *source);
 				void add_in_texcoord(int,const char *);
 
 			public:		//最终计算
