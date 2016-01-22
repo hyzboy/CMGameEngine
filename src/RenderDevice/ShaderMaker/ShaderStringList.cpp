@@ -44,7 +44,7 @@ namespace hgl
 					case HGL_TEXTURE_1D_ARRAY:		return "sampler1DArray";
 					case HGL_TEXTURE_2D_ARRAY:		return "sampler1DArray";
 
-					case HGL_TEXTURE_RECTANGLE:		return "sampler2DRect";
+					case HGL_TEXTURE_RECTANGLE:		return "samplerRect";
 
 					case HGL_TEXTURE_CUBE_MAP:		return "samplerCube";
 					case HGL_TEXTURE_CUBE_MAP_ARRAY:return "samplerCubeArray";
@@ -60,6 +60,15 @@ namespace hgl
 
 			const char *get_sampler_shadow_by_tex_type(uint type)
 			{
+				switch(type)
+				{
+					case HGL_TEXTURE_1D:			return "sampler1DShadow";
+					case HGL_TEXTURE_2D:			return "sampler2DShadow";
+					case HGL_TEXTURE_RECTANGLE:		return "samplerRectShadow";
+					case HGL_TEXTURE_CUBE_MAP:		return "samplerCubeShadow";
+
+					default:						return nullptr;
+				}
 			}
 
 			void shader_stringlist::debug_out(const os_char *filename)
