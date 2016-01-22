@@ -6,22 +6,37 @@ namespace hgl
 {
 	namespace graph
 	{
-// 		class Texture3D:public Texture
-// 		{
-// 			int width,height,length;																					///<长、宽、高
-//
-// 		public:
-//
-// 					int		GetWidth		(){return width;}
-// 					int		GetHeight		(){return height;}
-// 					int		GetLength		(){return length;}
-//
-// 		public:
-//
-// 					bool	LoadFile		(const u16char *,uint vf=0,uint ltp=0);										///<从文件加载一个贴图
-//
-// 			virtual bool	SetImageData3D	(uint w,uint h,uint l,void *data,uint size,uint sf,uint vf=0);				///<创建3D贴图数据
-// 		};//class Texture3D
+		/**
+		 * 2D贴图阵列
+		 */
+		class Texture3D:public Texture
+		{
+			int width,height,depth;																						///<宽、高、层数
+
+			uint wrap_s,wrap_t,wrap_r;
+
+		public:
+
+					uint	GetCoordNumber	()const{return 3;}															///<取得坐标数量
+					int		GetWidth		(){return width;}
+					int		GetHeight		(){return height;}
+					int		GetDepth		(){return depth;}
+
+		public:
+
+							Texture3D();
+			virtual			~Texture3D();
+
+					bool	SetImage		(uint w,uint h,uint l,void *data,uint,TSF sf,uint vf,uint ltp);				///<设置
+
+					int		GetImage		(void *data_pointer,TSF fmt,int level);										///<取得图片数据
+
+					bool	ChangeImage		(uint l,uint t,uint s,uint w,uint h,uint d,void *data,uint bytes,TSF sf);	///<更改图片数据
+
+			virtual void	SetWrapS		(uint);																		///<设置横向寻址方式
+			virtual void	SetWrapT		(uint);																		///<设置纵向寻址方式
+			virtual void	SetWrapR		(uint);																		///<设置纵向寻址方式
+		};//class Texture3D
 	}//namespace graph
 }//namespace hgl
 #endif//HGL_GRAPH_TEXTURE_3D_INCLUDE
