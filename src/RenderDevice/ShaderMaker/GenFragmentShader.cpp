@@ -12,13 +12,6 @@ namespace hgl
 	{
 		namespace shadergen
 		{
-			const char shader_get_sampler_color[3][16]=
-			{
-				"texture1D",
-				"texture2D",
-				"texture3D"
-			};
-
 			#define HGL_FS_DIFFUSE_COLOR	"DiffuseColor"
 			#define HGL_FS_ALPHA			"Alpha"
 
@@ -87,8 +80,7 @@ namespace hgl
 				if(color_format!=GL_RGBA)
 					tex_sampler[mtc_index].Strcat("vec4(");
 
-				tex_sampler[mtc_index].Strcat(shader_get_sampler_color[coord_num-1]);
-				tex_sampler[mtc_index].Strcat("(");
+				tex_sampler[mtc_index].Strcat("texture(");			//texture会处理过滤,如果不过滤使用texelFetch会更高效
 				tex_sampler[mtc_index].Strcat(mtc_name);
 				tex_sampler[mtc_index].Strcat(",");
 				tex_sampler[mtc_index].Strcat(HGL_FS_TEXCOORD);

@@ -43,8 +43,6 @@ namespace hgl
 			extern const char shader_sampler[3][16];
 			extern const char shader_sampler_shadow[2][16];
 
-			extern const char shader_get_sampler_color[3][16];
-
 			struct shader_stringlist
 			{
 			protected:

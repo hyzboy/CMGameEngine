@@ -131,7 +131,7 @@ namespace hgl
 				in_vertex_buffer[vbtColor]=true;
 			}
 
-			void vs::add_in_texture(const char *vb_name,int coord_num,int mtc_index)
+			void vs::add_in_texture(const char *vb_name,int coord_num,uint color_format,int mtc_index)
 			{
 				MATERIAL_TEXTURE_CHANNEL_NAME mtc_name;
 
@@ -139,12 +139,25 @@ namespace hgl
 
 				add_sampler(mtc_name,coord_num);
 
-				tex_sampler[mtc_index].Strcat(shader_get_sampler_color[coord_num-1]);
-				tex_sampler[mtc_index].Strcat("(");
+				if(color_format!=GL_RGBA)
+					tex_sampler[mtc_index].Strcat("vec4(");
+
+				tex_sampler[mtc_index].Strcat("texture(");		//texture会处理过滤,如果不过滤使用texelFetch会更高效
 				tex_sampler[mtc_index].Strcat(mtc_name);
 				tex_sampler[mtc_index].Strcat(",");
 				tex_sampler[mtc_index].Strcat(vb_name);
 				tex_sampler[mtc_index].Strcat(")");
+
+				if(color_format!=GL_RGBA)
+				{
+					if(color_format==GL_DEPTH	)tex_sampler[mtc_index].Strcat(".rrr,1)");else
+					if(color_format==GL_RED		)tex_sampler[mtc_index].Strcat(".rrr,1)");else
+					if(color_format==GL_RG		)tex_sampler[mtc_index].Strcat(".rrr,b)");else		//一般是luminance+a
+					if(color_format==GL_RGB		)tex_sampler[mtc_index].Strcat(".rgb,1)");else
+					{
+						//还有srgb,srgba就暂时不知道了如果处理了
+					}
+				}
 
 				in_tex[mtc_index]=true;
 				in_tex_count++;
@@ -396,7 +409,7 @@ namespace hgl
 
 					GetVertexBufferName(vbn,vbtVertex);
 
-					code.add_in_texture(vbn,2,mtcHeight);
+					code.add_in_texture(vbn,2,GL_RG,mtcHeight);
 
 					if(state->tex[mtcDiffuse])					//漫反射，绘制坐标即贴图坐标
 					{
