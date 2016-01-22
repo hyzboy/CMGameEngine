@@ -47,7 +47,7 @@ namespace hgl
             if(max_uniform_block_binding<=0)
                 return(false);
 
-            for(int i=1;i<max_uniform_block_binding;i++)
+            for(int i=1;i<=max_uniform_block_binding;i++)
                 uniform_block_binding_stack.Push(i);
 
             return(true);
@@ -98,7 +98,7 @@ namespace hgl
 
             if(size>max_uniform_block_size)
             {
-                LOG_ERROR(U8_TEXT("block size very large,max ")+UTF8String(max_uniform_block_size)+U8_TEXT(", need ")+UTF8String(size));
+                LOG_ERROR(U8_TEXT("block size very large,UBO max ")+UTF8String(max_uniform_block_size)+U8_TEXT(", need ")+UTF8String(size));
 
                 return(nullptr);
             }

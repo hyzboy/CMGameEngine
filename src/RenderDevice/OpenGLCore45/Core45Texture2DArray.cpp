@@ -1,26 +1,26 @@
 ﻿#include<glew/include/GL/glew.h>
-#include<hgl/graph/Texture2D.h>
+#include<hgl/graph/Texture2DArray.h>
 #include<hgl/LogInfo.h>
 
 namespace hgl
 {
     namespace graph
     {
-        Texture2D::Texture2D()
+        Texture2DArray::Texture2DArray()
         {
-            type=HGL_TEXTURE_2D;
-			width=height=wrap_s=wrap_t=0;
-            glCreateTextures(GL_TEXTURE_2D,1,&texture_id);
+            type=HGL_TEXTURE_2D_ARRAY;
+			width=height=layer=wrap_s=wrap_t=0;
+            glCreateTextures(GL_TEXTURE_2D_ARRAY,1,&texture_id);
         }
 
-        Texture2D::~Texture2D()
+        Texture2DArray::~Texture2DArray()
         {
             glDeleteTextures(1,&texture_id);
         }
 
-        bool Texture2D::SetImage(unsigned int w,unsigned int h,void *data,unsigned int image_size,TSF sf,unsigned int vf,unsigned int ltp)
+        bool Texture2DArray::SetImage(uint w,uint h,uint l,void *data,uint image_size,TSF sf,uint vf,uint ltp)
         {
-            if(!w||!h)
+            if(!w||!h||!l)
             {
                 LOG_ERROR(OS_TEXT("size error,width=")+OSString(w)+OS_TEXT(",height=")+OSString(h));
                 return(false);
@@ -37,6 +37,7 @@ namespace hgl
 
             width=w;
             height=h;
+			layer=l;
 
             const TextureFormat *sfmt=TextureFormatInfoList+sf;       //原始数据格式
 
@@ -48,14 +49,14 @@ namespace hgl
             if(sfmt->compress)      //原本就是压缩格式
             {
 				if(data)
-                glCompressedTextureSubImage2D(texture_id,0,0,0,w,h,vf,image_size,data);
+					glCompressedTextureSubImage3D(texture_id,0,0,0,0,w,h,l,vf,image_size,data);
             }
             else                    //正常非压缩格式
             {
-                glTextureStorage2D(texture_id, 1, vf, w, h);
+                glTextureStorage3D(texture_id, 1, vf, w, h,l);
 
 				if(data)
-                glTextureSubImage2D(texture_id, 0, 0, 0, w, h, sfmt->format, sfmt->type, data);
+                glTextureSubImage3D(texture_id, 0,0,0,0, w,h,l, sfmt->format, sfmt->type, data);
             }
 
             video_format=vf;
@@ -85,11 +86,11 @@ namespace hgl
             return(true);
         }
 
-        int Texture2D::GetImage(void *data_pointer,TSF fmt,int level)
+        int Texture2DArray::GetImage(void *data_pointer,TSF fmt,int level)
         {
             if(!TextureSourceFormatCheck(fmt))
             {
-                LOG_ERROR(OS_TEXT("glTexture2D::GetImage,fmt error =")+OSString(fmt));
+                LOG_ERROR(OS_TEXT("glTexture2DArray::GetImage,fmt error =")+OSString(fmt));
                 return(-1);
             }
 
@@ -120,11 +121,12 @@ namespace hgl
             return(bytes);
         }
 
-        bool Texture2D::ChangeImage(uint l,uint t,uint w,uint h,void *data,uint bytes,TSF sf)
+        bool Texture2DArray::ChangeImage(uint l,uint t,uint s,uint w,uint h,uint d,void *data,uint bytes,TSF sf)
         {
-            if(	l>width||t>height
+            if(	l>width||t>height||s>layer
 				||w>width-l
 				||h>height-t
+				||d>layer-s
 				||!data
 				||!TextureSourceFormatCheck(sf))
                 RETURN_FALSE;
@@ -132,14 +134,14 @@ namespace hgl
             const TextureFormat *sfmt=TextureFormatInfoList+sf;       //原始数据格式
 
             if(sfmt->compress)
-                glCompressedTextureSubImage2D(texture_id,0,l,t,w,h,sfmt->internalFormat,bytes,data);
+                glCompressedTextureSubImage3D(texture_id,0,l,t,s,w,h,d,sfmt->internalFormat,bytes,data);
             else
-                glTextureSubImage2D(texture_id,0,l,t,w,h,sfmt->format,sfmt->type,data);
+                glTextureSubImage3D(texture_id,0,l,t,s,w,h,d,sfmt->format,sfmt->type,data);
 
             return(true);
         }
 
-        void Texture2D::SetWrapS(uint wrap)
+        void Texture2DArray::SetWrapS(uint wrap)
         {
             if(wrap_s==wrap)return;
 
@@ -148,7 +150,7 @@ namespace hgl
             glTextureParameteri(texture_id,GL_TEXTURE_WRAP_S,wrap_s);
         }
 
-        void Texture2D::SetWrapT(uint wrap)
+        void Texture2DArray::SetWrapT(uint wrap)
         {
             if(wrap_t==wrap)return;
 

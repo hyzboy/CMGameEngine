@@ -117,7 +117,7 @@ namespace hgl
         bool Texture1D::ChangeImage(uint s,uint l,void *data,uint bytes,TSF sf)
         {
             if(s>=length
-			||!l||l>length-s
+			||l>length-s
 			||!data
 			||!TextureSourceFormatCheck(sf))
             {

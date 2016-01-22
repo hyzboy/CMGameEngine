@@ -16,7 +16,7 @@ namespace hgl
         void ReleaseShaderBlockBinding(int);        ///<释放一个绑定点
 
         /**
-        * Shader数据块，用于跨Shader提供数据或是大批量提供数据
+        * Shader数据块，用于跨Shader提供大批量数据
         */
         class ShaderDataBlock                                                                       ///Shader数据块
         {
