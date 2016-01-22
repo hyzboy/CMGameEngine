@@ -7,7 +7,7 @@ namespace hgl
 	namespace graph
 	{
 		/**
-		 * 2D贴图阵列
+		 * 3D贴图
 		 */
 		class Texture3D:public Texture
 		{
