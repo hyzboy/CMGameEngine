@@ -8,30 +8,41 @@ namespace hgl
 	namespace graph
 	{
 		class Texture2D;
+		class Texture2DArray;
 		class TextureCubeMap;
 
+		/**
+		 * 渲染到纹理基类
+		 */
 		class RenderToTexture
 		{
 		protected:
 
+			uint fbo;
 			int viewport[4];
 
 			bool CheckFrameBufferStatus(uint);
+
+		protected:
+
+			virtual bool Use()=0;										///<使用当前FBO
 
 		public:
 
 			RenderToTexture();
 			virtual ~RenderToTexture();
 
-			virtual bool Begin()=0;												///<开始使用
-			virtual void End()=0;												///<结束使用
+			bool Begin();												///<开始使用
+			void End();													///<结束使用
 		};//class RenderToTexture
 
+		/**
+		 * 渲染到纹理，仅颜色
+		 */
 		class RenderToTextureColor:public RenderToTexture
 		{
 		protected:
 
-			uint fbo;
 			uint rb_depth;
 			Texture2D *tex_color;
 
@@ -47,15 +58,16 @@ namespace hgl
 
 			Texture2D *GetTexture(){return tex_color;}
 
-			bool Begin();
-			void End();
+			bool Use()HGL_OVERRIDE;
 		};//class RenderToTextureColor
 
+		/**
+		 * 渲染到纹理，仅深度
+		 */
 		class RenderToTextureDepth:public RenderToTexture
 		{
 		protected:
 
-			uint fbo;
 			Texture2D *tex_depth;
 
 			float init_depth;
@@ -67,15 +79,16 @@ namespace hgl
 
 			Texture2D *GetTexture(){return tex_depth;}
 
-			bool Begin();
-			void End();
+			bool Use()HGL_OVERRIDE;
 		};//class RenderToTextureDepth
 
+		/**
+		 * 渲染到纹理，颜色与深度
+		 */
 		class RenderToTextureColorDepth:public RenderToTexture
 		{
 		protected:
 
-			uint fbo;
 			Texture2D *tex_color;
 			Texture2D *tex_depth;
 
@@ -92,14 +105,33 @@ namespace hgl
 			Texture2D *GetColorTexture(){return tex_color;}
 			Texture2D *GetDepthTexture(){return tex_depth;}
 
-			bool Begin();
-			void End();
+			bool Use()HGL_OVERRIDE;
 		};//class RenderToTextureColorDepth
+
+		/**
+		 * 渲染到2D阵列纹理
+		 */
+		class RenderToTextureLayer:public RenderToTexture
+		{
+		protected:
+
+			Texture2DArray *tex;
+
+			GLenum *draw_buffers;
+
+		public:
+
+			RenderToTextureLayer(uint width,uint height,uint depth,const TextureSourceFormat &tsf);
+			virtual ~RenderToTextureLayer();
+
+			Texture2DArray *GetTexture(){return tex;}
+
+			bool Use()HGL_OVERRIDE;
+		};//class RenderToTextureLayer
 
 		class RenderToTextureCubeMap:public RenderToTexture
 		{
 		};//class RenderToTextureCubeMap
-
 	}//namespace graph
 }//namespace hgl
 #endif//HGL_GRAPH_RENDER_TO_TEXTURE_INCLUDE

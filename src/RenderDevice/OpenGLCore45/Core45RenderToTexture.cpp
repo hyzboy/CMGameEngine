@@ -20,10 +20,28 @@ namespace hgl
 	{
 		RenderToTexture::RenderToTexture()
 		{
+			glCreateFramebuffers(1,&fbo);
 		}
 
 		RenderToTexture::~RenderToTexture()
 		{
+			glDeleteFramebuffers(1,&fbo);
+		}
+
+		bool RenderToTexture::Begin()
+		{
+			glGetIntegerv(GL_VIEWPORT,viewport);
+
+			glBindFramebuffer(GL_FRAMEBUFFER,fbo);
+			CheckFrameBufferStatus(fbo);
+
+			return Use();
+		}
+
+		void RenderToTexture::End()
+		{
+			glBindFramebuffer(GL_FRAMEBUFFER,0);
+			glViewport(viewport[0],viewport[1],viewport[2],viewport[3]);
 		}
 
 		bool RenderToTexture::CheckFrameBufferStatus(uint fbo)
@@ -71,7 +89,6 @@ namespace hgl
 
 			draw_buffers=GL_COLOR_ATTACHMENT0;
 
-			glCreateFramebuffers(1,&fbo);
 			glCreateRenderbuffers(1,&rb_depth);
 			glBindRenderbuffer(GL_RENDERBUFFER_EXT, rb_depth);
 			glNamedRenderbufferStorage(rb_depth,GL_DEPTH_COMPONENT24,width,height);
@@ -87,33 +104,21 @@ namespace hgl
 			if(tex_color)
 			{
 				glDeleteRenderbuffers(1,&rb_depth);
-				glDeleteFramebuffers(1,&fbo);
 
 				delete tex_color;
 			}
 		}
 
-		bool RenderToTextureColor::Begin()
+		bool RenderToTextureColor::Use()
 		{
 			if(!tex_color)return(false);
 
-			glGetIntegerv(GL_VIEWPORT,this->viewport);
-
-			glBindFramebuffer(GL_FRAMEBUFFER,fbo);
-			CheckFrameBufferStatus(fbo);
 			glDrawBuffers(1,&draw_buffers);
 
 			glViewport(0,0,tex_color->GetWidth(),tex_color->GetHeight());
 			glClearBufferfv(GL_COLOR,0,(float *)&back_color);
 			glClearBufferfv(GL_DEPTH,0,&init_depth);
-		}
-
-		void RenderToTextureColor::End()
-		{
-			if(!tex_color)return;
-
-			glBindFramebuffer(GL_FRAMEBUFFER,0);
-			glViewport(viewport[0],viewport[1],viewport[2],viewport[3]);
+			return(true);
 		}
 	}//namespace graph
 
@@ -135,41 +140,24 @@ namespace hgl
 
 			init_depth=id;
 
-			glCreateFramebuffers(1,&fbo);
 			glNamedFramebufferTexture(fbo, GL_DEPTH_ATTACHMENT, tex_depth->GetID(), 0);
 			CheckFrameBufferStatus(fbo);
 		}
 
 		RenderToTextureDepth::~RenderToTextureDepth()
 		{
-			if(tex_depth)
-			{
-				glDeleteFramebuffers(1,&fbo);
-				delete tex_depth;
-			}
+			SAFE_CLEAR(tex_depth);
 		}
 
-		bool RenderToTextureDepth::Begin()
+		bool RenderToTextureDepth::Use()
 		{
 			if(!tex_depth)return(false);
-
-			glGetIntegerv(GL_VIEWPORT,this->viewport);
-
-			glBindFramebuffer(GL_FRAMEBUFFER,fbo);
-			CheckFrameBufferStatus(fbo);
 			glDrawBuffer(GL_NONE);
 			glReadBuffer(GL_NONE);
 
 			glViewport(0,0,tex_depth->GetWidth(),tex_depth->GetHeight());
 			glClearBufferfv(GL_DEPTH,0,&init_depth);
-		}
-
-		void RenderToTextureDepth::End()
-		{
-			if(!tex_depth)return;
-
-			glBindFramebuffer(GL_FRAMEBUFFER,0);
-			glViewport(viewport[0],viewport[1],viewport[2],viewport[3]);
+			return(true);
 		}
 	}//namespace graph
 
@@ -201,8 +189,6 @@ namespace hgl
 
 			draw_buffers=GL_COLOR_ATTACHMENT0;
 
-			glCreateFramebuffers(1,&fbo);
-
 			glNamedFramebufferTexture(fbo, GL_COLOR_ATTACHMENT0, tex_color->GetID(), 0);
 			CheckFrameBufferStatus(fbo);
 			glNamedFramebufferTexture(fbo, GL_DEPTH_ATTACHMENT, tex_depth->GetID(), 0);
@@ -213,34 +199,21 @@ namespace hgl
 		{
 			if(tex_color)
 			{
-				glDeleteFramebuffers(1,&fbo);
-
 				delete tex_depth;
 				delete tex_color;
 			}
 		}
 
-		bool RenderToTextureColorDepth::Begin()
+		bool RenderToTextureColorDepth::Use()
 		{
 			if(!tex_color)return(false);
 
-			glGetIntegerv(GL_VIEWPORT,this->viewport);
-
-			glBindFramebuffer(GL_FRAMEBUFFER,fbo);
-			CheckFrameBufferStatus(fbo);
 			glDrawBuffers(1,&draw_buffers);
 
 			glViewport(0,0,tex_color->GetWidth(),tex_color->GetHeight());
 			glClearBufferfv(GL_COLOR,0,(float *)&back_color);
 			glClearBufferfv(GL_DEPTH,0,&init_depth);
-		}
-
-		void RenderToTextureColorDepth::End()
-		{
-			if(!tex_color)return;
-
-			glBindFramebuffer(GL_FRAMEBUFFER,0);
-			glViewport(viewport[0],viewport[1],viewport[2],viewport[3]);
+			return(true);
 		}
 	}//namespace graph
 }//namespace hgl
