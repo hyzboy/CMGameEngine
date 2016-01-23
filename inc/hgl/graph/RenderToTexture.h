@@ -119,9 +119,12 @@ namespace hgl
 
 			GLenum *draw_buffers;
 
+			Color3f back_color;
+			float init_depth;
+
 		public:
 
-			RenderToTextureLayer(uint width,uint height,uint depth,const TextureSourceFormat &tsf);
+			RenderToTextureLayer(uint width,uint height,uint depth,const TextureSourceFormat &tsf,const Color3f &bc=Color3f(0,0,0),const float id=1.0f);
 			virtual ~RenderToTextureLayer();
 
 			Texture2DArray *GetTexture(){return tex;}

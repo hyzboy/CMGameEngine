@@ -1,5 +1,6 @@
 ﻿#include<hgl/graph/RenderToTexture.h>
 #include<hgl/graph/Texture2D.h>
+#include<hgl/graph/Texture2DArray.h>
 #include<hgl/LogInfo.h>
 
 #ifndef GL_FRAMEBUFFER_INCOMPLETE_DUPLICATE_ATTACHMENT
@@ -33,7 +34,8 @@ namespace hgl
 			glGetIntegerv(GL_VIEWPORT,viewport);
 
 			glBindFramebuffer(GL_FRAMEBUFFER,fbo);
-			CheckFrameBufferStatus(fbo);
+			if(!CheckFrameBufferStatus(fbo))
+				return(false);
 
 			return Use();
 		}
@@ -81,7 +83,7 @@ namespace hgl
 			{
 				tex_color=new Texture2D();
 
-				tex_color->SetImage(width,height,nullptr,0,tsf,0,0);
+				tex_color->SetImage(width,height,tsf);
 			}
 
 			back_color=bc;
@@ -135,7 +137,7 @@ namespace hgl
 			{
 				tex_depth=new Texture2D();
 
-				tex_depth->SetImage(width,height,nullptr,0,tsf,0,0);
+				tex_depth->SetImage(width,height,tsf);
 			}
 
 			init_depth=id;
@@ -175,13 +177,13 @@ namespace hgl
 			{
 				tex_color=new Texture2D();
 
-				tex_color->SetImage(width,height,nullptr,0,color_tsf,0,0);
+				tex_color->SetImage(width,height,color_tsf);
 			}
 
 			{
 				tex_depth=new Texture2D();
 
-				tex_depth->SetImage(width,height,nullptr,0,depth_tsf,0,0);
+				tex_depth->SetImage(width,height,depth_tsf);
 			}
 
 			back_color=bc;
@@ -211,6 +213,55 @@ namespace hgl
 			glDrawBuffers(1,&draw_buffers);
 
 			glViewport(0,0,tex_color->GetWidth(),tex_color->GetHeight());
+			glClearBufferfv(GL_COLOR,0,(float *)&back_color);
+			glClearBufferfv(GL_DEPTH,0,&init_depth);
+			return(true);
+		}
+	}//namespace graph
+
+	namespace graph
+	{
+		RenderToTextureLayer::RenderToTextureLayer(uint width,uint height,uint depth,const TextureSourceFormat &tsf,const Color3f &bc,const float id)
+		{
+			if(width<=0||height<=0||depth<=0||!TextureSourceFormatCheck(tsf))
+			{
+				tex=nullptr;
+				draw_buffers=nullptr;
+				return;
+			}
+
+			{
+				tex=new Texture2DArray();
+				tex->SetImage(width,height,depth,tsf);
+			}
+
+			back_color=bc;
+			init_depth=id;
+
+			draw_buffers=new GLenum[depth-1];
+			for(int i=0;i<depth;i++)
+			{
+				draw_buffers[i]=GL_COLOR_ATTACHMENT0+i;
+
+				glNamedFramebufferTextureLayer(fbo,draw_buffers[i],tex->GetID(),0,i);
+				CheckFrameBufferStatus(fbo);
+			}
+		}
+
+		RenderToTextureLayer::~RenderToTextureLayer()
+		{
+			delete[] draw_buffers;		//delete[] nullptr不是BUG
+
+			SAFE_CLEAR(tex);
+		}
+
+		bool RenderToTextureLayer::Use()
+		{
+			if(!tex)return(false);
+
+			glDrawBuffers(tex->GetLayer(),draw_buffers);
+
+			glViewport(0,0,tex->GetWidth(),tex->GetHeight());
 			glClearBufferfv(GL_COLOR,0,(float *)&back_color);
 			glClearBufferfv(GL_DEPTH,0,&init_depth);
 			return(true);
