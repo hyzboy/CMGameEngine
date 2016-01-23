@@ -115,7 +115,8 @@ namespace hgl
 		{
 		protected:
 
-			Texture2DArray *tex;
+			Texture2DArray *tex_color;
+			Texture2D *tex_depth;
 
 			GLenum *draw_buffers;
 
@@ -124,10 +125,11 @@ namespace hgl
 
 		public:
 
-			RenderToTextureLayer(uint width,uint height,uint depth,const TextureSourceFormat &tsf,const Color3f &bc=Color3f(0,0,0),const float id=1.0f);
+			RenderToTextureLayer(uint width,uint height,uint depth,const TextureSourceFormat &color_tsf,const TextureSourceFormat &depth_tsf,const Color3f &bc=Color3f(0,0,0),const float id=1.0f);
 			virtual ~RenderToTextureLayer();
 
-			Texture2DArray *GetTexture(){return tex;}
+			Texture2DArray *GetColorTexture(){return tex_color;}
+			Texture2D *		GetDepthTexture(){return tex_depth;}
 
 			bool Use()HGL_OVERRIDE;
 		};//class RenderToTextureLayer

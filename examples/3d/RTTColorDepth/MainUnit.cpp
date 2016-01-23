@@ -64,7 +64,7 @@ public:
 
 		sc=new SpiralCubeScene(up_vector);							///<创建Cube螺旋排列场景
 
-		rtt=new RenderToTextureColorDepth(512,512,HGL_SF_RGB8,HGL_SF_DEPTH32F);	///<创建渲染到纹理对象
+		rtt=new RenderToTextureColorDepth(512,512,HGL_SF_R3_G3_B2,HGL_SF_DEPTH16);	///<创建渲染到纹理对象
 
 		{
 			RectScope2f pos((GetScreenWidth()-1024)/2,

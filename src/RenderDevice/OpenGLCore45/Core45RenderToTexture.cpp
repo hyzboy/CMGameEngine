@@ -93,7 +93,7 @@ namespace hgl
 
 			glCreateRenderbuffers(1,&rb_depth);
 			glBindRenderbuffer(GL_RENDERBUFFER_EXT, rb_depth);
-			glNamedRenderbufferStorage(rb_depth,GL_DEPTH_COMPONENT24,width,height);
+			glNamedRenderbufferStorage(rb_depth,GL_DEPTH_COMPONENT32,width,height);
 
 			glNamedFramebufferTexture(fbo, GL_COLOR_ATTACHMENT0, tex_color->GetID(), 0);
 			CheckFrameBufferStatus(fbo);
@@ -221,18 +221,25 @@ namespace hgl
 
 	namespace graph
 	{
-		RenderToTextureLayer::RenderToTextureLayer(uint width,uint height,uint depth,const TextureSourceFormat &tsf,const Color3f &bc,const float id)
+		RenderToTextureLayer::RenderToTextureLayer(uint width,uint height,uint depth,const TextureSourceFormat &color_tsf,const TextureSourceFormat &depth_tsf,const Color3f &bc,const float id)
 		{
-			if(width<=0||height<=0||depth<=0||!TextureSourceFormatCheck(tsf))
+			if(width<=0||height<=0||depth<=0||!TextureSourceFormatCheck(color_tsf)||!TextureSourceFormatDepthCheck(depth_tsf))
 			{
-				tex=nullptr;
+				tex_color=nullptr;
+				tex_depth=nullptr;
 				draw_buffers=nullptr;
 				return;
 			}
 
 			{
-				tex=new Texture2DArray();
-				tex->SetImage(width,height,depth,tsf);
+				tex_color=new Texture2DArray();
+				tex_color->SetImage(width,height,power_to_2(depth),color_tsf);
+			}
+
+			{
+				tex_depth=new Texture2D();
+
+				tex_depth->SetImage(width,height,depth_tsf);
 			}
 
 			back_color=bc;
@@ -243,25 +250,29 @@ namespace hgl
 			{
 				draw_buffers[i]=GL_COLOR_ATTACHMENT0+i;
 
-				glNamedFramebufferTextureLayer(fbo,draw_buffers[i],tex->GetID(),0,i);
+				glNamedFramebufferTextureLayer(fbo,draw_buffers[i],tex_color->GetID(),0,i);
 				CheckFrameBufferStatus(fbo);
 			}
+
+			glNamedFramebufferTexture(fbo, GL_DEPTH_ATTACHMENT, tex_depth->GetID(), 0);
+			CheckFrameBufferStatus(fbo);
 		}
 
 		RenderToTextureLayer::~RenderToTextureLayer()
 		{
 			delete[] draw_buffers;		//delete[] nullptr不是BUG
 
-			SAFE_CLEAR(tex);
+			SAFE_CLEAR(tex_depth);
+			SAFE_CLEAR(tex_color);
 		}
 
 		bool RenderToTextureLayer::Use()
 		{
-			if(!tex)return(false);
+			if(!tex_color)return(false);
 
-			glDrawBuffers(tex->GetLayer(),draw_buffers);
+			glDrawBuffers(tex_color->GetLayer(),draw_buffers);
 
-			glViewport(0,0,tex->GetWidth(),tex->GetHeight());
+			glViewport(0,0,tex_color->GetWidth(),tex_color->GetHeight());
 			glClearBufferfv(GL_COLOR,0,(float *)&back_color);
 			glClearBufferfv(GL_DEPTH,0,&init_depth);
 			return(true);
