@@ -56,7 +56,6 @@ namespace hgl
 
 					int		GetID		    ()const{return texture_id;}								///<取得纹理ID
 					uint	GetType			()const{return type;}									///<取得类型
-			virtual uint	GetCoordNumber	()const=0;												///<取得坐标数量
 					uint	GetColorFormat	()const{return color_format;}							///<取得颜色格式
 					uint	GetVideoFormat	()const{return video_format;}							///<取得显存中的数据格式
 

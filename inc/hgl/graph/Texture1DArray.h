@@ -18,7 +18,6 @@ namespace hgl
 			uint wrap;
 
 		public:
-					uint	GetCoordNumber	()const{return 2;}															///<取得坐标数量
 					int		GetLength		()const{return length;}														///<取得纹理长度
 					int		GetCount		()const{return count;}														///<取得纹理数量
 

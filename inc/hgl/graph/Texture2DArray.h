@@ -17,7 +17,6 @@ namespace hgl
 
 		public:
 
-					uint	GetCoordNumber	()const{return 3;}															///<取得坐标数量
 					int		GetWidth		(){return width;}
 					int		GetHeight		(){return height;}
 					int		GetLayer		(){return layer;}

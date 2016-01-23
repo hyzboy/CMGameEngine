@@ -20,7 +20,6 @@ namespace hgl
 			uint wrap_s,wrap_t;
 
 		public:
-					uint	GetCoordNumber	()const{return 2;}															///<取得坐标数量
 					int		GetWidth		()const{return width;}														///<取得纹理宽度
 					int		GetHeight		()const{return height;}														///<取得纹理高度
 

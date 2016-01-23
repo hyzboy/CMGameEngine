@@ -19,7 +19,6 @@ namespace hgl
 
 		public:	//
 
-					uint	GetCoordNumber	()const{return 1;}															///<取得坐标数量
 					int		GetLength		()const{return length;}														///<取得纹理长度
 
 		public:
