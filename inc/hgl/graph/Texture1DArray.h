@@ -29,6 +29,7 @@ namespace hgl
 					bool	LoadFile		(const OSString &,uint vf=0,uint ltp=0);									///<从文件加载一个贴图
 
 			virtual bool	SetImage		(uint,uint,void *,uint,TSF,uint vf=0,uint ltp=0);							///<创建1D贴图阵列数据
+					bool	SetImage		(uint l,uint c,TSF tsf){return SetImage(l,c,nullptr,0,tsf);}				///<创建1D贴图阵列数据
 			virtual bool	ChangeImage		(uint,uint,uint,uint,void *,uint,TSF);										///<更改1D贴图阵列数据
 
 			virtual int		GetImage		(void *,TSF,int level=0);													///<取得1D贴图阵列数据

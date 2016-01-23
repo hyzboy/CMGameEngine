@@ -31,6 +31,7 @@ namespace hgl
 					bool	LoadFile		(const OSString &,uint vf=0,uint ltp=0);									///<从文件加载一个贴图
 
 			virtual bool	SetImage		(uint w,uint h,void *data,uint size,TSF sf,uint vf=0,uint ltp=0);			///<创建2D贴图数据
+					bool	SetImage		(uint w,uint h,TSF sf){return SetImage(w,h,nullptr,0,sf);}					///<创建空的2D贴图数据
 			virtual bool	ChangeImage		(uint l,uint t,uint w,uint h,void *data,uint bytes,TSF sf);					///<更改2D贴图数据
 
 					bool	SetImage		(Bitmap2D *,uint vf=0,uint ltp=0);											///<从位图创建一个贴图
