@@ -9,7 +9,6 @@
 using namespace hgl;
 using namespace hgl::graph;
 
-
 const Vector3f  eye(100,100,80),
 				center(0,0,0),
 				up_vector(0,0,1);

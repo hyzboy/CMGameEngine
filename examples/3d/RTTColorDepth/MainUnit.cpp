@@ -10,8 +10,6 @@
 using namespace hgl;
 using namespace hgl::graph;
 
-#define CUBE_NUMBER	360
-
 const Vector3f  eye(100,100,80),
 				center(0,0,0),
 				up_vector(0,0,1);
@@ -66,13 +64,13 @@ public:
 
 		sc=new SpiralCubeScene(up_vector);							///<创建Cube螺旋排列场景
 
-		rtt=new RenderToTextureColorDepth(256,256,HGL_SF_RGB8,HGL_SF_DEPTH32F);	///<创建渲染到纹理对象
+		rtt=new RenderToTextureColorDepth(512,512,HGL_SF_RGB8,HGL_SF_DEPTH32F);	///<创建渲染到纹理对象
 
 		{
-			RectScope2f pos((GetScreenWidth()-512)/2,
-							(GetScreenHeight()-256)/2,
-							256,
-							256);
+			RectScope2f pos((GetScreenWidth()-1024)/2,
+							(GetScreenHeight()-512)/2,
+							512,
+							512);
 
 			RectScope2f tex_coord(0,0,1,1);
 
@@ -87,10 +85,10 @@ public:
 		}
 
 		{
-			RectScope2f pos(((GetScreenWidth()-512)/2)+256,
-							(GetScreenHeight()-256)/2,
-							256,
-							256);
+			RectScope2f pos(((GetScreenWidth()-1024)/2)+512,
+							(GetScreenHeight()-512)/2,
+							512,
+							512);
 
 			RectScope2f tex_coord(0,0,1,1);
 
