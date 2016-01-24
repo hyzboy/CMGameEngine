@@ -78,5 +78,14 @@ namespace hgl
 		operator float *() const {return((float *)this);}										    //使得本类可以直接当做float *使用
 		operator const float *() const {return((const float *)this);}							    //使得本类可以直接当做const float *使用
 	};//class Color3f
+
+	const Color3f BlackColor3f(0,0,0);
+	const Color3f WhiteColor3f(1,1,1);
+	const Color3f RedColor3f(1,1,0);
+	const Color3f GreenColor3f(0,1,0);
+	const Color3f BlueColor3f(0,0,1);
+	const Color3f YellowColor3f(1,1,0);
+
+	#define DEF_RGB_U8_TO_COLOR3F(r,g,b)		Color3f(float(r)/255.0f,float(g)/255.0f,float(b)/255.0f)
 }//namespace hgl
 #endif//HGL_COLOR_3_FLOAT_INCLUDE

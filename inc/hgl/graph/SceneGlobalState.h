@@ -24,11 +24,8 @@ namespace hgl
 			GlobalSceneState();
 			virtual ~GlobalSceneState();
 
-			DirectionLight *GetSkyLight	(){return sky_light;}					///<取得天空灯光
-			virtual void	SetSkyLight	(const double &day_time)				///<根据当天当前时间设定天空光照属性
-					{
-						SkyLight(sky_light,day_time);
-					}
+			DirectionLight *GetSkyLight	(){return &sky_light;}					///<取得天空灯光
+			virtual void	SetSkyLight	(uint);									///<根据当天当前时间设定天空光照属性
 
 			virtual void	SetLighting	(bool l){lighting=l;}					///<设置全局光照
 			virtual void	SetMaxLight	(int);									///<设置最大灯光数

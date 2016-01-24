@@ -4,6 +4,8 @@ namespace hgl
 {
 	namespace graph
 	{
+		void GetSkyLightColor(Color4f &,uint time);	///<根据时间产生天空灯光属性
+
 		/**
 		* 全局场景状态
 		*/
@@ -60,6 +62,15 @@ namespace hgl
 
 			if(light_list[index])
 				light_list[index]->enabled=false;
+		}
+
+		/**
+		 * 根据当天当前时间设定天空光照属性
+		 * @param day_time 当天的时间，以秒为单位
+		 */
+		void GlobalSceneState::SetSkyLight(uint day_time)
+		{
+			GetSkyLightColor(sky_light.ambient,day_time);
 		}
 	}//namespace graph
 }//namespace hgl

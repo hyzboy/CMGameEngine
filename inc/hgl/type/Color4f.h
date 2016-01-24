@@ -93,5 +93,7 @@ namespace hgl
 		operator float *() const {return((float *)this);}										    //使得本类可以直接当做float *使用
 		operator const float *() const {return((const float *)this);}							    //使得本类可以直接当做const float *使用
 	};//class Color4f
+
+	#define DEF_RGBA_U8_TO_COLOR4F(r,g,b,a)		Color4f(float(r)/255.0f,float(g)/255.0f,float(b)/255.0f,float(a)/255.0f)
 }//namespace hgl
 #endif//HGL_COLOR_4_FLOAT_INCLUDE

@@ -2,6 +2,7 @@
 #define HGL_GRAPH_LIGHT_INCLUDE
 
 #include<hgl/type/Color3f.h>
+#include<hgl/type/Color4f.h>
 #include<hgl/VectorMath.h>
 namespace hgl
 {
@@ -33,9 +34,9 @@ namespace hgl
 
 			bool		enabled;		///<是否开启
 
-			Vector4f	ambient;		///<环境光
-			Vector4f	specular;		///<镜面光
-			Vector4f	diffuse;		///<漫反射
+			Color4f		ambient;		///<环境光
+			Color4f		specular;		///<镜面光
+			Color4f		diffuse;		///<漫反射
 		};//struct Light
 
 		/**
@@ -43,9 +44,9 @@ namespace hgl
 		*/
 		struct PointLight:public Light
 		{
-			Vector3f	position;				///<光源位置
+			Color3f	position;				///<光源位置
 
-			Vector3f	attenuation;			///<constant,linear,quadratic
+			Color3f	attenuation;			///<constant,linear,quadratic
 		};//struct PointLight
 
 		/**
@@ -53,23 +54,21 @@ namespace hgl
 		 */
 		struct DirectionLight:public Light
 		{
-			Vector3f	direction;				///<方向
+			Color3f	direction;				///<方向
 
-			float		nDotVP;					///<normal . light direction
+			float	nDotVP;					///<normal . light direction
 		};//struct DirectionLight
-
-		void SkyLight(DirectionLight &,double);	///<根据时间产生天空灯光属性
 
 		/**
 		 * 聚光灯
 		 */
 		struct SpotLight:public Light
 		{
-			Vector3f	position;				///<位置
-			Vector3f	attenuation;			///<constant,linear,quadratic
-			Vector3f	direction;
-			float		coscutoff;
-			float		exponent;
+			Color3f	position;				///<位置
+			Color3f	attenuation;			///<constant,linear,quadratic
+			Color3f	direction;
+			float	coscutoff;
+			float	exponent;
 		};//struct SpotLight
 
 		/**
@@ -77,9 +76,9 @@ namespace hgl
 		 */
 		struct InfiniteSpotLight:public Light
 		{
-			Vector3f	position;
-			Vector3f	direction;
-			Vector3f	exponent;
+			Color3f	position;
+			Color3f	direction;
+			Color3f	exponent;
 		};//struct InfiniteSpotLight
 	}//namespace graph
 }//namespace hgl
