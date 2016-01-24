@@ -70,6 +70,46 @@ namespace hgl
 				add("#version "+UTF8String(ver)+" core\n\n");
 			}
 
+			void shader_stringlist::add_sky_light()
+			{
+				add("struct DirectionLight\n"
+					"{\n"
+					"\tvec3 direction;\n"
+					"\tvec4 ambient;\n"
+					"\tvec4 specular;\n"
+					"\tvec4 diffuse;\n"
+					"\tfloat shininess;\n"
+					"};\n"
+					"\n"
+					"uniform SkyLight\n"
+					"{\n"
+					"\tDirectionLight sky_light;\n"
+					"};"
+					"\n"
+					"vec4 " HGL_SKY_COLOR ";\n");
+			}
+
+			void shader_stringlist::add_sky_light_func()
+			{
+				add("void " HGL_SKY_COLOR_FUNC "(in vec3 normal)\n"
+					"{\n"
+					"\tvec3 n=normalize(normal);\n"
+					"\tvec3 e=normalize(vec3(100,100,80));\n"
+					"\n"
+					"\tfloat intensity=max(dot(n,sky_light.direction),0.0);\n"
+					"\n"
+					"\tif(intensity>0.0)\n"
+					"\t{\n"
+					"\t\tvec3 h=normalize(sky_light.direction+e);\n"
+					"\t\tfloat intSpec=max(dot(h,n),0.0);\n"
+					"\n"
+					"\t\t" HGL_SKY_COLOR "=max(intensity*sky_light.diffuse+sky_light.specular*pow(intSpec,sky_light.shininess),sky_light.ambient);\n"
+					"\t}\n"
+					"\telse\n"
+					"\t\t" HGL_SKY_COLOR "=max(intensity*sky_light.diffuse,sky_light.ambient);\n"
+					"}\n\n");
+			}
+
 			void shader_stringlist::add_main_begin()
 			{
 				add("void main(void)\n"

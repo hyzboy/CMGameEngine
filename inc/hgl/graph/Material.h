@@ -115,6 +115,8 @@ namespace hgl
 
 			bool		outside_discard;															///<贴图出界放弃
 
+			int8		use_sky_light;																///<使用天空灯光
+
 			bool		smooth;																		///<是否平滑(未用)
 
 			bool		color_material;																///<是否使用颜色追踪材质
@@ -150,6 +152,8 @@ namespace hgl
 			virtual ~Material()HGL_DEFAULT_MEMFUNC;
 
 		public:
+
+			void SetSkyLight		(const int8 sl)						{use_sky_light=sl;}								///<设置如何使用天空灯光
 
 			void SetColor			(const Color4f &c)					{Color=c;}										///<设置全局颜色
 			void SetColor			(float r,float g,float b,float a)	{Color.Set(r,g,b,a);}							///<设置全局颜色
@@ -195,6 +199,7 @@ namespace hgl
 
 		public:	//读取方法
 
+			const int8		GetSkyLight()const					{return use_sky_light;}				///<获取如何使用天空灯光
 			const Color4f &	GetColor()const						{return Color;}
 
 			void			GetDrawMode(uint &d,uint &f)const	{d=draw_face;f=fill_mode;}			///<取得绘制模式

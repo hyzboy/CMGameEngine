@@ -12,10 +12,8 @@ namespace hgl
 		 */
 		struct UBOValue
 		{
-			int indices;
-			int size;
-			int offset;
-			int type;
+		public:
+
 		};//struct UBOValue
 
 		/**

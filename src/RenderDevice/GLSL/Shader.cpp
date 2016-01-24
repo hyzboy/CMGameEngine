@@ -176,7 +176,7 @@ namespace hgl
 
             const int block_index=GetUniformBlockIndex(name);
 
-            if(block_index<=0)
+            if(block_index<0)
             {
                 LOG_ERROR(U8_TEXT("UBO name error:")+UTF8String(name));
                 return(nullptr);

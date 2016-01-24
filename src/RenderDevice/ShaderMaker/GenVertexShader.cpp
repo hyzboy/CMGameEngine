@@ -76,8 +76,6 @@ namespace hgl
 			{
 				add_layout_in(vbtNormal,HGL_VS_NORMAL,3);
 				//add_out_vec3(HGL_FS_NORMAL);
-//				add_uniform_float(HGL_VS_GLOBAL_LIGHT_INTENSITY);
-//				add_out_float(HGL_FS_LIGHT_INTENSITY);
 
 				in_normal=sitVertexAttrib;
 
@@ -216,16 +214,26 @@ namespace hgl
 
 				if(in_normal)			//有法线要算
 				{
-					add("\n\tvec3 VP;\n");
-					add("\tvec3 MVNormal;\n");
+// 					add("\n\tvec3 VP;\n");
+// 					add("\tvec3 MVNormal;\n");
 				}
 
 				if(in_vertex_color)		//有顶点颜色
 				{
 					if(!color_material)
+					{
 						add(U8_TEXT("\n\t" HGL_FS_COLOR "=")+vertex_color_to_vec4+U8_TEXT(";\n"));
+					}
 					else
+					{
 						add(U8_TEXT("\n\t" HGL_FS_COLOR "=")+vertex_color_to_vec4+U8_TEXT("*" HGL_MATERIAL_COLOR ";\n"));
+					}
+				}
+
+				if(this->use_sky_light==1)
+				{
+					add(U8_TEXT("\n\tsky_light_compute(Normal);"));
+					add(U8_TEXT("\n\t" HGL_FS_LIGHT "=" HGL_SKY_COLOR ";\n"));
 				}
 
 				if(out_texcoord_count)	//有纹理坐标需要输出到fs
@@ -364,29 +372,39 @@ namespace hgl
 				code.add();
 			}
 
+			//法线
+			if(state->vertex_normal)				//使用顶点法线
+			{
+				code.add_in_normal();
+				code.add();
+			}
+
+			{
+				code.set_sky_light(state->use_sky_light);
+
+				if(state->use_sky_light==1)
+					code.add_sky_light();
+			}
+
 			//颜色
 			if(state->vertex_color)					//使用顶点颜色
 			{
 				code.add_in_color(state->vertex_color_format);
 				code.add();
 
-				if(state->color_material)			//使用颜色材质传入,没顶点颜色,也无需使用材质颜色
+				if(state->color_material)			//使用颜色材质传入,但没顶点颜色,也无需使用材质颜色
 				{
 					code.set_color_material();
 				}
 			}
-
-			//灯光
-			if(state->lighting)
+			else if(state->use_sky_light==1)		//有天空灯光
 			{
-//				code.add_uniform_vec3(HGL_VS_LIGHT_POSITION);
+				code.add_out_fv(HGL_FS_LIGHT,4);
 				code.add();
 
-				//法线
-				if(state->vertex_normal)				//使用顶点法线
+				if(state->color_material)
 				{
-					code.add_in_normal();
-					code.add();
+					code.set_color_material();
 				}
 			}
 
@@ -443,6 +461,9 @@ namespace hgl
 				if(tex_count)		//没有加贴图不加这个空行
 					code.add();
 			}
+
+			if(state->use_sky_light==1)
+				code.add_sky_light_func();
 
 			code.add_main_begin();
 

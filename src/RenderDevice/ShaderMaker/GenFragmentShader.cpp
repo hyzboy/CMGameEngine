@@ -19,6 +19,8 @@ namespace hgl
 			{
 				in_normal=sitNone;
 				in_color=sitNone;
+				in_light=false;
+
 				color_material=false;
 
 				hgl_zero(mtc_tex_type);
@@ -58,6 +60,13 @@ namespace hgl
 				in_color=sitVertexAttrib;
 
 				add_in_fv(HGL_FS_COLOR,4);
+			}
+
+			void fs::add_in_light()
+			{
+				in_light=true;
+
+				add_in_fv(HGL_FS_LIGHT,4);
 			}
 
 			/**
@@ -176,6 +185,9 @@ namespace hgl
 					}
 				}
 
+				if(in_light)
+					fin_color+="+" HGL_FS_LIGHT;
+
 				if(mtc_tex_type[mtcAlpha])				//透明贴图
 				{
 					add(U8_TEXT("\tfloat tex_alpha=")+tex_sampler[mtcAlpha]+U8_TEXT(";\n\n"));
@@ -235,6 +247,13 @@ namespace hgl
 
 			code.add_version(330);		//OpenGL 3.3
 
+			code.set_sky_light(state->use_sky_light);
+
+			if(state->use_sky_light==2)
+			{
+				code.add_sky_light();
+			}
+
 			//颜色
 			{
 				if(state->vertex_color)					//使用顶点颜色
@@ -248,6 +267,12 @@ namespace hgl
 					code.set_color_material();			//使用材质颜色
 					code.add();
 				}
+			}
+
+			if(state->use_sky_light==1)				//在顶点有光照
+			{
+				code.add_in_light();
+				code.add();
 			}
 
 			//灯光
@@ -319,6 +344,9 @@ namespace hgl
 
 			code.add_frag_color();					//指定颜色输出
 			code.add();
+
+			if(state->use_sky_light==2)
+				code.add_sky_light_func();
 
 			code.add_main_begin();
 

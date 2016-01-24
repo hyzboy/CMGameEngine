@@ -15,6 +15,8 @@ namespace hgl
 				shader_in_type in_normal;
 				shader_in_type in_color;
 
+				bool in_light;
+
 				bool color_material;
 
 				uint32 mtc_tex_type[mtcMax];
@@ -42,6 +44,8 @@ namespace hgl
 				void set_color_material();
 
 				void add_in_color();
+
+				void add_in_light();
 
 			public:		//贴图
 

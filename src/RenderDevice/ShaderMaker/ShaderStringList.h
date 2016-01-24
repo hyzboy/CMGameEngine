@@ -50,9 +50,15 @@ namespace hgl
 
 				UTF8String shader_string;
 
+				int use_sky_light;
+
 			public:
 
-				shader_stringlist(){}
+				shader_stringlist()
+				{
+					use_sky_light=0;
+				}
+
 				virtual ~shader_stringlist(){}
 
 				char *end_get()
@@ -87,6 +93,10 @@ namespace hgl
 
 				void add_sampler		(const char *name,uint tex_type){add("uniform "	);add(get_sampler_by_tex_type(tex_type));add(" ");add(name);add(";\n");}
 				void add_sampler_shadow	(const char *name,uint tex_type){add("uniform "	);add(get_sampler_shadow_by_tex_type(tex_type));add(" ");add(name);add(";\n");}
+
+				void set_sky_light(int sk){use_sky_light=sk;}
+				void add_sky_light();
+				void add_sky_light_func();
 
 			public:
 

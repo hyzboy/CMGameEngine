@@ -24,7 +24,7 @@ namespace hgl
             if(max_uniform_block_binding<=0)
                 return(false);
 
-            for(uint i=1;i<=max_uniform_block_binding;i++)
+            for(uint i=0;i<max_uniform_block_binding;i++)
                 uniform_block_binding_stack.Push(i);
 
             return(true);
@@ -94,6 +94,39 @@ namespace hgl
 			#undef UNI_CASE
 		}
 
+		const char *textFromUniformType(GLint type)
+		{
+			switch(type)
+			{
+				case GL_FLOAT : return "GL_FLOAT";
+				case GL_FLOAT_VEC2 : return "GL_FLOAT_VEC2";
+				case GL_FLOAT_VEC3 : return "GL_FLOAT_VEC3";
+				case GL_FLOAT_VEC4 : return "GL_FLOAT_VEC4";
+				case GL_INT : return "GL_INT";
+				case GL_INT_VEC2 : return "GL_INT_VEC2";
+				case GL_INT_VEC3 : return "GL_INT_VEC3";
+				case GL_INT_VEC4 : return "GL_INT_VEC4";
+				case GL_UNSIGNED_INT : return "GL_UNSIGNED_INT";
+				case GL_UNSIGNED_INT_VEC2 : return "GL_UNSIGNED_INT_VEC2";
+				case GL_UNSIGNED_INT_VEC3 : return "GL_UNSIGNED_INT_VEC3";
+				case GL_UNSIGNED_INT_VEC4 : return "GL_UNSIGNED_INT_VEC4";
+				case GL_BOOL : return "GL_BOOL";
+				case GL_BOOL_VEC2 : return "GL_BOOL_VEC2";
+				case GL_BOOL_VEC3 : return "GL_BOOL_VEC3";
+				case GL_BOOL_VEC4 : return "GL_BOOL_VEC4";
+				case GL_FLOAT_MAT2 : return "GL_FLOAT_MAT2";
+				case GL_FLOAT_MAT3 : return "GL_FLOAT_MAT3";
+				case GL_FLOAT_MAT4 : return "GL_FLOAT_MAT4";
+				case GL_FLOAT_MAT2x3 : return "GL_FLOAT_MAT2x3";
+				case GL_FLOAT_MAT2x4 : return "GL_FLOAT_MAT2x4";
+				case GL_FLOAT_MAT3x2 : return "GL_FLOAT_MAT3x2";
+				case GL_FLOAT_MAT3x4 : return "GL_FLOAT_MAT3x4";
+				case GL_FLOAT_MAT4x2 : return "GL_FLOAT_MAT4x2";
+				case GL_FLOAT_MAT4x3 : return "GL_FLOAT_MAT4x3";
+				default : return "Unknown";
+			}
+		}
+
 		UBO::UBO(const UTF8String &n,uint p,uint i,uint level)
 		{
 			block_name=n;
@@ -116,22 +149,38 @@ namespace hgl
 			uniform_matrix_stride=new int[uniform_count];
 
 			glGetActiveUniformBlockiv(program,block_index,GL_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES,uniform_indices);
-			glGetActiveUniformsiv(program,uniform_count,&block_index,GL_UNIFORM_NAME_LENGTH,uniform_name_size);
+			glGetActiveUniformsiv(program,uniform_count,(GLuint *)uniform_indices,GL_UNIFORM_NAME_LENGTH,uniform_name_size);
 
 			for(int i=0;i<uniform_count;i++)
 			{
 				uniform_name[i]=new char[uniform_name_size[i]+1];
 
-				glGetActiveUniformName(program,block_index,uniform_name_size[i],uniform_name_size+i,uniform_name[i]);
+				glGetActiveUniformName(program,uniform_indices[i],uniform_name_size[i],uniform_name_size+i,uniform_name[i]);
 
 				uniform_name[i][uniform_name_size[i]]=0;
 			}
 
-			glGetActiveUniformsiv(program,uniform_count,&block_index,GL_UNIFORM_SIZE,			uniform_size			);
-			glGetActiveUniformsiv(program,uniform_count,&block_index,GL_UNIFORM_OFFSET,			uniform_offset			);
-			glGetActiveUniformsiv(program,uniform_count,&block_index,GL_UNIFORM_TYPE,			uniform_type			);
-			glGetActiveUniformsiv(program,uniform_count,&block_index,GL_UNIFORM_ARRAY_STRIDE,	uniform_array_stride	);
-			glGetActiveUniformsiv(program,uniform_count,&block_index,GL_UNIFORM_MATRIX_STRIDE,	uniform_matrix_stride	);
+			glGetActiveUniformsiv(program,uniform_count,(GLuint *)uniform_indices,GL_UNIFORM_SIZE,			uniform_size			);
+			glGetActiveUniformsiv(program,uniform_count,(GLuint *)uniform_indices,GL_UNIFORM_OFFSET,		uniform_offset			);
+			glGetActiveUniformsiv(program,uniform_count,(GLuint *)uniform_indices,GL_UNIFORM_TYPE,			uniform_type			);
+			glGetActiveUniformsiv(program,uniform_count,(GLuint *)uniform_indices,GL_UNIFORM_ARRAY_STRIDE,	uniform_array_stride	);
+			glGetActiveUniformsiv(program,uniform_count,(GLuint *)uniform_indices,GL_UNIFORM_MATRIX_STRIDE,	uniform_matrix_stride	);
+
+#ifdef _DEBUG
+			LOG_INFO("uniform block:"+n);
+			for(int i=0;i<uniform_count;i++)
+			{
+				LOG_INFO("\t        index: "+UTF8String(i));
+				LOG_INFO("\t      indices: "+UTF8String(uniform_indices[i]));
+				LOG_INFO("\t         name: "+UTF8String(uniform_name[i]));
+				LOG_INFO("\t         size: "+UTF8String(uniform_size[i]));
+				LOG_INFO("\t         type: "+UTF8String(textFromUniformType(uniform_type[i])));
+				LOG_INFO("\t        bytes: "+UTF8String(sizeFromUniformType(uniform_type[i])*uniform_size[i]));
+				LOG_INFO("\t       offset: "+UTF8String(uniform_offset[i]));
+				LOG_INFO("\t array_stride: "+UTF8String(uniform_array_stride[i]));
+				LOG_INFO("\tmatrix_stride: "+UTF8String(uniform_matrix_stride[i]));
+			}
+#endif//_DEBUG
 
 			{
 				glCreateBuffers(1,&ubo);

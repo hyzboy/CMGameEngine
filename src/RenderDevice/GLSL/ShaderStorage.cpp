@@ -45,8 +45,8 @@ namespace hgl
 				os_char vs_filename[HGL_MAX_PATH];
 				os_char fs_filename[HGL_MAX_PATH];
 
-				strcpy(vs_filename,HGL_MAX_PATH,save_filename);strcat(vs_filename,HGL_MAX_PATH,OS_TEXT(".vs"),3);
-				strcpy(fs_filename,HGL_MAX_PATH,save_filename);strcat(fs_filename,HGL_MAX_PATH,OS_TEXT(".fs"),3);
+				strcpy(vs_filename,HGL_MAX_PATH,save_filename);strcat(vs_filename,HGL_MAX_PATH,OS_TEXT(".vs.glsl"),8);
+				strcpy(fs_filename,HGL_MAX_PATH,save_filename);strcat(fs_filename,HGL_MAX_PATH,OS_TEXT(".fs.glsl"),8);
 
 				vs=MakeVertexShader(state,vs_filename);
 				fs=MakeFragmentShader(state,fs_filename);

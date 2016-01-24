@@ -181,6 +181,9 @@ namespace hgl
 			state.vertex_color			= va->GetVertexBuffer(vbtColor);
             state.vertex_tangent        = va->GetVertexBuffer(vbtTangent);
 
+			if(state.vertex_normal)		//没法线天空灯光也开不了
+			state.use_sky_light			=material->GetSkyLight();
+
 			state.diffuse_map			= GetTexCoord(mtcDiffuse);
 			state.normal_map			= GetTexCoord(mtcNormal);
             state.tangent_map           = GetTexCoord(mtcTangent);
