@@ -359,7 +359,7 @@ namespace hgl
             if(!program)
             {
                 LOG_ERROR(u8"Shader::BindUniformBlock("+UTF8String(uniform_block_name)+") program=0");
-                return(false);
+                return(-1);
             }
 
             const int index=glGetUniformBlockIndex(program,uniform_block_name);
@@ -367,7 +367,7 @@ namespace hgl
             if(index<0)
             {
                 LOG_ERROR(u8"Shader::BindUniformBlock("+UTF8String(uniform_block_name)+") block_index error");
-                return(false);
+                return(-1);
             }
 
             return index;
