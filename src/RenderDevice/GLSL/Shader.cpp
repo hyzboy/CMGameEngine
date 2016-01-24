@@ -1,4 +1,5 @@
 ﻿#include<hgl/graph/Shader.h>
+#include"UBO.h"
 
 namespace hgl
 {
@@ -12,7 +13,7 @@ namespace hgl
 		*/
 		int Shader::GetAttribLocation(const char *name)
 		{
-			if(!name)return(-1);
+            if(!name||!(*name))return(-1);
 
 			int result;
 
@@ -34,7 +35,7 @@ namespace hgl
 		*/
 		int Shader::GetUniformLocation(const char *name)													///<取得一个变量的地址
 		{
-			if(!name)return(-1);
+			if(!name||!(*name))return(-1);
 
 			int result;
 
@@ -56,7 +57,7 @@ namespace hgl
         */
         int Shader::GetUniformBlockIndex(const char *name)                                                    ///<取得一个变量的地址
         {
-            if(!name)return(-1);
+            if(!name||!(*name))return(-1);
 
             int result;
 
@@ -160,29 +161,32 @@ namespace hgl
 
 		#undef HGL_GLSL_SetUniformMatrixPointer
 
-        bool Shader::BindUniformBlock(const char *name,const int block_binding)
-        {
+		UBO *Shader::GetUniformBlock(const char *name,uint level)
+		{
             if(!name||!(*name))
             {
-                LOG_ERROR(U8_TEXT("ShaderDataBlock name error:"));
-                return(false);
+                LOG_ERROR(U8_TEXT("UBO name error:"));
+                return(nullptr);
             }
 
-            if(block_binding<=0)
-            {
-                LOG_ERROR(U8_TEXT("ShaderDataBlock BlockBinding error,name:")+UTF8String(name));
-                return(false);
-            }
+            UBO *ubo=uniform_block_object[name];
 
-            const int block_index=_GetUniformBlockIndex(name);
+			if(ubo)
+				return ubo;
+
+            const int block_index=GetUniformBlockIndex(name);
 
             if(block_index<=0)
             {
-                LOG_ERROR(U8_TEXT("ShaderDataBlock name error:")+UTF8String(name));
-                return(false);
+                LOG_ERROR(U8_TEXT("UBO name error:")+UTF8String(name));
+                return(nullptr);
             }
 
-            return _BindUniformBlock(block_index,block_binding);
-        }
+            ubo=new UBO(name,program,block_index,level);
+
+			uniform_block_object.Add(name,ubo);
+
+			return ubo;
+		}
 	}//namespace graph
 }//namespace hgl

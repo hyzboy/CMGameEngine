@@ -372,17 +372,5 @@ namespace hgl
 
             return index;
         }
-
-        bool Shader::_BindUniformBlock(int block_index,int block_binding)
-        {
-            if(!program)
-            {
-                LOG_ERROR(u8"Shader::BindUniformBlock("+UTF8String(block_index)+","+UTF8String(block_binding)+") program=0");
-                return(false);
-            }
-
-            glUniformBlockBinding(program,block_index,block_binding);
-            return(true);
-        }
 	}//namespace graph
 }//namespace hgl

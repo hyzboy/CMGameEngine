@@ -4,37 +4,13 @@
 #include<hgl/type/BaseString.h>
 #include<hgl/type/Map.h>
 #include<hgl/VectorMath.h>
+#include<hgl/graph/UBO.h>
+#include<hgl/graph/VertexBufferType.h>
 namespace hgl
 {
 	namespace graph
 	{
 		#define HGL_MAX_SHADER_NAME_LENGTH	128									///<最大Shader名称长度
-
-        int GetMaxShaderBlockBinding();             ///<取得最大绑定点数量
-        int GetMaxShaderBlockSize();                ///<取得最大绑定点尺寸
-        int AcquireShaderBlockBinding();            ///<申请一个绑定点
-        void ReleaseShaderBlockBinding(int);        ///<释放一个绑定点
-
-        /**
-        * Shader数据块，用于跨Shader提供大批量数据
-        */
-        class ShaderDataBlock                                                                       ///Shader数据块
-        {
-        protected:
-
-            char shader_name[HGL_MAX_SHADER_NAME_LENGTH];                                           ///<数据块在Shader中的名称
-            int block_size;                                                                         ///<数据块长度
-
-        public:
-
-            ShaderDataBlock(const char *,int);
-            virtual ~ShaderDataBlock()HGL_DEFAULT_MEMFUNC;
-
-            virtual bool SetData(void *)=0;                                                         ///<设置数据块内容
-            virtual bool ChangeData(void *,int,int)=0;                                              ///<更改数据块内容
-
-            virtual void Binding(int)=0;                                                            ///<绑定
-        };//class ShaderDataBlock
 
 		/**
 		 * 着色程序类型枚举
@@ -71,11 +47,11 @@ namespace hgl
 			Map<UTF8String,int> attrib_location;
 			Map<UTF8String,int> uniform_location;
             Map<UTF8String,int> uniform_block_index;
+			MapObject<UTF8String,UBO> uniform_block_object;
 
 			int _GetAttribLocation(const char *);																        ///<取得指定属性地址
 			int _GetUniformLocation(const char *);															            ///<取得一个变量的地址
 			int _GetUniformBlockIndex(const char *);                                                                    ///<取得一个数据块的地址索引
-            bool _BindUniformBlock(int,int);                                                                            ///<绑定一个数据块
 
 		public:
 
@@ -207,7 +183,7 @@ namespace hgl
 
         public: //Uniform Block
 
-            bool BindUniformBlock(const char *,const int);
+            UBO *GetUniformBlock(const char *,uint=HGL_DYNAMIC_DRAW);
 		};//class Shader
 	}//namespace graph
 }//namespace hgl
