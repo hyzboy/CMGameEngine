@@ -40,35 +40,37 @@ namespace hgl
 		};//struct Light
 
 		/**
-		* 点光源
-		*/
-		struct PointLight:public Light
-		{
-			Color3f	position;				///<光源位置
-
-			Color3f	attenuation;			///<constant,linear,quadratic
-		};//struct PointLight
-
-		/**
 		 * 方向光
 		 */
 		struct DirectionLight:public Light
 		{
-			Color3f	direction;				///<方向
+			Vector3f	direction;				///<方向
 
-			float	nDotVP;					///<normal . light direction
+			float		nDotVP;					///<normal . light direction
+			float		nDotHV;					///<HalfVector
 		};//struct DirectionLight
+
+		/**
+		* 点光源
+		*/
+		struct PointLight:public Light
+		{
+			Vector3f	position;				///<光源位置
+
+			Vector3f	attenuation;			///<constant,linear,quadratic
+		};//struct PointLight
 
 		/**
 		 * 聚光灯
 		 */
 		struct SpotLight:public Light
 		{
-			Color3f	position;				///<位置
-			Color3f	attenuation;			///<constant,linear,quadratic
-			Color3f	direction;
-			float	coscutoff;
-			float	exponent;
+			Vector3f	position;				///<位置
+			Vector3f	direction;				///<方向
+			Vector3f	attenuation;			///<constant,linear,quadratic
+
+			float		coscutoff;
+			float		exponent;
 		};//struct SpotLight
 
 		/**
@@ -76,9 +78,9 @@ namespace hgl
 		 */
 		struct InfiniteSpotLight:public Light
 		{
-			Color3f	position;
-			Color3f	direction;
-			Color3f	exponent;
+			Vector3f	position;
+			Vector3f	direction;
+			Vector3f	exponent;
 		};//struct InfiniteSpotLight
 	}//namespace graph
 }//namespace hgl

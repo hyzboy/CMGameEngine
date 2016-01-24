@@ -1,4 +1,5 @@
 ﻿#include"ShaderStringList.h"
+#include"ShaderLight.h"
 #include<malloc.h>
 #include<string.h>
 #include<stdarg.h>
@@ -70,44 +71,42 @@ namespace hgl
 				add("#version "+UTF8String(ver)+" core\n\n");
 			}
 
-			void shader_stringlist::add_sky_light()
-			{
-				add("struct DirectionLight\n"
-					"{\n"
-					"\tvec3 direction;\n"
-					"\tvec4 ambient;\n"
-					"\tvec4 specular;\n"
-					"\tvec4 diffuse;\n"
-					"\tfloat shininess;\n"
-					"};\n"
-					"\n"
-					"uniform SkyLight\n"
-					"{\n"
-					"\tDirectionLight sky_light;\n"
-					"};"
-					"\n"
-					"vec4 " HGL_SKY_COLOR ";\n");
-			}
+			void shader_stringlist::add_direction_light		(){add(glsl_light_directional	);}
+			void shader_stringlist::add_point_light			(){add(glsl_light_point			);}
+			void shader_stringlist::add_spot_light			(){add(glsl_light_spot			);}
+			void shader_stringlist::add_infinite_spot_light	(){add(glsl_light_infinite_spot	);}
 
-			void shader_stringlist::add_sky_light_func()
+			void shader_stringlist::add_light(int dl,int pl,int sl,int isl,bool sky)
 			{
-				add("void " HGL_SKY_COLOR_FUNC "(in vec3 normal)\n"
-					"{\n"
-					"\tvec3 n=normalize(normal);\n"
-					"\tvec3 e=normalize(vec3(100,100,80));\n"
-					"\n"
-					"\tfloat intensity=max(dot(n,sky_light.direction),0.0);\n"
-					"\n"
-					"\tif(intensity>0.0)\n"
-					"\t{\n"
-					"\t\tvec3 h=normalize(sky_light.direction+e);\n"
-					"\t\tfloat intSpec=max(dot(h,n),0.0);\n"
-					"\n"
-					"\t\t" HGL_SKY_COLOR "=max(intensity*sky_light.diffuse+sky_light.specular*pow(intSpec,sky_light.shininess),sky_light.ambient);\n"
-					"\t}\n"
-					"\telse\n"
-					"\t\t" HGL_SKY_COLOR "=max(intensity*sky_light.diffuse,sky_light.ambient);\n"
-					"}\n\n");
+				UTF8String str;
+
+				if(dl>0||sky)
+				{
+					str="DirectionLight DirectionLightSource["+UTF8String(dl+(sky?1:0))+"];\n\n";
+
+					add(str);
+				}
+
+				if(pl>0)
+				{
+					str="PointLight PointLightSource["+UTF8String(pl)+"];\n\n";
+
+					add(str);
+				}
+
+				if(sl>0)
+				{
+					str="SpotLight SpotLightSource["+UTF8String(sl)+"];\n\n";
+
+					add(str);
+				}
+
+				if(isl>0)
+				{
+					str="InfiniteSpotLight InfiniteSpotLightSource["+UTF8String(isl)+"];\n\n";
+
+					add(str);
+				}
 			}
 
 			void shader_stringlist::add_main_begin()

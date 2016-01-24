@@ -230,12 +230,6 @@ namespace hgl
 					}
 				}
 
-				if(this->use_sky_light==1)
-				{
-					add(U8_TEXT("\n\tsky_light_compute(Normal);"));
-					add(U8_TEXT("\n\t" HGL_FS_LIGHT "=" HGL_SKY_COLOR ";\n"));
-				}
-
 				if(out_texcoord_count)	//有纹理坐标需要输出到fs
 				{
 					int count=0;
@@ -379,13 +373,6 @@ namespace hgl
 				code.add();
 			}
 
-			{
-				code.set_sky_light(state->use_sky_light);
-
-				if(state->use_sky_light==1)
-					code.add_sky_light();
-			}
-
 			//颜色
 			if(state->vertex_color)					//使用顶点颜色
 			{
@@ -393,16 +380,6 @@ namespace hgl
 				code.add();
 
 				if(state->color_material)			//使用颜色材质传入,但没顶点颜色,也无需使用材质颜色
-				{
-					code.set_color_material();
-				}
-			}
-			else if(state->use_sky_light==1)		//有天空灯光
-			{
-				code.add_out_fv(HGL_FS_LIGHT,4);
-				code.add();
-
-				if(state->color_material)
 				{
 					code.set_color_material();
 				}
@@ -461,9 +438,6 @@ namespace hgl
 				if(tex_count)		//没有加贴图不加这个空行
 					code.add();
 			}
-
-			if(state->use_sky_light==1)
-				code.add_sky_light_func();
 
 			code.add_main_begin();
 
