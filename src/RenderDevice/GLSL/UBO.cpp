@@ -57,6 +57,49 @@ namespace hgl
             uniform_block_binding_stack.Push(bb);
         }
 
+	#define UBO_VALUE(name,type,C)	class UBO##name:public UBOValue	\
+									{	\
+										using UBOValue::UBOValue;	\
+										\
+										bool Set##Name(const type *value)	\
+										{	\
+											memcpy(this->data,value,C*sizeof(type));	\
+											return(true);	\
+										}	\
+									};
+
+			UBO_VALUE(Float,float,1)
+			UBO_VALUE(Float2,float,2)
+			UBO_VALUE(Float3,float,3)
+			UBO_VALUE(Float4,float,4)
+
+			UBO_VALUE(Integer,int,1)
+			UBO_VALUE(Integer2,int,2)
+			UBO_VALUE(Integer3,int,3)
+			UBO_VALUE(Integer4,int,4)
+
+			UBO_VALUE(UInteger,uint,1)
+			UBO_VALUE(UInteger2,uint,2)
+			UBO_VALUE(UInteger3,uint,3)
+			UBO_VALUE(UInteger4,uint,4)
+
+			UBO_VALUE(Bool,bool,1)
+			UBO_VALUE(Bool2,bool,2)
+			UBO_VALUE(Bool3,bool,3)
+			UBO_VALUE(Bool4,bool,4)
+
+			UBO_VALUE(Mat2,float,4)
+			UBO_VALUE(Mat3,float,9)
+			UBO_VALUE(Mat4,float,16)
+
+	 		UBO_VALUE(Mat2x3,float,6)
+	 		UBO_VALUE(Mat2x4,float,8)
+	 		UBO_VALUE(Mat3x2,float,6)
+			UBO_VALUE(Mat3x4,float,12)
+	 		UBO_VALUE(Mat4x2,float,8)
+	 		UBO_VALUE(Mat4x3,float,12)
+	#undef UBO_VALUE
+
         GLuint sizeFromUniformType(GLint type)
 		{
 			#define UNI_CASE(type, numElementsInType, elementType) case type : return(numElementsInType * sizeof(elementType));
@@ -127,12 +170,54 @@ namespace hgl
 			}
 		}
 
-		UBO::UBO(const UTF8String &n,uint p,uint i,uint level)
+		UBOValue *CreateUBOValue(GLint type,char *buffer)
+		{
+			switch(type)
+			{
+#define CREATE_UBOVALUE(type,uvb)	case GL_##type:return(new UBO##uvb(buffer));
+
+				CREATE_UBOVALUE(FLOAT,				Float)
+				CREATE_UBOVALUE(FLOAT_VEC2,			Float2)
+				CREATE_UBOVALUE(FLOAT_VEC3,			Float3)
+				CREATE_UBOVALUE(FLOAT_VEC4,			Float4)
+
+				CREATE_UBOVALUE(INT,				Integer)
+				CREATE_UBOVALUE(INT_VEC2,			Integer2)
+				CREATE_UBOVALUE(INT_VEC3,			Integer3)
+				CREATE_UBOVALUE(INT_VEC4,			Integer4)
+
+				CREATE_UBOVALUE(UNSIGNED_INT,		UInteger)
+				CREATE_UBOVALUE(UNSIGNED_INT_VEC2,	UInteger2)
+				CREATE_UBOVALUE(UNSIGNED_INT_VEC3,	UInteger3)
+				CREATE_UBOVALUE(UNSIGNED_INT_VEC4,	UInteger4)
+
+				CREATE_UBOVALUE(BOOL,				Bool)
+				CREATE_UBOVALUE(BOOL_VEC2,			Bool2)
+				CREATE_UBOVALUE(BOOL_VEC3,			Bool3)
+				CREATE_UBOVALUE(BOOL_VEC4,			Bool4)
+
+				CREATE_UBOVALUE(FLOAT_MAT2, 		Mat2)
+				CREATE_UBOVALUE(FLOAT_MAT3,			Mat3)
+				CREATE_UBOVALUE(FLOAT_MAT4,			Mat4)
+				CREATE_UBOVALUE(FLOAT_MAT2x3,		Mat2x3)
+				CREATE_UBOVALUE(FLOAT_MAT2x4,		Mat2x4)
+				CREATE_UBOVALUE(FLOAT_MAT3x2,		Mat3x2)
+				CREATE_UBOVALUE(FLOAT_MAT3x4,		Mat3x4)
+				CREATE_UBOVALUE(FLOAT_MAT4x2,		Mat4x2)
+				CREATE_UBOVALUE(FLOAT_MAT4x3,		Mat4x3)
+
+#undef CREATE_UBOVALUE
+				default : return nullptr;
+			}
+		}
+
+		UBO::UBO(const UTF8String &n,uint p,uint i,uint l)
 		{
 			block_name=n;
 			program=p;
 			block_index=i;
 			binding_point=AcquireShaderBlockBinding();
+			level=l;
 
 			glGetActiveUniformBlockiv(program,block_index,GL_UNIFORM_BLOCK_DATA_SIZE,&size);
             glUniformBlockBinding(program,block_index,binding_point);
@@ -242,6 +327,37 @@ namespace hgl
 		void UBO::Unmap()
 		{
 			glUnmapNamedBuffer(ubo);
+		}
+
+		UBOValue *UBO::GetValue(const UTF8String &value_name)
+		{
+			if(!ubo)return(nullptr);
+
+			UBOValue *uv=ubo_value[value_name];
+
+			if(uv)
+				return uv;
+
+			for(int i=0;i<uniform_count;i++)
+				if(value_name.Comp(uniform_name[i])==0)
+				{
+					uv=CreateUBOValue(uniform_type[i],buffer+uniform_offset[i]);
+
+					if(uv)
+					{
+						ubo_value.Add(value_name,uv);
+						return uv;
+					}
+
+					return nullptr;
+				}
+
+			return(nullptr);
+		}
+
+		void UBO::Commit()
+		{
+			glNamedBufferData(ubo,size,buffer,level);
 		}
 	}//namespace graph
 }//namespace hgl
