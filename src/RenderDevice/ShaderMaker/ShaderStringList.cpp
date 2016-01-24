@@ -20,19 +20,6 @@ namespace hgl
 				"vec4"
 			};
 
-			const char shader_sampler[3][16]=
-			{
-				"sampler1D",
-				"sampler2D",
-				"sampler3D",
-			};
-
-			const char shader_sampler_shadow[2][16]=
-			{
-				"sampler1DShadow",
-				"sampler2DShadow",
-			};
-
 			const char *get_sampler_by_tex_type(uint type)
 			{
 				switch(type)
