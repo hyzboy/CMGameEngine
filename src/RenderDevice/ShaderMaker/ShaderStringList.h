@@ -89,6 +89,8 @@ namespace hgl
 				void add_sampler		(const char *name,uint tex_type){add("uniform "	);add(get_sampler_by_tex_type(tex_type));add(" ");add(name);add(";\n");}
 				void add_sampler_shadow	(const char *name,uint tex_type){add("uniform "	);add(get_sampler_shadow_by_tex_type(tex_type));add(" ");add(name);add(";\n");}
 
+				void add_material(bool);
+
 				void add_direction_light();
 				void add_point_light();
 				void add_spot_light();

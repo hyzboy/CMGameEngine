@@ -71,6 +71,23 @@ namespace hgl
 				add("#version "+UTF8String(ver)+" core\n\n");
 			}
 
+			void shader_stringlist::add_material(bool two_side)
+			{
+				add("struct Material\n"
+					"{\n"
+					"\tvec4 emission;\n"
+					"\tvec4 ambient;\n"
+					"\tvec4 diffuse;\n"
+					"\tvec4 specular;\n"
+					"\tfloat shininess;\n"
+					"};\n"
+					"\n"
+					"uniform Material FrontMaterial;\n");
+
+				if(two_side)
+					add("uniform Material BackMaterial;\n");
+			}
+
 			void shader_stringlist::add_direction_light		(){add(glsl_light_directional	);}
 			void shader_stringlist::add_point_light			(){add(glsl_light_point			);}
 			void shader_stringlist::add_spot_light			(){add(glsl_light_spot			);}
@@ -82,28 +99,28 @@ namespace hgl
 
 				if(dl>0||sky)
 				{
-					str="DirectionLight DirectionLightSource["+UTF8String(dl+(sky?1:0))+"];\n\n";
+					str="uniform DirectionLight DirectionLightSource["+UTF8String(dl+(sky?1:0))+"];\n\n";
 
 					add(str);
 				}
 
 				if(pl>0)
 				{
-					str="PointLight PointLightSource["+UTF8String(pl)+"];\n\n";
+					str="uniform PointLight PointLightSource["+UTF8String(pl)+"];\n\n";
 
 					add(str);
 				}
 
 				if(sl>0)
 				{
-					str="SpotLight SpotLightSource["+UTF8String(sl)+"];\n\n";
+					str="uniform SpotLight SpotLightSource["+UTF8String(sl)+"];\n\n";
 
 					add(str);
 				}
 
 				if(isl>0)
 				{
-					str="InfiniteSpotLight InfiniteSpotLightSource["+UTF8String(isl)+"];\n\n";
+					str="uniform InfiniteSpotLight InfiniteSpotLightSource["+UTF8String(isl)+"];\n\n";
 
 					add(str);
 				}
