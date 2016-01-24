@@ -97,7 +97,7 @@ namespace hgl
 			uint GetSize()const{return size;}							///<取得当前UBO尺寸大小
 
 			UBOValue *GetValue(const UTF8String &);						///<取得某个变量的
-
+			char *GetBuffer(){return buffer;}							///<取得内存缓冲区数据指针
 			void Commit();												///<提交数据到显存
 
 			void *ReadMap(uint start=0,uint access_size=0);
