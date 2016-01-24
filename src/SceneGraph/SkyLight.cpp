@@ -1,8 +1,8 @@
-﻿#include<hgl/graph/SkyLight.h>
+﻿#include <hgl/graph/Light.h>
 
 namespace hgl
 {
-	namespace scene
+	namespace graph
 	{
 		//天空色要素
 		//季节：春、夏、秋、冬
@@ -65,31 +65,34 @@ namespace hgl
 
 		/**
 		* 根据时间产生天空灯光数据
-		* @param time 时间,以小时为单位
+		* @param time 时间,以小时为单位(0-24)
 		*/
-		void SkyLight::FromTime(double time)
+		void SkyLight(DirectionLight &dl,double time)
 		{
-			while(time<0)time+=24;
+			while(time<0)time+=48;
 
-			while(time>=24)time-=24;
+			while(time>=48)time-=48;
+
+			dl.ambient.Set(0,0,0,0);
+			dl.specular.Set(0,0,0,0);
 
 			if(time<=10||time>=40)		//晚上
-				diffuse.Set(0,0,0);
+				dl.diffuse.Set(0,0,0,1);
 			else
 			if(time>=19&&time<=31)		//白天
-				diffuse.Set(1,1,1);
+				dl.diffuse.Set(1,1,1,1);
 			else						//渐变实现
 			{
 				const int index=time;
 
 				time-=index;
 
-				diffuse=SkyLightColor[index];
-				diffuse.To(SkyLightColor[index+1],time);
+				dl.diffuse=SkyLightColor[index];
+				dl.diffuse.To(SkyLightColor[index+1],time);
 			}
 
 			//direction=
 		}
-	}//namespace scene
+	}//namespace graph
 }//namespace hgl
 
