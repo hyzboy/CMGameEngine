@@ -129,11 +129,17 @@ namespace hgl
 
 		protected:	//材质本身数据
 
-			Color4f		Emission;
-			Color4f		Ambient;
-			Color4f		Diffuse;																	///<漫反射
-			Color4f		Specular;																	///<反射指数
-			float		Shininess;																	///<镜面指数
+			struct
+			{
+				Color4f		Emission;																///<散射光
+				Color4f		Ambient;																///<环境光
+				Color4f		Diffuse;																///<漫反射
+				Color4f		Specular;																///<镜面光
+				float		Shininess;																///<镜面指数
+			}Front,Back;
+
+			bool		two_side;																	///<启用双面材质
+
 			float		Transparency;																///<透明度
 
 		protected:
@@ -179,20 +185,22 @@ namespace hgl
 			void SetColorMaterial	(bool cm)							{color_material=cm;}							///<设置是否使用颜色追踪材质
 
 			void SetLight			(bool l)							{Light=l;}										///<设置是否承接光照
+			void SetTwoSide			(bool ts)							{two_side=ts;}									///<设置量启用双面材质
 
 		public:
 
-			void SetEmission		(const Color4f &c)					{Emission=c;}
-			void SetAmbient			(const Color4f &c)					{Ambient=c;}
-			void SetDiffuse			(const Color4f &c)					{Diffuse=c;}
-			void SetSpecular		(const Color4f &c)					{Specular=c;}
+			void SetEmission		(const Color4f &c,bool b=false)		{if(b)Back.Emission	=c;else Front.Emission	=c;}
+			void SetAmbient			(const Color4f &c,bool b=false)		{if(b)Back.Ambient	=c;else Front.Ambient	=c;}
+			void SetDiffuse			(const Color4f &c,bool b=false)		{if(b)Back.Diffuse	=c;else Front.Diffuse	=c;}
+			void SetSpecular		(const Color4f &c,bool b=false)		{if(b)Back.Specular	=c;else Front.Specular	=c;}
 
-			void SetEmission		(const float c[4])					{Emission.Set(c[0],c[1],c[2],c[3]);}
-			void SetAmbient			(const float c[4])					{Ambient.Set(c[0],c[1],c[2],c[3]);}
-			void SetDiffuse			(const float c[4])					{Diffuse.Set(c[0],c[1],c[2],c[3]);}
-			void SetSpecular		(const float c[4])					{Specular.Set(c[0],c[1],c[2],c[3]);}
+			void SetEmission		(const float c[4],bool b=false)		{if(b)Back.Emission	.Set(c[0],c[1],c[2],c[3]);else Front.Emission	.Set(c[0],c[1],c[2],c[3]);}
+			void SetAmbient			(const float c[4],bool b=false)		{if(b)Back.Ambient	.Set(c[0],c[1],c[2],c[3]);else Front.Ambient	.Set(c[0],c[1],c[2],c[3]);}
+			void SetDiffuse			(const float c[4],bool b=false)		{if(b)Back.Diffuse	.Set(c[0],c[1],c[2],c[3]);else Front.Diffuse	.Set(c[0],c[1],c[2],c[3]);}
+			void SetSpecular		(const float c[4],bool b=false)		{if(b)Back.Specular	.Set(c[0],c[1],c[2],c[3]);else Front.Specular	.Set(c[0],c[1],c[2],c[3]);}
 
-			void SetShininess		(float s)							{Shininess=s;}
+			void SetShininess		(float s,bool b=false)				{if(b)Back.Shininess=s;else Front.Shininess	=s;}
+
 			void SetTransparency	(float t)							{Transparency=t;}
 
 			bool SetTexture			(int mtc,Texture *tex)				{return TextureList.Set(mtc,tex);}				///<在设定通道设定纹理
@@ -221,15 +229,17 @@ namespace hgl
 			bool			GetColorMaterial()const				{return color_material;}			///<读取是否使用颜色追踪材质
 
 			bool			GetLight()const						{return Light;}						///<读取是否承接光照
+			bool			GetTwoSide()const					{return two_side;}					///<读取是否启用双面材质
 
 		public:
 
-			const Color4f &	GetEmission()const					{return Emission;}
-			const Color4f &	GetAmbient()const					{return Ambient;}
-			const Color4f &	GetDiffuse()const					{return Diffuse;}
-			const Color4f &	GetSpecular()const					{return Specular;}
+			const Color4f &	GetEmission	(bool b=false)const		{return b?Back.Emission	:Front.Emission	;}
+			const Color4f &	GetAmbient	(bool b=false)const		{return b?Back.Ambient	:Front.Ambient	;}
+			const Color4f &	GetDiffuse	(bool b=false)const		{return b?Back.Diffuse	:Front.Diffuse	;}
+			const Color4f &	GetSpecular	(bool b=false)const		{return b?Back.Specular	:Front.Specular	;}
 
-			const float	&	GetShininess()const					{return Shininess;}
+			const float	&	GetShininess(bool b=false)const		{return b?Back.Shininess:Front.Shininess;}
+
 			const float	&	GetTransparency()const				{return Transparency;}
 
 			const int		GetTextureNumber()const				{return TextureList.GetCount();}

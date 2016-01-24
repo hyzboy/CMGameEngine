@@ -218,6 +218,13 @@ namespace hgl
 
 			state.lighting				= material->GetLight();
 
+			if(state.lighting)
+			{
+
+			}
+
+			state.two_side				=material->GetTwoSide();
+
 			if(!CheckPrim(GetPrimitive()))
 			{
 				LOG_ERROR(OS_TEXT("错误的图元类型：")+OSString(GetPrimitive()));

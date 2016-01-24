@@ -45,12 +45,14 @@ namespace hgl
 
 			Light=false;
 
-			Emission.Set(0.0f,0.0f,0.0f,1.0f);
-			Ambient.Set(0.25f,0.25f,0.25f,1.0f);
-			Diffuse.Set(1.0f,1.0f,1.0f,1.0f);
-			Specular.Set(0.95f,0.95f,0.95f,1.0f);
+			Front.Emission.Set(0.0f,0.0f,0.0f,1.0f);
+			Front.Ambient.Set(0.25f,0.25f,0.25f,1.0f);
+			Front.Diffuse.Set(1.0f,1.0f,1.0f,1.0f);
+			Front.Specular.Set(0.95f,0.95f,0.95f,1.0f);
+			Front.Shininess=40.0f;
 
-			Shininess=40.0f;
+			Back=Front;
+
 			Transparency=1.0f;
 		}
 
