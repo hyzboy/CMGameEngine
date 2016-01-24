@@ -1,31 +1,8 @@
-﻿#include"UBO.h"
+﻿#include<hgl/graph/UBO.h>
 #include<hgl/type/Stack.h>
 #include<glew/include/GL/glew.h>
 #include<hgl/LogInfo.h>
 #include<hgl/graph/VertexBuffer.h>
-
-/**
- * Unifrom Buffer Object 用法
- *
- * shader中定义：
- *
- *          uniform ubo_block
- *          {
- *              ....
- *          };
- *
- * C代码中：
- *
- *          ubo_index=glGetUniformBlockIndex(program,"ubo_block");            //取得ubo块变量索引
- *
- *          uint bind_point=1;                                                  //从1开始，自己编号
- *
- *          glUniformBlockBinding(program,ubo_index,bind_point);
- *
- *          glGenBuffer(1,&buffer_id);
- *          glBindBufferBase(GL_UNIFORM_BUFFER,bind_point,buffer_id);
- *
- */
 
 //注：较大数据请使用SSBO
 
@@ -34,7 +11,7 @@ namespace hgl
 	namespace graph
 	{
         //绑定点是全局不可重用的，所以使用一个全局计数
-        static Stack<int> uniform_block_binding_stack;                                               ///<绑定点计数
+        static Stack<uint> uniform_block_binding_stack;                                               ///<绑定点计数
 
         static int max_uniform_block_binding=0;
         static int max_uniform_block_size=0;
@@ -47,118 +24,175 @@ namespace hgl
             if(max_uniform_block_binding<=0)
                 return(false);
 
-            for(int i=1;i<=max_uniform_block_binding;i++)
+            for(uint i=1;i<=max_uniform_block_binding;i++)
                 uniform_block_binding_stack.Push(i);
 
             return(true);
         }
 
-        int GetMaxShaderBlockBinding()
+        uint GetMaxShaderBlockBinding()
         {
             return max_uniform_block_binding;
         }
 
-        int GetMaxShaderBlockSize()
+        uint GetMaxShaderBlockSize()
         {
             return max_uniform_block_size;
         }
 
-        int AcquireShaderBlockBinding()
+        uint AcquireShaderBlockBinding()
         {
-            int result;
+            uint result;
 
             if(uniform_block_binding_stack.Pop(result))
                 return result;
 
-            return -1;
+            return 0;
         }
 
-        void ReleaseShaderBlockBinding(int bb)
+        void ReleaseShaderBlockBinding(uint bb)
         {
-            if(bb<=0)return;
+            if(bb==0)return;
 
             uniform_block_binding_stack.Push(bb);
         }
 
-		/**
-		* 创建一个Shader数据块
-		* @param name 数据块在shader中的名称
-		* @param size 数据块长度
-		* @param data 数据内容
-		* @param level 更新级别
-		* @return 创建好的数据块
-		*/
-		ShaderDataBlock *CreateShaderDataBlock(const char *name,int size,void *data,int level)
+        GLuint sizeFromUniformType(GLint type)
 		{
-            if(!name||!(*name))
-            {
-                LOG_ERROR("block name error");
-                return(nullptr);
-            }
+			#define UNI_CASE(type, numElementsInType, elementType) case type : return(numElementsInType * sizeof(elementType));
 
-            if(size>max_uniform_block_size)
-            {
-                LOG_ERROR(U8_TEXT("block size very large,UBO max ")+UTF8String(max_uniform_block_size)+U8_TEXT(", need ")+UTF8String(size));
+			switch(type)
+			{
+				UNI_CASE(GL_FLOAT, 1, GLfloat);
+				UNI_CASE(GL_FLOAT_VEC2, 2, GLfloat);
+				UNI_CASE(GL_FLOAT_VEC3, 3, GLfloat);
+				UNI_CASE(GL_FLOAT_VEC4, 4, GLfloat);
+				UNI_CASE(GL_INT, 1, GLint);
+				UNI_CASE(GL_INT_VEC2, 2, GLint);
+				UNI_CASE(GL_INT_VEC3, 3, GLint);
+				UNI_CASE(GL_INT_VEC4, 4, GLint);
+				UNI_CASE(GL_UNSIGNED_INT, 1, GLuint);
+				UNI_CASE(GL_UNSIGNED_INT_VEC2, 2, GLuint);
+				UNI_CASE(GL_UNSIGNED_INT_VEC3, 3, GLuint);
+				UNI_CASE(GL_UNSIGNED_INT_VEC4, 4, GLuint);
+				UNI_CASE(GL_BOOL, 1, GLboolean);
+				UNI_CASE(GL_BOOL_VEC2, 2, GLboolean);
+				UNI_CASE(GL_BOOL_VEC3, 3, GLboolean);
+				UNI_CASE(GL_BOOL_VEC4, 4, GLboolean);
+				UNI_CASE(GL_FLOAT_MAT2, 4, GLfloat);
+				UNI_CASE(GL_FLOAT_MAT3, 9, GLfloat);
+				UNI_CASE(GL_FLOAT_MAT4, 16, GLfloat);
+				UNI_CASE(GL_FLOAT_MAT2x3, 6, GLfloat);
+				UNI_CASE(GL_FLOAT_MAT2x4, 8, GLfloat);
+				UNI_CASE(GL_FLOAT_MAT3x2, 6, GLfloat);
+				UNI_CASE(GL_FLOAT_MAT3x4, 12, GLfloat);
+				UNI_CASE(GL_FLOAT_MAT4x2, 8, GLfloat);
+				UNI_CASE(GL_FLOAT_MAT4x3, 12, GLfloat);
+				default : return(0);
+			}
 
-                return(nullptr);
-            }
-
-			ShaderDataBlock *ubo=new UBO(name,size,level);
-
-			ubo->SetData(data);
-
-			return ubo;
+			#undef UNI_CASE
 		}
 
-		UBO::UBO(const char *name,int size,int level):ShaderDataBlock(name,size)
+		UBO::UBO(const UTF8String &n,uint p,uint i,uint level)
 		{
-			glGenBuffers(1,&buffer_id);
+			block_name=n;
+			program=p;
+			block_index=i;
+			binding_point=AcquireShaderBlockBinding();
 
-            if(buffer_id==0)return;
+			glGetActiveUniformBlockiv(program,block_index,GL_UNIFORM_BLOCK_DATA_SIZE,&size);
+            glUniformBlockBinding(program,block_index,binding_point);
 
-			update_level=(level?level:HGL_DYNAMIC_DRAW);
+			glGetActiveUniformBlockiv(program,block_index,GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS,&uniform_count);
+
+			uniform_indices		=new int[uniform_count];
+			uniform_name_size	=new int[uniform_count];
+			uniform_name		=new char *[uniform_count];
+			uniform_size		=new int[uniform_count];
+			uniform_offset		=new int[uniform_count];
+			uniform_type		=new int[uniform_count];
+			uniform_array_stride=new int[uniform_count];
+			uniform_matrix_stride=new int[uniform_count];
+
+			glGetActiveUniformBlockiv(program,block_index,GL_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES,uniform_indices);
+			glGetActiveUniformsiv(program,uniform_count,&block_index,GL_UNIFORM_NAME_LENGTH,uniform_name_size);
+
+			for(int i=0;i<uniform_count;i++)
+			{
+				uniform_name[i]=new char[uniform_name_size[i]+1];
+
+				glGetActiveUniformName(program,block_index,uniform_name_size[i],uniform_name_size+i,uniform_name[i]);
+
+				uniform_name[i][uniform_name_size[i]]=0;
+			}
+
+			glGetActiveUniformsiv(program,uniform_count,&block_index,GL_UNIFORM_SIZE,			uniform_size			);
+			glGetActiveUniformsiv(program,uniform_count,&block_index,GL_UNIFORM_OFFSET,			uniform_offset			);
+			glGetActiveUniformsiv(program,uniform_count,&block_index,GL_UNIFORM_TYPE,			uniform_type			);
+			glGetActiveUniformsiv(program,uniform_count,&block_index,GL_UNIFORM_ARRAY_STRIDE,	uniform_array_stride	);
+			glGetActiveUniformsiv(program,uniform_count,&block_index,GL_UNIFORM_MATRIX_STRIDE,	uniform_matrix_stride	);
+
+			{
+				glCreateBuffers(1,&ubo);
+				glBindBuffer(GL_UNIFORM_BUFFER,ubo);
+
+				glNamedBufferData(ubo,size,nullptr,level);
+
+				buffer=new char[size];
+				memset(buffer,0,size);
+			}
 		}
 
 		UBO::~UBO()
 		{
-            if(!buffer_id)
-                return;
-
-			glDeleteBuffers(1,&buffer_id);
-			glBindBuffer(GL_UNIFORM_BUFFER,0);
+			delete[] uniform_matrix_stride;
+			delete[] uniform_array_stride;
+			delete[] uniform_type;
+			delete[] uniform_offset;
+			delete[] uniform_size;
+			for(int i=0;i<uniform_count;i++)delete[] uniform_name[i];
+			delete[] uniform_name;
+			delete[] uniform_name_size;
+			delete[] uniform_indices;
+			delete[] buffer;
+			ReleaseShaderBlockBinding(binding_point);
+			glDeleteBuffers(1,&ubo);
 		}
 
-		bool UBO::SetData(void *data)
+		/**
+		 * 只读访问一块数据
+		 * @param start 起始字节
+		 * @param access_size 要访问的长度
+		 */
+		void *UBO::ReadMap(uint start,uint access_size)
 		{
-            if(!buffer_id)return(false);
+			glBindBufferBase(GL_UNIFORM_BUFFER,binding_point,ubo);
 
-			glBindBuffer(GL_UNIFORM_BUFFER,buffer_id);
-			glBufferData(GL_UNIFORM_BUFFER,block_size,data,update_level);
+			if(start==0&&access_size==0)
+				access_size=size;
 
-            return(true);
+			return glMapNamedBufferRange(ubo,0,size,GL_MAP_READ_BIT);
 		}
 
-		bool UBO::ChangeData(void *data,int offset,int size)
+		/**
+		 * 只写访问一块数据
+		 * @param start 起始字节
+		 * @param access_size 要访问的长度
+		 */
+		void *UBO::WriteMap(uint start,uint access_size)
 		{
-            if(!buffer_id)return(false);
+			glBindBufferBase(GL_UNIFORM_BUFFER,binding_point,ubo);
 
-			if(offset+size>block_size)
-			{
-				LOG_ERROR(u8"UBO::ChangeData数据长度出错，block:"+UTF8String(shader_name)+UTF8String("offset=")+UTF8String(offset)+u8"size="+UTF8String(size));
-				return(false);
-			}
+			if(start==0&&access_size==0)
+				access_size=size;
 
-			glBindBuffer(GL_UNIFORM_BUFFER,buffer_id);
-			glBufferSubData(GL_UNIFORM_BUFFER,offset,size,data);
-
-            return(true);
+			return glMapNamedBufferRange(ubo,0,size,GL_MAP_WRITE_BIT|GL_MAP_INVALIDATE_BUFFER_BIT);
 		}
 
-        void UBO::Binding(int bb)
-        {
-            if(!buffer_id)return;
-
-            glBindBufferBase(GL_UNIFORM_BUFFER,bb,buffer_id);
-        }
+		void UBO::Unmap()
+		{
+			glUnmapNamedBuffer(ubo);
+		}
 	}//namespace graph
 }//namespace hgl
