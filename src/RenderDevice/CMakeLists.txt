@@ -11,8 +11,7 @@
 set(CM_GLSL_SHADER_MAKER_SOURCE     ShaderMaker/ShaderStringList.cpp
                                     ShaderMaker/GenVertexShader.cpp
                                     ShaderMaker/GenFragmentShader.cpp
-                                    ShaderMaker/GenGeometryShader.cpp
-                                    ShaderMaker/ShaderLight.cpp)
+                                    ShaderMaker/GenGeometryShader.cpp)
 
 set(CM_GLSL_SOURCE                  GLSL/Shader.cpp
                                     GLSL/GLSL.cpp

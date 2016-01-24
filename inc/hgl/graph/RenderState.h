@@ -27,8 +27,6 @@ namespace hgl
             bool alpha_test;            //是否使用Alpha测试
             bool outside_discard;       //是否使用出界放弃
 
-            int8 use_sky_light;			//是否接受天空灯光(0:不接收 1:在vertex shader 2:在fragment shader)
-
             bool height_map;            //是否是高度图
 
             ColorFormat vertex_color_format;  //顶点色格式
