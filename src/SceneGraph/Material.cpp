@@ -53,6 +53,8 @@ namespace hgl
 
 			Back=Front;
 
+			two_side=false;
+
 			Transparency=1.0f;
 		}
 
