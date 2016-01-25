@@ -219,6 +219,8 @@ namespace hgl
 			binding_point=AcquireShaderBlockBinding();
 			level=l;
 
+			use_map=0;
+
 			glGetActiveUniformBlockiv(program,block_index,GL_UNIFORM_BLOCK_DATA_SIZE,&size);
             glUniformBlockBinding(program,block_index,binding_point);
 
@@ -299,8 +301,13 @@ namespace hgl
 		 * @param start 起始字节
 		 * @param access_size 要访问的长度
 		 */
-		void *UBO::ReadMap(uint start,uint access_size)
+		void *UBO::ReadMap(int start,int access_size)
 		{
+			if(use_map!=0)
+				return(nullptr);
+
+			use_map=GL_MAP_READ_BIT;
+
 			glBindBufferBase(GL_UNIFORM_BUFFER,binding_point,ubo);
 
 			if(start==0&&access_size==0)
@@ -314,18 +321,30 @@ namespace hgl
 		 * @param start 起始字节
 		 * @param access_size 要访问的长度
 		 */
-		void *UBO::WriteMap(uint start,uint access_size)
+		void *UBO::WriteMap(int start,int access_size)
 		{
+			if(use_map!=0)
+				return(nullptr);
+
+			use_map=GL_MAP_WRITE_BIT;
+
 			glBindBufferBase(GL_UNIFORM_BUFFER,binding_point,ubo);
 
 			if(start==0&&access_size==0)
 				access_size=size;
 
-			return glMapNamedBufferRange(ubo,0,size,GL_MAP_WRITE_BIT|GL_MAP_INVALIDATE_BUFFER_BIT);
+			map_start=start;
+			map_size=access_size;
+
+			return glMapNamedBufferRange(ubo,map_start,map_size,GL_MAP_WRITE_BIT|GL_MAP_FLUSH_EXPLICIT_BIT|GL_MAP_INVALIDATE_BUFFER_BIT);
 		}
 
 		void UBO::Unmap()
 		{
+			if(use_map==GL_MAP_WRITE_BIT)
+				glFlushMappedNamedBufferRange(ubo,map_start,map_size);
+
+			use_map=0;
 			glUnmapNamedBuffer(ubo);
 		}
 
