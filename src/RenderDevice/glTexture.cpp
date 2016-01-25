@@ -129,10 +129,14 @@ namespace hgl
                 glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS,                   &HGL_MAX_FS_TEXTURE_UNITS);         //fragment shader 可用最大纹理数量
                 glGetIntegerv(GL_MAX_GEOMETRY_TEXTURE_IMAGE_UNITS,          &HGL_MAX_GS_TEXTURE_UNITS);         //geometry shader 可用最大纹理数量,OpenGL 3.2
 
-                glGetIntegerv(GL_MAX_TESS_CONTROL_TEXTURE_IMAGE_UNITS,      &HGL_MAX_TCS_TEXTURE_UNITS);        //tess control shader 可用最大纹理数量,OpenGL 4
-                glGetIntegerv(GL_MAX_TESS_EVALUATION_TEXTURE_IMAGE_UNITS,   &HGL_MAX_TES_TEXTURE_UNITS);        //tess evaluation shader 可用最大纹理数量,OpenGL 4
+				if(GLEW_VERSION_4_0)
+				{
+					glGetIntegerv(GL_MAX_TESS_CONTROL_TEXTURE_IMAGE_UNITS,      &HGL_MAX_TCS_TEXTURE_UNITS);        //tess control shader 可用最大纹理数量,OpenGL 4
+					glGetIntegerv(GL_MAX_TESS_EVALUATION_TEXTURE_IMAGE_UNITS,   &HGL_MAX_TES_TEXTURE_UNITS);        //tess evaluation shader 可用最大纹理数量,OpenGL 4
 
-                glGetIntegerv(GL_MAX_COMPUTE_TEXTURE_IMAGE_UNITS,           &HGL_MAX_CS_TEXTURE_UNITS);         //compute shader 可用最大纹理数量,OpenGL 4.3
+					if(GLEW_VERSION_4_3)
+					glGetIntegerv(GL_MAX_COMPUTE_TEXTURE_IMAGE_UNITS,           &HGL_MAX_CS_TEXTURE_UNITS);         //compute shader 可用最大纹理数量,OpenGL 4.3
+				}
 
                 glGetIntegerv(GL_MAX_TEXTURE_SIZE,                          &HGL_MAX_TEXTURE_SIZE);             //最大贴图尺寸
                 glGetIntegerv(GL_MAX_CUBE_MAP_TEXTURE_SIZE,                 &HGL_MAX_CUBE_MAP_SIZE);            //最大CubeMap贴图尺寸
