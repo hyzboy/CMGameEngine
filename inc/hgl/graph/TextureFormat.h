@@ -190,6 +190,18 @@ namespace hgl
 			HGL_SF_BPTC_RGBA,
 			HGL_SF_BPTC_SRGBA,
 
+			HGL_SF_ETC2_RGB8,
+			HGL_SF_ETC2_SRGB8,
+			HGL_SF_ETC2_RGB8A1,
+			HGL_SF_ETC2_SRGB8A1,
+			HGL_SF_ETC2_RGBA8,
+			HGL_SF_ETC2_SRGBA8,
+
+			HGL_SF_EAC_R11,
+			HGL_SF_EAC_R11s,
+			HGL_SF_EAC_RG11,
+			HGL_SF_EAC_RG11s,
+
 			HGL_SF_END				//无用，做为枚举结束
 		};//enum TextureSourceFormat
 

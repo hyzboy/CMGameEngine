@@ -124,7 +124,6 @@ namespace hgl
 		{
 			void InitTexture()
 			{
-
                 glGetIntegerv(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS,            &HGL_MAX_VS_TEXTURE_UNITS);         //vertex shader 可用最大纹理数量
                 glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS,                   &HGL_MAX_FS_TEXTURE_UNITS);         //fragment shader 可用最大纹理数量
                 glGetIntegerv(GL_MAX_GEOMETRY_TEXTURE_IMAGE_UNITS,          &HGL_MAX_GS_TEXTURE_UNITS);         //geometry shader 可用最大纹理数量,OpenGL 3.2
