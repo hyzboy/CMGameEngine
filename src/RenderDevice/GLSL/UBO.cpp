@@ -11,7 +11,7 @@ namespace hgl
 	namespace graph
 	{
         //绑定点是全局不可重用的，所以使用一个全局计数
-        static Stack<uint> uniform_block_binding_stack;                                               ///<绑定点计数
+        static Stack<int> uniform_block_binding_stack;                                               ///<绑定点计数
 
         static int max_uniform_block_binding=0;
         static int max_uniform_block_size=0;
@@ -24,35 +24,35 @@ namespace hgl
             if(max_uniform_block_binding<=0)
                 return(false);
 
-            for(uint i=0;i<max_uniform_block_binding;i++)
+            for(int i=0;i<max_uniform_block_binding;i++)
                 uniform_block_binding_stack.Push(i);
 
             return(true);
         }
 
-        uint GetMaxShaderBlockBinding()
+        int GetMaxShaderBlockBinding()
         {
             return max_uniform_block_binding;
         }
 
-        uint GetMaxShaderBlockSize()
+        int GetMaxShaderBlockSize()
         {
             return max_uniform_block_size;
         }
 
-        uint AcquireShaderBlockBinding()
+        int AcquireShaderBlockBinding()
         {
-            uint result;
+            int result;
 
             if(uniform_block_binding_stack.Pop(result))
                 return result;
 
-            return 0;
+            return -1;
         }
 
-        void ReleaseShaderBlockBinding(uint bb)
+        void ReleaseShaderBlockBinding(int bb)
         {
-            if(bb==0)return;
+            if(bb==-1)return;
 
             uniform_block_binding_stack.Push(bb);
         }
