@@ -72,14 +72,12 @@ namespace hgl
                 min_filter=gen_mip?GL_LINEAR_MIPMAP_LINEAR:GL_LINEAR;
                 mag_filter=GL_LINEAR;
 
-                wrap_s=GL_REPEAT;
-                wrap_t=GL_REPEAT;
-
                 //未来使用Sampler Object，则不再需要以下部分
                 glTextureParameteri(texture_id,GL_TEXTURE_MIN_FILTER,min_filter);
                 glTextureParameteri(texture_id,GL_TEXTURE_MAG_FILTER,mag_filter);
-                glTextureParameteri(texture_id,GL_TEXTURE_WRAP_S,GL_REPEAT);
-                glTextureParameteri(texture_id,GL_TEXTURE_WRAP_T,GL_REPEAT);
+                glTextureParameteri(texture_id,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
+                glTextureParameteri(texture_id,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
+				glTextureParameteri(texture_id,GL_TEXTURE_WRAP_R,GL_CLAMP_TO_EDGE);
             }
 
             return(true);
@@ -137,24 +135,6 @@ namespace hgl
                 glTextureSubImage2D(texture_id,face,l,t,w,h,sfmt->format,sfmt->type,data);
 
             return(true);
-        }
-
-        void TextureCubeMap::SetWrapS(uint wrap)
-        {
-            if(wrap_s==wrap)return;
-
-            wrap_s=wrap;
-
-            glTextureParameteri(texture_id,GL_TEXTURE_WRAP_S,wrap_s);
-        }
-
-        void TextureCubeMap::SetWrapT(uint wrap)
-        {
-            if(wrap_t==wrap)return;
-
-            wrap_t=wrap;
-
-            glTextureParameteri(texture_id,GL_TEXTURE_WRAP_T,wrap_t);
         }
     }//namespace graph
 }//namespace hgl

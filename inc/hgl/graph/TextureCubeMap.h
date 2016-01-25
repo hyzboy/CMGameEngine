@@ -17,8 +17,6 @@ namespace hgl
 
 			int width,height;																							///<宽、高
 
-			uint wrap_s,wrap_t;
-
 		public:
 					int		GetWidth		()const{return width;}														///<取得纹理宽度
 					int		GetHeight		()const{return height;}														///<取得纹理高度
@@ -37,9 +35,6 @@ namespace hgl
 					bool	ChangeImage		(Bitmap2D *,uint l,uint t);													///<更改贴图数据
 
 			virtual int		GetImage		(void *data_pointer,TSF fmt,int level=0);									///<取得2D贴图数据
-
-			virtual void	SetWrapS		(uint);																		///<设置横向寻址方式
-			virtual void	SetWrapT		(uint);																		///<设置纵向寻址方式
 		};//class TextureCubeMap
 	}//namespace graph
 }//namespace hgl
