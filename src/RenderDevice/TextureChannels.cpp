@@ -15,12 +15,15 @@ namespace hgl
 				"Tangent",
 				"Light",
 				"Alpha",
+				"Depth",
 				"Shadow",
 
 				"Palette",
 
 				"Height",
 				"NormalHeight",
+
+				"GBuffer",
 			};
 		}//namespace
 

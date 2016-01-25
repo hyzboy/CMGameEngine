@@ -227,6 +227,21 @@ namespace hgl
 
 				return(true);
 			}
+
+			void fs::add_gbuffer_encode()
+			{
+				add("vec4 gbuffer_encode(in vec3 color,in vec3 normal,in vec2 pos,in float spec)\n"
+					"{\n"
+					"\treturn uvec4(packHalf2x16(color.rg),packHalf2x16(color.b,spec),packHalf2x16(normal_3to2(normal)),packHalf2x16(pos));\n"
+					"}\n\n");
+			}
+
+			bool fs::add_ds_end()
+			{
+				add(U8_TEXT("\t" HGL_FS_FRAG_COLOR "=gbuffer_encode(")+fin_color+U8_TEXT(",normal," HGL_FS_POSITION ".xy,specular_power);"));
+
+				return(true);
+			}
 		}//namespace shadergen
 
 		/**
@@ -332,7 +347,13 @@ namespace hgl
 			code.add_frag_color();					//指定颜色输出
 			code.add();
 
+			if(state->ds_render)					//是否是延迟渲染
+				code.add_gbuffer_encode();
+
 			code.add_main_begin();
+
+			if(state->ds_render)
+				code.add_ds_end();
 
 			code.add_end();							//收尾各方面的处理
 

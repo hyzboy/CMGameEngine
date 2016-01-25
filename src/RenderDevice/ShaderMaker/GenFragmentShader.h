@@ -54,7 +54,10 @@ namespace hgl
 
 			public:		//最终计算
 
-				bool add_end();
+				bool add_end();				//普通深度计算
+
+				void add_gbuffer_encode();
+				bool add_ds_end();			//延迟渲染首次计算
 			};//struct fs
 		}//namespace shadergen
 	}//namespace graph

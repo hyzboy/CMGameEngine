@@ -19,12 +19,15 @@ namespace hgl
             mtcTangent,                 ///<切线
             mtcLight,                   ///<光照贴图
             mtcAlpha,                   ///<透明度贴图
+			mtcDepth,
             mtcShadow,                  ///<阴影
 
             mtcPalette,                 ///<调色板
 
             mtcHeight,                  ///<高度图
             mtcNormalHeight,            ///<法线+高度
+
+			mtcGBuffer,					///<延迟渲染用GBuffer
 
             mtcMax                      ///<最大贴图通道
         };//enum MaterialTextureChannels

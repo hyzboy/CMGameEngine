@@ -21,11 +21,14 @@ namespace hgl
 		#define HGL_VS_NORMAL					"Normal"
 		#define HGL_VS_COLOR					"Color"
 		#define HGL_VS_VERTEX					"Vertex"
+		#define HGL_VS_TEXCOORD_GBUFFER			"TexCoord_GBuffer"
 
 		//fragment shader 部分
 		#define HGL_FS_NORMAL					"FragmentNormal"
 		#define HGL_FS_COLOR					"FragmentColor"
 		#define HGL_FS_LIGHT					"FragmentLight"
+		#define HGL_FS_POSITION					"FragmentPosition"
+		#define HGL_FS_TEXCOORD_GBUFFER			"FragmentTexCoord_GBuffer"
 
 		#define HGL_MATERIAL_COLOR				"MaterialColor"
 

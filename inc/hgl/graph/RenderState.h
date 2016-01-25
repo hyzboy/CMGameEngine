@@ -47,6 +47,8 @@ namespace hgl
 
             bool				two_side;				///<双面材质
 
+            bool				ds_render;				///<是否是延迟渲染
+
         public:
 
             CompOperatorMemcmp(const RenderState &);

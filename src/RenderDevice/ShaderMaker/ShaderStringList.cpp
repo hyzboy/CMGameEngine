@@ -71,6 +71,27 @@ namespace hgl
 				add("#version "+UTF8String(ver)+" core\n\n");
 			}
 
+			void shader_stringlist::add_normal_3to2()
+			{
+				add("vec2 normal_3to2(vec3 normal)\n"
+					"{\n"
+					"\treturn normalize(normal.xy)*sqrt(normal.z*0.5=0.5);\n"
+					"}\n\n");
+			}
+
+			void shader_stringlist::add_normal_2to3()
+			{
+				add("vec3 normal_2to3(vec2 n)\n"
+					"{\n"
+					"\tvec3 normal;\n"
+					"\n"
+					"\tnormal.z=dot(n,n)*2-1;\n"
+					"\tnormal.xy=normalize(n)*sqrt(1-normal.z*normal.z);\n"
+					"\n"
+					"\treturn normal;\n"
+					"}\n\n");
+			}
+
 			void shader_stringlist::add_material(bool two_side)
 			{
 				add("struct Material\n"

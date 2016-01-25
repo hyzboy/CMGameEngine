@@ -83,6 +83,8 @@ namespace hgl
 #else
             Shader *			AutoCreateShader	(bool mvp=true,ShaderStorage *storage=nullptr);							///<自动创建Shader
 #endif//#endif//_DEBUG
+
+			
 		};//class Renderable
 	}//namespace graph
 }//namespace hgl

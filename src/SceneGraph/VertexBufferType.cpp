@@ -26,6 +26,8 @@ namespace hgl
 				"TexCoord_Tangent",
 				"TexCoord_Ambient",
 				"TexCoord_Specular",
+
+				"TexCoord_GBuffer",
 			};//const VERTEX_BUFFER_NAME VertexBufferName
 		}//namespace
 

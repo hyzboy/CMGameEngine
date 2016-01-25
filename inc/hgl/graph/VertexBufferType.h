@@ -47,6 +47,8 @@ namespace hgl
             vbtAmbientTexCoord,     //环境光颜色纹理坐标
             vbtSpecularTexCoord,    //镜面光颜色纹理坐标
 
+			vbtGBufferTexCoord,		//延迟渲染最终混合用纹理坐标
+
             vbtEnd
         };//enum VertexBufferType
 
