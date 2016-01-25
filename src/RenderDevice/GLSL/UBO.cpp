@@ -321,7 +321,7 @@ namespace hgl
 			if(start==0&&access_size==0)
 				access_size=size;
 
-			return glMapNamedBufferRange(ubo,0,size,GL_MAP_WRITE_BIT|GL_MAP_INVALIDATE_BUFFER_BIT);
+			return glMapNamedBufferRange(ubo,0,size,GL_MAP_WRITE_BIT|GL_MAP_FLUSH_EXPLICIT_BIT|GL_MAP_INVALIDATE_BUFFER_BIT);
 		}
 
 		void UBO::Unmap()
