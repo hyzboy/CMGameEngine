@@ -73,8 +73,8 @@ public:
 
 		rot=mv*rotate(GetDoubleTime()-start_time,Vector3f(1,0,0));
 
-		ss->Render(&proj,&rot);			//渲染cube列表
+		ss->Render(&proj,&rot);			//渲染球体列表
 	}
 };//class TestObject
 
-HGL_GRAPHICS_APPLICATION("螺旋立方体排列","SpiralCube",new TestObject());
+HGL_GRAPHICS_APPLICATION("螺旋球体排列场景","SpiralSphereScene",new TestObject());
