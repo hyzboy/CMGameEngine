@@ -3,6 +3,7 @@
                                     OpenGLCore45/Core45Texture2D.cpp
                                     OpenGLCore45/Core45Texture2DArray.cpp
                                     OpenGLCore45/Core45Texture3D.cpp
+                                    OpenGLCore45/Core45TextureCubeMap.cpp
                                     OpenGLCore45/Core45Renderable.cpp
                                     OpenGLCore45/Core45VertexBuffer.cpp
                                     OpenGLCore45/Core45RenderToTexture.cpp

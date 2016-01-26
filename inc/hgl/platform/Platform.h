@@ -410,9 +410,11 @@
 
 namespace hgl
 {
-	typedef unsigned char       uchar;  ///< 无符号字符型
-	typedef unsigned int        uint;   ///< 无符号整型
-	typedef unsigned long		ulong;	///< 无符号长整型
-	typedef unsigned short		ushort;	///< 无符号短整型
+	using uchar			=unsigned char;  	///< 无符号字符型
+	using uint			=unsigned int;   	///< 无符号整型
+	using ulong			=unsigned long;		///< 无符号长整型
+	using ushort		=unsigned short;	///< 无符号短整型
+
+	using void_pointer	=void *;
 }//namespace hgl
 #endif//HGL_PLATFORM_INCLUDE

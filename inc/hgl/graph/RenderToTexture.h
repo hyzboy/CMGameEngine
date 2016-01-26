@@ -136,6 +136,11 @@ namespace hgl
 
 		class RenderToTextureCubeMap:public RenderToTexture
 		{
+		protected:
+
+			TextureCubeMap *tex;
+
+			GLenum *draw_buffers;
 		};//class RenderToTextureCubeMap
 	}//namespace graph
 }//namespace hgl
