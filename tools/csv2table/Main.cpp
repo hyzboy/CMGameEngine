@@ -54,17 +54,17 @@ Loader *CreateLoader(const os_char *filename,const CharSet &cs)
 
 HGL_CONSOLE_MAIN_FUNC()
 {
-	sii.info.ProjectName=OS_TEXT("csv/ods/fods/xlsx To .table Converter");
+	sii.info.ProjectName=U8_TEXT("csv/ods/fods/xlsx To .table Converter");
 	sii.info.ProjectCode=OS_TEXT("CSV2Table");
 
 	app.Init(&sii);
 
-	LOG_INFO(u"CMGDK tools <<.csv/ods/fods/xlsx to .table Converter>> 1.23");
-	LOG_INFO(u"(C)1997-2014 Copyright. Offical Web:www.hyzgame.com.cn");
+	LOG_INFO(OS_TEXT("CMGDK tools <<.csv/ods/fods/xlsx to .table Converter>> 1.23"));
+	LOG_INFO(OS_TEXT("(C)1997-2014 Copyright. Offical Web:www.hyzgame.com.cn"));
 
 	if(args.GetCount()<2)
 	{
-		LOG_INFO(u"csv2table [-charset=....] <filename.(csv|ods|fods|xlsx)>");
+		LOG_INFO(OS_TEXT("csv2table [-charset=....] <filename.(csv|ods|fods|xlsx)>"));
 		return(0);
 	}
 
@@ -105,7 +105,7 @@ HGL_CONSOLE_MAIN_FUNC()
 
 	for(int i=0;i<use_col_count;i++)
 	{
- 		LOG_INFO(u"字段["+UTF16String(i)+u"] 类型:"+typename_list[i]+u" 名称:"+name_list[i]);
+ 		LOG_INFO(U16_TEXT("字段[")+UTF16String(i)+ U16_TEXT("] 类型:")+typename_list[i]+ U16_TEXT(" 名称:")+name_list[i]);
 
 		if(type_list[i].count>0)
 		{
@@ -137,7 +137,7 @@ HGL_CONSOLE_MAIN_FUNC()
 		{
 			if(type_list[c].count>0)
 			{
-				LOG_INFO(name_list[c]+UTF16String(u":")+typename_list[c]+UTF16String(u":")+(*colume_list)[c]);
+				LOG_INFO(name_list[c]+U16_TEXT(":")+typename_list[c]+ U16_TEXT(":")+(*colume_list)[c]);
 
 				if(WriteFieldData(type_list[c],buf[c]+row_count*type_list[c].size,(*colume_list)[c]))
 					col_count[c]++;
