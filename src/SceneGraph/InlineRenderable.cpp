@@ -284,6 +284,102 @@ namespace hgl
 
 			return(obj);
 		}
+
+		template<typename T> VertexBuffer1<T> *CreateSphereIndices(const uint numberSlices)
+		{
+			VertexBuffer1<T> *vb=new VertexBuffer1<T>(numberSlices * numberSlices * 3);
+
+			vb->Begin();
+
+			for (int i = 0; i < numberSlices/2; i++)
+			{
+				for (int j = 0; j < numberSlices; j++)
+				{
+					vb->Write(i * (numberSlices + 1) + j);
+					vb->Write((i + 1) * (numberSlices + 1) + j);
+					vb->Write((i + 1) * (numberSlices + 1) + (j + 1));
+
+					vb->Write(i * (numberSlices + 1) + j);
+					vb->Write((i + 1) * (numberSlices + 1) + (j + 1));
+					vb->Write(i * (numberSlices + 1) + (j + 1));
+				}
+			}
+
+			vb->End();
+			return vb;
+		}
+
+		/**
+		* 创建一个球体的可渲染数据
+        * @param numberSlices 切片数
+		* @return 可渲染数据
+		*/
+		VertexArray *CreateRenderableSphere(const uint numberSlices)
+		{
+			VertexArray *obj=new VertexArray(HGL_PRIM_TRIANGLES);
+
+			uint numberParallels = numberSlices / 2;
+			uint numberVertices = (numberParallels + 1) * (numberSlices + 1);
+			uint numberIndices = numberParallels * numberSlices * 6;
+
+			float angleStep = (2.0f * HGL_PI) / ((float) numberSlices);
+
+			uint indexIndices;
+
+			// used later to help us calculating tangents vectors
+			float helpVector[3] = { 1.0f, 0.0f, 0.0f };
+			float helpQuaternion[4];
+			float helpMatrix[16];
+
+			VB3f *vertex;
+			VB3f *normal;
+
+			obj->SetVertex(vertex=new VB3f(numberVertices));
+			obj->SetNormal(normal=new VB3f(numberVertices));
+
+			vertex->Begin();
+			normal->Begin();
+
+			for (int i = 0; i < numberParallels + 1; i++)
+			{
+				for (int j = 0; j < numberSlices + 1; j++)
+				{
+					uint vertexIndex = (i * (numberSlices + 1) + j) * 4;
+					uint normalIndex = (i * (numberSlices + 1) + j) * 3;
+					uint tangentIndex = (i * (numberSlices + 1) + j) * 3;
+					uint texCoordsIndex = (i * (numberSlices + 1) + j) * 2;
+
+					float x=sinf(angleStep * (float) i) * sinf(angleStep * (float) j);
+					float y=cosf(angleStep * (float) i);
+					float z=sinf(angleStep * (float) i) * cosf(angleStep * (float) j);
+
+					vertex->Write(x,y,z);
+					normal->Write(x,y,z);
+
+// 					shape->texCoords[texCoordsIndex + 0] = (float) j / (float) numberSlices;
+// 					shape->texCoords[texCoordsIndex + 1] = 1.0f - (float) i / (float) numberParallels;
+//
+// 					// use quaternion to get the tangent vector
+// 					glusQuaternionRotateRyf(helpQuaternion, 360.0f * shape->texCoords[texCoordsIndex + 0]);
+// 					glusQuaternionGetMatrix4x4f(helpMatrix, helpQuaternion);
+//
+// 					glusMatrix4x4MultiplyVector3f(&shape->tangents[tangentIndex], helpMatrix, helpVector);
+				}
+			}
+
+			normal->End();
+			vertex->End();
+
+			if(numberVertices<=0xff)
+				obj->SetIndex(CreateSphereIndices<uint8>(numberSlices));
+			else
+			if(numberVertices<=0xffff)
+				obj->SetIndex(CreateSphereIndices<uint16>(numberSlices));
+			else
+				obj->SetIndex(CreateSphereIndices<uint32>(numberSlices));
+
+			return obj;
+		}
 //
 // 		/**
 // 		* 创建一个线框立方体的可渲染数据

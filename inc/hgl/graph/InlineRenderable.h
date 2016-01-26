@@ -35,7 +35,7 @@ namespace hgl
 											const VertexBufferType tex_coord_vbt=vbtNone,
 											const float tex_scale=1.0);								///<创建一个立方体的可渲染数据,尺寸为1,中心为0,0,0
 
-		VertexArray *CreateRenderableSphere(const float radius,const uint slices);					///<创建一个球的可渲染数据,半径为1,球心为0,0,0
+		VertexArray *CreateRenderableSphere(const uint slices);										///<创建一个球的可渲染数据,半径为1,球心为0,0,0
 
 // 		VertexArray *CreateRenderableWireCube();													///<创建一个线框立方体的可渲染数据,尺寸为1,中心为0,0,0
 //
