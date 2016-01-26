@@ -58,7 +58,7 @@ private:
 
     void CreateDualCube()
     {
-		cube_data=CreateRenderableCube(false,false,vbtDiffuseTexCoord);			///<创建一个Cube的顶点数据，并指定纹理坐标写在那一个位置上
+		cube_data=CreateRenderableCube(false,vbtDiffuseTexCoord);				///<创建一个Cube的顶点数据，并指定纹理坐标写在那一个位置上
 
         cube1=CreateCube(mtl1=new Material,1,0,0,GrayWhiteGrid);				///<使用内置灰白格子纹理
         cube2=CreateCube(mtl2=new Material,0,0,1,BlueWhiteGrid);				///<使用内置蓝白格子纹理

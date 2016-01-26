@@ -12,5 +12,6 @@ namespace hgl
 	//64位系统下long/long long都是64位，32位系列下只有long long是64位
 
 	typedef   signed long long 	 int64; 	///<有符号64位整型
-	typedef unsigned long long 	uint64; 	///<无符号64位整型}//namespace hgl
+	typedef unsigned long long 	uint64; 	///<无符号64位整型
+}//namespace hgl
 #endif//HGL_DATATYPE_GNU_INCLUDE

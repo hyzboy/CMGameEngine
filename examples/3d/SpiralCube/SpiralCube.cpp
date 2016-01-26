@@ -3,7 +3,7 @@
 
 SpiralCube::SpiralCube(const Vector3f &up_vector)
 {
-	cube_data=CreateRenderableCube(false,false,vbtDiffuseTexCoord);			///<创建一个Cube的顶点数据，并指定纹理坐标写在那一个位置上
+	cube_data=CreateRenderableCube(false,vbtDiffuseTexCoord);				///<创建一个Cube的顶点数据，并指定纹理坐标写在那一个位置上
 
 	for(int i=0;i<CUBE_NUMBER;i++)
 	{

@@ -225,13 +225,12 @@ namespace hgl
 
 		/**
 		* 创建一个立方体的可渲染数据
-        * @param use_normal 是否使用法线数据(默认不使用)
-        * @param use_tangent 是否使用切线数据(默认不使用)
+        * @param use_normal 是否使用法线和切线数据(默认不使用)
         * @param tex_coord_vbt 纹理坐标数据所对应的顶点缓冲区类型(默认不使用)
 		* @param tex_scale 纹理坐标缩放倍率(默认为1)
 		* @return 可渲染数据
 		*/
-		VertexArray *CreateRenderableCube(bool use_normal,bool use_tangent,const VertexBufferType tex_coord_vbt,const float tex_scale)
+		VertexArray *CreateRenderableCube(bool use_normal,const VertexBufferType tex_coord_vbt,const float tex_scale)
 		{								// Points of a cube.
 			/*     4            5 */	const float points[]={	-0.5f, -0.5f, -0.5f,	-0.5f, -0.5f, +0.5f,	+0.5f, -0.5f, +0.5f,	+0.5f, -0.5f, -0.5f,	-0.5f, +0.5f, -0.5f,	-0.5f, +0.5f, +0.5f,
 			/* 	   *------------* */							+0.5f, +0.5f, +0.5f,	+0.5f, +0.5f, -0.5f,	-0.5f, -0.5f, -0.5f,	-0.5f, +0.5f, -0.5f,	+0.5f, +0.5f, -0.5f,	+0.5f, -0.5f, -0.5f,
@@ -257,8 +256,12 @@ namespace hgl
 
 			obj->SetVertex(new VB3f(24,points));
 
-            if(use_normal)              obj->SetNormal(new VB3f(24,normals));
-            if(use_tangent)             obj->SetTangents(new VB3f(24,tangents));
+            if(use_normal)
+			{
+				obj->SetNormal(new VB3f(24,normals));
+				obj->SetTangents(new VB3f(24,tangents));
+			}
+
             if(tex_coord_vbt!=vbtNone)
 			{
 				VB2f *vb_tex=new VB2f(24,tex_coords);
@@ -491,7 +494,7 @@ namespace hgl
 		{
 			CreateInlineTexture();
 
-// 			SolidCube=CreateRenderableCube(false,false,vbtNone);
+// 			SolidCube=CreateRenderableCube(false,vbtNone);
 // 			WireCube=CreateRenderableWireCube();
 //
 // 			SolidRect=CreateRenderableRect();
