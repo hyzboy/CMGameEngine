@@ -1,4 +1,4 @@
-#include"Common.h"
+﻿#include"Common.h"
 
 int ParseField(UTF16StringList *sl,const UTF16String &str,const u16char ch,bool null_end)
 {
