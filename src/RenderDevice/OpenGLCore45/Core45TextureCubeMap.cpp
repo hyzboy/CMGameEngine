@@ -9,7 +9,7 @@ namespace hgl
         TextureCubeMap::TextureCubeMap()
         {
             type=HGL_TEXTURE_CUBE_MAP;
-			width=height=wrap_s=wrap_t=0;
+			width=height=0;
             glCreateTextures(GL_TEXTURE_CUBE_MAP,1,&texture_id);
         }
 
