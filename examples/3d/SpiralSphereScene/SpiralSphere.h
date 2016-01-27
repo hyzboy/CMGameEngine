@@ -4,7 +4,8 @@
 #include<hgl/VectorMath.h>
 #include<hgl/graph/SceneNode.h>
 
-#define SPHERE_NUMBER	360
+#define SPHERE_NUMBER		360
+#define SPHERE_LOD_LEVEL	8		//分成8级
 
 namespace hgl
 {
@@ -21,7 +22,7 @@ using namespace hgl::graph;
 
 class SpiralSphere
 {
-	VertexArray *sphere_data;
+	VertexArray *sphere_data[SPHERE_LOD_LEVEL];
 	Material *sphere_mtl[SPHERE_NUMBER];
 
 	Renderable *sphere_obj[SPHERE_NUMBER];

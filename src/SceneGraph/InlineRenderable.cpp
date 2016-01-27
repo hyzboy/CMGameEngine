@@ -334,8 +334,8 @@ namespace hgl
 			VB3f *vertex;
 			VB3f *normal;
 
-			obj->SetVertex(vertex=new VB3f(numberVertices));
-			obj->SetNormal(normal=new VB3f(numberVertices));
+			vertex=new VB3f(numberVertices);
+			normal=new VB3f(numberVertices);
 
 			vertex->Begin();
 			normal->Begin();
@@ -369,6 +369,9 @@ namespace hgl
 
 			normal->End();
 			vertex->End();
+
+			obj->SetVertex(vertex);
+			obj->SetNormal(normal);
 
 			if(numberVertices<=0xff)
 				obj->SetIndex(CreateSphereIndices<uint8>(numberSlices));
