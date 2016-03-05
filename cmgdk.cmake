@@ -340,7 +340,7 @@ IF(UNIX)
 	ENDIF(BUILD_NETWORK_SCTP)
 
 	SET(HGL_CONSOLE_LIB ${HGL_BASE_LIB} ${HGL_NETWORK_LIB})
-	SET(HGL_GRAPHICS_LIB ${HGL_CONSOLE_LIB} CM.SceneGraphRender CM.RenderDevice glfw ${HGL_OpenGL_LIB} X11 Xxf86vm Xrandr Xcursor Xinerama Xi)
+	SET(HGL_GRAPHICS_LIB ${HGL_CONSOLE_LIB} CM.SceneGraphRender CM.RenderDevice glfw3 ${HGL_OpenGL_LIB} X11 Xxf86vm Xrandr Xcursor Xinerama Xi)
 ELSE(UNIX)
 	MESSAGE("Host OS don't is UNIX")
 ENDIF(UNIX)
