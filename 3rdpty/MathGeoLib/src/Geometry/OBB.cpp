@@ -52,7 +52,8 @@
 #include "VertexBuffer.h"
 #endif
 
-#if defined(MATH_SSE) && defined(MATH_AUTOMATIC_SSE)
+#if defined(MATH_SIMD) && defined(MATH_AUTOMATIC_SSE)
+#include "../Math/float4_neon.h"
 #include "../Math/float4_sse.h"
 #include "../Math/float4x4_sse.h"
 #endif
@@ -1499,9 +1500,9 @@ OBB OBB::OptimalEnclosingOBB(const Polyhedron &convexHull)
 				MARK_VERTEX_VISITED(v);
 				TIMING_TICK(++numBootstrapStepsDone);
 				const std::vector<int> &n = adjacencyData[v];
-				for(size_t j = 0; j < n.size(); ++j)
+				for(size_t k = 0; k < n.size(); ++k)
 				{
-					int vAdj = n[j];
+					int vAdj = n[k];
 					if (!HAVE_VISITED_VERTEX(vAdj) && sidepodalVertices[i*convexHull.v.size()+vAdj])
 					{
 						if (sidepodalVertices[edgeJ*convexHull.v.size()+vAdj])
@@ -1532,9 +1533,9 @@ OBB OBB::OptimalEnclosingOBB(const Polyhedron &convexHull)
 					continue;
 				MARK_VERTEX_VISITED(v);
 				const std::vector<int> &n = adjacencyData[v];
-				for(size_t j = 0; j < n.size(); ++j)
+				for(size_t k = 0; k < n.size(); ++k)
 				{
-					int vAdj = n[j];
+					int vAdj = n[k];
 //					int edgeK = vertexPairsToEdges[std::make_pair(v, vAdj)];
 					int edgeK = vertexPairsToEdges[v*convexHull.v.size()+vAdj];
 					if (IS_INTERNAL_EDGE(edgeK))
@@ -2178,16 +2179,16 @@ float3x4 OBB::LocalToWorld() const
 /// The implementation of this function is from Christer Ericson's Real-Time Collision Detection, p.133.
 vec OBB::ClosestPoint(const vec &targetPoint) const
 {
-#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SIMD)
 	// Best: 8.833 nsecs / 24 ticks, Avg: 9.044 nsecs, Worst: 9.217 nsecs
 	simd4f d = sub_ps(targetPoint.v, pos.v);
 	simd4f x = xxxx_ps(r.v);
 	simd4f closestPoint = pos.v;
-	closestPoint = add_ps(closestPoint, mul_ps(max_ps(min_ps(dot4_ps(d, axis[0].v), x), negate_ps(x)), axis[0].v));
+	closestPoint = madd_ps(max_ps(min_ps(dot4_ps(d, axis[0].v), x), neg_ps(x)), axis[0].v, closestPoint);
 	simd4f y = yyyy_ps(r.v);
-	closestPoint = add_ps(closestPoint, mul_ps(max_ps(min_ps(dot4_ps(d, axis[1].v), y), negate_ps(y)), axis[1].v));
+	closestPoint = madd_ps(max_ps(min_ps(dot4_ps(d, axis[1].v), y), neg_ps(y)), axis[1].v, closestPoint);
 	simd4f z = zzzz_ps(r.v);
-	closestPoint = add_ps(closestPoint, mul_ps(max_ps(min_ps(dot4_ps(d, axis[2].v), z), negate_ps(z)), axis[2].v));
+	closestPoint = madd_ps(max_ps(min_ps(dot4_ps(d, axis[2].v), z), neg_ps(z)), axis[2].v, closestPoint);
 	return closestPoint;
 #else
 	// Best: 33.412 nsecs / 89.952 ticks, Avg: 33.804 nsecs, Worst: 34.180 nsecs
@@ -2490,39 +2491,36 @@ bool OBB::Intersects(const OBB &b, float epsilon) const
 
 	// Test the 9 different cross-axes.
 
+#define xxxw_ps(x) shuffle1_ps((x), _MM_SHUFFLE(3,0,0,0))
+#define yyyw_ps(x) shuffle1_ps((x), _MM_SHUFFLE(3,1,1,1))
+#define zzzw_ps(x) shuffle1_ps((x), _MM_SHUFFLE(3,2,2,2))
+#define yxxw_ps(x) shuffle1_ps((x), _MM_SHUFFLE(3,0,0,1))
+#define zzyw_ps(x) shuffle1_ps((x), _MM_SHUFFLE(3,1,2,2))
+
 	// A.x <cross> B.x
 	// A.x <cross> B.y
 	// A.x <cross> B.z
-	simd4f ra = mul_ps(shuffle1_ps(r, _MM_SHUFFLE(3,1,1,1)), AbsR[2]);
-	ra = add_ps(ra, mul_ps(shuffle1_ps(r, _MM_SHUFFLE(3,2,2,2)), AbsR[1]));
-	simd4f rb = mul_ps(shuffle1_ps(b.r, _MM_SHUFFLE(3,0,0,1)), shuffle1_ps(AbsR[0], _MM_SHUFFLE(3,1,2,2)));
-	rb = add_ps(rb, mul_ps(shuffle1_ps(b.r, _MM_SHUFFLE(3,1,2,2)), shuffle1_ps(AbsR[0], _MM_SHUFFLE(3,0,0,1))));
-	simd4f lhs = mul_ps(shuffle1_ps(t, _MM_SHUFFLE(3,2,2,2)), R[1]);
-	lhs = sub_ps(lhs, mul_ps(shuffle1_ps(t, _MM_SHUFFLE(3,1,1,1)), R[2]));
+	simd4f ra = madd_ps(yyyw_ps(r), AbsR[2], mul_ps(zzzw_ps(r), AbsR[1]));
+	simd4f rb = madd_ps(yxxw_ps(b.r), zzyw_ps(AbsR[0]), mul_ps(zzyw_ps(b.r), yxxw_ps(AbsR[0])));
+	simd4f lhs = msub_ps(zzzw_ps(t), R[1], mul_ps(yyyw_ps(t), R[2]));
 	res = cmpgt_ps(abs_ps(lhs), add_ps(ra, rb));
 	if (!allzero_ps(res)) return false;
 
 	// A.y <cross> B.x
 	// A.y <cross> B.y
 	// A.y <cross> B.z
-	ra = mul_ps(shuffle1_ps(r, _MM_SHUFFLE(3,0,0,0)), AbsR[2]);
-	ra = add_ps(ra, mul_ps(shuffle1_ps(r, _MM_SHUFFLE(3,2,2,2)), AbsR[0]));
-	rb = mul_ps(shuffle1_ps(b.r, _MM_SHUFFLE(3,0,0,1)), shuffle1_ps(AbsR[1], _MM_SHUFFLE(3,1,2,2)));
-	rb = add_ps(rb, mul_ps(shuffle1_ps(b.r, _MM_SHUFFLE(3,1,2,2)), shuffle1_ps(AbsR[1], _MM_SHUFFLE(3,0,0,1))));
-	lhs = mul_ps(shuffle1_ps(t, _MM_SHUFFLE(3,0,0,0)), R[2]);
-	lhs = sub_ps(lhs, mul_ps(shuffle1_ps(t, _MM_SHUFFLE(3,2,2,2)), R[0]));
+	ra = madd_ps(xxxw_ps(r), AbsR[2], mul_ps(zzzw_ps(r), AbsR[0]));
+	rb = madd_ps(yxxw_ps(b.r), zzyw_ps(AbsR[1]), mul_ps(zzyw_ps(b.r), yxxw_ps(AbsR[1])));
+	lhs = msub_ps(xxxw_ps(t), R[2], mul_ps(zzzw_ps(t), R[0]));
 	res = cmpgt_ps(abs_ps(lhs), add_ps(ra, rb));
 	if (!allzero_ps(res)) return false;
 
 	// A.z <cross> B.x
 	// A.z <cross> B.y
 	// A.z <cross> B.z
-	ra = mul_ps(shuffle1_ps(r, _MM_SHUFFLE(3,0,0,0)), AbsR[1]);
-	ra = add_ps(ra, mul_ps(shuffle1_ps(r, _MM_SHUFFLE(3,1,1,1)), AbsR[0]));
-	rb = mul_ps(shuffle1_ps(b.r, _MM_SHUFFLE(3,0,0,1)), shuffle1_ps(AbsR[2], _MM_SHUFFLE(3,1,2,2)));
-	rb = add_ps(rb, mul_ps(shuffle1_ps(b.r, _MM_SHUFFLE(3,1,2,2)), shuffle1_ps(AbsR[2], _MM_SHUFFLE(3,0,0,1))));
-	lhs = mul_ps(shuffle1_ps(t, _MM_SHUFFLE(3,1,1,1)), R[0]);
-	lhs = sub_ps(lhs, mul_ps(shuffle1_ps(t, _MM_SHUFFLE(3,0,0,0)), R[1]));
+	ra = madd_ps(xxxw_ps(r), AbsR[1], mul_ps(yyyw_ps(r), AbsR[0]));
+	rb = madd_ps(yxxw_ps(b.r), zzyw_ps(AbsR[2]), mul_ps(zzyw_ps(b.r), yxxw_ps(AbsR[2])));
+	lhs = msub_ps(yyyw_ps(t), R[0], mul_ps(xxxw_ps(t), R[1]));
 	res = cmpgt_ps(abs_ps(lhs), add_ps(ra, rb));
 	return allzero_ps(res) != 0;
 
@@ -2641,15 +2639,15 @@ bool OBB::Intersects(const Plane &p) const
 bool OBB::Intersects(const Ray &ray) const
 {
 	AABB aabb(POINT_VEC_SCALAR(0.f), Size());
-	Ray r = WorldToLocal() * ray;
-	return aabb.Intersects(r);
+	Ray localRay = WorldToLocal() * ray;
+	return aabb.Intersects(localRay);
 }
 
 bool OBB::Intersects(const Ray &ray, float &dNear, float &dFar) const
 {
 	AABB aabb(POINT_VEC_SCALAR(0.f), Size());
-	Ray r = WorldToLocal() * ray;
-	return aabb.Intersects(r, dNear, dFar);
+	Ray localRay = WorldToLocal() * ray;
+	return aabb.Intersects(localRay, dNear, dFar);
 }
 
 bool OBB::Intersects(const Line &line) const

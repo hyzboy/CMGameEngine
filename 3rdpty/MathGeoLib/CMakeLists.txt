@@ -1,4 +1,9 @@
 cmake_minimum_required(VERSION 2.8)
+
+if (CMAKE_VERSION VERSION_GREATER 3.0.99999) # Want to say "version >= 3.1", but no idea how to achieve that otherwise.
+	cmake_policy(SET CMP0054 NEW) # Don't expand vars inside quotes, i.e. don't expand a line of form: ''if ("MSVC")'', but require ''if ("${MSVC}")''
+endif()
+
 project(MathGeoLib)
 
 include(CommonOptions.cmake)
@@ -57,31 +62,3 @@ if (NOT MATH_TESTS_EXECUTABLE)
 	install (DIRECTORY "src/" DESTINATION "include/MathGeoLib" FILES_MATCHING PATTERN "*.h")
 	install (DIRECTORY "src/" DESTINATION "include/MathGeoLib" FILES_MATCHING PATTERN "*.inl")
 endif (NOT MATH_TESTS_EXECUTABLE)
-
-    OPTION(X86_USE_SSE              "Use SSE"               TRUE    )
-	OPTION(X86_USE_SSE2				"Use SSE2"				TRUE	)
-	OPTION(X86_USE_SSE3             "Use SSE3"              TRUE    )
-	OPTION(X86_USE_SSE4             "Use SSE4"              TRUE    )
-	OPTION(X86_USE_SSE41            "Use SSE41"             TRUE    )
-	OPTION(X86_USE_SSE42            "Use SSE42"             TRUE    )
-	OPTION(X86_USE_AVX              "Use AVX"               FALSE   )
-	
-    if(X86_USE_SSE41)
-        add_definitions("-DMATH_SSE41")
-        add_definitions(-msse4.1)
-    ELSE()
-        if(X86_USE_SSE3)
-            add_definitions("-DMATH_SSE3")
-            add_definitions(-msse3)
-        else()
-            if(X86_USE_SSE2)
-                add_definitions("-DMATH_SSE2")
-                add_definitions(-msse2)
-                else()
-                if(X86_USE_SSE)
-                    add_definitions("-DMATH_SSE")
-                    add_definitions(-msse)
-                endif()
-            endif()
-        endif()
-    endif()

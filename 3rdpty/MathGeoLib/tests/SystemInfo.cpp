@@ -12,13 +12,23 @@
 
 std::string TrimLeft(std::string str)
 {
-	return str.substr(str.find_first_not_of(" \n\r\t"));
+	size_t pos = str.find_first_not_of(" \n\r\t");
+	if (pos != std::string::npos)
+		return str.substr(pos);
+	else
+		return "";
 }
 
 std::string TrimRight(std::string str)
 {
-	str.erase(str.find_last_not_of(" \n\r\t")+1);
-	return str;
+	size_t pos = str.find_last_not_of(" \n\r\t");
+	if (pos != std::string::npos)
+	{
+		str.erase(pos+1);
+		return str;
+	}
+	else
+		return "";
 }
 
 std::string Trim(std::string str)
@@ -272,7 +282,12 @@ unsigned long long GetTotalSystemPhysicalMemory()
 std::string GetProcessorBrandName()
 {
 	std::string r = RunProcess("cat /proc/cpuinfo");
-	return Trim(FindLine(FindLine(r, "vendor_id"),":"));
+	std::string vendor_id = Trim(FindLine(FindLine(r, "vendor_id"),":"));
+	// Slightly hacky mechanism to report generic ARM processors that don't have a vendor_id in their /proc/cpuinfo.
+	if (vendor_id.empty() && !Trim(FindLine(GetProcessorCPUIDString(), "ARM")).empty())
+		return "ARM";
+	else
+		return "Unknown";
 }
 
 std::string GetProcessorCPUIDString()
@@ -309,7 +324,16 @@ unsigned long GetCPUSpeedFromRegistry(unsigned long /*dwCPU*/)
 	r = TrimRight(FindLine(r, "CPU MHz:"));
 	int mhz = 0;
 	int n = sscanf(r.c_str(), "%d", &mhz);
-	return (n == 1) ? (unsigned long)mhz : 0;
+	if (!r.empty() && n == 1)
+		return mhz;
+	else
+	{
+		// lscpu did not contain clock speed. Perhaps we are on a Raspberry Pi: http://elinux.org/RPI_vcgencmd_usage
+		r = RunProcess("vcgencmd get_config arm_freq");
+		r = TrimRight(FindLine(r, "arm_freq="));
+		n = sscanf(r.c_str(), "%d", &mhz);
+		return mhz;
+	}
 }
 
 #elif defined(EMSCRIPTEN)
