@@ -175,7 +175,7 @@ static OutInterface out_interface=
 	const u16char plugin_intro[]=u"WAV音频文件解码(2014-04-09,代码源自ALUT)";
 #else
 	const u16char plugin_intro[]=L"WAV音频文件解码(2014-04-09,代码源自ALUT)";
-#endif HGL_OS != HGL_OS_Windows
+#endif//HGL_OS != HGL_OS_Windows
 
 HGL_PLUGIN_FUNC uint32 GetPlugInVersion()
 {
