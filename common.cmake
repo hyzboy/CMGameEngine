@@ -13,8 +13,7 @@ ENDIF()
 IF(WIN32)
 ELSE(WIN32)
 	OPTION(USE_CPP14				"Use C++ 14"							FALSE	)
-	OPTION(USE_CPP11				"Use C++ 11"							TRUE	)
-	OPTION(USE_ICE_CREAM			"Use IceCream"							FALSE	)
+	OPTION(USE_ICE_CREAM			"Use IceCream(only openSUSE/SUSE)"		FALSE	)
 
 	IF(APPLE)
 		OPTION(USE_LLVM_CLANG			"Use LLVM Clang"						TRUE	)
@@ -41,16 +40,18 @@ ELSE(WIN32)
 
 ENDIF(WIN32)
 
-
-
 IF(USE_LLVM_CLANG)
-OPTION(USE_LLVM_CLANG_STATIC_ANALYZER	"the static analyzer"				OFF		)
-OPTION(USE_LLVM_SAFECode                "use LLVM SAFECode"                 OFF     )
-ENDIF(USE_LLVM_CLANG)
+    OPTION(USE_LLVM_CLANG_STATIC_ANALYZER	"the static analyzer"				OFF		)
+    OPTION(USE_LLVM_SAFECode                "use LLVM SAFECode"                 OFF     )
 
-IF(USE_LLVM_SAFECode)
-	add_definitions("-fmemsafety")
-ENDIF(USE_LLVM_SAFECode)
+    IF(USE_LLVM_CLANG_STATIC_ANALYZER)
+        add_definitions("--analyze")
+    ENDIF(USE_LLVM_CLANG_STATIC_ANALYZER)
+
+    IF(USE_LLVM_SAFECode)
+        add_definitions("-fmemsafety")
+    ENDIF(USE_LLVM_SAFECode)
+ENDIF(USE_LLVM_CLANG)
 
 IF(WIN32)
 	IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
@@ -79,10 +80,6 @@ ELSE()
 ENDIF()
 
 #ADD_DEFINITIONS("-DUNICODE -D_UNICODE")
-
-IF(USE_LLVM_CLANG_STATIC_ANALYZER)
-	add_definitions("--analyze")
-ENDIF(USE_LLVM_CLANG_STATIC_ANALYZER)
 
 SET(HGL_PLATFORM_STRING	${CMAKE_SYSTEM_NAME}_${CMAKE_SYSTEM_PROCESSOR}_${CMGDK_BUILD_TYPE})
 IF(UNIX)
@@ -149,12 +146,8 @@ IF(UNIX)
 	IF(USE_CPP14)
 		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 		add_definitions("-DHGL_CPP14")
-		add_definitions("-DHGL_CPP11")
 	ELSE(USE_CPP14)
-		IF(USE_CPP11)
-			SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-			add_definitions("-DHGL_CPP11")
-		ENDIF(USE_CPP11)
+		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 	ENDIF(USE_CPP14)
 
 	SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")

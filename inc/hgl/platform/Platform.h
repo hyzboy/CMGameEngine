@@ -415,10 +415,8 @@ namespace hgl
 	using uint			=unsigned int;   	///< 无符号整型
 	using ulong			=unsigned long;		///< 无符号长整型
 
-#ifdef HGL_CPP11_INT128
 	using int128		=  signed __int128;	///<有符号128位整型
 	using uint128		=unsigned __int128;	///<无符号128位整型
-#endif//HGL_CPP11_INT128
 
 	using void_pointer	=void *;
 }//namespace hgl
