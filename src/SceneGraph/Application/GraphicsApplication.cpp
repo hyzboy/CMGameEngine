@@ -424,7 +424,8 @@ namespace hgl
 		{
 			graph::SetViewport(0,0,w,h);
 
-			graph::Ortho2DMatrix=ortho2d(w,h);
+			if(w>0&&h>0)
+				graph::Ortho2DMatrix=ortho2d(w,h);
 
 			SafeCallEvent(OnResize,(w,h));
 
