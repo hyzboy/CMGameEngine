@@ -1,5 +1,5 @@
 ﻿#include<glew/include/GL/glew.h>
-#include<glfw3.h>
+#include<GLFW/glfw3.h>
 #include<hgl/LogInfo.h>
 #include<string.h>
 namespace hgl

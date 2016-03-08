@@ -4,7 +4,7 @@
 #include<hgl/graph/Render.h>
 #include<hgl/graph/TileFont.h>
 #include<glew/include/GL/glew.h>
-#include<glfw3.h>
+#include<GLFW/glfw3.h>
 
 extern "C"
 {

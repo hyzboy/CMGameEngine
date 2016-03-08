@@ -1,5 +1,5 @@
 #include<hgl/platform/GraphicsApplication.h>
-#include<glfw3.h>
+#include<GLFW/glfw3.h>
 
 namespace hgl
 {
