@@ -23,7 +23,7 @@ namespace hgl
 			{
 				if(!SendData)RETURN_FALSE;
 
-				CallEvent(SendData,(id,mb.data(),mb.bytes()));
+				SafeCallEvent(SendData,(id,mb.data(),mb.bytes()));
 			}
 
 			virtual bool SendToUser(const ID *id_list,const int count)
