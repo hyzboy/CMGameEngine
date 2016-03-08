@@ -154,6 +154,7 @@ namespace hgl
 
 			glfw_win=nullptr;
 			wait_active=true;
+			visible = true;
 
 			default_font=nullptr;
 
@@ -362,7 +363,8 @@ namespace hgl
 				flow->Update();             //流程刷新
 				flow->ProcCurState();       //处理流程状态
 
-				if(cur_time-prev_time>=interval_time)			//刷新时间到了
+				if(visible										//显示画面
+				 &&cur_time-prev_time>=interval_time)			//刷新时间到了
 				{
 					prev_time=cur_time;
 
@@ -424,8 +426,13 @@ namespace hgl
 		{
 			graph::SetViewport(0,0,w,h);
 
-			if(w>0&&h>0)
-				graph::Ortho2DMatrix=ortho2d(w,h);
+			if (w > 0 && h > 0)
+			{
+				visible = true;
+				graph::Ortho2DMatrix = ortho2d(w, h);
+			}
+			else
+				visible = false;
 
 			SafeCallEvent(OnResize,(w,h));
 
