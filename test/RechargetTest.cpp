@@ -1,4 +1,4 @@
-#include<curl/curl.h>
+﻿#include<curl/curl.h>
 #include<hgl/ut/Hash.h>
 #include<hgl/Str.h>
 #include<hgl/type/BaseString.h>
@@ -64,7 +64,7 @@ bool Recharge5EBO(const UTF8String &username,const int money,const int type,cons
 
 	char check_code_str[33];
 
-	HashToLowerStr(md5,check_code_str);
+    ToLowerHexStr(check_code_str,&md5,md5.size());
 	check_code_str[32]=0;
 
 	UTF8String url=recharge_url+"?user="+username+"&money="+UTF8String(money)+UTF8String(type==0?"&type=coin":"&type=vouchers")+UTF8String(acquire_or_confirm?"&proc=acquire":"&proc=confirm")+"&check="+check_code_str;
