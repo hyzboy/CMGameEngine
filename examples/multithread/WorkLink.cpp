@@ -101,7 +101,7 @@ public:
 
 		for(int i=0;i<num;i++)
 		{
-			int target=rand()%WORK_QUEUE_NUMBER;	    //随机一个投递目标
+			int target=rand()%POST_THREAD_NUMBER;	    //随机一个投递目标
 
 			wo_list[target]->Push();
 		}
@@ -145,7 +145,7 @@ public:
 		}
 	}
 
-	bool Update()
+	void Update()
 	{
 	}
 };//class TestObject

@@ -1,9 +1,12 @@
-#ifndef HGL_MULTI_THREAD_ASYNC_INCLUDE
+﻿#ifndef HGL_MULTI_THREAD_ASYNC_INCLUDE
 #define HGL_MULTI_THREAD_ASYNC_INCLUDE
 
 #include<hgl/thread/Thread.h>
 namespace hgl
 {
+    未完成，不可用
+
+
     /**
      * 异步工作线程
      */
