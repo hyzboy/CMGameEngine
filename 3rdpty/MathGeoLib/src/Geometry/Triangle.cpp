@@ -42,6 +42,7 @@
 
 #if defined(MATH_SSE) && defined(MATH_AUTOMATIC_SSE)
 #include "../Math/float4_sse.h"
+#include "../Math/float4_neon.h"
 #endif
 
 MATH_BEGIN_NAMESPACE
@@ -169,14 +170,14 @@ vec Triangle::Point(float u, float v, float w) const
 	return u * a + v * b + w * c;
 }
 
-vec Triangle::Point(const float3 &b) const
+vec Triangle::Point(const float3 &uvw) const
 {
-	return Point(b.x, b.y, b.z);
+	return Point(uvw.x, uvw.y, uvw.z);
 }
 
-vec Triangle::Point(const float2 &b) const
+vec Triangle::Point(const float2 &uv) const
 {
-	return Point(b.x, b.y);
+	return Point(uv.x, uv.y);
 }
 
 vec Triangle::Centroid() const
@@ -706,8 +707,8 @@ bool Triangle::Intersects(const AABB &aabb) const
 
 	simd4f cmp = cmpge_ps(tMin, aabb.maxPoint.v);
 	cmp = or_ps(cmp, cmple_ps(tMax, aabb.minPoint.v));
-	cmp = and_ps(cmp, set_ps_hex(0, 0xFFFFFFFFU, 0xFFFFFFFFU, 0xFFFFFFFFU)); // Mask off results from the W channel.
-	if (!allzero_ps(cmp)) return false;
+	// Mask off results from the W channel and test if all were zero.
+	if (!a_and_b_allzero_ps(cmp, set_ps_hex(0, 0xFFFFFFFFU, 0xFFFFFFFFU, 0xFFFFFFFFU))) return false;
 
 	simd4f center = mul_ps(add_ps(aabb.minPoint.v, aabb.maxPoint.v), set1_ps(0.5f));
 	simd4f h = sub_ps(aabb.maxPoint.v, center);
@@ -719,62 +720,62 @@ bool Triangle::Intersects(const AABB &aabb) const
 	if (_mm_ucomige_ss(abs_ps(dot4_ps(n, ac)), abs_ps(dot4_ps(h, abs_ps(n))))) return false;
 
 	// {eX, eY, eZ} cross t1
-	simd4f ac_wyxz  = shuffle1_ps(ac,  _MM_SHUFFLE(3, 1, 0, 2));
-	simd4f h_wyxz   = shuffle1_ps(h,   _MM_SHUFFLE(3, 1, 0, 2));
-	simd4f ac_wxzy  = shuffle1_ps(ac,  _MM_SHUFFLE(3, 0, 2, 1));
-	simd4f h_wxzy   = shuffle1_ps(h,   _MM_SHUFFLE(3, 0, 2, 1));
+	simd4f ac_wyxz  = zxyw_ps(ac);
+	simd4f h_wyxz   = zxyw_ps(h);
+	simd4f ac_wxzy  = yzxw_ps(ac);
+	simd4f h_wxzy   = yzxw_ps(h);
 	simd4f bc = sub_ps(b, center);
-	simd4f bc_wyxz  = shuffle1_ps(bc,  _MM_SHUFFLE(3, 1, 0, 2));
+	simd4f bc_wyxz  = zxyw_ps(bc);
 	simd4f at1 = abs_ps(t1);
-	simd4f t1_wyxz  = shuffle1_ps(t1,  _MM_SHUFFLE(3, 1, 0, 2));
-	simd4f at1_wyxz = shuffle1_ps(at1, _MM_SHUFFLE(3, 1, 0, 2));
-	simd4f bc_wxzy  = shuffle1_ps(bc,  _MM_SHUFFLE(3, 0, 2, 1));
-	simd4f t1_wxzy  = shuffle1_ps(t1,  _MM_SHUFFLE(3, 0, 2, 1));
-	simd4f at1_wxzy = shuffle1_ps(at1, _MM_SHUFFLE(3, 0, 2, 1));
+	simd4f t1_wyxz  = zxyw_ps(t1);
+	simd4f at1_wyxz = zxyw_ps(at1);
+	simd4f bc_wxzy  = yzxw_ps(bc);
+	simd4f t1_wxzy  = yzxw_ps(t1);
+	simd4f at1_wxzy = yzxw_ps(at1);
 
-	simd4f d1 = sub_ps(mul_ps(t1_wxzy, ac_wyxz), mul_ps(t1_wyxz, ac_wxzy));
-	simd4f d2 = sub_ps(mul_ps(t1_wxzy, bc_wyxz), mul_ps(t1_wyxz, bc_wxzy));
+	simd4f d1 = msub_ps(t1_wxzy, ac_wyxz, mul_ps(t1_wyxz, ac_wxzy));
+	simd4f d2 = msub_ps(t1_wxzy, bc_wyxz, mul_ps(t1_wyxz, bc_wxzy));
 	simd4f tc = mul_ps(add_ps(d1, d2), set1_ps(0.5f));
-	simd4f r = abs_ps(add_ps(mul_ps(h_wyxz, at1_wxzy), mul_ps(h_wxzy, at1_wyxz)));
+	simd4f r = abs_ps(madd_ps(h_wyxz, at1_wxzy, mul_ps(h_wxzy, at1_wyxz)));
 	cmp = cmple_ps(add_ps(r, abs_ps(sub_ps(tc, d1))), abs_ps(tc));
 	// Note: The three masks of W channel could be omitted if cmplt_ps was used instead of cmple_ps, but
 	// want to be strict here and define that AABB and Triangle which touch at a vertex should not intersect.
-	cmp = and_ps(cmp, set_ps_hex(0, 0xFFFFFFFFU, 0xFFFFFFFFU, 0xFFFFFFFFU)); // Mask off results from the W channel.
-	if (!allzero_ps(cmp)) return false;
+	// Mask off results from the W channel and test if all were zero.
+	if (!a_and_b_allzero_ps(cmp, set_ps_hex(0, 0xFFFFFFFFU, 0xFFFFFFFFU, 0xFFFFFFFFU))) return false;
 
 	// {eX, eY, eZ} cross t2
 	simd4f t2 = sub_ps(c, b);
 	simd4f at2 = abs_ps(t2);
-	simd4f t2_wyxz  = shuffle1_ps(t2,  _MM_SHUFFLE(3, 1, 0, 2));
-	simd4f at2_wyxz = shuffle1_ps(at2, _MM_SHUFFLE(3, 1, 0, 2));
-	simd4f t2_wxzy  = shuffle1_ps(t2,  _MM_SHUFFLE(3, 0, 2, 1));
-	simd4f at2_wxzy = shuffle1_ps(at2, _MM_SHUFFLE(3, 0, 2, 1));
+	simd4f t2_wyxz  = zxyw_ps(t2);
+	simd4f at2_wyxz = zxyw_ps(at2);
+	simd4f t2_wxzy  = yzxw_ps(t2);
+	simd4f at2_wxzy = yzxw_ps(at2);
 
-	d1 = sub_ps(mul_ps(t2_wxzy, ac_wyxz), mul_ps(t2_wyxz, ac_wxzy));
-	d2 = sub_ps(mul_ps(t2_wxzy, bc_wyxz), mul_ps(t2_wyxz, bc_wxzy));
+	d1 = msub_ps(t2_wxzy, ac_wyxz, mul_ps(t2_wyxz, ac_wxzy));
+	d2 = msub_ps(t2_wxzy, bc_wyxz, mul_ps(t2_wyxz, bc_wxzy));
 	tc = mul_ps(add_ps(d1, d2), set1_ps(0.5f));
-	r = abs_ps(add_ps(mul_ps(h_wyxz, at2_wxzy), mul_ps(h_wxzy, at2_wyxz)));
+	r = abs_ps(madd_ps(h_wyxz, at2_wxzy, mul_ps(h_wxzy, at2_wyxz)));
 	cmp = cmple_ps(add_ps(r, abs_ps(sub_ps(tc, d1))), abs_ps(tc));
-	cmp = and_ps(cmp, set_ps_hex(0, 0xFFFFFFFFU, 0xFFFFFFFFU, 0xFFFFFFFFU)); // Mask off results from the W channel.
-	if (!allzero_ps(cmp)) return false;
+	// Mask off results from the W channel and test if all were zero.
+	if (!a_and_b_allzero_ps(cmp, set_ps_hex(0, 0xFFFFFFFFU, 0xFFFFFFFFU, 0xFFFFFFFFU))) return false;
 
 	// {eX, eY, eZ} cross t0
 	simd4f cc = sub_ps(c, center);
-	simd4f cc_wyxz  = shuffle1_ps(cc,  _MM_SHUFFLE(3, 1, 0, 2));
-	simd4f t0_wyxz  = shuffle1_ps(t0,  _MM_SHUFFLE(3, 1, 0, 2));
+	simd4f cc_wyxz  = zxyw_ps(cc);
+	simd4f t0_wyxz  = zxyw_ps(t0);
 	simd4f at0 = abs_ps(t0);
-	simd4f at0_wyxz = shuffle1_ps(at0, _MM_SHUFFLE(3, 1, 0, 2));
-	simd4f at0_wxzy = shuffle1_ps(at0, _MM_SHUFFLE(3, 0, 2, 1));
-	simd4f t0_wxzy  = shuffle1_ps(t0,  _MM_SHUFFLE(3, 0, 2, 1));
-	simd4f cc_wxzy  = shuffle1_ps(cc,  _MM_SHUFFLE(3, 0, 2, 1));
+	simd4f at0_wyxz = zxyw_ps(at0);
+	simd4f at0_wxzy = yzxw_ps(at0);
+	simd4f t0_wxzy  = yzxw_ps(t0);
+	simd4f cc_wxzy  = yzxw_ps(cc);
 
-	d1 = sub_ps(mul_ps(t0_wxzy, ac_wyxz), mul_ps(t0_wyxz, ac_wxzy));
-	d2 = sub_ps(mul_ps(t0_wxzy, cc_wyxz), mul_ps(t0_wyxz, cc_wxzy));
+	d1 = msub_ps(t0_wxzy, ac_wyxz, mul_ps(t0_wyxz, ac_wxzy));
+	d2 = msub_ps(t0_wxzy, cc_wyxz, mul_ps(t0_wyxz, cc_wxzy));
 	tc = mul_ps(add_ps(d1, d2), set1_ps(0.5f));
-	r = abs_ps(add_ps(mul_ps(h_wyxz, at0_wxzy), mul_ps(h_wxzy, at0_wyxz)));
+	r = abs_ps(madd_ps(h_wyxz, at0_wxzy, mul_ps(h_wxzy, at0_wyxz)));
 	cmp = cmple_ps(add_ps(r, abs_ps(sub_ps(tc, d1))), abs_ps(tc));
-	cmp = and_ps(cmp, set_ps_hex(0, 0xFFFFFFFFU, 0xFFFFFFFFU, 0xFFFFFFFFU)); // Mask off results from the W channel.
-	return allzero_ps(cmp) != 0;
+	// Mask off results from the W channel and test if all were zero.
+	return a_and_b_allzero_ps(cmp, set_ps_hex(0, 0xFFFFFFFFU, 0xFFFFFFFFU, 0xFFFFFFFFU)) != 0;
 #else
 	// Benchmark 'Triangle_intersects_AABB': Triangle::Intersects(AABB)
 	//    Best: 17.282 nsecs / 46.496 ticks, Avg: 17.804 nsecs, Worst: 18.434 nsecs

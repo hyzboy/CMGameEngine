@@ -1,4 +1,5 @@
-#include"Common.h"
+﻿#include"Common.h"
+#include<hgl/Str.h>
 
 int ParseField(UTF16StringList *sl,const UTF16String &str,const u16char ch,bool null_end)
 {
@@ -24,7 +25,7 @@ int ParseField(UTF16StringList *sl,const UTF16String &str,const u16char ch,bool 
 
 		if(p)
 		{
-			strcpy(tmp,sp,p-sp);
+			hgl::strcpy(tmp,str.Length(),sp,p-sp);
 			tmp[p-sp]=0;
 
 			if(p>sp)
@@ -39,7 +40,7 @@ int ParseField(UTF16StringList *sl,const UTF16String &str,const u16char ch,bool 
 				if(null_end)
 					break;
 
-				sl->Add(u"");	//空的也要加
+				sl->Add(U16_TEXT(""));	//空的也要加
 				count++;
 			}
 

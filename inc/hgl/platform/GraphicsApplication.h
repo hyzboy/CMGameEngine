@@ -29,6 +29,7 @@ namespace hgl
 
 			TileFont *default_font;
 
+			bool visible;																				///<是否显示
 			uint cur_fps;
 			double interval_time;
 

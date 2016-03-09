@@ -186,7 +186,7 @@ float4 float4::Swizzled(int i, int j, int k, int l) const
 
 float4 float4::xxxx() const
 {
-#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SIMD)
 	return xxxx_ps(v);
 #else
 	return float4::FromScalar(x);
@@ -195,7 +195,7 @@ float4 float4::xxxx() const
 
 float4 float4::yyyy() const
 {
-#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SIMD)
 	return yyyy_ps(v);
 #else
 	return float4::FromScalar(x);
@@ -204,7 +204,7 @@ float4 float4::yyyy() const
 
 float4 float4::zzzz() const
 {
-#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SIMD)
 	return zzzz_ps(v);
 #else
 	return float4::FromScalar(x);
@@ -240,7 +240,7 @@ float4 float4::zzzw() const
 
 float4 float4::wwww() const
 {
-#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SIMD)
 	return wwww_ps(v);
 #else
 	return float4::FromScalar(x);
@@ -299,12 +299,7 @@ void float4::Normalize4_Fast_SSE()
 
 void float4::NormalizeW_SSE()
 {
-#ifdef MATH_SSE
-	simd4f div = wwww_ps(v);
-	v = div_ps(v, div);
-#elif defined(MATH_NEON)
-	v = div_ps(v, vdupq_n_f32(vgetq_lane_f32(v, 3)));
-#endif
+	v = div_ps(v, wwww_ps(v));
 }
 
 #endif
@@ -387,7 +382,7 @@ float4 float4::Normalized3() const
 
 float float4::Normalize4()
 {
-#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SIMD)
 	simd4f len = Normalize4_SSE();
 	return s4f_x(len);
 #else
@@ -418,7 +413,7 @@ float4 float4::Normalized4() const
 
 void float4::NormalizeW()
 {
-#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SIMD)
 	NormalizeW_SSE();
 #else
 	if (MATH_NS::Abs(w) > 1e-6f)
@@ -463,7 +458,7 @@ void float4::Scale3(float scalar)
 	simd4f scale = setx_ps(scalar);
 	scale = _mm_shuffle_ps(scale, simd4fOne, _MM_SHUFFLE(0,0,0,0)); // scale = (1 1 s s)
 	scale = shuffle1_ps(scale, _MM_SHUFFLE(3,0,0,0)); // scale = (1 s s s)
-	v = _mm_mul_ps(v, scale);
+	v = mul_ps(v, scale);
 #else
 	x *= scalar;
 	y *= scalar;
@@ -491,9 +486,9 @@ float4 float4::ScaledToLength3(float newLength) const
 {
 	assume(!IsZero3());
 
-	float4 v = *this;
-	v.ScaleToLength3(newLength);
-	return v;
+	float4 vtx = *this;
+	vtx.ScaleToLength3(newLength);
+	return vtx;
 }
 
 float float4::ScaleToLength(float newLength)
@@ -506,9 +501,9 @@ float float4::ScaleToLength(float newLength)
 
 float4 float4::ScaledToLength(float newLength) const
 {
-	float4 v = *this;
-	v.ScaleToLength(newLength);
-	return v;
+	float4 vtx = *this;
+	vtx.ScaleToLength(newLength);
+	return vtx;
 }
 
 bool float4::IsFinite() const
@@ -659,7 +654,7 @@ float4 float4::Abs() const
 float4 float4::Neg3() const
 {
 #ifdef MATH_AUTOMATIC_SSE
-	return negate3_ps(v);
+	return neg3_ps(v);
 #else
 	return float4(-x, -y, -z, w);
 #endif
@@ -668,7 +663,7 @@ float4 float4::Neg3() const
 float4 float4::Neg4() const
 {
 #ifdef MATH_AUTOMATIC_SSE
-	return negate_ps(v);
+	return neg_ps(v);
 #else
 	return float4(-x, -y, -z, -w);
 #endif
@@ -683,7 +678,7 @@ float4 float4::Recip3() const
 float4 float4::Recip4() const
 {
 #ifdef MATH_AUTOMATIC_SSE
-	return vec4_recip(v);
+	return rcp_ps(v);
 #else
 	return float4(1.f/x, 1.f/y, 1.f/z, 1.f/w);
 #endif
@@ -691,8 +686,8 @@ float4 float4::Recip4() const
 
 float4 float4::RecipFast4() const
 {
-#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
-	return float4(_mm_rcp_ps(v));
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SIMD)
+	return float4(rcp_ps(v));
 #else
 	return float4(1.f/x, 1.f/y, 1.f/z, 1.f/w);
 #endif
@@ -700,7 +695,7 @@ float4 float4::RecipFast4() const
 
 float4 float4::Min(float ceil) const
 {
-#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SIMD)
 	return float4(min_ps(v, set1_ps(ceil)));
 #else
 	return float4(MATH_NS::Min(x, ceil), MATH_NS::Min(y, ceil), MATH_NS::Min(z, ceil), MATH_NS::Min(w, ceil));
@@ -772,7 +767,7 @@ float4 float4::Clamp(float floor, float ceil) const
 
 float float4::Distance3Sq(const float4 &rhs) const
 {
-#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SIMD)
 	return vec3_length_sq_float(sub_ps(v, rhs.v));
 #else
 	float dx = x - rhs.x;
@@ -784,7 +779,7 @@ float float4::Distance3Sq(const float4 &rhs) const
 
 float float4::Distance3(const float4 &rhs) const
 {
-#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SIMD)
 	return vec3_length_float(sub_ps(v, rhs.v));
 #else
 	return Sqrt(Distance3Sq(rhs));
@@ -793,7 +788,7 @@ float float4::Distance3(const float4 &rhs) const
 
 float float4::Distance4Sq(const float4 &rhs) const
 {
-#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SIMD)
 	return vec4_length_sq_float(sub_ps(v, rhs.v));
 #else
 	float dx = x - rhs.x;
@@ -806,7 +801,7 @@ float float4::Distance4Sq(const float4 &rhs) const
 
 float float4::Distance4(const float4 &rhs) const
 {
-#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SIMD)
 	return vec4_length_float(sub_ps(v, rhs.v));
 #else
 	return Sqrt(Distance4Sq(rhs));
@@ -815,7 +810,7 @@ float float4::Distance4(const float4 &rhs) const
 
 float float4::Dot3(const float3 &rhs) const
 {
-#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SIMD)
 	return dot3_float(v, float4(rhs, 0.f));
 #else
 	return x * rhs.x + y * rhs.y + z * rhs.z;
@@ -824,7 +819,7 @@ float float4::Dot3(const float3 &rhs) const
 
 float float4::Dot3(const float4 &rhs) const
 {
-#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SIMD)
 	return dot3_float(v, rhs.v);
 #else
 	return x * rhs.x + y * rhs.y + z * rhs.z;
@@ -833,7 +828,7 @@ float float4::Dot3(const float4 &rhs) const
 
 float float4::Dot4(const float4 &rhs) const
 {
-#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SIMD)
 	return dot4_float(v, rhs.v);
 #else
 	return x * rhs.x + y * rhs.y + z * rhs.z + w * rhs.w;
@@ -863,7 +858,7 @@ i x j == -(j x i) == k,
 (k x i) == -(i x k) == j. */
 float4 float4::Cross3(const float3 &rhs) const
 {
-#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SIMD)
 	return float4(cross_ps(v, load_vec3(rhs.ptr(), 0.f)));
 #else
 	float4 dst;
@@ -877,7 +872,7 @@ float4 float4::Cross3(const float3 &rhs) const
 
 float4 float4::Cross3(const float4 &rhs) const
 {
-#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SIMD)
 	assert((((uintptr_t)&rhs) & 15) == 0); // For SSE ops we must be 16-byte aligned.
 	assert((((uintptr_t)this) & 15) == 0);
 	return float4(cross_ps(v, rhs.v));
@@ -888,12 +883,12 @@ float4 float4::Cross3(const float4 &rhs) const
 
 float4x4 float4::OuterProduct(const float4 &rhs) const
 {
-	const float4 &u = *this;
-	const float4 &v = rhs;
-	return float4x4(u[0]*v[0], u[0]*v[1], u[0]*v[2], u[0]*v[3],
-					u[1]*v[0], u[1]*v[1], u[1]*v[2], u[1]*v[3],
-					u[2]*v[0], u[2]*v[1], u[2]*v[2], u[2]*v[3],
-					u[3]*v[0], u[3]*v[1], u[3]*v[2], u[3]*v[3]);
+	const float4 &i = *this;
+	const float4 &j = rhs;
+	return float4x4(i[0]*j[0], i[0]*j[1], i[0]*j[2], i[0]*j[3],
+					i[1]*j[0], i[1]*j[1], i[1]*j[2], i[1]*j[3],
+					i[2]*j[0], i[2]*j[1], i[2]*j[2], i[2]*j[3],
+					i[3]*j[0], i[3]*j[1], i[3]*j[2], i[3]*j[3]);
 }
 
 float4 float4::Perpendicular3(const float3 &hint, const float3 &hint2) const
@@ -902,12 +897,12 @@ float4 float4::Perpendicular3(const float3 &hint, const float3 &hint2) const
 	assume(EqualAbs(w, 0));
 	assume(hint.IsNormalized());
 	assume(hint2.IsNormalized());
-	float3 v = this->Cross3(hint).xyz();
-	float len = v.Normalize();
+	float3 perp = this->Cross3(hint).xyz();
+	float len = perp.Normalize();
 	if (len == 0)
 		return float4(hint2, 0);
 	else
-		return float4(v, 0);
+		return float4(perp, 0);
 }
 
 float4 float4::Perpendicular(const float4 &hint, const float4 &hint2) const
@@ -916,31 +911,31 @@ float4 float4::Perpendicular(const float4 &hint, const float4 &hint2) const
 	assume(EqualAbs(w, 0));
 	assume(hint.IsNormalized());
 	assume(hint2.IsNormalized());
-	float4 v = this->Cross(hint);
-	float len = v.Normalize();
+	float4 perp = this->Cross(hint);
+	float len = perp.Normalize();
 	if (len == 0)
 		return hint2;
 	else
-		return v;
+		return perp;
 }
 
 float4 float4::AnotherPerpendicular3(const float3 &hint, const float3 &hint2) const
 {
 	float4 firstPerpendicular = Perpendicular3(hint, hint2);
-	float4 v = this->Cross3(firstPerpendicular);
-	return v.Normalized3();
+	float4 perp = this->Cross3(firstPerpendicular);
+	return perp.Normalized3();
 }
 
 float4 float4::AnotherPerpendicular(const float4 &hint, const float4 &hint2) const
 {
 	float4 firstPerpendicular = Perpendicular(hint, hint2);
-	float4 v = this->Cross(firstPerpendicular);
-	return v.Normalized();
+	float4 perp = this->Cross(firstPerpendicular);
+	return perp.Normalized();
 }
 
 void float4::PerpendicularBasis(float4 &outB, float4 &outC) const
 {
-#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SIMD)
 	// Benchmark 'float4_PerpendicularBasis': float4::PerpendicularBasis
 	//   Best: 17.468 nsecs / 29.418 ticks, Avg: 17.703 nsecs, Worst: 19.275 nsecs
 	basis_ps(this->v, &outB.v, &outC.v);
@@ -1067,7 +1062,7 @@ float4 float4::Lerp(const float4 &b, float t) const
 {
 	assume(EqualAbs(this->w, b.w));
 	assume(0.f <= t && t <= 1.f);
-#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
+#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SIMD)
 	return vec4_lerp(v, b.v, t);
 #else
 	return (1.f - t) * *this + t * b;
@@ -1210,10 +1205,10 @@ float4 MUST_USE_RESULT float4::FromSphericalCoordinates(float azimuth, float inc
 
 void float4::SetFromSphericalCoordinates(float azimuth, float inclination)
 {
-	float4 v, s, c;
-	v.x = inclination;
-	v.y = azimuth;
-	SinCos2(v, s, c);
+	float4 vec, s, c;
+	vec.x = inclination;
+	vec.y = azimuth;
+	SinCos2(vec, s, c);
 	x = c.x * s.y;
 	y = -s.x;
 	z = c.x * c.y;
@@ -1230,12 +1225,12 @@ float4 MUST_USE_RESULT float4::FromSphericalCoordinates(float azimuth, float inc
 float3 float4::ToSphericalCoordinates() const
 {
 	// R_y * R_x * (0,0,length) = (cosx*siny, -sinx, cosx*cosy).
-	float4 v = *this;
-	float len = v.Normalize();
+	float4 vec = *this;
+	float len = vec.Normalize();
 	if (len <= 1e-5f)
 		return float3::zero;
-	float azimuth = atan2(v.x, v.z);
-	float inclination = asin(-v.y);
+	float azimuth = atan2(vec.x, vec.z);
+	float inclination = asin(-vec.y);
 	return float3(azimuth, inclination, len);
 }
 
@@ -1322,7 +1317,7 @@ float4 float4::operator -(const float4 &rhs) const
 float4 float4::operator -() const
 {
 #ifdef MATH_AUTOMATIC_SSE
-	return negate_ps(v);
+	return neg_ps(v);
 #else
 	return float4(-x, -y, -z, -w);
 #endif
@@ -1331,7 +1326,7 @@ float4 float4::operator -() const
 float4 float4::operator *(float scalar) const
 {
 #ifdef MATH_AUTOMATIC_SSE
-	return vec4_mul_float(v, scalar);
+	return muls_ps(v, scalar);
 #else
 	return float4(x * scalar, y * scalar, z * scalar, w * scalar);
 #endif
@@ -1340,7 +1335,7 @@ float4 float4::operator *(float scalar) const
 float4 operator *(float scalar, const float4 &rhs)
 {
 #ifdef MATH_AUTOMATIC_SSE
-	return vec4_mul_float(rhs.v, scalar);
+	return muls_ps(rhs.v, scalar);
 #else
 	return float4(scalar * rhs.x, scalar * rhs.y, scalar * rhs.z, scalar * rhs.w);
 #endif
@@ -1349,7 +1344,7 @@ float4 operator *(float scalar, const float4 &rhs)
 float4 float4::operator /(float scalar) const
 {
 #ifdef MATH_AUTOMATIC_SSE
-	return vec4_div_float(v, scalar);
+	return div_ps(v, set1_ps(scalar));
 #else
 	float invScalar = 1.f / scalar;
 	return float4(x * invScalar, y * invScalar, z * invScalar, w * invScalar);
@@ -1387,7 +1382,7 @@ float4 &float4::operator -=(const float4 &rhs)
 float4 &float4::operator *=(float scalar)
 {
 #ifdef MATH_AUTOMATIC_SSE
-	v = vec4_mul_float(v, scalar);
+	v = muls_ps(v, scalar);
 #else
 	x *= scalar;
 	y *= scalar;
@@ -1401,7 +1396,7 @@ float4 &float4::operator *=(float scalar)
 float4 &float4::operator /=(float scalar)
 {
 #ifdef MATH_AUTOMATIC_SSE
-	v = vec4_div_float(v, scalar);
+	v = div_ps(v, set1_ps(scalar));
 #else
 	float invScalar = 1.f / scalar;
 	x *= invScalar;
@@ -1416,7 +1411,7 @@ float4 &float4::operator /=(float scalar)
 float4 float4::Add(float s) const
 {
 #ifdef MATH_AUTOMATIC_SSE
-	return vec4_add_float(v, s);
+	return add_ps(v, set1_ps(s));
 #else
 	return float4(x + s, y + s, z + s, w + s);
 #endif
@@ -1425,7 +1420,7 @@ float4 float4::Add(float s) const
 float4 float4::Sub(float s) const
 {
 #ifdef MATH_AUTOMATIC_SSE
-	return vec4_sub_float(v, s);
+	return sub_ps(v, set1_ps(s));
 #else
 	return float4(x - s, y - s, z - s, w - s);
 #endif
@@ -1434,7 +1429,7 @@ float4 float4::Sub(float s) const
 float4 float4::SubLeft(float s) const
 {
 #ifdef MATH_AUTOMATIC_SSE
-	return float_sub_vec4(s, v);
+	return sub_ps(set1_ps(s), v);
 #else
 	return float4(s - x, s - y, s - z, s - w);
 #endif
@@ -1443,7 +1438,7 @@ float4 float4::SubLeft(float s) const
 float4 float4::DivLeft(float s) const
 {
 #ifdef MATH_AUTOMATIC_SSE
-	return float_div_vec4(s, v);
+	return div_ps(set1_ps(s), v);
 #else
 	return float4(s / x, s / y, s / z, s / w);
 #endif

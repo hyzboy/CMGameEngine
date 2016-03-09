@@ -242,7 +242,7 @@ namespace hgl
 
 			const float	&	GetTransparency()const				{return Transparency;}
 
-			const int		GetTextureNumber()const				{return TextureList.GetCount();}
+			const size_t	GetTextureNumber()const				{return TextureList.GetCount();}
 
 			Texture *		GetTexture(int mtc)const			{return TextureList[mtc];}
 

@@ -24,7 +24,9 @@
 
 #include "myassert.h"
 #include "float2.h"
+#ifdef MATH_WITH_GRISU3
 #include "grisu3.h"
+#endif
 
 #ifdef WIN32
 #include "../Math/InclWindows.h"
@@ -90,7 +92,7 @@ Init_fast_cossin_table static_initializer;
 static inline float sin_lookuptable(float n)
 {
 	int i = (int)(n * (HALF_MAX_CIRCLE_ANGLE / PI));
-	if (i < 0) return fast_cossin_table[MAX_CIRCLE_ANGLE - ((-i) & MASK_MAX_CIRCLE_ANGLE)];
+	if (i < 0) return -fast_cossin_table[(-i) & MASK_MAX_CIRCLE_ANGLE];
 	else return fast_cossin_table[i & MASK_MAX_CIRCLE_ANGLE];
 }
 
@@ -397,7 +399,7 @@ float LerpMod(float a, float b, float mod, float t)
 
 float InvLerp(float a, float b, float x)
 {
-	assume(Abs(b-a) > eps);
+	assume(Abs(b-a) > 1e-5f);
 	return (x - a) / (b - a);
 }
 
@@ -533,8 +535,12 @@ char *SerializeFloat(float f, char *dstStr)
 {
 	if (!IsNan(f))
 	{
+#ifdef MATH_WITH_GRISU3
 		int numChars = dtoa_grisu3((double)f, dstStr);
 		return dstStr + numChars;
+#else
+		return dstStr + sprintf(dstStr, "%.17g", f);
+#endif
 	}
 	else
 	{

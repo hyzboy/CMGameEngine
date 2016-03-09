@@ -221,6 +221,16 @@ namespace hgl
 
             bool Comp(const IPAddress *ipa)const;
         };//class IPv6Address
+
+        inline IPv4Address *CreateIPv4TCP(const char *name,ushort port){return(new IPv4Address(name,port,SOCK_STREAM,  IPPROTO_TCP));}
+        inline IPv6Address *CreateIPv6TCP(const char *name,ushort port){return(new IPv6Address(name,port,SOCK_STREAM,  IPPROTO_TCP));}
+        inline IPv4Address *CreateIPv4UDP(const char *name,ushort port){return(new IPv4Address(name,port,SOCK_DGRAM,   IPPROTO_UDP));}
+        inline IPv6Address *CreateIPv6UDP(const char *name,ushort port){return(new IPv6Address(name,port,SOCK_DGRAM,   IPPROTO_UDP));}
+
+        inline IPv4Address *CreateIPv4TCP(ushort port){return(new IPv4Address(nullptr,port,SOCK_STREAM,  IPPROTO_TCP));}
+        inline IPv6Address *CreateIPv6TCP(ushort port){return(new IPv6Address(nullptr,port,SOCK_STREAM,  IPPROTO_TCP));}
+        inline IPv4Address *CreateIPv4UDP(ushort port){return(new IPv4Address(nullptr,port,SOCK_DGRAM,   IPPROTO_UDP));}
+        inline IPv6Address *CreateIPv6UDP(ushort port){return(new IPv6Address(nullptr,port,SOCK_DGRAM,   IPPROTO_UDP));}
 	}//namespace network
 }//namespace hgl
 #endif//HGL_NETWORK_IP_TOOL_INCLUDE

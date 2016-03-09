@@ -27,4 +27,6 @@ add_subdirectory(Platform)
 
 add_subdirectory(PlugIn)
 
-add_subdirectory(RedisClient)
+IF(UNIX)
+	add_subdirectory(RedisClient)
+ENDIF(UNIX)

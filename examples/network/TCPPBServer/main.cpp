@@ -61,5 +61,5 @@ public:
 HGL_CONSOLE_PB_SERVER_APPLICATION(	"基于Google Protocol Buffer的TCP服务器范例",
 									"TCPPBServer",
 								   UserThread,
-								   "0.0.0.0",8000)
+								   CreateIPv4TCP(8000))
 

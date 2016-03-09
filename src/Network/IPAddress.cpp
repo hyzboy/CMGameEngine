@@ -5,7 +5,7 @@ namespace hgl
     namespace network
     {
         template<int FAMILY,typename SockAddrIn>
-        bool FillAddr(SockAddrIn &addr, const char *name, ushort port,int socktype,int protocol)        ///<将指定域名或地址填充到sockaddr_in结构中
+        bool FillAddr(SockAddrIn &addr, const char *name, int socktype,int protocol)        ///<将指定域名或地址填充到sockaddr_in结构中
         {
             struct addrinfo hints, *answer;
 
@@ -14,8 +14,9 @@ namespace hgl
             hints.ai_socktype=socktype;
             hints.ai_protocol=protocol;
 
-            if (getaddrinfo(name, nullptr, &hints, &answer))         //此函数最低Windows 2003/Vista
-                RETURN_FALSE;
+            if(name)
+                if (getaddrinfo(name, nullptr, &hints, &answer))         //此函数最低Windows 2003/Vista
+                    RETURN_FALSE;
 
             memcpy(&addr,answer->ai_addr,sizeof(SockAddrIn));
             freeaddrinfo(answer);
@@ -88,7 +89,11 @@ namespace hgl
             socktype=_socktype;
             protocol=_protocol;
 
-            return FillAddr<AF_INET,sockaddr_in>(addr,name,port,socktype,protocol);
+            if(!FillAddr<AF_INET,sockaddr_in>(addr,name,socktype,protocol))
+                RETURN_FALSE;
+
+            addr.sin_port=port;
+            return(true);
         }
 
         void IPv4Address::Set(ushort port)
@@ -156,8 +161,13 @@ namespace hgl
             socktype=_socktype;
             protocol=_protocol;
 
-            return FillAddr<AF_INET6,sockaddr_in6>(addr,name,port,socktype,protocol);
+            if(!FillAddr<AF_INET6,sockaddr_in6>(addr,name,socktype,protocol))
+                RETURN_FALSE;
+
+            addr.sin6_port=port;
+            return(true);
         }
+
         void IPv6Address::Set(ushort port)
         {
             hgl_zero(addr);

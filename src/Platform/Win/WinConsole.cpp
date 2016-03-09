@@ -1,4 +1,4 @@
-#include<hgl/Console.h>
+﻿#include<hgl/Console.h>
 #include<hgl/platform/ConsoleApplication.h>
 #include<windows.h>
 

@@ -58,7 +58,7 @@ namespace hgl
 
 			virtual bool ProcStartThread() HGL_OVERRIDE
 			{
-				s=new S(sock,&addr);
+				s=new S(sock,addr);
 
 				sis=new SocketInputStream(sock);
 				sos=new SocketOutputStream(sock);

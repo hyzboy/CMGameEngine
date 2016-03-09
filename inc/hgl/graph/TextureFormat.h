@@ -232,6 +232,24 @@ namespace hgl
         extern const TextureFormat TextureFormatInfoList[HGL_SF_END];
 
         TSF GetColorFormat(const char *);       //根据简写名称取得对应的TextureSourceFormat
+
+        inline const TextureFormat *GetTextureFormat(const TSF &tsf)
+        {
+            if(tsf<=HGL_SF_NONE||tsf>=HGL_SF_END)
+                return(nullptr);
+
+            return TextureFormatInfoList+tsf;
+        }
+
+        inline const TextureFormat *GetTextureFormat(const char *color_format)
+        {
+            const TextureSourceFormat tsf=GetColorFormat(color_format);
+
+            if(tsf<=HGL_SF_NONE||tsf>=HGL_SF_END)
+                return(nullptr);
+
+            return TextureFormatInfoList+tsf;
+        }
 	}//namespace graph
 }//namespace hgl
 #endif//HGL_GRAPH_TEXTURE_FORMAT_INCLUDE

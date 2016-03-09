@@ -128,7 +128,7 @@ namespace hgl
 			{
 				if(id<=0)RETURN_FALSE;
 				if(!ui)RETURN_FALSE;
-				if(!uo)return(nullptr);
+				if(!uo)RETURN_FALSE;
 
 				if(!user_list.Add(id,ui))
 					RETURN_FALSE;

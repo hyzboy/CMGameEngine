@@ -57,5 +57,4 @@ HGL_CONSOLE_TCP_SERVER_APPLICATION("Unity3DWebPlayer专用843端口服务器",
 								   "Unity3D843Server",
 								   Init843Server,			//全局初始化函数
 								   WorkThread,				//工作线程
-								   "0.0.0.0",				//监听IP
-								   843);					//端口
+								   CreateIPv4TCP(843))	    //监听端口

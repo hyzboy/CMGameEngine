@@ -355,57 +355,103 @@ float Sqrt_Via_Rcp_RSqrt(float x)
 
 #endif
 
+// Quake Inverse Sqrt, from http://betterexplained.com/articles/understanding-quakes-fast-inverse-square-root/
+// Benchmarked and tested for reference, DON'T USE THIS! It's twice as slow, and a magnitude of 1e3 worse in precision
+// compared to the function RSqrt!
+float QuakeInvSqrt(float x)
+{
+	float xhalf = 0.5f * x;
+	u32 i = ReinterpretAsU32(x);//*(int*)&x; // store floating-point bits in integer
+	i = 0x5f375a86 - (i >> 1); // A better initial value: http://en.wikipedia.org/wiki/Fast_inverse_square_root#History_and_investigation
+	//i = 0x5f3759d5 - (i >> 1); // initial guess for Newton's method
+	x = ReinterpretAsFloat(i);//*(float*)&i; // convert new bits into float
+	x = x*(1.5f - xhalf*x*x); // One round of Newton's method
+	return x;
+}
+
+float QuakeHackSqrt(float f)
+{
+	return f * QuakeInvSqrt(f);
+}
+
+float AnotherHackSqrt(float f)
+{
+	int i = 0x1FBD1DF5 + (*(int*)&f >> 1);
+	return *(float*)&i;
+}
+
+UNIQUE_TEST(SqrtVals)
+{
+	assert(Sqrt(-0.f) == 0.f);
+	assert(Sqrt(0.f) == 0.f);
+	assert(Sqrt(1.f) == 1.f);
+}
+
 UNIQUE_TEST(sqrt_precision)
 {
-	const int C = 8;
-	float maxRelError[C] = {};
-	float X[C] = {};
+	const int C = 11;
 
-	for(int i = 0; i < 1000000; ++i)
+	const float ranges[] = { 1e3f, 1e6f, 1e9f, 1e15f, 1e20f };
+
+	for(size_t k = 0; k < sizeof(ranges)/sizeof(ranges[0]); ++k)
 	{
-		float f = rng.Float(0.f, 1e20f);
-		float x = (float)sqrt((double)f); // best precision of the Sqrt.
+		float maxRelError[C] = {};
+		float X[C] = {};
 
-		X[0] = Sqrt(f);
-		X[1] = SqrtFast(f);
-		X[2] = NewtonRhapsonSqrt(f);
+		LOGI("Within range of [0, %e]:", ranges[k]);
+		for(int i = 0; i < 100000; ++i)
+		{
+			float f = rng.Float(0.f, ranges[k]);
+			float x = (float)sqrt((double)f); // best precision of the Sqrt.
+
+			X[0] = Sqrt(f);
+			X[1] = SqrtFast(f);
+			X[2] = NewtonRhapsonSqrt(f);
 #ifdef MATH_SSE
-		X[3] = NewtonRhapsonSSESqrt(f);
-		X[4] = NewtonRhapsonSSESqrt2(f);
-		X[5] = NewtonRhapsonSSESqrt3(f);
-		X[6] = Sqrt_Via_Rcp_RSqrt(f);
+			X[3] = NewtonRhapsonSSESqrt(f);
+			X[4] = NewtonRhapsonSSESqrt2(f);
+			X[5] = NewtonRhapsonSSESqrt3(f);
+			X[6] = Sqrt_Via_Rcp_RSqrt(f);
 #endif
 #ifdef MATH_SIMD
-		X[7] = s4f_x(sqrt_ps(set1_ps(f)));
+			X[7] = s4f_x(sqrt_ps(set1_ps(f)));
+#endif
+			X[8] = sqrtf(f);
+			X[9] = QuakeHackSqrt(f);
+			X[10] = AnotherHackSqrt(f);
+
+			for(int j = 0; j < C; ++j)
+				maxRelError[j] = Max(RelativeError(x, X[j]), maxRelError[j]);
+		}
+
+		LOGI("Max relative error with Sqrt: %e", maxRelError[0]);
+		assert(maxRelError[0] < 1e-6f);
+		LOGI("Max relative error with SqrtFast: %e", maxRelError[1]);
+		assert(maxRelError[1] < 1e-3f);
+		LOGI("Max relative error with NewtonRhapsonSqrt: %e", maxRelError[2]);
+		assert(maxRelError[2] < 1e-6f);
+#ifdef MATH_SSE
+		LOGI("Max relative error with NewtonRhapsonSSESqrt: %e", maxRelError[3]);
+		assert(maxRelError[3] < 1e-6f);
+
+		LOGI("Max relative error with NewtonRhapsonSSESqrt2: %e", maxRelError[4]);
+		assert(maxRelError[4] < 1e-6f);
+
+		LOGI("Max relative error with NewtonRhapsonSSESqrt3: %e", maxRelError[5]);
+		assert(maxRelError[5] < 1e-6f);
+
+		LOGI("Max relative error with Sqrt_Via_Rcp_RSqrt: %e", maxRelError[6]);
+		assert(maxRelError[6] < 1e-3f);
+#endif
+#ifdef MATH_SIMD
+		LOGI("Max relative error with sqrt_ps: %e", maxRelError[7]);
+		assert(maxRelError[7] < 1e-6f);
 #endif
 
-		for(int j = 0; j < C; ++j)
-			maxRelError[j] = Max(RelativeError(x, X[j]), maxRelError[j]);
+		LOGI("Max relative error with sqrtf: %e", maxRelError[8]);
+		LOGI("Max relative error with QuakeHackSqrt: %e", maxRelError[9]);
+		LOGI("Max relative error with AnotherHackSqrt: %e", maxRelError[10]);
 	}
-
-	LOGI("Max relative error with Sqrt: %e", maxRelError[0]);
-	assert(maxRelError[0] < 1e-6f);
-	LOGI("Max relative error with SqrtFast: %e", maxRelError[1]);
-	assert(maxRelError[1] < 1e-3f);
-	LOGI("Max relative error with NewtonRhapsonSqrt: %e", maxRelError[2]);
-	assert(maxRelError[2] < 1e-6f);
-#ifdef MATH_SSE
-	LOGI("Max relative error with NewtonRhapsonSSESqrt: %e", maxRelError[3]);
-	assert(maxRelError[3] < 1e-6f);
-
-	LOGI("Max relative error with NewtonRhapsonSSESqrt2: %e", maxRelError[4]);
-	assert(maxRelError[4] < 1e-6f);
-
-	LOGI("Max relative error with NewtonRhapsonSSESqrt3: %e", maxRelError[5]);
-	assert(maxRelError[5] < 1e-6f);
-
-	LOGI("Max relative error with Sqrt_Via_Rcp_RSqrt: %e", maxRelError[6]);
-	assert(maxRelError[6] < 1e-3f);
-#endif
-#ifdef MATH_SIMD
-	LOGI("Max relative error with sqrt_ps: %e", maxRelError[7]);
-	assert(maxRelError[7] < 1e-6f);
-#endif
 }
 
 BENCHMARK(Sqrt, "Sqrt")
@@ -458,6 +504,18 @@ BENCHMARK(Sqrt_Via_Rcp_RSqrt, "test against Sqrt")
 BENCHMARK_END;
 #endif
 
+BENCHMARK(QuakeHackSqrt, "test against Sqrt")
+{
+	f[i] = QuakeHackSqrt(pf[i]);
+}
+BENCHMARK_END;
+
+BENCHMARK(AnotherHackSqrt, "test against Sqrt")
+{
+	f[i] = AnotherHackSqrt(pf[i]);
+}
+BENCHMARK_END;
+
 FORCE_INLINE float recip_sqrtf(float x)
 {
 	return 1.f / sqrtf(x);
@@ -466,20 +524,6 @@ FORCE_INLINE float recip_sqrtf(float x)
 FORCE_INLINE float sqrtf_recip(float x)
 {
 	return sqrtf(1.f / x);
-}
-
-// Quake Inverse Sqrt, from http://betterexplained.com/articles/understanding-quakes-fast-inverse-square-root/
-// Benchmarked and tested for reference, DON'T USE THIS! It's twice as slow, and a magnitude of 1e3 worse in precision
-// compared to the function RSqrt!
-float QuakeInvSqrt(float x)
-{
-	float xhalf = 0.5f * x;
-	u32 i = ReinterpretAsU32(x);//*(int*)&x; // store floating-point bits in integer
-	i = 0x5f375a86 - (i >> 1); // A better initial value: http://en.wikipedia.org/wiki/Fast_inverse_square_root#History_and_investigation
-	//i = 0x5f3759d5 - (i >> 1); // initial guess for Newton's method
-	x = ReinterpretAsFloat(i);//*(float*)&i; // convert new bits into float
-	x = x*(1.5f - xhalf*x*x); // One round of Newton's method
-	return x;
 }
 
 UNIQUE_TEST(sqrt_rsqrt_precision)
@@ -1228,4 +1272,26 @@ UNIQUE_TEST(LSB_U64)
 	asserteq(LSB64((u64)33), 0x1FFFFFFFFULL);
 	asserteq(LSB64((u64)63), 0x7FFFFFFFFFFFFFFFULL);
 	asserteq(LSB64((u64)64), 0xFFFFFFFFFFFFFFFFULL);
+}
+
+UNIQUE_TEST(Sin_lookuptable)
+{
+	asserteq(Sin(0.f), 0.f);
+	assert1(EqualAbs(Sin(pi), 0.f, 1e-7f), Sin(pi));
+	assert1(EqualAbs(Sin(-pi), 0.f, 1e-7f), Sin(-pi));
+	assert1(EqualAbs(Sin(-37.6991577f), 0.f, 1e-4f), Sin(-37.6991577f));
+	assert1(EqualAbs(Sin(pi/2.f), 1.f, 1e-7f), Sin(pi/2.f));
+	assert1(EqualAbs(Sin(-pi/2.f), -1.f, 1e-4f), Sin(-pi/2.f));
+	assert1(EqualAbs(Sin(pi/4.f), 1.f/Sqrt(2.f), 1e-4f), Sin(pi/4.f));
+}
+
+UNIQUE_TEST(Cos_lookuptable)
+{
+	asserteq(Cos(0.f), 1.f);
+	assert1(EqualAbs(Cos(pi), -1.f, 1e-7f), Cos(pi));
+	assert1(EqualAbs(Cos(-pi), -1.f, 1e-7f), Cos(-pi));
+	assert1(EqualAbs(Cos(-37.6991577f), 1.f, 1e-4f), Cos(-37.6991577f));
+	assert1(EqualAbs(Cos(pi / 2.f), 0.f, 1e-7f), Cos(pi / 2.f));
+	assert1(EqualAbs(Cos(-pi / 2.f), -0.f, 1e-4f), Cos(-pi / 2.f));
+	assert1(EqualAbs(Cos(pi / 4.f), 1.f/Sqrt(2.f), 1e-4f), Cos(pi / 4.f));
 }

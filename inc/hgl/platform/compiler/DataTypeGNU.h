@@ -13,10 +13,5 @@ namespace hgl
 
 	typedef   signed long long 	 int64; 	///<有符号64位整型
 	typedef unsigned long long 	uint64; 	///<无符号64位整型
-
-#ifdef HGL_CPP11_INT128
-	typedef   signed __int128	 int128; 	///<有符号128位整型
-	typedef unsigned __int128	uint128; 	///<无符号128位整型
-#endif//HGL_CPP11_INT128
 }//namespace hgl
 #endif//HGL_DATATYPE_GNU_INCLUDE

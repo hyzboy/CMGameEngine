@@ -1,4 +1,4 @@
-#include<hgl/Graphics.h>
+﻿#include<hgl/Graphics.h>
 
 #include<hgl/graph/Render.h>			//SetClearColor,ClearScreen
 #include<hgl/graph/Shader.h>			//GLSL
@@ -24,9 +24,15 @@ using namespace hgl::io;
 using namespace hgl::util;
 using namespace hgl::graph;
 
+const TextureFormat *default_r8     =&TextureFormatInfoList[HGL_SF_R8];
+const TextureFormat *default_rg8    =&TextureFormatInfoList[HGL_SF_RG8];
+const TextureFormat *default_rgb8   =&TextureFormatInfoList[HGL_SF_RGB8];
+const TextureFormat *default_rgba8  =&TextureFormatInfoList[HGL_SF_RGBA8];
+
+const TextureFormat *default_r16    =&TextureFormatInfoList[HGL_SF_R16];
+const TextureFormat *default_r32f   =&TextureFormatInfoList[HGL_SF_R32F];
 //--------------------------------------------------------------------------------------------------
-const	int							tf_count	=sizeof(tf_list)/sizeof(TextureFormat);
-		TextureFormat *	glfmt[4]	={NULL,NULL,NULL,NULL};				//选中格式
+const	TextureFormat *             glfmt[4]	={NULL,NULL,NULL,NULL};				//选中格式
 		bool						gen_mipmaps	=false;								//是否产生mipmaps
 
 		bool						only_view	=false;								//仅显示
@@ -59,45 +65,26 @@ int convert_count=0;		//转换总数
 int bytes_count=0;			//总字节数
 int cbytes_count=0;			//转换后总字节数
 //--------------------------------------------------------------------------------------------------
-TextureFormat *GetFormat(const char *str)
-{
-	TextureFormat *p=tf_list;
-
-	for(int i=0;i<tf_count;i++)
-		if(strcmp(str,p->name)==0)
-			return p;
-		else
-			p++;
-
-	return(NULL);
-}
-//--------------------------------------------------------------------------------------------------
-TextureFormat *CheckOpenGLCoreFormat(const CmdParse &cmd,const os_char *flag)
+const TextureFormat *CheckOpenGLCoreFormat(const CmdParse &cmd,const os_char *flag,const TextureFormat *default_tf)
 {
 	OSString fmtstr;
 
-	if(!cmd.GetString(flag,fmtstr))return(NULL);
+	if(!cmd.GetString(flag,fmtstr))return(nullptr);
 
-	for(int i=0;i<tf_count;i++)
-		if(fmtstr.Comp(tf_list[i].name)==0)
-			return(tf_list+i);
+	const TextureFormat *result=GetTextureFormat(fmtstr.c_str());
 
-	return(NULL);
+    if(result)return(result);
+
+    return default_tf;
 }
 
 void CheckOpenGLCoreFormat(const CmdParse &cmd)
 {
 	//指定格式
-	glfmt[0]=CheckOpenGLCoreFormat(cmd,OS_TEXT("/R:"));
-	glfmt[1]=CheckOpenGLCoreFormat(cmd,OS_TEXT("/RG:"));
-	glfmt[2]=CheckOpenGLCoreFormat(cmd,OS_TEXT("/RGB:"));
-	glfmt[3]=CheckOpenGLCoreFormat(cmd,OS_TEXT("/RGBA:"));
-
-	//默认格式
-	if(!glfmt[0])glfmt[0]=GetFormat("R8");
-	if(!glfmt[1])glfmt[1]=GetFormat("RG8");
-	if(!glfmt[2])glfmt[2]=GetFormat("RGB8");
-	if(!glfmt[3])glfmt[3]=GetFormat("RGBA8");
+	glfmt[0]=CheckOpenGLCoreFormat(cmd,OS_TEXT("/R:"),      &TextureFormatInfoList[HGL_SF_R8]);
+	glfmt[1]=CheckOpenGLCoreFormat(cmd,OS_TEXT("/RG:"),     &TextureFormatInfoList[HGL_SF_RG8]);
+	glfmt[2]=CheckOpenGLCoreFormat(cmd,OS_TEXT("/RGB:"),    &TextureFormatInfoList[HGL_SF_RGB8]);
+	glfmt[3]=CheckOpenGLCoreFormat(cmd,OS_TEXT("/RGBA:"),   &TextureFormatInfoList[HGL_SF_RGBA8]);
 }
 
 bool CheckSameAlpha(uint8 *data,uint count)
@@ -257,7 +244,7 @@ void CheckPalette()
 	}
 }
 
-void SaveTexture2DToFile(const os_char *filename,void *texture_data,uint width,uint height,char *format,uint bytes)
+void SaveTexture2DToFile(const os_char *filename,void *texture_data,uint width,uint height,const char *format,uint bytes)
 {
 	os_char tex_fn[HGL_MAX_PATH];
 	char fmt_str[17];
@@ -310,8 +297,8 @@ void SaveTexture2DToFile(const os_char *filename,void *texture_data,uint width,u
 int ConvertImage(const os_char *filename)
 {
 	uint pixels=0;
-	TextureFormat *curfmt=NULL;
-	TextureFormat *tarfmt=NULL;
+	const TextureFormat *curfmt=nullptr;
+	const TextureFormat *tarfmt=nullptr;
 
 	LOG_INFO(OS_TEXT("File: ")+OSString(filename));
 
@@ -348,19 +335,19 @@ int ConvertImage(const os_char *filename)
 			if(il_format==IL_LUMINANCE		)
 			{
 				if(il_type==IL_UNSIGNED_BYTE)
-					curfmt=GetFormat("R8");
+					curfmt=default_r8;
 				else
 				if(il_type==IL_UNSIGNED_SHORT)
-					curfmt=GetFormat("R16");
+					curfmt=default_r16;
 				else
 				if(il_type==IL_FLOAT)
-					curfmt=GetFormat("R32F");
+					curfmt=default_r32f;
 				else
 				{
 					ilConvertImage(IL_LUMINANCE,IL_UNSIGNED_BYTE);
 					il_type=IL_UNSIGNED_BYTE;
 
-					curfmt=GetFormat("R8");
+					curfmt=default_r8;
 				}
 
 				tarfmt=(glfmt[0]?glfmt[0]:curfmt);
@@ -379,7 +366,7 @@ int ConvertImage(const os_char *filename)
 
 				if(il_format==IL_ALPHA			)
 				{
-					curfmt=GetFormat("R8");
+					curfmt=default_r8;
 					tarfmt=(glfmt[0]?glfmt[0]:curfmt);
 
 					memcpy(image_data,ilGetAlpha(GL_UNSIGNED_BYTE),pixels);
@@ -387,7 +374,7 @@ int ConvertImage(const os_char *filename)
 				else
 				if(il_format==IL_LUMINANCE_ALPHA)
 				{
-					curfmt=GetFormat("RG8");
+					curfmt=default_rg8;
 					tarfmt=(glfmt[1]?glfmt[1]:curfmt);
 
 					uint8 *alpha=ilGetAlpha(GL_UNSIGNED_BYTE);
@@ -401,7 +388,7 @@ int ConvertImage(const os_char *filename)
 				else
 				if(il_format==IL_RGB			)
 				{
-					curfmt=GetFormat("RGB8");
+					curfmt=default_rgb8;
 					tarfmt=(glfmt[2]?glfmt[2]:curfmt);
 
 					memcpy(image_data,ilGetData(),pixels*3);
@@ -409,7 +396,7 @@ int ConvertImage(const os_char *filename)
 				else
 				if(il_format==IL_RGBA			)
 				{
-					curfmt=GetFormat("RGBA8");
+					curfmt=default_rgba8;
 					tarfmt=(glfmt[3]?glfmt[3]:curfmt);
 
 					uint8 *alpha=ilGetAlpha(GL_UNSIGNED_BYTE);
@@ -462,30 +449,30 @@ int ConvertImage(const os_char *filename)
 				cbytes_count+=bytes;
 			}
 		}
-		else	//索引色贴图
-		{
-			il_pal_type		=ilGetInteger(IL_PALETTE_TYPE);		//调色板类型
-			il_pal_color_num=ilGetInteger(IL_PALETTE_NUM_COLS);	//颜色数量
-
-			LOG_INFO(OS_TEXT("\tpal color number = ")+OSString(il_pal_color_num));
-
-			if(il_pal_color_num==16||il_pal_color_num==256)
-			{
-				CheckPalette();
-
-				if(il_pal_type==IL_PAL_RGB24 &&il_pal_color_num== 16)curfmt=GetFormat("16RGB");else
-
-				if(il_pal_type==IL_PAL_RGBA32&&il_pal_color_num== 16)curfmt=GetFormat("16RGBA");else
-				if(il_pal_type==IL_PAL_RGB24 &&il_pal_color_num==256)curfmt=GetFormat("256RGB");else
-				if(il_pal_type==IL_PAL_RGBA32&&il_pal_color_num==256)curfmt=GetFormat("256RGBA");else
-					curfmt=NULL;
-
-				if(curfmt)
-					LOG_INFO(OS_TEXT("\tcolor format = ")+OSString(curfmt->name));
-			}
-			else
-				curfmt=NULL;
-		}
+// 		else	//索引色贴图
+// 		{
+// 			il_pal_type		=ilGetInteger(IL_PALETTE_TYPE);		//调色板类型
+// 			il_pal_color_num=ilGetInteger(IL_PALETTE_NUM_COLS);	//颜色数量
+//
+// 			LOG_INFO(OS_TEXT("\tpal color number = ")+OSString(il_pal_color_num));
+//
+// 			if(il_pal_color_num==16||il_pal_color_num==256)
+// 			{
+// 				CheckPalette();
+//
+// 				if(il_pal_type==IL_PAL_RGB24 &&il_pal_color_num== 16)curfmt=GetFormat("16RGB");else
+//
+// 				if(il_pal_type==IL_PAL_RGBA32&&il_pal_color_num== 16)curfmt=GetFormat("16RGBA");else
+// 				if(il_pal_type==IL_PAL_RGB24 &&il_pal_color_num==256)curfmt=GetFormat("256RGB");else
+// 				if(il_pal_type==IL_PAL_RGBA32&&il_pal_color_num==256)curfmt=GetFormat("256RGBA");else
+// 					curfmt=NULL;
+//
+// 				if(curfmt)
+// 					LOG_INFO(OS_TEXT("\tcolor format = ")+OSString(curfmt->name));
+// 			}
+// 			else
+// 				curfmt=NULL;
+// 		}
 
 		if(!curfmt)
 			LOG_INFO("\tformat error!\n");
@@ -532,13 +519,13 @@ HGL_GRAPHICS_MAIN(sii,app,args)
 
 	if(args.GetCount()<2)
 	{
-		char *hint=new char[32*tf_count];
+		char *hint=new char[32*HGL_SF_END];
 
 		::strcpy(hint,"support format:\n\n");
 
-		for(int i=0;i<tf_count;i++)
+		for(int i=HGL_SF_NONE+1;i<HGL_SF_END;i++)
 		{
-			::strcat(hint,tf_list[i].name);
+			::strcat(hint,TextureFormatInfoList[i].name);
 			::strcat(hint,"\n");
 		}
 

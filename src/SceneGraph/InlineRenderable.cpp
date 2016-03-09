@@ -225,13 +225,12 @@ namespace hgl
 
 		/**
 		* 创建一个立方体的可渲染数据
-        * @param use_normal 是否使用法线数据(默认不使用)
-        * @param use_tangent 是否使用切线数据(默认不使用)
+        * @param use_normal 是否使用法线和切线数据(默认不使用)
         * @param tex_coord_vbt 纹理坐标数据所对应的顶点缓冲区类型(默认不使用)
 		* @param tex_scale 纹理坐标缩放倍率(默认为1)
 		* @return 可渲染数据
 		*/
-		VertexArray *CreateRenderableCube(bool use_normal,bool use_tangent,const VertexBufferType tex_coord_vbt,const float tex_scale)
+		VertexArray *CreateRenderableCube(bool use_normal,const VertexBufferType tex_coord_vbt,const float tex_scale)
 		{								// Points of a cube.
 			/*     4            5 */	const float points[]={	-0.5f, -0.5f, -0.5f,	-0.5f, -0.5f, +0.5f,	+0.5f, -0.5f, +0.5f,	+0.5f, -0.5f, -0.5f,	-0.5f, +0.5f, -0.5f,	-0.5f, +0.5f, +0.5f,
 			/* 	   *------------* */							+0.5f, +0.5f, +0.5f,	+0.5f, +0.5f, -0.5f,	-0.5f, -0.5f, -0.5f,	-0.5f, +0.5f, -0.5f,	+0.5f, +0.5f, -0.5f,	+0.5f, -0.5f, -0.5f,
@@ -257,8 +256,12 @@ namespace hgl
 
 			obj->SetVertex(new VB3f(24,points));
 
-            if(use_normal)              obj->SetNormal(new VB3f(24,normals));
-            if(use_tangent)             obj->SetTangents(new VB3f(24,tangents));
+            if(use_normal)
+			{
+				obj->SetNormal(new VB3f(24,normals));
+				obj->SetTangents(new VB3f(24,tangents));
+			}
+
             if(tex_coord_vbt!=vbtNone)
 			{
 				VB2f *vb_tex=new VB2f(24,tex_coords);
@@ -280,6 +283,105 @@ namespace hgl
             obj->SetIndex(new VB1u8(6*2*3,indices));
 
 			return(obj);
+		}
+
+		template<typename T> VertexBuffer1<T> *CreateSphereIndices(const uint numberSlices)
+		{
+			VertexBuffer1<T> *vb=new VertexBuffer1<T>(numberSlices * numberSlices * 3);
+
+			vb->Begin();
+
+			for (int i = 0; i < numberSlices/2; i++)
+			{
+				for (int j = 0; j < numberSlices; j++)
+				{
+					vb->Write(i * (numberSlices + 1) + j);
+					vb->Write((i + 1) * (numberSlices + 1) + j);
+					vb->Write((i + 1) * (numberSlices + 1) + (j + 1));
+
+					vb->Write(i * (numberSlices + 1) + j);
+					vb->Write((i + 1) * (numberSlices + 1) + (j + 1));
+					vb->Write(i * (numberSlices + 1) + (j + 1));
+				}
+			}
+
+			vb->End();
+			return vb;
+		}
+
+		/**
+		* 创建一个球体的可渲染数据
+        * @param numberSlices 切片数
+		* @return 可渲染数据
+		*/
+		VertexArray *CreateRenderableSphere(const uint numberSlices)
+		{
+			VertexArray *obj=new VertexArray(HGL_PRIM_TRIANGLES);
+
+			uint numberParallels = numberSlices / 2;
+			uint numberVertices = (numberParallels + 1) * (numberSlices + 1);
+			uint numberIndices = numberParallels * numberSlices * 6;
+
+			float angleStep = (2.0f * HGL_PI) / ((float) numberSlices);
+
+			uint indexIndices;
+
+			// used later to help us calculating tangents vectors
+			float helpVector[3] = { 1.0f, 0.0f, 0.0f };
+			float helpQuaternion[4];
+			float helpMatrix[16];
+
+			VB3f *vertex;
+			VB3f *normal;
+
+			vertex=new VB3f(numberVertices);
+			normal=new VB3f(numberVertices);
+
+			vertex->Begin();
+			normal->Begin();
+
+			for (int i = 0; i < numberParallels + 1; i++)
+			{
+				for (int j = 0; j < numberSlices + 1; j++)
+				{
+					uint vertexIndex = (i * (numberSlices + 1) + j) * 4;
+					uint normalIndex = (i * (numberSlices + 1) + j) * 3;
+					uint tangentIndex = (i * (numberSlices + 1) + j) * 3;
+					uint texCoordsIndex = (i * (numberSlices + 1) + j) * 2;
+
+					float x=sinf(angleStep * (float) i) * sinf(angleStep * (float) j);
+					float y=cosf(angleStep * (float) i);
+					float z=sinf(angleStep * (float) i) * cosf(angleStep * (float) j);
+
+					vertex->Write(x,y,z);
+					normal->Write(x,y,z);
+
+// 					shape->texCoords[texCoordsIndex + 0] = (float) j / (float) numberSlices;
+// 					shape->texCoords[texCoordsIndex + 1] = 1.0f - (float) i / (float) numberParallels;
+//
+// 					// use quaternion to get the tangent vector
+// 					glusQuaternionRotateRyf(helpQuaternion, 360.0f * shape->texCoords[texCoordsIndex + 0]);
+// 					glusQuaternionGetMatrix4x4f(helpMatrix, helpQuaternion);
+//
+// 					glusMatrix4x4MultiplyVector3f(&shape->tangents[tangentIndex], helpMatrix, helpVector);
+				}
+			}
+
+			normal->End();
+			vertex->End();
+
+			obj->SetVertex(vertex);
+			obj->SetNormal(normal);
+
+			if(numberVertices<=0xff)
+				obj->SetIndex(CreateSphereIndices<uint8>(numberSlices));
+			else
+			if(numberVertices<=0xffff)
+				obj->SetIndex(CreateSphereIndices<uint16>(numberSlices));
+			else
+				obj->SetIndex(CreateSphereIndices<uint32>(numberSlices));
+
+			return obj;
 		}
 //
 // 		/**
@@ -491,7 +593,7 @@ namespace hgl
 		{
 			CreateInlineTexture();
 
-// 			SolidCube=CreateRenderableCube(false,false,vbtNone);
+// 			SolidCube=CreateRenderableCube(false,vbtNone);
 // 			WireCube=CreateRenderableWireCube();
 //
 // 			SolidRect=CreateRenderableRect();

@@ -69,7 +69,7 @@ void TextExtract(TextExtractOption *teo,hgl::FileInfo &fi)
 
 	os_char new_name[HGL_MAX_PATH];
 
-	replace_extname(fi.name,new_name,teo->save_ext.c_str());
+	replace_extname(fi.name,new_name,HGL_MAX_PATH,teo->save_ext.c_str());
 
 	OSString target_filename=teo->save_path+new_name;
 
