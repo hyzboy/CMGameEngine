@@ -72,15 +72,18 @@ SET(ut_files
 	Parse/CmdParse.cpp
 )
 
-INCLUDE_DIRECTORIES(XML/Expat)
+SET(XML_PARSE XML/XMLParse.cpp)
 
-SET(XML_PARSE
-    XML/Expat/xmlparse.c
-    XML/Expat/xmlrole.c
-    XML/Expat/xmltok.c 
-    XML/Expat/xmltok_impl.c 
-    XML/Expat/xmltok_ns.c
-	XML/XMLParse.cpp)
+IF(WIN32)
+    INCLUDE_DIRECTORIES(XML/Expat)
+
+    SET(XML_PARSE ${XML_PARSE}
+        XML/Expat/xmlparse.c
+        XML/Expat/xmlrole.c
+        XML/Expat/xmltok.c
+        XML/Expat/xmltok_impl.c
+        XML/Expat/xmltok_ns.c)
+ENDIF(WIN32)
 
 SET(CDB_FILES
 	DB/CDBField.cpp

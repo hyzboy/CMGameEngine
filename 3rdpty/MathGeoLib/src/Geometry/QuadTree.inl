@@ -769,11 +769,11 @@ void QuadTree<T>::DebugSanityCheckNode(Node *n)
 	assert(aabb.minPoint.x <= aabb.maxPoint.x);
 	assert(aabb.minPoint.y <= aabb.maxPoint.y);
 
-	LOGI("Node AABB: %s.", aabb.ToString().c_str());
+	//LOGI("Node AABB: %s.", aabb.ToString().c_str());
 	// Each object in this node must be contained in this node.
 	for(size_t i = 0; i < n->objects.size(); ++i)
 	{
-		LOGI("Object AABB: %s.", GetAABB2D(n->objects[i]).ToString().c_str());
+		//LOGI("Object AABB: %s.", GetAABB2D(n->objects[i]).ToString().c_str());
 
 		assert(aabb.Contains(GetAABB2D(n->objects[i])));
 	}
