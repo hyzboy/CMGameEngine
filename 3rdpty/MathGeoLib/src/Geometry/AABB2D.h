@@ -125,14 +125,14 @@ struct AABB2D
 		return a;
 	}
 
-#ifdef MATH_ENABLE_STL_SUPPORT
-	std::string ToString() const
-	{
-		char str[256];
-		sprintf(str, "AABB2D(Min:(%.2f, %.2f) Max:(%.2f, %.2f))", minPoint.x, minPoint.y, maxPoint.x, maxPoint.y);
-		return str;
-	}
-#endif
+//#ifdef MATH_ENABLE_STL_SUPPORT
+//	std::string ToString() const
+//	{
+//		char str[256];
+//		sprintf(str, "AABB2D(Min:(%.2f, %.2f) Max:(%.2f, %.2f))", minPoint.x, minPoint.y, maxPoint.x, maxPoint.y);
+//		return str;
+//	}
+//#endif
 };
 
 inline AABB2D GetAABB2D(const float3 &pt) { return AABB2D(pt.xy(), pt.xy()); }

@@ -40,6 +40,7 @@ namespace hgl
 			if(buffer_id>0)return(false);
 
 			glCreateRenderbuffers(1,&buffer_id);
+			return(true);
 		}
 
 		bool RenderBuffer::Close()
@@ -48,6 +49,7 @@ namespace hgl
 
 			glDeleteRenderbuffers(1,&buffer_id);
 			buffer_id=0;
+			return(true);
 		}
 	}//namespace graph
 }//namespace hgl

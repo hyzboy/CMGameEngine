@@ -246,7 +246,7 @@ namespace hgl
 			init_depth=id;
 
 			draw_buffers=new GLenum[depth-1];
-			for(int i=0;i<depth;i++)
+			for(uint i=0;i<depth;i++)
 			{
 				draw_buffers[i]=GL_COLOR_ATTACHMENT0+i;
 

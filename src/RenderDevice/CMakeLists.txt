@@ -1,5 +1,11 @@
-﻿set(CM_OPENGL_CORE_45_SOURCE        OpenGLCore45/Core45Texture1D.cpp
-									OpenGLCore45/Core45Texture1DArray.cpp
+﻿set(CM_OPENGL_SOURCE                glBuffer.cpp
+                                    glCaps.cpp
+                                    glFace.cpp
+                                    glTexture.cpp
+                                    glViewport.cpp)
+
+set(CM_OPENGL_CORE_45_SOURCE        OpenGLCore45/Core45Texture1D.cpp
+						OpenGLCore45/Core45Texture1DArray.cpp
                                     OpenGLCore45/Core45Texture2D.cpp
                                     OpenGLCore45/Core45Texture2DArray.cpp
                                     OpenGLCore45/Core45Texture3D.cpp
@@ -19,18 +25,7 @@ set(CM_GLSL_SOURCE                  GLSL/Shader.cpp
                                     GLSL/ShaderStorage.cpp
                                     GLSL/UBO.cpp)
 
-
-set(CM_RENDER_DEVICE_SOURCE         ${CM_OPENGL_CORE_45_SOURCE}
-									${CM_GLSL_SOURCE}
-                                    ${CM_GLSL_SHADER_MAKER_SOURCE}
-                                    ${CM_RENDER_DEVICE_OPENGL_CORE_SOURCE}
-                                    ${GLEW_SOURCE}
-                        # 			Debugger_ATI_GPU_Perf.cpp
-                                    glBuffer.cpp
-                                    glCaps.cpp
-                                    glFace.cpp
-                                    glTexture.cpp
-                                    glViewport.cpp
+set(CM_RENDER_SOURCE    # 			Debugger_ATI_GPU_Perf.cpp
                                     Render.cpp
                                     RenderBuffer.cpp
                                     TextureChannels.cpp
@@ -38,8 +33,39 @@ set(CM_RENDER_DEVICE_SOURCE         ${CM_OPENGL_CORE_45_SOURCE}
                         # 			ScreenShot.cpp
                                     )
 
+set(CM_RENDER_DEVICE_SOURCE         ${CM_OPENGL_SOURCE}
+                                    ${CM_OPENGL_CORE_45_SOURCE}
+                                    ${CM_GLSL_SHADER_MAKER_SOURCE}
+                                    ${CM_GLSL_SOURCE}
+                                    ${CM_RENDER_SOURCE}
+                                    ${GLEW_SOURCE})
+
+SOURCE_GROUP("OpenGL"                     FILES ${CM_OPENGL_SOURCE})
+SOURCE_GROUP("OpenGL\\Core45"             FILES ${CM_OPENGL_CORE_45_SOURCE})
+SOURCE_GROUP("OpenGL\\GLSL"               FILES ${CM_GLSL_SOURCE})
+SOURCE_GROUP("OpenGL\\GLSL\\ShaderMaker"  FILES ${CM_GLSL_SHADER_MAKER_SOURCE})
+
 IF(WIN32)
-	add_library(CM.RenderDevice STATIC ${CM_RENDER_DEVICE_SOURCE})
+
+      add_definitions("-D_GLFW_WIN32")
+      add_definitions("-D_GLFW_WGL")
+
+      set(GLFW_SOURCE		GLFW/context.c
+					GLFW/init.c
+					GLFW/input.c
+					GLFW/monitor.c
+					GLFW/wgl_context.c
+					GLFW/win32_init.c
+					GLFW/win32_monitor.c
+					GLFW/win32_time.c
+					GLFW/win32_tls.c
+					GLFW/win32_window.c
+					GLFW/window.c
+					GLFW/winmm_joystick.c)
+
+      SOURCE_GROUP("OpenGL\\GLFW"   FILES ${GLFW_SOURCE})
+
+	add_library(CM.RenderDevice STATIC ${CM_RENDER_DEVICE_SOURCE} ${GLFW_SOURCE})
 ELSE()
 	add_library(CM.RenderDevice SHARED ${CM_RENDER_DEVICE_SOURCE})
 ENDIF()

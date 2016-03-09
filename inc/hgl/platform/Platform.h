@@ -415,8 +415,10 @@ namespace hgl
 	using uint			=unsigned int;   	///< 无符号整型
 	using ulong			=unsigned long;		///< 无符号长整型
 
+#if HGL_COMPILER != HGL_COMPILER_Microsoft
 	using int128		=  signed __int128;	///<有符号128位整型
 	using uint128		=unsigned __int128;	///<无符号128位整型
+#endif//HGL_COMPILER == HGL_COMPILER_Microsoft
 
 	using void_pointer	=void *;
 }//namespace hgl
