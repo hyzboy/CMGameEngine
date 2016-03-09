@@ -7,4 +7,7 @@ add_subdirectory(network)
 add_subdirectory(datatype)
 add_subdirectory(database)
 add_subdirectory(time)
+
+IF(UNIX)
 add_subdirectory(db/redis)
+ENDIF()
