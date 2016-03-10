@@ -114,7 +114,7 @@ namespace hgl
 			#define HGL_BOM_UTF32BE	0x0000feff
 
 			#define LittleToCurrentEndian	EndianSwap
-			#define BigToCurrentEndian		ToBigEndiankate
+			#define BigToCurrentEndian		ToBigEndian
 
 			template<typename T> T ToBigEndian(T value){return value;}
 
