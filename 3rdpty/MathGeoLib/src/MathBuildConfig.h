@@ -135,15 +135,15 @@
 
 // Uncomment to specify the SIMD instruction set level in use.
 #ifndef MATH_AVX
-    #define MATH_AVX
+//    #define MATH_AVX
 #endif//MATH_AVX
 
 #ifndef MATH_SSE41
-    #define MATH_SSE41
+//    #define MATH_SSE41
 #endif//MATH_SSE41
 
 #ifndef MATH_SSE3
-    #define MATH_SSE3
+//    #define MATH_SSE3
 #endif//MATH_SSE3
 
 #ifndef MATH_SSE2
