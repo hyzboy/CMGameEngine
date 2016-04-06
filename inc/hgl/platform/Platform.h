@@ -26,7 +26,7 @@
 #define HGL_OS_PSP					HGL_MERGE32('P','S','P',' ')
 #define HGL_OS_PS3					HGL_MERGE32('P','S','3',' ')
 #define HGL_OS_PS4					HGL_MERGE32('P','S','4',' ')
-#define HGL_OS_PSV					HGL_MERGE32('P','S','V',' ')
+#define HGL_OS_PSP2					HGL_MERGE32('P','S','P','2')
 #define HGL_OS_PS4					HGL_MERGE32('P','S','4',' ')
 #define HGL_OS_AIX					HGL_MERGE32('A','I','X',' ')
 #define HGL_OS_HPUX					HGL_MERGE32('H','P','U','X')
@@ -193,10 +193,23 @@
 	#define HGL_OS			HGL_OS_PS2
 #elif defined(__PSP__)||defined(__psp__)||defined(_PSP)
 	#define HGL_OS			HGL_OS_PSP
-#elif defined(__PS3__)||defined(__ps3__)||defined(_PS3)
+#elif defined(SN_TARGET_PS3)||defined(SN_TARGET_PS3_SPU)||defined(__PS3__)||defined(__ps3__)||defined(_PS3)
 	#define HGL_OS			HGL_OS_PS3
-#elif defined(__PSV__)||defined(__psv__)||defined(_PSV)||defined(__PSVita__)||defined(__PSVita)
-	#define HGL_OS			HGL_OS_PSV
+#elif defined(SN_TARGET_PSP2)||defined(__PSV__)||defined(__psv__)||defined(_PSV)||defined(__PSVita__)||defined(__PSVita)
+	#define HGL_OS			HGL_OS_PSP2
+#elif defined(SN_TARGET_ORBIS)
+	#define HGL_OS			HGL_OS_PS4
+#elif defined(__APPLE__)
+	#include "TargetConditionals.h"
+	#if TARGET_OS_IPHONE
+//		#if TARGET_IPHONE_SIMULATOR
+//			#define HGL_OS	HGL_OS_iOS_Simulator
+//		#else
+			#define HGL_OS	HGL_OS_iOS
+//		#endif//TARGET_IPHONE_SIMULATOR
+	#elif TARGET_OS_MAC
+		#define HGL_OS		HGL_OS_MacOSX
+	#endif//
 #elif defined(_AIX)||defined(__AIX)||defined(__AIX__)||defined(__aix)||defined(__aix__)
 	#define HGL_OS			HGL_OS_AIX
 #elif defined(__hpux__)||defined(__hpux)
@@ -327,11 +340,23 @@
 
 	#if HGL_COMPILER == HGL_COMPILER_Intel
 		#include<hgl/platform/compiler/Intel.h>
-	#elif HGL_COMPILER == HGL_COMPILER_IBM
-		#include<hgl/platform/compiler/IBM.h>
+//	#elif HGL_COMPILER == HGL_COMPILER_IBM
+//		#include<hgl/platform/compiler/IBM.h>
 	#elif HGL_COMPILER == HGL_COMPILER_LLVM
 		#include<hgl/platform/compiler/LLVM.h>
     #elif HGL_COMPILER == HGL_COMPILER_GNU
+		#include<hgl/platform/compiler/GNU.h>
+	#else
+		#error Unrecognized compiler
+	#endif
+
+#elif HGL_OS == HGL_OS_iOS
+
+	#include<hgl/platform/os/MacOS.h>
+
+	#if HGL_COMPILER == HGL_COMPILER_LLVM
+		#include<hgl/platform/compiler/LLVM.h>
+	#elif HGL_COMPILER == HGL_COMPILER_GNU
 		#include<hgl/platform/compiler/GNU.h>
 	#else
 		#error Unrecognized compiler
@@ -381,9 +406,9 @@
 		#error Unrecognized compiler
 	#endif
 
-#elif HGL_OS == HGL_OS_PSV
+#elif HGL_OS == HGL_OS_PSP2
 
-	#include<hgl/platform/os/psv.h>
+	#include<hgl/platform/os/psp2.h>
 
 	#if HGL_COMPILER == HGL_COMPILER_GNU
 		#include<hgl/platform/compiler/GNU.h>
