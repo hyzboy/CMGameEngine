@@ -154,6 +154,11 @@ namespace hgl
 		cePeachpuff,			///<桃色
 		cePeru,					///<秘鲁色
 		cePink,					///<粉红色
+
+		//SONY PlayStation 商标用配色
+		cePlayStationBlue,
+		cePlayStationLightBlue,
+
 		cePlum,					///<洋李色
 		cePowderBlue,			///<粉蓝色
 		cePurple,				///<紫色

@@ -150,6 +150,10 @@ namespace hgl
 		DEF_COLOR(cePeachpuff,				255,218,185,"桃色")
 		DEF_COLOR(cePeru,					205,133, 63,"秘鲁色")
 		DEF_COLOR(cePink,					255,192,203,"粉红色")
+
+		DEF_COLOR(cePlayStationBlue,		  0, 55,145,"PlayStation蓝")
+		DEF_COLOR(cePlayStationLightBlue,	  0,120,200,"PlayStation亮蓝")
+
 		DEF_COLOR(cePlum,					221,160,221,"洋李色")
 		DEF_COLOR(cePowderBlue,				176,224,230,"粉蓝色")
 		DEF_COLOR(cePurple,					128,  0,128,"紫色")
