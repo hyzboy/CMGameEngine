@@ -29,15 +29,6 @@ namespace hgl
 			{
 				return post(os,url.c_str(),post_data.c_str(),post_data.Length());
 			}
-
-			/**
-			 * 通过http/https get下载一个文件
-			 * @param filename 要保存的文件名称
-			 * @param url 要下载的网址
-			 * @return >=0 文件长度
-			 * @return <0 失败
-			 */
-			int get_to_file(const OSString &filename,const char *url);
 		}//namespace http
 	}//namespace network
 }//namespace hgl
