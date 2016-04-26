@@ -77,13 +77,20 @@ namespace hgl
 
 #define XML_END_PARSE()				LOG_ERROR(UTF8String(__FILE__)+U8_TEXT(":")+UTF8String(__LINE__)+U8_TEXT(" can't parse atts \"")+UTF8String(flag)+U8_TEXT("\" , info \"")+UTF8String(info)+U8_TEXT("\"."));	\
 								}
+#define XML_END_PARSE_SKIP()    ;}
 
 #define xml_parse_skip(name)		if(hgl::strcmp(flag,#name)==0)continue;else
-#define xml_parse_string(name)		if(hgl::strcmp(flag,#name)==0)name=to_u16(info);else
+#define xml_parse_string_u16(name)	if(hgl::strcmp(flag,#name)==0)name=to_u16(info);else
 #define xml_parse_string_u8(name)	if(hgl::strcmp(flag,#name)==0)name=info;else
 #define xml_parse_int(name)			if(hgl::strcmp(flag,#name)==0)hgl::stoi(info,name);else
 #define xml_parse_uint(name)		if(hgl::strcmp(flag,#name)==0)hgl::stou(info,name);else
 #define xml_parse_float(name)		if(hgl::strcmp(flag,#name)==0)hgl::stof(info,name);else
 #define xml_parse_bool(name)		if(hgl::strcmp(flag,#name)==0)hgl::stob(info,name);else
+
+#define xml_parse_to_string_u8(name,value)   if(hgl::strcmp(flag,name)==0)value=info;else
+#define xml_parse_to_int(name,value)         if(hgl::strcmp(flag,name)==0)hgl::stoi(info,value);else
+#define xml_parse_to_uint(name,value)        if(hgl::strcmp(flag,name)==0)hgl::stou(info,value);else
+#define xml_parse_to_float(name,value)       if(hgl::strcmp(flag,name)==0)hgl::stof(info,value);else
+#define xml_parse_to_bool(name,value)        if(hgl::strcmp(flag,name)==0)hgl::stob(info,value);else
 }//namespace hgl
 #endif//HGL_XML_PARSE_INCLUDE
