@@ -317,7 +317,7 @@ namespace hgl
 	* @return 成功写入的字节数
 	* @return -1 失败
 	*/
-	int64 SaveMemoryToFile(const OSString &filename,void *buf,int64 size)
+	int64 SaveMemoryToFile(const OSString &filename,const void *buf,int64 size)
 	{
 		io::FileOutputStream fs;
 
