@@ -52,16 +52,7 @@ namespace hgl
 		os_char name[HGL_MAX_PATH];				///<文件名(不包含路径)
 		os_char fullname[HGL_MAX_PATH];			///<完整名称(包含路径)
 
-		union
-		{
-			uint64 size;						///<文件长度
-
-			struct
-			{
-				uint32 size_low;				///<文件长度低32位
-				uint32 size_high;				///<文件长度高32位
-			};
-		};
+		uint64 size;						    ///<文件长度
 
 		union
 		{

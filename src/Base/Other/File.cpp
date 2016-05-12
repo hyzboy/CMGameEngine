@@ -22,9 +22,9 @@ namespace hgl
 
 	/**
 	 * 组合路径名与文件名
+     * @param fullname 完整路径文件名
 	 * @param pathname 路径名
 	 * @param filename 文件名
-	 * @return 完整路径文件名
 	 */
 	void MergeFilename(OSString &fullname,const OSString &pathname,const OSString &filename)
 	{
@@ -504,7 +504,7 @@ namespace hgl
 
 	/**
 	* 删除一个子目录
-	* @param dirname 目录名称
+	* @param name 目录名称
 	* @return 目录是否删除成功
 	*/
 	bool DeletePath(const OSString &name)
