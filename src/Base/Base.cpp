@@ -55,15 +55,6 @@ namespace hgl
 	#endif//HGL_BIG_ENDIAN
 			LOG_ERROR(OS_TEXT("cpu endian error,this library is bad.library macro Cpu=") HGL_CPU_NAME OS_TEXT(", Endian is ") HGL_CPU_ENDIAN);
 
-//         #if HGL_COMPILER == HGL_COMPILER_GNU
-//         if(sizeof(u16char)!=2
-//          ||L'中'!=0x4E2D)
-//         {
-// 			LOG_ERROR(u"please use \"-fwide-exec-charset=UTF-16LE -fshort-wchar\"");
-//             return(false);
-//         }
-//         #endif//HGL_COMPILER == HGL_COMPILER_GNU
-
 		if(sii->info.ProjectCode.Length()<=0)
 		{
 			LOG_PROBLEM(OS_TEXT("please set ProjectCode,use in Registry,Filename,Network Name,Code,....."));

@@ -20,11 +20,11 @@ namespace hgl
 	bool FileComp(const OSString &,const OSString &);                                          		///<文件比较
 
 	bool FileCanRead(const OSString &);																///<检测文件是否可读
-	bool FileCanWrite(const OSString &);																///<检测文件是否可写
+	bool FileCanWrite(const OSString &);															///<检测文件是否可写
 	bool FileCanExec(const OSString &);																///<检测文件是否可执行
 
 	int64 LoadFileToMemory(const OSString &,void **);                                            	///<加载一个文件到内存
-	int64 SaveMemoryToFile(const OSString &,void *,int64);                                       	///<保存一块内存成文件
+	int64 SaveMemoryToFile(const OSString &,const void *,int64);                                    ///<保存一块内存成文件
 
 	void *LoadFileToMemory(const OSString &,int64,void *buf,int64);									///<加载一个文件的一部分到内存
 	bool SaveMemoryToFile(const OSString &,int64,const void *,int64);							    ///<保存一块内存到一个文件
@@ -52,16 +52,7 @@ namespace hgl
 		os_char name[HGL_MAX_PATH];				///<文件名(不包含路径)
 		os_char fullname[HGL_MAX_PATH];			///<完整名称(包含路径)
 
-		union
-		{
-			uint64 size;						///<文件长度
-
-			struct
-			{
-				uint32 size_low;				///<文件长度低32位
-				uint32 size_high;				///<文件长度高32位
-			};
-		};
+		uint64 size;						    ///<文件长度
 
 		union
 		{
