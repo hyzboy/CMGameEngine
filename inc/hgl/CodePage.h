@@ -44,9 +44,6 @@ namespace hgl
 		ccpEnd                          					///<结束定义，无意义
 	};//enum CharCodePage
 
-    #define CharSetNameLength   32
-    using CharSetName=char[CharSetNameLength];
-
 	struct CodePageAndCharSet
 	{
 		CharCodePage codepage;
@@ -189,6 +186,8 @@ namespace hgl
 	 */
 	int ansi_to_utf16(const CharSet &charset,u16char **ws,const char *as,const int as_size=-1);
 
+    int ansi_to_utf8(const CharSet &charset,char **u8str,const char *as,const int as_size=-1);
+
 	/**
 	 * 转换u16char *字符串到指定字符集的ansi字符串
 	 * @param charset	字符集
@@ -198,6 +197,8 @@ namespace hgl
 	 * @return 转换成功后的字符串字符数
 	 */
 	int utf16_to_ansi(const CharSet &charset,char **as,const u16char *ws,const int ws_size=-1);
+
+    int utf8_to_ansi(const CharSet &charset,char **as,const char *u8str,const int u8str_size=-1);
 
 	int				u16_to_u8(char *,int,const u16char *,const int=-1);							///<转换u16char *到utf8格式的char *
 	int				u8_to_u16(u16char *,int,const char *,const int=-1);							///<转换utf8格式的char *到u16char *

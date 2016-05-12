@@ -53,8 +53,8 @@ namespace hgl
 namespace hgl
 {
 	template<typename T,typename S>
-	int CharSetConv(T **out_buf,const char *out_charset,
-					const S *in_str,int in_str_size,const char *in_charset)
+	int CharSetConv(T **out_buf,const CharSetName &out_charset,
+					const S *in_str,int in_str_size,const CharSetName &in_charset)
 	{
 		if(!out_buf||!out_charset||!*out_charset
 		 ||!in_str||!*in_str||in_str_size==0||!in_charset||!*in_charset)
@@ -148,6 +148,16 @@ namespace hgl
 	{
 		return CharSetConv<char,u16char>(as,cs.charset,ws,ws_size,endian::GetCharSet<u16char>());
 	}
+
+	int ansi_to_utf8(const CharSet &cs,char **u8str,const char *as,const int as_size)
+    {
+        return CharSetConv<char,char>(u8str,utf8_charset,as,as_size,cs.charset);
+    }
+
+    int utf8_to_ansi(const CharSet &cs,char **as,const char *u8str,const int u8str_size)
+    {
+        return CharSetConv<char,char>(as,cs.charset,u8str,u8str_size,utf8_charset);
+    }
 }//namespace hgl
 #endif//HGL_OS == HGL_OS_Windows
 

@@ -42,14 +42,23 @@ namespace hgl
 			{4,{0x00,0x00,0xFE,0xFF}}
 		};
 
-		template<int,char> const char *GetCurCharSet();											///<取得当前程序编码字符集
+        #define CharSetNameLength   32
+        using CharSetName=char[CharSetNameLength];
 
-		template<> inline const char *GetCurCharSet<2,HGL_LITTLE_ENDIAN	>(){return "utf-16le";}
-		template<> inline const char *GetCurCharSet<2,HGL_BIG_ENDIAN	>(){return "utf-16be";}
-		template<> inline const char *GetCurCharSet<4,HGL_LITTLE_ENDIAN	>(){return "utf-32le";}
-		template<> inline const char *GetCurCharSet<4,HGL_BIG_ENDIAN	>(){return "utf-32be";}
+		template<int,char> const CharSetName &GetCurCharSet();											///<取得当前程序编码字符集
 
-		template<typename T> inline const char *GetCharSet()
+        const CharSetName utf8_charset="utf8";
+        const CharSetName utf16le_charset="utf-16le";
+        const CharSetName utf16be_charset="utf-16be";
+        const CharSetName utf32le_charset="utf-32le";
+        const CharSetName utf32be_charset="utf-32be";
+
+		template<> inline const CharSetName &GetCurCharSet<2,HGL_LITTLE_ENDIAN	>(){return utf16le_charset;}
+		template<> inline const CharSetName &GetCurCharSet<2,HGL_BIG_ENDIAN	>(){return utf16be_charset;}
+		template<> inline const CharSetName &GetCurCharSet<4,HGL_LITTLE_ENDIAN	>(){return utf32le_charset;}
+		template<> inline const CharSetName &GetCurCharSet<4,HGL_BIG_ENDIAN	>(){return utf32be_charset;}
+
+		template<typename T> inline const CharSetName &GetCharSet()
 		{
 			return GetCurCharSet<sizeof(T),HGL_ENDIAN>();
 		}
