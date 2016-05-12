@@ -12,3 +12,7 @@ ENDIF()
 #IF(BUILD_OPENGL_LIB)
 #    add_subdirectory(TexConv)
 #ENDIF()
+
+IF(BUILD_OpenCart)
+    add_subdirectory(OpenCart)
+ENDIF()

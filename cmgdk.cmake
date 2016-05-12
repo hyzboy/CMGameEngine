@@ -11,6 +11,8 @@ OPTION(BUILD_EXAMPLES_PROJECT	"Build Examples Project"					FALSE	)
 OPTION(BUILD_TEST_PROJECT		"Build Test Project"						FALSE	)
 OPTION(BUILD_GUI_TOOLS			"Build GUI Tools"							FALSE	)
 
+OPTION(BUILD_OpenCart           "Build OpenCart Tools"                      FALSE   )
+
 OPTION(LOG_INFO					"Output Log info"							TRUE	)
 OPTION(LOG_INFO_THREAD			"Output Log info include ThreadPID"			TRUE	)
 OPTION(LOG_INFO_TIME			"Output Log info include time"				TRUE	)
