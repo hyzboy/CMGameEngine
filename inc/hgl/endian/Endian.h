@@ -11,7 +11,7 @@ namespace hgl
 		 */
 		enum ByteOrderMask
 		{
-			bomAnsi=0,
+			bomNone=0,
 			bomUTF8,
 			bomUTF16LE,
 			bomUTF16BE,
@@ -53,10 +53,10 @@ namespace hgl
         const CharSetName utf32le_charset="utf-32le";
         const CharSetName utf32be_charset="utf-32be";
 
-		template<> inline const CharSetName &GetCurCharSet<2,HGL_LITTLE_ENDIAN	>(){return utf16le_charset;}
-		template<> inline const CharSetName &GetCurCharSet<2,HGL_BIG_ENDIAN	>(){return utf16be_charset;}
-		template<> inline const CharSetName &GetCurCharSet<4,HGL_LITTLE_ENDIAN	>(){return utf32le_charset;}
-		template<> inline const CharSetName &GetCurCharSet<4,HGL_BIG_ENDIAN	>(){return utf32be_charset;}
+		template<> inline const CharSetName &GetCurCharSet<2,HGL_LITTLE_ENDIAN    >(){return utf16le_charset;}
+		template<> inline const CharSetName &GetCurCharSet<2,HGL_BIG_ENDIAN	      >(){return utf16be_charset;}
+		template<> inline const CharSetName &GetCurCharSet<4,HGL_LITTLE_ENDIAN    >(){return utf32le_charset;}
+		template<> inline const CharSetName &GetCurCharSet<4,HGL_BIG_ENDIAN       >(){return utf32be_charset;}
 
 		template<typename T> inline const CharSetName &GetCharSet()
 		{
