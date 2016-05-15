@@ -219,10 +219,10 @@ namespace hgl
             bool compress;              //是否压缩格式
             uint index;                 //索引色数量
 
-            uint internalFormat;        //显存格式
+            uint video_format;          //显存格式
 
-            uint format;                //格式
-            uint type;                  //类型
+            uint color_format;          //色彩格式(指R/RG/RGB/RGBA/DEPTH这些)
+            uint data_type;             //数据类型(指BYTE，SHORT，FLOAT这些)
 
             uint source_bytes;          //原始格式字节数
             uint video_bytes;           //显存格式字节数

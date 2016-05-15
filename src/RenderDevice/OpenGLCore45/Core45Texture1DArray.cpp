@@ -1,4 +1,4 @@
-﻿#include<glew/include/GL/glew.h>
+#include<glew/include/GL/glew.h>
 #include<hgl/graph/Texture1DArray.h>
 #include<hgl/LogInfo.h>
 
@@ -41,7 +41,7 @@ namespace hgl
             const TextureFormat *sfmt=TextureFormatInfoList+sf;       //原始数据格式
 
             if(vf==0)
-                vf=TextureFormatInfoList[sf].internalFormat;
+                vf=TextureFormatInfoList[sf].video_format;
 
             const bool gen_mip=ltp&ltGenMipmaps;            //取得是否创建mipmaps
 
@@ -55,11 +55,11 @@ namespace hgl
                 glTextureStorage2D(texture_id, 1, vf, l, c);
 
 				if(data)
-                glTextureSubImage2D(texture_id, 0, 0, 0, l, c, sfmt->format, sfmt->type, data);
+                glTextureSubImage2D(texture_id, 0, 0, 0, l, c, sfmt->color_format, sfmt->data_type, data);
             }
 
             video_format=vf;
-            color_format=sfmt->format;
+            color_format=sfmt->color_format;
 
             if(gen_mip)
             {
@@ -112,7 +112,7 @@ namespace hgl
                 bytes=length*count*tsf->video_bytes;
 
                 if(data_pointer)
-                    glGetTextureImage(texture_id,level,tsf->format,tsf->type,bytes,data_pointer);
+                    glGetTextureImage(texture_id,level,tsf->color_format,tsf->data_type,bytes,data_pointer);
             }
 
             return(bytes);
@@ -130,9 +130,9 @@ namespace hgl
             const TextureFormat *sfmt=TextureFormatInfoList+sf;       //原始数据格式
 
             if(sfmt->compress)
-                glCompressedTextureSubImage2D(texture_id,0,s,t,c,h,sfmt->internalFormat,bytes,data);
+                glCompressedTextureSubImage2D(texture_id,0,s,t,c,h,sfmt->video_format,bytes,data);
             else
-                glTextureSubImage2D(texture_id,0,s,t,c,h,sfmt->format,sfmt->type,data);
+                glTextureSubImage2D(texture_id,0,s,t,c,h,sfmt->color_format,sfmt->data_type,data);
 
             return(true);
         }
