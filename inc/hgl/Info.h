@@ -8,9 +8,6 @@ namespace hgl                           				///古月游戏开发库所使用的
 	{
 		void InitString();								//初始化标志字符串
 		void SetString(int,const OSString &);			//设置标志字符串
-
-		void InitPointer();								//初始化标志指针
-		void SetPointer(int,void *);					//设置标志指针
 	}//namespace info
 
 	namespace info
@@ -44,26 +41,6 @@ namespace hgl                           				///古月游戏开发库所使用的
 		};//enum HGLFlagString
 
 		const OSString &GetString(HGLFlagString);                                                    ///<取得古月标记字符串
-
-		/**
-		* 古月标志指针枚举
-		* @see GetPointer
-		*/
-		enum HGLFlagPointer
-		{
-			hfpNone=0,				///<起始定义，无意义
-
-			hfpSII,					///<SystemInitInfo *
-			hfpApplication,			///<应用程序类(BaseApplication *)
-            hfpWindow,              ///<窗口管理类(Window *)
-			hfpFont,				///<缺省字体(TileFont *)
-			hfpFlow,				///<当前活动流程(FlowObject *)
-			hfpRootFlowControl,		///<根流程控制器(FlowControl *);
-
-			hfpEnd					///<结束定义，无意义
-		};//enum HGLFlagPointer
-
-		const void *GetPointer(HGLFlagPointer);
 	}//namespace info
 
 	using namespace info;

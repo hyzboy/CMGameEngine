@@ -77,8 +77,6 @@ namespace hgl
 
 		GetCMGDKPath(si.path);		//取得CMGDK路径
 
-		InitPointer();
-
 		if(sii->CheckSystem)
 			SystemCheck(&si);
 

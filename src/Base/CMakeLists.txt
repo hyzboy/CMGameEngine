@@ -67,7 +67,7 @@ ENDIF(WIN32)
 SOURCE_GROUP("Application" FILES ${BASE_APPLICATION_SOURCE} ${BASE_OS_APPLICATION_SOURCE})
 
 SET(BASE_TYPE_SOURCE
-	DataType/DataType.cpp
+	DataType/Info.cpp
 	DataType/BitArray.cpp
 	DataType/Color.cpp
 	DataType/Color3f.cpp

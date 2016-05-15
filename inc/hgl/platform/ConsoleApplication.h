@@ -18,7 +18,7 @@ namespace hgl
 
 	protected:
 
-		virtual void ProcActiveObject(ConsoleFlowObject *);
+		virtual void ProcActiveObject(ConsoleFlowObject *){}
 
 	public:
 

@@ -40,33 +40,4 @@ namespace hgl
 			hgl_status_string[n]=str;
 		}
 	}//namespace info
-
-	namespace info
-	{
-		static void *hgl_status_pointer[hfpEnd-1];
-
-		void InitPointer()
-		{
-			hgl_zero(hgl_status_pointer);
-		}
-
-		/**
-		* 读取HGL标志指针
-		* @param n 标志枚举
-		* @return 标志字串
-		* @see HGLFlagPointer
-		*/
-		const void *GetPointer(HGLFlagPointer n)
-		{
-			if(n<=hfpNone||n>=hfpEnd)return(nullptr);
-
-			return(hgl_status_pointer[n-1]);
-		}
-
-		void SetPointer(int n,void *p)
-		{
-			if(n>hfpNone&&n<hfpEnd)
-				hgl_status_pointer[n-1]=p;
-		}
-	}//namespace info
 }//namespace hgl

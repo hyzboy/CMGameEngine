@@ -24,8 +24,6 @@ namespace hgl
 		else
 			flow=new ConsoleFlowControl();
 
-		SetPointer(hfpRootFlowControl,flow);
-
 		SetEventCall(flow->OnChange,this,ConsoleApplication,ProcActiveObject);
 	}
 
@@ -91,10 +89,5 @@ namespace hgl
 		flow->SetStart(fo);
 
 		ProcActiveObject(fo);
-	}
-
-	void ConsoleApplication::ProcActiveObject(ConsoleFlowObject *fo)
-	{
-		SetPointer(hfpFlow,fo);
 	}
 }//namespace hgl

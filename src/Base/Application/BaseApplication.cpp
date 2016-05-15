@@ -17,8 +17,6 @@ namespace hgl
 		hglSetPropertyRead(	SII,	this,BaseApplication::GetSII	);
 		hglSetPropertyRead(	Time,	this,BaseApplication::GetTime	);
 
-		SetPointer(hfpApplication,this);
-
 		sii=nullptr;
 
 		active=true;
