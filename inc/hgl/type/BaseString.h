@@ -116,9 +116,9 @@ namespace hgl
 			Set(tmp_str);
 		}
 
-		BaseString(const Vector2f &v,int n=2):BaseString((const float *)&v,2){}
-		BaseString(const Vector3f &v,int n=3):BaseString((const float *)&v,3){}
-		BaseString(const Vector4f &v,int n=4):BaseString((const float *)&v,4){}
+		BaseString(const Vector2f &v,int n=2):BaseString((const float *)&v,n){}
+		BaseString(const Vector3f &v,int n=3):BaseString((const float *)&v,n){}
+		BaseString(const Vector4f &v,int n=4):BaseString((const float *)&v,n){}
 
 		virtual ~BaseString()
 		{
@@ -420,7 +420,7 @@ namespace hgl
 
 		/**
 		* 和一个字符串进行比较
-		* @param bs 比较字符串
+		* @param str 比较字符串
 		* @return <0 自身小
 		* @return 0 等同
 		* @return >0 自身大
@@ -459,7 +459,7 @@ namespace hgl
 
 		/**
 		* 和一个字符串进行比较
-		* @param bs 比较字符串
+		* @param str 比较字符串
 		* @return <0 自身小
 		* @return 0 等同
 		* @return >0 自身大
@@ -497,7 +497,7 @@ namespace hgl
 
 		/**
 		* 和那一个字符串进行比较,英文不区分大小写
-		* @param bs 比较字符串
+		* @param str 比较字符串
 		* @return <0 自身小
 		* @return 0 等同
 		* @return >0 自身大

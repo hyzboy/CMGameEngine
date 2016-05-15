@@ -136,7 +136,7 @@ namespace hgl
     inline void rotate2d(T1 &result,const T2 &source,const T3 &center,const double ang)
     {
         double as,ac;
-        double nx,ny;
+//        double nx,ny;
 
 //      as=sin(ang*(HGL_PI/180.0f));
 //      ac=cos(ang*(HGL_PI/180.0f));

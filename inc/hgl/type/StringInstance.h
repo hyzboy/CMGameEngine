@@ -206,7 +206,7 @@ namespace hgl
 
 		/**
 		 * 和一个字符串进行比较
-		 * @param sc 比较字符串
+		 * @param str 比较字符串
 		 * @return <0 我方小
 		 * @return 0 等同
 		 * @return >0 我方大
@@ -219,7 +219,7 @@ namespace hgl
 		/**
 		 * 和一个字符串进行比较
 		 * @param pos 起始位置
-		 * @param sc 比较字符串
+		 * @param str 比较字符串
 		 * @return <0 我方小
 		 * @return 0 等同
 		 * @return >0 我方大

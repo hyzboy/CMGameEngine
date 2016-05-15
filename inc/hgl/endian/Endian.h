@@ -152,7 +152,7 @@ namespace hgl
 
 			template<typename T> T ToLittleEndian(T value){return value;}
 
-			template<typename T> inline void ToLittleEndian(T *value,const int64 count){}
+			template<typename T> inline void ToLittleEndian(T *,const int64){}
 			template<typename D,typename S> inline void ToLittleEndian(D *dst,const S *src,const int64 count){hgl_cpy(dst,src,count);}
 		#endif//HGL_BIG_ENDIAN
 
@@ -174,12 +174,14 @@ namespace hgl
 
 		template<> struct UTF16CharConvert<HGL_LITTLE_ENDIAN>
 		{
+        #if HGL_ENDIAN == HGL_BIG_ENDIAN
 			static void convert(const u16char *str,const int length)
 			{
-				#if HGL_ENDIAN == HGL_BIG_ENDIAN
 					swap_strcpy<u16char>(str,length);
-				#endif//HGL_ENDIAN == HGL_LITTLE_ENDIAN
 			}
+        #else
+            static void convert(const u16char *,const int){}
+		#endif//HGL_ENDIAN == HGL_LITTLE_ENDIAN
 
 			static void convert(u16char *out_str,const u16char *in_str,const int length)
 			{
