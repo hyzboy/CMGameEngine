@@ -1,6 +1,6 @@
 ﻿#include<hgl/Console.h>
 #include<hgl/platform/QT5Application.h>
-#include<qt5/QtWidgets/qapplication.h>
+#include<QApplication>
 
 using namespace hgl;
 

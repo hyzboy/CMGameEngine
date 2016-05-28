@@ -1,5 +1,5 @@
 ﻿#include<hgl/platform/QT5Application.h>
-#include<qt5/QtWidgets/qapplication.h>
+#include<QApplication>
 
 namespace hgl
 {

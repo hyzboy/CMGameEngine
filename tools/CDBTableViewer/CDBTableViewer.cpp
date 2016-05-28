@@ -1,8 +1,15 @@
 ﻿#include "CDBTableViewer.h"
-#include <QtGui/QTableWidget>
-#include <QtGui/QTableWidgetItem>
 #include <hgl/db/CDBTable.h>
-#include <hgl/QT4.h>
+
+#include <hgl/QT.h>
+
+#ifdef HGL_QT4
+    #include <QtGui/QTableWidget>
+    #include <QtGui/QTableWidgetItem>
+#else
+    #include <QTableWidget>
+    #include <QTableWidgetItem>
+#endif//HGL_QT4
 
 CDBTableViewer::CDBTableViewer()
 {
@@ -15,7 +22,7 @@ void CDBTableViewer::Load(const hgl::OSString &filename)
 {
     if(filename.IsEmpty())
         return;
-    
+
 	hgl::db::CDBTable tab;
 
 	if(!tab.Load(filename))return;
@@ -61,4 +68,6 @@ void CDBTableViewer::Load(const hgl::OSString &filename)
 	setCentralWidget(tw);
 }
 
+#ifdef HGL_QT4
 #include "CDBTableViewer.moc"
+#endif//HGL_QT4

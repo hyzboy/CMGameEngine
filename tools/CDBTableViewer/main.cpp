@@ -1,5 +1,5 @@
 ﻿#include"CDBTableViewer.h"
-#include<hgl/QT4.h>
+#include<hgl/QT.h>
 
 HGL_QT_MAIN_FUNC()
 {

@@ -259,6 +259,9 @@ IF(BUILD_NETWORK_LIB)
 ENDIF(BUILD_NETWORK_LIB)
 
 IF(BUILD_QT4_SUPPORT_LIB)
+
+    add_definitions("-DHGL_QT4")
+
 	find_package(Qt4 REQUIRED)
 
 	IF(WIN32)
@@ -271,7 +274,14 @@ IF(BUILD_QT4_SUPPORT_LIB)
 ENDIF()
 
 IF(BUILD_QT5_SUPPORT_LIB)
-	find_package(Qt5Widgets REQUIRED)
+
+    add_definitions("-DHGL_QT5")
+
+    set(QT_MIN_VERSION "5.3.0")
+    find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Core)
+
+    include_directories(${Qt5Core_INCLUDES})
+    add_definitions(${Qt5Core_DEFINITIONS})
 
 	IF(WIN32)
 		SET(HGL_QT_MAIN_SOURCE ${CMGDK_PATH}/src/Platform/QT/PlatformQT5WinUTF16.cpp)
@@ -357,9 +367,12 @@ MESSAGE("HGL_CONSOLE_MAIN_SOURCE: " ${HGL_CONSOLE_MAIN_SOURCE})
 MESSAGE("HGL_GRAPHICS_MAIN_SOURCE: " ${HGL_GRAPHICS_MAIN_SOURCE})
 MESSAGE("HGL_GUI_MAIN_SOURCE: " ${HGL_GUI_MAIN_SOURCE})
 message("")
-MESSAGE("Processor: " ${CMAKE_SYSTEM_PROCESSOR})
 MESSAGE("Sytem: " ${CMAKE_SYSTEM})
 MESSAGE("System Name: " ${CMAKE_SYSTEM_NAME})
+MESSAGE("System Version: " ${CMAKE_SYSTEM_VERSION})
+MESSAGE("System Processor: " ${CMAKE_SYSTEM_PROCESSOR})
+MESSAGE("Generator: " ${CMAKE_GENERATOR})
+message("")
 MESSAGE("C Compiler: " ${CMAKE_C_COMPILER})
 MESSAGE("C++ Compiler: " ${CMAKE_CXX_COMPILER})
 message("")
