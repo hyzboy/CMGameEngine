@@ -1,12 +1,7 @@
 ﻿#ifndef CDBTableViewer_H
 #define CDBTableViewer_H
 
-#ifdef HGL_QT4
-    #include <QtGui/QMainWindow>
-#else
-    #include <QMainWindow>
-#endif//HGL_QT4
-
+#include <QMainWindow>
 #include <hgl/type/BaseString.h>
 
 class CDBTableViewer : public QMainWindow
