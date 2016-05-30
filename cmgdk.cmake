@@ -4,6 +4,10 @@ OPTION(BUILD_BASE_LIB 			"Build Base Library"						TRUE	)
 OPTION(BUILD_OPENGL_LIB			"Build OpenGL Library"						FALSE	)
 OPTION(BUILD_OPENAL_LIB			"Build OpenAL Library"						FALSE	)
 OPTION(BUILD_NETWORK_LIB		"Build Network Library"						TRUE	)
+
+OPTION(BUILD_SCRIPT_ANGEL       "Build Script AngelScript"                  FALSE   )
+OPTION(BUILD_SCRIPT_DEVIL       "Build Script DevilScript"                  FALSE   )
+
 OPTION(BUILD_NETWORK_SCTP		"Include SCTP Support"						FALSE	)
 OPTION(BUILD_QT4_SUPPORT_LIB	"Build QT4 Support Library"					FALSE	)
 OPTION(BUILD_QT5_SUPPORT_LIB	"Build QT5 Support Library"					FALSE	)

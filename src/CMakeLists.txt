@@ -3,6 +3,14 @@
 	add_subdirectory(UtilityTools)
 ENDIF(BUILD_BASE_LIB)
 
+IF(BUILD_SCRIPT_ANGEL)
+    add_subdirectory(Script/AngelVM)
+ENDIF()
+
+IF(BUILD_SCRIPT_DEVIL)
+    add_subdirectory(Script/DevilVM)
+ENDIF()
+
 IF(BUILD_NETWORK_LIB)
 	add_subdirectory(Network)
 ENDIF(BUILD_NETWORK_LIB)
