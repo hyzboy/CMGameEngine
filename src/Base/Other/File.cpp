@@ -806,8 +806,10 @@ namespace hgl
 
 				strcat(fi.fullname, HGL_MAX_PATH, fi.name, HGL_MAX_PATH);
 			}
-			fi.size_high=FindFileData.nFileSizeHigh;
-			fi.size_low =FindFileData.nFileSizeLow;
+
+			fi.size =	FindFileData.nFileSizeHigh;
+			fi.size <<= 32;
+			fi.size |=	FindFileData.nFileSizeLow;
 
 			if(FindFileData.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY)
 			{

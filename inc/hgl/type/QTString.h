@@ -21,16 +21,16 @@
 
 	inline QString toQString(const u16char *str,int size){return QString::fromUtf16((ushort *)str,size);}
 	inline QString toQString(const char32_t *str,int size){return QString::fromUcs4((uint *)str,size);}
+
+	inline QString toQString(const hgl::UTF16String &str)
+	{
+		return QString::fromUtf16((ushort *)str.c_str(), str.Length());
+	}
 #endif//HGL_OS == HGL_OS_Windows
 
 inline QString toQString(const hgl::UTF8String &str)
 {
 	return QString::fromUtf8(str.c_str(),str.Length());
-}
-
-inline QString toQString(const hgl::UTF16String &str)
-{
-	return QString::fromUtf16((ushort *)str.c_str(),str.Length());
 }
 
 // inline QString toQString(const hgl::UTF32String &str)

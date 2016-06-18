@@ -8,7 +8,7 @@ HGL_QT_MAIN_FUNC()
     if(filename.IsEmpty())
         return(-1);
 
-	sii.info.ProjectName=OS_TEXT("CDB表格查看器");
+	sii.info.ProjectName=U8_TEXT("CDB表格查看器");
 	sii.info.ProjectCode=OS_TEXT("CDBTableViewer");
 
 	app.Init(&sii);
