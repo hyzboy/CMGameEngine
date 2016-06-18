@@ -27,9 +27,15 @@ void CDBTableViewer::Load(const hgl::OSString &filename)
 
 	{
 		QString title;
+
+#if HGL_OS == HGL_OS_Windows
 		hgl::UTF8String u8_filename = to_u8(filename);
 
 		title.fromUtf8("CDBTableViewer - file:"+ u8_filename +" col:"+hgl::UTF8String(col_count)+" row:"+hgl::UTF8String(row_count));
+#else
+        title.fromUtf8("CDBTableViewer - file:"+ filename +" col:"+hgl::UTF8String(col_count)+" row:"+hgl::UTF8String(row_count));
+#endif//
+
 		this->setWindowTitle(title);
 	}
 
