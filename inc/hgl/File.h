@@ -29,9 +29,6 @@ namespace hgl
 	void *LoadFileToMemory(const OSString &,int64,void *buf,int64);									///<加载一个文件的一部分到内存
 	bool SaveMemoryToFile(const OSString &,int64,const void *,int64);							    ///<保存一块内存到一个文件
 
-	int64 LoadTxtToMemory(io::InputStream *,const int64,u16char **,const CharSet &cs=CharSet());	///<加载文本文件到内存
-	int64 LoadTxtToMemory(const OSString &,u16char **,const CharSet &cs=CharSet());					///<加载文本文件到内存
-
 			bool IsDirectory(const os_char *);
 	inline	bool IsDirectory(const OSString &str){return IsDirectory(str.c_str());}					///<判断这个名称是否是目录
 
