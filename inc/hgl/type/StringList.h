@@ -571,26 +571,15 @@ namespace hgl
 		return(result);
 	}//int LoadStringList
 
-	template<typename T> int LoadUTF8StringList(StringList<BaseString<T> > &sl,io::DataInputStream *dis)
-	{
-		return LoadStringList<T,bomUTF8>(sl,dis);
-	}
+	inline int LoadUTF8StringList      (UTF8StringList &   sl,io::DataInputStream *dis){return LoadStringList<char,    bomUTF8     >(sl,dis);}
+	inline int LoadUTF16LEStringList   (UTF16StringList &  sl,io::DataInputStream *dis){return LoadStringList<u16char, bomUTF16LE  >(sl,dis);}
+	inline int LoadUTF16BEStringList   (UTF16StringList &  sl,io::DataInputStream *dis){return LoadStringList<u16char, bomUTF16BE  >(sl,dis);}
 
-	template<typename T> int LoadUTF16LEStringList(StringList<BaseString<T> > &sl,io::DataInputStream *dis)
-	{
-		return LoadStringList<T,bomUTF16LE>(sl,dis);
-	}
+    int LoadStringListFromText(UTF8StringList   &sl,void *data,const int size,const CharSet &default_charset=UTF8CharSet);              ///<从文件加载一个文本块到UTF8StringList
+    int LoadStringListFromText(UTF16StringList  &sl,void *data,const int size,const CharSet &default_charset=UTF16LECharSet);           ///<从文件加载一个文本块到UTF16StringList
 
-	template<typename T> int LoadUTF16BEStringList(StringList<BaseString<T> > &sl,io::DataInputStream *dis)
-	{
-		return LoadStringList<T,bomUTF16BE>(sl,dis);
-	}
-
-	int LoadStringListBOM(UTF16StringList &,const OSString &,const CharSet &cs=CharSet());          ///<从文件加载一个文本到UTF16StringList,支持BOM头
-
-    int LoadUTF8FileToStringList    (UTF8StringList   &sl,const OSString &filename);                ///<从文件加载一个UTF8文本到UTF8StringList,不支持BOM头
-    int LoadUTF16LEFileToStringList (UTF16StringList  &sl,const OSString &filename);                ///<从文件加载一个UTF16LE文本到UTF16LEStringList,不支持BOM头
-    int LoadUTF16BEFileToStringList (UTF16StringList  &sl,const OSString &filename);                ///<从文件加载一个UTF16BE文本到UTF16BEStringList,不支持BOM头
+    int LoadStringListFromTextFile(UTF8StringList   &sl,const OSString &filename,const CharSet &default_charset=UTF8CharSet);              ///<从文件加载一个文本文件到UTF8StringList
+    int LoadStringListFromTextFile(UTF16StringList  &sl,const OSString &filename,const CharSet &default_charset=UTF16LECharSet);           ///<从文件加载一个文本文件到UTF16StringList
 
 	template<typename T,ByteOrderMask bom> struct WriteStringToDOS
 	{

@@ -3,6 +3,7 @@
 
 #include<limits.h>
 //--------------------------------------------------------------------------------------------------
+#define u32char         char32_t
 #define u16char			char16_t
 #define os_char			char
 #define to_oschar		to_u8

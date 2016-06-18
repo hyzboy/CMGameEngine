@@ -3,65 +3,170 @@
 namespace hgl
 {
 	/**
-	* 从指定文件中加载一个字符串列表<br>支持带BOM头的UTF8/UTF16LE/UTF16BE/UTF32LE/UTF32BE文本
-	* @param sl 字符串列表
-	* @param filename 文件名
-	* @param cs 如果为ansi，将使用的转换代码页/字符集
-	* @return 加载的字符串列表行数
-	*/
-	int LoadStringListBOM(UTF16StringList &sl,const OSString &filename,const CharSet &cs)
-	{
-		u16char *buf;
-		const int64 size=LoadTxtToMemory(filename,&buf,cs);
+     * 加载一个原始文本块到UTF8StringList
+     */
+    int LoadStringListFromText(UTF8StringList &sl,uchar *data,const int size,const CharSet &cs)
+    {
+        char *str=nullptr;
 
-		if(size<=0)
-			return(0);
+        int line_count;
+        int char_count;
 
-		const int line=SplitToStringList(sl,buf,size);
+        if(size>=3&&data[0]==0xEF&&data[1]==0xBB&&data[2]==0xBF)            //utf8
+            line_count=SplitToStringList<char>(sl,(char *)(data+3),size-3);
+        else
+        if(cs==UTF8CharSet)
+            line_count=SplitToStringList<char>(sl,(char *)data,size);
+        else
+        {
+            if(size>=2)
+            {
+                int u16_count;
 
-		delete[] buf;
+                if(data[0]==0xFF&&data[1]==0xFE)								//LE
+                {
+                    if(size>=4&&data[2]==0&&data[3]==0)                         //utf32-le
+                    {
+                        u16_count=(size-4)>>2;
+                        u16char *u16str=new u16char[u16_count];
 
-		return(line);
-	}
+                        LittleToCurrentEndian(u16str,(uint32 *)(data+4),u16_count);
+
+                        str=u16_to_u8(u16str,u16_count,char_count);
+                        delete[] u16str;
+                    }
+                    else                                                        //utf16-le
+                    {
+                        u16_count=(size-2)>>1;
+                        LittleToCurrentEndian((u16char *)(data+2),u16_count);
+                        str=u16_to_u8((u16char *)(data+2),u16_count,char_count);
+                    }
+                }
+                else
+                if(data[0]==0&&data[1]==0&&data[2]==0xFE&&data[3]==0xFF)        //utf32-be
+                {
+                    u16_count=(size-4)>>2;
+                    u16char *u16str=new u16char[u16_count];
+
+                    BigToCurrentEndian(u16str,(uint32 *)(data+4),u16_count);
+
+                    str=u16_to_u8(u16str,u16_count,char_count);
+                    delete[] u16str;
+                }
+                else
+                if(data[0]==0xFE&&data[1]==0xFF)                                //utf16-be
+                {
+                    u16_count=(size-2)>>1;
+                    BigToCurrentEndian((u16char *)(data+2),u16_count);
+                    str=u16_to_u8((u16char *)(data+2),u16_count,char_count);
+                }
+            }
+
+            if(!str)
+                char_count=to_utf8(cs,&str,(char *)data,size);
+
+            line_count=SplitToStringList<char>(sl,str,char_count);
+
+            delete[] str;
+        }
+
+        delete[] data;
+        return line_count;
+    }
 
 	/**
-     * 加载一个原始文本文件到StringList，不支持BOM头
+     * 加载一个原始文本块到UTF16StringList
      */
-    int LoadUTF8FileToStringList(UTF8StringList &sl,const OSString &filename)
+    int LoadStringListFromText(UTF16StringList &sl,uchar *data,const int size,const CharSet &cs)
     {
-        char *data;
+        u16char *str=nullptr;
+
+        int char_count=0;
+        int line_count;
+
+        if(size>=2)
+        {
+			if(data[0]==0xFF&&data[1]==0xFE)								//LE
+			{
+				if(size>=4&&data[2]==0&&data[3]==0)                         //utf32-le
+                {
+                    str=(u16char *)data;        //32->16使用原缓冲区覆盖
+                    char_count=(size-4)>>2;
+                    LittleToCurrentEndian(str,(uint32 *)(data+4),char_count);
+                }
+                else                                                        //utf16-le
+                {
+                    str=(u16char *)(data+2);
+                    char_count=(size-2)>>1;
+                    LittleToCurrentEndian(str,char_count);
+                }
+			}
+			else
+            if(data[0]==0&&data[1]==0&&data[2]==0xFE&&data[3]==0xFF)        //utf32-be
+            {
+                str=(u16char *)data;            ////32->16使用原缓冲区覆盖
+                char_count=(size-4)>>2;
+                BigToCurrentEndian(str,(uint32 *)(data+4),char_count);
+            }
+            else
+            if(data[0]==0xFE&&data[1]==0xFF)                                //utf16-be
+            {
+                str=(u16char *)(data+2);
+                char_count=(size-2)>>1;
+                BigToCurrentEndian(str,char_count);
+            }
+        }
+
+        if((uchar *)str>=data&&(uchar *)str<data+size)                      //如果str的地址在data的范围内
+        {
+            line_count=SplitToStringList<u16char>(sl,str,char_count);
+        }
+        else
+        {
+            if(size>=3&&data[0]==0xEF&&data[1]==0xBB&&data[2]==0xBF)        //utf8
+                str=u8_to_u16((char *)(data+3),size-3,char_count);
+            else
+            if(cs==UTF8CharSet)
+                str=u8_to_u16((char *)data,size,char_count);
+            else
+                char_count=to_utf16(cs,&str,(char *)data,size);
+
+            line_count=SplitToStringList<u16char>(sl,str,char_count);
+
+            delete[] str;
+        }
+
+        delete[] data;
+        return line_count;
+    }
+
+    /**
+     * 加载一个原始文本文件到UTF8StringList
+     */
+    int LoadStringListFromTextFile(UTF8StringList &sl,const OSString &filename,const CharSet &cs)
+    {
+        uchar *data;
 
         const int size=LoadFileToMemory(filename,(void **)&data);
 
         if(size<=0)
             return size;
 
-        const int line_count=SplitToStringList<char>(sl,data,size);
-
-        delete[] data;
-        return line_count;
+        return LoadStringListFromText(sl,data,size,cs);
     }
 
-    int LoadUTF16FileToStringList(UTF16StringList &sl,const OSString &filename,bool need_swap)
+  	/**
+     * 加载一个原始文本文件到UTF16StringList
+     */
+    int LoadStringListFromText(UTF16StringList &sl,const OSString &filename,const CharSet &cs)
     {
-        u16char *data;
+        uchar *data;
 
-        const int size=LoadFileToMemory(filename,(void **)&data)/2;
+        const int size=LoadFileToMemory(filename,(void **)&data);
 
         if(size<=0)
             return size;
 
-        if(need_swap)
-        {
-            EndianSwap(data,size);
-        }
-
-        const int line_count=SplitToStringList<u16char>(sl,data,size);
-
-        delete[] data;
-        return line_count;
+        return LoadStringListFromText(sl,data,size,cs);
     }
-
-//     int LoadUTF16LEFileToStringList (UTF16StringList  &sl,const OSString &filename){return LoadFileToStringList<u16char,bomUTF16LE  >(sl,filanem);} ///<从文件加载一个UTF16LE文本到UTF16LEStringList,不支持BOM头
-//     int LoadUTF16BEFileToStringList (UTF16StringList  &sl,const OSString &filename){return LoadFileToStringList<u16char,bomUTF16BE  >(sl,filanem);} ///<从文件加载一个UTF16BE文本到UTF16BEStringList,不支持BOM头
 }//namespace hgl

@@ -4,6 +4,7 @@
 #include<malloc.h>
 #include<windows.h>
 //--------------------------------------------------------------------------------------------------
+#define u32char         char32_t
 #define u16char			wchar_t
 #define os_char			wchar_t
 #define to_oschar		to_u16
