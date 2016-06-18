@@ -203,7 +203,7 @@ namespace hgl
 		};//class UserTeam
 
 		/**
-		 * 用线程用户组
+		 * 多线程用户组
 		 */
 		template<typename ID,typename USERINFO,typename USER_OUTPUT> struct MTUserTeam
 		{

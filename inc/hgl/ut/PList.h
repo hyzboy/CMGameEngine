@@ -12,36 +12,89 @@ namespace hgl
 	/**
 	* 属性列表,类似INI的管理类
 	*/
-	class PList:public Map<UTF16String,UTF16String>												///属性列表
+    template<typename C,typename T> class PList:public Map<T,T>										///属性列表
 	{
 	protected:
 
-		void ReadData(const UTF16StringList &);
+        void ReadData(const StringList<T> &sl)
+        {
+            int n=sl.GetCount();
+
+            while(n--)
+                Add(sl[n]);
+        }
 
 	public:
 
 		virtual ~PList()HGL_DEFAULT_MEMFUNC;
 
-		virtual bool Add(const UTF16String &);														///<向列表中增加一项
-		virtual bool Add(const UTF16String &,const UTF16String &);									///<向列表中增加一项
+        virtual bool Add(const T &key)                                                              ///<向列表中增加一项
+        {
+            T name;
+            C *value;
+            int off;
 
-		virtual bool LoadTxt(const OSString &);														///<从文件中加载列表
+            if(key.Length()<2)return(false);
+
+            if(((off=key.FindChar(C('\t')))==-1)
+            && ((off=key.FindChar(C(' '))) ==-1)
+            && ((off=key.FindChar(C('='))) ==-1))
+                return(false);
+
+            name.Strcpy(key,off);
+            off++;
+
+            value=key.c_str()+off;
+
+            while(true)
+            {
+                if(*value == C('\t')
+                || *value == C('=')
+                || *value == C(' '))
+                    value++;
+                else
+                {
+                    T str=value;
+
+                    Map<T,T>::Add(name,str);
+
+                    return(true);
+                }
+            }
+        }//bool PList::Add
+
+		virtual bool Add(const T &key,const T &value)									            ///<向列表中增加一项
+        {
+            return Map<T,T>::Add(key,value);
+        }
+
+        virtual bool LoadTxt(const OSString &filename)                                              ///<从文件中加载列表
+        {
+            StringList<T> sl;
+
+            if(LoadStringListFromTextFile(sl,filename)<=0)
+                return(false);
+
+            ReadData(sl);
+
+            return(true);
+        }
 
 		template<ByteOrderMask BOM>
-				bool SaveTxt(const OSString &filename,const u16char gap_ch=u'\t')					///<保存列表到文件
+                bool SaveTxt(const OSString &filename,const T &gap_ch=C('\t'))					    ///<保存列表到文件
 		{
 			FileOutputStream fos;
 			TextOutputStream<BOM> tos(&fos);
 
 			if(!fos.Create(filename))return(false);
 
-			int n=data_list.GetCount();
+			int n=this->data_list.GetCount();
 
 			tos.WriteBOM();
 
 			while(n--)
 			{
-				UTF16String f,s;
+				T f,s;
 
 				if(Get(n,f,s))
 					tos.WriteLine(f+gap_ch+s);
@@ -50,7 +103,18 @@ namespace hgl
 			return(true);
 		}
 
-		const UTF16String operator[](const UTF16String &)const;
+        virtual const T operator[](const T &name)const
+        {
+            T result;
+
+            Get(name,result);
+
+            return result;
+        }
 	};//class PList
+
+    using UTF8PList =PList<char,   UTF8String   >;
+    using UTF16PList=PList<u16char,UTF16String  >;
+    using WidePList =PList<wchar_t,WideString   >;
 }//namespace hgl
 #endif//HGL_PLIST_INCLUDE

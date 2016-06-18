@@ -8,7 +8,6 @@
 	Hash/md5.cpp
 	Hash/sha1.cpp
 	Hash/Hash.cpp
-	PList/PList.cpp
 	TaskManager/TaskManager.cpp
 	Timer/Timer.cpp
 	Parse/CmdParse.cpp
