@@ -160,6 +160,8 @@ namespace hgl
 			codepage=cs.codepage;
 			strcpy(charset,CharSetNameLength,cs.charset);
 		}
+
+        CompOperatorMemcmp(const CharSet &)
 	};//struct CharacterSet
 
 	inline CharSet::CharSet(CharCodePage ccp)
@@ -176,29 +178,33 @@ namespace hgl
 
 	extern CharSet DefaultCharSet();
 
-	/**
-	 * 使用指定字符集转换ansi字符串到 u16char *字符串
-	 * @param charset	字符集
-	 * @param ws		u16char *字符串缓冲区，自动分配，需手动delete[]
-	 * @param as		ansi字符串
-	 * @param as_size	字符串长度,-1表示全部
-	 * @return 转换成功后的字符串字符数
-	 */
-	int ansi_to_utf16(const CharSet &charset,u16char **ws,const char *as,const int as_size=-1);
-
-    int ansi_to_utf8(const CharSet &charset,char **u8str,const char *as,const int as_size=-1);
+    extern CharSet UTF8CharSet;
+    extern CharSet UTF16LECharSet;
+    extern CharSet UTF16BECharSet;
 
 	/**
-	 * 转换u16char *字符串到指定字符集的ansi字符串
+	 * 使用指定字符集转换字符串到 u16char *字符串
 	 * @param charset	字符集
-	 * @param as		char *字符串缓冲区，自动分配，需手动delete[]
-	 * @param ws		u16char *字符串
-	 * @param ws_size	字符串长度,-1表示全部
+	 * @param dst		u16char *字符串缓冲区，自动分配，需手动delete[]
+	 * @param src		原始字符串
+	 * @param src_size	字符串长度,-1表示全部
 	 * @return 转换成功后的字符串字符数
 	 */
-	int utf16_to_ansi(const CharSet &charset,char **as,const u16char *ws,const int ws_size=-1);
+	int to_utf16(const CharSet &charset,u16char **dst,const char *src,const int src_size=-1);
 
-    int utf8_to_ansi(const CharSet &charset,char **as,const char *u8str,const int u8str_size=-1);
+    int to_utf8(const CharSet &charset,char **dst,const char *src,const int src_size=-1);
+
+	/**
+	 * 转换u16char *字符串到指定字符集的字符串
+	 * @param charset	字符集
+	 * @param dst		char *字符串缓冲区，自动分配，需手动delete[]
+	 * @param src		u16char *字符串
+	 * @param src_size	字符串长度,-1表示全部
+	 * @return 转换成功后的字符串字符数
+	 */
+	int utf16_to(const CharSet &charset,char **dst,const u16char *src,const int src_size=-1);
+
+    int utf8_to(const CharSet &charset,char **dst,const char *src,const int src_size=-1);
 
 	int				u16_to_u8(char *,int,const u16char *,const int=-1);							///<转换u16char *到utf8格式的char *
 	int				u8_to_u16(u16char *,int,const char *,const int=-1);							///<转换utf8格式的char *到u16char *

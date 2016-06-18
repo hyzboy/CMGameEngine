@@ -6,33 +6,58 @@
 
 namespace hgl
 {
-    CharSet DefaultCharSet();
-
-	int ansi_to_utf16(const CharSet &cs,u16char **ws,const char *as,const int as_size)
+	int to_utf16(const CharSet &cs,u16char **dst,const char *src,const int src_size)
 	{
-		const int src_size=(as_size==-1)?strlen(as):as_size;
+		const int src_str_size=(src_size==-1)?strlen(src):src_size;
 
-		const int len=MultiByteToWideChar(cs.codepage,0,as,src_size,0,0);
+		const int len=MultiByteToWideChar(cs.codepage,0,src,src_str_size,0,0);
 
 		if(len<=0)return(len);
 
-		*ws=new u16char[len];
+		*dst=new u16char[len];
 
-		return MultiByteToWideChar(cs.codepage,0,as,src_size,*ws,len);
+		return MultiByteToWideChar(cs.codepage,0,src,src_str_size,*dst,len);
 	}
 
-	int utf16_to_ansi(const CharSet &cs,char **as,const u16char *ws,const int ws_size)
-	{
-		const int src_size=(ws_size==-1)?strlen(ws):ws_size;
+	int to_utf8(const CharSet &cs,u8char **dst,const char *src,const int src_size)
+    {
+        u16char *u16str;
+        int u16size=to_utf16(cs,&u16str,src,src_size);
 
-		const int len=WideCharToMultiByte(cs.codepage,0,ws,src_size,0,0,0,0);
+        if(u16size<=0)return(u16size);
+
+        int u8_size;
+        dst=u16_to_u8(u16str,u16size,u8_size)
+
+        delete[] u16str;
+        return u8_size;
+    }
+
+	int utf16_to(const CharSet &cs,char **dst,const u16char *src,const int src_size)
+	{
+		const int src_str_size=(src_size==-1)?strlen(src):src_size;
+
+		const int len=WideCharToMultiByte(cs.codepage,0,src,src_str_size,0,0,0,0);
 
 		if(len<=0)return(len);
 
-		*as=new char[len];
+		*dst=new char[len];
 
-		return WideCharToMultiByte(cs.codepage,0,ws,src_size,*as,len,0,0);
+		return WideCharToMultiByte(cs.codepage,0,src,src_str_size,*dst,len,0,0);
 	}
+
+	int utf8_to(const CharSet &cs,char **dst,const char *src,const int src_size)
+    {
+        int u16str_size;
+        u16char *u16str=u8_to_u16(src,src_size,&u16str_size);
+
+        if(!u16str)return(0);
+
+        int result=utf16_to(cs,dst,u16str,u16str_size);
+
+        delete[] u16str;
+        return(result);
+    }
 }//namespace hgl
 #else
 /**
@@ -139,30 +164,36 @@ namespace hgl
 		return(result);
 	}
 
-	int ansi_to_utf16(const CharSet &cs,u16char **ws,const char *as,const int as_size)
+	int to_utf16(const CharSet &cs,u16char **dst,const char *src,const int src_size)
 	{
-		return CharSetConv<u16char,char>(ws,endian::GetCharSet<u16char>(),as,as_size,cs.charset);
+		return CharSetConv<u16char,char>(dst,endian::GetCharSet<u16char>(),src,src_size,cs.charset);
 	}
 
-	int utf16_to_ansi(const CharSet &cs,char **as,const u16char *ws,const int ws_size)
+	int utf16_to(const CharSet &cs,char **dst,const u16char *src,const int src_size)
 	{
-		return CharSetConv<char,u16char>(as,cs.charset,ws,ws_size,endian::GetCharSet<u16char>());
+		return CharSetConv<char,u16char>(dst,cs.charset,src,src_size,endian::GetCharSet<u16char>());
 	}
 
-	int ansi_to_utf8(const CharSet &cs,char **u8str,const char *as,const int as_size)
+	int to_utf8(const CharSet &cs,char **dst,const char *src,const int src_size)
     {
-        return CharSetConv<char,char>(u8str,utf8_charset,as,as_size,cs.charset);
+        return CharSetConv<char,char>(dst,utf8_charset,src,src_size,cs.charset);
     }
 
-    int utf8_to_ansi(const CharSet &cs,char **as,const char *u8str,const int u8str_size)
+    int utf8_to(const CharSet &cs,char **dst,const char *src,const int src_size)
     {
-        return CharSetConv<char,char>(as,cs.charset,u8str,u8str_size,utf8_charset);
+        return CharSetConv<char,char>(dst,cs.charset,src,src_size,utf8_charset);
     }
 }//namespace hgl
 #endif//HGL_OS == HGL_OS_Windows
 
 namespace hgl
 {
+    CharSet DefaultCharSet();
+
+    CharSet UTF8CharSet     (ccpUTF8,   utf8_charset    );
+    CharSet UTF16LECharSet  (ccpUTF16LE,utf16le_charset );
+    CharSet UTF16BECharSet  (ccpUTF16BE,utf16be_charset );
+
 	int	u16_to_u8(char *dst,int dst_size,const u16char *src,const int src_size)
 	{
 		if(src_size<=0||!src||!*src)
@@ -302,6 +333,9 @@ namespace hgl
 			}
 		}
 
+		if(dst_size<=0)
+            return(nullptr);
+
 		char *dst=new char[dst_size+1];
 
 		dst[dst_size]=0;		//为防止内存检测工具报错，所以提前赋0
@@ -323,7 +357,7 @@ namespace hgl
 		if(src_size<=0||!src||!*src)
 		{
 			dst_size=0;
-			return(0);
+            return(nullptr);
 		}
 
 		uint8 *sp=(uint8 *)src;
@@ -364,6 +398,9 @@ namespace hgl
 				break;
 			}
 		}
+
+		if(dst_size<=0)
+            return(nullptr);
 
 		u16char *dst=new u16char[dst_size+1];
 

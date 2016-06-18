@@ -154,6 +154,7 @@ namespace hgl
 
 			template<typename T> inline void ToLittleEndian(T *,const int64){}
 			template<typename D,typename S> inline void ToLittleEndian(D *dst,const S *src,const int64 count){hgl_cpy(dst,src,count);}
+
 		#endif//HGL_BIG_ENDIAN
 
 		template<typename T>
