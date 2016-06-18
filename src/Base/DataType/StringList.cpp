@@ -117,7 +117,7 @@ namespace hgl
             }
         }
 
-        if((uchar *)str>=data&&(uchar *)str<data+size)                      //如果str的地址在data的范围内
+        if((uchar *)str>=data&&(uchar *)str<=data+size)                      //如果str的地址在data的范围内
         {
             line_count=SplitToStringList<u16char>(sl,str,char_count);
         }

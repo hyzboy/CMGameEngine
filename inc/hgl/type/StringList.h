@@ -224,6 +224,8 @@ namespace hgl
 	 */
 	template<typename T> int SplitToStringList(StringList<BaseString<T> > &sl,const T *str,int size,const T &split_char)
 	{
+        if(!str||size<=0)return(-1);
+
 		int count=0;
 		const T *p,*sp;
 
@@ -280,6 +282,8 @@ namespace hgl
 	 */
 	template<typename T> int SplitToStringList(StringList<BaseString<T> > &sl,const T *str,int size,const T &split_char,int maxSize)
 	{
+        if(!str||size<=0)return(-1);
+
 		int count=0;
 		const T *p,*sp;
 
@@ -346,6 +350,8 @@ namespace hgl
 	 */
 	template<typename T> int SplitToStringList(StringList<BaseString<T> > &sl,const T *str,int size)
 	{
+        if(!str||size<=0)return(-1);
+
 		int count=0;
 		const T *p,*sp;
 
@@ -423,6 +429,7 @@ namespace hgl
 	 */
 	template<typename T> int SplitToMultiStringList(StringList<BaseString<T> > **sl,int slc,const T *str,int size)
 	{
+        if(!str||size<=0)return(-1);
 		if(slc<=0)return(-1);
 
 		int index=0;
