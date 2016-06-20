@@ -15,11 +15,14 @@ namespace hgl
             hints.ai_protocol=protocol;
 
             if(name)
+            {
                 if (getaddrinfo(name, nullptr, &hints, &answer))         //此函数最低Windows 2003/Vista
                     RETURN_FALSE;
 
-            memcpy(&addr,answer->ai_addr,sizeof(SockAddrIn));
-            freeaddrinfo(answer);
+                memcpy(&addr,answer->ai_addr,sizeof(SockAddrIn));
+                freeaddrinfo(answer);
+            }
+
             return(true);
         }
 
