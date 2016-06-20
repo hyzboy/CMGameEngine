@@ -39,7 +39,7 @@ namespace hgl
 
 			~SocketThreadServer()
 			{
-				delete server;
+				SAFE_CLEAR(server);
 			}
 
 			S *GetServer()
@@ -51,6 +51,14 @@ namespace hgl
 			{
 				IPAddress *sa=server->CreateIPAddress();
 
+                if(!sa)
+                {
+                    this->fos=fosExitGame;
+
+					LOG_INFO(OS_TEXT("SocketThreadrServer Accept error!"));
+                    return;
+                }
+
 				const int sock=server->Accept(sa);							//接入一个连接
 
 				if(sock<0)		//出错
@@ -60,8 +68,9 @@ namespace hgl
                     this->fos=fosExitGame;
 
 					LOG_INFO(OS_TEXT("SocketThreadrServer Accept error!"));
+                    return;
 				}
-				else
+
 				if(sock>0)
 				{
 					O *obj=new O(sock,sa);
