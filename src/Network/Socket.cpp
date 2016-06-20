@@ -355,6 +355,7 @@ namespace hgl
 
 					LOG_INFO(OS_TEXT("CloseSocket: ")+OSString(ThisSocket)+OS_TEXT(",result:")+OSString(result)+OS_TEXT(",errno: ")+OSString(errno));
 
+                    if(errno==EBADF)break;
 					if(errno==EINPROGRESS)continue;
 				}while(result);
 
