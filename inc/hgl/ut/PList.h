@@ -102,15 +102,6 @@ namespace hgl
 
 			return(true);
 		}
-
-        virtual const T operator[](const T &name)const
-        {
-            T result;
-
-            Get(name,result);
-
-            return result;
-        }
 	};//class PList
 
     using UTF8PList =PList<char,   UTF8String   >;
