@@ -4,23 +4,55 @@ namespace hgl
 {
     namespace network
     {
-        template<int FAMILY,typename SockAddrIn>
-        bool FillAddr(SockAddrIn &addr, const char *name, int socktype,int protocol)        ///<将指定域名或地址填充到sockaddr_in结构中
+        bool FillAddr(sockaddr_in &addr,const char *name,int socktype,int protocol)
         {
-            struct addrinfo hints, *answer;
-
-            hgl_zero(hints);
-            hints.ai_family = FAMILY;
-            hints.ai_socktype=socktype;
-            hints.ai_protocol=protocol;
-
             if(name)
             {
+                struct addrinfo hints, *answer;
+
+                hgl_zero(hints);
+                hints.ai_family = AF_INET;
+                hints.ai_socktype=socktype;
+                hints.ai_protocol=protocol;
+
                 if (getaddrinfo(name, nullptr, &hints, &answer))         //此函数最低Windows 2003/Vista
                     RETURN_FALSE;
 
-                memcpy(&addr,answer->ai_addr,sizeof(SockAddrIn));
+                memcpy(&addr,answer->ai_addr,sizeof(sockaddr_in));
                 freeaddrinfo(answer);
+            }
+            else
+            {
+                hgl_zero(addr);
+
+                addr.sin_family=AF_INET;
+            }
+
+            return(true);
+        }
+
+        bool FillAddr(sockaddr_in6 &addr,const char *name,int socktype,int protocol)
+        {
+            if(name)
+            {
+                struct addrinfo hints, *answer;
+
+                hgl_zero(hints);
+                hints.ai_family = AF_INET6;
+                hints.ai_socktype=socktype;
+                hints.ai_protocol=protocol;
+
+                if (getaddrinfo(name, nullptr, &hints, &answer))         //此函数最低Windows 2003/Vista
+                    RETURN_FALSE;
+
+                memcpy(&addr,answer->ai_addr,sizeof(sockaddr_in6));
+                freeaddrinfo(answer);
+            }
+            else
+            {
+                hgl_zero(addr);
+
+                addr.sin6_family=AF_INET6;
             }
 
             return(true);
@@ -92,10 +124,10 @@ namespace hgl
             socktype=_socktype;
             protocol=_protocol;
 
-            if(!FillAddr<AF_INET,sockaddr_in>(addr,name,socktype,protocol))
+            if(!FillAddr(addr,name,socktype,protocol))
                 RETURN_FALSE;
 
-            addr.sin_port=port;
+            addr.sin_port=htons(port);
             return(true);
         }
 
@@ -164,10 +196,10 @@ namespace hgl
             socktype=_socktype;
             protocol=_protocol;
 
-            if(!FillAddr<AF_INET6,sockaddr_in6>(addr,name,socktype,protocol))
+            if(!FillAddr(addr,name,socktype,protocol))
                 RETURN_FALSE;
 
-            addr.sin6_port=port;
+            addr.sin6_port=htons(port);
             return(true);
         }
 
