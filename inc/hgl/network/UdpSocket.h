@@ -1,4 +1,4 @@
-#ifndef HGL_UDPSOCKET_INCLUDE
+﻿#ifndef HGL_UDPSOCKET_INCLUDE
 #define HGL_UDPSOCKET_INCLUDE
 
 #include<hgl/type/DataType.h>
@@ -23,30 +23,45 @@ namespace hgl
 		public:
 
 			UDPSocket();                                                                            ///<本类构造函数
-			~UDPSocket();                                                                           ///<本类析构函数
+			virtual ~UDPSocket();                                                                   ///<本类析构函数
 
-			bool Create(const IPAddress *);                                                         ///<创建一个udp,并绑定一个IP地址与指定端口
-			bool Create(int family);                                                                ///<创建一个udp
+			virtual bool Create(const IPAddress *);                                                 ///<创建一个udp,并绑定一个IP地址与指定端口
+			virtual bool Create(int family);                                                        ///<创建一个udp
 
-			uint GetBindPort()const{return bind_addr->GetPort();}									///<取得绑定端口
+                    uint GetBindPort()const{return bind_addr->GetPort();}							///<取得绑定端口
 
-			void SetSendAddr(const IPAddress *);                                                    ///<设定发送地址
+                    void SetSendAddr(const IPAddress *);                                            ///<设定发送地址
 
-			int SendPacket(const void *,int);                                                       ///<发送数据包
-			int SendPacket(IPAddress *,const void *,int);                                     ///<向指定地址发送数据包
-			int RecvPacket(void *,int,IPAddress *);                                                 ///<接收数据包
+                    int SendPacket(const void *,int);                                               ///<发送数据包
+                    int SendPacket(IPAddress *,const void *,int);                                   ///<向指定地址发送数据包
+                    int RecvPacket(void *,int,IPAddress *);                                         ///<接收数据包
 		};//class UDPSocket
+
+		/**
+         * UDPLite协议封装使用
+         */
+		class UDPLiteSocket:public UDPSocket
+		{
+        public:
+
+            virtual ~UDPLiteSocket()HGL_DEFAULT_MEMFUNC;
+
+            bool Create(const IPAddress *)HGL_OVERRIDE;                                              ///<创建一个udp lite,并绑定一个IP地址与指定端口
+			bool Create(int family)HGL_OVERRIDE;                                                     ///<创建一个udp lite
+
+			void SetChecksumCoverage(int send_val=20,int recv_val=20);                               ///<设定UDPLite检验位长度,最小20
+        };//class UDPLiteSocket
 
 		/**
 		 * 使用回呼事件机制的UDPSocket
 		 */
-		class UDPSocketCB:public UDPSocket
+        template<typename BASE> class _UDPSocketCB:public BASE
 		{
 		public:	//事件函数
 
-			DefEvent(void,	OnDisconnect,	(UDPSocket *));
-			DefEvent(int,	OnRecv,			(UDPSocket *,int));
-			DefEvent(int,	OnSend,			(UDPSocket *,int,int &));
+			DefEvent(void,	OnDisconnect,	(BASE *));
+			DefEvent(int,	OnRecv,			(BASE *,int));
+			DefEvent(int,	OnSend,			(BASE *,int,int &));
 
 			virtual void ClearEvent()
 			{
@@ -57,8 +72,8 @@ namespace hgl
 
 		public:
 
-			UDPSocketCB(){ClearEvent();}															///<本类构造函数
-			virtual ~UDPSocketCB()HGL_DEFAULT_MEMFUNC;
+			_UDPSocketCB(){ClearEvent();}															///<本类构造函数
+			virtual ~_UDPSocketCB()HGL_DEFAULT_MEMFUNC;
 
 			virtual void ProcDisconnect()
 			{
@@ -86,7 +101,10 @@ namespace hgl
 				return CallEvent(OnSend,(this,size,left_bytes));
 #endif//HGL_VARIADIC_TEMPLATES
 			}
-		};//class UDPSocketCB
+		};//class _UDPSocketCB
+
+		using UDPSocketCB     =_UDPSocketCB<UDPSocket>;
+        using UDPLiteSocketCB =_UDPSocketCB<UDPLiteSocket>;
 	}//namespace network
 
 	using namespace network;

@@ -9,6 +9,7 @@ OPTION(BUILD_SCRIPT_ANGEL       "Build Script AngelScript"                  FALS
 OPTION(BUILD_SCRIPT_DEVIL       "Build Script DevilScript"                  FALSE   )
 
 OPTION(BUILD_NETWORK_SCTP		"Include SCTP Support"						FALSE	)
+OPTION(BUILD_NETWORK_UDP_LITE   "Include UDP-Lite Support"                  FALSE   )
 OPTION(BUILD_QT4_SUPPORT_LIB	"Build QT4 Support Library"					FALSE	)
 OPTION(BUILD_QT5_SUPPORT_LIB	"Build QT5 Support Library"					FALSE	)
 OPTION(BUILD_EXAMPLES_PROJECT	"Build Examples Project"					FALSE	)
