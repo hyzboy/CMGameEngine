@@ -59,14 +59,17 @@ namespace hgl
             uint socktype;          ///<Socket类型：SOCK_STREAM,SOCK_DGRAM,SOCK_RAW,SOCK_RDM,SOCK_SEQPACKET
             uint protocol;          ///<协议类型：IPPROTO_TCP,IPPROTO_UDP,IPPROTO_SCTP
 
-        public:
-
-            IPSupport(uint f,uint s,uint p)
+            union
             {
-                family=f;
-                socktype=s;
-                protocol=p;
-            }
+                sockaddr_in ipv4;
+                sockaddr_in6 ipv6;
+            };
+
+            union
+            {
+                char ipv4str[INET_ADDRSTRLEN+1];
+                char ipv6str[INET6_ADDRSTRLEN+1];
+            };
         };
 
         int GetIPSupport(List<IPSupport> &);        ///<取得本机IP支持列表
@@ -242,13 +245,21 @@ namespace hgl
 
         inline IPv4Address *CreateIPv4TCP(const char *name,ushort port){return(new IPv4Address(name,port,SOCK_STREAM,  IPPROTO_TCP));}
         inline IPv6Address *CreateIPv6TCP(const char *name,ushort port){return(new IPv6Address(name,port,SOCK_STREAM,  IPPROTO_TCP));}
+
         inline IPv4Address *CreateIPv4UDP(const char *name,ushort port){return(new IPv4Address(name,port,SOCK_DGRAM,   IPPROTO_UDP));}
         inline IPv6Address *CreateIPv6UDP(const char *name,ushort port){return(new IPv6Address(name,port,SOCK_DGRAM,   IPPROTO_UDP));}
 
+        inline IPv4Address *CreateIPv4UDPLite(const char *name,ushort port){return(new IPv4Address(name,port,SOCK_DGRAM,   IPPROTO_UDPLITE));}
+        inline IPv6Address *CreateIPv6UDPLite(const char *name,ushort port){return(new IPv6Address(name,port,SOCK_DGRAM,   IPPROTO_UDPLITE));}
+
         inline IPv4Address *CreateIPv4TCP(ushort port){return(new IPv4Address(nullptr,port,SOCK_STREAM,  IPPROTO_TCP));}
         inline IPv6Address *CreateIPv6TCP(ushort port){return(new IPv6Address(nullptr,port,SOCK_STREAM,  IPPROTO_TCP));}
+
         inline IPv4Address *CreateIPv4UDP(ushort port){return(new IPv4Address(nullptr,port,SOCK_DGRAM,   IPPROTO_UDP));}
         inline IPv6Address *CreateIPv6UDP(ushort port){return(new IPv6Address(nullptr,port,SOCK_DGRAM,   IPPROTO_UDP));}
+
+        inline IPv4Address *CreateIPv4UDPLite(ushort port){return(new IPv4Address(nullptr,port,SOCK_DGRAM,   IPPROTO_UDPLITE));}
+        inline IPv6Address *CreateIPv6UDPLite(ushort port){return(new IPv6Address(nullptr,port,SOCK_DGRAM,   IPPROTO_UDPLITE));}
 	}//namespace network
 }//namespace hgl
 #endif//HGL_NETWORK_IP_TOOL_INCLUDE

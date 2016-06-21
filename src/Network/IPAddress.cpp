@@ -144,7 +144,27 @@ namespace hgl
 
             for (ptr = answer; ptr; ptr = ptr->ai_next)
             {
-                ipsl.Add(IPSupport(ptr->ai_family,ptr->ai_socktype,ptr->ai_protocol));
+                IPSupport s;
+
+                s.family    =ptr->ai_family;
+                s.socktype  =ptr->ai_socktype;
+                s.protocol  =ptr->ai_protocol;
+
+                if(ptr->ai_family==AF_INET)
+                {
+                    memcpy(&(s.ipv4),ptr->ai_addr,ptr->ai_addrlen);
+
+                    inet_ntop(AF_INET,&(s.ipv4.sin_addr),s.ipv4str,INET_ADDRSTRLEN);
+                }
+                else
+                if(ptr->ai_family==AF_INET6)
+                {
+                    memcpy(&(s.ipv6),ptr->ai_addr,ptr->ai_addrlen);
+
+                    inet_ntop(AF_INET6,&(s.ipv6.sin6_addr),s.ipv6str,INET6_ADDRSTRLEN);
+                }
+
+                ipsl.Add(s);
 
                 ++count;
             }
