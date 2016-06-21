@@ -19,7 +19,7 @@ namespace hgl
 		return MultiByteToWideChar(cs.codepage,0,src,src_str_size,*dst,len);
 	}
 
-	int to_utf8(const CharSet &cs,u8char **dst,const char *src,const int src_size)
+	int to_utf8(const CharSet &cs,char **dst,const char *src,const int src_size)
     {
         u16char *u16str;
         int u16size=to_utf16(cs,&u16str,src,src_size);
@@ -27,7 +27,7 @@ namespace hgl
         if(u16size<=0)return(u16size);
 
         int u8_size;
-        dst=u16_to_u8(u16str,u16size,u8_size)
+		*dst = u16_to_u8(u16str, u16size, u8_size);
 
         delete[] u16str;
         return u8_size;
@@ -49,7 +49,7 @@ namespace hgl
 	int utf8_to(const CharSet &cs,char **dst,const char *src,const int src_size)
     {
         int u16str_size;
-        u16char *u16str=u8_to_u16(src,src_size,&u16str_size);
+        u16char *u16str=u8_to_u16(src,src_size,u16str_size);
 
         if(!u16str)return(0);
 

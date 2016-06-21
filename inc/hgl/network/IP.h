@@ -18,6 +18,22 @@
     typedef ULONG in_addr_t;
 
     #define GetLastSocketError() WSAGetLastError()
+
+	#ifndef SOCK_DCCP
+	#define SOCK_DCCP 6
+	#endif//SOCK_DCCP
+
+	#ifndef SOCK_PACKET
+	#define SOCK_PACKET 10
+	#endif//SOCK_PACKET
+
+	#ifndef IPPROTO_DCCP
+	#define IPPROTO_DCCP 33
+	#endif//IPPROTO_DCCP
+
+	#ifndef IPPROTO_UDPLITE
+	#define IPPROTO_UDPLITE     136
+	#endif//IPPROTO_UDPLITE
 #else
     #include<errno.h>
     #include<sys/types.h>

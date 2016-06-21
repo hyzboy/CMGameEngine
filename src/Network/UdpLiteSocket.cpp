@@ -6,17 +6,17 @@
 #include<netinet/udplite.h>
 #endif//HGL_OS != HGL_OS_Windows
 
-// #ifndef IPPROTO_UDPLITE
-// #define IPPROTO_UDPLITE     136
-// #endif
+#ifndef SOL_UDPLITE
+#define SOL_UDPLITE         136
+#endif//SOL_UDPLITE
 
-// #ifndef UDPLITE_SEND_CSCOV
-// #define UDPLITE_SEND_CSCOV  10
-// #endif
-//
-// #ifndef UDPLITE_RECV_CSCOV
-// #define UDPLITE_RECV_CSCOV  11
-// #endif
+#ifndef UDPLITE_SEND_CSCOV
+#define UDPLITE_SEND_CSCOV  10
+#endif
+
+#ifndef UDPLITE_RECV_CSCOV
+#define UDPLITE_RECV_CSCOV  11
+#endif
 //--------------------------------------------------------------------------------------------------
 namespace hgl
 {
@@ -73,8 +73,13 @@ namespace hgl
         {
             if(ThisSocket==-1)return;
 
+#if HGL_OS == HGL_OS_Windows
+			setsockopt(ThisSocket, SOL_UDPLITE, UDPLITE_SEND_CSCOV, (const char *)&send_val, sizeof(int));
+			setsockopt(ThisSocket, SOL_UDPLITE, UDPLITE_RECV_CSCOV, (const char *)&recv_val, sizeof(int));
+#else
             setsockopt(ThisSocket, SOL_UDPLITE, UDPLITE_SEND_CSCOV, &send_val, sizeof(int));
             setsockopt(ThisSocket, SOL_UDPLITE, UDPLITE_RECV_CSCOV, &recv_val, sizeof(int));
+#endif//
         }
 	}//namespace network
 }//namespace hgl

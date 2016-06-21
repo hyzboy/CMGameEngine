@@ -12,6 +12,12 @@ int main(int,char **)
 
     List<IPSupport> ipsl;
 
+#if HGL_OS == HGL_OS_Windows
+	WSADATA wsa;
+
+	(WSAStartup(MAKEWORD(2, 2), &wsa) == NO_ERROR);
+#endif//
+
     const int count=GetIPSupport(ipsl);
 
     int v4=0,v6=0;
@@ -27,7 +33,6 @@ int main(int,char **)
             case AF_INET6:  cout<<"IPv6";++v6;break;
 
 #if HGL_OS == HGL_OS_Windows
-
             case AF_NETBIOS: cout<<"NetBIOS";break;
 #endif//Windows
 
@@ -44,22 +49,21 @@ int main(int,char **)
             case SOCK_SEQPACKET:cout<<"SEQPACKET";break;
             case SOCK_DCCP:     cout<<"DCCP     ";break;
             case SOCK_PACKET:   cout<<"PACKET   ";break;
-
             default:            cout<<"Other("<<s.socktype<<")";break;
         }
 
         cout<<" Protocol: ";
         switch(s.protocol)
         {
-            case IPPROTO_TCP:       cout<<"TCP      ";break;
-            case IPPROTO_UDP:       cout<<"UDP      ";break;
-            case IPPROTO_DCCP:      cout<<"DCCP     ";break;
-            case IPPROTO_SCTP:      cout<<"SCTP     ";break;
-            case IPPROTO_UDPLITE:   cout<<"UDP-Lite ";break;
+            case IPPROTO_TCP:       cout<<"TCP     ";break;
+            case IPPROTO_UDP:       cout<<"UDP     ";break;
+            case IPPROTO_DCCP:      cout<<"DCCP    ";break;
+            case IPPROTO_SCTP:      cout<<"SCTP    ";break;
+            case IPPROTO_UDPLITE:   cout<<"UDP-Lite";break;
             default:                cout<<"Other("<<s.protocol<<")";break;
         }
 
-        cout<<"Address: ";
+        cout<<" Address: ";
 
         if(s.family==AF_INET)cout<<s.ipv4str;else
         if(s.family==AF_INET6)cout<<s.ipv6str;

@@ -140,7 +140,6 @@ namespace hgl
                 return(-1);
 
             int count = 0;
-            uint64 *p;
 
             for (ptr = answer; ptr; ptr = ptr->ai_next)
             {
