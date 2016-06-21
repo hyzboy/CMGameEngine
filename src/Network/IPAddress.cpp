@@ -119,6 +119,40 @@ namespace hgl
             return(count);
         }
 
+        /**
+         * 返回本机的IP支持情况
+         * @return 支持的协议数量
+         * @return -1 出错，无法获取主机名称
+         * @return -2 出错，无法获取地址信息
+         */
+        int GetIPSupport(List<IPSupport> &ipsl)
+        {
+            char hostname[256];
+
+            if(gethostname(hostname, 256))
+                return(-1);
+
+            struct addrinfo hints, *answer, *ptr;
+
+            hgl_zero(hints);
+
+            if (getaddrinfo(hostname, nullptr, &hints, &answer))         //此函数最低Windows 2003/Vista
+                return(-1);
+
+            int count = 0;
+            uint64 *p;
+
+            for (ptr = answer; ptr; ptr = ptr->ai_next)
+            {
+                ipsl.Add(IPSupport(ptr->ai_family,ptr->ai_socktype,ptr->ai_protocol));
+
+                ++count;
+            }
+
+            freeaddrinfo(answer);
+            return(count);
+        }
+
         bool IPv4Address::Set(const char *name,ushort port,int _socktype,int _protocol)
         {
             socktype=_socktype;

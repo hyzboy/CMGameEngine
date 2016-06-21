@@ -53,6 +53,24 @@ namespace hgl
 {
 	namespace network
 	{
+        struct IPSupport
+        {
+            uint family;            ///<协议家族：AF_INET,AF_INET6,AF_NETBIOS
+            uint socktype;          ///<Socket类型：SOCK_STREAM,SOCK_DGRAM,SOCK_RAW,SOCK_RDM,SOCK_SEQPACKET
+            uint protocol;          ///<协议类型：IPPROTO_TCP,IPPROTO_UDP,IPPROTO_SCTP
+
+        public:
+
+            IPSupport(uint f,uint s,uint p)
+            {
+                family=f;
+                socktype=s;
+                protocol=p;
+            }
+        };
+
+        int GetIPSupport(List<IPSupport> &);        ///<取得本机IP支持列表
+
 		/**
          * IP地址类
          */
