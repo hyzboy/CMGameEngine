@@ -61,7 +61,7 @@ IF(WIN32)
 					GLFW/win32_tls.c
 					GLFW/win32_window.c
 					GLFW/window.c
-					GLFW/winmm_joystick.c)
+					GLFW/win32_joystick.c)
 
       SOURCE_GROUP("OpenGL\\GLFW"   FILES ${GLFW_SOURCE})
 

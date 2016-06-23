@@ -238,7 +238,7 @@ namespace hgl
 
 			bool fs::add_ds_end()
 			{
-				add(U8_TEXT("\t" HGL_FS_FRAG_COLOR "=gbuffer_encode(")+fin_color+U8_TEXT(",normal," HGL_FS_POSITION ".xy,specular_power);"));
+				//add(U8_TEXT("\t" HGL_FS_FRAG_COLOR "=gbuffer_encode(")+fin_color+U8_TEXT(",normal," HGL_FS_POSITION ".xy,specular_power);"));
 
 				return(true);
 			}
