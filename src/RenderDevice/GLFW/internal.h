@@ -45,7 +45,7 @@
 #endif
 
 #define GLFW_INCLUDE_NONE
-#include "../include/GLFW/glfw3.h"
+#include "GLFW/glfw3.h"
 
 typedef int GLFWbool;
 
