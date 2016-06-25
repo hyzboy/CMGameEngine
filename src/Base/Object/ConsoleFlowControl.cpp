@@ -117,7 +117,7 @@ namespace hgl
 	*/
 	void ConsoleFlowControl::ExitGame()
 	{
-		cur->fos=fosExitGame;
+		cur->fos=fosExitApp;
 	}
 
 	/**
@@ -261,7 +261,7 @@ namespace hgl
 					ChangeActiveObject(nullptr);
 				}
 
-				fos=fosExitGame;
+				fos=fosExitApp;
 			}
 			else
 			{
@@ -284,7 +284,7 @@ namespace hgl
 			{
 				cur=nullptr;
 
-				fos=fosExitGame;
+				fos=fosExitApp;
 			}
 			else
 			{
@@ -294,11 +294,11 @@ namespace hgl
 			return;
 		}
 
-		if(state==fosExitGame)
+		if(state==fosExitApp)
 		{
 			Clear();
 
-			fos=fosExitGame;
+			fos=fosExitApp;
 
 			return;
 		}
@@ -311,7 +311,7 @@ namespace hgl
 	{
 		if(!cur)
 		{
-			fos=fosExitGame;
+			fos=fosExitApp;
 			return;
 		}
 
@@ -336,7 +336,7 @@ namespace hgl
     {
 		if(!cur)
 		{
-			fos=fosExitGame;
+			fos=fosExitApp;
 			return;
 		}
 

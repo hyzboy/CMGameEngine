@@ -45,7 +45,7 @@ namespace hgl
             {
                 Frame();                                                                            ///<调用一帧刷新
             }
-		    while(flow->ObjectState!=fosExitGame);
+		    while(flow->ObjectState!=fosExitApp);
 
 			return(0);
         }
