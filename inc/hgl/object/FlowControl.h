@@ -63,7 +63,7 @@ namespace hgl
 
 		virtual void Exit(FlowObject *next=nullptr);												///<退出当前流程对象
 		virtual void ExitToBack(FlowObject *);                                                   	///<退出当前流程对象到后台
-		virtual void ExitGame();																	///<退出整个游戏
+		virtual void ExitApp();																	    ///<退出整个游戏
 		virtual void Call(FlowObject *);                                                         	///<呼叫进入子流程对象
 		virtual void Return();                                                                      ///<退出子流程对象，返回上一级流程对象
 		virtual void ClearTo(FlowObject *);															///<清空当前所有流程对象，进入指定流程对象

@@ -384,7 +384,7 @@ namespace hgl
 
 				WaitActive();
 			}
-			while(flow->ObjectState!=fosExitGame);
+			while(flow->ObjectState!=fosExitApp);
 
 			return(0);
 		}
@@ -449,7 +449,7 @@ namespace hgl
 					return(false);
 			}
 
-			flow->ExitGame();
+			flow->ExitApp();
 
 			return(true);
 		}

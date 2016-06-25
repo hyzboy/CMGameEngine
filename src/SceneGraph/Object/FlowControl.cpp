@@ -114,9 +114,9 @@ namespace hgl
 	/**
 	* 退出整个游戏
 	*/
-	void FlowControl::ExitGame()
+	void FlowControl::ExitApp()
 	{
-		active_object->fos=fosExitGame;
+		active_object->fos=fosExitApp;
 	}
 
 	/**
@@ -263,7 +263,7 @@ namespace hgl
 					ChangeActiveObject(nullptr);
 				}
 
-				fos=fosExitGame;
+				fos=fosExitApp;
 			}
 			else
 			{
@@ -286,7 +286,7 @@ namespace hgl
 			{
 				active_object=nullptr;
 
-				fos=fosExitGame;
+				fos=fosExitApp;
 			}
 			else
 			{
@@ -296,11 +296,11 @@ namespace hgl
 			return;
 		}
 
-		if(state==fosExitGame)
+		if(state==fosExitApp)
 		{
 			Clear();
 
-			fos=fosExitGame;
+			fos=fosExitApp;
 
 			return;
 		}
@@ -313,7 +313,7 @@ namespace hgl
 	{
 		if(!active_object)
 		{
-			fos=fosExitGame;
+			fos=fosExitApp;
 			return;
 		}
 
@@ -362,7 +362,7 @@ namespace hgl
     {
 		if(!active_object)
 		{
-			fos=fosExitGame;
+			fos=fosExitApp;
 			return;
 		}
 

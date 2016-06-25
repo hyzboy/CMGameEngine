@@ -70,7 +70,7 @@ namespace hgl
 
 			virtual int  Run();																		    ///<运行当前应用程序
 
-			virtual void ExitGame(){if(flow)flow->ExitGame();}											///<退出游戏
+			virtual void ExitApp(){if(flow)flow->ExitApp();}											///<退出游戏
 
             virtual void SwapBuffer();                                                                  ///<刷新一帧
 			virtual void WaitActive();																	///<等待活动

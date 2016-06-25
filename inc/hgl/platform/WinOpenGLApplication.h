@@ -62,7 +62,7 @@ namespace hgl
                 if(RunMode==armFast	)RunFast();else
                     RunSync();
             }
-            while(flow->ObjectState!=fosExitGame);
+            while(flow->ObjectState!=fosExitApp);
 
 			return(0);
         }

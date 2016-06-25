@@ -21,7 +21,7 @@ public:
         if(!InitOpenALDriver())
         {
             LOG_ERROR("InitOpenALDriver() return error");
-            fos=hgl::fosExitGame;
+            fos=hgl::fosExitApp;
             return;
         }
 
@@ -70,7 +70,7 @@ public:
 
         WaitTime(buf.Time);
 
-		fos=hgl::fosExitGame;
+		fos=hgl::fosExitApp;
 	}
 };//class TestObject
 

@@ -23,7 +23,7 @@ namespace hgl
                 {
                     server=nullptr;
                     LOG_ERROR(OS_TEXT("Create SocketThreadServer failed! no address"));
-                    this->fos=fosExitGame;
+                    this->fos=fosExitApp;
                     return;
                 }
 
@@ -32,7 +32,7 @@ namespace hgl
 				if(!server->CreateServer(addr))
 				{
 					LOG_ERROR(OS_TEXT("Create SocketThreadServer failed!"));
-					this->fos=fosExitGame;
+					this->fos=fosExitApp;
 					return;
 				}
 			}
@@ -53,7 +53,7 @@ namespace hgl
 
                 if(!sa)
                 {
-                    this->fos=fosExitGame;
+                    this->fos=fosExitApp;
 
 					LOG_INFO(OS_TEXT("SocketThreadrServer Accept error!"));
                     return;
@@ -65,7 +65,7 @@ namespace hgl
 				{
                     delete sa;
 
-                    this->fos=fosExitGame;
+                    this->fos=fosExitApp;
 
 					LOG_INFO(OS_TEXT("SocketThreadrServer Accept error!"));
                     return;

@@ -78,7 +78,7 @@ namespace hgl
 
 		virtual int Run()=0;																	    ///<运行当前应用程序
 
-		virtual void ExitGame()=0;																	///<退出游戏
+		virtual void ExitApp()=0;																	///<退出游戏
 	};//class BaseApplication
 }//namespace hgl
 #endif//HGL_BASE_APPLICATION_INCLUDE;

@@ -115,7 +115,7 @@ namespace hgl
 	/**
 	* 退出整个游戏
 	*/
-	void ConsoleFlowControl::ExitGame()
+	void ConsoleFlowControl::ExitApp()
 	{
 		cur->fos=fosExitApp;
 	}

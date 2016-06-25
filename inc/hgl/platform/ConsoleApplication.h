@@ -50,7 +50,7 @@ namespace hgl
 			return(0);
         }
 
-		virtual void ExitGame(){if(flow)flow->ExitGame();}											///<退出游戏
+		virtual void ExitApp(){if(flow)flow->ExitApp();}											///<退出游戏
 	};//class ConsoleApplication
 }//namespace hgl
 
