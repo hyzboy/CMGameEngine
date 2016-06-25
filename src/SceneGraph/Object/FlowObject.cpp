@@ -49,11 +49,20 @@ namespace hgl
 
 	#define HGL_PROC_EVENT(name,type1,type2)	bool FlowObject::Proc_##name(type1 v1,type2 v2)	\
 												{	\
-													if(Control.Proc_##name(v1,v2))return(true);	\
-												\
-													if(On##name!=nullptr)	\
-														return On##name(v1,v2);	\
-												\
+                                                    if(KeyPreview)  \
+                                                    {   \
+                                                        if(On##name!=nullptr)	\
+                                                            return On##name(v1,v2);	\
+                                                        \
+                                                        if(Control.Proc_##name(v1,v2))return(true);	\
+                                                    }   \
+                                                    else    \
+                                                    {   \
+                                                        if(Control.Proc_##name(v1,v2))return(true);	\
+                                                    \
+                                                        if(On##name!=nullptr)	\
+                                                            return On##name(v1,v2);	\
+                                                    }   \
 													return(false);	\
 												}
 
