@@ -51,17 +51,19 @@ IF(WIN32)
       add_definitions("-D_GLFW_WGL")
 
       set(GLFW_SOURCE		GLFW/context.c
-					GLFW/init.c
-					GLFW/input.c
-					GLFW/monitor.c
-					GLFW/wgl_context.c
-					GLFW/win32_init.c
-					GLFW/win32_monitor.c
-					GLFW/win32_time.c
-					GLFW/win32_tls.c
-					GLFW/win32_window.c
-					GLFW/window.c
-					GLFW/win32_joystick.c)
+                            GLFW/egl_context.c
+                            GLFW/init.c
+                            GLFW/input.c
+                            GLFW/monitor.c
+                            GLFW/vulkan.c
+                            GLFW/wgl_context.c
+                            GLFW/win32_init.c
+                            GLFW/win32_joystick.c
+                            GLFW/win32_monitor.c
+                            GLFW/win32_time.c
+                            GLFW/win32_tls.c
+                            GLFW/win32_window.c
+                            GLFW/window.c)
 
       SOURCE_GROUP("OpenGL\\GLFW"   FILES ${GLFW_SOURCE})
 
