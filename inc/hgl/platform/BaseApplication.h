@@ -23,7 +23,7 @@ namespace hgl
 
 		fosExit,                        ///<退出，进入下一个对象
 		fosExitFlow,                    ///<退出当前流程控制中的所有流程，并进入指定的下一个流程
-		fosExitGame,                    ///<退出整个游戏
+        fosExitApp,                     ///<退出整个程序
 	};
 
 	/**
