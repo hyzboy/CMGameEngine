@@ -53,5 +53,12 @@ namespace hgl
 			ThisSocket=-1;
             SAFE_CLEAR(server_address);
 		}
+
+		void ServerSocket::SetIPv6Only(bool only)
+		{
+			int on = only?1:0;
+
+			setsockopt(ThisSocket, IPPROTO_IPV6, IPV6_V6ONLY, (const char *)&on, sizeof(on));
+		}
 	}//namespace network
 }//namespace hgl
