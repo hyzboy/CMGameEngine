@@ -42,7 +42,7 @@ namespace hgl
 						SetSocketBlock(ThisSocket,block,sto,rto);
 					}
 
-					void SetIPv6Only(bool);															///<设置仅使用IPv6
+					bool SetIPv6Only(bool);															///<设置仅使用IPv6
 		};//class ServerSocket
 	}//namespace network
 }//namespace hgl

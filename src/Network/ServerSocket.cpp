@@ -54,11 +54,15 @@ namespace hgl
             SAFE_CLEAR(server_address);
 		}
 
-		void ServerSocket::SetIPv6Only(bool only)
+		bool ServerSocket::SetIPv6Only(bool only)
 		{
+			if (ThisSocket == -1)return(false);
+
+			if (server_address->GetFamily() != AF_INET6)return(false);
+
 			int on = only?1:0;
 
-			setsockopt(ThisSocket, IPPROTO_IPV6, IPV6_V6ONLY, (const char *)&on, sizeof(on));
+			return(setsockopt(ThisSocket, IPPROTO_IPV6, IPV6_V6ONLY, (const char *)&on, sizeof(on)) == 0);
 		}
 	}//namespace network
 }//namespace hgl
