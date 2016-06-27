@@ -1,0 +1,1156 @@
+<!--?xml version="1.0" encoding="iso-8859-1"?-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="Userlevel%20IPv6%20Programming%20Introduction_files/style.htm" type="text/css">
+
+    <title>Userlevel IPv6 Programming Introduction</title>
+
+    <style type="text/css">
+      pre { background-color: #b0b0b0; }
+      tt { background-color: #e0e0e0; }
+      table.codediff { background: rgb(208,208,208); }
+      td.same { color: black; font-family: monospace; }
+      td.new { color: green; font-family: monospace; font-weight: bold; background: rgb(224,224,224); }
+      td.old { color: red; font-family: monospace; font-weight: bold; background: rgb(224,224,224); }
+    </style>
+  <style type="text/css"> #fi #fic {margin-right:100px !important}  #fi #rh {margin-left:-115px !important;width:95px !important}  #fi .rh {display:none !important}  body:not(.xE) div[role='main'] .Bu:not(:first-child) {display: none !important} </style></head>
+
+  <body>
+    <h1>Userlevel IPv6 Programming Introduction</h1>
+
+    <div id="author">
+      <a href="mailto:drepper@gmail.com">Ulrich Drepper</a><br>
+      2008-10-30
+    </div>
+
+    <p>Despite the 10+ years of development many people still don't
+    know how to program for IPv6 or better yet, protocol independence.
+    This can be seen by the high number of programs which are still
+    not IPv6-ready.  I'll explain here a few things related to the
+    userlevel APIs people should be using.  The text should be helpful
+    for people who write new code as well for those converting
+    IPv4-only code.</p>
+
+    <p>In the following text I'll restrict the description to storing,
+    resolving, and printing and scanning IP addresses.  At some later
+    time I might add more details of advanced features.</p>
+
+    <p>I will exclusively cover C interfaces here.  I assume that C++
+    programs use the same interfaces because up to this day I still
+    haven't found a C++ net class library which doesn't make me angry
+    or sick.</p>
+
+
+    <h2>Storing Addresses</h2>
+
+    <p>Programs in an IPv4-only world stored IP addresses often in
+    <tt>int</tt>s.  If the programmer was a bit more clueful she used
+    <tt>struct in_addr</tt>.  Regardless, the type must be (at least)
+    32 bits wide.  That is not enough for IPv6 addresses which are 128
+    bits (16 bytes) wide.</p>
+
+    <p>Instead of going ahead and hardcoding the 16 byte requirement
+    programs should instead use the <tt>struct sockaddr_storage</tt>
+    type defined in <tt>&lt;sys/socket.h&gt;</tt>.  This type should
+    be large enough to hold all types of addresses.
+
+    </p><p>This advice should be qualified a bit, though.  The type size
+    is really big (128 bytes).  If lots of addresses have to be stored
+    one might want to use a representation which is just large enough.
+    Ideally this means no fixed size arrays but instead (length, byte
+    sequence) pairs.  All the interfaces providing addresses either
+    report how large an address is or they produce only addresses of a
+    specific form.  This means the program can always know the size of
+    the address.</p>
+
+
+    <h2>Resolving Addresses</h2>
+
+    <p>There are two directions for resolving of addresses.  In the
+    first case a (host) name is resolved to one or more addresses.
+    The second direction is resolving addresses to (host) names.  This
+    functionality has been around for a long time.  But the interfaces
+    used were designed for IPv4 only and also for a simpler time where
+    each machine had exactly one IP address.  Times change but let's
+    examine the old, sorry state first.</p><p>
+
+
+    </p><h3>Historic Name and Address Lookup</h3>
+
+    <p>The initial interface to resolve a name to an address was:</p>
+
+<pre>#include &lt;netdb.h&gt;
+struct hostent *gethostbyname(const char *name);
+</pre>
+
+    <p>The <tt>hostent</tt> structure returns the official host name,
+    the address type, the address length, a number of addresses, and
+    possible aliases.  The function can return both IPv4 and IPv6
+    addresses (controlled by the <tt>_res</tt> variable) but never can
+    return both types at the same time.  The use of <tt>_res</tt> can
+    also have nasty side effects on concurrently running code.</p>
+
+    <p>As a stop-gap solution the <tt>gethostbyname2</tt> function was
+    instroduced:</p>
+
+<pre>#include &lt;netdb.h&gt;
+struct hostent *gethostbyname2(const char *name, int af);
+</pre>
+
+    <p>It allows to request IPv4 or IPv6 addresses based on the second
+    parameter which can be <tt>AF_INET</tt> or <tt>AF_INET6</tt>.
+    This eliminates using the <tt>_res</tt> variable and potentially
+    allows requesting addresses for other protocols.  I am not aware
+    of any implementation which handles anything other than the two.
+    This still does not eliminate one big problem with the interfaces:
+    they are not thread safe since they return a pointer to static
+    memory.  For this we have two other interfaces
+    (<tt>gethostbyname_r</tt> and <tt>gethostbyname2_r</tt>).</p>
+
+    <p>These interfaces were OK in the early days.  Machines had one
+    network interfaces.  Yes, some names are associated with multiple
+    addresses but this is mainly meant for load balancing betweem
+    different machines.  But there are two big problems:</p>
+
+    <ol>
+
+      <li>the interface force one to make a decision about using IPv4
+      and/or IPv6 and if both, in which order to try the
+      connection.</li>
+
+      <li>the order in which the addresses for each lookup returns are
+      not specified. In fact, for DNS lookups the order is determined
+      by the name server.  The server cannot know which the best
+      address for the client is.</li>
+
+    </ol>
+
+    <p>Not trying the best address first can mean that connections
+    which cannot succeed are tried (causing delays), traffic can be
+    routed over public lines instead of through intranet lines, the
+    speed can be reduced because indirections are used, etc.  Fixing
+    these problems could in theory be solved by the programmer but it
+    requires a whole lot of quite complex code.  It should not be the
+    responsibility of the programmer.</p>
+
+    <p>Determining a host name from an IP address happens using the
+    <tt>gethostbyaddr</tt> interface:</p>
+
+<pre>include &lt;netdb.h&gt;
+struct hostent *gethostbyaddr(const void *addr, int len, int type);
+</pre>
+
+    <p>This function could be used for all protocols.  But the usual
+    problem is that the function is not thread-safe.  There is
+    <tt>gethostbyaddr_r</tt> but like the other <tt>*_r</tt> functions
+    it depends on the programmer allocating the memory and adjusting
+    the buffer size.  <tt>gethostbyaddr</tt> also returns addresses
+    which really isn't needed in these situations.
+
+
+    </p><h3>Modern Address Lookup</h3>
+
+    <p>POSIX specifies the interface which should be used for address
+    lookups:</p>
+
+<pre>#include &lt;netdb.h&gt;
+int getaddrinfo(const char *node, const char *service,
+                const struct addrinfo *hints, struct addrinfo **res);
+</pre>
+
+    <p>This is a terribly complicated interface, it has many options.
+    I'll explain a few of them but first the most basic lookup and
+    more importantly, how to handle the results.  This is a simple
+    code sequence:</p>
+
+<pre>struct addrinfo *res;
+struct addrinfo hints;
+memset(&amp;hints, '\0', sizeof(hints));
+hints.ai_socktype = SOCK_STREAM;
+hints.ai_flags = AI_ADDRCONFIG;
+int e = getaddrinfo("www.redhat.com", "http", &amp;hints, &amp;res);
+if (e != 0) {
+  printf("failure %s\n", gai_strerror (e));
+  return;
+}
+int sock = -1;
+for (struct addrinfo *r = res; r != NULL; r = r-&gt;ai_next) {
+  sock = socket(r-&gt;ai_family, r-&gt;ai_socktype, r-&gt;ai_protocol);
+  if (sock != -1 &amp;&amp; connect(sock, r-&gt;ai_addr, r-&gt;ai_addrlen) == 0)
+    break;
+  if (sock != -1) {
+    close(sock);
+    sock = -1;
+  }
+}
+freeaddrinfo(res);
+if (sock != -1) {
+  ... use socket ...
+}
+</pre>
+
+    <p>As you can see the <tt>getaddrinfo</tt> functions specifies all
+    the information needed for the connection.  The example code also
+    shows how the different addresses are returned.</p>
+
+    <ul>
+
+      <li>the first parameter of the <tt>getaddrinfo</tt> function is
+      the name of the host for which the address(es) are
+      requested.</li>
+
+      <li>the second parameter is a string describing the service.
+      The string can be the name of the service or a numeric value.
+      In case a port number is not needed the parameter can be
+      NULL</li>
+
+      <li>the third parameter is a pointer to an <tt>addrinfo</tt>
+      structure which does not contain and will not contain results.
+      It is only used to specify additional options.  In the example
+      above the two hints set indicate that only TCP records are
+      requested and that only addresses for the currently configured
+      interfaces are requested (see below).</li>
+
+      <li>the fourth parameter is a pointer to a variable which will
+      contain the list of found addresses</li>
+
+      <li>multiple addresses are returned in individual elements of
+      the single-linked list.  The pointer to the first element is
+      returned, the following elements are accessed through the
+      <tt>ai_next</tt> element</li>
+
+      <li>the parameters which have to be passed to a <tt>socket</tt>
+      all come from the <tt>sockaddr</tt> structure as can be
+      seen</li>
+
+      <li>the <tt>connect</tt> call gets passed the actual address and port
+      information.  Note that the code is completely protocol
+      independent.  Since the <tt>sockaddr</tt> structure as well as
+      the length is filled in by <tt>getaddrinfo</tt> the program can
+      handle everything that is passed back</li>
+
+      <li>Whenever <tt>getaddrinfo</tt> returns successful the list of
+      returned addresses must be freed by a call to
+      <tt>freeaddrinfo</tt>.  This can happen as soon as the
+      connection is established, none of the values is necessary for
+      the later operation.  This is no requirement though.  As long as
+      all the memory is freed the code is allowed to do whatever it
+      wants.</li>
+
+      <li>Errors in the <tt>getaddrinfo</tt> call are reported through
+      the return value.  Every value other than zero indicates an
+      error.  The return value is the error code (see the
+      <tt>EAI_*</tt> values in <tt>&lt;netdb.h&gt;</tt>) which can be
+      translated into a string using the <tt>gai_strerror</tt>
+      function.</li>
+
+    </ul>
+
+    <p>The most important thing when using <tt>getaddrinfo</tt> is
+    to make sure
+    that all results are used in order.  To stress the important words
+    again: <q>all</q> and <q>order</q>.  Too many (incorrect) programs
+    only use the first result.  The order in which the results are
+    returned is <b>not</b> arbitrary or random.  The results are in
+    fact sorted.</p>
+
+    <p>The POSIX specification does not require this but this is
+    mainly because POSIX is protocol agnostic.  But there is
+    <a href="http://www.rfc-editor.org/rfc/rfc3484.txt">RFC 3484</a>.
+    It explains how addresses should be sorted based on source and
+    destination addresses.  I have <a href="http://people.redhat.com/drepper/linux-rfc3484.html">another
+    write-up</a> on just this topic so I won't repeat it here.  The
+    important thing to remember here is that the addresses are
+    returned in an order where the first returned address has the
+    highest probability to succeed.</p>
+
+    <p>There are a few more hints which can be passed.  The following
+    flags can be set in <tt>ai_flags</tt> (the list is not
+    complete):</p>
+
+    <dl>
+
+      <dt><tt>AI_ADDRCONFIG</tt></dt>
+
+      <dd>This flag should always be set when the returned values are
+      needed to make connections.  If no specific protocol is
+      requested, the Linux <tt>getaddrinfo</tt> implementation returns
+      both IPv4 and IPv6 addresses.  This can be less than optimal and
+      is certainly slower if the machine has only interfaces for one
+      protocol.  These days there are still many systems which have no
+      configured IPv6 address at all.  In that case using an IPv6
+      address will always fail.  Worse, it might cause the IPv6 kernel
+      module to be loaded unnecessarily.  Using
+      <tt>AI_ADDRCONFIG</tt> avoids this by determining what protocols
+      are supported by the currently configured network interfaces and
+      return only addresses for those.</dd>
+
+
+      <dt><tt>AI_CANONNAME</tt></dt>
+
+      <dd>The first element of the returned list has the
+      <tt>ai_canonname</tt> filled in with the official name of the
+      machine.  This name might be different from the name passed in
+      as the first parameter.  The value is only really meaningful
+      when the name lookup happens using DNS which has the concept of
+      a canonical host name.</dd>
+
+
+      <dt><tt>AI_V4MAPPED</tt></dt>
+
+      <dd>When looking up IPv6 addresses the function will return
+      mapped IPv4 addresses if there is no IPv6 address available at
+      all.</dd>
+
+
+      <dt><tt>AI_ALL</tt></dt>
+
+      <dd>If this flag is set along with <tt>AI_V4MAPPED</tt> when
+      looking up IPv6 addresses the function will return all IPv6
+      addresses as well as all IPv4 addresses.  The latter mapped to
+      IPv6 format.</dd>
+
+
+      <dt><tt>AI_IDN</tt></dt>
+
+      <dd>Setting this flag indicates that the provided host name is
+      encoded using the International Domain Name format (<a href="http://www.rfc-editor.org/rfc/rfc3490.txt">RFC
+      3490</a>).</dd>
+
+
+      <dt><tt>AI_CANONIDN</tt></dt>
+
+      <dd>Setting this flag indicates that the returned canonical host
+      name should be encoded using the IDN format.</dd>
+
+    </dl>
+
+    <p>The <tt>ai_family</tt> and <tt>ai_protocol</tt> fields in the
+    hint structure can also be set.  Most of the time this is not
+    needed.  There are a lot more details of <tt>getaddrinfo</tt>.
+    The POSIX specification describes them pretty well.  Just use the
+    man pages (<tt>man getaddrinfo</tt> requests the Linux version,
+    <tt>man 3p getaddrinfo</tt> the POSIX man page).</p>
+
+
+    <h3>Modern Host Name Lookup</h3>
+
+    <p>To determine the name of a host and the name of a service from
+    the socket address one should use <tt>getnameinfo</tt>:
+
+    </p><pre>#include &lt;netdb.h&gt;
+int getnameinfo(const struct sockaddr *sa, socklen_t salen, char *node, socklen_t nodelen, char *service,
+                socklen_t servicelen, int flags);
+</pre>
+
+    <p>The first two parameters describe the socket address.  These
+    can be values as returned by <tt>getaddrinfo</tt> or
+    <tt>getpeername</tt> or they can be constructed by hand.  The
+    important point is that the code is protocol independent.</p>
+
+    <p>The result strings are returned in the buffers pointed to by
+    <tt>node</tt> and <tt>service</tt>.  The length of the two buffers
+    is specified by the <tt>nodelen</tt> and <tt>servicelen</tt>
+    parameters respectively.  Either buffer pointer can be a null
+    pointer in which case no such information is returned.  If a
+    buffer is too small the function returns
+    <tt>EAI_OVERFLOW</tt>.</p>
+
+    <p>The <tt>flags</tt> parameter can have one or more of the
+    <tt>NI_*</tt> flags defined in <tt>&lt;netdb.h&gt;</tt> set.  I'm
+    not going all of them here.  It is perhaps worthwhile to mention
+    that the <tt>NI_DGRAM</tt> flag can be used to lookup UDP services
+    instead of the default TCP services.  This corresponds roughly to
+    the second parameter of <tt>getservbyport</tt>.</p>
+
+
+    <h2>Printing and Scanning Addresses</h2>
+
+    <p>The routines to generate textual representations for IP
+    addresses and to convert text to IP addresses is also protocol
+    independent but not automatic.  Two functions which can be used
+    are:</p>
+
+    <pre>#include &lt;arpa/inet.h&gt;:
+int inet_pton(int af, const char *cp, void *buf);
+const char *inet_ntop (int af, const void *cp, char *buf, socklen_t len);
+</pre>
+
+    <p>For both functions the programmer has to make calls for the
+    different protocols which are supported.  Supported are only
+    <tt>AF_INET</tt> and <tt>AF_INET6</tt>.  The second parameter of
+    <tt>inet_pton</tt> is a string.  The third parameter to a memory
+    region large enough to hold an address.  For <tt>AF_INET</tt> the
+    requirement is <tt>NS_INADDRSZ</tt> bytes (i.e., <tt>sizeof(struct
+    in_addr)</tt>) and for <tt>AF_INET6</tt> it is
+    <tt>NS_IN6ADDRSZ</tt> (i.e, <tt>sizeof (struct
+    in6_addr)</tt>).</p>
+
+    <p>For <tt>inet_ntop</tt> the second parameter is the address
+    (usually the <tt>sin_addr</tt> field of a <tt>struct
+    sockaddr_in</tt> object or the <tt>sin6_addr</tt> field of a
+    <tt>struct sockaddr_in6</tt> object).  The buffer to store the
+    result in is passed in the third parameter, its length in the
+    fourth.  The <tt>buf</tt> value is also the return value of a
+    successful call.</p>
+
+    <p>These are the lowlevel functions and some people might want to
+    use them.  But they are more cumbersome to use than it's worth it.
+    There are two higher-level interfaces and we've already talked
+    about them.  <tt>getaddrinfo</tt> and <tt>getnameinfo</tt> can be
+    used to convert addresses back and forth.  And what is more, they
+    automatically recognize the address format and handle them
+    transparently.</p><p>
+
+    </p><p>A call to <tt>getaddrinfo</tt> with the string as the first
+    parameter and ideally the <tt>AI_NUMERICHOST</tt> bit set in the
+    <tt>ai_flags</tt> field of the hints will return an object with
+    the converted address.  This is a bit slower due to the dynamic
+    memory allocation but simplifies things a lot.  That's usually
+    more important.  Another plus: the result is fully usable socket
+    address structure.  If a service name is also passed to
+    <tt>getaddrinfo</tt> even the port is already filled in.</p>
+
+    <p>Similarly, to convert an address to a string use
+    <tt>getnameinfo</tt> with the <tt>NI_NUMERICHOST</tt> flag set.
+    There are really no disadvantages to using the function instead of
+    <tt>inet_ntop</tt>.</p>
+
+
+    <h2>Interface Checklist</h2>
+
+    <p>The following is a table listing on the left side the
+    interfaces which must/should be avoided and on the right side the
+    replacements.  The list also contains interfaces not mentioned
+    above because they should be avoided when possible.</p>
+
+    <table border="1">
+
+      <colgroup>
+        <col width="45%">
+        <col width="45%">
+      </colgroup>
+
+      <thead>
+        <tr>
+	  <th>Obsolete Interface</th>
+	  <th>Protocol Independent Interface</th>
+	</tr>
+      </thead>
+
+      <tbody>
+        <tr>
+	  <td><tt>struct sockaddr_in</tt> (when used to store addresses)</td>
+	  <td><tt>struct sockaddr_storage</tt></td>
+        </tr>
+
+        <tr>
+	  <td><tt>gethostbyname</tt></td>
+	  <td rowspan="3"><tt>getaddrinfo</tt></td>
+        </tr>
+
+        <tr>
+	  <td><tt>gethostbyname2</tt></td>
+        </tr>
+
+        <tr>
+	  <td><tt>getservbyname</tt> when filling in port number</td>
+        </tr>
+
+        <tr>
+	  <td><tt>gethostbyaddr</tt></td>
+	  <td rowspan="2"><tt>getnameinfo</tt></td>
+        </tr>
+
+        <tr>
+	  <td><tt>getservbyport</tt> when handling socket address</td>
+        </tr>
+
+        <tr>
+	  <td><tt>inet_addr</tt></td>
+	  <td rowspan="3"><tt>getaddrinfo</tt> with <tt>AI_NUMERICHOST</tt> flag</td>
+        </tr>
+
+        <tr>
+	  <td><tt>inet_aton</tt></td>
+        </tr>
+
+        <tr>
+	  <td><tt>inet_nsap_addr</tt></td>
+        </tr>
+
+        <tr>
+	  <td><tt>inet_ntoa</tt></td>
+	  <td rowspan="2"><tt>getnameinfo</tt> with <tt>NI_NUMERICHOST</tt> flag</td>
+        </tr>
+
+        <tr>
+	  <td><tt>inet_nsap_ntoa</tt></td>
+        </tr>
+
+        <tr>
+	  <td><tt>inet_makeaddr</tt></td>
+	  <td rowspan="6">Avoid completely, we don't have this concept anymore</td>
+        </tr>
+
+        <tr>
+	  <td><tt>inet_netof</tt></td>
+        </tr>
+
+        <tr>
+	  <td><tt>inet_network</tt></td>
+        </tr>
+
+        <tr>
+	  <td><tt>inet_neta</tt></td>
+        </tr>
+
+        <tr>
+	  <td><tt>inet_net_ntop</tt></td>
+        </tr>
+
+        <tr>
+	  <td><tt>inet_net_pton</tt></td>
+        </tr>
+
+        <tr>
+	  <td><tt>rcmd</tt></td>
+	  <td><tt>rcmd_af</tt></td>
+        </tr>
+
+        <tr>
+	  <td><tt>rexec</tt></td>
+	  <td><tt>rexec_af</tt></td>
+        </tr>
+
+        <tr>
+	  <td><tt>rresvport</tt></td>
+	  <td><tt>rresvport_af</tt></td>
+        </tr>
+      </tbody>
+    </table>
+
+
+    <h2>Example Client Code</h2>
+
+    <p>The following is a trivial client program.  In fact, there are
+    two programs.  One is using the old interfaces and it uses IPv4
+    only.  The second program is protocol independent.  The tables
+    shows the differences.  Obviously not all IPv4 programs look
+    exactly like this but it should be easy enough to recognize
+    commonalities and therefore adjust the code for protocol
+    independence.</p>
+
+    <table class="codediff" rules="cols" cellspacing="0">
+      <tbody><tr>
+        <td class="same">#include&nbsp;&lt;errno.h&gt;</td>
+        <td class="same">#include&nbsp;&lt;errno.h&gt;</td>
+      </tr>
+      <tr>
+        <td class="same">#include&nbsp;&lt;error.h&gt;</td>
+        <td class="same">#include&nbsp;&lt;error.h&gt;</td>
+      </tr>
+      <tr>
+        <td class="same">#include&nbsp;&lt;netdb.h&gt;</td>
+        <td class="same">#include&nbsp;&lt;netdb.h&gt;</td>
+      </tr>
+      <tr>
+        <td class="same">#include&nbsp;&lt;stdio.h&gt;</td>
+        <td class="same">#include&nbsp;&lt;stdio.h&gt;</td>
+      </tr>
+      <tr>
+        <td class="same">#include&nbsp;&lt;stdlib.h&gt;</td>
+        <td class="same">#include&nbsp;&lt;stdlib.h&gt;</td>
+      </tr>
+      <tr>
+        <td class="same"></td>
+        <td class="new">#include&nbsp;&lt;string.h&gt;</td>
+      </tr>
+      <tr>
+        <td class="same">#include&nbsp;&lt;unistd.h&gt;</td>
+        <td class="same">#include&nbsp;&lt;unistd.h&gt;</td>
+      </tr>
+      <tr>
+        <td class="same">#include&nbsp;&lt;netinet/in.h&gt;</td>
+        <td class="same">#include&nbsp;&lt;netinet/in.h&gt;</td>
+      </tr>
+      <tr>
+        <td class="same">#include&nbsp;&lt;sys/socket.h&gt;</td>
+        <td class="same">#include&nbsp;&lt;sys/socket.h&gt;</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;</td>
+        <td class="same">&nbsp;</td>
+      </tr>
+      <tr>
+        <td class="same">int</td>
+        <td class="same">int</td>
+      </tr>
+      <tr>
+        <td class="same">main&nbsp;(int&nbsp;argc,&nbsp;char&nbsp;*argv[])</td>
+        <td class="same">main&nbsp;(int&nbsp;argc,&nbsp;char&nbsp;*argv[])</td>
+      </tr>
+      <tr>
+        <td class="same">{</td>
+        <td class="same">{</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;int&nbsp;result&nbsp;=&nbsp;0;</td>
+        <td class="same">&nbsp;&nbsp;int&nbsp;result&nbsp;=&nbsp;0;</td>
+      </tr>
+      <tr>
+        <td class="old">&nbsp;&nbsp;struct&nbsp;hostent&nbsp;*h&nbsp;=&nbsp;gethostbyname&nbsp;(argv[1]);</td>
+        <td class="new">&nbsp;&nbsp;struct&nbsp;addrinfo&nbsp;*ai;</td>
+      </tr>
+      <tr>
+        <td class="old">&nbsp;&nbsp;if&nbsp;(h&nbsp;==&nbsp;NULL)</td>
+        <td class="new">&nbsp;&nbsp;struct&nbsp;addrinfo&nbsp;hints;</td>
+      </tr>
+      <tr>
+        <td class="old">&nbsp;&nbsp;&nbsp;&nbsp;error&nbsp;(EXIT_FAILURE,&nbsp;errno,&nbsp;"gethostbyname");</td>
+        <td class="new">&nbsp;&nbsp;memset&nbsp;(&amp;hints,&nbsp;'\0',&nbsp;sizeof&nbsp;(hints));</td>
+      </tr>
+      <tr>
+        <td class="old">&nbsp;&nbsp;struct&nbsp;servent&nbsp;*s&nbsp;=&nbsp;getservbyname&nbsp;("echo",&nbsp;"tcp");</td>
+        <td class="new">&nbsp;&nbsp;hints.ai_flags&nbsp;=&nbsp;AI_ADDRCONFIG;</td>
+      </tr>
+      <tr>
+        <td class="old">&nbsp;&nbsp;if&nbsp;(s&nbsp;==&nbsp;NULL)</td>
+        <td class="new">&nbsp;&nbsp;hints.ai_socktype&nbsp;=&nbsp;SOCK_STREAM;</td>
+      </tr>
+      <tr>
+        <td class="old">&nbsp;&nbsp;&nbsp;&nbsp;error&nbsp;(EXIT_FAILURE,&nbsp;errno,&nbsp;"getservbyname");</td>
+        <td class="new">&nbsp;&nbsp;int&nbsp;e&nbsp;=&nbsp;getaddrinfo&nbsp;(argv[1],&nbsp;"echo",&nbsp;&amp;hints,&nbsp;&amp;ai);</td>
+      </tr>
+      <tr>
+        <td class="old">&nbsp;&nbsp;struct&nbsp;in_addr&nbsp;**addrs&nbsp;=&nbsp;(struct&nbsp;in_addr&nbsp;**)&nbsp;h-&gt;h_addr_list;</td>
+        <td class="new">&nbsp;&nbsp;if&nbsp;(e&nbsp;!=&nbsp;0)</td>
+      </tr>
+      <tr>
+        <td class="old">&nbsp;&nbsp;while&nbsp;(*addrs&nbsp;!=&nbsp;NULL)</td>
+        <td class="new">&nbsp;&nbsp;&nbsp;&nbsp;error&nbsp;(EXIT_FAILURE,&nbsp;0,&nbsp;"getaddrinfo:&nbsp;%s",&nbsp;gai_strerror&nbsp;(e));</td>
+      </tr>
+      <tr>
+        <td class="same"></td>
+        <td class="new">&nbsp;&nbsp;struct&nbsp;addrinfo&nbsp;*runp&nbsp;=&nbsp;ai;</td>
+      </tr>
+      <tr>
+        <td class="same"></td>
+        <td class="new">&nbsp;&nbsp;while&nbsp;(runp&nbsp;!=&nbsp;NULL)</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;{</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;{</td>
+      </tr>
+      <tr>
+        <td class="old">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;sock&nbsp;=&nbsp;socket&nbsp;(PF_INET,&nbsp;SOCK_STREAM,&nbsp;0);</td>
+        <td class="new">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;sock&nbsp;=&nbsp;socket&nbsp;(runp-&gt;ai_family,&nbsp;runp-&gt;ai_socktype,</td>
+      </tr>
+      <tr>
+        <td class="same"></td>
+        <td class="new">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;runp-&gt;ai_protocol);</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(sock&nbsp;!=&nbsp;-1)</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(sock&nbsp;!=&nbsp;-1)</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{</td>
+      </tr>
+      <tr>
+        <td class="old">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;struct&nbsp;sockaddr_in&nbsp;sin;</td>
+        <td class="same"></td>
+      </tr>
+      <tr>
+        <td class="old">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sin.sin_family&nbsp;=&nbsp;AF_INET;</td>
+        <td class="same"></td>
+      </tr>
+      <tr>
+        <td class="old">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sin.sin_port&nbsp;=&nbsp;s-&gt;s_port;</td>
+        <td class="same"></td>
+      </tr>
+      <tr>
+        <td class="old">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sin.sin_addr&nbsp;=&nbsp;**addrs;</td>
+        <td class="same"></td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(connect&nbsp;(sock,</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(connect&nbsp;(sock,</td>
+      </tr>
+      <tr>
+        <td class="old">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(struct&nbsp;sockaddr&nbsp;*)&nbsp;&amp;sin,&nbsp;sizeof&nbsp;(sin))&nbsp;==&nbsp;0)</td>
+        <td class="new">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;runp-&gt;ai_addr,&nbsp;runp-&gt;ai_addrlen)&nbsp;==&nbsp;0)</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;char&nbsp;*line&nbsp;=&nbsp;NULL;</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;char&nbsp;*line&nbsp;=&nbsp;NULL;</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;size_t&nbsp;len&nbsp;=&nbsp;0;</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;size_t&nbsp;len&nbsp;=&nbsp;0;</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ssize_t&nbsp;n&nbsp;=&nbsp;getline&nbsp;(&amp;line,&nbsp;&amp;len,&nbsp;stdin);</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ssize_t&nbsp;n&nbsp;=&nbsp;getline&nbsp;(&amp;line,&nbsp;&amp;len,&nbsp;stdin);</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;write&nbsp;(sock,&nbsp;line,&nbsp;n);</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;write&nbsp;(sock,&nbsp;line,&nbsp;n);</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;n&nbsp;=&nbsp;read&nbsp;(sock,&nbsp;line,&nbsp;len);</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;n&nbsp;=&nbsp;read&nbsp;(sock,&nbsp;line,&nbsp;len);</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;write&nbsp;(STDOUT_FILENO,&nbsp;line,&nbsp;n);</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;write&nbsp;(STDOUT_FILENO,&nbsp;line,&nbsp;n);</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;close&nbsp;(sock);</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;close&nbsp;(sock);</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goto&nbsp;out;</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goto&nbsp;out;</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;close&nbsp;(sock);</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;close&nbsp;(sock);</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</td>
+      </tr>
+      <tr>
+        <td class="old">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;++addrs;</td>
+        <td class="new">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;runp&nbsp;=&nbsp;runp-&gt;ai_next;</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;}</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;}</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;error&nbsp;(0,&nbsp;0,&nbsp;"cannot&nbsp;contact&nbsp;%s",&nbsp;argv[1]);</td>
+        <td class="same">&nbsp;&nbsp;error&nbsp;(0,&nbsp;0,&nbsp;"cannot&nbsp;contact&nbsp;%s",&nbsp;argv[1]);</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;result&nbsp;=&nbsp;1;</td>
+        <td class="same">&nbsp;&nbsp;result&nbsp;=&nbsp;1;</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;out:</td>
+        <td class="same">&nbsp;out:</td>
+      </tr>
+      <tr>
+        <td class="same"></td>
+        <td class="new">&nbsp;&nbsp;freeaddrinfo&nbsp;(ai);</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;return&nbsp;result;</td>
+        <td class="same">&nbsp;&nbsp;return&nbsp;result;</td>
+      </tr>
+      <tr>
+        <td class="same">}</td>
+        <td class="same">}</td>
+      </tr>
+    </tbody></table>
+
+    <p>The protocol independent code is actually smaller, requires
+    fewer function calls, and is less error prone.</p>
+
+
+    <h2>Example Server Code</h2>
+
+    <p>The following is a trivial TCP server, again in two versions.
+    The server binds to all available addresses.  There is one little
+    oddity to observe.  The Linux kernel by default does not allow to bind an
+    IPv4 and an IPv6 socket to the same port at the same time (this can be
+    changed with <tt>/proc/sys/net/ipv6/bindv6only</tt>).  An
+    IPv4 socket cannot accept an IPv6 connection.  The
+    <tt>connect()</tt> call would fail with <tt>ECONNREFUSED</tt>.
+    But it is possible to accept an IPv4 connection with an IPv6
+    socket.  The address returned by the <tt>accept()</tt> call is an
+    V4-mapped IPv6 address.  What this means is that if a server is
+    meant to accept IPv4 and IPv6 connections the server has to bind
+    an IPv6 socket.  For the benefits of systems which allow/require
+    binding an IPv4 and IPv6 socket the server code still iterates
+    over all addresses returned by <tt>getaddrinfo()</tt>.  The
+    program recognizes the limitation the Linux kernel imposes by
+    checking for the <tt>EADDRINUSE</tt> returned by the <tt>bind()</tt>
+    call.  In this case the program just ignores the error.</p>
+
+    <table class="codediff" rules="cols" cellspacing="0">
+      <tbody><tr>
+        <td class="same">#include&nbsp;&lt;error.h&gt;</td>
+        <td class="same">#include&nbsp;&lt;error.h&gt;</td>
+      </tr>
+      <tr>
+        <td class="same">#include&nbsp;&lt;errno.h&gt;</td>
+        <td class="same">#include&nbsp;&lt;errno.h&gt;</td>
+      </tr>
+      <tr>
+        <td class="same">#include&nbsp;&lt;netdb.h&gt;</td>
+        <td class="same">#include&nbsp;&lt;netdb.h&gt;</td>
+      </tr>
+      <tr>
+        <td class="same">#include&nbsp;&lt;stdio.h&gt;</td>
+        <td class="same">#include&nbsp;&lt;stdio.h&gt;</td>
+      </tr>
+      <tr>
+        <td class="same">#include&nbsp;&lt;stdlib.h&gt;</td>
+        <td class="same">#include&nbsp;&lt;stdlib.h&gt;</td>
+      </tr>
+      <tr>
+        <td class="same">#include&nbsp;&lt;string.h&gt;</td>
+        <td class="same">#include&nbsp;&lt;string.h&gt;</td>
+      </tr>
+      <tr>
+        <td class="same">#include&nbsp;&lt;unistd.h&gt;</td>
+        <td class="same">#include&nbsp;&lt;unistd.h&gt;</td>
+      </tr>
+      <tr>
+        <td class="old">#include&nbsp;&lt;arpa/inet.h&gt;</td>
+        <td class="same"></td>
+      </tr>
+      <tr>
+        <td class="same">#include&nbsp;&lt;netinet/in.h&gt;</td>
+        <td class="same">#include&nbsp;&lt;netinet/in.h&gt;</td>
+      </tr>
+      <tr>
+        <td class="same">#include&nbsp;&lt;sys/poll.h&gt;</td>
+        <td class="same">#include&nbsp;&lt;sys/poll.h&gt;</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;</td>
+        <td class="same">&nbsp;</td>
+      </tr>
+      <tr>
+        <td class="same">int</td>
+        <td class="same">int</td>
+      </tr>
+      <tr>
+        <td class="same">main&nbsp;(int&nbsp;argc,&nbsp;char&nbsp;*argv[])</td>
+        <td class="same">main&nbsp;(int&nbsp;argc,&nbsp;char&nbsp;*argv[])</td>
+      </tr>
+      <tr>
+        <td class="same">{</td>
+        <td class="same">{</td>
+      </tr>
+      <tr>
+        <td class="old">&nbsp;&nbsp;struct&nbsp;servent&nbsp;*s&nbsp;=&nbsp;getservbyname&nbsp;("echo",&nbsp;"tcp");</td>
+        <td class="new">&nbsp;&nbsp;struct&nbsp;addrinfo&nbsp;*ai;</td>
+      </tr>
+      <tr>
+        <td class="old">&nbsp;&nbsp;if&nbsp;(s&nbsp;==&nbsp;NULL)</td>
+        <td class="new">&nbsp;&nbsp;struct&nbsp;addrinfo&nbsp;hints;</td>
+      </tr>
+      <tr>
+        <td class="old">&nbsp;&nbsp;&nbsp;&nbsp;error&nbsp;(EXIT_FAILURE,&nbsp;errno,&nbsp;"getservent");</td>
+        <td class="new">&nbsp;&nbsp;memset&nbsp;(&amp;hints,&nbsp;'\0',&nbsp;sizeof&nbsp;(hints));</td>
+      </tr>
+      <tr>
+        <td class="old">&nbsp;&nbsp;struct&nbsp;pollfd&nbsp;fds[1];</td>
+        <td class="new">&nbsp;&nbsp;hints.ai_flags&nbsp;=&nbsp;AI_PASSIVE&nbsp;|&nbsp;AI_ADDRCONFIG;</td>
+      </tr>
+      <tr>
+        <td class="same"></td>
+        <td class="new">&nbsp;&nbsp;hints.ai_socktype&nbsp;=&nbsp;SOCK_STREAM;</td>
+      </tr>
+      <tr>
+        <td class="same"></td>
+        <td class="new">&nbsp;&nbsp;int&nbsp;e&nbsp;=&nbsp;getaddrinfo&nbsp;(NULL,&nbsp;"echo",&nbsp;&amp;hints,&nbsp;&amp;ai);</td>
+      </tr>
+      <tr>
+        <td class="same"></td>
+        <td class="new">&nbsp;&nbsp;if&nbsp;(e&nbsp;!=&nbsp;0)</td>
+      </tr>
+      <tr>
+        <td class="same"></td>
+        <td class="new">&nbsp;&nbsp;&nbsp;&nbsp;error&nbsp;(EXIT_FAILURE,&nbsp;0,&nbsp;"getaddrinfo:&nbsp;%s",&nbsp;gai_strerror&nbsp;(e));</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;int&nbsp;nfds&nbsp;=&nbsp;0;</td>
+        <td class="same">&nbsp;&nbsp;int&nbsp;nfds&nbsp;=&nbsp;0;</td>
+      </tr>
+      <tr>
+        <td class="same"></td>
+        <td class="new">&nbsp;&nbsp;struct&nbsp;addrinfo&nbsp;*runp&nbsp;=&nbsp;ai;</td>
+      </tr>
+      <tr>
+        <td class="same"></td>
+        <td class="new">&nbsp;&nbsp;while&nbsp;(runp&nbsp;!=&nbsp;NULL)</td>
+      </tr>
+      <tr>
+        <td class="same"></td>
+        <td class="new">&nbsp;&nbsp;&nbsp;&nbsp;{</td>
+      </tr>
+      <tr>
+        <td class="same"></td>
+        <td class="new">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;++nfds;</td>
+      </tr>
+      <tr>
+        <td class="same"></td>
+        <td class="new">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;runp&nbsp;=&nbsp;runp-&gt;ai_next;</td>
+      </tr>
+      <tr>
+        <td class="same"></td>
+        <td class="new">&nbsp;&nbsp;&nbsp;&nbsp;}</td>
+      </tr>
+      <tr>
+        <td class="same"></td>
+        <td class="new">&nbsp;&nbsp;struct&nbsp;pollfd&nbsp;fds[nfds];</td>
+      </tr>
+      <tr>
+        <td class="same"></td>
+        <td class="new">&nbsp;&nbsp;for&nbsp;(nfds&nbsp;=&nbsp;0,&nbsp;runp&nbsp;=&nbsp;ai;&nbsp;runp&nbsp;!=&nbsp;NULL;&nbsp;runp&nbsp;=&nbsp;runp-&gt;ai_next)</td>
+      </tr>
+      <tr>
+        <td class="same"></td>
+        <td class="new">&nbsp;&nbsp;&nbsp;&nbsp;{</td>
+      </tr>
+      <tr>
+        <td class="old">&nbsp;&nbsp;fds[nfds].fd&nbsp;=&nbsp;socket&nbsp;(AF_INET,&nbsp;SOCK_STREAM,&nbsp;0);</td>
+        <td class="new">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fds[nfds].fd&nbsp;=&nbsp;socket&nbsp;(runp-&gt;ai_family,&nbsp;runp-&gt;ai_socktype,&nbsp;runp-&gt;ai_protocol);</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;if&nbsp;(fds[nfds].fd&nbsp;==&nbsp;-1)</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(fds[nfds].fd&nbsp;==&nbsp;-1)</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;error&nbsp;(EXIT_FAILURE,&nbsp;errno,&nbsp;"socket");</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error&nbsp;(EXIT_FAILURE,&nbsp;errno,&nbsp;"socket");</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;fds[nfds].events&nbsp;=&nbsp;POLLIN;</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fds[nfds].events&nbsp;=&nbsp;POLLIN;</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;int&nbsp;opt&nbsp;=&nbsp;1;</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;opt&nbsp;=&nbsp;1;</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;setsockopt&nbsp;(fds[nfds].fd,&nbsp;SOL_SOCKET,&nbsp;SO_REUSEADDR,</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setsockopt&nbsp;(fds[nfds].fd,&nbsp;SOL_SOCKET,&nbsp;SO_REUSEADDR,</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;opt,&nbsp;sizeof&nbsp;(opt));</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;opt,&nbsp;sizeof&nbsp;(opt));</td>
+      </tr>
+      <tr>
+        <td class="old">&nbsp;&nbsp;struct&nbsp;sockaddr_in&nbsp;sin;</td>
+        <td class="same"></td>
+      </tr>
+      <tr>
+        <td class="old">&nbsp;&nbsp;sin.sin_family&nbsp;=&nbsp;AF_INET;</td>
+        <td class="same"></td>
+      </tr>
+      <tr>
+        <td class="old">&nbsp;&nbsp;sin.sin_port&nbsp;=&nbsp;s-&gt;s_port;</td>
+        <td class="same"></td>
+      </tr>
+      <tr>
+        <td class="old">&nbsp;&nbsp;sin.sin_addr.s_addr&nbsp;=&nbsp;INADDR_ANY;</td>
+        <td class="same"></td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;if&nbsp;(bind&nbsp;(fds[nfds].fd,</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(bind&nbsp;(fds[nfds].fd,</td>
+      </tr>
+      <tr>
+        <td class="old">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;sin,&nbsp;sizeof&nbsp;(sin))&nbsp;!=&nbsp;0)</td>
+        <td class="new">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;runp-&gt;ai_addr,&nbsp;runp-&gt;ai_addrlen)&nbsp;!=&nbsp;0)</td>
+      </tr>
+      <tr>
+        <td class="same"></td>
+        <td class="new">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{</td>
+      </tr>
+      <tr>
+        <td class="same"></td>
+        <td class="new">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(errno&nbsp;!=&nbsp;EADDRINUSE)</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;error&nbsp;(EXIT_FAILURE,&nbsp;errno,&nbsp;"bind");</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error&nbsp;(EXIT_FAILURE,&nbsp;errno,&nbsp;"bind");</td>
+      </tr>
+      <tr>
+        <td class="same"></td>
+        <td class="new">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;close&nbsp;(fds[nfds].fd);</td>
+      </tr>
+      <tr>
+        <td class="same"></td>
+        <td class="new">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</td>
+      </tr>
+      <tr>
+        <td class="same"></td>
+        <td class="new">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else</td>
+      </tr>
+      <tr>
+        <td class="same"></td>
+        <td class="new">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;if&nbsp;(listen&nbsp;(fds[nfds].fd,&nbsp;SOMAXCONN)&nbsp;!=&nbsp;0)</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(listen&nbsp;(fds[nfds].fd,&nbsp;SOMAXCONN)&nbsp;!=&nbsp;0)</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;error&nbsp;(EXIT_FAILURE,&nbsp;errno,&nbsp;"listen");</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error&nbsp;(EXIT_FAILURE,&nbsp;errno,&nbsp;"listen");</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;++nfds;</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;++nfds;</td>
+      </tr>
+      <tr>
+        <td class="old">&nbsp;&nbsp;int&nbsp;i&nbsp;=&nbsp;0;</td>
+        <td class="new">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</td>
+      </tr>
+      <tr>
+        <td class="same"></td>
+        <td class="new">&nbsp;&nbsp;&nbsp;&nbsp;}</td>
+      </tr>
+      <tr>
+        <td class="same"></td>
+        <td class="new">&nbsp;&nbsp;freeaddrinfo&nbsp;(ai);</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;while&nbsp;(1)</td>
+        <td class="same">&nbsp;&nbsp;while&nbsp;(1)</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;{</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;{</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;n&nbsp;=&nbsp;poll&nbsp;(fds,&nbsp;nfds,&nbsp;-1);</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;n&nbsp;=&nbsp;poll&nbsp;(fds,&nbsp;nfds,&nbsp;-1);</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(n&nbsp;&gt;&nbsp;0)</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(n&nbsp;&gt;&nbsp;0)</td>
+      </tr>
+      <tr>
+        <td class="same"></td>
+        <td class="new">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;(int&nbsp;i&nbsp;=&nbsp;0;&nbsp;i&nbsp;&lt;&nbsp;nfds;&nbsp;++i)</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(fds[i].revents&nbsp;&amp;&nbsp;POLLIN)</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(fds[i].revents&nbsp;&amp;&nbsp;POLLIN)</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{</td>
+      </tr>
+      <tr>
+        <td class="old">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;struct&nbsp;sockaddr_in&nbsp;rem;</td>
+        <td class="new">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;struct&nbsp;sockaddr_storage&nbsp;rem;</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;socklen_t&nbsp;remlen&nbsp;=&nbsp;sizeof&nbsp;(rem);</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;socklen_t&nbsp;remlen&nbsp;=&nbsp;sizeof&nbsp;(rem);</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;fd&nbsp;=&nbsp;accept&nbsp;(fds[i].fd,&nbsp;(struct&nbsp;sockaddr&nbsp;*)&nbsp;&amp;rem,&nbsp;&amp;remlen);</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;fd&nbsp;=&nbsp;accept&nbsp;(fds[i].fd,&nbsp;(struct&nbsp;sockaddr&nbsp;*)&nbsp;&amp;rem,&nbsp;&amp;remlen);</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(fd&nbsp;!=&nbsp;-1)</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(fd&nbsp;!=&nbsp;-1)</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{</td>
+      </tr>
+      <tr>
+        <td class="old">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;struct&nbsp;hostent&nbsp;*h&nbsp;=&nbsp;gethostbyaddr&nbsp;(&amp;rem.sin_addr,</td>
+        <td class="new">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;char&nbsp;buf1[200];</td>
+      </tr>
+      <tr>
+        <td class="old">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sizeof&nbsp;(rem.sin_addr),</td>
+        <td class="new">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(getnameinfo&nbsp;((struct&nbsp;sockaddr&nbsp;*)&nbsp;&amp;rem,&nbsp;remlen,</td>
+      </tr>
+      <tr>
+        <td class="old">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rem.sin_family);</td>
+        <td class="new">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buf1,&nbsp;sizeof&nbsp;(buf1),&nbsp;NULL,&nbsp;0,&nbsp;0)&nbsp;!=&nbsp;0)</td>
+      </tr>
+      <tr>
+        <td class="old">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;char&nbsp;*buf1&nbsp;=&nbsp;h&nbsp;?&nbsp;h-&gt;h_name&nbsp;:&nbsp;"???";</td>
+        <td class="new">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strcpy&nbsp;(buf1,&nbsp;"???");</td>
+      </tr>
+      <tr>
+        <td class="old">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;char&nbsp;*buf2&nbsp;=&nbsp;inet_ntoa&nbsp;(rem.sin_addr);</td>
+        <td class="new">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;char&nbsp;buf2[100];</td>
+      </tr>
+      <tr>
+        <td class="same"></td>
+        <td class="new">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(void)&nbsp;getnameinfo&nbsp;((struct&nbsp;sockaddr&nbsp;*)&nbsp;&amp;rem,&nbsp;remlen,</td>
+      </tr>
+      <tr>
+        <td class="same"></td>
+        <td class="new">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buf2,&nbsp;sizeof&nbsp;(buf2),&nbsp;NULL,&nbsp;0,</td>
+      </tr>
+      <tr>
+        <td class="same"></td>
+        <td class="new">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NI_NUMERICHOST);</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf&nbsp;("connection&nbsp;from&nbsp;%s&nbsp;(%s)\n",&nbsp;buf1,&nbsp;buf2);</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf&nbsp;("connection&nbsp;from&nbsp;%s&nbsp;(%s)\n",&nbsp;buf1,&nbsp;buf2);</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;char&nbsp;buf[1000];</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;char&nbsp;buf[1000];</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ssize_t&nbsp;l&nbsp;=&nbsp;read&nbsp;(fd,&nbsp;buf,&nbsp;sizeof&nbsp;(buf));</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ssize_t&nbsp;l&nbsp;=&nbsp;read&nbsp;(fd,&nbsp;buf,&nbsp;sizeof&nbsp;(buf));</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;write&nbsp;(fd,&nbsp;buf,&nbsp;l);</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;write&nbsp;(fd,&nbsp;buf,&nbsp;l);</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;close&nbsp;(fd);</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;close&nbsp;(fd);</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</td>
+      </tr>
+      <tr>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;}</td>
+        <td class="same">&nbsp;&nbsp;&nbsp;&nbsp;}</td>
+      </tr>
+      <tr>
+        <td class="same">}</td>
+        <td class="same">}</td>
+      </tr>
+    </tbody></table>
+
+    <p>Note that this code works as expected because IPv6 addresses are
+    sorted before IPv4 addresses in the
+    <a href="http://www.rfc-editor.org/rfc/rfc3484.txt">RFC 3484</a>
+    sorting.</p>
+
+    <p>In case a server has to be bound to a specific address one
+    usually does not have to call <tt>getaddrinfo()</tt> to determine
+    the address because it is determined by a call to a function like
+    <tt>getifaddrs()</tt>.  <tt>getaddrinfo()</tt> can still be called
+    to get the port number for the service.</p>
+
+  
+
+</body></html>
