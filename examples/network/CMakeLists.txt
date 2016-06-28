@@ -13,7 +13,7 @@ add_subdirectory(Unity3D843Server)
 add_executable(DomainParse DomainParse.cpp ${HGL_CONSOLE_MAIN_SOURCE})
 target_link_libraries(DomainParse ${HGL_CONSOLE_LIB})
 
-add_executable(IPSupport IPSupport/main.cpp)
+add_executable(IPSupport IPSupport.cpp)
 target_link_libraries(IPSupport ${HGL_CONSOLE_LIB})
 
 add_executable(IP2Hostname IP2Hostname.cpp ${HGL_CONSOLE_MAIN_SOURCE})
