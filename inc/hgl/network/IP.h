@@ -139,6 +139,11 @@ namespace hgl
              */
             virtual bool Bind(int ThisSocket,int reuse=1)const=0;
 
+            /**
+             * 获取当前地址的主机名称
+             */
+            virtual bool GetHostname(UTF8String &)const=0;
+
             virtual sockaddr *GetSockAddr()=0;
 
             /**
@@ -196,6 +201,7 @@ namespace hgl
             bool Set(const char *name,ushort port,int _socktype,int _protocol);
             void Set(ushort port);
             bool Bind(int ThisSocket,int reuse=1)const;
+            bool GetHostname(UTF8String &)const;
 
             sockaddr *GetSockAddr(){return (sockaddr *)&addr;}
 
@@ -243,6 +249,7 @@ namespace hgl
             bool Set(const char *name,ushort port,int _socktype,int _protocol);
             void Set(ushort port);
             bool Bind(int ThisSocket,int reuse=1)const;
+            bool GetHostname(UTF8String &)const;
 
             sockaddr *GetSockAddr(){return (sockaddr *)&addr;}
             const ushort GetPort()const;

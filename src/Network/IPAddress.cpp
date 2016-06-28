@@ -85,6 +85,18 @@ namespace hgl
             return(true);
         }
 
+        bool GetHostname(UTF8String &name,const sockaddr *addr)
+        {
+            char hostname[NI_MAXHOST];
+            char server_info[NI_MAXSERV];
+
+            if(getnameinfo(addr,sizeof(struct sockaddr),hostname,NI_MAXHOST,server_info,NI_MAXSERV,NI_NUMERICSERV))
+                return(false);
+
+            name=hostname;
+            return(true);
+        }
+
         void AddAddrToList(List<in_addr> &addr_list, const sockaddr_in *sai)
         {
             addr_list.Add(sai->sin_addr);
@@ -127,9 +139,9 @@ namespace hgl
          */
         int GetIPSupport(List<IPSupport> &ipsl)
         {
-            char hostname[256];
+            char hostname[NI_MAXHOST];
 
-            if(gethostname(hostname, 256))
+            if(gethostname(hostname, NI_MAXHOST))
                 return(-1);
 
             struct addrinfo hints, *answer, *ptr;
@@ -171,7 +183,10 @@ namespace hgl
             freeaddrinfo(answer);
             return(count);
         }
+    }//namespace network
 
+    namespace network
+    {
         bool IPv4Address::Set(const char *name,ushort port,int _socktype,int _protocol)
         {
             socktype=_socktype;
@@ -193,6 +208,8 @@ namespace hgl
         }
 
         bool IPv4Address::Bind(int ThisSocket,int reuse)const{return BindAddr<sockaddr,sockaddr_in>(ThisSocket,addr,reuse);}
+        bool IPv4Address::GetHostname(UTF8String &name)const{return hgl::network::GetHostname(name,(sockaddr *)&addr);}
+
         const ushort IPv4Address::GetPort()const{return addr.sin_port;}
 
         void IPv4Address::ToString(char *str)const{inet_ntop(AF_INET,&(addr.sin_addr),str,INET_ADDRSTRLEN);}
@@ -219,9 +236,9 @@ namespace hgl
         */
         int IPv4Address::GetLocalIPList(List<in_addr> &addr_list,int _socktype,int _protocol)
         {
-            char hostname[256];
+            char hostname[NI_MAXHOST];
 
-            if(gethostname(hostname, 256))
+            if(gethostname(hostname, NI_MAXHOST))
                 return(-1);
 
             return GetDomainIPList(addr_list,hostname,_socktype,_protocol);
@@ -235,15 +252,17 @@ namespace hgl
         bool IPv4Address::Comp(const IPAddress *ipa)const
         {
             if(this==ipa)return(true);
-            if(!ipa)
-                return(!this);
+            if(!ipa)return(false);
 
             if(ipa->GetFamily()!=AF_INET)return(false);
             if(ipa->GetProtocol()!=protocol)return(false);
 
             return (memcmp(&addr,&(((IPv4Address *)ipa)->addr),sizeof(sockaddr_in))==0);
         }
+    }//namespace network
 
+    namespace network
+    {
         bool IPv6Address::Set(const char *name,ushort port,int _socktype,int _protocol)
         {
             socktype=_socktype;
@@ -264,6 +283,8 @@ namespace hgl
             addr.sin6_port = htons(port);
         }
         bool IPv6Address::Bind(int ThisSocket,int reuse)const{return BindAddr<sockaddr,sockaddr_in6>(ThisSocket,addr,reuse);}
+        bool IPv6Address::GetHostname(UTF8String &name)const{return hgl::network::GetHostname(name,(sockaddr *)&addr);}
+
         const ushort IPv6Address::GetPort()const{return addr.sin6_port;}
 
         void IPv6Address::ToString(char *str)const{inet_ntop(AF_INET6,&(addr.sin6_addr),str,INET6_ADDRSTRLEN);}
@@ -290,9 +311,9 @@ namespace hgl
         */
         int IPv6Address::GetLocalIPList(List<in6_addr> &addr_list,int _socktype,int _protocol)
         {
-            char hostname[256];
+            char hostname[NI_MAXHOST];
 
-            if(gethostname(hostname, 256))
+            if(gethostname(hostname, NI_MAXHOST))
                 return(-1);
 
             return GetDomainIPList(addr_list,hostname,_socktype,_protocol);
@@ -306,8 +327,7 @@ namespace hgl
         bool IPv6Address::Comp(const IPAddress *ipa)const
         {
             if(this==ipa)return(true);
-            if(!ipa)
-                return(!this);
+            if(!ipa)return(false);
 
             if(ipa->GetFamily()!=AF_INET6)return(false);
             if(ipa->GetProtocol()!=protocol)return(false);
