@@ -6,7 +6,13 @@
 
 * e-mail: hyzboy (@) gmail.com
 
+* Minimum supported OS: Microsoft Windows 7/2008R2 , Linux kernel 3.0
+* Minimum supported compilers: GNU C/C++ 4.8 , Microsoft Visual C++ 2015
+
 
 * 除特别的情况外，使用是免费的。包括所有商业和非商业环境，所有开源和闭源工程。但同样的，我们不会为出现的任何问题负责。
 * 如果向本仓库提交代码，请优先创建自有分支，仅在自有分支进行提交。直接提交到主分支的情况，将会封杀提交权限。
 * 电子邮箱：hyzboy (@) gmail.com
+
+* 最低支持操作系统：Microsoft Windows 7/2008R2 , Linux kernel 3.0
+* 最低支持编译器：GNU C/C++ 4.8 , Microsoft Visual C++ 2015
