@@ -251,21 +251,6 @@ namespace hgl
 #endif//HGL_OS == HGL_OS_Windows
 
 	/**
-	 * 指数计算模板类
-	 */
-	template<int B,int N> struct Pow
-	{
-		enum{value=B*Pow<B,N-1>::value};
-	};
-
-	template<int B> struct Pow<B,0>
-	{
-		enum{value=1};				//指数为0时结果永远为1
-	};
-
-	//int quartic_of_three=Pow<3,4>::value;		//示例，求3的4次方
-
-	/**
 	 * 取适合正巧大于当前数的2次幂值
 	 */
 	template<typename T>
