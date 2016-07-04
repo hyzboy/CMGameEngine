@@ -20,10 +20,10 @@ namespace hgl
 
 	public:
 
-		size_t GetLength()const{return cur_size;}													///<取得内存块长度(注：非字节数)
-		const size_t GetMaxLength()const{return buf_size;}											///<取得内存块最大长度(注：非字节数)
-		const size_t GetBytes()const{return cur_size*sizeof(T);}									///<取得内存块字节数
-		const size_t GetMaxBytes()const{return buf_size*sizeof(T);}									///<取得内存块最大字节数
+				size_t GetLength	()const{return cur_size;}										///<取得内存块长度(注：非字节数)
+		const	size_t GetMaxLength	()const{return buf_size;}										///<取得内存块最大长度(注：非字节数)
+		const	size_t GetBytes		()const{return cur_size*sizeof(T);}								///<取得内存块字节数
+		const	size_t GetMaxBytes	()const{return buf_size*sizeof(T);}								///<取得内存块最大字节数
 
 		void SetLength(size_t size)																	///<设置内存块长度(注：非字节数)
 		{

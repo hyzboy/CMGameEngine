@@ -61,7 +61,7 @@ namespace hgl
 
 		const PlugInType &	GetType		()const{return type;}										///<取得插件类型
 		const uint			GetVersion	()const{return ver;}										///<取得插件版本
-		const u16char *	GetIntro	()const{return intro;}										///<取得插件介绍
+		const u16char *		GetIntro	()const{return intro;}										///<取得插件介绍
 		const OSString &	GetName		()const{return name;}										///<取得插件名称
 
 	public:
