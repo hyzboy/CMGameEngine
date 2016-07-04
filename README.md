@@ -8,6 +8,7 @@
 
 * Minimum supported OS: Microsoft Windows 7/2008R2 , Linux kernel 3.0
 * Minimum supported compilers: GNU C/C++ 4.8 , Microsoft Visual C++ 2015
+* Minimum supported OpenGL: Core 3.3+DSA (HD5xxx/GTX4xx)
 
 
 * 除特别的情况外，使用是免费的。包括所有商业和非商业环境，所有开源和闭源工程。但同样的，我们不会为出现的任何问题负责。
@@ -16,3 +17,4 @@
 
 * 最低支持操作系统：Microsoft Windows 7/2008R2 , Linux kernel 3.0
 * 最低支持编译器：GNU C/C++ 4.8 , Microsoft Visual C++ 2015
+* 最低支持OpenGL: Core 3.3+DSA (HD5xxx/GTX4xx)
