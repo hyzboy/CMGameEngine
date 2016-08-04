@@ -53,8 +53,8 @@ namespace hgl
 				graphics.gl.glsl=true;
 				graphics.gl.multi_texture=true;
 
-				graphics.gl.major=4;
-				graphics.gl.minor=5;
+				graphics.gl.major=3;
+				graphics.gl.minor=3;
 
 				graphics.gl.egl=false;
 
