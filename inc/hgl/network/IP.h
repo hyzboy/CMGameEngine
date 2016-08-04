@@ -108,11 +108,19 @@ namespace hgl
                 protocol=0;
             }
 
+            IPAddress(int s,int p)
+            {
+                socktype=s;
+                protocol=p;
+            }
+
             virtual const int GetFamily()const=0;                                                           ///<返回网络家族
                     const int GetSocketType()const{return socktype;}                                        ///<返回Socket类型
                     const int GetProtocol()const{return protocol;}                                          ///<返回协议类型
             virtual const int GetSockAddrInSize()const=0;                                                   ///<取得SockAddrIn变量长度
             virtual const int GetIPStringMaxSize()const=0;                                                  ///<取得IP字符串最大长度
+
+            virtual const bool IsBoradcast()const=0;                                                        ///<是否为广播
 
             /**
              * 设置IP地址
@@ -182,6 +190,15 @@ namespace hgl
         public:
 
             IPv4Address(){hgl_zero(addr);}
+            IPv4Address(const uint32 s_addr,ushort port,int _socktype,int _protocol):IPAddress(_socktype,_protocol)
+            {
+                hgl_zero(addr);
+
+                addr.sin_family     =AF_INET;
+                addr.sin_addr.s_addr=s_addr;
+                addr.sin_port       =port;
+            }
+
             IPv4Address(const char *name,ushort port,int _socktype,int _protocol)
             {
                 Set(name,port,_socktype,_protocol);
@@ -197,6 +214,8 @@ namespace hgl
             const int GetFamily()const{return AF_INET;}
             const int GetSockAddrInSize()const{return sizeof(sockaddr_in);}
             const int GetIPStringMaxSize()const{return INET_ADDRSTRLEN;}
+
+            const bool IsBoradcast()const{return(addr.sin_addr.s_addr==htonl(INADDR_BROADCAST));}
 
             bool Set(const char *name,ushort port,int _socktype,int _protocol);
             void Set(ushort port);
@@ -246,6 +265,8 @@ namespace hgl
             const int GetSockAddrInSize()const{return sizeof(sockaddr_in6);}
             const int GetIPStringMaxSize()const{return INET6_ADDRSTRLEN;}
 
+            const bool IsBoradcast()const{return(false);}
+
             bool Set(const char *name,ushort port,int _socktype,int _protocol);
             void Set(ushort port);
             bool Bind(int ThisSocket,int reuse=1)const;
@@ -283,6 +304,9 @@ namespace hgl
 
         inline IPv4Address *CreateIPv4UDPLite(ushort port){return(new IPv4Address(nullptr,port,SOCK_DGRAM,   IPPROTO_UDPLITE));}
         inline IPv6Address *CreateIPv6UDPLite(ushort port){return(new IPv6Address(nullptr,port,SOCK_DGRAM,   IPPROTO_UDPLITE));}
+
+        inline IPv4Address *CreateIPv4UDPBoradcast      (ushort port){return(new IPv4Address(htonl(INADDR_BROADCAST),port,SOCK_DGRAM,   IPPROTO_UDP));}
+        inline IPv4Address *CreateIPv4UDPLiteBoradcast  (ushort port){return(new IPv4Address(htonl(INADDR_BROADCAST),port,SOCK_DGRAM,   IPPROTO_UDPLITE));}
 	}//namespace network
 }//namespace hgl
 #endif//HGL_NETWORK_IP_TOOL_INCLUDE
