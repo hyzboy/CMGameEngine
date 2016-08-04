@@ -30,7 +30,7 @@ namespace hgl
 
                     uint GetBindPort()const{return bind_addr->GetPort();}							///<取得绑定端口
 
-                    void SetSendAddr(const IPAddress *);                                            ///<设定发送地址
+                    bool SetSendAddr(const IPAddress *);                                            ///<设定发送地址
 
                     int SendPacket(const void *,int);                                               ///<发送数据包
                     int SendPacket(IPAddress *,const void *,int);                                   ///<向指定地址发送数据包

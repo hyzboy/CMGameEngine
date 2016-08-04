@@ -81,11 +81,23 @@ namespace hgl
 		/**
 		* 设定发送数据时，接收数据方的地址
 		* @param addr 接收方的地址
+        * @return 是否成功
 		*/
-		void UDPSocket::SetSendAddr(const IPAddress *addr)
+		bool UDPSocket::SetSendAddr(const IPAddress *addr)
 		{
+            if(ThisSocket==-1)RETURN_FALSE;
+
             SAFE_CLEAR(tar_addr);
 			tar_addr=addr->CreateCopy();
+
+            {
+                const int opt = tar_addr->IsBoradcast()?1:0;
+
+                if(setsockopt(ThisSocket, SOL_SOCKET, SO_BROADCAST, (char *)&opt, sizeof(opt))==-1)
+                    RETURN_FALSE;
+            }
+
+            return(true);
 		}
 
 		/**
