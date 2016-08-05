@@ -40,9 +40,9 @@ namespace hgl
 				bytes=size;
 
 				if(mem_data)
-					hgl_realloc(mem_data,size);
+					mem_data=hgl_realloc(mem_data,size);
 				else
-					hgl_malloc(size);
+					mem_data=hgl_malloc(size);
 
 				mem_end=((char *)mem_data)+size;
 			}
