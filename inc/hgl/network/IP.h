@@ -114,6 +114,8 @@ namespace hgl
                 protocol=p;
             }
 
+            virtual ~IPAddress()HGL_DEFAULT_MEMFUNC;
+
             virtual const int GetFamily()const=0;                                                           ///<返回网络家族
                     const int GetSocketType()const{return socktype;}                                        ///<返回Socket类型
                     const int GetProtocol()const{return protocol;}                                          ///<返回协议类型
