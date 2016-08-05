@@ -6,8 +6,6 @@ namespace hgl
 {
 	namespace graph
 	{
-		class ObjectControl;
-
 		namespace gui
 		{
 			/**
@@ -17,8 +15,6 @@ namespace hgl
 			*/
 			class RadioObject:public GUIObject															///收音机对像
 			{
-				friend class ObjectControl;
-
 			protected:
 
 				int team;
