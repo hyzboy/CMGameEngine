@@ -3,7 +3,11 @@
 #include <string.h>
 
 #if HGL_OS != HGL_OS_Windows
-#include<netinet/udplite.h>
+    #if (HGL_OS == HGL_OS_FreeBSD)||(HGL_OS == HGL_OS_NetBSD)||(HGL_OS == HGL_OS_OpenBSD)||(HGL_OS==HGL_OS_MacOSX)
+        #include<netinet/udplite.h>
+    #else
+        #include<sys/socket.h>
+    #endif//BSD or macOS
 #endif//HGL_OS != HGL_OS_Windows
 
 #ifndef SOL_UDPLITE
