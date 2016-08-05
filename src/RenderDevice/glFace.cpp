@@ -74,7 +74,7 @@ namespace hgl
 			}
 			else
 			{
-				CurCullFace.cull;
+				CurCullFace.cull=true;
 				glEnable(GL_CULL_FACE);
 			}
 
