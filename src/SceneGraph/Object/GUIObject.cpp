@@ -133,7 +133,7 @@ namespace hgl
 			{
 				if(view_scope==vs)return;
 
-				view_scope==vs;
+				view_scope=vs;
 
 				CallRefresh();
 			}
