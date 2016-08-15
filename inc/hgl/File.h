@@ -70,7 +70,7 @@ namespace hgl
 
 	List<FileInfo> GetListFiles(const OSString &folder_name,bool proc_folder,bool proc_file,bool sub_folder);
 
-	using EnumFileFunc=void (*)(void *,hgl::FileInfo &);
+	using EnumFileFunc=void (*)(void *,FileInfo &);
 
 	/**
 	* 枚举一个目录内的所有文件
