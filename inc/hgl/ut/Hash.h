@@ -101,7 +101,7 @@ namespace hgl
 		template<> inline Hash *CreateHash<hashCRC32	>(){return CreateCRC32Hash();}
 		template<> inline Hash *CreateHash<hashMD4		>(){return CreateMD4Hash();}
 		template<> inline Hash *CreateHash<hashMD5		>(){return CreateMD5Hash();}
-		template<> inline Hash *CreateHash<hashSHA1	>(){return CreateSHA1Hash();}
+		template<> inline Hash *CreateHash<hashSHA1		>(){return CreateSHA1Hash();}
 
 		inline Hash *CreateHash(HASH_ALGORITHML ha)
 		{
