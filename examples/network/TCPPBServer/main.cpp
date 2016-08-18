@@ -16,7 +16,7 @@ public:
 };//struct UserInfo
 
 //定义工作类
-HGL_PB_WORK_THREAD_CLASS(USER_ID,							// 由于分流的ID数据类型
+HGL_PB_WORK_THREAD_CLASS(USER_ID,							// 用于分流的ID数据类型
 						UserInfo,							// 用户信息类型
 						256,								// 分组数量
 						UserThread)							// 工作类名称
@@ -36,7 +36,7 @@ public:
 		:UserThreadBASE(sock,sa)							//基类，用当前工作类名称+BASE做为基类名称
 	{
 		mp.Init(c2s_login::id,				//结起消息ID
-				c2s_login::id);			//结束消息ID
+				c2s_login::id);				//结束消息ID
 
 	#define SET_PB_EVENT(name)	{	\
 									PBCmdFunc pcf;	\
