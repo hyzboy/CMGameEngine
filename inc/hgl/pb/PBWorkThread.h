@@ -3,7 +3,6 @@
 
 #include<hgl/pb/PBUserManage.h>
 #include<hgl/pb/mp.h>
-#include <map>
 namespace hgl
 {
 	namespace pb

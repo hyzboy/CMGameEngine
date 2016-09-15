@@ -95,7 +95,7 @@ namespace hgl
 		/**
 		* 编译一个glsl着色程序
 		* @param shader_type 着色程序类型
-		* @param shader_code 着色程序代码
+		* @param shader_codes 着色程序代码
 		* @return 是否添加编程成功
 		*/
 		bool Shader::AddShader(const int shader_type,const char *shader_codes)
@@ -243,7 +243,7 @@ namespace hgl
 													{	\
 														HGL_GLSL_CHECK_PROGRAM_AND_LOCATION(1##func)	\
 													\
-														glUniform1##func(location,v0);	\
+														glProgramUniform1##func(program,location,v0);	\
 														return(true);	\
 													}	\
 													\
@@ -251,7 +251,7 @@ namespace hgl
 													{	\
 														HGL_GLSL_CHECK_PROGRAM_AND_LOCATION(2##func)	\
 													\
-														glUniform2##func(location,v0,v1);	\
+														glProgramUniform2##func(program,location,v0,v1);	\
 														return(true);	\
 													}	\
 													\
@@ -259,7 +259,7 @@ namespace hgl
 													{	\
 														HGL_GLSL_CHECK_PROGRAM_AND_LOCATION(3##func)	\
 													\
-														glUniform3##func(location,v0,v1,v2);	\
+														glProgramUniform3##func(program,location,v0,v1,v2);	\
 														return(true);	\
 													}	\
 													\
@@ -267,7 +267,7 @@ namespace hgl
 													{	\
 														HGL_GLSL_CHECK_PROGRAM_AND_LOCATION(4##func)	\
 													\
-														glUniform4##func(location,v0,v1,v2,v3);	\
+														glProgramUniform4##func(program,location,v0,v1,v2,v3);	\
 														return(true);	\
 													}
 		HGL_GLSL_SetUniform1234(f,float);
@@ -296,7 +296,7 @@ namespace hgl
 																return(false);	\
 															}	\
 														\
-															glUniform##func(location,1,value);	\
+															glProgramUniform##func(program,location,1,value);	\
 															return(true);	\
 														}
 
@@ -337,7 +337,7 @@ namespace hgl
 																return(false);	\
 															}	\
 														\
-															glUniformMatrix##func(location,1,GL_FALSE,mat);	\
+															glProgramUniformMatrix##func(program,location,1,GL_FALSE,mat);	\
 															return(true);	\
 														}
 
