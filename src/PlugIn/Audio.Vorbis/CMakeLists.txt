@@ -1,14 +1,10 @@
 ﻿IF(WIN32)
-    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libogg/include)
     INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libvorbis/include)
     INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libvorbis/lib)
     INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libvorbis/lib/modes)
     INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libvorbis/lib/books/coupled)
     INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libvorbis/lib/books/floor)
     INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libvorbis/lib/books/uncoupled)
-
-    SET(OGG_SOURCE	libogg/src/bitwise.c
-                	libogg/src/framing.c)
 
     SET(VORBIS_SOURCE	libvorbis/lib/analysis.c
 		                libvorbis/lib/bitrate.c
