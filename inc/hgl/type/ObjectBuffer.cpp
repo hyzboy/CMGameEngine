@@ -10,22 +10,22 @@
 
 namespace hgl
 {
-	template<typename T>
-    bool ObjectBuffer<T>::Create(const UTF16String &name,T *&item)
+	template<typename F,typename T>
+    bool ObjectBuffer<F,T>::Create(const F &name,T *&item)
     {
     	item=new T(name);
 
         return(true);
     }
 
-	template<typename T>
-	void ObjectBuffer<T>::Clear(const UTF16String &,T *&item)
+	template<typename F,typename T>
+	void ObjectBuffer<F,T>::Clear(const F &,T *&item)
     {
 		delete item;
 	}
 
-	template<typename T>
-	ObjectBuffer<T>::~ObjectBuffer()
+	template<typename F,typename T>
+	ObjectBuffer<F,T>::~ObjectBuffer()
 	{
 		fud_class::Clear();
     }
