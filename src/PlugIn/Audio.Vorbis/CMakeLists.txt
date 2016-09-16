@@ -33,7 +33,7 @@
 		                libvorbis/lib/vorbisfile.c
 		                libvorbis/lib/window.c)
 
-    add_library(CMP.Audio.VorbisOGG SHARED OggRead.cpp ${OGG_SOURCE} ${VORBIS_SOURCE})
+    add_library(CMP.Audio.Vorbis SHARED OggRead.cpp ${OGG_SOURCE} ${VORBIS_SOURCE})
 
     SOURCE_GROUP("LibOGG"		FILES ${OGG_SOURCE})
     SOURCE_GROUP("LibVorbis"	FILES ${VORBIS_SOURCE})
@@ -51,6 +51,6 @@ ELSE()
         ${LIB_3RD_FIND_HINT})
     LINK_DIRECTORIES(${VORBIS_LIBRARY_DIR})
 
-    add_library(CMP.Audio.VorbisOGG SHARED OggRead.cpp)
-    target_link_libraries(CMP.Audio.VorbisOGG vorbisfile ogg)
+    add_library(CMP.Audio.Vorbis SHARED OggRead.cpp)
+    target_link_libraries(CMP.Audio.Vorbis vorbisfile ogg)
 ENDIF()
