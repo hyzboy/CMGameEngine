@@ -192,12 +192,12 @@ namespace hgl
         public:
 
             IPv4Address(){hgl_zero(addr);}
-            IPv4Address(const uint32 s_addr,ushort port,int _socktype,int _protocol):IPAddress(_socktype,_protocol)
+            IPv4Address(const uint32 _addr,ushort port,int _socktype,int _protocol):IPAddress(_socktype,_protocol)
             {
                 hgl_zero(addr);
 
                 addr.sin_family     =AF_INET;
-                addr.sin_addr.s_addr=s_addr;
+                addr.sin_addr.s_addr=_addr;
                 addr.sin_port       =port;
             }
 
