@@ -215,6 +215,60 @@ namespace hgl
     template<typename T> T StringList<T>::NullString;                                               ///<空字符串实例
 
 	/**
+	 * 以不可打印字符为分隔拆解一个字符串到一个字符串列表
+	 * @param sl 字符串列表处理类
+	 * @param str 字符串
+	 * @param size 字符串长度
+	 * @return 字符串行数
+	 */
+	template<typename T> int SplitToStringListBySpace(StringList<BaseString<T> > &sl,const T *str,int size)
+	{
+        if(!str||size<=0)return(-1);
+
+		int count=0;
+		const T *p,*sp;
+
+		sp=p=str;
+
+		while(size>0)
+		{
+			if(!(*p))
+			{
+				if(p>sp)
+				{
+					sl.Add(sp,p-sp);
+					++count;
+				}
+
+				--size;
+				return count;
+			}
+
+			if(isspace(*p))
+			{
+                if(p>sp)
+                {
+                    sl.Add(sp,p-sp);
+                    ++count;
+                }
+
+				sp=p+1; ///<跳过分割符
+			}
+
+			++p;
+			--size;
+		}
+
+		if(p>sp)
+		{
+			sl.Add(sp,p-sp);
+			++count;
+		}
+
+		return count;
+	}//int SplitToStringList
+
+	/**
 	 * 以指定字符为分隔拆解一个字符串到一个字符串列表
 	 * @param sl 字符串列表处理类
 	 * @param str 字符串
@@ -247,8 +301,11 @@ namespace hgl
 
 			if(*p==split_char)
 			{
-				sl.Add(sp,p-sp);
-				++count;
+                if(p>sp)
+                {
+                    sl.Add(sp,p-sp);
+                    ++count;
+                }
 
 				sp=p+1; ///<跳过分割符
 			}
@@ -305,8 +362,11 @@ namespace hgl
 
 			if(*p==split_char)
 			{
-				sl.Add(sp,p-sp);
-				++count;
+                if(p>sp)
+                {
+                    sl.Add(sp,p-sp);
+                    ++count;
+                }
 
 				sp=p+1; ///<跳过分割符
 				if(maxSize >0 && count >=maxSize-1)
@@ -348,7 +408,7 @@ namespace hgl
 	 * @param size 字符串长度
 	 * @return 字符串行数
 	 */
-	template<typename T> int SplitToStringList(StringList<BaseString<T> > &sl,const T *str,int size)
+	template<typename T> int SplitToStringListByEnter(StringList<BaseString<T> > &sl,const T *str,int size)
 	{
         if(!str||size<=0)return(-1);
 
