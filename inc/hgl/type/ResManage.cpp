@@ -26,6 +26,23 @@ namespace hgl
 	}
 
 	template<typename F,typename T>
+	void ResManage<F,T>::ClearZero()
+	{
+		int n=items.GetCount();
+
+		while(n--)
+		{
+			ResItem *obj=items.GetItem(n);
+
+            if(obj->count<=0)
+            {
+                Clear(obj->second);
+                items.DeleteBySerial(n);
+            }
+		}
+	}
+
+	template<typename F,typename T>
 	bool ResManage<F,T>::Add(const F &flag,T *obj)
 	{
 		if(!obj)return(false);
@@ -82,7 +99,7 @@ namespace hgl
 	}
 
 	template<typename F,typename T>
-	void ResManage<F,T>::ReleaseBySerial(int index)
+	void ResManage<F,T>::ReleaseBySerial(int index,bool zero_clear)
 	{
 		if(index==-1)
 		{
@@ -92,7 +109,9 @@ namespace hgl
 
 		ResItem *obj=items.GetItem(index);
 
-		if(--obj->count==0)
+        --obj->count;
+
+        if(zero_clear&&obj->count==0)
 		{
 			Clear(obj->second);
 
@@ -101,15 +120,15 @@ namespace hgl
 	}
 
 	template<typename F,typename T>
-	void ResManage<F,T>::Release(const F &flag)
+	void ResManage<F,T>::Release(const F &flag,bool zero_clear)
 	{
-    	ReleaseBySerial(items.Find(flag));
+    	ReleaseBySerial(items.Find(flag),zero_clear);
 	}
 
 	template<typename F,typename T>
-	void ResManage<F,T>::Release(T *td)
+	void ResManage<F,T>::Release(T *td,bool zero_clear)
 	{
-		ReleaseBySerial(items.FindByData(td));
+		ReleaseBySerial(items.FindByData(td),zero_clear);
 	}
 }//namespace hgl
 #endif//HGL_RES_MANAGE_CPP

@@ -28,7 +28,7 @@ namespace hgl
 
 		_Map<F,T *,ResItem> items;
 
-		void ReleaseBySerial(int);
+		void ReleaseBySerial(int,bool);
 
 	protected:
 
@@ -40,6 +40,7 @@ namespace hgl
 		virtual ~ResManage();
 
 		virtual void		Clear();											///<清除所有数据
+        virtual void        ClearZero();                                        ///<清除所有没有用到的数据
 
 				const int	GetCount()const{return items.GetCount();}			///<取得数据数量
 
@@ -47,8 +48,8 @@ namespace hgl
 		virtual T *			Find(const F &);									///<查找一个数据
 		virtual T *			Get(const F &);										///<取得一个数据，如不存在则创建
 
-		virtual void		Release(const F &);									///<释放一个数据
-		virtual void		Release(T *);										///<释放一个数据
+		virtual void		Release(const F &,bool zero_clear=false);			///<释放一个数据
+		virtual void		Release(T *,bool zero_clear=false);					///<释放一个数据
 	};//template<typename F,typename T> class ResManage
 }//namespace hgl
 #include<hgl/type/ResManage.cpp>
