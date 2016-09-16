@@ -156,7 +156,7 @@ namespace hgl
 
 	/**
 	* 从流中加载一个音频文件到当前缓冲区,仅支持OGG和WAV。注：由于这个函数会一次性将音频数据载入内存，所以较长的音乐请使用CreateAudioPlayer，以免占用太多的内存。
-	* @param stream 要加载数据的流
+	* @param in 要加载数据的流
 	* @param aft 音频文件类型
 	* @return 是否加载成功
 	*/

@@ -61,7 +61,7 @@ namespace openal                                                									///Open
 
 	/**
 	 * 初始化OpenAL设备
-	 * @param device_name 设备名称
+	 * @param device 设备名称
 	 * @return 是否成功
 	 */
 	bool InitOpenALDevice(const OpenALDevice *device=nullptr);
