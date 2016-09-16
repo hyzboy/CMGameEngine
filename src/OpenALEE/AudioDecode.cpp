@@ -12,4 +12,5 @@ namespace hgl
 					*/
 
 	PlugInManage(Audio,"Audio",2);
+    PlugInManage(AudioFloat,"Audio",3);
 }//namespace hgl

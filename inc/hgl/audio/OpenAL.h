@@ -79,6 +79,8 @@ namespace openal                                                									///Open
 	unsigned int AudioTime(ALenum,ALsizei);
 	double AudioDataTime(ALuint,ALenum,ALsizei);
 
+    bool IsSupportFloatAudioData();                                                                 ///<是否支持浮点音频数据
+
 	// #define AL_INVERSE_DISTANCE                      0xD001	//倒数距离
 	// #define AL_INVERSE_DISTANCE_CLAMPED              0xD002	//钳位倒数距离
 	// #define AL_LINEAR_DISTANCE                       0xD003	//线性距离

@@ -32,13 +32,24 @@ namespace hgl
 
         if(!decode)RETURN_ERROR(0);
 
-		decode->Load((ALbyte *)memory, memory_size, &format, &data, &size, &freq, &loop);
+        AudioFloatPlugInInterface *decode_float=nullptr;
+
+        if(IsSupportFloatAudioData())
+            decode_float=AudioFloatInterfaceCheck(plugin_name);
+
+        if(decode_float)
+            decode_float->Load((ALbyte *)memory, memory_size, &format,(float **)&data, &size, &freq, &loop);
+        else
+            decode->Load((ALbyte *)memory, memory_size, &format, &data, &size, &freq, &loop);
 
         alLastError();
 
 		alBufferData(index, format, data, size, freq);
 
-		decode->Clear(format, data, size, freq);
+        if(decode_float)
+            decode_float->Clear(format, data, size, freq);
+        else
+            decode->Clear(format, data, size, freq);
 
 		if(alLastError())RETURN_ERROR(0);
 

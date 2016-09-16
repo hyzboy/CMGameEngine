@@ -43,7 +43,7 @@ namespace hgl
 		void Clear();                                                                               ///<清除数据
 	};//class AudioBuffer
 
-	typedef ObjectBuffer<AudioBuffer> 			AudioBufferBuffer;									///<AudioBuffer缓冲管理器
+//	typedef ObjectBuffer<AudioBuffer> 			AudioBufferBuffer;									///<AudioBuffer缓冲管理器
 // 	typedef ObjectBufferFromHAC<AudioBuffer> 	AudioBufferHAC;										///<AudioBuffer缓冲管理器(从HAC名中取得文件)
 }//namespace hgl
 #endif//AUDIO_BUFFER_INCLUDE

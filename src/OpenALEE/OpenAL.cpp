@@ -19,7 +19,8 @@ namespace openal
 	static ALCdevice *AudioDevice	=nullptr;		//OpenAL设备
 	static ALCcontext *AudioContext	=nullptr;		//OpenAL上下文
 
-	static hgl::UTF8StringList OpenALExt_list;
+	static hgl::UTF8StringList OpenALExt_List;
+    static hgl::UTF8StringList OpenALContextExt_List;
 
 	static bool AudioFloat32       =false;         //是否支持float 32数据
 	static bool AudioEFX			=false;			//EFX是否可用
@@ -262,6 +263,22 @@ namespace openal
 		alcMakeContextCurrent(AudioContext);
 	}
 
+	void GetOpenALExt(UTF8StringList &ext_list,const char *ext_str)
+    {
+        int len=hgl::strlen(ext_str);
+
+        SplitToStringListBySpace(ext_list,ext_str,len);         //space指所有不可打印字符
+    }
+
+    void InitOpenALExt()
+    {
+        GetOpenALExt(OpenALExt_List,alGetString(AL_EXTENSIONS));
+        GetOpenALExt(OpenALContextExt_List,alcGetString(AudioDevice,ALC_EXTENSIONS));
+
+        if(OpenALExt_List.Find("AL_EXT_FLOAT32")!=-1)
+            AudioFloat32=true;
+    }
+
 	/**
 	* 初始化OpenAL驱动
 	* @param driver_name 驱动名称,如果不写则自动查找
@@ -377,12 +394,13 @@ namespace openal
 
 		alGetError();
 
+        InitOpenALExt();
+
 		LOG_INFO(OS_TEXT("初始化OpenAL完成！"));
 		PutOpenALInfo();
 
 		return(AL_TRUE);
 	}
-
 
     bool InitOpenALDevice(const OpenALDevice *device)
     {
@@ -598,6 +616,14 @@ namespace openal
 
 		return count;
 	}
+
+	/**
+     * 是否支持浮点音频数据
+     */
+	bool IsSupportFloatAudioData()
+    {
+        return AudioFloat32;
+    }
 	//--------------------------------------------------------------------------------------------------
 	const char *alGetErrorInfo(const char *filename,const int line)
 	{
@@ -643,6 +669,9 @@ namespace openal
 		LOG_INFO(UTF8String(u8"　　支持的OpenAL版本: ")+alGetString(AL_VERSION   ));
 		LOG_INFO(UTF8String(u8"　　　　音频芯片名称: ")+alGetString(AL_RENDERER  ));
 		LOG_INFO(OS_TEXT(			"　　　　　最大音源数: ")+OSString(GetMaxNumSources()));
+   		LOG_INFO(AudioFloat32?OS_TEXT(	"    浮点音频数据支持: 是")
+                             :OS_TEXT(	"    浮点音频数据支持: 否"));
+
 		LOG_INFO(AudioEFX?OS_TEXT(	"　　　　　   EFX支持: 是")
 						:OS_TEXT(	"　　　　　   EFX支持: 否"));
 		LOG_INFO(AudioXRAM?OS_TEXT(	"           X-RAM支持: 是")
@@ -657,82 +686,31 @@ namespace openal
 			LOG_INFO(OS_TEXT("           X-RAM容量: ")+OSString(size));
 		}
 
-		char *al_ext;
-		char *sp,*p,*p2;
-
-		p=(char *)alGetString(AL_EXTENSIONS);
-		p2=(char *)alcGetString(AudioDevice,ALC_EXTENSIONS);
-
-        OpenALExt_list.Clear();
-		al_ext=new char[::strlen(p)+2+::strlen(p2)];
-		::strcpy(al_ext,p);
-		::strcat(al_ext," ");
-		::strcat(al_ext,p2);
-
-//		#ifdef _DEBUG
-//		SaveMemoryToFile(u"OpenAL_Extensions.TXT",al_ext,::strlen(p)+2+::strlen(p2));
-//		#endif//
-
-		sp=al_ext;
-
-		//有的声卡在两个扩展间用\n，有的用空格,所以做一下转换
-		{
-			p=sp;
-
-			while(*p)
-			{
-				if(*p=='\n')
-					*p=' ';
-
-				p++;
-			}
-		}
-
-		p=::strchr(sp,' ');
-		if(p)
-		{
-			*p++=0;
-			LOG_INFO(UTF8String(u8"　　支持的OpenAL扩展: ")+sp);
-
-            OpenALExt_list.Add(sp);
-
-			sp=p;
-			while((p=::strchr(sp,' ')))
-			{
-				*p++=0;
-
-                if(*sp)		//可能连续两个空格，没有信息
-                {
-					LOG_INFO(UTF8String(u8"                      ")+sp);
-                    OpenALExt_list.Add(sp);
-                }
-
-				sp=p;
-			}
-
-			if(p>sp)
+        for(int i=0;i<OpenALExt_List.GetCount();i++)
+            if(i==0)
             {
-				LOG_INFO(UTF8String(u8"                      ")+sp);
-                OpenALExt_list.Add(sp);
+                LOG_INFO(UTF8String(u8"　　支持的OpenAL扩展: ")+OpenALExt_List[i]);
             }
-		}
-		else
-		{
-			LOG_INFO(UTF8String(u8"　　支持的OpenAL扩展: ")+al_ext);
-            OpenALExt_list.Add(al_ext);
-		}
+            else
+            {
+				LOG_INFO(UTF8String(u8"                      ")+OpenALExt_List[i]);
+            }
 
-		delete[] al_ext;
+        for(int i=0;i<OpenALContextExt_List.GetCount();i++)
+            if(i==0)
+            {
+                LOG_INFO(UTF8String(u8"支持的OpenAL设备扩展: ")+OpenALContextExt_List[i]);
+            }
+            else
+            {
+				LOG_INFO(UTF8String(u8"                      ")+OpenALContextExt_List[i]);
+            }
+
 
 		#ifdef _DEBUG
 		LOG_INFO(OS_TEXT("输出OpenAL信息完成"));
 		#endif//
 	}
-
-	bool CheckOpenALExt(const UTF8String &ext_name)
-    {
-        return OpenALExt_list.CaseFind(ext_name)!=-1;
-    }
 
     /**
     * 初始化OpenAL
@@ -755,6 +733,8 @@ namespace openal
 			CloseOpenAL();
 			return(false);
 		}
+
+		InitOpenALExt();
 
 		if(out_info)
             PutOpenALInfo();
