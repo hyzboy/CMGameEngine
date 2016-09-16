@@ -39,6 +39,8 @@ namespace hgl
 
 				if(len<=0)return;
 
+				buf[len] = 0;
+
 				MessageBoxW(nullptr,buf,name,MB_OK);
 			}
 		};//class LogWinDialog
