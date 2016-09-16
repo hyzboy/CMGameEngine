@@ -78,11 +78,11 @@ namespace hgl
 	/**
 	* 外部插件
 	*/
-	class ExternalPlugIn:public PlugIn                                                              ///外部插件
+	class ExternalPlugIn:public PlugIn                                                                 ///外部插件
 	{
 	protected:
 
-		ExternalModule module;                                                                      ///<插件模块
+		ExternalModule module;                                                                            ///<插件模块
 
 		bool Load();
 
@@ -132,7 +132,7 @@ namespace hgl
 		{
 			if(pi->GetVersion()<ver)
 			{
-				LOG_ERROR(OS_TEXT("插件<")+name+OS_TEXT(">的版本太低！"));
+				LOG_ERROR(OS_TEXT("插件<")+name+OS_TEXT(">的版本太低！需求ver:")+OSString(ver));
 			}
 			else
 			{
@@ -191,7 +191,7 @@ namespace hgl
 												{	\
 													first=false;	\
 													\
-													LOG_INFO(OS_TEXT("Registry <") OS_TEXT(str_name) OS_TEXT("> Plug-In Manager."));	\
+													LOG_INFO(OS_TEXT("Registry <") OS_TEXT(str_name) OS_TEXT(",") + OSString(ver)+OS_TEXT("> Plug-In Manager."));	\
 													RegistryPIMClear(name##PlugInClear);	\
 												}	\
 												\
