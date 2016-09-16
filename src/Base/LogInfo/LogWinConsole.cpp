@@ -40,8 +40,8 @@ namespace hgl
 
 			void Write(const u16char *str,int size)
 			{
-				WriteConsole(console_handle,str,size,&result,nullptr);
-				WriteConsole(console_handle,L"\n", 1, &result, nullptr);
+				WriteConsoleW(console_handle,str,size,&result,nullptr);
+				WriteConsoleW(console_handle,L"\n", 1, &result, nullptr);
 			}
 
 			void Write(const char *str,int size)
@@ -52,7 +52,7 @@ namespace hgl
 
 				buf[len]=L'\n';
 
-				WriteConsole(console_handle,buf,len+1,&result,nullptr);
+				WriteConsoleW(console_handle,buf,len+1,&result,nullptr);
 			}
 		};//class LogWinConsole
 
