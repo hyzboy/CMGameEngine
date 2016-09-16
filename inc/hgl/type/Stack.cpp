@@ -146,7 +146,7 @@ namespace hgl
 			{
 				if(count+1>mem_count)
 				{
-					mem_count=count+1;
+					mem_count=power_to_2(count+1);
 
 					items=(T *)hgl_realloc(items,mem_count*sizeof(T));
 				}
@@ -186,7 +186,7 @@ namespace hgl
 			{
 				if(count+data_count>mem_count)
 				{
-					mem_count=count+data_count;
+					mem_count=power_to_2(count+data_count);
 
 					items=(T *)hgl_realloc(items,mem_count*sizeof(T));
 				}
