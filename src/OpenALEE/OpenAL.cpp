@@ -4,7 +4,9 @@
 #include <hgl/Other.h>
 #include <hgl/audio/OpenAL.h>
 #include <hgl/type/Pair.h>
+#include <hgl/type/Stack.h>
 #include <hgl/type/BaseString.h>
+#include <hgl/type/StringList.h>
 #include <hgl/ExternalModule.h>
 
 using namespace hgl;
@@ -17,6 +19,9 @@ namespace openal
 	static ALCdevice *AudioDevice	=nullptr;		//OpenAL设备
 	static ALCcontext *AudioContext	=nullptr;		//OpenAL上下文
 
+	static hgl::UTF8StringList OpenALExt_list;
+
+	static bool AudioFloat32       =false;         //是否支持float 32数据
 	static bool AudioEFX			=false;			//EFX是否可用
 	static bool AudioXRAM			=false;			//X-RAM是否可用
 
@@ -490,8 +495,8 @@ namespace openal
 // 		{AL_FORMAT_61CHN16,			14},
 // 		{AL_FORMAT_71CHN16,			16},
 //
-// 		{AL_FORMAT_MONO_FLOAT32,	4},
-// 		{AL_FORMAT_STEREO_FLOAT32,	8},
+		{AL_FORMAT_MONO_FLOAT32,	4},
+		{AL_FORMAT_STEREO_FLOAT32,	8},
 //
 // 		{AL_FORMAT_QUAD8,			4},
 // 		{AL_FORMAT_QUAD16,			8},
@@ -564,31 +569,34 @@ namespace openal
 
 	unsigned int GetMaxNumSources()
 	{
-		ALuint uiSources[256];
-		unsigned int iSourceCount = 0;
+        ALuint source;
+		Stack<ALuint> source_stack;
 
 		// Clear AL Error Code
 		alGetError();
 
-		// Generate up to 256 Sources, checking for any errors
-		for (iSourceCount = 0; iSourceCount < 256; iSourceCount++)
+		for(;;)
 		{
-			alGenSources(1, &uiSources[iSourceCount]);
+			alGenSources(1, &source);
+
 			if (alGetError() != AL_NO_ERROR)
 				break;
+
+            source_stack.Push(source);
 		}
 
-		// Release the Sources
-		alDeleteSources(iSourceCount, uiSources);
+        const int count=source_stack.GetCount();
+        const ALuint *p=source_stack.GetData();
+
+		alDeleteSources(count,p);
+
 		if (alGetError() != AL_NO_ERROR)
 		{
-			for (unsigned int i = 0; i < 256; i++)
-			{
-				alDeleteSources(1, &uiSources[i]);
-			}
+			for(int i=0;i<count;i++)
+				alDeleteSources(1, p++);
 		}
 
-		return iSourceCount;
+		return count;
 	}
 	//--------------------------------------------------------------------------------------------------
 	const char *alGetErrorInfo(const char *filename,const int line)
@@ -654,6 +662,8 @@ namespace openal
 
 		p=(char *)alGetString(AL_EXTENSIONS);
 		p2=(char *)alcGetString(AudioDevice,ALC_EXTENSIONS);
+
+        OpenALExt_list.Clear();
 		al_ext=new char[::strlen(p)+2+::strlen(p2)];
 		::strcpy(al_ext,p);
 		::strcat(al_ext," ");
@@ -684,23 +694,32 @@ namespace openal
 			*p++=0;
 			LOG_INFO(UTF8String(u8"　　支持的OpenAL扩展: ")+sp);
 
+            OpenALExt_list.Add(sp);
+
 			sp=p;
 			while((p=::strchr(sp,' ')))
 			{
 				*p++=0;
 
                 if(*sp)		//可能连续两个空格，没有信息
+                {
 					LOG_INFO(UTF8String(u8"                      ")+sp);
+                    OpenALExt_list.Add(sp);
+                }
 
 				sp=p;
 			}
 
 			if(p>sp)
+            {
 				LOG_INFO(UTF8String(u8"                      ")+sp);
+                OpenALExt_list.Add(sp);
+            }
 		}
 		else
 		{
 			LOG_INFO(UTF8String(u8"　　支持的OpenAL扩展: ")+al_ext);
+            OpenALExt_list.Add(al_ext);
 		}
 
 		delete[] al_ext;
@@ -709,6 +728,12 @@ namespace openal
 		LOG_INFO(OS_TEXT("输出OpenAL信息完成"));
 		#endif//
 	}
+
+	bool CheckOpenALExt(const UTF8String &ext_name)
+    {
+        return OpenALExt_list.CaseFind(ext_name)!=-1;
+    }
+
     /**
     * 初始化OpenAL
     * @param driver_name 驱动名称,如果不写则自动查找
