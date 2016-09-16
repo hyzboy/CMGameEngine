@@ -125,7 +125,7 @@ ALvoid LoadOGG(ALbyte *memory, ALsizei memory_size,ALenum *format, ALvoid **data
 void ClearOGG(ALenum, ALvoid *data, ALsizei, ALsizei)
 {
 	if (data)
-		delete[] data;
+		delete[] (char *)data;
 }
 //--------------------------------------------------------------------------------------------------
 struct OggStream
