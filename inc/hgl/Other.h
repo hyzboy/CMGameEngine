@@ -5,6 +5,18 @@
 #include<hgl/type/DataType.h>
 #include<hgl/Str.h>
 
+namespace hgl
+{
+    //此代码取自xiph.org的opus dec
+    static inline uint32 FastRand32()
+    {
+        static uint32 rngseed = 22222;
+
+        rngseed = (rngseed * 96314165) + 907633515;
+        return rngseed;
+    }
+}//namespace hgl
+
 namespace hgl   //校验/加密算法
 {
 	void OverflowEncrypt(void *,void *,int,void *,int);			//溢出加密(轻度加密)
