@@ -71,10 +71,8 @@ long VorbisTell(void *ptr)
 
 ALvoid LoadOGG(ALbyte *memory, ALsizei memory_size,ALenum *format, ALvoid **data, ALsizei *size, ALsizei *freq, ALboolean *loop)
 {
-    int             total=0;
     int             result;
-			char *	ptr=nullptr;
-			char *	buf;
+	char *			ptr=nullptr;
 
     ov_callbacks    func;
     OggVorbis_File  ogg_stream;
@@ -102,25 +100,23 @@ ALvoid LoadOGG(ALbyte *memory, ALsizei memory_size,ALenum *format, ALvoid **data
     if(info->channels==1)*format=AL_FORMAT_MONO16;
                     else *format=AL_FORMAT_STEREO16;
 
-    buf=new char[64*1024];
+	const int pcm_total = ov_pcm_total(&ogg_stream,0)*info->channels*2;
+
+	int out_size = 0;
+
+	ptr = new char[pcm_total];
 
     while(true)
     {
-        result=ov_read(&ogg_stream,buf,64*1024,0,2,1,&section);
-
-        if(ptr)ptr=(char *)realloc(ptr,total+result);
-            else ptr=(char *)malloc(result);
-
-        memcpy(ptr+total,buf,result);
-        total+=result;
+        result=ov_read(&ogg_stream,ptr+out_size,pcm_total-out_size,0,2,1,&section);
 
         if(result<=0)break;
+
+		out_size += result;
     }
 
-    delete[] buf;
-
 	*freq=info->rate;
-	*size=total;
+	*size=out_size;
 	*data=ptr;
 
     ov_clear(&ogg_stream);
@@ -128,8 +124,8 @@ ALvoid LoadOGG(ALbyte *memory, ALsizei memory_size,ALenum *format, ALvoid **data
 
 void ClearOGG(ALenum, ALvoid *data, ALsizei, ALsizei)
 {
-	if(data)
-		free(data);
+	if (data)
+		delete[] data;
 }
 //--------------------------------------------------------------------------------------------------
 struct OggStream

@@ -19,15 +19,15 @@ namespace openal
 	static ALCdevice *AudioDevice	=nullptr;		//OpenAL设备
 	static ALCcontext *AudioContext	=nullptr;		//OpenAL上下文
 
-	static hgl::UTF8StringList OpenALExt_List;
-    static hgl::UTF8StringList OpenALContextExt_List;
+	static UTF8StringList OpenALExt_List;
+    static UTF8StringList OpenALContextExt_List;
 
 	static bool AudioFloat32       =false;         //是否支持float 32数据
 	static bool AudioEFX			=false;			//EFX是否可用
 	static bool AudioXRAM			=false;			//X-RAM是否可用
 
-	void LoadALCFunc(ExternalModule *);
-	void LoadALFunc(ExternalModule *);
+	bool LoadALCFunc(ExternalModule *);
+	bool LoadALFunc(ExternalModule *);
 
 	bool CheckXRAM(ALCdevice_struct *);
 	bool CheckEFX(ALCdevice_struct *);
@@ -49,6 +49,8 @@ namespace openal
 		{
 #if HGL_OS == HGL_OS_Windows
 			OS_TEXT("\\OpenAL32.DLL"),
+			OS_TEXT("\\ct_oal.DLL"),
+			OS_TEXT("\\nvOpenAL.DLL"),
 			OS_TEXT("\\wrap_oal.DLL"),
 #elif (HGL_OS == HGL_OS_Linux)||(HGL_OS == HGL_OS_FreeBSD)||(HGL_OS == HGL_OS_NetBSD)||(HGL_OS == HGL_OS_OpenBSD)
 			OS_TEXT("/libopenal.so"),
@@ -106,7 +108,7 @@ namespace openal
 
 		if(AudioEM)
 		{
-			LOG_ERROR(OS_TEXT("加载OpenAL成功！使用动态链接库: ")+OSString(final_filename));
+			LOG_INFO(OS_TEXT("加载OpenAL成功！使用动态链接库: ")+OSString(final_filename));
 
 			return (AL_TRUE);
 		}
@@ -286,12 +288,10 @@ namespace openal
 	*/
 	bool InitOpenALDriver(const os_char *driver_name)
 	{
-		if(!AudioEM)
-			if(!LoadOpenAL(driver_name))return(AL_FALSE);
+		if (!AudioEM)
+			if (!LoadOpenAL(driver_name))RETURN_FALSE;
 
-		LoadALCFunc(AudioEM);
-
-		return(true);
+		RETURN_BOOL(LoadALCFunc(AudioEM));
 	}
 
 	bool InitOpenALDeviceByName(const char *device_name)
@@ -364,7 +364,7 @@ namespace openal
 		{
 			LOG_ERROR(OS_TEXT("关联音频设备上下文与音频设备失败！"));
 			CloseOpenAL();
-			return (AL_FALSE);
+			RETURN_FALSE;
 		}
 		#ifdef _DEBUG
 		else
@@ -377,7 +377,12 @@ namespace openal
 
 		LOG_INFO("初始化音频设备完成: "+UTF8String(AudioDeviceName));
 
-		LoadALFunc(AudioEM);
+		if (!LoadALFunc(AudioEM))
+		{
+			LOG_INFO(OS_TEXT("加载OpenAL函数失败！"));
+			CloseOpenAL();
+			RETURN_FALSE;
+		}
 
 		LOG_INFO(OS_TEXT("加载OpenAL函数完成！"));
 
