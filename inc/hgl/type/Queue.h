@@ -26,6 +26,8 @@ namespace hgl
 		int GetMax()const{return max_count;}														///<取得最大数量
 		void SetMax(int);																			///<设置最大数量
 
+        T *GetData(){return items;}                                                                 ///<取得原始数据
+
 	public: //方法
 
 		Queue(int=0);

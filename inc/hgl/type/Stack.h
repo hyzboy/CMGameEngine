@@ -29,6 +29,8 @@ namespace hgl
 
 		void SetMax(int);																			///<设置堆栈中的最大数据个数
 
+        T *GetData(){return items;}                                                                 ///<取得原始数据
+
 	public: //方法
 
 		Stack(int=0);
