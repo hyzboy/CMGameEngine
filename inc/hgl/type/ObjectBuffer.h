@@ -6,16 +6,16 @@
 // #include<hgl/HAC.h>
 namespace hgl
 {
-	template<typename T> class ObjectBuffer:public ActiveChain<UTF16String,T *>
+	template<typename F,typename T> class ObjectBuffer:public ActiveChain<F,T *>
     {
-		typedef ActiveChain<UTF16String,T *> fud_class;
+		typedef ActiveChain<F,T *> fud_class;
 
-        virtual bool Create(const UTF16String &,T *&);
-    	void Clear(const UTF16String &,T *&);
+        virtual bool Create(const F &,T *&);
+    	void Clear(const F &,T *&);
 
     public:
 
-		using ActiveChain<UTF16String,T *>::ActiveChain;
+		using ActiveChain<F,T *>::ActiveChain;
     	virtual ~ObjectBuffer();
 	};
 
