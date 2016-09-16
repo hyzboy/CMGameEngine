@@ -12,7 +12,8 @@ namespace hgl
 		aftNone=0,			///<起始定义，如使用表示自动根据扩展名识别
 
 		aftWAV,             ///<Wav音波文件
-		aftOGG,             ///<Vorbis OGG文件
+		aftVorbis,          ///<Vorbis OGG文件
+        aftOpus,            ///<Opus OGG文件
 
 		aftEnd
 	};//enum AudioFileType

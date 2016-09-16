@@ -11,8 +11,9 @@ namespace hgl
 
 	const AudioFormatExt audio_format_ext_name[]=
 	{
-		{OS_TEXT("wav"),aftWAV},
-		{OS_TEXT("ogg"), aftOGG },
+		{OS_TEXT("wav"),  aftWAV      },
+		{OS_TEXT("ogg"),  aftVorbis   },
+		{OS_TEXT("opus"), aftOpus     },
 		{OS_TEXT(""), aftNone }
 	};
 
@@ -53,7 +54,8 @@ namespace hgl
 	{
 		OS_TEXT(""),
 		OS_TEXT("Wav"),
-		OS_TEXT("VorbisOGG")
+		OS_TEXT("Vorbis"),
+		OS_TEXT("Opus")
 	};
 
 	const os_char *GetAudioDecodeName(const AudioFileType aft)

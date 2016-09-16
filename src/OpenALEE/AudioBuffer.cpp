@@ -34,6 +34,8 @@ namespace hgl
 
 		decode->Load((ALbyte *)memory, memory_size, &format, &data, &size, &freq, &loop);
 
+        alLastError();
+
 		alBufferData(index, format, data, size, freq);
 
 		decode->Clear(format, data, size, freq);

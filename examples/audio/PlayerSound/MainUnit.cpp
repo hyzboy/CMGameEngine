@@ -9,6 +9,8 @@ using namespace openal;
 
 class TestObject:public ConsoleFlowObject
 {
+    OSString filename;
+
 public:
 
     void Out(const UTF8String &name,const OpenALDevice &dev)
@@ -16,7 +18,7 @@ public:
         LOG_INFO(name+u8": \""+UTF8String(dev.name)+u8"\" Specifier: \""+UTF8String(dev.specifier)+u8"\",支持OpenAL特性版本: "+UTF8String(dev.major)+"."+UTF8String(dev.minor));
     }
 
-    TestObject()
+    TestObject(const OSString &fn)
     {
         if(!InitOpenALDriver())
         {
@@ -50,6 +52,8 @@ public:
 
         if(!InitOpenALDevice(&default_device))                  //初始化缺省设备
             return;
+
+        filename=fn;
     }
 
     ~TestObject()
@@ -62,7 +66,14 @@ public:
 		AudioBuffer buf;
 		AudioSource source;
 
-		buf.Load("cicada3.ogg");
+        double start=GetDoubleTime();
+        double end;
+
+		buf.Load(filename.c_str());
+
+        end=GetDoubleTime();
+
+        LOG_INFO(u8"Audio Total time: "+UTF8String(buf.Time)+UTF8String(" Decode Time: ")+UTF8String(end-start));
 
         source.Link(&buf);
 
@@ -74,4 +85,17 @@ public:
 	}
 };//class TestObject
 
-HGL_CONSOLE_APPLICATION("音效播放","PlayerSound",new TestObject)
+using namespace hgl;
+
+HGL_CONSOLE_MAIN(sii,app,args)
+{
+    sii.info.ProjectName=U8_TEXT("音效播放");
+    sii.info.ProjectCode=OS_TEXT("PlayerSound");
+
+    if(!app.Init(&sii))
+        return(-1);
+
+    app.SetStart(new TestObject(args[1]));
+
+    return app.Run();
+}
