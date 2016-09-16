@@ -1,4 +1,4 @@
-#define __MAKE_PLUGIN__
+﻿#define __MAKE_PLUGIN__
 
 #include<hgl/PlugIn.h>
 #include<malloc.h>
@@ -227,7 +227,7 @@ static OutInterface3 out_interface_3
 #if HGL_OS != HGL_OS_Windows
 const u16char plugin_intro[]=U16_TEXT("Opus 音频文件解码(使用操作系统内置解码器,2016-09-16)");
 #else
-const u16char plugin_intro[]=U16_TEXT("Opus 音频文件解码(LibOpus 1.1.3,2016-09-16)");
+const u16char plugin_intro[]=U16_TEXT("Opus 音频文件解码(LibOpus 1.1.3,LibOpusFile 0.7,LibOGG 1.3.2,2016-09-16)");
 #endif//
 
 HGL_PLUGIN_FUNC uint32 GetPlugInVersion()
