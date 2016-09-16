@@ -55,6 +55,50 @@ void ClearOpus(ALenum,ALvoid *data,ALsizei,ALsizei)
     delete[] pcm;
 }
 
+
+ALvoid LoadOpusFloat32(ALbyte *memory, ALsizei memory_size,ALenum *format, float **data, ALsizei *size, ALsizei *freq, ALboolean *loop)
+{
+    OggOpusFile *of;
+
+    int op_error;
+
+    of=op_open_memory((const unsigned char *)memory,memory_size,&op_error);
+
+    if(!of)
+        return;
+
+    const OpusHead *head=op_head(of,0);
+
+    if(head->channel_count==1)*format=AL_FORMAT_MONO_FLOAT32;else
+    if(head->channel_count==2)*format=AL_FORMAT_STEREO_FLOAT32;else
+        return;
+
+    long pcm_total=op_pcm_total(of,-1)*head->channel_count;
+
+    float *out_buf=new float[pcm_total];
+    int out_size;
+    int out_total_size=0;
+
+    while(-1)
+    {
+        out_size=op_read_float(of,out_buf+out_total_size,pcm_total-out_total_size,nullptr);
+
+        if(out_size<=0)
+            break;
+
+        out_total_size+=out_size*head->channel_count;
+    }
+
+    *freq=head->input_sample_rate;
+    *size=out_total_size*sizeof(float);
+    *data=out_buf;
+}
+
+void ClearOpusFloat32(ALenum,float *data,ALsizei,ALsizei)
+{
+    delete[] data;
+}
+
 struct OpusStream
 {
     OggOpusFile *of;
@@ -117,6 +161,24 @@ uint ReadOpus(void *ptr,char *data,uint buf_max)
 	return(size*2);
 }
 
+uint ReadOpusFloat32(void *ptr,float *data,uint buf_max)
+{
+    OpusStream *os=(OpusStream *)ptr;
+	int result;
+	uint size=0;
+    uint buf_left=buf_max/sizeof(float);
+
+	while(size<buf_max)
+	{
+		result=op_read_float(os->of,data+size,buf_left-size,nullptr);
+
+		if(result>0)size+=result*os->head->channel_count;else
+		if(result<=0)break;
+	}
+
+	return(size*sizeof(float));
+}
+
 void RestartOpus(void *ptr)
 {
     OpusStream *os=(OpusStream *)ptr;
@@ -124,7 +186,7 @@ void RestartOpus(void *ptr)
     op_pcm_seek(os->of,0);
 }
 //--------------------------------------------------------------------------------------------------
-struct OutInterface
+struct OutInterface2
 {
 	void (*Load)(ALbyte *,ALsizei,ALenum *,ALvoid **,ALsizei *,ALsizei *,ALboolean *);
 	void (*Clear)(ALenum,ALvoid *,ALsizei,ALsizei);
@@ -135,7 +197,7 @@ struct OutInterface
 	void  (*Restart)(void *);
 };
 
-static OutInterface out_interface=
+static OutInterface2 out_interface_2=
 {
 	LoadOpus,
 	ClearOpus,
@@ -144,6 +206,22 @@ static OutInterface out_interface=
 	CloseOpus,
 	ReadOpus,
 	RestartOpus
+};
+
+struct OutInterface3
+{
+	void (*Load)(ALbyte *,ALsizei,ALenum *,float **,ALsizei *,ALsizei *,ALboolean *);
+	void (*Clear)(ALenum,float *,ALsizei,ALsizei);
+
+	uint (*Read)(void *,float *,uint);
+};
+
+static OutInterface3 out_interface_3
+{
+    LoadOpusFloat32,
+    ClearOpusFloat32,
+
+    ReadOpusFloat32
 };
 //--------------------------------------------------------------------------------------------------
 #if HGL_OS != HGL_OS_Windows
@@ -154,7 +232,7 @@ const u16char plugin_intro[]=U16_TEXT("Opus 音频文件解码(LibOpus 1.1.3,201
 
 HGL_PLUGIN_FUNC uint32 GetPlugInVersion()
 {
-	return(2);		//版本号
+	return(3);		//版本号
 					//根据版本号取得不同的API
 }
 
@@ -167,7 +245,12 @@ HGL_PLUGIN_FUNC bool GetPlugInInterface(uint32 ver,void *data)
 {
 	if(ver==2)
 	{
-		memcpy(data,&out_interface,sizeof(OutInterface));
+		memcpy(data,&out_interface_2,sizeof(OutInterface2));
+	}
+	else
+	if(ver==3)
+	{
+		memcpy(data,&out_interface_3,sizeof(OutInterface3));
 	}
 	else
 		return(false);

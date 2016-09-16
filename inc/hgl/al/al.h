@@ -82,6 +82,29 @@
 #define AL_EXPONENT_DISTANCE                      0xD005
 #define AL_EXPONENT_DISTANCE_CLAMPED              0xD006
 
+#define AL_FORMAT_MONO_FLOAT32                   0x10010
+#define AL_FORMAT_STEREO_FLOAT32                 0x10011
+#define AL_FORMAT_MONO_DOUBLE_EXT                0x10012
+#define AL_FORMAT_STEREO_DOUBLE_EXT              0x10013
+
+#define AL_FORMAT_QUAD8                          0x1204
+#define AL_FORMAT_QUAD16                         0x1205
+#define AL_FORMAT_QUAD32                         0x1206
+#define AL_FORMAT_REAR8                          0x1207
+#define AL_FORMAT_REAR16                         0x1208
+#define AL_FORMAT_REAR32                         0x1209
+#define AL_FORMAT_51CHN8                         0x120A
+#define AL_FORMAT_51CHN16                        0x120B
+#define AL_FORMAT_51CHN32                        0x120C
+#define AL_FORMAT_61CHN8                         0x120D
+#define AL_FORMAT_61CHN16                        0x120E
+#define AL_FORMAT_61CHN32                        0x120F
+#define AL_FORMAT_71CHN8                         0x1210
+#define AL_FORMAT_71CHN16                        0x1211
+#define AL_FORMAT_71CHN32                        0x1212
+
+#define AL_SOURCE_DISTANCE_MODEL                 0x200
+
 namespace openal
 {
 	typedef char ALboolean;
