@@ -55,6 +55,12 @@ void ClearOpus(ALenum,ALvoid *data,ALsizei,ALsizei)
     delete[] pcm;
 }
 
+struct OpusStream
+{
+    OggOpusFile *of;
+    const OpusHead *head;
+};
+
 void *OpenOpus(ALbyte *memory,ALsizei memory_size,ALenum *format,ALsizei *freq,double *total_time)
 {
     OggOpusFile *of;
@@ -76,28 +82,35 @@ void *OpenOpus(ALbyte *memory,ALsizei memory_size,ALenum *format,ALsizei *freq,d
 
     *total_time=double(op_pcm_total(of,-1))/double(head->input_sample_rate);
 
-	return(of);
+    OpusStream *os=new OpusStream;
+
+    os->of=of;
+    os->head=head;
+
+    return os;
 }
 
 void CloseOpus(void *ptr)
 {
-    OggOpusFile *of=(OggOpusFile *)ptr;
+    OpusStream *os=(OpusStream *)ptr;
 
-    op_free(of);
+    op_free(os->of);
+
+    delete os;
 }
 
 uint ReadOpus(void *ptr,char *data,uint buf_max)
 {
-	OggOpusFile *of=(OggOpusFile *)ptr;
+    OpusStream *os=(OpusStream *)ptr;
 	int result;
 	uint size=0;
     uint buf_left=buf_max/2;        //16位,所以要除2
 
 	while(size<buf_max)
 	{
-		result=op_read(of,((opus_int16 *)data)+size,buf_left-size,nullptr);
+		result=op_read(os->of,((opus_int16 *)data)+size,buf_left-size,nullptr);
 
-		if(result>0)size+=result;else
+		if(result>0)size+=result*os->head->channel_count;else
 		if(result<=0)break;
 	}
 
@@ -106,9 +119,9 @@ uint ReadOpus(void *ptr,char *data,uint buf_max)
 
 void RestartOpus(void *ptr)
 {
-	OggOpusFile *of=(OggOpusFile *)ptr;
+    OpusStream *os=(OpusStream *)ptr;
 
-    op_pcm_seek(of,0);
+    op_pcm_seek(os->of,0);
 }
 //--------------------------------------------------------------------------------------------------
 struct OutInterface
