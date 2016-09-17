@@ -156,7 +156,7 @@ namespace hgl
 		if(pi)
 			UnloadPlugIn(pi);
 
-		LOG_ERROR(OS_TEXT("加载插件<")+name+OS_TEXT("失败!"));
+		LOG_ERROR(OS_TEXT("加载插件<")+name+OS_TEXT(",ver:")+OSString(ver)+OS_TEXT(">失败!"));
 		return(nullptr);
 	}
 
