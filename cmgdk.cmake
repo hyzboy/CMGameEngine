@@ -26,6 +26,11 @@ OPTION(LOG_FILE_ONLY_ERROR 		"Only log error to file"					TRUE	)
 OPTION(LOG_THREAD_MUTEX			"Log Thread Mutex"							TRUE	)
 OPTION(LOG_CDB_LOADER_LOG		"Output CDBLoader log"						FALSE	)
 
+IF(BUILD_OPENAL_LIB)
+    OPTION(AUDIO_VORBIS_USE_TREMOR  "Vorbis Decode use Tremor"                  FALSE   )
+    OPTION(AUDIO_VORBIS_USE_TREMOLO "Vorbis Decode use Tremolo"                 FALSE   )
+ENDIF()
+
 IF(BUILD_OPENGL_LIB)
 
 	IF(UNIX)
