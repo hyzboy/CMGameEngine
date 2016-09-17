@@ -28,7 +28,10 @@ OPTION(LOG_CDB_LOADER_LOG		"Output CDBLoader log"						FALSE	)
 
 IF(BUILD_OPENAL_LIB)
     OPTION(AUDIO_VORBIS_USE_TREMOR  "Vorbis Decode use Tremor"                  FALSE   )
-    OPTION(AUDIO_VORBIS_USE_TREMOLO "Vorbis Decode use Tremolo"                 FALSE   )
+    
+    IF(UNIX)
+        OPTION(AUDIO_VORBIS_USE_TREMOLO "Vorbis Decode use Tremolo"                 FALSE   )
+    ENDIF()
 ENDIF()
 
 IF(BUILD_OPENGL_LIB)
