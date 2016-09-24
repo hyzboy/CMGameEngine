@@ -2,11 +2,12 @@
 #define HGL_AUDIO_SOURCE_INCLUDE
 
 #include<hgl/audio/ConeAngle.h>
-#include<hgl/audio/ReferenceValue.h>
 #include<hgl/audio/AudioBuffer.h>
 
 namespace hgl
 {
+    class AudioListener;
+
 	/**
 	* 音频源，指的是一个发声源，要发声必须创建至少一个发声源。而这个类就是管理发声源所用的。
 	*/
@@ -30,12 +31,6 @@ namespace hgl
 		Property<float>		Gain;                                                           ///<音量增益幅度
 		Property<float>		ConeGain;                                                       ///<音源锥增益
 
-// #define AL_INVERSE_DISTANCE                      0xD001	//倒数距离
-// #define AL_INVERSE_DISTANCE_CLAMPED              0xD002	//钳位倒数距离
-// #define AL_LINEAR_DISTANCE                       0xD003	//线性距离
-// #define AL_LINEAR_DISTANCE_CLAMPED               0xD004	//钳位线性距离
-// #define AL_EXPONENT_DISTANCE                     0xD005	//指数距离
-// #define AL_EXPONENT_DISTANCE_CLAMPED             0xD006	//钳位指数距离
 		Property<uint>		DistanceModel;													///<距离衰减模型(默认钳位倒数距离模型)
 		Property<float>		RolloffFactor;                                                  ///<音源衰减因(>=0,默认1.0)
 
@@ -48,13 +43,13 @@ namespace hgl
 		const Vector3f &GetVelocity(){return velocity;}
 		const Vector3f &GetDirection(){return direction;}
 
-		const ReferenceValue &GetDistance(){return distance;}
+		const void GetDistance(float &ref_distance,float &max_distance)const;
 		const ConeAngle &GetAngle(){return angle;}
 
 		void SetPosition(const Vector3f &);
 		void SetVelocity(const Vector3f &);
 		void SetDirection(const Vector3f &);
-		void SetDistance(const ReferenceValue &);
+		void SetDistance(const float &ref_distance,const float &max_distance);
 		void SetAngle(const ConeAngle &);
 
 	public: //方法

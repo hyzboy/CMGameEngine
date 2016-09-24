@@ -36,6 +36,7 @@ namespace hgl
 		hglSetProperty(		Gain,			this,AudioSource::GetGain,			AudioSource::SetGain);
 		hglSetProperty(		ConeGain,		this,AudioSource::GetConeGain,		AudioSource::SetConeGain);
 
+        hglSetProperty(     DistanceModel,  this,AudioSource::GetDistanceModel, AudioSource::SetDistanceModel   );
 		hglSetProperty(		RolloffFactor,	this,AudioSource::GetRolloffFactor,	AudioSource::SetRolloffFactor	);
 	}
 
@@ -179,15 +180,35 @@ namespace hgl
 		alSourcefv(index,AL_DIRECTION,direction);
 	}
 
-	void AudioSource::SetDistance(const ReferenceValue &dist)
+	void AudioSource::SetDistance(const float &ref_distance,const float &max_distance)
 	{
 		if(!alSourcef)return;
 		if(index==InvalidIndex)return;
 
-		distance=dist;
-		alSourcef(index,AL_REFERENCE_DISTANCE,dist.half);
-		alSourcef(index,AL_MAX_DISTANCE,dist.max);
+		ref_dist=ref_distance;
+        max_dist=max_distance;
+		alSourcef(index,AL_REFERENCE_DISTANCE,ref_dist);
+		alSourcef(index,AL_MAX_DISTANCE,max_dist);
 	}
+
+	void AudioSource::SetDistanceModel(uint dm)
+    {
+		if(!alSourcef)return;
+		if(index==InvalidIndex)return;
+        if(!alDistanceModel)return;
+
+// #define AL_INVERSE_DISTANCE                      0xD001	//倒数距离
+// #define AL_INVERSE_DISTANCE_CLAMPED              0xD002	//钳位倒数距离
+// #define AL_LINEAR_DISTANCE                       0xD003	//线性距离
+// #define AL_LINEAR_DISTANCE_CLAMPED               0xD004	//钳位线性距离
+// #define AL_EXPONENT_DISTANCE                     0xD005	//指数距离
+// #define AL_EXPONENT_DISTANCE_CLAMPED             0xD006	//钳位指数距离
+        if(dm<AL_INVERSE_DISTANCE
+         ||dm>AL_EXPONENT_DISTANCE_CLAMPED)return;
+
+        distance_model=dm;
+        alDistanceModel(distance_model);
+    }
 
 	void AudioSource::SetRolloffFactor(float rf)
 	{
@@ -304,8 +325,8 @@ namespace hgl
 		alGetSourcefv	(index,AL_POSITION,				position);
 		alGetSourcefv	(index,AL_VELOCITY,				velocity);
 		alGetSourcefv	(index,AL_DIRECTION,			direction);
-		alGetSourcef	(index,AL_MAX_DISTANCE,			&distance.max);
-		alGetSourcef	(index,AL_REFERENCE_DISTANCE,	&distance.half);
+		alGetSourcef	(index,AL_MAX_DISTANCE,			&max_dist);
+		alGetSourcef	(index,AL_REFERENCE_DISTANCE,	&ref_dist);
 		alGetSourcef	(index,AL_ROLLOFF_FACTOR,		&rolloff_factor);
 		alGetSourcef	(index,AL_CONE_INNER_ANGLE,		&angle.inner);
 		alGetSourcef	(index,AL_CONE_OUTER_ANGLE,		&angle.outer);

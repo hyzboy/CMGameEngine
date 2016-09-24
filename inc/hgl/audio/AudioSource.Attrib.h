@@ -19,13 +19,14 @@ protected:
 	Vector3f position;
 	Vector3f velocity;
 	Vector3f direction;
-	ReferenceValue distance;
+	float ref_dist,max_dist;
+    uint distance_model;
 	float rolloff_factor;
 	ConeAngle angle;
 
 protected:
 
-	uint GetIndex(){return index;}
+	uint GetIndex()const{return index;}
 
 	double GetCurTime();
 
@@ -33,16 +34,24 @@ protected:
 	float GetMinGain();
 	float GetMaxGain();
 
-	bool GetLoop(){return loop;}
+	const bool GetLoop()const{return loop;}
 
-	float GetPitch(){return pitch;}
-	float GetGain(){return gain;}
-	float GetConeGain(){return cone_gain;}
+	const float GetPitch()const{return pitch;}
+	const float GetGain()const{return gain;}
+	const float GetConeGain()const{return cone_gain;}
 
-	float GetRolloffFactor(){return rolloff_factor;}
+	const uint GetDistanceModel()const{return distance_model;}
+	const float GetRolloffFactor()const{return rolloff_factor;}
+
+	const void GetDistance(double &rd,double &md)const
+	{
+        rd=ref_dist;
+        md=max_dist;
+    }
 
 	virtual void SetLoop(bool);
 	void SetPitch(float);
 	void SetGain(float);
 	void SetConeGain(float);
+    void SetDistanceModel(uint);
 	void SetRolloffFactor(float);

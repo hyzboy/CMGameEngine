@@ -66,8 +66,8 @@ namespace hgl
 		const Vector3f &		GetDirection(){return audiosource.direction;} const
 		void            		SetDirection(const Vector3f &dir){audiosource.SetDirection(dir);}
 
-		const ReferenceValue & 	GetDistance(){return audiosource.distance;} const
-		void            		SetDistance(const ReferenceValue &rv){audiosource.SetDistance(rv);}
+		const void	            GetDistance(float &ref_distance, float &max_distance)const{audiosource.GetDistance(ref_distance,max_distance);} const
+		void            		SetDistance(const float &ref_distance,const float &max_distance){audiosource.SetDistance(ref_distance,max_distance);}
 
 		const ConeAngle &      	GetAngle(){return audiosource.angle;} const
 		void            		SetAngle(const ConeAngle &ca){audiosource.SetAngle(ca);}
