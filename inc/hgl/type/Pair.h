@@ -13,7 +13,7 @@ namespace hgl
 		L left;
 		R right;
 
-		typedef Pair<L,R> SelfClass;
+		using SelfClass=Pair<L,R>;
 
 	public:
 
@@ -67,12 +67,27 @@ namespace hgl
      */
 	template<typename L,typename R> struct LeftIndexPair:public Pair<L,R>
 	{
+        using SuperClass=Pair<L,R>;
+        using LIPCalss=struct LeftIndexPair<L,R>;
+
         virtual int Comp(const L &l)
         {
-            return l-this->left;
+            return this->left-l;
+        }
+
+        virtual int Comp(const SuperClass &p)
+        {
+            return this->left-p.left;
+        }
+
+        virtual int Comp(const LIPCalss &p)
+        {
+            return this->left-p.left;
         }
 
         CompOperator(const L &,Comp);
+        CompOperator(const SuperClass &,Comp);
+        CompOperator(const LIPCalss &,Comp);
     };//template<typename L,typename R> struct LeftIndexPair:public Pair<L,R>
 
     /**
@@ -80,12 +95,27 @@ namespace hgl
      */
     template<typename L,typename R> struct RightIndexPair:public Pair<L,R>
 	{
+        using SuperClass=Pair<L,R>;
+        using RIPClass=struct RightIndexPair<L,R>;
+
         virtual int Comp(const R &r)
         {
-            return r-this->right;
+            return this->right-r;
+        }
+
+        virtual int Comp(const SuperClass &p)
+        {
+            return this->right-p.right;
+        }
+
+        virtual int Comp(const RIPClass &p)
+        {
+            return this->right-p.right;
         }
 
         CompOperator(const R &,Comp);
+        CompOperator(const SuperClass &,Comp);
+        CompOperator(const RIPClass &,Comp);
     };//template<typename L,typename R> struct RightIndexPair:public Pair<L,R>
 }//namespace hgl
 #endif//HGL_TYPE_PAIR_INCLUDE
