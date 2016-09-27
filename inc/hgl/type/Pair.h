@@ -62,6 +62,9 @@ namespace hgl
 		}
 	};//template<typename L,typename R> struct Pair
 
+	/**
+     * 左值比较数据对
+     */
 	template<typename L,typename R> struct LeftIndexPair:public Pair<L,R>
 	{
         virtual int Comp(const L &l)
@@ -72,6 +75,9 @@ namespace hgl
         CompOperator(const L &,Comp);
     };//template<typename L,typename R> struct LeftIndexPair:public Pair<L,R>
 
+    /**
+     * 右值比较数据对
+     */
     template<typename L,typename R> struct RightIndexPair:public Pair<L,R>
 	{
         virtual int Comp(const R &r)
