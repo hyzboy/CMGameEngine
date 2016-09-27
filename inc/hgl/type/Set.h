@@ -32,7 +32,8 @@ namespace hgl
 
 				template<typename S>
 		const	int		Find			(const S &)const;											///<查找数据位置,不存在返回-1
-		const	bool	IsMember		(const T &v)const{return(Find(v)!=-1);}						///<确认是否成员
+                template<typename S>
+		const	bool	IsMember		(const S &v)const{return(Find(v)!=-1);}						///<确认是否成员
 				int		Add				(const T &);												///<添加一个数据,返回索引号,返回-1表示数据已存在
 				int		Add				(const T *,const int);										///<添加一批数据
 				int		Add				(const Set<T> &s){return Add(s.GetData(),s.GetCount());}	///<添加一批数据
