@@ -139,7 +139,7 @@ namespace hgl
 		typedef _Map<F,T *,DataPair> SuperClass;
 
 		virtual void	DeleteObject(const F &,T *)=0;												///<删除一个数据
-				void	DeleteObject(DataPair *ds){DeleteObject(ds->first,ds->second);}
+				void	DeleteObject(DataPair *ds){DeleteObject(ds->left,ds->right);}
 				void	DeleteObject(int index){DeleteObject(this->data_list[index]);}
 
 	public:
@@ -322,7 +322,7 @@ namespace hgl
 
 			if(pos==-1)return(nullptr);
 
-			return this->data_list[pos]->second;
+			return this->data_list[pos]->right;
 		};
 	};//class MapObject
 }//namespace hgl

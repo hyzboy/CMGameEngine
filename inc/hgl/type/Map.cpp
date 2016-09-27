@@ -27,14 +27,14 @@ namespace hgl
 
 		while(left<=right)
 		{
-			if(data_array[left ]->first==flag)return(left);
-			if(data_array[right]->first==flag)return(right);
+			if(data_array[left ]->left==flag)return(left);
+			if(data_array[right]->left==flag)return(right);
 
 			mid=(right+left)>>1;
 
-			if(data_array[mid]->first==flag)return(mid);
+			if(data_array[mid]->left==flag)return(mid);
 
-			if(data_array[mid]->first>flag)
+			if(data_array[mid]->left>flag)
 			{
 				++left;
 				right=mid-1;
@@ -60,25 +60,25 @@ namespace hgl
 
 		while(left<=right)
 		{
-			if(data_array[left ]->first>flag)
+			if(data_array[left ]->left>flag)
 			{
 				pos=left;
 				return(false);
 			}
 			else
-			if(data_array[left ]->first==flag)
+			if(data_array[left ]->left==flag)
 			{
 				pos=left;
 				return(true);
 			}
 
-			if(data_array[right]->first<flag)
+			if(data_array[right]->left<flag)
 			{
 				pos=right+1;
 				return(false);
 			}
 			else
-			if(data_array[right]->first==flag)
+			if(data_array[right]->left==flag)
 			{
 				pos=right;
 				return(true);
@@ -86,21 +86,21 @@ namespace hgl
 
 			mid=(right+left)>>1;
 
-			if(data_array[mid]->first==flag)
+			if(data_array[mid]->left==flag)
 			{
 				pos=mid;
 				return(true);
 			}
 
-			if(data_array[mid]->first>flag)
+			if(data_array[mid]->left>flag)
 			{
-				if(data_array[mid-1]->first<flag)
+				if(data_array[mid-1]->left<flag)
 				{
 					pos=mid;
 					return(false);
 				}
 				else
-				if(data_array[mid-1]->first==flag)
+				if(data_array[mid-1]->left==flag)
 				{
 					pos=mid-1;
 					return(true);
@@ -111,13 +111,13 @@ namespace hgl
 			}
 			else
 			{
-				if(data_array[mid+1]->first>flag)
+				if(data_array[mid+1]->left>flag)
 				{
 					pos=mid+1;
 					return(false);
 				}
 				else
-				if(data_array[mid+1]->first==flag)
+				if(data_array[mid+1]->left==flag)
 				{
 					pos=mid+1;
 					return(true);
@@ -142,7 +142,7 @@ namespace hgl
 
 		for(int i=0;i<count;i++)
 		{
-			if((*data_array)->second==data)
+			if((*data_array)->right==data)
 				return(i);
 
 			++data_array;
@@ -162,8 +162,8 @@ namespace hgl
 	{
 	    DataPair *ds=data_pool.Acquire();
 
-		ds->first=flag;
-		ds->second=data;
+		ds->left=flag;
+		ds->right=data;
 
 		int pos;
 
@@ -185,7 +185,7 @@ namespace hgl
 	{
 	    DataPair *ds=data_pool.Acquire();
 
-		ds->first=flag;
+		ds->left=flag;
 
 		int pos;
 
@@ -193,7 +193,7 @@ namespace hgl
 
         data_list.Insert(pos,ds);
 
-		return ds->second;
+		return ds->right;
 	}
 
 	/**
@@ -203,7 +203,7 @@ namespace hgl
 	template<typename F,typename T,typename DataPair>
 	void _Map<F,T,DataPair>::Add(DataPair *obj)
 	{
-		data_list.Insert(FindPos(obj->first),obj);
+		data_list.Insert(FindPos(obj->left),obj);
 	}
 
  	/**
@@ -219,7 +219,7 @@ namespace hgl
 
 		if(index==-1)return(false);
 
-		data=data_list[index]->second;
+		data=data_list[index]->right;
 
 		return(true);
 	}
@@ -238,8 +238,8 @@ namespace hgl
 
 		DataPair *ds=data_list[index];
 
-		f=ds->first;
-		t=ds->second;
+		f=ds->left;
+		t=ds->right;
 
 		return(true);
 	}
@@ -257,7 +257,7 @@ namespace hgl
 
 		DataPair *ds=data_list[index];
 
-		f=ds->first;
+		f=ds->left;
 
 		return(true);
 	}
@@ -277,7 +277,7 @@ namespace hgl
 
 		if(!ds)return(false);
 
-		t=ds->second;
+		t=ds->right;
 
 		return(true);
 	}
@@ -292,7 +292,7 @@ namespace hgl
 	{
 		if(index<0||index>=data_list.GetCount())return(false);
 
-		data_list[index]->second=t;
+		data_list[index]->right=t;
 
 		return(true);
 	}
@@ -312,7 +312,7 @@ namespace hgl
 
 		DataPair *dp=data_list[index];
 
-		data=dp->second;
+		data=dp->right;
 
 		data_pool.Release(dp);
 		data_list.DeleteMove(index);
@@ -436,13 +436,13 @@ namespace hgl
 		int result;
 
 		if(FindPos(flag,result))
-			data_list[result]->second=data;
+			data_list[result]->right=data;
 		else
 		{
 			DataPair *ds=data_pool.Acquire();
 
-			ds->first=flag;
-			ds->second=data;
+			ds->left=flag;
+			ds->right=data;
 
 			data_list.Insert(result,ds);
 		}
@@ -462,7 +462,7 @@ namespace hgl
 		if(result==-1)
 			return(false);
 
-		data_list[result]->second=data;
+		data_list[result]->right=data;
 
 		return(true);
 	}
@@ -504,7 +504,7 @@ namespace hgl
 		{
 			DataPair *obj=data_list[i];
 
-			if(OnSaveToStream(str,obj->first,obj->second)==false)
+			if(OnSaveToStream(str,obj->left,obj->right)==false)
             	return(false);
 		}
 

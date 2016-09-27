@@ -129,13 +129,13 @@ namespace hgl
 
 			for(int i=0;i<count;i++)
 			{
-				argv[index]=(*idp)->first.c_str();
-				argvlen[index]=(*idp)->first.Length();
+				argv[index]=(*idp)->left.c_str();
+				argvlen[index]=(*idp)->left.Length();
 
 				++index;
 
-				argv[index]=(const char *)((*idp)->second->mos.GetData());
-				argvlen[index]=(*idp)->second->mos.Tell();
+				argv[index]=(const char *)((*idp)->right->mos.GetData());
+				argvlen[index]=(*idp)->right->mos.Tell();
 
 				++index;
 				++idp;
@@ -158,7 +158,7 @@ namespace hgl
 
 			for(int i=0;i<count;i++)
 			{
-				if((*idp)->second->update)
+				if((*idp)->right->update)
 					++update_count;
 
 				++idp;
@@ -186,15 +186,15 @@ namespace hgl
 
 			for(int i=0;i<count;i++)
 			{
-				if((*idp)->second->update)
+				if((*idp)->right->update)
 				{
-					argv[index]=(*idp)->first.c_str();
-					argvlen[index]=(*idp)->first.Length();
+					argv[index]=(*idp)->left.c_str();
+					argvlen[index]=(*idp)->left.Length();
 
 					++index;
 
-					argv[index]=(const char *)((*idp)->second->mos.GetData());
-					argvlen[index]=(*idp)->second->mos.Tell();
+					argv[index]=(const char *)((*idp)->right->mos.GetData());
+					argvlen[index]=(*idp)->right->mos.Tell();
 
 					++index;
 				}
@@ -214,7 +214,7 @@ namespace hgl
 
 			for(int i=0;i<count;i++)
 			{
-				(*idp)->second->update=false;
+				(*idp)->right->update=false;
 				++idp;
 			}
 

@@ -33,7 +33,7 @@ void parse(const UTF8String &type_string,const UTF8String &domain)
         return;
     }
 
-    ipa.GetDomainIPList(ip_list,domain,tp.first,tp.second);
+    ipa.GetDomainIPList(ip_list,domain,tp.left,tp.right);
 
     for(int i=0;i<ip_list.GetCount();i++)
     {

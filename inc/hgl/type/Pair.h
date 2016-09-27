@@ -10,8 +10,8 @@ namespace hgl
 	 */
 	template<typename L,typename R> struct Pair														///成对数据模板
 	{
-		L first;
-		R second;
+		L left;
+		R right;
 
 		typedef Pair<L,R> SelfClass;
 
@@ -21,8 +21,8 @@ namespace hgl
 
 		Pair(const L &l,const R &r)
 		{
-			first=l;
-			second=r;
+			     left=l;
+			     right=r;
 		}
 
 		Pair(const SelfClass &p)
@@ -39,8 +39,8 @@ namespace hgl
 
 		SelfClass &operator=(const SelfClass &p)
 		{
-			first=p.first;
-			second=p.second;
+			     left=p.first;
+			     right=p.second;
 
 			return(*this);
 		}
@@ -49,33 +49,37 @@ namespace hgl
 		{
 			if(!p)return(*this);
 
-			first=p->first;
-			second=p->second;
+			     left=p->first;
+			     right=p->second;
 
 			return(*this);
 		}
 
 		void Swap(Pair<R,L> &p)
 		{
-			p.first=second;
-			p.second=first;
+			p.first=right;
+			p.second=left;
 		}
-
-		int Comp(const SelfClass &p)const
-		{
-			if(first==p.first)
-				return second-p.second;
-
-			return first-p.first;
-		}
-
-		int Comp(const L &l)const
-		{
-			return first-l;
-		}
-
-		CompOperator(const SelfClass &,Comp)
-		CompOperator(const L &,Comp)
 	};//template<typename L,typename R> struct Pair
+
+	template<typename L,typename R> struct LeftIndexPair:public Pair<L,R>
+	{
+        virtual int Comp(const L &l)
+        {
+            return l-this->left;
+        }
+
+        CompOperator(const L &,Comp);
+    };//template<typename L,typename R> struct LeftIndexPair:public Pair<L,R>
+
+    template<typename L,typename R> struct RightIndexPair:public Pair<L,R>
+	{
+        virtual int Comp(const R &r)
+        {
+            return r-this->right;
+        }
+
+        CompOperator(const R &,Comp);
+    };//template<typename L,typename R> struct RightIndexPair:public Pair<L,R>
 }//namespace hgl
 #endif//HGL_TYPE_PAIR_INCLUDE

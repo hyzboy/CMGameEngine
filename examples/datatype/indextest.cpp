@@ -1,4 +1,4 @@
-﻿#include<iostream>
+#include<iostream>
 #include<stdlib.h>
 #include<hgl/type/Set.h>
 #include<hgl/type/Map.h>
@@ -15,7 +15,7 @@ void out_id(Map<int,int> &ii)
 
 	for(int i=0;i<count;i++)
 	{
-		cout<<"["<</*i<<":"<<*/(*p)->first<<","<<(*p)->second<<"]";
+		cout<<"["<</*i<<":"<<*/(*p)->left<<","<<(*p)->right<<"]";
 		++p;
 	}
 
