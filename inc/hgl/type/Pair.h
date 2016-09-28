@@ -1,6 +1,7 @@
 ﻿#ifndef HGL_TYPE_PAIR_INCLUDE
 #define HGL_TYPE_PAIR_INCLUDE
 
+#include<hgl/platform/Platform.h>
 #include<hgl/CompOperator.h>
 
 namespace hgl
@@ -21,8 +22,8 @@ namespace hgl
 
 		Pair(const L &l,const R &r)
 		{
-			     left=l;
-			     right=r;
+            left=l;
+            right=r;
 		}
 
 		Pair(const SelfClass &p)
@@ -39,8 +40,8 @@ namespace hgl
 
 		SelfClass &operator=(const SelfClass &p)
 		{
-			     left=p.first;
-			     right=p.second;
+            left=p.left;
+            right=p.right;
 
 			return(*this);
 		}
@@ -49,16 +50,16 @@ namespace hgl
 		{
 			if(!p)return(*this);
 
-			     left=p->first;
-			     right=p->second;
+            left=p->left;
+            right=p->right;
 
 			return(*this);
 		}
 
 		void Swap(Pair<R,L> &p)
 		{
-			p.first=right;
-			p.second=left;
+			p.left=right;
+			p.right=left;
 		}
 	};//template<typename L,typename R> struct Pair
 
@@ -117,5 +118,61 @@ namespace hgl
         CompOperator(const SuperClass &,Comp);
         CompOperator(const RIPClass &,Comp);
     };//template<typename L,typename R> struct RightIndexPair:public Pair<L,R>
+
+    template<typename L,typename R> struct LeftPointerPair
+    {
+        using PairClass=Pair<L,R>;
+        using SelfClass=LeftPointerPair<L,R>;
+
+        PairClass *data;
+
+    public:
+
+        LeftPointerPair(PairClass *p)
+        {
+            data=p;
+        }
+
+        virtual int Comp(const PairClass &p)
+        {
+            return data->left-p.left;
+        }
+
+        virtual int Comp(const SelfClass &p)
+        {
+            return data->left-p.data->left;
+        }
+
+        CompOperator(const PairClass &,Comp);
+        CompOperator(const SelfClass &,Comp);
+    };//template<typename L,typename R> struct LeftPointerPair
+
+    template<typename L,typename R> struct RightPointerPair
+    {
+        using PairClass=Pair<L,R>;
+        using SelfClass=RightPointerPair<L,R>;
+
+        PairClass *data;
+
+    public:
+
+        RightPointerPair(PairClass *p)
+        {
+            data=p;
+        }
+
+        virtual int Comp(const PairClass &p)
+        {
+            return data->right-p.right;
+        }
+
+        virtual int Comp(const SelfClass &p)
+        {
+            return data->right-p.data->right;
+        }
+
+        CompOperator(const PairClass &,Comp);
+        CompOperator(const SelfClass &,Comp);
+    };//template<typename L,typename R> struct RightPointerPair
 }//namespace hgl
 #endif//HGL_TYPE_PAIR_INCLUDE
