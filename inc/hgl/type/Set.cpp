@@ -15,8 +15,7 @@ namespace hgl
 	* @return 数据所在索引，-1表示不存在
 	*/
 	template<typename T>
-	template<typename S>
-	const int Set<T>::Find(const S &flag)const
+	const int Set<T>::Find(const T &flag)const
 	{
 		int left=0,right=data_list.GetCount()-1;				//使用left,right而不使用min,max是为了让代码能够更好的阅读。
 		int mid;
@@ -214,8 +213,7 @@ namespace hgl
 	* @param data 数据
 	*/
 	template<typename T>
-	template<typename S>
-	bool Set<T>::Delete(const S &data)
+	bool Set<T>::Delete(const T &data)
 	{
 		int pos=Find(data);
 

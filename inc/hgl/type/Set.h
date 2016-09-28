@@ -30,16 +30,13 @@ namespace hgl
 				void	SetCount		(int count){data_list.SetCount(count);}						///<指定数据数量，一般用于批量加载前的处理
 				void	PreMalloc		(int count){data_list.PreMalloc(count);}					///<预分配指定数量的数据空间
 
-				template<typename S>
-		const	int		Find			(const S &)const;											///<查找数据位置,不存在返回-1
-                template<typename S>
-		const	bool	IsMember		(const S &v)const{return(Find(v)!=-1);}						///<确认是否成员
+		const	int		Find			(const T &)const;											///<查找数据位置,不存在返回-1
+		const	bool	IsMember		(const T &v)const{return(Find(v)!=-1);}						///<确认是否成员
 				int		Add				(const T &);												///<添加一个数据,返回索引号,返回-1表示数据已存在
 				int		Add				(const T *,const int);										///<添加一批数据
 				int		Add				(const Set<T> &s){return Add(s.GetData(),s.GetCount());}	///<添加一批数据
 				bool	Update			(const T &);												///<更新一个数据
-                template<typename S>
-				bool	Delete			(const S &);												///<删除一个数据
+				bool	Delete			(const T &);												///<删除一个数据
 				int		Delete			(T *,const int);											///<删除一批数据
 				bool	DeleteBySerial	(int);														///<删除一个数据,使用序号
 				void	Clear			();                                                         ///<清除数据
