@@ -18,7 +18,7 @@ namespace hgl
 
 		CheckPoint=nullptr;
 
-		Steps.Malloc((w+h)*2);
+		Steps.PreMalloc((w+h)*2);
 	}
 
 	void FindPath::SetStart(int x,int y)

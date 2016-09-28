@@ -11,7 +11,7 @@ namespace hgl
 
 	/**
 	* 查找数据是否存在
-	* @param data 数据
+	* @param flag 数据
 	* @return 数据所在索引，-1表示不存在
 	*/
 	template<typename T>
@@ -199,7 +199,7 @@ namespace hgl
 
 	/**
 	* 删除一个数据
-	* @param Pos 索引编号
+	* @param pos 索引编号
 	*/
 	template<typename T>
 	bool Set<T>::DeleteBySerial(int pos)
@@ -214,7 +214,8 @@ namespace hgl
 	* @param data 数据
 	*/
 	template<typename T>
-	bool Set<T>::Delete(const T &data)
+	template<typename S>
+	bool Set<T>::Delete(const S &data)
 	{
 		int pos=Find(data);
 
@@ -260,7 +261,7 @@ namespace hgl
 	}
 
 	/**
-	* 清除所有数据
+	* 清除所有数据，但不释放内存
 	*/
 	template<typename T>
 	void Set<T>::ClearData()

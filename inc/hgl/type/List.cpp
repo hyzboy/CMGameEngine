@@ -476,7 +476,7 @@ namespace hgl
 	}
 
 	template<typename T>
-	void List<T>::Malloc(int new_count)
+	void List<T>::PreMalloc(int new_count)
 	{
 		if(max_count>=new_count)return;
 
@@ -499,7 +499,7 @@ namespace hgl
 			return;
 		}
 
-		Malloc(new_count);
+		PreMalloc(new_count);
 
 		count=new_count;
 	}
