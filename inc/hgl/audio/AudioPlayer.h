@@ -69,8 +69,8 @@ namespace hgl
 		const void	            GetDistance(float &ref_distance, float &max_distance)const{audiosource.GetDistance(ref_distance,max_distance);} const
 		void            		SetDistance(const float &ref_distance,const float &max_distance){audiosource.SetDistance(ref_distance,max_distance);}
 
-		const ConeAngle &      	GetAngle(){return audiosource.angle;} const
-		void            		SetAngle(const ConeAngle &ca){audiosource.SetAngle(ca);}
+		const ConeAngle &      	GetConeAngle(){return audiosource.angle;} const
+		void            		SetConeAngle(const ConeAngle &ca){audiosource.SetConeAngle(ca);}
 
 	public:	//方法
 
