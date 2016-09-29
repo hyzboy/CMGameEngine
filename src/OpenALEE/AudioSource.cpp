@@ -24,7 +24,7 @@ namespace hgl
 
 		hglSetPropertyRead(	Index,			this,AudioSource::GetIndex);
 
-		hglSetPropertyRead(	CurTime,		this,AudioSource::GetCurTime);
+		hglSetProperty(   	CurTime,		this,AudioSource::GetCurTime,        AudioSource::SetCurTime);
 
 		hglSetPropertyRead(	State,			this,AudioSource::GetState);
 		hglSetPropertyRead(	MinGain,		this,AudioSource::GetMinGain);
@@ -74,12 +74,20 @@ namespace hgl
 		if(!alGetSourcei)return(0);
 		if(index==InvalidIndex)return(0);
 
-		int offset;
+		float offset;
 
-		alGetSourcei(index,AL_BYTE_OFFSET,&offset);
+		alGetSourcef(index,AL_SEC_OFFSET,&offset);
 
-		return(double(offset)/double(Buffer->Size)*double(Buffer->Time));
+        return offset;
 	}
+
+	void AudioSource::SetCurTime(const double &ct)
+    {
+        if(!alGetSourcef)return;
+		if(index==InvalidIndex)return;
+
+		alSourcef(index,AL_SEC_OFFSET,ct);
+    }
 
 	int AudioSource::GetState()
 	{

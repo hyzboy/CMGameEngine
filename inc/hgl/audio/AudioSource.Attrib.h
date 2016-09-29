@@ -32,6 +32,7 @@ protected:
 	uint GetIndex()const{return index;}
 
 	double GetCurTime();
+    void SetCurTime(const double &);
 
 	int GetState();
 	float GetMinGain();
