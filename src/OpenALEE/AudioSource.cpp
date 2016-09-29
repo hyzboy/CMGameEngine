@@ -219,7 +219,7 @@ namespace hgl
 		alSourcef(index,AL_ROLLOFF_FACTOR,rolloff_factor);
 	}
 
-	void AudioSource::SetAngle(const ConeAngle &ca)
+	void AudioSource::SetConeAngle(const ConeAngle &ca)
 	{
 		if(!alSourcef)return;
 		if(index==InvalidIndex)return;
