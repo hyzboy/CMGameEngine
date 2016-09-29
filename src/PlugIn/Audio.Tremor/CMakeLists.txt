@@ -14,7 +14,14 @@ SET(TREMOR_SOURCE	tremor/block.c
                     tremor/sharedbook.c
                     tremor/vorbisfile.c)
 
-add_library(CMP.Audio.Vorbis SHARED OggRead.cpp ${TREMOR_SOURCE})
-target_link_libraries(CMP.Audio.Vorbis ogg)
-
 SOURCE_GROUP("Tremor"	FILES ${TREMOR_SOURCE})
+
+IF(WIN32)
+	SOURCE_GROUP("LibOGG"	FILES ${OGG_SOURCE})
+
+	add_library(CMP.Audio.Vorbis SHARED OggRead.cpp ${TREMOR_SOURCE} ${OGG_SOURCE})
+ELSE()
+	add_library(CMP.Audio.Vorbis SHARED OggRead.cpp ${TREMOR_SOURCE})
+	target_link_libraries(CMP.Audio.Vorbis ogg)
+ENDIF()
+
