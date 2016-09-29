@@ -373,7 +373,7 @@ namespace openal
 		}
 		#endif//_DEBUG
 
-		::strcpy(AudioDeviceName,alcGetString(AudioDevice,ALC_DEVICE_SPECIFIER));
+		hgl::strcpy(AudioDeviceName,AL_DEVICE_NAME_MAX_LEN,alcGetString(AudioDevice,ALC_DEVICE_SPECIFIER));
 
 		LOG_INFO("初始化音频设备完成: "+UTF8String(AudioDeviceName));
 
