@@ -89,6 +89,8 @@ namespace hgl
         virtual void    OnContinuedMute(AudioSourceItem *){/*無任何處理，請自行重載處理*/}          ///<持续聽不到聲音
         virtual void    OnContinuedHear(AudioSourceItem *){/*無任何處理，請自行重載處理*/}          ///<持续可以聽到聲音
 
+		virtual bool	OnStopped(AudioSourceItem *){return true;}									///<单个音源播放结束事件,返回TRUE表示可以释放这个音源，返回FALSE依然占用这个音源
+
     public:
 
         AudioScene(int max_source,AudioListener *al);                                               ///<构造函数(指定最大音源数)

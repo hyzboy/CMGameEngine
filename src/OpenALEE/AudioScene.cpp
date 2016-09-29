@@ -129,9 +129,12 @@ namespace hgl
         if(!asi)return(false);
         if(!asi->buffer)return(false);
 
-        asi->source=source_pool.Acquire();
+		if(!asi->source)
+		{
+			asi->source=source_pool.Acquire();
 
-        if(!asi->source)return(false);
+			if(!asi->source)return(false);
+		}
 
         asi->source->Link(asi->buffer);
 
@@ -149,6 +152,25 @@ namespace hgl
     {
         if(!asi)return(false);
         if(!asi->source)return(false);
+
+		if (asi->source->State==AL_STOPPED)	//放完了，回收音源
+		{
+			if(asi->loop)
+			{
+				asi->source->Play(true);	//循环放的
+			}
+			else
+			{
+				if(OnStopped(asi))
+				{
+					asi->source->Unlink();
+					source_pool.Release(asi->source);
+					asi->source=nullptr;
+				}
+
+				return(true);
+			}
+		}
 
         if(asi->last_pos!=asi->cur_pos)      //坐标不一样了
         {
