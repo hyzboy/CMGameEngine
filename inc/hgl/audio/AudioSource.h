@@ -34,8 +34,6 @@ namespace hgl
 		Property<uint>		DistanceModel;													///<距离衰减模型(默认钳位倒数距离模型)
 		Property<float>		RolloffFactor;                                                  ///<音源衰减因(>=0,默认1.0)
 
-		Property<float>		SpeedOfSound;													///<声音传播速度(单位为米，默认值343.3，最小精度0.0001米)
-
 	public:	//属性方法
 
 		const Vector3f &GetPosition(){return position;}
