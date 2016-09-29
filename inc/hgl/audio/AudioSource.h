@@ -48,7 +48,8 @@ namespace hgl
 		void SetDirection(const Vector3f &);
 		void SetDistance(const float &ref_distance,const float &max_distance);
 		void SetAngle(const ConeAngle &);
-        void SetDoppler(const float &factor,const float &velocity);                                 ///<设置多普勒
+        void SetDopplerFactor(const float &);                                                       ///<设置多普勒效果强度
+        void SetDopplerVelocity(const float &);                                                     ///<设置多普勒速度
 
 	public: //方法
 

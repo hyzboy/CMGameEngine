@@ -229,15 +229,23 @@ namespace hgl
 		alSourcef(index,AL_CONE_OUTER_ANGLE,ca.outer);
 	}
 
-	void AudioSource::SetDoppler(const float &factor,const float &velocity)
+	void AudioSource::SetDopplerFactor(const float &factor)
     {
 		if(!alSourcef)return;
 		if(index==InvalidIndex)return;
 
         doppler_factor=factor;
-        doppler_velocity=velocity;
 
         alDopplerFactor(doppler_factor);
+    }
+
+    void AudioSource::SetDopplerVelocity(const float &velocity)
+    {
+		if(!alSourcef)return;
+		if(index==InvalidIndex)return;
+
+        doppler_velocity=velocity;
+
         alDopplerVelocity(doppler_velocity);
     }
 
