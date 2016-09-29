@@ -34,7 +34,6 @@ namespace hgl
 		Property<uint>		DistanceModel;													///<距离衰减模型(默认钳位倒数距离模型)
 		Property<float>		RolloffFactor;                                                  ///<音源衰减因(>=0,默认1.0)
 
-		Property<float>		DopplerFactor;													///<多普勒因子(默认1.0)
 		Property<float>		SpeedOfSound;													///<声音传播速度(单位为米，默认值343.3，最小精度0.0001米)
 
 	public:	//属性方法
@@ -42,8 +41,6 @@ namespace hgl
 		const Vector3f &GetPosition(){return position;}
 		const Vector3f &GetVelocity(){return velocity;}
 		const Vector3f &GetDirection(){return direction;}
-
-		const void GetDistance(float &ref_distance,float &max_distance)const;
 		const ConeAngle &GetAngle(){return angle;}
 
 		void SetPosition(const Vector3f &);
@@ -51,6 +48,7 @@ namespace hgl
 		void SetDirection(const Vector3f &);
 		void SetDistance(const float &ref_distance,const float &max_distance);
 		void SetAngle(const ConeAngle &);
+        void SetDoppler(const float &factor,const float &velocity);                                 ///<设置多普勒
 
 	public: //方法
 

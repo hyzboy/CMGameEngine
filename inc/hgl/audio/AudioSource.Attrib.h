@@ -24,6 +24,9 @@ protected:
 	float rolloff_factor;
 	ConeAngle angle;
 
+    float doppler_factor;
+    float doppler_velocity;
+
 protected:
 
 	uint GetIndex()const{return index;}
@@ -43,10 +46,16 @@ protected:
 	const uint GetDistanceModel()const{return distance_model;}
 	const float GetRolloffFactor()const{return rolloff_factor;}
 
-	const void GetDistance(double &rd,double &md)const
+	const void GetDistance(float &rd,float &md)const
 	{
         rd=ref_dist;
         md=max_dist;
+    }
+
+    void GetDoppler(float &factor,float &velocity)
+    {
+        factor=doppler_factor;
+        velocity=doppler_velocity;
     }
 
 	virtual void SetLoop(bool);
