@@ -1,4 +1,4 @@
-#include<hgl/audio/AudioScene.h>
+﻿#include<hgl/audio/AudioScene.h>
 #include<hgl/audio/AudioSource.h>
 #include<hgl/audio/Listener.h>
 #include<hgl/al/al.h>
@@ -13,7 +13,7 @@ namespace hgl
 
         if(s->gain<=0)return(0);        //本声音量就是0
 
-        float ref_dist,max_dist,distance;
+        float distance;
 
         const Vector3f &        lpos=l->GetPosition();
 

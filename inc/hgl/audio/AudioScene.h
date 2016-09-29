@@ -1,4 +1,4 @@
-#ifndef HGL_AUDIO_SCENE_INCLUDE
+﻿#ifndef HGL_AUDIO_SCENE_INCLUDE
 #define HGL_AUDIO_SCENE_INCLUDE
 
 #include<hgl/VectorMath.h>
@@ -75,11 +75,11 @@ namespace hgl
             return asi?GetGain(listener,asi)*asi->gain:0;
         }
 
-        virtual void    OnToMute(AudioSourceItem *){/*無任何處理，請自行重載處理*/}                     ///<从有声变成聽不到聲音
-        virtual void    OnToHear(AudioSourceItem *){/*無任何處理，請自行重載處理*/}                     ///<从听不到声变成能听到声音
+        virtual void    OnToMute(AudioSourceItem *){/*無任何處理，請自行重載處理*/}                 ///<从有声变成聽不到聲音
+        virtual void    OnToHear(AudioSourceItem *){/*無任何處理，請自行重載處理*/}                 ///<从听不到声变成能听到声音
 
-        virtual void    OnContinuedMute(AudioSourceItem *){/*無任何處理，請自行重載處理*/}              ///<持续聽不到聲音
-        virtual void    OnContinuedHear(AudioSourceItem *){/*無任何處理，請自行重載處理*/}              ///<持续可以聽到聲音
+        virtual void    OnContinuedMute(AudioSourceItem *){/*無任何處理，請自行重載處理*/}          ///<持续聽不到聲音
+        virtual void    OnContinuedHear(AudioSourceItem *){/*無任何處理，請自行重載處理*/}          ///<持续可以聽到聲音
 
     public:
 
@@ -90,6 +90,12 @@ namespace hgl
 
         virtual AudioSourceItem *   Create(AudioBuffer *,const Vector3f &pos,const float &gain=1);  ///<创建一個音源
         virtual void                Delete(AudioSourceItem *);                                      ///<删除一个音源
+
+		virtual void				Clear()															///<清除所有音源
+		{
+			source_list.Clear();
+			source_pool.ReleaseAll();
+		}
 
         virtual int                 Update();                                                       ///<刷新,返回仍在發聲的音源數量
     };//class AudioScene
