@@ -5,6 +5,7 @@
 	AudioBuffer.cpp
 	AudioDecode.cpp
 	AudioManage.cpp
+	AudioScene.cpp
 	AudioPlayer.cpp
 	AudioSource.cpp
 	EFX.cpp
