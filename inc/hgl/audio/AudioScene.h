@@ -16,7 +16,13 @@ namespace hgl
      */
     struct AudioSourceItem
     {
+		friend class AudioScene;
+
+	private:
+
         AudioBuffer *buffer;
+
+	public:
 
         bool loop;
 //         float min_gain,max_gain;
@@ -34,13 +40,15 @@ namespace hgl
 //         Vector3f Velocity;
 //         Vector3f Direction;
 
-        Vector3f last_pos;
-        double last_time;
-
         Vector3f cur_pos;
         double cur_time;
 
-        double move_speed;
+	private:
+
+		Vector3f last_pos;
+		double last_time;
+		
+		double move_speed;
 
         double last_gain;                                                                           ///<最近一次的音量
 

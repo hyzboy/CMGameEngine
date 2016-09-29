@@ -86,6 +86,7 @@ namespace hgl
         asi->gain=gain;
 
         asi->distance_model=AL_INVERSE_DISTANCE_CLAMPED;
+		asi->rolloff_factor=1;
 
         asi->last_pos=pos;
         asi->cur_pos=pos;
