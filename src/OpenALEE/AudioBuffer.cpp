@@ -16,7 +16,7 @@ namespace hgl
 
 	const os_char *GetAudioDecodeName(const AudioFileType aft);
 
-	double LoadAudioData(int index,AudioFileType aft,void *memory,int memory_size)
+	double LoadAudioData(int index,AudioFileType aft,void *memory,int memory_size,uint &Freq)
 	{
 		ALenum format;
 		ALvoid *data;
@@ -52,6 +52,8 @@ namespace hgl
             decode->Clear(format, data, size, freq);
 
 		if(alLastError())RETURN_ERROR(0);
+
+        Freq=freq;
 
     	return AudioDataTime(size,format,freq);
 	}
@@ -115,6 +117,8 @@ namespace hgl
 
 		Time=AudioDataTime(size,format,freq);
 
+        Freq=freq;
+
 		return(true);
 	}
 
@@ -141,7 +145,7 @@ namespace hgl
 		}
 		else
 		{
-			Time=LoadAudioData(Index,aft,memory,size);
+			Time=LoadAudioData(Index,aft,memory,size,Freq);
 			Size=size;
 		}
 
