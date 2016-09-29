@@ -2,6 +2,7 @@
 #include<hgl/audio/AudioSource.h>
 #include<hgl/audio/Listener.h>
 #include<hgl/al/al.h>
+#include<hgl/Other.h>
 namespace hgl
 {
 	/**
@@ -70,6 +71,9 @@ namespace hgl
         source_pool.PreMalloc(max_source);
 
         listener=al;
+
+        ref_distance=1000;
+        max_distance=100000;
     }
 
     AudioSourceItem *AudioScene::Create(AudioBuffer *buf,const Vector3f &pos,const float &gain)
@@ -87,6 +91,11 @@ namespace hgl
 
         asi->distance_model=AL_INVERSE_DISTANCE_CLAMPED;
 		asi->rolloff_factor=1;
+        asi->ref_distance=ref_distance;
+        asi->max_distance=max_distance;
+
+        asi->start_play_time=0;
+        asi->is_play=false;
 
         asi->last_pos=pos;
         asi->cur_pos=pos;
@@ -94,7 +103,7 @@ namespace hgl
         asi->last_time=asi->cur_time=0;
         asi->move_speed=0;
 
-        asi->last_gain=gain*GetGain(listener,asi);
+        asi->last_gain=0;
 
         asi->source=nullptr;
 
@@ -115,6 +124,8 @@ namespace hgl
         if(!asi)return(false);
         if(!asi->source)return(false);
 
+        OnToMute(asi);
+
         asi->source->Stop();
         asi->source->Unlink();
         source_pool.Release(asi->source);
@@ -128,6 +139,32 @@ namespace hgl
     {
         if(!asi)return(false);
         if(!asi->buffer)return(false);
+
+        if(asi->start_play_time>cur_time)       //还没到起播时间
+            return(false);
+
+        double time_off=0;
+
+        if(asi->start_play_time>0
+         &&asi->start_play_time<cur_time)
+        {
+            time_off=cur_time-asi->start_play_time;
+
+            if(time_off>=asi->buffer->Time)     //大于整个音频的时间
+            {
+                if(!asi->loop)                  //无需循环
+                {
+                    asi->is_play=false;         //不用放了
+                    return(false);
+                }
+                else                            //循环播放的
+                {
+                    const int count=int(time_off/asi->buffer->Time);        //计算超了几次并取整
+
+                    time_off-=asi->buffer->Time*count;                      //计算单次的偏移时间
+                }
+            }
+        }
 
 		if(!asi->source)
 		{
@@ -143,7 +180,16 @@ namespace hgl
         asi->source->RolloffFactor=asi->rolloff_factor;
         asi->source->SetDistance(asi->ref_distance,asi->max_distance);
         asi->source->SetPosition(asi->cur_pos);
+        asi->source->SetConeAngle(asi->cone_angle);
+        asi->source->SetVelocity(asi->velocity);
+        asi->source->SetDirection(asi->direction);
+        asi->source->SetDopplerFactor(asi->doppler_factor);
+        asi->source->SetDopplerVelocity(0);
+
+        asi->source->CurTime=time_off;
         asi->source->Play(asi->loop);
+
+        OnToHear(asi);
 
         return(true);
     }
@@ -153,29 +199,40 @@ namespace hgl
         if(!asi)return(false);
         if(!asi->source)return(false);
 
-		if (asi->source->State==AL_STOPPED)	//放完了，回收音源
+		if(asi->source->State==AL_STOPPED)	//停播状态
 		{
-			if(asi->loop)
-			{
-				asi->source->Play(true);	//循环放的
-			}
-			else
-			{
-				if(OnStopped(asi))
-				{
-					asi->source->Unlink();
-					source_pool.Release(asi->source);
-					asi->source=nullptr;
-				}
+            if(!asi->loop)                  //不是循环播放
+            {
+                if(OnStopped(asi))
+                    ToMute(asi);
 
-				return(true);
-			}
+                return(true);
+            }
+            else
+            {
+                asi->source->Play();        //继续播放
+            }
 		}
 
-        if(asi->last_pos!=asi->cur_pos)      //坐标不一样了
+        if(asi->doppler_factor>0)                   //需要多普勒效果
         {
-            //根据移动速度进行多普勒调整
-//            double shift = DOPPLER_FACTOR * freq * (DOPPLER_VELOCITY - l.velocity) / (DOPPLER_VELOCITY + s.velocity)
+//             double shift=0;
+
+            if(asi->last_pos!=asi->cur_pos)         //坐标不一样了
+            {
+                asi->move_speed=length(asi->last_pos,asi->cur_pos)/(asi->cur_time-asi->last_time);
+                //根据离收听者的距离和速度进行多普勒调整
+
+//                 shift = DOPPLER_FACTOR * freq * (DOPPLER_VELOCITY - l.velocity) / (DOPPLER_VELOCITY + s.velocity)
+
+                asi->source->SetDopplerVelocity(asi->move_speed);       //由于计算未理清，暂用move_speed代替
+            }
+
+            if(cur_time>asi->cur_time)          //更新时间和坐标
+            {
+                asi->last_pos=asi->cur_pos;
+                asi->last_time=asi->cur_time;
+            }
         }
 
         return(true);
@@ -183,16 +240,22 @@ namespace hgl
 
     /**
      * 刷新處理
+     * @param ct 当前时间
      * @return 收聽者仍可聽到的音源數量
      * @return -1 出錯
      */
-    int AudioScene::Update()
+    int AudioScene::Update(const double &ct)
     {
         if(!listener)return(-1);
 
         const int count=source_list.GetCount();
 
         if(count<=0)return 0;
+
+        if(ct!=0)
+            cur_time=ct;
+        else
+            cur_time=GetDoubleTime();
 
         float new_gain;
         int hear_count=0;
@@ -201,15 +264,20 @@ namespace hgl
 
         for(int i=0;i<count;i++)
         {
+            if(!(*ptr)->is_play)
+            {
+                if((*ptr)->source)          //还有音源
+                    ToMute(*ptr);
+
+                continue;   //不需要放的音源
+            }
+
             new_gain=OnCheckGain(*ptr);
 
             if(new_gain<=0)                 //听不到声音了
             {
-                if((*ptr)->last_gain>0)
-                {
+                if((*ptr)->last_gain>0)     //之前可以听到
                     ToMute(*ptr);
-                    OnToMute(*ptr);         //之前可以听到
-                }
                 else
                     OnContinuedMute(*ptr);  //之前就听不到
             }
@@ -217,10 +285,8 @@ namespace hgl
             {
                 if((*ptr)->last_gain<=0)
                 {
-                    if(ToHear(*ptr))
-                        OnToHear(*ptr);     //之前没声
-                    else
-                        new_gain=0;         //没有足够可用音源，所以还是听不到
+                    if(!ToHear(*ptr))       //之前没声
+                        new_gain=0;         //没有足够可用音源、或是已经放完了，所以还是听不到
                 }
                 else
                 {
