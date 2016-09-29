@@ -11,8 +11,8 @@
 * Source repository: https://bitbucket.org/cm_dev/gameengine
 * Offical Web (sorry,only chinese): http://www.hyzgame.com
 
-* Minimum supported OS: Microsoft Windows 7/2008R2 , Linux kernel 3.0
-* Minimum supported compilers: GNU C/C++ 4.8 , Microsoft Visual C++ 2015
+* Minimum supported OS: Microsoft Windows 7/2008 R2 , Linux kernel 3.0
+* Minimum supported compilers: GNU C/C++ 4.8 , LLVM CLang 3.8 , Microsoft Visual C++ 2015
 * Minimum supported OpenGL: Core 3.3+DSA (HD5xxx/GTX4xx)
 
 
@@ -23,6 +23,6 @@
 * 源代码仓库: https://bitbucket.org/cm_dev/gameengine
 * 官方网站: http://www.hyzgame.com.cn
 
-* 最低支持操作系统：Microsoft Windows 7/2008R2 , Linux kernel 3.0
-* 最低支持编译器：GNU C/C++ 4.8 , Microsoft Visual C++ 2015
+* 最低支持操作系统：Microsoft Windows 7/2008 R2 , Linux kernel 3.0
+* 最低支持编译器：GNU C/C++ 4.8 , LLVM Clang 3.8 , Microsoft Visual C++ 2015
 * 最低支持OpenGL: Core 3.3+DSA (HD5xxx/GTX4xx)
