@@ -8,6 +8,8 @@
     Submitted directly to the master branch, will ban submissions.
 
 * e-mail: hyzboy (@) gmail.com
+* Source repository: https://bitbucket.org/cm_dev/gameengine
+* Offical Web (sorry,only chinese): http://www.hyzgame.com
 
 * Minimum supported OS: Microsoft Windows 7/2008R2 , Linux kernel 3.0
 * Minimum supported compilers: GNU C/C++ 4.8 , Microsoft Visual C++ 2015
@@ -18,6 +20,8 @@
 * 对本工程的再开发和使用，必须有明确的名称标识。否则你将不会得到任何形式的支持，并被加入黑名单，即使你付费。
 * 如果向本仓库提交代码，请优先创建自有分支，仅在自有分支进行提交。直接提交到主分支的情况，将会封杀提交权限。
 * 电子邮箱：hyzboy (@) gmail.com
+* 源代码仓库: https://bitbucket.org/cm_dev/gameengine
+* 官方网站: http://www.hyzgame.com.cn
 
 * 最低支持操作系统：Microsoft Windows 7/2008R2 , Linux kernel 3.0
 * 最低支持编译器：GNU C/C++ 4.8 , Microsoft Visual C++ 2015
