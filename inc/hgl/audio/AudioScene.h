@@ -43,6 +43,8 @@ namespace hgl
         double move_speed;
 
         double last_gain;                                                                           ///<最近一次的音量
+
+        AudioSource *source;
     };//struct AudioSourceItem
 
     const double GetGain(AudioListener *,AudioSourceItem *);                                        ///<取得相對音量
@@ -57,13 +59,14 @@ namespace hgl
         AudioListener *listener;                                                                    ///<收聽者
 
         ObjectPool<AudioSource> source_pool;                                                        ///<音源数据池
-        List<AudioSourceItem *> source_list;                                                        ///<音源列表
-        Map<AudioSourceItem *,AudioSource *> source_link;                                           ///<音源关联
+        Set<AudioSourceItem *> source_list;                                                         ///<音源列表
 
     protected:
 
         bool ToMute(AudioSourceItem *);                                                             ///<转静默处理
         bool ToHear(AudioSourceItem *);                                                             ///<转发声处理
+
+        bool UpdateSource(AudioSourceItem *);                                                       ///<刷新音源处理
 
     public:     //事件
 
@@ -72,8 +75,8 @@ namespace hgl
             return asi?GetGain(listener,asi)*asi->gain:0;
         }
 
-        virtual void    OnMute(AudioSourceItem *){/*無任何處理，請自行重載處理*/}                       ///<从有声变成聽不到聲音
-        virtual void    OnHear(AudioSourceItem *){/*無任何處理，請自行重載處理*/}                       ///<从听不到声变成能听到声音
+        virtual void    OnToMute(AudioSourceItem *){/*無任何處理，請自行重載處理*/}                     ///<从有声变成聽不到聲音
+        virtual void    OnToHear(AudioSourceItem *){/*無任何處理，請自行重載處理*/}                     ///<从听不到声变成能听到声音
 
         virtual void    OnContinuedMute(AudioSourceItem *){/*無任何處理，請自行重載處理*/}              ///<持续聽不到聲音
         virtual void    OnContinuedHear(AudioSourceItem *){/*無任何處理，請自行重載處理*/}              ///<持续可以聽到聲音
@@ -86,7 +89,6 @@ namespace hgl
                 void                SetListener(AudioListener *al){listener=al;}                    ///<設置收聽者
 
         virtual AudioSourceItem *   Create(AudioBuffer *,const Vector3f &pos,const float &gain=1);  ///<创建一個音源
-
         virtual void                Delete(AudioSourceItem *);                                      ///<删除一个音源
 
         virtual int                 Update();                                                       ///<刷新,返回仍在發聲的音源數量

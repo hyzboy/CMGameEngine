@@ -95,6 +95,8 @@ namespace hgl
 
         asi->last_gain=gain*GetGain(listener,asi);
 
+        asi->source=nullptr;
+
         return asi;
     }
 
@@ -102,17 +104,58 @@ namespace hgl
     {
         if(!asi)return;
 
-        source_list.DeleteByData(asi);
-    //    source_link.
+        ToMute(asi);
+
+        source_list.Delete(asi);
     }
 
     bool AudioScene::ToMute(AudioSourceItem *asi)
     {
+        if(!asi)return(false);
+        if(!asi->source)return(false);
 
+        asi->source->Stop();
+        asi->source->Unlink();
+        source_pool.Release(asi->source);
+
+        asi->source=nullptr;
+
+        return(true);
     }
 
     bool AudioScene::ToHear(AudioSourceItem *asi)
     {
+        if(!asi)return(false);
+        if(!asi->buffer)return(false);
+
+        asi->source=source_pool.Acquire();
+
+        if(!asi->source)return(false);
+
+        asi->source->Link(asi->buffer);
+
+        asi->source->Gain=asi->gain;
+        asi->source->DistanceModel=asi->distance_model;
+        asi->source->RolloffFactor=asi->rolloff_factor;
+        asi->source->SetDistance(asi->ref_distance,asi->max_distance);
+        asi->source->SetPosition(asi->cur_pos);
+        asi->source->Play(asi->loop);
+
+        return(true);
+    }
+
+    bool AudioScene::UpdateSource(AudioSourceItem *asi)
+    {
+        if(!asi)return(false);
+        if(!asi->source)return(false);
+
+        if(asi->last_pos!=asi->cur_pos)      //坐标不一样了
+        {
+            //根据移动速度进行多普勒调整
+//            double shift = DOPPLER_FACTOR * freq * (DOPPLER_VELOCITY - l.velocity) / (DOPPLER_VELOCITY + s.velocity)
+        }
+
+        return(true);
     }
 
     /**
@@ -142,7 +185,7 @@ namespace hgl
                 if((*ptr)->last_gain>0)
                 {
                     ToMute(*ptr);
-                    OnMute(*ptr);           //之前可以听到
+                    OnToMute(*ptr);         //之前可以听到
                 }
                 else
                     OnContinuedMute(*ptr);  //之前就听不到
@@ -152,12 +195,15 @@ namespace hgl
                 if((*ptr)->last_gain<=0)
                 {
                     if(ToHear(*ptr))
-                        OnHear(*ptr);       //之前没声
+                        OnToHear(*ptr);     //之前没声
                     else
                         new_gain=0;         //没有足够可用音源，所以还是听不到
                 }
                 else
+                {
+                    UpdateSource(*ptr);     //刷新音源处理
                     OnContinuedHear(*ptr);  //之前就有声音
+                }
             }
 
             (*ptr)->last_gain=new_gain;
