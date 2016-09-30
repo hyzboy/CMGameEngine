@@ -19,7 +19,7 @@ namespace hgl
 		{
 			ResItem *obj=items.GetItem(n);
 
-			Clear(obj->second);
+			Clear(obj->right);
 		}
 
 		items.Clear();
@@ -36,7 +36,7 @@ namespace hgl
 
             if(obj->count<=0)
             {
-                Clear(obj->second);
+                Clear(obj->right);
                 items.DeleteBySerial(n);
             }
 		}
@@ -83,7 +83,7 @@ namespace hgl
 			obj->count++;
 
 //			return(items[index]->data);
-			return obj->second;
+			return obj->right;
 		}
 
 		T *data=Create(flag);
@@ -113,7 +113,7 @@ namespace hgl
 
         if(zero_clear&&obj->count==0)
 		{
-			Clear(obj->second);
+			Clear(obj->right);
 
 			items.DeleteBySerial(index);
 		}
