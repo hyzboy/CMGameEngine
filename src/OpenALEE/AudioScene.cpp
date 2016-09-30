@@ -45,6 +45,7 @@ namespace hgl
             distance = hgl_min(distance,s->max_distance);
             return (1-s->rolloff_factor*(distance-s->ref_distance)/(s->max_distance-s->ref_distance));
         }
+		else
         if(s->distance_model==AL_EXPONENT_DISTANCE)
         {
             return pow(distance/s->ref_distance,-s->rolloff_factor);
