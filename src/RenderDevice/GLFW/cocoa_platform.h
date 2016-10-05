@@ -1,5 +1,5 @@
 //========================================================================
-// GLFW 3.2 OS X - www.glfw.org
+// GLFW 3.3 OS X - www.glfw.org
 //------------------------------------------------------------------------
 // Copyright (c) 2009-2016 Camilla Berglund <elmindreda@glfw.org>
 //
@@ -75,6 +75,8 @@ typedef struct _GLFWwindowNS
     id              delegate;
     id              view;
 
+    GLFWbool        maximized;
+
     // The total sum of the distances the cursor has been warped
     // since the last cursor motion event was processed
     // This is kept to counteract Cocoa doing the same internally
@@ -96,8 +98,8 @@ typedef struct _GLFWlibraryNS
     id                  listener;
 
     char                keyName[64];
-    short int           publicKeys[256];
-    short int           nativeKeys[GLFW_KEY_LAST + 1];
+    short int           keycodes[256];
+    short int           scancodes[GLFW_KEY_LAST + 1];
     char*               clipboardString;
     // Where to place the cursor when re-enabled
     double              restoreCursorPosX, restoreCursorPosY;

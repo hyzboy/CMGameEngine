@@ -1,5 +1,5 @@
 //========================================================================
-// GLFW 3.2 GLX - www.glfw.org
+// GLFW 3.3 GLX - www.glfw.org
 //------------------------------------------------------------------------
 // Copyright (c) 2002-2006 Marcus Geelnard
 // Copyright (c) 2006-2016 Camilla Berglund <elmindreda@glfw.org>
@@ -84,7 +84,7 @@ typedef void (*PFNGLXSWAPBUFFERSPROC)(Display*,GLXDrawable);
 typedef const char* (*PFNGLXQUERYEXTENSIONSSTRINGPROC)(Display*,int);
 typedef GLXFBConfig* (*PFNGLXGETFBCONFIGSPROC)(Display*,int,int*);
 typedef GLXContext (*PFNGLXCREATENEWCONTEXTPROC)(Display*,GLXFBConfig,int,GLXContext,Bool);
-typedef __GLXextproc (* PFNGLXGETPROCADDRESSPROC) (const GLubyte *procName);
+typedef __GLXextproc (* PFNGLXGETPROCADDRESSPROC)(const GLubyte *procName);
 typedef int (*PFNGLXSWAPINTERVALMESAPROC)(int);
 typedef int (*PFNGLXSWAPINTERVALSGIPROC)(int);
 typedef void (*PFNGLXSWAPINTERVALEXTPROC)(Display*,GLXDrawable,int);

@@ -1,5 +1,5 @@
 //========================================================================
-// GLFW 3.2 - www.glfw.org
+// GLFW 3.3 - www.glfw.org
 //------------------------------------------------------------------------
 // Copyright (c) 2010-2016 Camilla Berglund <elmindreda@glfw.org>
 //
@@ -35,9 +35,9 @@
 //========================================================================
 
 // Define this to 1 if building GLFW for X11
-#define _GLFW_X11
+/* #undef _GLFW_X11 */
 // Define this to 1 if building GLFW for Win32
-/* #undef _GLFW_WIN32 */
+#define _GLFW_WIN32
 // Define this to 1 if building GLFW for Cocoa
 /* #undef _GLFW_COCOA */
 // Define this to 1 if building GLFW for Wayland
@@ -47,12 +47,14 @@
 
 // Define this to 1 if building as a shared library / dynamic library / DLL
 /* #undef _GLFW_BUILD_DLL */
+// Define this to 1 to use Vulkan loader linked statically into application
+/* #undef _GLFW_VULKAN_STATIC */
 
 // Define this to 1 to force use of high-performance GPU on hybrid systems
 /* #undef _GLFW_USE_HYBRID_HPG */
 
 // Define this to 1 if the Xxf86vm X11 extension is available
-#define _GLFW_HAS_XF86VM
+/* #undef _GLFW_HAS_XF86VM */
 
 // Define this to 1 if glfwInit should change the current directory
 /* #undef _GLFW_USE_CHDIR */

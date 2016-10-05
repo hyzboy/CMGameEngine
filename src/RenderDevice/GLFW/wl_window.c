@@ -1,5 +1,5 @@
 //========================================================================
-// GLFW 3.2 Wayland - www.glfw.org
+// GLFW 3.3 Wayland - www.glfw.org
 //------------------------------------------------------------------------
 // Copyright (c) 2014 Jonas Ådahl <jadahl@gmail.com>
 //
@@ -393,6 +393,8 @@ int _glfwPlatformCreateWindow(_GLFWwindow* window,
 
     if (ctxconfig->client != GLFW_NO_API)
     {
+        if (!_glfwInitEGL())
+            return GLFW_FALSE;
         if (!_glfwCreateContextEGL(window, ctxconfig, fbconfig))
             return GLFW_FALSE;
     }
@@ -435,7 +437,7 @@ void _glfwPlatformDestroyWindow(_GLFWwindow* window)
         _glfwInputWindowFocus(window, GLFW_FALSE);
     }
 
-    if (window->context.client != GLFW_NO_API)
+    if (window->context.destroy)
         window->context.destroy(window);
 
     if (window->wl.native)
@@ -682,6 +684,11 @@ const char* _glfwPlatformGetKeyName(int key, int scancode)
 {
     // TODO
     return NULL;
+}
+
+int _glfwPlatformGetKeyScancode(int key)
+{
+    return _glfw.wl.scancodes[key];
 }
 
 int _glfwPlatformCreateCursor(_GLFWcursor* cursor,
@@ -958,21 +965,13 @@ const char* _glfwPlatformGetClipboardString(_GLFWwindow* window)
     return NULL;
 }
 
-char** _glfwPlatformGetRequiredInstanceExtensions(uint32_t* count)
+void _glfwPlatformGetRequiredInstanceExtensions(char** extensions)
 {
-    char** extensions;
+    if (!_glfw.vk.KHR_surface || !_glfw.vk.KHR_wayland_surface)
+        return;
 
-    *count = 0;
-
-    if (!_glfw.vk.KHR_wayland_surface)
-        return NULL;
-
-    extensions = calloc(2, sizeof(char*));
-    extensions[0] = strdup("VK_KHR_surface");
-    extensions[1] = strdup("VK_KHR_wayland_surface");
-
-    *count = 2;
-    return extensions;
+    extensions[0] = "VK_KHR_surface";
+    extensions[1] = "VK_KHR_wayland_surface";
 }
 
 int _glfwPlatformGetPhysicalDevicePresentationSupport(VkInstance instance,

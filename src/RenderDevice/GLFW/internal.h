@@ -1,5 +1,5 @@
 //========================================================================
-// GLFW 3.2 - www.glfw.org
+// GLFW 3.3 - www.glfw.org
 //------------------------------------------------------------------------
 // Copyright (c) 2002-2006 Marcus Geelnard
 // Copyright (c) 2006-2016 Camilla Berglund <elmindreda@glfw.org>
@@ -40,12 +40,13 @@
     defined(GLFW_INCLUDE_NONE)      || \
     defined(GLFW_INCLUDE_GLEXT)     || \
     defined(GLFW_INCLUDE_GLU)       || \
+    defined(GLFW_INCLUDE_VULKAN)    || \
     defined(GLFW_DLL)
  #error "You must not define any header option macros when compiling GLFW"
 #endif
 
 #define GLFW_INCLUDE_NONE
-#include "GLFW/glfw3.h"
+#include "win/GLFW/glfw3.h"
 
 typedef int GLFWbool;
 
@@ -149,11 +150,16 @@ typedef struct VkExtensionProperties
 } VkExtensionProperties;
 
 typedef void (APIENTRY * PFN_vkVoidFunction)(void);
-typedef PFN_vkVoidFunction (APIENTRY * PFN_vkGetInstanceProcAddr)(VkInstance,const char*);
-typedef VkResult (APIENTRY * PFN_vkEnumerateInstanceExtensionProperties)(const char*,uint32_t*,VkExtensionProperties*);
 
-#define vkEnumerateInstanceExtensionProperties _glfw.vk.EnumerateInstanceExtensionProperties
-#define vkGetInstanceProcAddr _glfw.vk.GetInstanceProcAddr
+#if defined(_GLFW_VULKAN_STATIC)
+  PFN_vkVoidFunction vkGetInstanceProcAddr(VkInstance,const char*);
+  VkResult vkEnumerateInstanceExtensionProperties(const char*,uint32_t*,VkExtensionProperties*);
+#else
+  typedef PFN_vkVoidFunction (APIENTRY * PFN_vkGetInstanceProcAddr)(VkInstance,const char*);
+  typedef VkResult (APIENTRY * PFN_vkEnumerateInstanceExtensionProperties)(const char*,uint32_t*,VkExtensionProperties*);
+  #define vkEnumerateInstanceExtensionProperties _glfw.vk.EnumerateInstanceExtensionProperties
+  #define vkGetInstanceProcAddr _glfw.vk.GetInstanceProcAddr
+#endif
 
 #if defined(_GLFW_COCOA)
  #include "cocoa_platform.h"
@@ -372,6 +378,7 @@ struct _GLFWwindow
         GLFWwindowrefreshfun    refresh;
         GLFWwindowfocusfun      focus;
         GLFWwindowiconifyfun    iconify;
+        GLFWwindowmaximizefun   maximize;
         GLFWframebuffersizefun  fbsize;
         GLFWmousebuttonfun      mouseButton;
         GLFWcursorposfun        cursorPos;
@@ -443,16 +450,22 @@ struct _GLFWlibrary
     struct {
         GLFWbool        available;
         void*           handle;
-        char**          extensions;
-        uint32_t        extensionCount;
+        char*           extensions[2];
+#if !defined(_GLFW_VULKAN_STATIC)
         PFN_vkEnumerateInstanceExtensionProperties EnumerateInstanceExtensionProperties;
         PFN_vkGetInstanceProcAddr GetInstanceProcAddr;
+#endif
         GLFWbool        KHR_surface;
+#if defined(_GLFW_WIN32)
         GLFWbool        KHR_win32_surface;
+#elif defined(_GLFW_X11)
         GLFWbool        KHR_xlib_surface;
         GLFWbool        KHR_xcb_surface;
+#elif defined(_GLFW_WAYLAND)
         GLFWbool        KHR_wayland_surface;
+#elif defined(_GLFW_MIR)
         GLFWbool        KHR_mir_surface;
+#endif
     } vk;
 
     struct {
@@ -534,6 +547,11 @@ void _glfwPlatformSetCursorMode(_GLFWwindow* window, int mode);
  *  @ingroup platform
  */
 const char* _glfwPlatformGetKeyName(int key, int scancode);
+
+/*! @copydoc glfwGetKeyScancode
+ *  @ingroup platform
+ */
+int _glfwPlatformGetKeyScancode(int key);
 
 /*! @copydoc glfwGetMonitors
  *  @ingroup platform
@@ -784,7 +802,7 @@ void _glfwPlatformSetCursor(_GLFWwindow* window, _GLFWcursor* cursor);
 
 /*! @ingroup platform
  */
-char** _glfwPlatformGetRequiredInstanceExtensions(uint32_t* count);
+void _glfwPlatformGetRequiredInstanceExtensions(char** extensions);
 
 /*! @ingroup platform
  */
@@ -838,6 +856,14 @@ void _glfwInputFramebufferSize(_GLFWwindow* window, int width, int height);
  *  @ingroup event
  */
 void _glfwInputWindowIconify(_GLFWwindow* window, GLFWbool iconified);
+
+/*! @brief Notifies shared code of a window maximization event.
+ *  @param[in] window The window that received the event.
+ *  @param[in] maximized `GLFW_TRUE` if the window was maximized, or
+ *  `GLFW_FALSE` if it was restored.
+ *  @ingroup event
+ */
+void _glfwInputWindowMaximize(_GLFWwindow* window, GLFWbool maximized);
 
 /*! @brief Notifies shared code of a window damage event.
  *  @param[in] window The window that received the event.
@@ -1034,7 +1060,7 @@ GLFWbool _glfwIsPrintable(int key);
 
 /*! @ingroup utility
  */
-void _glfwInitVulkan(void);
+GLFWbool _glfwInitVulkan(void);
 
 /*! @ingroup utility
  */

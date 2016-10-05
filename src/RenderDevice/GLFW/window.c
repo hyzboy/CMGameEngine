@@ -1,5 +1,5 @@
 //========================================================================
-// GLFW 3.2 - www.glfw.org
+// GLFW 3.3 - www.glfw.org
 //------------------------------------------------------------------------
 // Copyright (c) 2002-2006 Marcus Geelnard
 // Copyright (c) 2006-2016 Camilla Berglund <elmindreda@glfw.org>
@@ -84,6 +84,12 @@ void _glfwInputWindowIconify(_GLFWwindow* window, GLFWbool iconified)
 {
     if (window->callbacks.iconify)
         window->callbacks.iconify((GLFWwindow*) window, iconified);
+}
+
+void _glfwInputWindowMaximize(_GLFWwindow* window, GLFWbool maximized)
+{
+    if (window->callbacks.maximize)
+        window->callbacks.maximize((GLFWwindow*) window, maximized);
 }
 
 void _glfwInputFramebufferSize(_GLFWwindow* window, int width, int height)
@@ -628,7 +634,13 @@ GLFWAPI void glfwRestoreWindow(GLFWwindow* handle)
 GLFWAPI void glfwMaximizeWindow(GLFWwindow* handle)
 {
     _GLFWwindow* window = (_GLFWwindow*) handle;
+    assert(window != NULL);
+
     _GLFW_REQUIRE_INIT();
+
+    if (window->monitor)
+        return;
+
     _glfwPlatformMaximizeWindow(window);
 }
 
@@ -847,6 +859,17 @@ GLFWAPI GLFWwindowiconifyfun glfwSetWindowIconifyCallback(GLFWwindow* handle,
 
     _GLFW_REQUIRE_INIT_OR_RETURN(NULL);
     _GLFW_SWAP_POINTERS(window->callbacks.iconify, cbfun);
+    return cbfun;
+}
+
+GLFWAPI GLFWwindowmaximizefun glfwSetWindowMaximizeCallback(GLFWwindow* handle,
+                                                            GLFWwindowmaximizefun cbfun)
+{
+    _GLFWwindow* window = (_GLFWwindow*) handle;
+    assert(window != NULL);
+
+    _GLFW_REQUIRE_INIT_OR_RETURN(NULL);
+    _GLFW_SWAP_POINTERS(window->callbacks.maximize, cbfun);
     return cbfun;
 }
 

@@ -1,5 +1,5 @@
 //========================================================================
-// GLFW 3.2 Wayland - www.glfw.org
+// GLFW 3.3 Wayland - www.glfw.org
 //------------------------------------------------------------------------
 // Copyright (c) 2014 Jonas Ådahl <jadahl@gmail.com>
 //
@@ -129,7 +129,8 @@ typedef struct _GLFWlibraryWayland
     int                         monitorsCount;
     int                         monitorsSize;
 
-    short int                   publicKeys[256];
+    short int                   keycodes[256];
+    short int                   scancodes[GLFW_KEY_LAST + 1];
 
     struct {
         struct xkb_context*     context;

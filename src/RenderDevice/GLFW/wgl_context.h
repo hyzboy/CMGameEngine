@@ -1,5 +1,5 @@
 //========================================================================
-// GLFW 3.2 WGL - www.glfw.org
+// GLFW 3.3 WGL - www.glfw.org
 //------------------------------------------------------------------------
 // Copyright (c) 2002-2006 Marcus Geelnard
 // Copyright (c) 2006-2016 Camilla Berglund <elmindreda@glfw.org>
@@ -72,6 +72,9 @@
 #define WGL_CONTEXT_RELEASE_BEHAVIOR_ARB 0x2097
 #define WGL_CONTEXT_RELEASE_BEHAVIOR_NONE_ARB 0
 #define WGL_CONTEXT_RELEASE_BEHAVIOR_FLUSH_ARB 0x2098
+
+#define ERROR_INVALID_VERSION_ARB 0x2095
+#define ERROR_INVALID_PROFILE_ARB 0x2096
 
 typedef BOOL (WINAPI * PFNWGLSWAPINTERVALEXTPROC)(int);
 typedef BOOL (WINAPI * PFNWGLGETPIXELFORMATATTRIBIVARBPROC)(HDC,int,int,UINT,const int*,int*);

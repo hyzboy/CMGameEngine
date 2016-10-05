@@ -1,5 +1,5 @@
 //========================================================================
-// GLFW 3.2 WGL - www.glfw.org
+// GLFW 3.3 WGL - www.glfw.org
 //------------------------------------------------------------------------
 // Copyright (c) 2002-2006 Marcus Geelnard
 // Copyright (c) 2006-2016 Camilla Berglund <elmindreda@glfw.org>
@@ -55,19 +55,17 @@ static int getPixelFormatAttrib(_GLFWwindow* window, int pixelFormat, int attrib
 
 // Return a list of available and usable framebuffer configs
 //
-static GLFWbool choosePixelFormat(_GLFWwindow* window,
-                                  const _GLFWfbconfig* desired,
-                                  int* result)
+static int choosePixelFormat(_GLFWwindow* window, const _GLFWfbconfig* desired)
 {
     _GLFWfbconfig* usableConfigs;
     const _GLFWfbconfig* closest;
-    int i, nativeCount, usableCount;
+    int i, pixelFormat, nativeCount, usableCount;
 
     if (_glfw.wgl.ARB_pixel_format)
     {
         nativeCount = getPixelFormatAttrib(window,
-                                         1,
-                                         WGL_NUMBER_PIXEL_FORMATS_ARB);
+                                           1,
+                                           WGL_NUMBER_PIXEL_FORMATS_ARB);
     }
     else
     {
@@ -197,7 +195,7 @@ static GLFWbool choosePixelFormat(_GLFWwindow* window,
                         "WGL: The driver does not appear to support OpenGL");
 
         free(usableConfigs);
-        return GLFW_FALSE;
+        return 0;
     }
 
     closest = _glfwChooseFBConfig(desired, usableConfigs, usableCount);
@@ -207,13 +205,13 @@ static GLFWbool choosePixelFormat(_GLFWwindow* window,
                         "WGL: Failed to find a suitable pixel format");
 
         free(usableConfigs);
-        return GLFW_FALSE;
+        return 0;
     }
 
-    *result = (int) closest->handle;
+    pixelFormat = (int) closest->handle;
     free(usableConfigs);
 
-    return GLFW_TRUE;
+    return pixelFormat;
 }
 
 // Returns whether desktop compositing is enabled
@@ -335,12 +333,16 @@ static void destroyContextWGL(_GLFWwindow* window)
 //
 static void loadWGLExtensions(void)
 {
-    int pf;
     PIXELFORMATDESCRIPTOR pfd;
-    HDC dc;
     HGLRC rc;
+    HDC dc = GetDC(_glfw.win32.helperWindowHandle);;
 
     _glfw.wgl.extensionsLoaded = GLFW_TRUE;
+
+    // NOTE: A dummy context has to be created for opengl32.dll to load the
+    //       OpenGL ICD, from which we can then query WGL extensions
+    // NOTE: This code will accept the Microsoft GDI ICD; accelerated context
+    //       creation failure occurs during manual pixel format enumeration
 
     ZeroMemory(&pfd, sizeof(pfd));
     pfd.nSize = sizeof(pfd);
@@ -349,27 +351,10 @@ static void loadWGLExtensions(void)
     pfd.iPixelType = PFD_TYPE_RGBA;
     pfd.cColorBits = 24;
 
-    dc = GetDC(_glfw.win32.helperWindowHandle);
-
-    pf = ChoosePixelFormat(dc, &pfd);
-    if (!pf)
+    if (!SetPixelFormat(dc, ChoosePixelFormat(dc, &pfd), &pfd))
     {
         _glfwInputError(GLFW_PLATFORM_ERROR,
-                        "WGL: Failed to choose pixel format for WGL extension loading");
-        return;
-    }
-
-    if (!DescribePixelFormat(dc, pf, sizeof(pfd), &pfd))
-    {
-        _glfwInputError(GLFW_PLATFORM_ERROR,
-                        "WGL: Failed to describe pixel format for WGL extension loading");
-        return;
-    }
-
-    if (!SetPixelFormat(dc, pf, &pfd))
-    {
-        _glfwInputError(GLFW_PLATFORM_ERROR,
-                        "WGL: Failed to set pixel format for WGL extension loading");
+                        "WGL: Failed to set pixel format for dummy context");
         return;
     }
 
@@ -377,38 +362,34 @@ static void loadWGLExtensions(void)
     if (!rc)
     {
         _glfwInputError(GLFW_PLATFORM_ERROR,
-                        "WGL: Failed to create context for WGL extension loading");
+                        "WGL: Failed to create dummy context");
         return;
     }
 
     if (!wglMakeCurrent(dc, rc))
     {
+        wglDeleteContext(rc);
+
         _glfwInputError(GLFW_PLATFORM_ERROR,
-                        "WGL: Failed to make context current for WGL extension loading");
+                        "WGL: Failed to make dummy context current");
         return;
     }
 
-    // Functions for WGL_EXT_extension_string
-    // NOTE: These are needed by extensionSupported
+    // NOTE: Functions must be loaded first as they're needed to retrieve the
+    //       extension string that tells us whether the functions are supported
     _glfw.wgl.GetExtensionsStringEXT = (PFNWGLGETEXTENSIONSSTRINGEXTPROC)
         wglGetProcAddress("wglGetExtensionsStringEXT");
     _glfw.wgl.GetExtensionsStringARB = (PFNWGLGETEXTENSIONSSTRINGARBPROC)
         wglGetProcAddress("wglGetExtensionsStringARB");
-
-    // Functions for WGL_ARB_create_context
     _glfw.wgl.CreateContextAttribsARB = (PFNWGLCREATECONTEXTATTRIBSARBPROC)
         wglGetProcAddress("wglCreateContextAttribsARB");
-
-    // Functions for WGL_EXT_swap_control
     _glfw.wgl.SwapIntervalEXT = (PFNWGLSWAPINTERVALEXTPROC)
         wglGetProcAddress("wglSwapIntervalEXT");
-
-    // Functions for WGL_ARB_pixel_format
     _glfw.wgl.GetPixelFormatAttribivARB = (PFNWGLGETPIXELFORMATATTRIBIVARBPROC)
         wglGetProcAddress("wglGetPixelFormatAttribivARB");
 
-    // This needs to include every extension used below except for
-    // WGL_ARB_extensions_string and WGL_EXT_extensions_string
+    // NOTE: WGL_ARB_extensions_string and WGL_EXT_extensions_string are not
+    //       checked below as we are already using them
     _glfw.wgl.ARB_multisample =
         extensionSupportedWGL("WGL_ARB_multisample");
     _glfw.wgl.ARB_framebuffer_sRGB =
@@ -443,6 +424,9 @@ static void loadWGLExtensions(void)
 //
 GLFWbool _glfwInitWGL(void)
 {
+    if (_glfw.wgl.instance)
+        return GLFW_TRUE;
+
     _glfw.wgl.instance = LoadLibraryA("opengl32.dll");
     if (!_glfw.wgl.instance)
     {
@@ -488,7 +472,7 @@ GLFWbool _glfwCreateContextWGL(_GLFWwindow* window,
                                const _GLFWfbconfig* fbconfig)
 {
     int attribs[40];
-    int pixelFormat = 0;
+    int pixelFormat;
     PIXELFORMATDESCRIPTOR pfd;
     HGLRC share = NULL;
 
@@ -506,7 +490,8 @@ GLFWbool _glfwCreateContextWGL(_GLFWwindow* window,
         return GLFW_FALSE;
     }
 
-    if (!choosePixelFormat(window, fbconfig, &pixelFormat))
+    pixelFormat = choosePixelFormat(window, fbconfig);
+    if (!pixelFormat)
         return GLFW_FALSE;
 
     if (!DescribePixelFormat(window->context.wgl.dc,
@@ -638,8 +623,44 @@ GLFWbool _glfwCreateContextWGL(_GLFWwindow* window,
                                               share, attribs);
         if (!window->context.wgl.handle)
         {
-            _glfwInputError(GLFW_VERSION_UNAVAILABLE,
-                            "WGL: Failed to create OpenGL context");
+            const DWORD error = GetLastError();
+
+            if (error == (0xc0070000 | ERROR_INVALID_VERSION_ARB))
+            {
+                if (ctxconfig->client == GLFW_OPENGL_API)
+                {
+                    _glfwInputError(GLFW_VERSION_UNAVAILABLE,
+                                    "WGL: Driver does not support OpenGL version %i.%i",
+                                    ctxconfig->major,
+                                    ctxconfig->minor);
+                }
+                else
+                {
+                    _glfwInputError(GLFW_VERSION_UNAVAILABLE,
+                                    "WGL: Driver does not support OpenGL ES version %i.%i",
+                                    ctxconfig->major,
+                                    ctxconfig->minor);
+                }
+            }
+            else if (error == (0xc0070000 | ERROR_INVALID_PROFILE_ARB))
+            {
+                _glfwInputError(GLFW_VERSION_UNAVAILABLE,
+                                "WGL: Driver does not support the requested OpenGL profile");
+            }
+            else
+            {
+                if (ctxconfig->client == GLFW_OPENGL_API)
+                {
+                    _glfwInputError(GLFW_VERSION_UNAVAILABLE,
+                                    "WGL: Failed to create OpenGL context");
+                }
+                else
+                {
+                    _glfwInputError(GLFW_VERSION_UNAVAILABLE,
+                                    "WGL: Failed to create OpenGL ES context");
+                }
+            }
+
             return GLFW_FALSE;
         }
     }

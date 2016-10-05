@@ -5,7 +5,7 @@
                                     glViewport.cpp)
 
 set(CM_OPENGL_CORE_45_SOURCE        OpenGLCore45/Core45Texture1D.cpp
-						OpenGLCore45/Core45Texture1DArray.cpp
+                                    OpenGLCore45/Core45Texture1DArray.cpp
                                     OpenGLCore45/Core45Texture2D.cpp
                                     OpenGLCore45/Core45Texture2DArray.cpp
                                     OpenGLCore45/Core45Texture3D.cpp
@@ -38,7 +38,7 @@ set(CM_RENDER_DEVICE_SOURCE         ${CM_OPENGL_SOURCE}
                                     ${CM_GLSL_SHADER_MAKER_SOURCE}
                                     ${CM_GLSL_SOURCE}
                                     ${CM_RENDER_SOURCE}
-                                    ${GLEW_SOURCE})
+                                    GLEW/glew.c)
 
 SOURCE_GROUP("OpenGL"                     FILES ${CM_OPENGL_SOURCE})
 SOURCE_GROUP("OpenGL\\Core45"             FILES ${CM_OPENGL_CORE_45_SOURCE})

@@ -1,5 +1,5 @@
 //========================================================================
-// GLFW 3.2 - www.glfw.org
+// GLFW 3.3 - www.glfw.org
 //------------------------------------------------------------------------
 // Copyright (c) 2002-2006 Marcus Geelnard
 // Copyright (c) 2006-2016 Camilla Berglund <elmindreda@glfw.org>
@@ -254,6 +254,19 @@ GLFWAPI const char* glfwGetKeyName(int key, int scancode)
 {
     _GLFW_REQUIRE_INIT_OR_RETURN(NULL);
     return _glfwPlatformGetKeyName(key, scancode);
+}
+
+GLFWAPI int glfwGetKeyScancode(int key)
+{
+    _GLFW_REQUIRE_INIT_OR_RETURN(-1);
+
+    if (key < GLFW_KEY_SPACE || key > GLFW_KEY_LAST)
+    {
+        _glfwInputError(GLFW_INVALID_ENUM, "Invalid key %i", key);
+        return GLFW_RELEASE;
+    }
+
+    return _glfwPlatformGetKeyScancode(key);
 }
 
 GLFWAPI int glfwGetKey(GLFWwindow* handle, int key)

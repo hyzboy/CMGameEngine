@@ -1,5 +1,5 @@
 //========================================================================
-// GLFW 3.2 X11 - www.glfw.org
+// GLFW 3.3 X11 - www.glfw.org
 //------------------------------------------------------------------------
 // Copyright (c) 2002-2006 Marcus Geelnard
 // Copyright (c) 2006-2016 Camilla Berglund <elmindreda@glfw.org>
@@ -112,6 +112,8 @@ typedef struct _GLFWwindowX11
     XIC             ic;
 
     GLFWbool        overrideRedirect;
+    GLFWbool        iconified;
+    GLFWbool        maximized;
 
     // Cached position and size used to filter out duplicate events
     int             width, height;
@@ -123,10 +125,8 @@ typedef struct _GLFWwindowX11
     int             warpCursorPosX, warpCursorPosY;
 
     // The information from the last KeyPress event
-    struct {
-        unsigned int keycode;
-        Time         time;
-    } last;
+    unsigned int    lastKeyCode;
+    Time            lastKeyTime;
 
 } _GLFWwindowX11;
 
@@ -138,8 +138,10 @@ typedef struct _GLFWlibraryX11
     int             screen;
     Window          root;
 
+    // Helper window for IPC
+    Window          helperWindowHandle;
     // Invisible cursor for hidden cursor mode
-    Cursor          cursor;
+    Cursor          hiddenCursorHandle;
     // Context for mapping window XIDs to _GLFWwindow pointers
     XContext        context;
     // XIM input method
@@ -151,9 +153,9 @@ typedef struct _GLFWlibraryX11
     // Key name string
     char            keyName[64];
     // X11 keycode to GLFW key LUT
-    short int       publicKeys[256];
+    short int       keycodes[256];
     // GLFW key to X11 keycode LUT
-    short int       nativeKeys[GLFW_KEY_LAST + 1];
+    short int       scancodes[GLFW_KEY_LAST + 1];
     // Where to place the cursor when re-enabled
     double          restoreCursorPosX, restoreCursorPosY;
     // The window whose disabled cursor mode is active
@@ -294,5 +296,7 @@ unsigned long _glfwGetWindowPropertyX11(Window window,
 void _glfwGrabErrorHandlerX11(void);
 void _glfwReleaseErrorHandlerX11(void);
 void _glfwInputErrorX11(int error, const char* message);
+
+void _glfwPushSelectionToManagerX11(void);
 
 #endif // _glfw3_x11_platform_h_
