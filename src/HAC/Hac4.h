@@ -14,6 +14,8 @@ namespace hgl
 
 	struct Hac4File
 	{
+        uint64      ID;             ///<文件ID
+        
 		UTF16String	FileName;		///<文件名
 		UTF16String	CompressName;	///<压缩算法
 		uint64		FileSize;		///<文件长度
