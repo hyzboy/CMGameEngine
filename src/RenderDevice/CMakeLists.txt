@@ -37,8 +37,7 @@ set(CM_RENDER_DEVICE_SOURCE         ${CM_OPENGL_SOURCE}
                                     ${CM_OPENGL_CORE_45_SOURCE}
                                     ${CM_GLSL_SHADER_MAKER_SOURCE}
                                     ${CM_GLSL_SOURCE}
-                                    ${CM_RENDER_SOURCE}
-                                    GLEW/glew.c)
+                                    ${CM_RENDER_SOURCE})
 
 SOURCE_GROUP("OpenGL"                     FILES ${CM_OPENGL_SOURCE})
 SOURCE_GROUP("OpenGL\\Core45"             FILES ${CM_OPENGL_CORE_45_SOURCE})
@@ -64,10 +63,14 @@ IF(WIN32)
                             GLFW/win32_tls.c
                             GLFW/win32_window.c
                             GLFW/window.c)
-
+                            
       SOURCE_GROUP("OpenGL\\GLFW"   FILES ${GLFW_SOURCE})
+      
+      SET(GLEW_SOURCE       GLEW/glew.c)
+      
+      SOURCE_GROUP("OpenGL\\GLEW"   FILES ${GLEW_SOURCE})
 
-	add_library(CM.RenderDevice STATIC ${CM_RENDER_DEVICE_SOURCE} ${GLFW_SOURCE})
+	add_library(CM.RenderDevice STATIC ${CM_RENDER_DEVICE_SOURCE} ${GLFW_SOURCE} ${GLEW_SOURCE})
 ELSE()
 	add_library(CM.RenderDevice SHARED ${CM_RENDER_DEVICE_SOURCE})
 ENDIF()
