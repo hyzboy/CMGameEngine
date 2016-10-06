@@ -38,7 +38,7 @@
 
 // If MATH_ENABLE_WINXP_SUPPORT is defined, we avoid using Windows symbols that require Vista or newer (e.g. GetTickCount64)
 #if !defined(WIN8) /* Win8 cannot build with XP support - GetTickCount() doesn't exist. */
-//#define MATH_ENABLE_WINXP_SUPPORT
+#define MATH_ENABLE_WINXP_SUPPORT
 #endif
 
 // If MATH_ASSERT_ON_ASSUME is defined, assume() resolves directly to assert().
@@ -134,25 +134,11 @@
 #define MATH_WITH_GRISU3
 
 // Uncomment to specify the SIMD instruction set level in use.
-#ifndef MATH_AVX
-//    #define MATH_AVX
-#endif//MATH_AVX
-
-#ifndef MATH_SSE41
-//    #define MATH_SSE41
-#endif//MATH_SSE41
-
-#ifndef MATH_SSE3
-//    #define MATH_SSE3
-#endif//MATH_SSE3
-
-#ifndef MATH_SSE2
-    #define MATH_SSE2
-#endif//MATH_SSE2
-
-#ifndef MATH_SSE
-    #define MATH_SSE // SSE1.
-#endif//MATH_SSE
+//#define MATH_AVX
+//#define MATH_SSE41
+//#define MATH_SSE3
+#define MATH_SSE2
+#define MATH_SSE // SSE1.
 
 ///\todo Test iOS support.
 ///\todo Enable NEON only on ARMv7, not older.
