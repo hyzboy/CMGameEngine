@@ -215,7 +215,7 @@ namespace hgl
 #ifdef HGL_CONSTRUCTION_REUSE
 			using VertexBuffer<T,1>::VertexBuffer;
 #else
-			VertexBuffer1(int _size,const void *_data=nullptr,uint level=HGL_STATIC_DRAW):VertexBuffer<T,1>(_size,_data,level){}
+			VertexBuffer1(int _size,const T *_data=nullptr,uint level=HGL_STATIC_DRAW):VertexBuffer<T,1>(_size,_data,level){}
 #endif//HGL_CONSTRUCTION_REUSE
 			virtual ~VertexBuffer1()HGL_DEFAULT_MEMFUNC;
 
@@ -262,7 +262,7 @@ namespace hgl
 #ifdef HGL_CONSTRUCTION_REUSE
 			using VertexBuffer<T,2>::VertexBuffer;
 #else
-			VertexBuffer2(int _size,const void *_data=nullptr,uint level=HGL_STATIC_DRAW):VertexBuffer<T,2>(_size,_data,level){}
+			VertexBuffer2(int _size,const T *_data=nullptr,uint level=HGL_STATIC_DRAW):VertexBuffer<T,2>(_size,_data,level){}
 #endif//HGL_CONSTRUCTION_REUSE
 			virtual ~VertexBuffer2()HGL_DEFAULT_MEMFUNC;
 
@@ -449,7 +449,7 @@ namespace hgl
 #ifdef HGL_CONSTRUCTION_REUSE
 			using VertexBuffer<T,3>::VertexBuffer;
 #else
-			VertexBuffer3(int _size,const void *_data=nullptr,uint level=HGL_STATIC_DRAW):VertexBuffer<T,3>(_size,_data,level){}
+			VertexBuffer3(int _size,const T *_data=nullptr,uint level=HGL_STATIC_DRAW):VertexBuffer<T,3>(_size,_data,level){}
 #endif//HGL_CONSTRUCTION_REUSE
 
 			virtual ~VertexBuffer3()HGL_DEFAULT_MEMFUNC;
@@ -686,7 +686,7 @@ namespace hgl
 #ifdef HGL_CONSTRUCTION_REUSE
 			using VertexBuffer<T,4>::VertexBuffer;
 #else
-			VertexBuffer4(int _size,const void *_data=nullptr,uint level=HGL_STATIC_DRAW):VertexBuffer<T,4>(_size,_data,level){}
+			VertexBuffer4(int _size,const T *_data=nullptr,uint level=HGL_STATIC_DRAW):VertexBuffer<T,4>(_size,_data,level){}
 #endif//HGL_CONSTRUCTION_REUSE
 			virtual ~VertexBuffer4()HGL_DEFAULT_MEMFUNC;
 
@@ -882,10 +882,10 @@ namespace hgl
 		};//class VertexBuffer4
 
 		//缓冲区具体数据类型定义
-		typedef VertexBuffer1<int8	>	VB1i8	,VB1b;	template<> inline uint VertexBuffer1<int8	>::GetDataType()const{return HGL_BYTE;			}
+// 		typedef VertexBuffer1<int8	>	VB1i8	,VB1b;	template<> inline uint VertexBuffer1<int8	>::GetDataType()const{return HGL_BYTE;			}
 		typedef VertexBuffer1<int16	>	VB1i16	,VB1s;	template<> inline uint VertexBuffer1<int16	>::GetDataType()const{return HGL_SHORT;			}
 		typedef VertexBuffer1<int32	>	VB1i32	,VB1i;	template<> inline uint VertexBuffer1<int32	>::GetDataType()const{return HGL_INT;			}
-		typedef VertexBuffer1<uint8	>	VB1u8	,VB1ub;	template<> inline uint VertexBuffer1<uint8	>::GetDataType()const{return HGL_UNSIGNED_BYTE;	}
+// 		typedef VertexBuffer1<uint8	>	VB1u8	,VB1ub;	template<> inline uint VertexBuffer1<uint8	>::GetDataType()const{return HGL_UNSIGNED_BYTE;	}
 		typedef VertexBuffer1<uint16>	VB1u16	,VB1us;	template<> inline uint VertexBuffer1<uint16	>::GetDataType()const{return HGL_UNSIGNED_SHORT;}
 		typedef VertexBuffer1<uint32>	VB1u32	,VB1ui;	template<> inline uint VertexBuffer1<uint32	>::GetDataType()const{return HGL_UNSIGNED_INT;	}
 		typedef VertexBuffer1<float	>	VB1f;			template<> inline uint VertexBuffer1<float	>::GetDataType()const{return HGL_FLOAT;			}
