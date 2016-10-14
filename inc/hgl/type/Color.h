@@ -155,7 +155,7 @@ namespace hgl
 		cePeru,					///<秘鲁色
 		cePink,					///<粉红色
 
-		//SONY PlayStation 商标用配色
+		//SONY PlayStation 商标用配色(注：商业使用需获得SONY授权)
 		cePlayStationBlue,
 		cePlayStationLightBlue,
 
