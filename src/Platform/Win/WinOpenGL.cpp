@@ -2,6 +2,10 @@
 #include<hgl/platform/GraphicsApplication.h>
 #include<hgl/type/StringList.h>
 
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif//WIN32_LEAN_AND_MEAN
+
 #include<windows.h>
 
 #if defined(_MSC_VER)&&defined(_DEBUG)
@@ -28,7 +32,6 @@ extern "C" int WINAPI WinMain(HINSTANCE,HINSTANCE,char *,int)
 
 		for(int i=0;i<argc;i++)
 			sl.Add(argv[i]);
-
 
 		return GraphicsAppMain(sii,app,sl);
 #ifdef _DEBUG
