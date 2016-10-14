@@ -137,7 +137,11 @@
 //#define MATH_AVX
 //#define MATH_SSE41
 //#define MATH_SSE3
+
+#ifndef MATH_SSE2
 #define MATH_SSE2
+#endif//MATH_SSE2
+
 #define MATH_SSE // SSE1.
 
 ///\todo Test iOS support.
