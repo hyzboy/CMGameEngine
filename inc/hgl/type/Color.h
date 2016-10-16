@@ -26,13 +26,17 @@ namespace hgl
 		ceNone,
 
 		ceAliceBlue,			///<艾利斯兰
+        ceAndroidGreen,         ///<安卓绿
 		ceAntiqueWhite,			///<古董白
+        ceAppleGreen,           ///<苹果绿
 		ceAqua,					///<浅绿色
 		ceAquaMarine,			///<碧绿色
 
 		ceArdenRed,				///<雅顿红(注：商业使用需获得Elizabeth Arden公司授权)
 
 		ceAzure,				///<天蓝色
+        ceBananaMania,          ///<香蕉黄(芯)
+        ceBananaYellow,         ///<香蕉黄(皮)
 		ceBeige,				///<米色
 		ceBisque,				///<桔黄色
 		ceBlack,				///<黑色
@@ -42,7 +46,9 @@ namespace hgl
 		ceBrown,				///<褐色
 		ceBurlyWood,			///<实木色
 		ceCadetBlue,			///<军兰色
+        ceCaribbeanGreen,       ///<加勒比海绿
 		ceChartreuse,			///<黄绿色
+        ceCherryBlossomPink,    ///<樱桃花粉
 		ceChocolate,			///<巧克力色
 		ceCoral,				///<珊瑚色
 		ceCornflowerBlue,		///<菊花兰
@@ -76,24 +82,34 @@ namespace hgl
 		ceFireBrick,			///<火砖色
 		ceFloralWhite,			///<花白色
 		ceForestGreen,			///<森林绿
+        ceFrenchBeige,          ///<法国米色
+        ceFrenchBlue,           ///<法国兰
+        ceFrenchLilac,          ///<法国丁香色
 		ceFuchsia,				///<紫红色
 		ceGainsboro,			///<淡灰色
 		ceGhostWhite,			///<幽灵白
 		ceGold,					///<金色
 		ceGoldenrod,			///<金麒麟色
+        ceGoldenYellow,         ///<金黄
 		ceGray,					///<灰色
 		ceGreen,				///<绿色
 		ceGreenYellow,			///<蓝绿色
 		ceGrey,					///<灰白色
-		ceHoneydew,				///<蜜色
-		ceHotPink,				///<热粉红
-		ceIndianRed,			///<印第安红
+        ceHollywoodCerise,      ///<好莱坞樱桃红
+		ceHoneydew,				///<蜜色        
+		ceHotPink,				///<火热粉
+        ceHunterGreen,          ///<猎人绿
+        ceIndianGreen,          ///<印度绿
+		ceIndianRed,			///<印度红
+        ceIndianYellow,         ///<印度黄
 		ceIndigo,				///<靛青色
 		ceIvory,				///<象牙白
 		ceKhaki,				///<黄褐色
 		ceLavender,				///<淡紫色
 		ceLavenderBlush,		///<淡紫红
 		ceLawnGreen,			///<草绿色
+        ceLemon,                ///<柠檬色
+        ceLemonYellow,          ///<柠檬黄
 		ceLemonChiffon,			///<柠檬绸
 		ceLightBlue,			///<亮蓝色
 		ceLightCoral,			///<亮珊瑚色
@@ -113,6 +129,7 @@ namespace hgl
 		ceLime,					///<酸橙色
 		ceLimeGreen,			///<橙绿色
 		ceLinen,				///<亚麻色
+        ceLion,                 ///<獅子棕
 		ceMagenta,				///<红紫色
 		ceMaroon,				///<粟色
 		ceMediumAquamarine,		///<间绿色
@@ -125,7 +142,9 @@ namespace hgl
 		ceMediumTurquoise,		///<间绿宝石
 		ceMediumVioletRed,		///<间紫罗兰
 		ceMidNightBlue,			///<中灰蓝
-		ceMintCream,			///<薄荷色
+        ceMint,                 ///<薄荷色
+		ceMintCream,			///<薄荷霜
+        ceMintGreen,            ///<薄荷绿
 		ceMistyRose,			///<浅玫瑰
 		ceMoccasin,				///<鹿皮色
 
@@ -152,6 +171,7 @@ namespace hgl
 		cePaleVioletRed,		///<苍紫罗兰色
 		cePapayawhip,			///<番木色
 		cePeachpuff,			///<桃色
+        cePear,                 ///<梨色
 		cePeru,					///<秘鲁色
 		cePink,					///<粉红色
 
@@ -163,8 +183,10 @@ namespace hgl
 		cePowderBlue,			///<粉蓝色
 		cePurple,				///<紫色
 		ceRed,					///<红色
+        ceRose,                 ///<玫瑰红
 		ceRosyBrown,			///<褐玫瑰红
 		ceRoyalBlue,			///<皇家蓝
+        ceRuby,                 ///<宝石红
 		ceSaddleBrown,			///<重褐色
 		ceSalmon,				///<鲜肉色
 
