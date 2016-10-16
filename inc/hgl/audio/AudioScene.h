@@ -146,7 +146,7 @@ namespace hgl
     public:
 
         AudioScene(int max_source,AudioListener *al);                                               ///<构造函数(指定最大音源数)
-        virtual ~AudioScene();                                                                      ///<析构函数
+        virtual ~AudioScene()HGL_DEFAULT_MEMFUNC;                                                   ///<析构函数
 
                 void                SetListener(AudioListener *al){listener=al;}                    ///<設置收聽者
 
