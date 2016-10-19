@@ -91,7 +91,7 @@ IF(BUILD_OPENGL_LIB)
     SET(PLATFORM_SOURCE ${PLATFORM_SOURCE}
                         Window.cpp)
 
-    SOURCE_GROUP("Graphics" FILES Window.cpp ${PLATFORM_SOURCE})
+    SOURCE_GROUP("Graphics" FILES Window.cpp)
 
     SET(PLATFORM_GLFW_SUPPORT_SOURCE    GLFW/PlatformGLFW.cpp
                                         GLFW/WindowGLFW.cpp)
