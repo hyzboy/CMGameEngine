@@ -30,7 +30,7 @@
 
 
 #if defined(_GLFW_USE_CONFIG_H)
- #include "glfw_config.h"
+ #include "win/GLFW/glfw_config.h"
 #endif
 
 #if defined(GLFW_INCLUDE_GLCOREARB) || \
@@ -46,7 +46,7 @@
 #endif
 
 #define GLFW_INCLUDE_NONE
-#include "../include/GLFW/glfw3.h"
+#include "win/GLFW/glfw3.h"
 
 typedef int GLFWbool;
 

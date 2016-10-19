@@ -57,7 +57,7 @@ namespace hgl
 
                 glfwGetVersion(&major,&minor,&rev);
 
-                platform_name=OS_TEXT("GLFW ")+OSString(major)+OS_TEXT(".")+OSString(minor)+OS_TEXT(".")+OSString(rev);
+                platform_name=U8_TEXT("GLFW ")+UTF8String(major)+ U8_TEXT(".")+ UTF8String(minor)+ U8_TEXT(".")+ UTF8String(rev);
             }
 
             return platform_name;

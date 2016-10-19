@@ -1,6 +1,12 @@
-﻿#include<hgl/io/FileAccess.h>
+﻿#include<hgl/platform/Platform.h>
+#include<hgl/io/FileAccess.h>
 #include<hgl/LogInfo.h>
+
+#if HGL_OS != HGL_OS_Windows
 #include<unistd.h>
+#else
+#include<io.h>
+#endif//HGL_OS!=HGL_OS_Windows
 namespace hgl
 {
 	namespace io

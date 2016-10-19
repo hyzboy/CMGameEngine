@@ -27,7 +27,11 @@ namespace hgl
 
             void SetCaption(const OSString &name)override
             {
+#if HGL_OS == HGL_OS_Windows
+				glfwSetWindowTitle(glfw_win,to_u8(name));
+#else
                 glfwSetWindowTitle(glfw_win,name);
+#endif//
                 this->caption=name;
             }
 
