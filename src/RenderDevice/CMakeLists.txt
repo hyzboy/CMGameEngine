@@ -1,6 +1,4 @@
-﻿set(CM_PLATFORM_BASE_SOURCE			Platform/Window.cpp)
-
-set(CM_OPENGL_SOURCE                glBuffer.cpp
+﻿set(CM_OPENGL_SOURCE                glBuffer.cpp
                                     glCaps.cpp
                                     glFace.cpp
                                     glTexture.cpp
@@ -42,8 +40,6 @@ set(CM_RENDER_DEVICE_SOURCE         ${CM_PLATFORM_BASE_SOURCE}
                                     ${CM_GLSL_SOURCE}
                                     ${CM_RENDER_SOURCE})
 
-SOURCE_GROUP("Platform"						FILES ${CM_PLATFORM_BASE_SOURCE})
-
 SOURCE_GROUP("OpenGL"						FILES ${CM_OPENGL_SOURCE})
 SOURCE_GROUP("OpenGL\\Core45"				FILES ${CM_OPENGL_CORE_45_SOURCE})
 SOURCE_GROUP("OpenGL\\GLSL"					FILES ${CM_GLSL_SOURCE})
@@ -51,31 +47,11 @@ SOURCE_GROUP("OpenGL\\GLSL\\ShaderMaker"	FILES ${CM_GLSL_SHADER_MAKER_SOURCE})
 
 IF(WIN32)
 
-      add_definitions("-D_GLFW_WIN32")
-      add_definitions("-D_GLFW_WGL")
-
-      set(GLFW_SOURCE		GLFW/context.c
-                            GLFW/egl_context.c
-                            GLFW/init.c
-                            GLFW/input.c
-                            GLFW/monitor.c
-                            GLFW/vulkan.c
-                            GLFW/wgl_context.c
-                            GLFW/win32_init.c
-                            GLFW/win32_joystick.c
-                            GLFW/win32_monitor.c
-                            GLFW/win32_time.c
-                            GLFW/win32_tls.c
-                            GLFW/win32_window.c
-                            GLFW/window.c)
-                            
-      SOURCE_GROUP("OpenGL\\GLFW"   FILES ${GLFW_SOURCE})
-      
       SET(GLEW_SOURCE       GLEW/glew.c)
-      
+
       SOURCE_GROUP("OpenGL\\GLEW"   FILES ${GLEW_SOURCE})
 
-	add_library(CM.RenderDevice STATIC ${CM_RENDER_DEVICE_SOURCE} ${GLFW_SOURCE} ${GLEW_SOURCE})
+	add_library(CM.RenderDevice STATIC ${CM_RENDER_DEVICE_SOURCE} ${GLEW_SOURCE})
 ELSE()
 	add_library(CM.RenderDevice SHARED ${CM_RENDER_DEVICE_SOURCE})
 ENDIF()

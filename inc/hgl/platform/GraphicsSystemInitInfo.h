@@ -2,9 +2,12 @@
 #define HGL_GRAPHICS_SYSTEM_INIT_INFO_INCLUDE
 
 #include<hgl/platform/ConsoleSystemInitInfo.h>
+#include<hgl/platform/PlatformInterface.h>
 #include<hgl/graph/Font.h>
 namespace hgl
 {
+    using namespace platform;
+
 	/**
 	 * 系统初始化信息类
 	 */
@@ -35,31 +38,7 @@ namespace hgl
 				int32 Width,Height;                                                                 ///<游戏画面大小
 			}safe;
 
-			struct OpenGLSetup
-			{
-				int32 AlphaBits;                                                                    ///<Alpha缓冲区位深度,默认8位
-				int32 DepthBits;                                                                    ///<Depth缓冲区位深度,默认24
-				int32 StencilBits;                                                                  ///<Stencil缓冲区位深度,默认8
-				int32 AccumBits;                                                                    ///<Accum缓冲区位深度,默认0
-
-				int32 MultiSample;                                                                  ///<多重采样级别(全屏抗矩齿级别)
-
-				bool NicestTextureCompress;															///<高质量贴图压缩,默认为真
-
-				bool texture_rectangle;																///<是否启用矩形贴图
-				bool texture_non_power_of_two;														///<是否启用非2次幂贴图
-				bool vbo;																			///<是否启用vbo
-				bool pbo;																			///<是否启用pbo
-				bool fbo;																			///<是否启用fbo
-				bool glsl;																			///<是否启用glsl
-				bool multi_texture;																	///<是否启用多重贴图
-
-				int32 major,minor;																	///<OpenGL核心模式版本需求(默认为0,0表示无需求使用兼容模式)
-
-				bool debug;																			///<产生硬件Debug信息(默认不产生，并且此功能不对所有显卡以及驱动有效)
-				bool opengl_es;																		///<使用OpenGL ES模式
-				bool egl;																			///<使用EGL模式
-			}gl;
+            OpenGLSetup gl;
 
 			struct GUI
 			{
@@ -84,26 +63,7 @@ namespace hgl
 			AnsiString DeviceName;																	///<设备名称
 		}audio;
 
-		struct WindowSetup
-		{
-			UTF8String Name;																		///<窗口标题
-#if HGL_OS == HGL_OS_Windows
-			UTF16String ClassName;																	///<类名(windows用)
-#endif//HGL_OS == HGL_OS_Windows
-			OSString IconFilename;																	///<图标文件名称
-			OSString CursorFilename;																///<光标文件名称
-			bool Edge;																				///<是否显示边框
-
-			bool SysMenu;                                                                           ///<是否显示系统菜单
-			bool Right;                                                                             ///<窗口是否使用靠右风格
-
-			bool Resize;                                                                            ///<窗口大小是否可调整
-			bool Minimize;                                                                          ///<窗口是否可以最小化
-			bool Maximize;                                                                          ///<窗口是否可以最大化
-
-			bool TopMost;                                                                           ///<永远在最上面
-			bool AppTaskBar;                                                                        ///<程序项在任务栏显示
-		}win;
+        WindowSetup win;
 
 	public:
 

@@ -37,11 +37,7 @@ namespace hgl
 			}
 
 			{
-				graphics.gl.AlphaBits=0;
-				graphics.gl.DepthBits=0;
-				graphics.gl.StencilBits=0;
-				graphics.gl.AccumBits=0;
-				graphics.gl.MultiSample=0;
+                hgl_zero(graphics.gl);
 
 				graphics.gl.NicestTextureCompress=true;
 
@@ -56,15 +52,11 @@ namespace hgl
 				graphics.gl.major=3;
 				graphics.gl.minor=3;
 
-				graphics.gl.egl=false;
-
 #ifdef _DEBUG
                 graphics.gl.debug=true;
 #else
 				graphics.gl.debug=false;
 #endif//_DEBUG
-
-				graphics.gl.opengl_es=false;
 			}
 
 			{
