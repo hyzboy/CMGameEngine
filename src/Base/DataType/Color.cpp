@@ -9,9 +9,9 @@ namespace hgl
                                                         blue,   \
                                                         int(double(red)*0.299+double(green)*0.587+double(blue)*0.114), \
                                                         \
-                                                        float(double(red)*0.299),   \
-                                                        float(double(green)*0.587), \
-                                                        float(double(blue)*0.114),  \
+                                                        float(double(red)/255.0f),   \
+                                                        float(double(green)/255.0f), \
+                                                        float(double(blue)/255.0f),  \
                                                         float((double(red)*0.299+double(green)*0.587+double(blue)*0.114)/255.0f),\
                                                         \
                                                         U16_TEXT(chn_name)  \

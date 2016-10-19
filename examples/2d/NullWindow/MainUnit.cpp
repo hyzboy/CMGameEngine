@@ -11,7 +11,7 @@ public:
 
 	TestObject()
 	{
-		SetClearColor(0,0,0);
+		SetClearColor(ceSlateBlue);
 	}
 
 	~TestObject()

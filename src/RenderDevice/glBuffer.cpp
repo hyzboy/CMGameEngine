@@ -5,10 +5,10 @@ namespace hgl
 	{
 		namespace
 		{
-			float ClearColor[4] = { 0.0f,0.0f,0.0f,0.0f };
-			float ClearDepth = 1.0f;
-			int ClearStencil = 0;
-			float ClearAccum = 0.0f;
+			static GLfloat ClearColor[4] = { 0.0f,0.0f,0.0f,1.0f };
+			static GLfloat ClearDepth = 1.0f;
+			static GLint ClearStencil = 0;
+			static GLfloat ClearAccum = 0.0f;
 
 			static struct
 			{
@@ -95,7 +95,7 @@ namespace hgl
 			ClearColor[1] = green;
 			ClearColor[2] = blue;
 
-			glClearColor(red,green,blue,1.0f);
+			//glClearColor(red,green,blue,1.0f);
 		}
 
 		/**
@@ -112,6 +112,7 @@ namespace hgl
 		void ClearColorBuffer()		{glClearBufferfv(GL_COLOR,0,ClearColor);}
 		void ClearDepthBuffer()		{SetDepthMask(true);glClearBufferfv(GL_DEPTH,0,&ClearDepth);}
 		void ClearColorDepthBuffer(){ClearColorBuffer();ClearDepthBuffer();}
+		//void ClearColorDepthBuffer(){SetDepthMask(true);glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);}
 		void ClearStencilBuffer()	{glClearBufferiv(GL_STENCIL,0,&ClearStencil);}
 		void ClearAccumBuffer()		{glClearBufferfv(GL_ACCUM,0,&ClearAccum);}
 	}//namespace graph
