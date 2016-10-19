@@ -3,14 +3,9 @@
 
 #include<hgl/type/DataType.h>
 #include<hgl/FuncLoad.h>
+#include OS_EXTERNAL_H
 namespace hgl
 {
-	#if HGL_OS == HGL_OS_Windows
-		typedef HMODULE	ExternalModulePointer;
-	#else
-		typedef void *	ExternalModulePointer;
-	#endif//HGL_OS == HGL_OS_Windows
-
 	/**
 	* 这个类用于对外部动态库的调用,支持Windows/Linux/BSD/MacOSX<br>
 	* Windows 下动态库扩展名为.DLL<br>

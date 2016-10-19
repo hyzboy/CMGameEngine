@@ -32,6 +32,8 @@ IF(UNIX)
     SET(PLATFORM_TIME_SOURCE            UNIX/Time.cpp
                                         UNIX/Exit.cpp
                                         UNIX/DateTime.cpp)
+
+    SET(PLATFORM_EXTERNAL_MODULE_SOURCE UNIX/ExternalModule.cpp)
 ENDIF(UNIX)
 
 IF(WIN32)
@@ -56,8 +58,10 @@ IF(WIN32)
 
 	SET(PLATFORM_MULTI_PROCESS_SOURCE  Win/ProcMutex.cpp)
 
-    SET(PLATFORM_TIME_SOURCE    Win/Time.cpp
-                                Win/DateTime.cpp)
+    SET(PLATFORM_TIME_SOURCE            Win/Time.cpp
+                                        Win/DateTime.cpp)
+
+    SET(PLATFORM_EXTERNAL_MODULE_SOURCE Win/ExternalModule.cpp)
 
     SET(PLATFORM_DESKTOP_SOURCE Win/Desktop.cpp)
 ENDIF(WIN32)
@@ -74,11 +78,12 @@ SOURCE_GROUP("Desktop"      FILES ${PLATFORM_DESKTOP_SOURCE})
 SET(PLATFORM_SOURCE ${PLATFORM_SOURCE}
                     ${PLATFORM_FILE_SOURCE}
                     ${PLATFORM_CODEPAGE_SOURCE}
-                    ${PLATFORM_TIME_SOURCE}
                     ${PLATFORM_APPLICATION_SOURCE}
                     ${PLATFORM_LOG_SOURCE}
                     ${PLATFORM_MULTI_THREAD_SOURCE}
                     ${PLATFORM_MULTI_PROCESS_SOURCE}
+                    ${PLATFORM_TIME_SOURCE}
+                    ${PLATFORM_EXTERNAL_MODULE_SOURCE}
                     ${PLATFORM_DESKTOP_SOURCE})
 
 IF(BUILD_OPENGL_LIB)
