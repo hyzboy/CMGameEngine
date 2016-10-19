@@ -37,10 +37,10 @@ namespace hgl
         public:	//方法
 
             Window();																					///<本类构造函数
-            virtual ~Window(){};																	   ///<本类析构函数
+            virtual ~Window();                                                                          ///<本类析构函数
 
-            virtual void ToMin()=0;																         ///<窗口最小化
-            virtual void ToMax()=0;																         ///<窗口最大化
+            virtual void ToMin()=0;																        ///<窗口最小化
+            virtual void ToMax()=0;																        ///<窗口最大化
 
             virtual void Show()=0;																		///<显示窗口
             virtual void Hide()=0;																		///<隐藏窗口
@@ -55,12 +55,13 @@ namespace hgl
         public:	//被实际操作系统接口层所调用的函数，在不了解的情况下请不要使用
 
             virtual void SetMouseCoord(const Vertex2i &coord){mouse_coord=coord;}						///<设置鼠标坐标
-            virtual void SetSize(int w,int h);															///<设置窗口大小
+            virtual void SetSize(int w,int h)=0;														///<设置窗口大小
 
             virtual void MakeToCurrent()=0;																///<切换到当前
             virtual void SwapBuffer()=0;																///<交换缓冲区
             virtual void WaitEvent(const double &time_out=0)=0;                                         ///<等待下一个事件
             virtual void PollEvent()=0;                                                                 ///<轮询事件
+            virtual bool IsOpen()=0;                                                                    ///<是否依然存在
         };//class Window
     }//namespace platform
 }//namespace hgl

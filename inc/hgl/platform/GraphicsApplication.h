@@ -5,10 +5,13 @@
 #include<hgl/platform/GraphicsSystemInitInfo.h>
 #include<hgl/object/FlowControl.h>
 
-struct GLFWwindow;
-
 namespace hgl
 {
+    namespace platform
+    {
+        class Window;
+    }//namespace platform
+
 	namespace graph
 	{
 		class TileFont;
@@ -18,7 +21,7 @@ namespace hgl
 		*/
 		class GraphicsApplication:public BaseApplication                                                ///图形应用序基类
 		{
-			GLFWwindow *glfw_win;
+			Window *win;
 			bool wait_active;
 
 			#include<hgl/object/Object.ProcEvent.h>
@@ -36,8 +39,6 @@ namespace hgl
 		protected:
 
 			virtual void ProcActiveObject(FlowObject *);
-
-			virtual void InitProcEvent();
 
 		protected:
 

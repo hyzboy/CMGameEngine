@@ -24,5 +24,9 @@ namespace hgl
 
             mouse_coord.Zero();
         }
+
+        Window::~Window()
+        {
+        }
     }//namespace platform
 }//namespace hgl
