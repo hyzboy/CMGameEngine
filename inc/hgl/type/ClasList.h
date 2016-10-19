@@ -17,8 +17,8 @@ namespace hgl
 
 	public:
 
-		ClasList()HGL_DEFAULT_MEMFUNC;
-		virtual ~ClasList()HGL_DEFAULT_MEMFUNC;
+		ClasList()=default;
+		virtual ~ClasList()=default;
 
 		virtual void Add(T *);																		///<添加一个对象到当前控制器器
 		virtual void Clear();                                                                       ///<清除所有对象

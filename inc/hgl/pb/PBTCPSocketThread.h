@@ -1,4 +1,4 @@
-﻿#ifndef HGL_PROTOCOL_BUFFER_SOCKET_THREAD_INCLUDE
+#ifndef HGL_PROTOCOL_BUFFER_SOCKET_THREAD_INCLUDE
 #define HGL_PROTOCOL_BUFFER_SOCKET_THREAD_INCLUDE
 
 #include<hgl/network/DirectSocketIOUserThread.h>
@@ -30,14 +30,14 @@ namespace hgl
 				user_manage=um;
 			}
 
-			virtual bool ProcStartThread() HGL_OVERRIDE
+			virtual bool ProcStartThread() override
 			{
 				this->SetUserManage(user_manage);
 			}
 
 			virtual ID CreateUserID()=0;
 
-			MTUserDOSOutput *CreateUserOutput() HGL_OVERRIDE
+			MTUserDOSOutput *CreateUserOutput() override
 			{
 				return(new MTUserDOSOutput(this->dos));
 			}

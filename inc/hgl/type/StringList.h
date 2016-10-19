@@ -1,4 +1,4 @@
-﻿#ifndef HGL_STRINGLIST_INCLUDE
+#ifndef HGL_STRINGLIST_INCLUDE
 #define HGL_STRINGLIST_INCLUDE
 
 #include<hgl/type/List.h>
@@ -55,7 +55,7 @@ namespace hgl
 
 	public: //方法
 
-		StringList()HGL_DEFAULT_MEMFUNC;															///<本类构造函数
+		StringList()=default;															///<本类构造函数
 		StringList(const T &list){operator=(&list);}												///<本类构造函数
 		StringList(const T *list){operator=(list);}													///<本类构造函数
 		virtual ~StringList(){Clear();}																///<本类析构函数

@@ -1,4 +1,4 @@
-﻿#ifndef HGL_UTIL_HASH_INCLUDE
+#ifndef HGL_UTIL_HASH_INCLUDE
 #define HGL_UTIL_HASH_INCLUDE
 
 #include<hgl/type/BaseString.h>
@@ -78,7 +78,7 @@ namespace hgl
 		{
 		public:
 
-			virtual ~Hash()HGL_DEFAULT_MEMFUNC;
+			virtual ~Hash()=default;
 
 			virtual void GetName(UTF8String &)const=0;		///<取得HASH算法的名称
 			virtual void GetName(UTF16String &)const=0;		///<取得HASH算法的名称

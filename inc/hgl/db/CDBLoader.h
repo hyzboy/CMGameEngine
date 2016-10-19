@@ -25,7 +25,7 @@ namespace hgl
 				offset=o;
 			}
 
-			virtual ~CDBFieldMap()HGL_DEFAULT_MEMFUNC;
+			virtual ~CDBFieldMap()=default;
 
 			virtual void Convert(int,void *)=0;
 
@@ -41,11 +41,7 @@ namespace hgl
 		{
 		public:
 
-#ifdef HGL_CONSTRUCTION_REUSE
 			using CDBFieldMap::CDBFieldMap;
-#else
-			CDBFieldMapBool(CDBField* f, size_t o):CDBFieldMap(f,o){}
-#endif//HGL_CONSTRUCTION_REUSE
 
 			void Convert(int row,void *base)
 			{
@@ -57,11 +53,7 @@ namespace hgl
 		{
 		public:
 
-#ifdef HGL_CONSTRUCTION_REUSE
 			using CDBFieldMap::CDBFieldMap;
-#else
-			CDBFieldMapInteger(CDBField* f, size_t o):CDBFieldMap(f,o){}
-#endif//HGL_CONSTRUCTION_REUSE
 
 			void Convert(int row,void *base)
 			{
@@ -73,11 +65,7 @@ namespace hgl
 		{
 		public:
 
-#ifdef HGL_CONSTRUCTION_REUSE
 			using CDBFieldMap::CDBFieldMap;
-#else
-			CDBFieldMapUInteger(CDBField* f, size_t o):CDBFieldMap(f,o){}
-#endif//HGL_CONSTRUCTION_REUSE
 
 			void Convert(int row,void *base)
 			{
@@ -89,11 +77,7 @@ namespace hgl
 		{
 		public:
 
-#ifdef HGL_CONSTRUCTION_REUSE
 			using CDBFieldMap::CDBFieldMap;
-#else
-			CDBFieldMapFloat(CDBField* f, size_t o):CDBFieldMap(f,o){}
-#endif//HGL_CONSTRUCTION_REUSE
 
 			void Convert(int row,void *base)
 			{
@@ -105,11 +89,7 @@ namespace hgl
 		{
 		public:
 
-#ifdef HGL_CONSTRUCTION_REUSE
 			using CDBFieldMap::CDBFieldMap;
-#else
-			CDBFieldMapDouble(CDBField* f, size_t o):CDBFieldMap(f,o){}
-#endif//HGL_CONSTRUCTION_REUSE
 
 			void Convert(int row,void *base)
 			{
@@ -121,11 +101,7 @@ namespace hgl
 		{
 		public:
 
-#ifdef HGL_CONSTRUCTION_REUSE
 			using CDBFieldMap::CDBFieldMap;
-#else
-			CDBFieldMapChar8(CDBField* f, size_t o):CDBFieldMap(f,o){}
-#endif//HGL_CONSTRUCTION_REUSE
 
 			void Convert(int row,void *base)
 			{
@@ -137,11 +113,7 @@ namespace hgl
 		{
 		public:
 
-#ifdef HGL_CONSTRUCTION_REUSE
 			using CDBFieldMap::CDBFieldMap;
-#else
-			CDBFieldMapChar16(CDBField* f, size_t o):CDBFieldMap(f,o){}
-#endif//HGL_CONSTRUCTION_REUSE
 
 			void Convert(int row,void *base)
 			{
@@ -153,11 +125,7 @@ namespace hgl
 		{
 		public:
 
-#ifdef HGL_CONSTRUCTION_REUSE
 			using CDBFieldMap::CDBFieldMap;
-#else
-			CDBFieldMapArray(CDBField* f, size_t o):CDBFieldMap(f,o){}
-#endif//HGL_CONSTRUCTION_REUSE
 
 			void Convert(int row,void *base)
 			{

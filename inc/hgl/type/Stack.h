@@ -52,11 +52,7 @@ namespace hgl
 	{
 	public:
 
-#ifdef HGL_CONSTRUCTION_REUSE
 		using Stack<T *>::Stack;
-#else
-		StackObject(int n=0):Stack<T *>(n){}
-#endif//HGL_CONSTRUCTION_REUSE
 		virtual ~StackObject(){Clear();};
 
 		void Clear();

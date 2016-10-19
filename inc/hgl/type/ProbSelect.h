@@ -1,4 +1,4 @@
-﻿#ifndef HGL_PROBSELECT_INCLUDE
+#ifndef HGL_PROBSELECT_INCLUDE
 #define HGL_PROBSELECT_INCLUDE
 
 #include<hgl/type/List.h>
@@ -40,7 +40,7 @@ namespace hgl
 
 		ProbSelect(const uint *,const uint);
 		ProbSelect();
-		virtual ~ProbSelect()HGL_DEFAULT_MEMFUNC;
+		virtual ~ProbSelect()=default;
 
         void Add(const uint);                                                                       ///<添加一个机率数据
 		void Add(const uint *,const uint);                                                          ///<添加多个机率数据

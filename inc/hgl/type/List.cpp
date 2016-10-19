@@ -15,13 +15,13 @@ namespace hgl
 		max_count=0;
 		items=0;
 	}
-#ifdef HGL_INITIALIZER_LIST
+
 	template<typename T>
 	List<T>::List(const std::initializer_list<T> &l):List()
 	{
 		operator=(l);
 	}
-#endif//HGL_INITIALIZER_LIST
+
 	template<typename T>
 	List<T>::~List()
 	{
@@ -521,7 +521,7 @@ namespace hgl
 
 		memcpy(items,lt.items,count*sizeof(T));
 	}
-#ifdef HGL_INITIALIZER_LIST
+
 	template<typename T>
 	void List<T>::operator = (const std::initializer_list<T> &l)
 	{
@@ -531,6 +531,5 @@ namespace hgl
 
 		memcpy(items,l.begin(),count*sizeof(T));
 	}
-#endif//HGL_INITIALIZER_LIST
 }//namespace hgl
 #endif//HGL_LIST_CPP

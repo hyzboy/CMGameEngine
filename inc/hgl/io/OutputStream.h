@@ -1,4 +1,4 @@
-﻿#ifndef HGL_IO_OUTPUT_STREAM_INCLUDE
+#ifndef HGL_IO_OUTPUT_STREAM_INCLUDE
 #define HGL_IO_OUTPUT_STREAM_INCLUDE
 
 #include<hgl/type/DataType.h>
@@ -14,7 +14,7 @@ namespace hgl
 		{
 		public:
 
-			virtual ~OutputStream()HGL_DEFAULT_MEMFUNC;
+			virtual ~OutputStream()=default;
 
 			virtual void	Close()=0;																///<关闭输出流
 

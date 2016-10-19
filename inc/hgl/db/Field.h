@@ -1,4 +1,4 @@
-﻿#ifndef HGL_DB_FIELD_INCLUDE
+#ifndef HGL_DB_FIELD_INCLUDE
 #define HGL_DB_FIELD_INCLUDE
 
 #include<hgl/type/BaseString.h>
@@ -30,7 +30,7 @@ namespace hgl
 		public:
 
 			FieldData(const FieldDesc *fd){desc=fd;}
-			virtual ~FieldData()HGL_DEFAULT_MEMFUNC;
+			virtual ~FieldData()=default;
 
 			const FieldDesc *GetDesc()const{return desc;}											///<取得字段描述
 			const UTF8String &GetName()const{return desc->name;}									///<取得字段名称

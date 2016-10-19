@@ -69,7 +69,7 @@ namespace hgl
 				hglSetPropertyRead(DirectionPower,this,Thrust2D::GetDirPower);
 			}
 
-			virtual ~Thrust()HGL_DEFAULT_MEMFUNC;
+			virtual ~Thrust()=default;
 
 			virtual const u16char *GetClassName(){return u"Thrust";}								///<取得类名
 

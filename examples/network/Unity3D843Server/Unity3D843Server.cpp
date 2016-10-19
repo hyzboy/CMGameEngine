@@ -1,4 +1,4 @@
-﻿#include<hgl/ConsoleServer.h>
+#include<hgl/ConsoleServer.h>
 #include<hgl/File.h>
 
 using namespace hgl;
@@ -24,7 +24,7 @@ public:
 		CloseSocket(sock);
 	}
 
-	bool Execute()// HGL_OVERRIDE
+	bool Execute()// override
 	{
 		int pos=0;
 		int result;

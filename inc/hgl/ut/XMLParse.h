@@ -1,4 +1,4 @@
-﻿#ifndef HGL_XML_PARSE_INCLUDE
+#ifndef HGL_XML_PARSE_INCLUDE
 #define HGL_XML_PARSE_INCLUDE
 
 #include<hgl/type/BaseString.h>
@@ -67,7 +67,7 @@ namespace hgl
 	public:
 
 		XMLParseCB();
-		virtual ~XMLParseCB()HGL_DEFAULT_MEMFUNC;
+		virtual ~XMLParseCB()=default;
 	};//class XMLParseCB
 
 #define XML_START_PARSE(name)	while(*name)	\

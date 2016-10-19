@@ -36,7 +36,7 @@ namespace hgl
 	public:
 
 		DevilModule(){OnTrueFuncCall=nullptr;}
-		virtual ~DevilModule()HGL_DEFAULT_MEMFUNC;
+		virtual ~DevilModule()=default;
 
 		virtual bool		MapProperty		(const u16char *,void *)=0;			///<映射属性(真实变量的映射，在整个模块中全局有效)
 		virtual bool		MapFunc			(const u16char *,void *)=0;			///<映射C函数
@@ -72,7 +72,7 @@ namespace hgl
 	public:
 
 		DevilContext(){State=dvsStop;}
-		virtual ~DevilContext()HGL_DEFAULT_MEMFUNC;
+		virtual ~DevilContext()=default;
 
 		virtual bool Start(const u16char *)=0;									///<开始运行虚拟机
 		virtual bool Start(const u16char *,const u16char *)=0;					///<开始运行虚拟机

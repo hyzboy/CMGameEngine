@@ -1,4 +1,4 @@
-﻿#ifndef HGL_VERTEX_BUFFER_OBJECT_INCLUDE
+#ifndef HGL_VERTEX_BUFFER_OBJECT_INCLUDE
 #define HGL_VERTEX_BUFFER_OBJECT_INCLUDE
 
 #include<hgl/type/DataType.h>
@@ -102,7 +102,7 @@ namespace hgl
 
 		public:
 
-			VertexBuffer(int _size,const void *_data=nullptr,uint level=HGL_STATIC_DRAW):VertexBufferBase(level,C*_size*sizeof(T))
+			VertexBuffer(int _size,const T *_data=nullptr,uint level=HGL_STATIC_DRAW):VertexBufferBase(level,C*_size*sizeof(T))
 			{
 				dc_num=C;
 
@@ -116,7 +116,7 @@ namespace hgl
 					memcpy(mem_type,_data,bytes);
 			}
 
-			virtual ~VertexBuffer()HGL_DEFAULT_MEMFUNC;
+			virtual ~VertexBuffer()=default;
 
 			size_t GetDataBytes()const
 			{
@@ -212,12 +212,8 @@ namespace hgl
 		{
 		public:
 
-#ifdef HGL_CONSTRUCTION_REUSE
 			using VertexBuffer<T,1>::VertexBuffer;
-#else
-			VertexBuffer1(int _size,const T *_data=nullptr,uint level=HGL_STATIC_DRAW):VertexBuffer<T,1>(_size,_data,level){}
-#endif//HGL_CONSTRUCTION_REUSE
-			virtual ~VertexBuffer1()HGL_DEFAULT_MEMFUNC;
+			virtual ~VertexBuffer1()=default;
 
 			uint	GetDataType()const;
 
@@ -259,12 +255,8 @@ namespace hgl
 		{
 		public:
 
-#ifdef HGL_CONSTRUCTION_REUSE
 			using VertexBuffer<T,2>::VertexBuffer;
-#else
-			VertexBuffer2(int _size,const T *_data=nullptr,uint level=HGL_STATIC_DRAW):VertexBuffer<T,2>(_size,_data,level){}
-#endif//HGL_CONSTRUCTION_REUSE
-			virtual ~VertexBuffer2()HGL_DEFAULT_MEMFUNC;
+			virtual ~VertexBuffer2()=default;
 
 			uint	GetDataType()const;
 
@@ -446,13 +438,8 @@ namespace hgl
 		{
 		public:
 
-#ifdef HGL_CONSTRUCTION_REUSE
 			using VertexBuffer<T,3>::VertexBuffer;
-#else
-			VertexBuffer3(int _size,const T *_data=nullptr,uint level=HGL_STATIC_DRAW):VertexBuffer<T,3>(_size,_data,level){}
-#endif//HGL_CONSTRUCTION_REUSE
-
-			virtual ~VertexBuffer3()HGL_DEFAULT_MEMFUNC;
+			virtual ~VertexBuffer3()=default;
 
 			uint	GetDataType()const;
 
@@ -683,12 +670,8 @@ namespace hgl
 		{
 		public:
 
-#ifdef HGL_CONSTRUCTION_REUSE
 			using VertexBuffer<T,4>::VertexBuffer;
-#else
-			VertexBuffer4(int _size,const T *_data=nullptr,uint level=HGL_STATIC_DRAW):VertexBuffer<T,4>(_size,_data,level){}
-#endif//HGL_CONSTRUCTION_REUSE
-			virtual ~VertexBuffer4()HGL_DEFAULT_MEMFUNC;
+			virtual ~VertexBuffer4()=default;
 
 			uint	GetDataType()const;
 

@@ -1,4 +1,4 @@
-﻿#ifndef HGL_GRAPH_VERTEX_ARRAY_INCLUDE
+#ifndef HGL_GRAPH_VERTEX_ARRAY_INCLUDE
 #define HGL_GRAPH_VERTEX_ARRAY_INCLUDE
 
 #include<hgl/type/FixedArray.h>
@@ -32,7 +32,7 @@ namespace hgl
         public:
 
             VertexArray(uint prim);
-            ~VertexArray()HGL_DEFAULT_MEMFUNC;
+            ~VertexArray()=default;
 
             uint                        GetPrimitive        ()const{return primitive;}                                              ///<取得要绘制的图元类型
 

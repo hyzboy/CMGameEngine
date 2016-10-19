@@ -1,4 +1,4 @@
-﻿#ifndef HGL_NETWORK_IOSOCKET_INCLUDE
+#ifndef HGL_NETWORK_IOSOCKET_INCLUDE
 #define HGL_NETWORK_IOSOCKET_INCLUDE
 
 #include<hgl/network/Socket.h>
@@ -30,7 +30,7 @@ namespace hgl
 				Clear();
 			}
 
-			virtual ~IOSocket()HGL_DEFAULT_MEMFUNC;
+			virtual ~IOSocket()=default;
 
 			virtual void	Clear()
 			{
@@ -41,7 +41,7 @@ namespace hgl
 				left_send_bytes=0;
 			}
 
-			virtual void	CloseSocket()HGL_OVERRIDE													///<关闭连接
+			virtual void	CloseSocket()override													///<关闭连接
 			{
 				Socket::CloseSocket();
 				Clear();

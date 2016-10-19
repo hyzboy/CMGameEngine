@@ -1,4 +1,4 @@
-﻿#ifndef HGL_ENUM_OBJECT_INCLUDE
+#ifndef HGL_ENUM_OBJECT_INCLUDE
 #define HGL_ENUM_OBJECT_INCLUDE
 
 #include<hgl/object/Object.h>
@@ -12,7 +12,7 @@ namespace hgl
 	public:
 
 		EnumObject(bool=true);
-		virtual ~EnumObject()HGL_DEFAULT_MEMFUNC;
+		virtual ~EnumObject()=default;
 
 		virtual void Update();
 	};//class EnumObject

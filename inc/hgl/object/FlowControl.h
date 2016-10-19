@@ -1,4 +1,4 @@
-﻿#ifndef HGL_FLOW_CONTROL_INCLUDE
+#ifndef HGL_FLOW_CONTROL_INCLUDE
 #define HGL_FLOW_CONTROL_INCLUDE
 
 #include<hgl/object/FlowObject.h>
@@ -82,14 +82,8 @@ namespace hgl
 	{
 	public:
 
-#ifdef HGL_CONSTRUCTION_REUSE
 		using FlowControl::FlowControl;
-#else
-		IAOFlowControl():FlowControl(){}															///<本类构造函数
-		IAOFlowControl(FlowObject *fo):FlowControl(fo){}											///<本类构造函数
-		IAOFlowControl(u16char *n,FlowObject *fo):FlowControl(n,fo){}								///<本类构造函数
-#endif//HGL_CONSTRUCTION_REUSE
-		virtual ~IAOFlowControl()HGL_DEFAULT_MEMFUNC;
+		virtual ~IAOFlowControl()=default;
 
 		virtual void InitiallyUpdate(){}															///<前初的刷新
 		virtual void LastlyUpdate(){}																///<最后的刷新

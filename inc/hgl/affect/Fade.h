@@ -67,7 +67,7 @@ namespace hgl
 				hglSetPropertyRead(	CurValue,	this,Fade<T>::GetCur);
 			}
 
-			virtual ~Fade()HGL_DEFAULT_MEMFUNC;
+			virtual ~Fade()=default;
 
 			const u16char *GetClassName(){return name.wc_str();}									///<返回类名
 

@@ -10,7 +10,7 @@ namespace hgl
 	{
 	public:
 
-		virtual ~DataObject()HGL_DEFAULT_MEMFUNC;
+		virtual ~DataObject()=default;
 
 		virtual bool SaveToStream(Stream *){return(false);}
 		virtual bool LoadFromStream(Stream *){return(false);}

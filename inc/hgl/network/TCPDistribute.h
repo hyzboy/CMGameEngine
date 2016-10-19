@@ -20,11 +20,7 @@ namespace hgl
 
 		#define HGL_TCP_PACKET_NAME(name)									name##Packet
 
-#ifdef HGL_CONSTRUCTION_REUSE
 		#define HGL_TCP_PACKET_BEGIN(name)									struct HGL_TCP_PACKET_NAME(name):public TCPPacket{using TCPPacket::TCPPacket;
-#else
-		#define HGL_TCP_PACKET_BEGIN(name)									struct HGL_TCP_PACKET_NAME(name):public TCPPacket{HGL_TCP_PACKET_NAME(name)():TCPPacket(name){}
-#endif//HGL_CONSTRUCTION_REUSE
 
 		#define HGL_TCP_PACKET_END(name)									public:	\
 																			\

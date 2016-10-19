@@ -1,4 +1,4 @@
-﻿#ifndef HGL_NETWORK_DIRECT_SOCKET_IO_USER_THREAD_INCLUDE
+#ifndef HGL_NETWORK_DIRECT_SOCKET_IO_USER_THREAD_INCLUDE
 #define HGL_NETWORK_DIRECT_SOCKET_IO_USER_THREAD_INCLUDE
 
 #include<hgl/network/TCPSocket.h>
@@ -22,7 +22,7 @@ namespace hgl
 		template<typename DIS,typename DOS,typename S>
 		class DirectSocketIOUserThread:public Thread
 		{
-			bool IsExitDelete()const HGL_OVERRIDE {return true;}									///<返回在退出线程时，是否删除本对象
+			bool IsExitDelete()const override {return true;}									///<返回在退出线程时，是否删除本对象
 
 		protected:
 
@@ -56,7 +56,7 @@ namespace hgl
 				wait_time=10;
 			}
 
-			virtual bool ProcStartThread() HGL_OVERRIDE
+			virtual bool ProcStartThread() override
 			{
 				s=new S(sock,addr);
 
@@ -83,7 +83,7 @@ namespace hgl
 			virtual bool Update()=0;
 			virtual bool IdleUpdate(){return(true);}
 
-			virtual bool Execute() HGL_OVERRIDE
+			virtual bool Execute() override
 			{
 				int wr=s->WaitRecv(wait_time);
 

@@ -1,4 +1,4 @@
-﻿#ifndef HGL_CDB_FIELD_INCLUDE
+#ifndef HGL_CDB_FIELD_INCLUDE
 #define HGL_CDB_FIELD_INCLUDE
 
 #include<hgl/db/FieldType.h>
@@ -28,7 +28,7 @@ namespace hgl
 		public:
 
 			CDBField(const UTF16String &,const FieldType &);
-			virtual ~CDBField()HGL_DEFAULT_MEMFUNC;
+			virtual ~CDBField()=default;
 
 			virtual bool	ToString	(int,UTF16String &)=0;										///<转换为字符串
 

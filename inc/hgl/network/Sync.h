@@ -18,7 +18,7 @@ namespace hgl
 		public:
 
 			SyncObject(){tick_count=0;}
-			virtual ~SyncObject()HGL_DEFAULT_MEMFUNC;
+			virtual ~SyncObject()=default;
 
 			virtual bool Update(){return false;}
 		};//class SyncObject

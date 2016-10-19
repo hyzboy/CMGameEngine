@@ -1,4 +1,4 @@
-﻿#ifndef HGL_DB_TABLE_DESC_INCLUDE
+#ifndef HGL_DB_TABLE_DESC_INCLUDE
 #define HGL_DB_TABLE_DESC_INCLUDE
 
 #include<hgl/db/FieldDesc.h>
@@ -29,7 +29,7 @@ namespace hgl
 				primary_field=nullptr;
 			}
 
-			~TableDesc()HGL_DEFAULT_MEMFUNC;
+			~TableDesc()=default;
 
 			bool AddField(FieldDesc *);																///<增加一个字段
 

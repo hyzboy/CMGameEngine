@@ -240,11 +240,7 @@ namespace hgl
 
 		public:
 
-#ifdef HGL_CONSTRUCTION_REUSE
 			using AStarFindPath::AStarFindPath;
-#else
-			AStar4FindPath(int w,int h):AStarFindPath(w,h){}
-#endif//HGL_CONSTRUCTION_REUSE
 		};//class AStar4FindPath
 
 		class AStar8FindPath:public AStarFindPath
@@ -269,11 +265,7 @@ namespace hgl
 
 		public:
 
-#ifdef HGL_CONSTRUCTION_REUSE
 			using AStarFindPath::AStarFindPath;
-#else
-			AStar8FindPath(int w,int h):AStarFindPath(w,h){}
-#endif//HGL_CONSTRUCTION_REUSE
 		};//class AStar8FindPath
 
 		FindPath *CreateAStar4(int w,int h)

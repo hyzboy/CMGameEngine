@@ -1,4 +1,4 @@
-﻿#ifndef HGL_GRAPH_MATERIAL_INCLUDE
+#ifndef HGL_GRAPH_MATERIAL_INCLUDE
 #define HGL_GRAPH_MATERIAL_INCLUDE
 
 #include<hgl/VectorMath.h>
@@ -155,7 +155,7 @@ namespace hgl
 		public:
 
 			Material();
-			virtual ~Material()HGL_DEFAULT_MEMFUNC;
+			virtual ~Material()=default;
 
 		public:
 

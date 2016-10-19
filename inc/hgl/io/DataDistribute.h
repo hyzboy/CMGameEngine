@@ -1,4 +1,4 @@
-﻿#ifndef HGL_IO_DATA_DISTRIBUTE_INCLUDE
+#ifndef HGL_IO_DATA_DISTRIBUTE_INCLUDE
 #define HGL_IO_DATA_DISTRIBUTE_INCLUDE
 
 #include<hgl/type/DataType.h>
@@ -33,7 +33,7 @@ namespace hgl
 		{
 		public:
 
-			virtual ~DataPacket()HGL_DEFAULT_MEMFUNC;
+			virtual ~DataPacket()=default;
 
 			virtual const HGL_DATA_PACKET_TYPE GetPacketType()const=0;								///<取得数据包类型
 
@@ -53,7 +53,7 @@ namespace hgl
 
 		public:
 
-			~DataPacketTemplate()HGL_DEFAULT_MEMFUNC;
+			~DataPacketTemplate()=default;
 
 			const HGL_DATA_PACKET_TYPE GetPacketType()const											///<取得数据包类型
 			{

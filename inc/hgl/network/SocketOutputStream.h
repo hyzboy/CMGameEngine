@@ -1,4 +1,4 @@
-﻿#ifndef HGL_NETWORK_SOCKET_OUTPUT_STREAM_INCLUDE
+#ifndef HGL_NETWORK_SOCKET_OUTPUT_STREAM_INCLUDE
 #define HGL_NETWORK_SOCKET_OUTPUT_STREAM_INCLUDE
 
 #include<hgl/io/OutputStream.h>
@@ -24,7 +24,7 @@ namespace hgl
 				SetSocket(s);
 			}
 
-			~SocketOutputStream()HGL_DEFAULT_MEMFUNC;
+			~SocketOutputStream()=default;
 
 			void    SetSocket(int s)
 			{

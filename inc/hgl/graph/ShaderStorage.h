@@ -1,4 +1,4 @@
-﻿#ifndef HGL_GRAPH_SHADER_STORAGE_INCLUDE
+#ifndef HGL_GRAPH_SHADER_STORAGE_INCLUDE
 #define HGL_GRAPH_SHADER_STORAGE_INCLUDE
 
 #include<hgl/type/ResManage.h>
@@ -15,7 +15,7 @@ namespace hgl
 		{
 		protected:
 
-			Shader *Create(const RenderState &) HGL_OVERRIDE;
+			Shader *Create(const RenderState &) override;
 		};//class ShaderStorage
 
 		extern ShaderStorage *global_shader_storage;							///<全局Shader仓库

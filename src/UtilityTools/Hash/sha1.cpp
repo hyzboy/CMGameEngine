@@ -1,4 +1,4 @@
-﻿#include<hgl/ut/Hash.h>
+#include<hgl/ut/Hash.h>
 #include<hgl/endian/Endian.h>
 
 namespace hgl
@@ -144,12 +144,12 @@ namespace hgl
 
 		public:
 
-			void GetName(UTF8String &str)const HGL_OVERRIDE{str="SHA1";}
-			void GetName(UTF16String &str)const HGL_OVERRIDE{str=U16_TEXT("SHA1");}
+			void GetName(UTF8String &str)const override{str="SHA1";}
+			void GetName(UTF16String &str)const override{str=U16_TEXT("SHA1");}
 
-			const int GetHashBytes()const HGL_OVERRIDE{return DIGEST_SIZE;}
+			const int GetHashBytes()const override{return DIGEST_SIZE;}
 
-			void Init()HGL_OVERRIDE
+			void Init()override
 			{
 				digest[0] = 0x67452301L;
 				digest[1] = 0xEFCDAB89L;
@@ -162,7 +162,7 @@ namespace hgl
 				memset(data, 0, sizeof(data));
 			}
 
-			void Update(const void *input,uint count)HGL_OVERRIDE
+			void Update(const void *input,uint count)override
 			{
 				const uint8 *buffer=(const uint8 *)input;
 				uint8* db = (uint8*) &data[0];
@@ -187,7 +187,7 @@ namespace hgl
 				}
 			}
 
-			void Final(void *result)HGL_OVERRIDE
+			void Final(void *result)override
 			{
 				int count;
 				uint32 lowBitcount  = countLo;

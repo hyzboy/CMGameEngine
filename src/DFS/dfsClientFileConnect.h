@@ -14,11 +14,7 @@ namespace hgl
 
 		public:
 
-#ifdef HGL_CONSTRUCTION_REUSE
 			using dfsClientConnect::dfsClientConnect;
-#else
-			dfsClientFileConnect():dfsClientConnect(){}
-#endif//HGL_CONSTRUCTION_REUSE
 
 			void SetName(const UTF8String &gn)
 			{

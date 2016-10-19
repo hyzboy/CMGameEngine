@@ -1,4 +1,4 @@
-﻿#ifndef HGL_TYPE_SWITCH_INCLUDE
+#ifndef HGL_TYPE_SWITCH_INCLUDE
 #define HGL_TYPE_SWITCH_INCLUDE
 
 #include<hgl/type/BitArray.h>
@@ -34,7 +34,7 @@ namespace hgl
 		{
 		}
 
-		virtual ~Switch()HGL_DEFAULT_MEMFUNC;
+		virtual ~Switch()=default;
 
 		/**
 		* 取得数据访问指针

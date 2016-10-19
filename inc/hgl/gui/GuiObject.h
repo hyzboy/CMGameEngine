@@ -1,4 +1,4 @@
-﻿#ifndef HGL_GUI_OBJECT_INCLUDE
+#ifndef HGL_GUI_OBJECT_INCLUDE
 #define HGL_GUI_OBJECT_INCLUDE
 
 #include<hgl/object/EventObject.h>
@@ -97,7 +97,7 @@ namespace hgl
 				GUIObject();                                                                                ///<本类构造函数
 				GUIObject(const RectScope2i &);																///<本类构造函数
 				GUIObject(int,int,int,int);																	///<本类构造函数
-				virtual ~GUIObject()HGL_DEFAULT_MEMFUNC;																///<本类析构函数
+				virtual ~GUIObject()=default;																///<本类析构函数
 
 				virtual void SetMenuCoord(int,int);															///<设置对象绝对坐标
 

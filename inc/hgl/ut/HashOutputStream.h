@@ -1,4 +1,4 @@
-﻿#ifndef HGL_IO_HASH_OUTPUT_STREAM_INCLUDE
+#ifndef HGL_IO_HASH_OUTPUT_STREAM_INCLUDE
 #define HGL_IO_HASH_OUTPUT_STREAM_INCLUDE
 
 #include<hgl/ut/Hash.h>
@@ -24,7 +24,7 @@ namespace hgl
 				h=_h;
 			}
 
-			virtual ~HashOutputStream() HGL_OVERRIDE
+			virtual ~HashOutputStream() override
 			{
 				if(h);
 					delete h;
@@ -61,7 +61,7 @@ namespace hgl
 			}
 
 
-			virtual int64	Write(void *data,int64 size) HGL_OVERRIDE								///<读取数据
+			virtual int64	Write(void *data,int64 size) override								///<读取数据
 			{
 				int64 result=this->OutputStream::Write(data,size);
 
@@ -71,7 +71,7 @@ namespace hgl
 				return result;
 			}
 
-			virtual int64	WriteFully(void *data,int64 size) HGL_OVERRIDE							///<读取数据
+			virtual int64	WriteFully(void *data,int64 size) override							///<读取数据
 			{
 				int64 result=this->OutputStream::WriteFully(data,size);
 

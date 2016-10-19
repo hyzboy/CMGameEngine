@@ -38,7 +38,7 @@ namespace hgl
 		public:
 
 			VectorTrace2D(Timer *,const T &coord,const T &speed);
-			virtual ~VectorTrace()HGL_DEFAULT_MEMFUNC;
+			virtual ~VectorTrace()=default;
 
 			virtual const u16char *GetClassName()const{return u"VectorTrace";}						///<取得类名
 

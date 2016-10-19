@@ -1,4 +1,4 @@
-﻿#ifndef HGL_SMART_INCLUDE
+#ifndef HGL_SMART_INCLUDE
 #define HGL_SMART_INCLUDE
 
 #include<hgl/TypeFunc.h>
@@ -287,7 +287,7 @@ namespace hgl
 			return(*this);
 		}
 
-		bool valid()const HGL_OVERRIDE{return this->sd?(this->sd->data?true:false):false;}
+		bool valid()const override{return this->sd?(this->sd->data?true:false):false;}
 	};//template <typename T> class SharedPtr
 
 	template<typename T> class WeakArray;

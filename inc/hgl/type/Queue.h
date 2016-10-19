@@ -58,11 +58,7 @@ namespace hgl
 	{
 	public:
 
-#ifdef HGL_CONSTRUCTION_REUSE
 		using Queue<T *>::Queue;
-#else
-		QueueObject(int n=0):Queue<T *>(n){}
-#endif//HGL_CONSTRUCTION_REUSE
 		virtual ~QueueObject(){Clear();}
 
 		void Clear();

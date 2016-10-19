@@ -46,9 +46,9 @@ namespace hgl
 
 	protected:	//被动事件
 
-		virtual void ProcFinish()HGL_DEFAULT_MEMFUNC;															///<加载完成(异步事件)
-		virtual void ProcEnd()HGL_DEFAULT_MEMFUNC;																///<结束处理
-		virtual void ProcClear()HGL_DEFAULT_MEMFUNC;															///<清理处理(异步事件)
+		virtual void ProcFinish()=default;															///<加载完成(异步事件)
+		virtual void ProcEnd()=default;																///<结束处理
+		virtual void ProcClear()=default;															///<清理处理(异步事件)
 
 	public:	//事件
 
@@ -58,7 +58,7 @@ namespace hgl
 	public:
 
 		Loader();
-		virtual ~Loader()HGL_DEFAULT_MEMFUNC;
+		virtual ~Loader()=default;
 
 		bool Execute();
 

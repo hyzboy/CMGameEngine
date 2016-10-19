@@ -12,7 +12,7 @@ namespace hgl
 		 */
 		class SCTPO2OServer:public AcceptServer
 		{
-			int CreateServerSocket() HGL_OVERRIDE final;												///<创建Server Socket
+			int CreateServerSocket() override final;												///<创建Server Socket
 		};//class SCTPO2OServer
 
 		/**

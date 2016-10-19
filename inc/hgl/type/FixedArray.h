@@ -1,4 +1,4 @@
-﻿#ifndef HGL_TYPE_FIXED_ARRAY_INCLUDE
+#ifndef HGL_TYPE_FIXED_ARRAY_INCLUDE
 #define HGL_TYPE_FIXED_ARRAY_INCLUDE
 
 #include<hgl/TypeFunc.h>
@@ -91,12 +91,12 @@ namespace hgl
 	{
 	public:
 
-		~ObjectFixedArray() HGL_OVERRIDE
+		~ObjectFixedArray() override
 		{
 			ClearAll();
 		}
 
-		bool Clear(int n) HGL_OVERRIDE
+		bool Clear(int n) override
 		{
 			if(n<0||n>MAX_SIZE)return(false);
 
@@ -109,7 +109,7 @@ namespace hgl
 			return(true);
 		}
 
-		void ClearAll() HGL_OVERRIDE
+		void ClearAll() override
 		{
 			for(size_t i=0;i<MAX_SIZE;i++)
 			{

@@ -1,4 +1,4 @@
-﻿#ifndef HGL_TYPE_SET_INCLUDE
+#ifndef HGL_TYPE_SET_INCLUDE
 #define HGL_TYPE_SET_INCLUDE
 
 #include<hgl/type/List.h>
@@ -25,7 +25,7 @@ namespace hgl
 	public:
 
 		Set();
-		virtual ~Set()HGL_DEFAULT_MEMFUNC;
+		virtual ~Set()=default;
 
 				void	SetCount		(int count){data_list.SetCount(count);}						///<指定数据数量，一般用于批量加载前的处理
 				void	PreMalloc		(int count){data_list.PreMalloc(count);}					///<预分配指定数量的数据空间

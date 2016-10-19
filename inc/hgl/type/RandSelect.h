@@ -30,7 +30,7 @@ namespace hgl
 
 		RandSelect();
 		RandSelect(T,T,T);
-		virtual ~RandSelect()HGL_DEFAULT_MEMFUNC;
+		virtual ~RandSelect()=default;
 
 		virtual void Set(T,T,T);                                                                    ///<设置随机数产生条件
 

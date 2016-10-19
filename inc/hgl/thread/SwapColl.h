@@ -1,4 +1,4 @@
-﻿#ifndef HGL_THREAD_SWAP_LIST_INCLUDE
+#ifndef HGL_THREAD_SWAP_LIST_INCLUDE
 #define HGL_THREAD_SWAP_LIST_INCLUDE
 
 #include<hgl/thread/ThreadMutex.h>
@@ -82,7 +82,7 @@ namespace hgl
 
 	public:
 
-		virtual ~SemSwapColl()HGL_DEFAULT_MEMFUNC;
+		virtual ~SemSwapColl()=default;
 
 		/**
 		 * 增加一个数据到合集中

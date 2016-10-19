@@ -1,4 +1,4 @@
-﻿#ifndef HGL_MAP_INCLUDE
+#ifndef HGL_MAP_INCLUDE
 #define HGL_MAP_INCLUDE
 
 #include<hgl/type/List.h>
@@ -34,7 +34,7 @@ namespace hgl
 	public:	//方法
 
 		_Map();
-		virtual ~_Map()HGL_DEFAULT_MEMFUNC;
+		virtual ~_Map()=default;
 
 		const	int		GetCount()const{return data_list.GetCount();}								///<取得数据总量
 
@@ -118,8 +118,8 @@ namespace hgl
 	{
 	public:
 
-		Map()HGL_DEFAULT_MEMFUNC;
-		virtual ~Map()HGL_DEFAULT_MEMFUNC;
+		Map()=default;
+		virtual ~Map()=default;
 	};//class Map
 
 	template<typename T_ID,typename T_U> T_U *GetObject(Map<T_ID,T_U *> &list,const T_ID &id)
@@ -144,7 +144,7 @@ namespace hgl
 
 	public:
 
-		_MapObject()HGL_DEFAULT_MEMFUNC;
+		_MapObject()=default;
 		virtual ~_MapObject()
 		{
 			if(SuperClass::GetCount()>0)
@@ -299,7 +299,7 @@ namespace hgl
 
 	public:
 
-		CusMapObject()HGL_DEFAULT_MEMFUNC;
+		CusMapObject()=default;
 		virtual ~CusMapObject()
 		{
 			_MapObject<F,T,DataPair>::Clear();
@@ -310,7 +310,7 @@ namespace hgl
 	{
 	public:
 
-		MapObject()HGL_DEFAULT_MEMFUNC;
+		MapObject()=default;
 		virtual ~MapObject()
 		{
 			CusMapObject<F,T,Pair<F,T *> >::Clear();

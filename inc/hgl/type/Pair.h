@@ -1,4 +1,4 @@
-﻿#ifndef HGL_TYPE_PAIR_INCLUDE
+#ifndef HGL_TYPE_PAIR_INCLUDE
 #define HGL_TYPE_PAIR_INCLUDE
 
 #include<hgl/platform/Platform.h>
@@ -18,7 +18,7 @@ namespace hgl
 
 	public:
 
-		Pair()HGL_DEFAULT_MEMFUNC;
+		Pair()=default;
 
 		Pair(const L &l,const R &r)
 		{
@@ -36,7 +36,7 @@ namespace hgl
 			operator=(p);
 		}
 
-		virtual ~Pair()HGL_DEFAULT_MEMFUNC;
+		virtual ~Pair()=default;
 
 		SelfClass &operator=(const SelfClass &p)
 		{

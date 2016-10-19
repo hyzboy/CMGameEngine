@@ -435,6 +435,9 @@
 
 namespace hgl
 {
+    #define enum_int(name)	enum name:int
+    #define enum_uint(name)	enum name:uint
+    
 	using uchar			=unsigned char;  	///< 无符号字符型
 	using ushort		=unsigned short;	///< 无符号短整型
 	using uint			=unsigned int;   	///< 无符号整型

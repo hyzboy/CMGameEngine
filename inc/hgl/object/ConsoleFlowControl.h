@@ -1,4 +1,4 @@
-﻿#ifndef HGL_CONSOLE_FLOW_CONTROL_INCLUDE
+#ifndef HGL_CONSOLE_FLOW_CONTROL_INCLUDE
 #define HGL_CONSOLE_FLOW_CONTROL_INCLUDE
 
 #include<hgl/object/ConsoleFlowObject.h>
@@ -64,13 +64,8 @@ namespace hgl
 	{
 	public:
 
-#ifdef HGL_CONSTRUCTION_REUSE
 		using ConsoleFlowControl::ConsoleFlowControl;
-#else
-		IAOFlowControl(){}
-		IAOFlowControl(ConsoleFlowObject *fo):ConsoleFlowControl(fo){}
-#endif//HGL_CONSTRUCTION_REUSE
-		virtual ~IAOFlowControl()HGL_DEFAULT_MEMFUNC;
+		virtual ~IAOFlowControl()=default;
 
 		virtual void InitiallyUpdate(){}															///<前初的刷新
 		virtual void LastlyUpdate(){}																///<最后的刷新

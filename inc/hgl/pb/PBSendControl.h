@@ -1,4 +1,4 @@
-﻿#ifndef HGL_PROTOCOL_BUFFER_SEND_CONTROL_INCLUDE
+#ifndef HGL_PROTOCOL_BUFFER_SEND_CONTROL_INCLUDE
 #define HGL_PROTOCOL_BUFFER_SEND_CONTROL_INCLUDE
 
 #include<hgl/pb/serialize.h>
@@ -44,7 +44,7 @@ namespace hgl
 				SendData=send_func;
 			}
 
-			virtual ~SendControl()HGL_DEFAULT_MEMFUNC;
+			virtual ~SendControl()=default;
 
 			template<typename ...ARGS> bool OnlySend(ARGS...args)
 			{

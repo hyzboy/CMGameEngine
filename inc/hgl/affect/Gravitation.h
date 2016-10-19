@@ -59,7 +59,7 @@ namespace hgl
 				hglSetProperty(MaxSpeed,this,Gravitation::GetMaxSpeed,	Gravitation::SetMaxSpeed);
 			}
 
-			virtual ~Gravitation()HGL_DEFAULT_MEMFUNC;
+			virtual ~Gravitation()=default;
 
 			virtual const u16char *GetClassName(){return u"Gravitation";}							///<取得类名
 

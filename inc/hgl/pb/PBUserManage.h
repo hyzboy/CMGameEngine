@@ -1,4 +1,4 @@
-﻿#ifndef HGL_PB_USER_MANAGE_INCLUDE
+#ifndef HGL_PB_USER_MANAGE_INCLUDE
 #define HGL_PB_USER_MANAGE_INCLUDE
 
 #include<hgl/thread/ThreadMutex.h>
@@ -36,7 +36,7 @@ namespace hgl
 				user_info=ui;
 			}
 
-			virtual ~UserInstance()HGL_DEFAULT_MEMFUNC;
+			virtual ~UserInstance()=default;
 		};//struct UserInstance
 
 		/**
@@ -47,7 +47,7 @@ namespace hgl
 		public:
 
 			UserOutput(){}
-			virtual ~UserOutput()HGL_DEFAULT_MEMFUNC;
+			virtual ~UserOutput()=default;
 
 			virtual bool Send(void *,int)=0;
 		};//struct UserOutput
@@ -71,9 +71,9 @@ namespace hgl
 				dos=o;
 			}
 
-			virtual ~UserDOSOutput()HGL_DEFAULT_MEMFUNC;
+			virtual ~UserDOSOutput()=default;
 
-			virtual bool Send(void *data,int size) HGL_OVERRIDE
+			virtual bool Send(void *data,int size) override
 			{
 				RETURN_BOOL(dos->WriteFully(data,size)==size);
 			}
@@ -87,9 +87,9 @@ namespace hgl
 		public:
 
 			using UO::UO;
-			virtual ~MTUserOutput()HGL_DEFAULT_MEMFUNC;
+			virtual ~MTUserOutput()=default;
 
-			virtual bool Send(void *data,int size) HGL_OVERRIDE
+			virtual bool Send(void *data,int size) override
 			{
 				ThreadMutexLock tml(&lock);
 
@@ -115,7 +115,7 @@ namespace hgl
 
 		public:
 
-			virtual ~UserTeam()HGL_DEFAULT_MEMFUNC;
+			virtual ~UserTeam()=default;
 
 			/**
 			 * 注册一个用户
@@ -223,7 +223,7 @@ namespace hgl
 
 		public:
 
-			virtual ~MTUserTeam()HGL_DEFAULT_MEMFUNC;
+			virtual ~MTUserTeam()=default;
 
 			/**
 			 * 注册一个用户

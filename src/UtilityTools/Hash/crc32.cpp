@@ -1,4 +1,4 @@
-﻿#include<hgl/ut/Hash.h>
+#include<hgl/ut/Hash.h>
 
 namespace hgl
 {
@@ -72,22 +72,22 @@ namespace hgl
 
 		public:
 
-			void GetName(UTF8String &str)const HGL_OVERRIDE{str=U8_TEXT("CRC32");}
-			void GetName(UTF16String &str)const HGL_OVERRIDE{str=U16_TEXT("CRC32");}
+			void GetName(UTF8String &str)const override{str=U8_TEXT("CRC32");}
+			void GetName(UTF16String &str)const override{str=U16_TEXT("CRC32");}
 
-			const int GetHashBytes()const HGL_OVERRIDE{return 4;}
+			const int GetHashBytes()const override{return 4;}
 
-			void Init()HGL_OVERRIDE
+			void Init()override
 			{
 				result=0;
 			}
 
-			void Update(const void *input,uint inputLen)HGL_OVERRIDE
+			void Update(const void *input,uint inputLen)override
 			{
 				result=CountCRC32(result,(const uint8 *)input,inputLen);
 			}
 
-			void Final(void *digest)HGL_OVERRIDE
+			void Final(void *digest)override
 			{
 				*(uint32 *)digest=result;
 			}

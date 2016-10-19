@@ -1,4 +1,4 @@
-﻿#ifndef HGL_GRAPH_TRANSFORM_INCLUDE
+#ifndef HGL_GRAPH_TRANSFORM_INCLUDE
 #define HGL_GRAPH_TRANSFORM_INCLUDE
 
 #include<hgl/VectorMath.h>
@@ -13,8 +13,8 @@ namespace hgl
 		{
 		public:	//方法
 
-			Transform()HGL_DEFAULT_MEMFUNC;
-			virtual ~Transform()HGL_DEFAULT_MEMFUNC;
+			Transform()=default;
+			virtual ~Transform()=default;
 
 			virtual void UpdateToMatrix(Matrix4f &mat)const{};										///<使用这个变换更新矩阵
 		};//class Transform
@@ -31,7 +31,7 @@ namespace hgl
 		public:	//方法
 
 			TransformTranslate(){x=y=z=0;}
-			virtual ~TransformTranslate()HGL_DEFAULT_MEMFUNC;
+			virtual ~TransformTranslate()=default;
 
 			void UpdateToMatrix(Matrix4f &mat)const;
 		};//class TransformTranslate
@@ -49,7 +49,7 @@ namespace hgl
 		public:	//方法
 
 			TransformRotate(){angle=x=y=z=0;}
-			virtual ~TransformRotate()HGL_DEFAULT_MEMFUNC;
+			virtual ~TransformRotate()=default;
 
 			void UpdateToMatrix(Matrix4f &mat)const;
 		};//class TransformRotate
@@ -66,7 +66,7 @@ namespace hgl
 		public:	//方法
 
 			TransformScale(){x=y=z=1.0f;}
-			virtual ~TransformScale()HGL_DEFAULT_MEMFUNC;
+			virtual ~TransformScale()=default;
 
 			void UpdateToMatrix(Matrix4f &mat)const;
 		};//class TransformScale
@@ -83,7 +83,7 @@ namespace hgl
 		public:
 
 			TransformMatrix();
-			virtual ~TransformMatrix()HGL_DEFAULT_MEMFUNC;
+			virtual ~TransformMatrix()=default;
 
 			void UpdateToMatrix(Matrix4f &mat)const;
 		};//class TransformMatrix

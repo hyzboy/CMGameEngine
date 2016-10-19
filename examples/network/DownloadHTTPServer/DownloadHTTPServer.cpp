@@ -1,4 +1,4 @@
-﻿#include<hgl/ConsoleServer.h>
+#include<hgl/ConsoleServer.h>
 
 using namespace hgl;
 using namespace hgl::network;
@@ -23,7 +23,7 @@ public:
 		close(sock);
 	}
 
-	bool Execute()// HGL_OVERRIDE
+	bool Execute()// override
 	{
 		buf_size=recv(sock,buf,1024,0);
 

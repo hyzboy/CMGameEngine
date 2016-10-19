@@ -1,4 +1,4 @@
-﻿#ifndef HGL_PB_SERIALIZE_INCLUDE
+#ifndef HGL_PB_SERIALIZE_INCLUDE
 #define HGL_PB_SERIALIZE_INCLUDE
 
 #include<hgl/MemBlock.h>
@@ -18,8 +18,8 @@ namespace hgl
 
 		public:
 
-			Serialize()HGL_DEFAULT_MEMFUNC;
-			virtual ~Serialize()HGL_DEFAULT_MEMFUNC;
+			Serialize()=default;
+			virtual ~Serialize()=default;
 
 			void ClearData()
 			{

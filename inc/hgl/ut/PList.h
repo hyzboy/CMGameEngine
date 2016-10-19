@@ -1,4 +1,4 @@
-﻿#ifndef HGL_PLIST_INCLUDE
+#ifndef HGL_PLIST_INCLUDE
 #define HGL_PLIST_INCLUDE
 
 #include<hgl/type/Map.h>
@@ -26,7 +26,7 @@ namespace hgl
 
 	public:
 
-		virtual ~PList()HGL_DEFAULT_MEMFUNC;
+		virtual ~PList()=default;
 
         virtual bool Add(const T &key)                                                              ///<向列表中增加一项
         {

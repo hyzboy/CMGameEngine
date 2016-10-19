@@ -66,7 +66,6 @@ namespace hgl
 				return(vp_func!=v);
 			}
 
-#ifdef HGL_VARIADIC_TEMPLATES							//不用关心动态模板参数多一次调用问题，在开启优化编译时，这种会直接被优化掉
 			template<typename ...ARGS>
 			RT operator()(ARGS...args)
 			{
@@ -90,7 +89,6 @@ namespace hgl
 			{
 				return (((_Object *)tp)->*(func_pointer))(args...);
 			}
-#endif//HGL_VARIADIC_TEMPLATES
 		};//template<typename RT,typename Func> struct EventFunc
 
 		template<typename Func> struct EventFunc<void,Func>
@@ -145,7 +143,6 @@ namespace hgl
 				return(vp_func!=v);
 			}
 
-#ifdef HGL_VARIADIC_TEMPLATES							//不用关心动态模板参数多一次调用问题，在开启优化编译时，这种会直接被优化掉
 			template<typename ...ARGS>
 			void operator()(ARGS...args)
 			{
@@ -169,7 +166,6 @@ namespace hgl
 			{
 				(((_Object *)tp)->*(func_pointer))(args...);
 			}
-#endif//HGL_VARIADIC_TEMPLATES
 		};//template<void,typename Func> struct EventFunc
 
 		#define SetEventCall(event_obj,obj_this,class_name,event_func)	{	\

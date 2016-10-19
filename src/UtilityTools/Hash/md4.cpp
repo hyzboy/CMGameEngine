@@ -1,4 +1,4 @@
-﻿#include<hgl/ut/Hash.h>
+#include<hgl/ut/Hash.h>
 #include<hgl/type/DataType.h>
 
 namespace hgl
@@ -151,12 +151,12 @@ namespace hgl
 
 		public:
 
-			void GetName(UTF8String &str)const HGL_OVERRIDE{str="MD4";}
-			void GetName(UTF16String &str)const HGL_OVERRIDE{str=U16_TEXT("MD4");}
+			void GetName(UTF8String &str)const override{str="MD4";}
+			void GetName(UTF16String &str)const override{str=U16_TEXT("MD4");}
 
-			const int GetHashBytes()const HGL_OVERRIDE{return DIGEST_SIZE;}
+			const int GetHashBytes()const override{return DIGEST_SIZE;}
 
-			void Init()HGL_OVERRIDE
+			void Init()override
 			{
 				count[0] = count[1] = 0;
 				state[0] = 0x67452301;
@@ -165,7 +165,7 @@ namespace hgl
 				state[3] = 0x10325476;
 			}
 
-			void Update(const void *input,uint inputLen)HGL_OVERRIDE
+			void Update(const void *input,uint inputLen)override
 			{
 				unsigned int i, index, partLen;
 
@@ -196,7 +196,7 @@ namespace hgl
 				memcpy(&buffer[index], ((uchar *)input)+i, inputLen-i);
 			}
 
-			void Final(void *digest)HGL_OVERRIDE
+			void Final(void *digest)override
 			{
 				static const unsigned char PADDING[64] =
 				{

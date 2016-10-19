@@ -1,4 +1,4 @@
-﻿#ifndef HGL_EVENTOBJECT_INCLUDE
+#ifndef HGL_EVENTOBJECT_INCLUDE
 #define HGL_EVENTOBJECT_INCLUDE
 
 #include<hgl/object/VisualObject.h>
@@ -28,7 +28,7 @@ namespace hgl
 		public:
 
 			EventObject();
-			virtual ~EventObject()HGL_DEFAULT_MEMFUNC;
+			virtual ~EventObject()=default;
 
 			virtual void Destroy();                                                                     //<销毁当前对象
 		};//class EventObject

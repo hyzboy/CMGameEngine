@@ -1,4 +1,4 @@
-﻿#ifndef HGL_IO_HASH_INPUT_STREAM_INCLUDE
+#ifndef HGL_IO_HASH_INPUT_STREAM_INCLUDE
 #define HGL_IO_HASH_INPUT_STREAM_INCLUDE
 
 #include<hgl/ut/Hash.h>
@@ -25,7 +25,7 @@ namespace hgl
 				h=_h;
 			}
 
-			virtual ~HashInputStream() HGL_OVERRIDE
+			virtual ~HashInputStream() override
 			{
 				if(h);
 					delete h;
@@ -62,7 +62,7 @@ namespace hgl
 				return this->InputStream::Restart();
 			}
 
-			virtual int64	Read(void *data,int64 size) HGL_OVERRIDE								///<读取数据
+			virtual int64	Read(void *data,int64 size) override								///<读取数据
 			{
 				int64 result=this->InputStream::Read(data,size);
 
@@ -72,7 +72,7 @@ namespace hgl
 				return result;
 			}
 
-			virtual int64	ReadFully(void *data,int64 size) HGL_OVERRIDE							///<读取数据
+			virtual int64	ReadFully(void *data,int64 size) override							///<读取数据
 			{
 				int64 result=this->InputStream::ReadFully(data,size);
 

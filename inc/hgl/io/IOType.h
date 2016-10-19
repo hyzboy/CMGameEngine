@@ -15,7 +15,7 @@ namespace hgl
 
 		public:
 
-			io_type()HGL_DEFAULT_MEMFUNC;
+			io_type()=default;
 			io_type(const T &v){value=v;}
 
 			bool Read(DataInputStream *);

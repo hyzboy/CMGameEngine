@@ -1,4 +1,4 @@
-﻿protected:
+protected:
 
 	ALbyte *audio_data;
 	int audio_data_size;
@@ -32,7 +32,7 @@
 	void ClearBuffer();
 
 	bool Playback();
-	virtual bool Execute() HGL_OVERRIDE;
+	virtual bool Execute() override;
 
 	void InitPrivate();
 	bool Load(AudioFileType);

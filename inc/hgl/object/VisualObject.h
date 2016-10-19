@@ -1,4 +1,4 @@
-﻿#ifndef HGL_VISUALOBJECT_INCLUDE
+#ifndef HGL_VISUALOBJECT_INCLUDE
 #define HGL_VISUALOBJECT_INCLUDE
 
 #include<hgl/object/EnumObject.h>
@@ -24,7 +24,7 @@ namespace hgl
 		public: //方法
 
 			VisualObject();
-			virtual ~VisualObject()HGL_DEFAULT_MEMFUNC;
+			virtual ~VisualObject()=default;
 
 			virtual void Draw(const Matrix4f *);														///<对象绘制函数
 			virtual void DrawObject(const Matrix4f *mv){Draw(mv);}										///<对象绘制

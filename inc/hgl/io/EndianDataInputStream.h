@@ -11,12 +11,8 @@ namespace hgl
 		{
 		public:
 
-#ifdef HGL_CONSTRUCTION_REUSE
 			using DataInputStream::DataInputStream;
-#else
-			DirectDataInputStream(InputStream *is):DataInputStream(is){}
-#endif//HGL_CONSTRUCTION_REUSE
-			virtual ~DirectDataInputStream()HGL_DEFAULT_MEMFUNC;
+			virtual ~DirectDataInputStream()=default;
 
 			#define STREAM_DIRECT_READ(type,name)	virtual bool Read##name(type &value)	\
 													{	\
@@ -50,12 +46,8 @@ namespace hgl
 		{
 		public:
 
-#ifdef HGL_CONSTRUCTION_REUSE
 			using DataInputStream::DataInputStream;
-#else
-			SwapDataInputStream(InputStream* is):DataInputStream(is){}
-#endif//HGL_CONSTRUCTION_REUSE
-			virtual ~SwapDataInputStream()HGL_DEFAULT_MEMFUNC;
+			virtual ~SwapDataInputStream()=default;
 
 			#define STREAM_SWAP_READ(type,name) virtual bool Read##name(type &value)	\
 												{\

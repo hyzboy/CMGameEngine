@@ -28,7 +28,7 @@ namespace hgl
 
 		protected:
 
-			void ProcDisconnect()HGL_DEFAULT_MEMFUNC;
+			void ProcDisconnect()=default;
 			int ProcRecv(int)=default;
 			int ProcSend(int,int &)=default;
 
@@ -40,7 +40,7 @@ namespace hgl
 		public:
 
 			SCTPSocket();
-			virtual ~SCTPSocket()HGL_DEFAULT_MEMFUNC;
+			virtual ~SCTPSocket()=default;
 
 			virtual void UseSocket(int,const sockaddr_in *addr=nullptr);							///<使用指定socket
 		};//class SCTPSocket
@@ -53,7 +53,7 @@ namespace hgl
 		public:
 
 			using SCTPSocket::SCTPSocket;
-			virtual ~SCTPO2OSocket()HGL_DEFAULT_MEMFUNC;
+			virtual ~SCTPO2OSocket()=default;
 
 			virtual bool SendMsg(const void *,int len,uint16 stream);								///<发送一个数据包
 			virtual bool RecvMsg(MemBlock<char> *,uint16 &stream);									///<接收一个数据包
@@ -64,7 +64,7 @@ namespace hgl
 		public:
 
 			using SCTPSocket::SCTPSocket;
-			virtual ~SCTPO2MSocket()HGL_DEFAULT_MEMFUNC;
+			virtual ~SCTPO2MSocket()=default;
 
 			virtual bool Create();																	///<创建一个Socket
 

@@ -1,4 +1,4 @@
-﻿#ifndef HGL_FIXEDLIST_INCLUDE
+#ifndef HGL_FIXEDLIST_INCLUDE
 #define HGL_FIXEDLIST_INCLUDE
 
 #include<hgl/type/DataType.h>
@@ -58,12 +58,7 @@ namespace hgl
 	{
 	public:
 
-#ifdef HGL_CONSTRUCTION_REUSE
 		using FixedList<T *>::FixedList;
-#else
-		FixedObjectList():FixedList<T *>(){}
-		FixedObjectList(int n):FixedList<T *>(n){}
-#endif//HGL_CONSTRUCTION_REUSE
 
 		virtual ~FixedObjectList(){Clear();}
 
@@ -77,14 +72,8 @@ namespace hgl
 
 	public:
 
-#ifdef HGL_CONSTRUCTION_REUSE
 		using FixedList<T>::FixedList;
-#else
-		MTFixedList():FixedList<T>(){}
-		MTFixedList(int n):FixedList<T>(n){}
-#endif//HGL_CONSTRUCTION_REUSE
-
-		virtual ~MTFixedList()HGL_DEFAULT_MEMFUNC;
+		virtual ~MTFixedList()=default;
 
 	public:
 
@@ -238,12 +227,7 @@ namespace hgl
 	{
 	public:
 
-#ifdef HGL_CONSTRUCTION_REUSE
 		using MTFixedList<T *>::MTFixedList;
-#else
-		MTFixedObjectList():MTFixedList<T *>(){}
-		MTFixedObjectList(int n):MTFixedList<T *>(n){}
-#endif//HGL_CONSTRUCTION_REUSE
 		virtual ~MTFixedObjectList()
 		{
 			MTFixedList<T *>::SafeClear();

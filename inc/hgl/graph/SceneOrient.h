@@ -1,4 +1,4 @@
-﻿#ifndef HGL_GRAPH_SCENE_ORIENT_INCLUDE
+#ifndef HGL_GRAPH_SCENE_ORIENT_INCLUDE
 #define HGL_GRAPH_SCENE_ORIENT_INCLUDE
 
 //#include<hgl/type/List.h>
@@ -27,7 +27,7 @@ namespace hgl
 		public:
 
 			SceneOrient();
-			virtual ~SceneOrient()HGL_DEFAULT_MEMFUNC;
+			virtual ~SceneOrient()=default;
 
 					Matrix4f &	SetLocalMatrix				(const Matrix4f &);											///<设定当前节点矩阵
 					Matrix4f &	SetLocalToWorldMatrix		(const Matrix4f &);											///<设定当前节点到世界矩阵

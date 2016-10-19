@@ -7,15 +7,15 @@
 #define HGL_USE_APR			//使用Apache Portable Runtime
 //#define HGL_USE_C_IO		//使用C IO库
 
-#if _MSC_VER < 1500							//Visual C++ 2008(9.0)
-	#error Please upgrade your compiler or development tools to Microsoft C/C++ 15.0 (Visual C++ 2008) or later.
+#if _MSC_VER < 1900							//Visual C++ 2015(19)
+	#error Please upgrade your compiler or development tools to Microsoft C/C++ 19.0 (Visual C++ 2015) or later.
 #else
 	#if _MSC_VER == 1900
-		#define HGL_LIB_COMPILER_VERSION	OS_TEXT("19")
+		#define HGL_LIB_COMPILER_VERSION	OS_TEXT("19")        //Visual C++ 2015
 	#elif _MSC_VER == 1800
-		#define HGL_LIB_COMPILER_VERSION	OS_TEXT("18")
+		#define HGL_LIB_COMPILER_VERSION	OS_TEXT("18")        //Visual C++ 2013
 	#elif _MSC_VER == 1700
-		#define HGL_LIB_COMPILER_VERSION	OS_TEXT("17")
+		#define HGL_LIB_COMPILER_VERSION	OS_TEXT("17")        //Visual C++ 2012
 	#elif _MSC_VER == 1600
 		#if _MSC_FULL_VER < 160040219		//Visual C++ 2010 SP1
 			#error Please install Visual C++ 2010 Service Pack 1 and Windows SDK v7.1.
@@ -35,33 +35,6 @@
 #endif//_MSC_VER
 
 //--------------------------------------------------------------------------------------------------
-#if _MSC_VER>=1800
-	#define HGL_VARIADIC_TEMPLATES				//变长参数模板
-	#define HGL_INITIALIZER_LIST				//初始化列表
-#endif//VC2013
-
-#if _MSC_VER>=1700
-// 		#define HGL_ATOMIC_CPP11					//C++11原子模板
-	#define HGL_CONSTRUCTION_REUSE				//构造函数复用
-	#define HGL_DEFAULT_MEMFUNC 	=default
-	#define HGL_OVERRIDE			override
-#else
-	#define HGL_DEFAULT_MEMFUNC		{}
-	#define HGL_OVERRIDE
-#endif//VC2012
-
-#if _MSC_VER < 1700 // VC2012
-	#define _mm_set_ss set1_ps
-#endif
-
-#if _MSC_VER < 1800 // VC2013
-#define nullptr				NULL
-#endif//
-
-#define HGL_FORCE_INLINE	__forceinline
-
-#define HGL_THREAD			__declspec(thread)
-
 #define HGL_FMT_I64			"%I64d"
 #define HGL_FMT_U64			"%I64u"
 //参考文档最后查阅支持版本为VC2013，网址：http://msdn.microsoft.com/en-us/library/tcxf1dw6.aspx

@@ -71,8 +71,8 @@ namespace hgl
 	{
 	public:
 
-		DevilCommand()HGL_DEFAULT_MEMFUNC;
-		virtual ~DevilCommand()HGL_DEFAULT_MEMFUNC;
+		DevilCommand()=default;
+		virtual ~DevilCommand()=default;
 
 		virtual bool Run(){return false;}
 	};
@@ -85,7 +85,7 @@ namespace hgl
 
 	public:
 
-		virtual ~DevilFuncCall()HGL_DEFAULT_MEMFUNC;
+		virtual ~DevilFuncCall()=default;
 
 		virtual bool Run(DevilScriptContext *)=0;
 	};
@@ -109,7 +109,7 @@ namespace hgl
 			type=tt;
 		}
 
-		virtual ~DevilValueInterface()HGL_DEFAULT_MEMFUNC;
+		virtual ~DevilValueInterface()=default;
 	};
 
 	template<typename T> class DevilValue:public DevilValueInterface								//变量
@@ -122,20 +122,15 @@ namespace hgl
 
 	public:
 
-#ifdef HGL_CONSTRUCTION_REUSE
 		using DevilValueInterface::DevilValueInterface;
-#else
-		DevilValue(DevilScriptModule *dm,eTokenType tt):DevilValueInterface(dm,tt){};
-#endif//HGL_CONSTRUCTION_REUSE
-
-    	virtual ~DevilValue()HGL_DEFAULT_MEMFUNC;
+    	virtual ~DevilValue()=default;
 	};
 
 	class DevilCompInterface																		//比较基类
 	{
 	public:
 
-    	virtual ~DevilCompInterface()HGL_DEFAULT_MEMFUNC;
+    	virtual ~DevilCompInterface()=default;
 
     	virtual bool Comp()=0;
 	};
@@ -285,7 +280,7 @@ namespace hgl
 	{
 	public:
 
-		virtual ~DevilSystemFuncCall()HGL_DEFAULT_MEMFUNC;
+		virtual ~DevilSystemFuncCall()=default;
 
 		virtual bool Run(DevilScriptContext *)=0;
 	};

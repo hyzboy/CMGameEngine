@@ -1,4 +1,4 @@
-﻿#ifndef HGL_NETWORK_SOCKET_MANAGE_THREAD_INCLUDE
+#ifndef HGL_NETWORK_SOCKET_MANAGE_THREAD_INCLUDE
 #define HGL_NETWORK_SOCKET_MANAGE_THREAD_INCLUDE
 
 #include<hgl/thread/Thread.h>
@@ -53,9 +53,9 @@ namespace hgl
 			SocketManageThread();
 			virtual ~SocketManageThread();
 
-			virtual bool Execute()HGL_OVERRIDE;														///<本线程刷新函数
+			virtual bool Execute()override;														///<本线程刷新函数
 
-			virtual bool ProcStartThread()HGL_OVERRIDE=0;
+			virtual bool ProcStartThread()override=0;
 			virtual void ProcError(IOSocket **,const int)=0;										///<处理错误Socket列表函数
 			virtual bool ProcEvent(IOSocket *,int)=0;												///<处理事件Socket列表函数(需使用者自行重载处理)
 

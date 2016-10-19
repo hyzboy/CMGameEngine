@@ -22,7 +22,7 @@ namespace hgl
 
 	public:
 
-		virtual ~ResPoolManage()HGL_DEFAULT_MEMFUNC;
+		virtual ~ResPoolManage()=default;
 
 		virtual void Clear()
 		{

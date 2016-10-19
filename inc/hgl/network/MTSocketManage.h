@@ -1,4 +1,4 @@
-﻿#ifndef HGL_NETWORK_MULTI_THREAD_SOCKET_MANAGE_INCLUDE
+#ifndef HGL_NETWORK_MULTI_THREAD_SOCKET_MANAGE_INCLUDE
 #define HGL_NETWORK_MULTI_THREAD_SOCKET_MANAGE_INCLUDE
 
 #include<hgl/type/Set.h>
@@ -39,7 +39,7 @@ namespace hgl
 				manage=sm;
 			}
 
-			virtual void ProcError(IOSocket **sock_list,const int count)HGL_OVERRIDE
+			virtual void ProcError(IOSocket **sock_list,const int count)override
 			{
 				manage->ProcError(this,sock_list,count);			//将错误回传给MTSocketManage
 			}

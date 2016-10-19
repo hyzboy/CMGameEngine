@@ -4,6 +4,19 @@
 #include<hgl/platform/compiler/EventFunc.h>
 namespace hgl
 {
+    /**
+     * 只读属性
+     */
+    template<typename T> class PropertyRead
+    {
+	public:
+
+		DefEvent(T,Get,() const);
+    };//template<typename T> class PropertyRead
+    
+    /**
+     * 属性
+     */
 	template<typename T> class Property
 	{
 	public:
@@ -21,7 +34,6 @@ namespace hgl
 
 		virtual ~Property()	{}
 
-#ifdef HGL_VARIADIC_TEMPLATES
 		operator T() const{return Get();}
 		void operator = (T v){Set(v);}
 		void operator = (const Property<T> &v){Set(v.operator T());}
@@ -46,32 +58,6 @@ namespace hgl
 
 		void operator >>= (int n)	{	Set((operator T())>>n);}
 		void operator <<= (int n)	{	Set((operator T())<<n);}
-#else
-		operator T() const{return CallEvent(Get,());}
-		void operator = (T v){CallEvent(Set,(v));}
-		void operator = (const Property<T> &v){CallEvent(Set,(v.operator T()));}
-
-        T operator !(){ return !(operator T());}
-        T operator ~(){ return ~(operator T());}
-
-		T operator ++ ()	{	T v=operator T();   CallEvent(Set,(++v));   return v;	}           ///<前置++
-		T operator -- ()	{	T v=operator T();   CallEvent(Set,(--v));	return v;   }           ///<前置--
-
-		T operator ++ (int)	{	T r,v;  v=operator T(); r=v; CallEvent(Set,(++v)); return r;	}   ///<后置++
-		T operator -- (int)	{	T r,v;  v=operator T(); r=v; CallEvent(Set,(--v)); return r;	}   ///<后置--
-
-		void operator += (T v)	{	if(v){CallEvent(Set,(operator T() + v));}	}
-		void operator -= (T v)	{	if(v){CallEvent(Set,(operator T() - v));}	}
-		void operator *= (T v)	{	CallEvent(Set,(operator T() * v));	}
-		void operator /= (T v)	{	CallEvent(Set,(operator T() / v));	}
-		void operator %= (T v)	{	CallEvent(Set,(operator T() % v));	}
-
-        void operator &= (T v)	{	CallEvent(Set,(operator T() & v));	}
-        void operator |= (T v)	{	CallEvent(Set,(operator T() | v));	}
-
-		void operator >>= (int n)	{	CallEvent(Set,((operator T())>>n));}
-		void operator <<= (int n)	{	CallEvent(Set,((operator T())<<n));}
-#endif//HGL_VARIADIC_TEMPLATES
 
 		T operator >> (int n)	{	return (operator T())>>n;}
 		T operator << (int n)	{	return (operator T())<<n;}
@@ -84,13 +70,8 @@ namespace hgl
 	{
 	public:
 
-#ifdef HGL_VARIADIC_TEMPLATES
 		T *operator ->()const{return Property<T *>::Get();}
 		void operator =(void *pointer){Property<T *>::Set((T *)pointer);}
-#else
-		T *operator ->()const{return CallEvent(Property<T *>::Get,());}
-		void operator =(void *pointer){CallEvent(Property<T *>::Set,((T *)pointer));}
-#endif//HGL_VARIADIC_TEMPLATES
 	};//class PropertyObject
 
 	#ifdef __BORLANDC__

@@ -1,4 +1,4 @@
-﻿#ifndef HGL_GRAPH_RENDER_TO_TEXTURE_INCLUDE
+#ifndef HGL_GRAPH_RENDER_TO_TEXTURE_INCLUDE
 #define HGL_GRAPH_RENDER_TO_TEXTURE_INCLUDE
 
 #include<hgl/graph/TextureFormat.h>
@@ -58,7 +58,7 @@ namespace hgl
 
 			Texture2D *GetTexture(){return tex_color;}
 
-			bool Use()HGL_OVERRIDE;
+			bool Use()override;
 		};//class RenderToTextureColor
 
 		/**
@@ -79,7 +79,7 @@ namespace hgl
 
 			Texture2D *GetTexture(){return tex_depth;}
 
-			bool Use()HGL_OVERRIDE;
+			bool Use()override;
 		};//class RenderToTextureDepth
 
 		/**
@@ -105,7 +105,7 @@ namespace hgl
 			Texture2D *GetColorTexture(){return tex_color;}
 			Texture2D *GetDepthTexture(){return tex_depth;}
 
-			bool Use()HGL_OVERRIDE;
+			bool Use()override;
 		};//class RenderToTextureColorDepth
 
 		/**
@@ -131,7 +131,7 @@ namespace hgl
 			Texture2DArray *GetColorTexture(){return tex_color;}
 			Texture2D *		GetDepthTexture(){return tex_depth;}
 
-			bool Use()HGL_OVERRIDE;
+			bool Use()override;
 		};//class RenderToTextureLayer
 
 		class RenderToTextureCubeMap:public RenderToTexture

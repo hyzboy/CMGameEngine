@@ -1,4 +1,4 @@
-﻿#ifndef HGL_LOGGER_INCLUDE
+#ifndef HGL_LOGGER_INCLUDE
 #define HGL_LOGGER_INCLUDE
 
 #include<hgl/type/BaseString.h>
@@ -27,7 +27,7 @@ namespace hgl
 		public:
 
 			Logger(LogLevel l){min_level=l;}
-			virtual ~Logger()HGL_DEFAULT_MEMFUNC;
+			virtual ~Logger()=default;
 
 			const LogLevel GetLevel()const{return min_level;}										///<取得最小输出级别
 

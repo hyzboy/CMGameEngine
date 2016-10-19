@@ -1,4 +1,4 @@
-﻿#ifndef HGL_NETWORK_IP_INCLUDE
+#ifndef HGL_NETWORK_IP_INCLUDE
 #define HGL_NETWORK_IP_INCLUDE
 
 #include<hgl/type/DataType.h>
@@ -114,7 +114,7 @@ namespace hgl
                 protocol=p;
             }
 
-            virtual ~IPAddress()HGL_DEFAULT_MEMFUNC;
+            virtual ~IPAddress()=default;
 
             virtual const int GetFamily()const=0;                                                           ///<返回网络家族
                     const int GetSocketType()const{return socktype;}                                        ///<返回Socket类型

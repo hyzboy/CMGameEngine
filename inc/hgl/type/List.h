@@ -4,10 +4,7 @@
 #include<hgl/object/Object.h>
 #include<hgl/LogInfo.h>
 #include<stdlib.h>
-
-#ifdef HGL_INITIALIZER_LIST
 #include<initializer_list>
-#endif//HGL_INITIALIZER_LIST
 
 #if defined(__BORLANDC__)||defined(__TURBOC__)||defined(__CODEGEARC__)
 #pragma warn -8022						//使hides vitual function警告无效
@@ -38,10 +35,7 @@ namespace hgl
 
 		List();                                                                                     ///<本类构造函数
 		List(const List<T> &lt){operator=(lt);}														///<本类构造函数
-
-#ifdef HGL_INITIALIZER_LIST
 		List(const std::initializer_list<T> &l);
-#endif//HGL_INITIALIZER_LIST
 
 		virtual ~List();                                                                            ///<本类析构函数
 
@@ -66,9 +60,7 @@ namespace hgl
             	void DeleteClear();																	///<清除所有数据并全部调用delete
 
 		virtual void operator = (const List<T> &);													///<操作符重载复制一个列表
-#ifdef HGL_INITIALIZER_LIST
 		virtual void operator = (const std::initializer_list<T> &l);
-#endif//HGL_INITIALIZER_LIST
 
 		virtual void operator += (const T &obj){Add(obj);}											///<操作符重载添加一个数据
 		virtual void operator << (const T &obj){Add(obj);}											///<操作符重载添加一个数据

@@ -1,4 +1,4 @@
-﻿#ifndef HGL_UDPSOCKET_INCLUDE
+#ifndef HGL_UDPSOCKET_INCLUDE
 #define HGL_UDPSOCKET_INCLUDE
 
 #include<hgl/type/DataType.h>
@@ -44,10 +44,10 @@ namespace hgl
 		{
         public:
 
-            virtual ~UDPLiteSocket()HGL_DEFAULT_MEMFUNC;
+            virtual ~UDPLiteSocket()=default;
 
-            bool Create(const IPAddress *)HGL_OVERRIDE;                                              ///<创建一个udp lite,并绑定一个IP地址与指定端口
-			bool Create(int family)HGL_OVERRIDE;                                                     ///<创建一个udp lite
+            bool Create(const IPAddress *)override;                                              ///<创建一个udp lite,并绑定一个IP地址与指定端口
+			bool Create(int family)override;                                                     ///<创建一个udp lite
 
 			void SetChecksumCoverage(int send_val=20,int recv_val=20);                               ///<设定UDPLite检验位长度,最小20
         };//class UDPLiteSocket
@@ -73,7 +73,7 @@ namespace hgl
 		public:
 
 			_UDPSocketCB(){ClearEvent();}															///<本类构造函数
-			virtual ~_UDPSocketCB()HGL_DEFAULT_MEMFUNC;
+			virtual ~_UDPSocketCB()=default;
 
 			virtual void ProcDisconnect()
 			{
@@ -84,22 +84,14 @@ namespace hgl
 			{
 				if(OnRecv==nullptr)return(-1);
 
-#ifdef HGL_VARIADIC_TEMPLATES
 				return OnRecv(this,size);
-#else
-				return CallEvent(OnRecv,(this,size));
-#endif//HGL_VARIADIC_TEMPLATES
 			}
 
 			virtual int ProcSend(int size,int &left_bytes)
 			{
 				if(OnSend==nullptr)return(-1);
 
-#ifdef HGL_VARIADIC_TEMPLATES
 				return OnSend(this,size,left_bytes);
-#else
-				return CallEvent(OnSend,(this,size,left_bytes));
-#endif//HGL_VARIADIC_TEMPLATES
 			}
 		};//class _UDPSocketCB
 

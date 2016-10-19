@@ -1,4 +1,4 @@
-﻿#ifndef HGL_TCP_SOCKET_INCLUDE
+#ifndef HGL_TCP_SOCKET_INCLUDE
 #define HGL_TCP_SOCKET_INCLUDE
 
 #include<hgl/network/IOSocket.h>
@@ -29,10 +29,10 @@ namespace hgl
 
 		public: //被动事件函数
 
-			virtual void ProcDisconnect()HGL_OVERRIDE{}												///<断线事件处理函数
-			virtual int ProcRecv(int recv_buf_size=-1,const double cur_time=0)HGL_OVERRIDE			///<接收数据事件处理函数
+			virtual void ProcDisconnect()override{}												///<断线事件处理函数
+			virtual int ProcRecv(int recv_buf_size=-1,const double cur_time=0)override			///<接收数据事件处理函数
 						{return IOSocket::ProcRecv(recv_buf_size,cur_time);}
-			virtual int ProcSend(int,int &left_bytes)HGL_OVERRIDE{return -1;}						///<发送数据事件处理函数
+			virtual int ProcSend(int,int &left_bytes)override{return -1;}						///<发送数据事件处理函数
 
 		public: //方法
 
@@ -76,33 +76,25 @@ namespace hgl
 
 			TCPSocketCB(){InitPrivate();}															///<本类构造函数
 			TCPSocketCB(int s,IPAddress *addr):TCPSocket(s,addr){InitPrivate();}			        ///<本类构造函数
-			virtual ~TCPSocketCB()HGL_DEFAULT_MEMFUNC;
+			virtual ~TCPSocketCB()=default;
 
-			virtual void ProcDisconnect() HGL_OVERRIDE
+			virtual void ProcDisconnect() override
 			{
 				SafeCallEvent(OnDisconnect,(this));
 			}
 
-			virtual int ProcRecv(int size,const double cur_time) HGL_OVERRIDE
+			virtual int ProcRecv(int size,const double cur_time) override
 			{
 				if(OnRecv==nullptr)return(-1);
 
-#ifdef HGL_VARIADIC_TEMPLATES
 				return OnRecv(this,size,cur_time);
-#else
-				return CallEvent(OnRecv,(this,size,cur_time));
-#endif//HGL_VARIADIC_TEMPLATES
 			}
 
-			virtual int ProcSend(int size,int &left_bytes) HGL_OVERRIDE
+			virtual int ProcSend(int size,int &left_bytes) override
 			{
 				if(OnSend==nullptr)return(-1);
 
-#ifdef HGL_VARIADIC_TEMPLATES
 				return OnSend(this,size,left_bytes);
-#else
-				return CallEvent(OnSend,(this,size,left_bytes));
-#endif//HGL_VARIADIC_TEMPLATES
 			}
 		};//class TCPSocketCB
 
@@ -129,11 +121,11 @@ namespace hgl
 
 		protected:
 
-			virtual int ProcRecv(int=-1,const double cur_time=0)HGL_OVERRIDE;						///<接收数据处理(被回调函数)
+			virtual int ProcRecv(int=-1,const double cur_time=0)override;						///<接收数据处理(被回调函数)
 
 		public:
 
-			virtual int ProcSend(int,int &left_bytes)HGL_OVERRIDE;									///<发送数据处理(用户主动调用函数)
+			virtual int ProcSend(int,int &left_bytes)override;									///<发送数据处理(用户主动调用函数)
 
 		public:
 
@@ -141,11 +133,11 @@ namespace hgl
 			TCPSocketRB(int s,IPAddress *addr);												        ///<本类构造函数
 			virtual ~TCPSocketRB();
 
-			virtual void UseSocket(int,IPAddress *addr)HGL_OVERRIDE;						        ///<使用指定socket
+			virtual void UseSocket(int,IPAddress *addr)override;						        ///<使用指定socket
 			virtual io::InputStream *GetInputStream(){return ris;}									///<取得输入流
 			virtual io::OutputStream *GetOutputStream(){return ros;}								///<取得输出流
 
-			const	int	GetLeftSendBytes()const HGL_OVERRIDE{return left_send_bytes;}				///<取得剩余可发送数据
+			const	int	GetLeftSendBytes()const override{return left_send_bytes;}				///<取得剩余可发送数据
 		};//class TCPSocketRB
 	}//namespace network
 

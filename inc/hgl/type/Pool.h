@@ -1,4 +1,4 @@
-﻿#ifndef HGL_POOL_INCLUDE
+#ifndef HGL_POOL_INCLUDE
 #define HGL_POOL_INCLUDE
 
 #include<hgl/type/List.h>
@@ -35,7 +35,7 @@ namespace hgl
 	public:
 
 		Pool(){count=0;history_max=0;}
-		virtual ~Pool()HGL_DEFAULT_MEMFUNC;
+		virtual ~Pool()=default;
 
 		virtual void	PreMalloc(int);																///<预分配空间
 
@@ -68,7 +68,7 @@ namespace hgl
 
 	public:
 
-		virtual ~MTPool()HGL_DEFAULT_MEMFUNC;
+		virtual ~MTPool()=default;
 
 		virtual T *ReadLock(int &c)																	///<读列表锁定(用于访问整个列表)
 		{
@@ -186,54 +186,41 @@ namespace hgl
 
 	public:
 
-#ifdef HGL_CONSTRUCTION_REUSE
 		using Pool<T *>::Pool;
-#else
-#endif//HGL_CONSTRUCTION_REUSE
 		virtual ~_ObjectPool(){Pool<T *>::ClearAll();}
 	};//template<typename T> class _ObjectPool
 
 	template<typename T> class ObjectPool:public _ObjectPool<T>										///对象池
 	{
-		virtual T *Create()HGL_OVERRIDE{return(new T());}
+		virtual T *Create()override{return(new T());}
 
 	public:
 
-#ifdef HGL_CONSTRUCTION_REUSE
 		using _ObjectPool<T>::_ObjectPool;
-#else
-#endif//HGL_CONSTRUCTION_REUSE
 		virtual ~ObjectPool(){_ObjectPool<T>::ClearAll();}
 	};//template<typename T> class ObjectPool
 
 	template<typename T> class _MTObjectPool:public MTPool<T *>										///多线程对象池
 	{
-		virtual T *Create() HGL_OVERRIDE=0;
+		virtual T *Create() override=0;
 
-		virtual void Clear(T *obj) HGL_OVERRIDE	{	if(obj)delete obj;	}
+		virtual void Clear(T *obj) override	{	if(obj)delete obj;	}
 
 	public:
 
-#ifdef HGL_CONSTRUCTION_REUSE
 		using MTPool<T *>::MTPool;
-#else
-#endif//HGL_CONSTRUCTION_REUSE
 		virtual ~_MTObjectPool(){MTPool<T *>::ClearAll();}
 	};//template<typename T> class MTObjectPool
 
 	template<typename T> class MTObjectPool:public _MTObjectPool<T>										///多线程对象池
 	{
-		virtual T *Create() HGL_OVERRIDE {return(new T());}
+		virtual T *Create() override {return(new T());}
 
-		virtual void Clear(T *obj) HGL_OVERRIDE	{	if(obj)delete obj;	}
+		virtual void Clear(T *obj) override	{	if(obj)delete obj;	}
 
 	public:
 
-#ifdef HGL_CONSTRUCTION_REUSE
 		using _MTObjectPool<T>::_MTObjectPool;
-
-#else
-#endif//HGL_CONSTRUCTION_REUSE
 		virtual ~MTObjectPool(){_MTObjectPool<T>::ClearAll();}
 	};//template<typename T> class MTObjectPool
 

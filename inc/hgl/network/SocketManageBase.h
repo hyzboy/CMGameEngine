@@ -1,4 +1,4 @@
-﻿#ifndef HGL_NETWORK_SOCKER_MANAGE_BASE_INCLUDE
+#ifndef HGL_NETWORK_SOCKER_MANAGE_BASE_INCLUDE
 #define HGL_NETWORK_SOCKER_MANAGE_BASE_INCLUDE
 
 #include<hgl/type/List.h>
@@ -14,7 +14,7 @@ namespace hgl
 		{
 		public:
 
-			virtual ~SocketManageBase()HGL_DEFAULT_MEMFUNC;
+			virtual ~SocketManageBase()=default;
 
 			virtual bool Join(int)=0;																///<加入一个Socket
 			virtual bool Join(const int *,int)=0;													///<加入一批Socket

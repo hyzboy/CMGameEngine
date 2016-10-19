@@ -1,4 +1,4 @@
-﻿#ifndef HGL_CDB_TABLE_INCLUDE
+#ifndef HGL_CDB_TABLE_INCLUDE
 #define HGL_CDB_TABLE_INCLUDE
 
 #include<hgl/type/Map.h>
@@ -31,7 +31,7 @@ namespace hgl
 		public:
 
 			CDBTable();																				///<本类构造函数
-			~CDBTable()HGL_DEFAULT_MEMFUNC;																	///<本类析构函数
+			~CDBTable()=default;																	///<本类析构函数
 
 			bool Load(io::DataInputStream *);														///<从流中加载一个表
 			bool Load(const OSString &);															///<从文件中加载一个表

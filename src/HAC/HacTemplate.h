@@ -31,7 +31,7 @@ namespace hgl
 	public:
 
 		HacTemplate();
-		virtual ~HacTemplate()HGL_DEFAULT_MEMFUNC;
+		virtual ~HacTemplate()=default;
 
 				bool 	FindFile(const UTF16String &);
 

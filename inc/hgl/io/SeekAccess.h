@@ -20,7 +20,7 @@ namespace hgl
 		{
 		public:
 
-			virtual ~SeekAccess()HGL_DEFAULT_MEMFUNC;
+			virtual ~SeekAccess()=default;
 
 			virtual bool	CanRestart()const=0;													///<是否可以复位
 			virtual bool	CanSeek()const=0;														///<是否可以定位

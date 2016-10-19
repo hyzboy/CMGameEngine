@@ -1,4 +1,4 @@
-﻿#ifndef HGL_SORT_INCLUDE
+#ifndef HGL_SORT_INCLUDE
 #define HGL_SORT_INCLUDE
 
 #include<hgl/TypeFunc.h>
@@ -29,7 +29,7 @@ namespace hgl
 			comp	=c;
 		}
 
-		virtual ~SortBase()HGL_DEFAULT_MEMFUNC;
+		virtual ~SortBase()=default;
 
 				int GetCount()const
 		{
