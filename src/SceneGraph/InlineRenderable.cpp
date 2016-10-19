@@ -10,6 +10,8 @@ namespace hgl
 	namespace graph
 	{
 		Texture1D *WhiteLine		=nullptr;
+		Texture1D *BlackWhiteLine	=nullptr;
+
 		Texture2D *BlackWhiteGrid	=nullptr;
         Texture2D *GrayWhiteGrid    =nullptr;
         Texture2D *BlueWhiteGrid    =nullptr;
@@ -291,9 +293,9 @@ namespace hgl
 
 			vb->Begin();
 
-			for (int i = 0; i < numberSlices/2; i++)
+			for (uint i = 0; i < numberSlices/2; i++)
 			{
-				for (int j = 0; j < numberSlices; j++)
+				for (uint j = 0; j < numberSlices; j++)
 				{
 					vb->Write(i * (numberSlices + 1) + j);
 					vb->Write((i + 1) * (numberSlices + 1) + j);
@@ -324,12 +326,12 @@ namespace hgl
 
 			float angleStep = (2.0f * HGL_PI) / ((float) numberSlices);
 
-			uint indexIndices;
+//			uint indexIndices;
 
 			// used later to help us calculating tangents vectors
 			float helpVector[3] = { 1.0f, 0.0f, 0.0f };
-			float helpQuaternion[4];
-			float helpMatrix[16];
+//			float helpQuaternion[4];
+//			float helpMatrix[16];
 
 			VB3f *vertex;
 			VB3f *normal;
@@ -340,9 +342,9 @@ namespace hgl
 			vertex->Begin();
 			normal->Begin();
 
-			for (int i = 0; i < numberParallels + 1; i++)
+			for (uint i = 0; i < numberParallels + 1; i++)
 			{
-				for (int j = 0; j < numberSlices + 1; j++)
+				for (uint j = 0; j < numberSlices + 1; j++)
 				{
 					uint vertexIndex = (i * (numberSlices + 1) + j) * 4;
 					uint normalIndex = (i * (numberSlices + 1) + j) * 3;
@@ -553,6 +555,14 @@ namespace hgl
 			}
 
 			{
+				const uint8 black_white_line[4] = { 255,0,255,0 };
+
+				BlackWhiteLine = new Texture1D;
+				BlackWhiteLine->SetImage(4, (void *)black_white_line, 4, HGL_SF_R8, HGL_R8);
+				BlackWhiteLine->SetMagFilter(HGL_FILTER_NEAREST);
+			}
+
+			{
 				const uint8 black_white_grid[16]={	0xFF,0xFF,0x00,0x00,
 													0xFF,0xFF,0x00,0x00,
 													0x00,0x00,0xFF,0xFF,
@@ -619,6 +629,9 @@ namespace hgl
             SAFE_CLEAR(BlueWhiteGrid);
             SAFE_CLEAR(GrayWhiteGrid);
 			SAFE_CLEAR(BlackWhiteGrid);
+
+			SAFE_CLEAR(BlackWhiteLine);
+			SAFE_CLEAR(WhiteLine);
 		}
 	}//namespace graph
 }//namespace hgl
