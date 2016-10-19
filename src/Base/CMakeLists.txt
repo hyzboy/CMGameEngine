@@ -15,7 +15,6 @@ SOURCE_GROUP("Object"	FILES ${BASE_OBJECT_SOURCE})
 SET(BASE_OTHER_SOURCE
 	Other/ProbSelect.cpp
 	Other/ExpendString.cpp
-	Other/Other.cpp
 	Other/Compress.cpp
 	Other/File.cpp
 	Other/TimeCount.cpp
