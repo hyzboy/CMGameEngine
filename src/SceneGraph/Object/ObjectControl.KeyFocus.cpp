@@ -1,4 +1,5 @@
 ﻿#include<hgl/gui/ObjectControl.h>
+#include<hgl/type/Vertex2.h>
 
 namespace hgl
 {
@@ -94,9 +95,9 @@ namespace hgl
 
 			int n=clas_object[ocKeyFocus].GetCount();
 
-			Vector2f center_point(center->view_scope.GetCenterX(),center->view_scope.GetCenterY());
-			Vector2f comp_point;
-			Vector2f offset;
+			Vertex2i center_point(center->view_scope.GetCenterX(),center->view_scope.GetCenterY());
+			Vertex2i comp_point;
+			Vertex2i offset;
 			int comp_ang;
 			int min_gap=-1,comp_gap;
 			GUIObject *fin_obj=nullptr;
@@ -107,42 +108,42 @@ namespace hgl
 
 				if(comp_obj==center)continue;
 
-                comp_point=Vector2f(comp_obj->view_scope.GetCenterX(),comp_obj->view_scope.GetCenterY());
+                comp_point=Vertex2i(comp_obj->view_scope.GetCenterX(),comp_obj->view_scope.GetCenterY());
 
 				//comp_ang=center_point.Angle(comp_point);
 				offset=comp_point-comp_point;
-				if(offset[0]>0)		//x>0
+				if(offset.x>0)		//x>0
 				{
 					comp_ang=0;		//向右
 
-					if(offset[1]<0)	//y<0
+					if(offset.y<0)	//y<0
 					{
-						if(abs(offset[1])>abs(offset[0]))comp_ang=270;			//向上
+						if(abs(offset.y)>abs(offset.x))comp_ang=270;			//向上
 					}
 					else
-					if(offset[1]>0)	//y>0
+					if(offset.y>0)	//y>0
 					{
-						if(abs(offset[1])>abs(offset[0]))comp_ang=90;			//向下
+						if(abs(offset.y)>abs(offset.x))comp_ang=90;			//向下
 					}
 				}
 				else
-				if(offset[0]<0)		//x<0
+				if(offset.x<0)		//x<0
 				{
 					comp_ang=180;		//向左
 
-					if(offset[1]<0)	//y<0
+					if(offset.y<0)	//y<0
 					{
-						if(abs(offset[1])>abs(offset[0]))comp_ang=270;			//向上
+						if(abs(offset.y)>abs(offset.x))comp_ang=270;			//向上
 					}
 					else
-					if(offset[1]>0)	//y>0
+					if(offset.y>0)	//y>0
 					{
-						if(abs(offset[1])>abs(offset[0]))comp_ang=90;			//向下
+						if(abs(offset.y)>abs(offset.x))comp_ang=90;			//向下
 					}
 				}
 				else
 				{
-					if(offset[1]<0)comp_ang=270;	//向上
+					if(offset.y<0)comp_ang=270;	//向上
 							else comp_ang=90;		//向下
 				}
 
