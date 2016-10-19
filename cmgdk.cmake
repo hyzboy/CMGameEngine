@@ -286,8 +286,8 @@ ENDIF()
 IF(UNIX)
 	MESSAGE("Host OS is UNIX")
 
-	SET(HGL_CONSOLE_MAIN_SOURCE ${CMGDK_PATH}/src/Platform/UNIX/UnixConsole.cpp)
-	SET(HGL_GRAPHICS_MAIN_SOURCE ${CMGDK_PATH}/src/Platform/UNIX/UnixOpenGL.cpp)
+	SET(HGL_CONSOLE_MAIN_SOURCE ${CMGDK_PATH}/src/Platform/UNIX/Console.cpp)
+	SET(HGL_GRAPHICS_MAIN_SOURCE ${CMGDK_PATH}/src/Platform/UNIX/OpenGL.cpp)
 
 	SET(HGL_BASE_LIB ${HGL_BASE_LIB} pthread dl rt)
 
@@ -336,8 +336,8 @@ ENDIF(UNIX)
 IF(WIN32)
 	MESSAGE("Host OS is Windows")
 
-	SET(HGL_CONSOLE_MAIN_SOURCE ${CMGDK_PATH}/src/Platform/Win/WinConsole.cpp)
-	SET(HGL_GRAPHICS_MAIN_SOURCE ${CMGDK_PATH}/src/Platform/Win/WinOpenGL.cpp)
+	SET(HGL_CONSOLE_MAIN_SOURCE ${CMGDK_PATH}/src/Platform/Win/Console.cpp)
+	SET(HGL_GRAPHICS_MAIN_SOURCE ${CMGDK_PATH}/src/Platform/Win/OpenGL.cpp)
 	SET(HGL_CONSOLE_LIB ${HGL_BASE_LIB} ${HGL_NETWORK_LIB} CM.Platform ws2_32.lib)
 	SET(HGL_GRAPHICS_LIB ${HGL_CONSOLE_LIB} CM.SceneGraphRender CM.RenderDevice CM.Platform ${HGL_OpenGL_LIB} OpenGL32.lib)
 

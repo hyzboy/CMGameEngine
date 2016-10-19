@@ -8,42 +8,45 @@ ENDIF()
 
 IF(UNIX)
 
-    SET(BASE_OS_APPLICATION_SOURCE UNIX/SystemInfoUNIX.cpp)
+    SET(BASE_OS_APPLICATION_SOURCE UNIX/SystemInfo.cpp)
 
-	SET(BASE_OS_LOG_SOURCE         UNIX/LogUnixConsole.cpp)
+	SET(BASE_OS_LOG_SOURCE         UNIX/LogConsole.cpp)
 
 	SET(BASE_MULTI_THREAD_SOURCE
-		UNIX/CondVarPOSIX.cpp
-		UNIX/RWLockPOSIX.cpp
-		UNIX/SemaphorePOSIX.cpp
-		UNIX/ThreadPOSIX.cpp
-		UNIX/ThreadMutexPOSIX.cpp)
+		UNIX/CondVar.cpp
+		UNIX/RWLock.cpp
+		UNIX/Semaphore.cpp
+		UNIX/Thread.cpp
+		UNIX/ThreadMutex.cpp)
 
 	SET(BASE_MULTI_PROCESS_SOURCE
-		UNIX/ProcMutexPOSIX.cpp
-		UNIX/ProcessPOSIX.cpp
+		UNIX/ProcMutex.cpp
+		UNIX/Process.cpp
 		UNIX/Pipe.cpp
 		UNIX/Fifo.cpp)
 
-    SET(BASE_TIME_SOURCE    UNIX/TimePOSIX.cpp
-                            UNIX/ExitUnix.cpp)
+    SET(BASE_TIME_SOURCE    UNIX/Time.cpp
+                            UNIX/Exit.cpp
+                            UNIX/DateTime.cpp)
 ENDIF(UNIX)
 
 IF(WIN32)
-    SET(BASE_OS_APPLICATION_SOURCE Win/SystemInfoWinNT.cpp)
+    SET(BASE_OS_APPLICATION_SOURCE Win/SystemInfo.cpp)
 
-	SET(BASE_OS_LOG_SOURCE         Win/LogWinConsole.cpp
-                                   Win/LogWinDialog.cpp)
+	SET(BASE_OS_LOG_SOURCE         Win/LogConsole.cpp
+                                   Win/LogDialog.cpp)
 
 	SET(BASE_MULTI_THREAD_SOURCE
-		Win/CondVarNT6.cpp
-		Win/RWLockNT6.cpp
-		Win/SemaphoreNT4.cpp
-		Win/ThreadNT4.cpp
-		Win/ThreadMutexNT4.cpp)
+		Win/CondVar.cpp
+		Win/RWLock.cpp
+		Win/Semaphore.cpp
+		Win/Thread.cpp
+		Win/ThreadMutex.cpp)
 
 	SET(BASE_MULTI_PROCESS_SOURCE
-		Win/ProcMutexNT4.cpp)
+		Win/ProcMutex.cpp)
+
+    SET(BASE_TIME_SOURCE    Win/DateTime.cpp)
 ENDIF(WIN32)
 
 SOURCE_GROUP("SystemInfo"   FILES ${BASE_OS_APPLICATION_SOURCE})
