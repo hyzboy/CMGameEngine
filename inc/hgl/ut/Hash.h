@@ -1,4 +1,4 @@
-#ifndef HGL_UTIL_HASH_INCLUDE
+﻿#ifndef HGL_UTIL_HASH_INCLUDE
 #define HGL_UTIL_HASH_INCLUDE
 
 #include<hgl/type/BaseString.h>

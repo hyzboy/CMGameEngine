@@ -1,4 +1,4 @@
-#ifndef HGL_AUDIO_SCENE_INCLUDE
+﻿#ifndef HGL_AUDIO_SCENE_INCLUDE
 #define HGL_AUDIO_SCENE_INCLUDE
 
 #include<hgl/VectorMath.h>

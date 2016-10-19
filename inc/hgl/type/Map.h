@@ -1,4 +1,4 @@
-#ifndef HGL_MAP_INCLUDE
+﻿#ifndef HGL_MAP_INCLUDE
 #define HGL_MAP_INCLUDE
 
 #include<hgl/type/List.h>

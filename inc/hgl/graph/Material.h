@@ -1,4 +1,4 @@
-#ifndef HGL_GRAPH_MATERIAL_INCLUDE
+﻿#ifndef HGL_GRAPH_MATERIAL_INCLUDE
 #define HGL_GRAPH_MATERIAL_INCLUDE
 
 #include<hgl/VectorMath.h>

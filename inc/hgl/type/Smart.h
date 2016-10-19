@@ -1,4 +1,4 @@
-#ifndef HGL_SMART_INCLUDE
+﻿#ifndef HGL_SMART_INCLUDE
 #define HGL_SMART_INCLUDE
 
 #include<hgl/TypeFunc.h>

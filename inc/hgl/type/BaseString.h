@@ -1,4 +1,4 @@
-#ifndef HGL_TYPE_BASE_STRING_INCLUDE
+﻿#ifndef HGL_TYPE_BASE_STRING_INCLUDE
 #define HGL_TYPE_BASE_STRING_INCLUDE
 
 #include<hgl/type/StringInstance.h>

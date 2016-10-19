@@ -1,4 +1,4 @@
-#ifndef HGL_ENUM_OBJECT_INCLUDE
+﻿#ifndef HGL_ENUM_OBJECT_INCLUDE
 #define HGL_ENUM_OBJECT_INCLUDE
 
 #include<hgl/object/Object.h>

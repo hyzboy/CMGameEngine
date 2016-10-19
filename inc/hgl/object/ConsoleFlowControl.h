@@ -1,4 +1,4 @@
-#ifndef HGL_CONSOLE_FLOW_CONTROL_INCLUDE
+﻿#ifndef HGL_CONSOLE_FLOW_CONTROL_INCLUDE
 #define HGL_CONSOLE_FLOW_CONTROL_INCLUDE
 
 #include<hgl/object/ConsoleFlowObject.h>

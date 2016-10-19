@@ -1,4 +1,4 @@
-#ifndef HGL_TYPE_SET_INCLUDE
+﻿#ifndef HGL_TYPE_SET_INCLUDE
 #define HGL_TYPE_SET_INCLUDE
 
 #include<hgl/type/List.h>

@@ -1,4 +1,4 @@
-#ifndef HGL_CDB_FIELD_INCLUDE
+﻿#ifndef HGL_CDB_FIELD_INCLUDE
 #define HGL_CDB_FIELD_INCLUDE
 
 #include<hgl/db/FieldType.h>

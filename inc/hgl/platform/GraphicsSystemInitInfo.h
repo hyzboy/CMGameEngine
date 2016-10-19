@@ -1,4 +1,4 @@
-#ifndef HGL_GRAPHICS_SYSTEM_INIT_INFO_INCLUDE
+﻿#ifndef HGL_GRAPHICS_SYSTEM_INIT_INFO_INCLUDE
 #define HGL_GRAPHICS_SYSTEM_INIT_INFO_INCLUDE
 
 #include<hgl/platform/ConsoleSystemInitInfo.h>

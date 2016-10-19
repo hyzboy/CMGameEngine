@@ -1,4 +1,4 @@
-#ifndef HGL_GRAPH_SCENE_NODE_INCLUDE
+﻿#ifndef HGL_GRAPH_SCENE_NODE_INCLUDE
 #define HGL_GRAPH_SCENE_NODE_INCLUDE
 
 #include<hgl/type/List.h>

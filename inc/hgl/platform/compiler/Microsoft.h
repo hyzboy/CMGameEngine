@@ -13,9 +13,6 @@
 	#if _MSC_VER == 1900
 		#define HGL_LIB_COMPILER_VERSION	OS_TEXT("19")        //Visual C++ 2015
 	#endif//_MSC_VER
-
-	#define enum_uint(name)	enum name:unsigned int
-	#define enum_int(name)	enum name:int
 #endif//_MSC_VER
 
 //--------------------------------------------------------------------------------------------------

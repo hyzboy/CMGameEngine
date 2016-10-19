@@ -1,4 +1,4 @@
-#ifndef HGL_AFFECTOR_TIMER_INCLUDE
+﻿#ifndef HGL_AFFECTOR_TIMER_INCLUDE
 #define HGL_AFFECTOR_TIMER_INCLUDE
 
 #include<hgl/affect/AffectorObject.h>

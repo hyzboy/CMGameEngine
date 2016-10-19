@@ -1,4 +1,4 @@
-#ifndef HGL_CDB_TABLE_INCLUDE
+﻿#ifndef HGL_CDB_TABLE_INCLUDE
 #define HGL_CDB_TABLE_INCLUDE
 
 #include<hgl/type/Map.h>

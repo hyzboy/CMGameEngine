@@ -1,4 +1,4 @@
-#ifndef HGL_FLOW_CONTROL_INCLUDE
+﻿#ifndef HGL_FLOW_CONTROL_INCLUDE
 #define HGL_FLOW_CONTROL_INCLUDE
 
 #include<hgl/object/FlowObject.h>

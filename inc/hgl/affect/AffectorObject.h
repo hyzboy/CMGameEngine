@@ -1,4 +1,4 @@
-#ifndef HGL_AFFECTOR_OBJECT_INCLUDE
+﻿#ifndef HGL_AFFECTOR_OBJECT_INCLUDE
 #define HGL_AFFECTOR_OBJECT_INCLUDE
 
 #include<hgl/object/EnumObject.h>
@@ -19,7 +19,7 @@ namespace hgl
 	public:	//方法
 
 		AffectorObject(){control=nullptr;}															///<本类构造函数
-		virtual ~AffectorObject()=default;												///<本类析构函数
+		virtual ~AffectorObject()=default;															///<本类析构函数
 
 		virtual void SetControl(AffectorControl *ac){control=ac;}									///<设置控制器
 
