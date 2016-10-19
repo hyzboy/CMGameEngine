@@ -7,6 +7,8 @@ namespace hgl
 		{
 			float ClearColor[4] = { 0.0f,0.0f,0.0f,0.0f };
 			float ClearDepth = 1.0f;
+			int ClearStencil = 0;
+			float ClearAccum = 0.0f;
 
 			static struct
 			{
@@ -106,12 +108,11 @@ namespace hgl
 			glClearDepth(clear_depth);
 		}
 
-//		void ClearColorBuffer()		{glClear(GL_COLOR_BUFFER_BIT);}
+		//glClearBufferfv系列函数最低需求OpenGL 3.0
 		void ClearColorBuffer()		{glClearBufferfv(GL_COLOR,0,ClearColor);}
-//		void ClearDepthBuffer()		{SetDepthMask(true);glClear(GL_DEPTH_BUFFER_BIT);}
 		void ClearDepthBuffer()		{SetDepthMask(true);glClearBufferfv(GL_DEPTH,0,&ClearDepth);}
 		void ClearColorDepthBuffer(){ClearColorBuffer();ClearDepthBuffer();}
-		void ClearStencilBuffer()	{glClear(GL_STENCIL_BUFFER_BIT);}
-		void ClearAccumBuffer()		{glClear(GL_ACCUM_BUFFER_BIT);}
+		void ClearStencilBuffer()	{glClearBufferiv(GL_STENCIL,0,&ClearStencil);}
+		void ClearAccumBuffer()		{glClearBufferfv(GL_ACCUM,0,&ClearAccum);}
 	}//namespace graph
 }//namespace hgl
