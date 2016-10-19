@@ -1,4 +1,5 @@
-﻿#include<minwinbase.h>
+﻿#include<hgl/platform/Platform.h>
+#include<hgl/TypeFunc.h>
 
 namespace hgl
 {
@@ -41,15 +42,6 @@ namespace hgl
 
 	/**
 	* 取得当前时间
-	* @return 当前时间(单位：千分之一秒)
-	*/
-	uint64 GetTime()
-	{
-		return(GetMicroTime() / 1000);
-	}
-
-	/**
-	* 取得当前时间
 	* @return 当前时间(单位：百万分之一秒)
 	*/
 	uint64 GetMicroTime()
@@ -65,6 +57,15 @@ namespace hgl
 		FileTimeToMicroTime(&result, &ft);
 
 		return(result);
+	}
+	
+	/**
+	* 取得当前时间
+	* @return 当前时间(单位：千分之一秒)
+	*/
+	uint64 GetTime()
+	{
+		return(GetMicroTime() / 1000);
 	}
 
 	/**
