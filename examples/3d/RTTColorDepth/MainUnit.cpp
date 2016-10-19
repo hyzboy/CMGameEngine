@@ -2,8 +2,8 @@
 #include<hgl/graph/Render.h>			//SetClearColor,ClearColorDepthBuffer
 #include<hgl/graph/Camera.h>			//WalkerCamera
 #include<hgl/object/FlowObject.h>		//FlowObject
-#include<hgl/graph/RenderToTexture.h>
-#include<hgl/graph/InlineRenderable.h>
+#include<hgl/graph/RenderToTexture.h>	//RenderToTextureColorDepth
+#include<hgl/graph/InlineRenderable.h>	//CreateRenderableRect
 
 #include"SpiralCubeScene.h"
 

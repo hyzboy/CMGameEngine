@@ -11,7 +11,7 @@ int main(int argc,char **argv)
 	try
 	{
 #endif//_DEBUG
-		StringList<UTF8String> sl;
+		OSStringList sl;
 
 		for(int i=0;i<argc;i++)
 			sl.Add(argv[i]);

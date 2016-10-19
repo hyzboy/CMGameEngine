@@ -23,7 +23,7 @@ extern "C" int WINAPI WinMain(HINSTANCE,HINSTANCE,char *,int)
 #endif//_DEBUG
         GraphicsSystemInitInfo sii;
         GraphicsApplication app;
-        StringList<WideString> sl;
+		OSStringList sl;
 
 		wchar_t **argv;
 		int argc;
