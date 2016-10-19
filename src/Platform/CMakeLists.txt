@@ -46,7 +46,8 @@ IF(WIN32)
 	SET(BASE_MULTI_PROCESS_SOURCE
 		Win/ProcMutex.cpp)
 
-    SET(BASE_TIME_SOURCE    Win/DateTime.cpp)
+    SET(BASE_TIME_SOURCE    Win/Time.cpp
+                            Win/DateTime.cpp)
 ENDIF(WIN32)
 
 SOURCE_GROUP("SystemInfo"   FILES ${BASE_OS_APPLICATION_SOURCE})
