@@ -149,7 +149,7 @@ namespace hgl
 		return S_ISDIR(buf.st_mode);
 	}
 
-	inline bool MakeDirectory(const OSString &name)
+	bool MakeDirectory(const OSString &name)
 	{
 		if(!mkdir(name,S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH))return(true);
 
@@ -157,52 +157,13 @@ namespace hgl
 		return(false);
 	}
 
-	/**
-	* 创建一个子目录,该函数可自动创建多级目录。
-	* @param dirname 目录名称
-	* @return 目录是否创建成功
-	*/
-	bool MakePath(const OSString &dirname)
-	{
-		const os_char directory_separator=HGL_DIRECTORY_SEPARATOR;
-		os_char *p;
-
-		os_char str[HGL_MAX_PATH];
-		os_char *sp;
-
-#if HGL_OS == HGL_OS_Windows
-		strcpy(str,HGL_MAX_PATH,dirname.c_str());
-
-		if(str[1]==OS_TEXT(':'))sp=str+3;
-				   else sp=str;
-#else
-		strcpy(str,HGL_MAX_PATH,dirname.c_str());
-
-		sp=str;
-#endif//HGL_OS == HGL_OS_Windows
-
-		while(1)
-		{
-			p=hgl::strchr(sp+1,directory_separator);				// unix下有可能第一个字符就是分隔符，所以必须用sp+1开始查找
-
-			if(p)
-				*p=0;
-
-            if(*sp==0)
-                return(true);
-
-			if(!IsDirectory(str))//没有找到
-				if(!MakeDirectory(str))
-					return(false);
-
-            if(p)
-                *p++=directory_separator;
-            else
-                return(true);
-
-            sp=p;
-		}
-	}
+    os_char *GetRootPath(os_char *str)
+    {
+		if(str[0]==HGL_DIRECTORY_SEPARATOR)
+            return str+1;
+        else
+            return str;
+    }
 
 	/**
 	* 删除一个子目录

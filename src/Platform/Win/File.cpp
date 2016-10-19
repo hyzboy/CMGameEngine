@@ -155,7 +155,7 @@ namespace hgl
 		return attrib&FILE_ATTRIBUTE_DIRECTORY;
 	}
 
-	inline bool MakeDirectory(const OSString &name)
+	bool MakeDirectory(const OSString &name)
 	{
 		if(::CreateDirectoryW(name,nullptr))return(true);
 
@@ -163,45 +163,13 @@ namespace hgl
 		return(false);
 	}
 
-	/**
-	* 创建一个子目录,该函数可自动创建多级目录。
-	* @param dirname 目录名称
-	* @return 目录是否创建成功
-	*/
-	bool MakePath(const OSString &dirname)
-	{
-		const os_char directory_separator=HGL_DIRECTORY_SEPARATOR;
-		os_char *p;
+    os_char *GetRootPath(os_char *str)
+    {
+		if(str[1]==OS_TEXT(':'))
+            return str+3;
 
-		os_char str[HGL_MAX_PATH];
-		os_char *sp;
-
-		strcpy(str,HGL_MAX_PATH,dirname.c_str());
-
-		sp=str;
-
-		while(1)
-		{
-			p=hgl::strchr(sp+1,directory_separator);				// unix下有可能第一个字符就是分隔符，所以必须用sp+1开始查找
-
-			if(p)
-				*p=0;
-
-            if(*sp==0)
-                return(true);
-
-			if(!IsDirectory(str))//没有找到
-				if(!MakeDirectory(str))
-					return(false);
-
-            if(p)
-                *p++=directory_separator;
-            else
-                return(true);
-
-            sp=p;
-		}
-	}
+        return str;
+    }
 
 	/**
 	* 删除一个子目录

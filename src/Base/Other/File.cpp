@@ -121,6 +121,49 @@ namespace hgl
 		return fs.Write(buf,size);
 	}
 
+    os_char *GetRootPath(os_char *str);
+    bool MakeDirectory(const OSString &name);
+
+	/**
+	* 创建一个子目录,该函数可自动创建多级目录。
+	* @param dirname 目录名称
+	* @return 目录是否创建成功
+	*/
+	bool MakePath(const OSString &dirname)
+	{
+		const os_char directory_separator=HGL_DIRECTORY_SEPARATOR;
+		os_char *p;
+
+		os_char str[HGL_MAX_PATH];
+		os_char *sp;
+
+		strcpy(str,HGL_MAX_PATH,dirname.c_str());
+
+        sp=GetRootPath(str);
+
+		while(1)
+		{
+			p=hgl::strchr(sp,directory_separator);
+
+			if(p)
+				*p=0;
+
+            if(*sp==0)
+                return(true);
+
+			if(!IsDirectory(str))//没有找到
+				if(!MakeDirectory(str))
+					return(false);
+
+            if(p)
+                *p++=directory_separator;
+            else
+                return(true);
+
+            sp=p;
+		}
+	}
+
 	/**
 	* 删除一个子目录,包含所有文件和子目录
 	* @param dirname 目录名称
