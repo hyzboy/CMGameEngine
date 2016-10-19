@@ -11,7 +11,7 @@ namespace hgl
 	{
 	protected:
 
-		UTF16String caption;
+		OSString caption;
 		bool full_screen;
         int mouse_x,mouse_y;
 
@@ -49,8 +49,8 @@ namespace hgl
 		virtual void Show()=0;																		///<显示窗口
 		virtual void Hide()=0;																		///<隐藏窗口
 
-		virtual const UTF16String &GetCaption()const{return caption;}
-		virtual void SetCaption(const UTF16String &cap){caption=cap;}
+		virtual const OSString &GetCaption()const{return caption;}
+		virtual void SetCaption(const OSString &cap){caption=cap;}
 
 		virtual void SetViewport(int,int,int,int)=0;												///<设定可视范围
 				void SetViewport(){SetViewport(0,0,width,height);}									///<设定可视范围为整个屏幕或窗口

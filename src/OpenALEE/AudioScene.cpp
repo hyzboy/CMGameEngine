@@ -12,7 +12,7 @@ namespace hgl
     {
         if(!l||!s)return(0);
 
-        if(s->gain<=0)return(0);        //本声音量就是0
+        if(s->gain<=0)return(0);        //本身音量就是0
 
         float distance;
 
