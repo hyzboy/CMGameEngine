@@ -5,9 +5,6 @@ namespace hgl
 	{
 		namespace
 		{
-			static unsigned int ClearBuffer= GL_COLOR_BUFFER_BIT
-											|GL_DEPTH_BUFFER_BIT;
-
 			static struct
 			{
 				GLboolean mask;
@@ -100,31 +97,6 @@ namespace hgl
 		{
 			glDepthMask(GL_TRUE);
 			glClearDepth(clear_depth);
-		}
-
-		/**
-		* 设置清屏时清除那些缓冲区
-		* @param color 颜色缓冲区
-		* @param depth 深度缓冲区
-		* @param stencil 模板缓冲区
-		* @param accum 累积缓冲区
-		*/
-		void SetClearBuffer(bool color,bool depth,bool stencil,bool accum)
-		{
-			ClearBuffer=0;
-
-			if(color	)ClearBuffer|=GL_COLOR_BUFFER_BIT;
-			if(depth	)ClearBuffer|=GL_DEPTH_BUFFER_BIT;
-			if(stencil	)ClearBuffer|=GL_STENCIL_BUFFER_BIT;
-			if(accum	)ClearBuffer|=GL_ACCUM_BUFFER_BIT;
-		}
-
-		void ClearScreen()
-		{
-			if(ClearBuffer&GL_DEPTH_BUFFER_BIT)
-				SetDepthMask(true);
-
-			glClear(ClearBuffer);
 		}
 
 		void ClearColorBuffer()		{glClear(GL_COLOR_BUFFER_BIT);}

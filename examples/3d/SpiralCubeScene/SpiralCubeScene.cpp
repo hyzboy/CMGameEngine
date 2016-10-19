@@ -1,5 +1,5 @@
 ﻿#include"SpiralCubeScene.h"
-#include<hgl/graph/Render.h>			//SetClearColor,ClearScreen
+#include<hgl/graph/Render.h>			//SetClearColor,ClearColorDepthBuffer
 
 SpiralCubeScene::SpiralCubeScene(const Vector3f &up_vector): SpiralCube(up_vector)
 {

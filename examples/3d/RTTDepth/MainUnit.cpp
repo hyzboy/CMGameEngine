@@ -1,5 +1,5 @@
 ﻿#include<hgl/Graphics.h>				//GraphicsApplication,SystemInitInfo
-#include<hgl/graph/Render.h>			//SetClearColor,ClearScreen
+#include<hgl/graph/Render.h>			//SetClearColor,ClearColorDepthBuffer
 #include<hgl/graph/Camera.h>			//WalkerCamera
 #include<hgl/object/FlowObject.h>		//FlowObject
 #include<hgl/graph/RenderToTexture.h>
@@ -92,7 +92,7 @@ public:
 
 	void Draw()
 	{
-		ClearScreen();
+		ClearColorDepthBuffer();
 
 		rtt_depth->Begin();
 		{

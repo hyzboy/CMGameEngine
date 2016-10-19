@@ -1,5 +1,5 @@
 ﻿#include<hgl/Graphics.h>				//GraphicsApplication,SystemInitInfo
-#include<hgl/graph/Render.h>			//SetClearColor,ClearScreen
+#include<hgl/graph/Render.h>			//SetClearColor,ClearColorDepthBuffer
 #include<hgl/object/FlowObject.h>		//FlowObject
 
 using namespace hgl;
@@ -20,7 +20,7 @@ public:
 
 	void Draw()
 	{
-		ClearScreen();
+		ClearColorDepthBuffer();
 	}
 };//class TestObject
 

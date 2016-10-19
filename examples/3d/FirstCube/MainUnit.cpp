@@ -1,5 +1,5 @@
 ﻿#include<hgl/Graphics.h>				//GraphicsApplication,SystemInitInfo
-#include<hgl/graph/Render.h>			//SetClearColor,ClearScreen
+#include<hgl/graph/Render.h>			//SetClearColor,ClearColorDepthBuffer
 #include<hgl/graph/Material.h>			//Material
 #include<hgl/graph/InlineRenderable.h>	//CreateRenderableCube
 #include<hgl/graph/Renderable.h>		//Renderable
@@ -97,7 +97,7 @@ public:
 
 	void Draw()
 	{
-		ClearScreen();
+		ClearColorDepthBuffer();
 
 		DirectRender(cube1,&proj,&look,&ltw1);
 		DirectRender(cube2,&proj,&look,&ltw2);
