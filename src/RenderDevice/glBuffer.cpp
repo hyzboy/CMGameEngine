@@ -5,6 +5,9 @@ namespace hgl
 	{
 		namespace
 		{
+			float ClearColor[4] = { 0.0f,0.0f,0.0f,0.0f };
+			float ClearDepth = 1.0f;
+
 			static struct
 			{
 				GLboolean mask;
@@ -86,6 +89,10 @@ namespace hgl
 		*/
 		void SetClearColor(float red,float green,float blue)
 		{
+			ClearColor[0] = red;
+			ClearColor[1] = green;
+			ClearColor[2] = blue;
+
 			glClearColor(red,green,blue,1.0f);
 		}
 
@@ -99,9 +106,11 @@ namespace hgl
 			glClearDepth(clear_depth);
 		}
 
-		void ClearColorBuffer()		{glClear(GL_COLOR_BUFFER_BIT);}
-		void ClearDepthBuffer()		{SetDepthMask(true);glClear(GL_DEPTH_BUFFER_BIT);}
-		void ClearColorDepthBuffer(){SetDepthMask(true);glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);}
+//		void ClearColorBuffer()		{glClear(GL_COLOR_BUFFER_BIT);}
+		void ClearColorBuffer()		{glClearBufferfv(GL_COLOR,0,ClearColor);}
+//		void ClearDepthBuffer()		{SetDepthMask(true);glClear(GL_DEPTH_BUFFER_BIT);}
+		void ClearDepthBuffer()		{SetDepthMask(true);glClearBufferfv(GL_DEPTH,0,&ClearDepth);}
+		void ClearColorDepthBuffer(){ClearColorBuffer();ClearDepthBuffer();}
 		void ClearStencilBuffer()	{glClear(GL_STENCIL_BUFFER_BIT);}
 		void ClearAccumBuffer()		{glClear(GL_ACCUM_BUFFER_BIT);}
 	}//namespace graph
