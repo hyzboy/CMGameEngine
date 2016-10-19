@@ -37,7 +37,7 @@ namespace hgl
         public:	//方法
 
             Window();																					///<本类构造函数
-            virtual ~Window();                                                                          ///<本类析构函数
+            virtual ~Window()=default;                                                                  ///<本类析构函数
 
             virtual void ToMin()=0;																        ///<窗口最小化
             virtual void ToMax()=0;																        ///<窗口最大化
