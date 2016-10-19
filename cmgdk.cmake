@@ -10,7 +10,6 @@ OPTION(BUILD_SCRIPT_DEVIL       "Build Script DevilScript"                  FALS
 
 OPTION(BUILD_NETWORK_SCTP		"Include SCTP Support"						FALSE	)
 OPTION(BUILD_NETWORK_UDP_LITE   "Include UDP-Lite Support"                  FALSE   )
-# OPTION(BUILD_QT4_SUPPORT_LIB	"Build QT4 Support Library"					FALSE	)
 OPTION(BUILD_QT5_SUPPORT_LIB	"Build QT5 Support Library"					FALSE	)
 OPTION(BUILD_EXAMPLES_PROJECT	"Build Examples Project"					FALSE	)
 OPTION(BUILD_TEST_PROJECT		"Build Test Project"						FALSE	)
@@ -264,21 +263,6 @@ ENDIF(BUILD_OPENAL_LIB)
 IF(BUILD_NETWORK_LIB)
 	SET(HGL_NETWORK_LIB CM.Network)
 ENDIF(BUILD_NETWORK_LIB)
-
-# IF(BUILD_QT4_SUPPORT_LIB)
-#
-#     add_definitions("-DHGL_QT4")
-#
-# 	find_package(Qt4 REQUIRED)
-#
-# 	IF(WIN32)
-# 		SET(HGL_QT_MAIN_SOURCE ${CMGDK_PATH}/src/Platform/QT/PlatformQT4WinUTF16.cpp)
-# 	ELSE()
-# 		SET(HGL_QT_MAIN_SOURCE ${CMGDK_PATH}/src/Platform/QT/PlatformQT4UnixUTF8.cpp)
-# 	ENDIF()
-#
-# 	SET(HGL_QT_LIB CM.QT4Support)
-# ENDIF()
 
 IF(BUILD_QT5_SUPPORT_LIB)
 

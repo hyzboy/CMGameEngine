@@ -4,18 +4,9 @@
 #include<hgl.h>
 #include<hgl/platform/ConsoleSystemInitInfo.h>
 
-#ifdef HGL_QT4
-    #include<hgl/platform/QT4Application.h>
+#include<hgl/platform/QT5Application.h>
 
-    #define HGL_QT_MAIN(sii_name,app_name,arg_name)	extern "C" int QT4AppMain(hgl::ConsoleSystemInitInfo &sii_name,hgl::QT4GuiApplication &app_name,const hgl::StringList<hgl::OSString> &arg_name)
-
-#endif//HGL_QT4
-
-#ifdef HGL_QT5
-    #include<hgl/platform/QT5Application.h>
-
-    #define HGL_QT_MAIN(sii_name,app_name,arg_name)	extern "C" int QT5AppMain(hgl::ConsoleSystemInitInfo &sii_name,hgl::QT5GuiApplication &app_name,const hgl::StringList<hgl::OSString> &arg_name)
-#endif//HGL_QT5
+#define HGL_QT_MAIN(sii_name,app_name,arg_name)	extern "C" int QT5AppMain(hgl::ConsoleSystemInitInfo &sii_name,hgl::QT5GuiApplication &app_name,const hgl::StringList<hgl::OSString> &arg_name)
 
 #define QTConnect(obj,event,class_pointer,slot_func)    connect(obj,SIGNAL(event()),class_pointer,SLOT(slot_func()))
 
