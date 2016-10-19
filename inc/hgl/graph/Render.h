@@ -3,6 +3,7 @@
 
 #include<hgl/type/List.h>
 #include<hgl/type/ResManage.h>
+#include<hgl/type/Color.h>
 #include<hgl/VectorMath.h>
 #include<hgl/graph/Texture1D.h>
 #include<hgl/graph/Texture2D.h>
@@ -31,6 +32,15 @@ namespace hgl
 
 		//清屏函数
 		void SetClearColor(float red=0.0f,float green=0.0f,float blue=0.0f);						///<设定清屏颜色
+        inline void SetClearColor(const COLOR_ENUM ce)
+        {
+            if(ce<=ceNone||ce>=ceEnd)SetClearColor(0,0,0);
+
+            const COLOR_DEF *c=prv_color+ce;
+
+            SetClearColor(c->r,c->g,c->b);
+        }
+
 		void SetClearDepth(float clear_depth=0.0f);													///<设定清屏后的深度值
 		void SetClearBuffer(bool color=true,bool depth=true,bool stencil=true,bool accum=true);		///<设定清屏缓冲区
 		void ClearScreen();																			///<清除缓冲区
