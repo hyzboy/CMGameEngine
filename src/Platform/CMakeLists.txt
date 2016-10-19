@@ -8,6 +8,8 @@ ENDIF()
 
 IF(UNIX)
 
+    SET(BASE_OS_FILE_SOURCE        UNIX/File.cpp)
+
     SET(BASE_OS_APPLICATION_SOURCE UNIX/SystemInfo.cpp)
 
 	SET(BASE_OS_LOG_SOURCE         UNIX/LogConsole.cpp)
@@ -31,6 +33,8 @@ IF(UNIX)
 ENDIF(UNIX)
 
 IF(WIN32)
+    SET(BASE_OS_FILE_SOURCE        Win/File.cpp)
+
     SET(BASE_OS_APPLICATION_SOURCE Win/SystemInfo.cpp)
 
 	SET(BASE_OS_LOG_SOURCE         Win/LogConsole.cpp
@@ -50,6 +54,7 @@ IF(WIN32)
                             Win/DateTime.cpp)
 ENDIF(WIN32)
 
+SOURCE_GROUP("File"         FILES ${BASE_OS_FILE_SOURCE})
 SOURCE_GROUP("SystemInfo"   FILES ${BASE_OS_APPLICATION_SOURCE})
 SOURCE_GROUP("LogInfo"      FILES ${BASE_OS_LOG_SOURCE})
 SOURCE_GROUP("MultiThread"  FILES ${BASE_MULTI_THREAD_SOURCE})
@@ -57,6 +62,7 @@ SOURCE_GROUP("MultiProcess" FILES ${BASE_MULTI_PROCESS_SOURCE})
 SOURCE_GROUP("Time"         FILES ${BASE_TIME_SOURCE})
 
 SET(PLATFORM_SOURCE ${PLATFORM_SOURCE}
+                    ${BASE_OS_FILE_SOURCE}
                     ${BASE_TIME_SOURCE}
                     ${BASE_OS_APPLICATION_SOURCE}
                     ${BASE_OS_LOG_SOURCE}
