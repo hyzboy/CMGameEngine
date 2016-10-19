@@ -15,7 +15,7 @@ namespace hgl
 		{
 		protected:
 
-			int width,height;																							///<宽、高
+			uint width,height;																							///<宽、高
 
 		public:
 					int		GetWidth		()const{return width;}														///<取得纹理宽度

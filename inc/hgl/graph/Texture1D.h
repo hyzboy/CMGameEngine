@@ -13,7 +13,7 @@ namespace hgl
 		{
 		protected:
 
-			int length;																									///<长
+			uint length;																								///<长
 
 			uint wrap;
 

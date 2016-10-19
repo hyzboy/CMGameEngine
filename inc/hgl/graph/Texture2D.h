@@ -15,7 +15,7 @@ namespace hgl
 		{
 		protected:
 
-			int width,height;																							///<宽、高
+			uint width,height;																							///<宽、高
 
 			uint wrap_s,wrap_t;
 
