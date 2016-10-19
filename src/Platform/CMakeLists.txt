@@ -8,31 +8,30 @@ ENDIF()
 
 IF(UNIX)
 
-    SET(PLATFORM_FILE_SOURCE        UNIX/File.cpp
-                                    UNIX/FileAccess.cpp)
+    SET(PLATFORM_FILE_SOURCE            UNIX/File.cpp
+                                        UNIX/FileAccess.cpp)
 
-    SET(PLATFORM_CODEPAGE_SOURCE    UNIX/CodePage.cpp)
+    SET(PLATFORM_CODEPAGE_SOURCE        UNIX/CodePage.cpp)
 
-    SET(PLATFORM_APPLICATION_SOURCE UNIX/SystemInfo.cpp)
+    SET(PLATFORM_APPLICATION_SOURCE     UNIX/SystemInfo.cpp)
 
-	SET(PLATFORM_LOG_SOURCE         UNIX/LogConsole.cpp)
+	SET(PLATFORM_LOG_SOURCE                UNIX/LogConsole.cpp
+                                        UNIX/LogFile.cpp)
 
-	SET(PLATFORM_MULTI_THREAD_SOURCE
-		UNIX/CondVar.cpp
-		UNIX/RWLock.cpp
-		UNIX/Semaphore.cpp
-		UNIX/Thread.cpp
-		UNIX/ThreadMutex.cpp)
+	SET(PLATFORM_MULTI_THREAD_SOURCE    UNIX/CondVar.cpp
+                                        UNIX/RWLock.cpp
+                                        UNIX/Semaphore.cpp
+                                        UNIX/Thread.cpp
+                                        UNIX/ThreadMutex.cpp)
 
-	SET(PLATFORM_MULTI_PROCESS_SOURCE
-		UNIX/ProcMutex.cpp
-		UNIX/Process.cpp
-		UNIX/Pipe.cpp
-		UNIX/Fifo.cpp)
+	SET(PLATFORM_MULTI_PROCESS_SOURCE   UNIX/ProcMutex.cpp
+                                        UNIX/Process.cpp
+                                        UNIX/Pipe.cpp
+                                        UNIX/Fifo.cpp)
 
-    SET(PLATFORM_TIME_SOURCE    UNIX/Time.cpp
-                                UNIX/Exit.cpp
-                                UNIX/DateTime.cpp)
+    SET(PLATFORM_TIME_SOURCE            UNIX/Time.cpp
+                                        UNIX/Exit.cpp
+                                        UNIX/DateTime.cpp)
 ENDIF(UNIX)
 
 IF(WIN32)
@@ -44,8 +43,9 @@ IF(WIN32)
 
     SET(PLATFORM_APPLICATION_SOURCE     Win/SystemInfo.cpp)
 
-	SET(PLATFORM_LOG_SOURCE            Win/LogConsole.cpp
-                                        Win/LogDialog.cpp)
+	SET(PLATFORM_LOG_SOURCE                Win/LogConsole.cpp
+                                        Win/LogDialog.cpp
+                                        Win/LogFile.cpp)
 
 	SET(PLATFORM_MULTI_THREAD_SOURCE
                                         Win/CondVar.cpp
