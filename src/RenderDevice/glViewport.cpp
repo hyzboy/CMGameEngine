@@ -85,15 +85,6 @@ namespace hgl
 		}
 
 		/**
-		* 取得屏幕宽高
-		*/
-		void GetScreenSize(float &width,float &height)
-		{
-			width=ScreenWidth;
-			height=ScreenHeight;
-		}
-
-		/**
 		* 取得屏幕宽度
 		*/
 		int GetScreenWidth()

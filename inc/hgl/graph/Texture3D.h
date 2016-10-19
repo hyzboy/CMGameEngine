@@ -11,7 +11,7 @@ namespace hgl
 		 */
 		class Texture3D:public Texture
 		{
-			int width,height,depth;																						///<宽、高、层数
+			uint width,height,depth;																					///<宽、高、层数
 
 			uint wrap_s,wrap_t,wrap_r;
 

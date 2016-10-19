@@ -23,7 +23,6 @@ namespace hgl
 		void GetViewport(int &,int &,int &,int &);													///<取得视口
 		void SetViewport(int,int,int,int);															///<设置视口
 		void GetScreenSize(int &,int &);															///<取得绘制区尺寸
-		void GetScreenSize(float &,float &);														///<取得绘制区尺寸
 		int GetScreenWidth();																		///<取得屏幕宽
 		int GetScreenHeight();																		///<取得屏幕高
 		void OpenScissor(int,int,int,int);															///<开启裁剪区
@@ -189,6 +188,7 @@ namespace hgl
 		//位于InlineRenderable.CPP中
 
 		extern Texture1D *WhiteLine;																///<白线背景
+		extern Texture1D *BlackWhiteLine;															///<黑白线
 
 		extern Texture2D *BlackWhiteGrid;															///<黑白格贴图
 		extern Texture2D *GrayWhiteGrid;                                                            ///<灰白格贴图

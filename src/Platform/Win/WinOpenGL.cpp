@@ -15,7 +15,7 @@
 using namespace hgl;
 using namespace hgl::graph;
 
-extern "C" int WINAPI WinMain(HINSTANCE,HINSTANCE,char *,int)
+extern "C" int WINAPI wWinMain(HINSTANCE,HINSTANCE,wchar_t *cmd_line,int)
 {
 #ifdef _DEBUG
 	try
@@ -28,7 +28,7 @@ extern "C" int WINAPI WinMain(HINSTANCE,HINSTANCE,char *,int)
 		wchar_t **argv;
 		int argc;
 
-		argv = CommandLineToArgvW(GetCommandLineW(), &argc);
+		argv = CommandLineToArgvW(cmd_line, &argc);
 
 		for(int i=0;i<argc;i++)
 			sl.Add(argv[i]);

@@ -3,17 +3,13 @@
 #include<hgl/platform/QT5Application.h>
 #include<QApplication>
 
-#if (__CODEGEARC__ >= 0x610)// C++Builder 2009 is 0x0610
-	extern "C" int WINAPI wWinMain(HINSTANCE,HINSTANCE,wchar_t *,int)
-#else
-	extern "C" int WINAPI WinMain(HINSTANCE, HINSTANCE, char *, int)
-#endif//
+extern "C" int WINAPI wWinMain(HINSTANCE,HINSTANCE,wchar_t *cmd_line,int)
 {
 	wchar_t **w_argv;
 	char **argv;
 	int argc;
 
-	w_argv = CommandLineToArgvW(GetCommandLineW(), &argc);
+	w_argv = CommandLineToArgvW(cmd_line, &argc);
 
 	hgl::StringList<hgl::UTF16String> sl;
 	hgl::StringList<hgl::UTF8String> sl8;
