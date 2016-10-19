@@ -11,8 +11,8 @@ namespace hgl
 		* 文本输出流<br>
 		* 用于将数据输出成文件，用于日志、配置等文本信息处理。
 		*/
-		template<ByteOrderMask BOM> class TextOutputStream								///文本输出流
-		{
+        class TextOutputStream
+        {
 		protected:
 
 			ByteOrderMask bom;																		///<文本编码
@@ -20,7 +20,11 @@ namespace hgl
 
 		public:
 
-			TextOutputStream(OutputStream *);
+			TextOutputStream(ByteOrderMask _bom,DataOutputStream *_out)
+            {
+                bom=_bom;
+                out=_out;
+            }
 
 			virtual ~TextOutputStream()
 			{
@@ -29,7 +33,7 @@ namespace hgl
 
 			const ByteOrderMask GetBOM()const
 			{
-				return BOM;
+				return bom;
 			}
 
 			DataOutputStream *GetDataOutputStream()
@@ -46,13 +50,13 @@ namespace hgl
 			{
 				if(!out)return(false);
 
-				const BOMFileHeader *bom_item=BOMData+BOM;
+				const BOMFileHeader *bom_item=BOMData+bom;
 
 				return(out->Write(bom_item->data,bom_item->size)==bom_item->size);
 			}
 
-			bool WriteChars(const char *,int64);													///<写入一个字符串
-			bool WriteChars(const u16char *,int64);													///<写入一个字符串
+			virtual bool WriteChars(const char *,int64)=0;											///<写入一个字符串
+			virtual bool WriteChars(const u16char *,int64)=0;										///<写入一个字符串
 
 			template<typename N>
 			bool WriteString(const BaseString<N> &str)												///<写入一个字符串
@@ -154,11 +158,21 @@ namespace hgl
 
 				return WriteChars(text,total);
 			}
-		};//template<ByteOrderMask BOM> class TextOutputStream
+        };//class TextOutputStream
 
-        typedef TextOutputStream<bomUTF8   > UTF8TextOutputStream;
-        typedef TextOutputStream<bomUTF16LE> UTF16LETextOutputStream;
-        typedef TextOutputStream<bomUTF16BE> UTF16BETextOutputStream;
+		template<ByteOrderMask BOM> class EndianTextOutputStream:public TextOutputStream	///文本输出流
+		{
+        public:
+
+            EndianTextOutputStream(OutputStream *);
+
+			bool WriteChars(const char *,int64);											///<写入一个字符串
+			bool WriteChars(const u16char *,int64);										    ///<写入一个字符串
+		};//template<ByteOrderMask BOM> class EndianTextOutputStream
+
+        typedef EndianTextOutputStream<bomUTF8   > UTF8TextOutputStream;
+        typedef EndianTextOutputStream<bomUTF16LE> UTF16LETextOutputStream;
+        typedef EndianTextOutputStream<bomUTF16BE> UTF16BETextOutputStream;
 	}//namespace io
 }//namespace hgl
 #endif//HGL_IO_TEXT_OUTPUT_STREAM_INCLUDE
