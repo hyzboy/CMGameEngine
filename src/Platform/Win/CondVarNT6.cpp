@@ -1,4 +1,4 @@
-#include<windows.h>
+﻿#include<windows.h>
 #include<hgl/thread/CondVar.h>
 #include<hgl/thread/ThreadMutex.h>
 #include<hgl/thread/RWLock.h>

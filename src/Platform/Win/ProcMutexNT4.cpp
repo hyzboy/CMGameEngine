@@ -1,4 +1,4 @@
-#include<hgl/proc/ProcMutex.h>
+﻿#include<hgl/proc/ProcMutex.h>
 #include<windows.h>
 
 namespace hgl
@@ -38,7 +38,7 @@ namespace hgl
 
 		if (rv == WAIT_OBJECT_0 || rv == WAIT_ABANDONED)
 			return(true);
-		
+
 		return(false);
 	}
 

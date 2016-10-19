@@ -1,4 +1,4 @@
-#include<hgl/proc/Pipe.h>
+﻿#include<hgl/proc/Pipe.h>
 #include<unistd.h>
 
 namespace hgl

@@ -1,4 +1,4 @@
-#include<hgl/proc/Fifo.h>
+﻿#include<hgl/proc/Fifo.h>
 #include<hgl/Str.h>
 #include<sys/stat.h>
 
