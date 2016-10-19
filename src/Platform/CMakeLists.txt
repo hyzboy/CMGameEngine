@@ -8,66 +8,70 @@ ENDIF()
 
 IF(UNIX)
 
-    SET(BASE_OS_FILE_SOURCE        UNIX/File.cpp)
+    SET(PLATFORM_FILE_SOURCE        UNIX/File.cpp)
+    SET(PLATFORM_CODEPAGE_SOURCE    UNIX/CodePage.cpp)
 
-    SET(BASE_OS_APPLICATION_SOURCE UNIX/SystemInfo.cpp)
+    SET(PLATFORM_APPLICATION_SOURCE UNIX/SystemInfo.cpp)
 
-	SET(BASE_OS_LOG_SOURCE         UNIX/LogConsole.cpp)
+	SET(PLATFORM_LOG_SOURCE         UNIX/LogConsole.cpp)
 
-	SET(BASE_MULTI_THREAD_SOURCE
+	SET(PLATFORM_MULTI_THREAD_SOURCE
 		UNIX/CondVar.cpp
 		UNIX/RWLock.cpp
 		UNIX/Semaphore.cpp
 		UNIX/Thread.cpp
 		UNIX/ThreadMutex.cpp)
 
-	SET(BASE_MULTI_PROCESS_SOURCE
+	SET(PLATFORM_MULTI_PROCESS_SOURCE
 		UNIX/ProcMutex.cpp
 		UNIX/Process.cpp
 		UNIX/Pipe.cpp
 		UNIX/Fifo.cpp)
 
-    SET(BASE_TIME_SOURCE    UNIX/Time.cpp
-                            UNIX/Exit.cpp
-                            UNIX/DateTime.cpp)
+    SET(PLATFORM_TIME_SOURCE    UNIX/Time.cpp
+                                UNIX/Exit.cpp
+                                UNIX/DateTime.cpp)
 ENDIF(UNIX)
 
 IF(WIN32)
-    SET(BASE_OS_FILE_SOURCE        Win/File.cpp)
 
-    SET(BASE_OS_APPLICATION_SOURCE Win/SystemInfo.cpp)
+    SET(PLATFORM_FILE_SOURCE            Win/File.cpp)
+    SET(PLATFORM_CODEPAGE_SOURCE        Win/CodePage.cpp)
 
-	SET(BASE_OS_LOG_SOURCE         Win/LogConsole.cpp
-                                   Win/LogDialog.cpp)
+    SET(PLATFORM_APPLICATION_SOURCE     Win/SystemInfo.cpp)
 
-	SET(BASE_MULTI_THREAD_SOURCE
-		Win/CondVar.cpp
-		Win/RWLock.cpp
-		Win/Semaphore.cpp
-		Win/Thread.cpp
-		Win/ThreadMutex.cpp)
+	SET(PLATFORM_LOG_SOURCE            Win/LogConsole.cpp
+                                        Win/LogDialog.cpp)
 
-	SET(BASE_MULTI_PROCESS_SOURCE
-		Win/ProcMutex.cpp)
+	SET(PLATFORM_MULTI_THREAD_SOURCE
+                                        Win/CondVar.cpp
+                                        Win/RWLock.cpp
+                                        Win/Semaphore.cpp
+                                        Win/Thread.cpp
+                                        Win/ThreadMutex.cpp)
 
-    SET(BASE_TIME_SOURCE    Win/Time.cpp
-                            Win/DateTime.cpp)
+	SET(PLATFORM_MULTI_PROCESS_SOURCE  Win/ProcMutex.cpp)
+
+    SET(PLATFORM_TIME_SOURCE    Win/Time.cpp
+                                Win/DateTime.cpp)
 ENDIF(WIN32)
 
-SOURCE_GROUP("File"         FILES ${BASE_OS_FILE_SOURCE})
-SOURCE_GROUP("SystemInfo"   FILES ${BASE_OS_APPLICATION_SOURCE})
-SOURCE_GROUP("LogInfo"      FILES ${BASE_OS_LOG_SOURCE})
-SOURCE_GROUP("MultiThread"  FILES ${BASE_MULTI_THREAD_SOURCE})
-SOURCE_GROUP("MultiProcess" FILES ${BASE_MULTI_PROCESS_SOURCE})
-SOURCE_GROUP("Time"         FILES ${BASE_TIME_SOURCE})
+SOURCE_GROUP("CodePage"     FILES ${PLATFORM_CODEPAGE_SOURCE})
+SOURCE_GROUP("File"         FILES ${PLATFORM_FILE_SOURCE})
+SOURCE_GROUP("SystemInfo"   FILES ${PLATFORM_APPLICATION_SOURCE})
+SOURCE_GROUP("LogInfo"      FILES ${PLATFORM_LOG_SOURCE})
+SOURCE_GROUP("MultiThread"  FILES ${PLATFORM_MULTI_THREAD_SOURCE})
+SOURCE_GROUP("MultiProcess" FILES ${PLATFORM_MULTI_PROCESS_SOURCE})
+SOURCE_GROUP("Time"         FILES ${PLATFORM_TIME_SOURCE})
 
 SET(PLATFORM_SOURCE ${PLATFORM_SOURCE}
-                    ${BASE_OS_FILE_SOURCE}
-                    ${BASE_TIME_SOURCE}
-                    ${BASE_OS_APPLICATION_SOURCE}
-                    ${BASE_OS_LOG_SOURCE}
-                    ${BASE_MULTI_THREAD_SOURCE}
-                    ${BASE_MULTI_PROCESS_SOURCE})
+                    ${PLATFORM_FILE_SOURCE}
+                    ${PLATFORM_CODEPAGE_SOURCE}
+                    ${PLATFORM_TIME_SOURCE}
+                    ${PLATFORM_APPLICATION_SOURCE}
+                    ${PLATFORM_LOG_SOURCE}
+                    ${PLATFORM_MULTI_THREAD_SOURCE}
+                    ${PLATFORM_MULTI_PROCESS_SOURCE})
 
 IF(BUILD_OPENGL_LIB)
 
