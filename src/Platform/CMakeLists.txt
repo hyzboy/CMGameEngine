@@ -8,7 +8,9 @@ ENDIF()
 
 IF(UNIX)
 
-    SET(PLATFORM_FILE_SOURCE        UNIX/File.cpp)
+    SET(PLATFORM_FILE_SOURCE        UNIX/File.cpp
+                                    UNIX/FileAccess.cpp)
+
     SET(PLATFORM_CODEPAGE_SOURCE    UNIX/CodePage.cpp)
 
     SET(PLATFORM_APPLICATION_SOURCE UNIX/SystemInfo.cpp)
@@ -35,7 +37,9 @@ ENDIF(UNIX)
 
 IF(WIN32)
 
-    SET(PLATFORM_FILE_SOURCE            Win/File.cpp)
+    SET(PLATFORM_FILE_SOURCE            Win/File.cpp
+                                        Win/FileAccess.cpp)
+
     SET(PLATFORM_CODEPAGE_SOURCE        Win/CodePage.cpp)
 
     SET(PLATFORM_APPLICATION_SOURCE     Win/SystemInfo.cpp)

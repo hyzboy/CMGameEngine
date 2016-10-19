@@ -1,13 +1,6 @@
 ﻿#include<hgl/io/FileAccess.h>
 #include<hgl/LogInfo.h>
-#if HGL_OS == HGL_OS_Windows
-	#include<io.h>
-	#include<share.h>
-#else
-	#include<unistd.h>
-	#include<stdlib.h>
-#endif//HGL_OS == HGL_OS_Windows
-#include<fcntl.h>
+#include<unistd.h>
 namespace hgl
 {
 	namespace io
@@ -23,33 +16,7 @@ namespace hgl
 			Close();
 		}
 
-		bool FileAccess::CreateTemp()
-		{
-#if HGL_OS == HGL_OS_Windows
-			const uint buf_size=HGL_MAX_PATH;
-
-			u16char PathBuffer[buf_size];
-			u16char TempName[buf_size];
-
-			GetTempPathW(buf_size,PathBuffer);
-
-			GetTempFileNameW(PathBuffer,L"NEW",0,TempName);
-
-			return Open(TempName,fomCreate);
-#else
-			char template_filename[128]="/tmp/cm/XXXXXX";
-
-			fp=mkstemps(template_filename,128);
-
-			if(fp==-1)
-				return(false);
-
-			filename=template_filename;
-			mode=fomCreate;
-
-			return(true);
-#endif//HGL_OS == HGL_OS_Windows
-		}
+		int OpenFile(const os_char *fn,FileOpenMode fom);
 
 		bool FileAccess::Open(const OSString &fn,FileOpenMode fom)
 		{
@@ -61,27 +28,7 @@ namespace hgl
                 return(false);
             }
 
-#if HGL_OS == HGL_OS_Windows
-			errno_t result;
-
-			if(fom==fomCreate		)result=_wsopen_s(&fp,fn,_O_BINARY|_O_WRONLY|_O_CREAT			,_SH_DENYNO,S_IREAD|_S_IWRITE);else
-			if(fom==fomCreateTrunc 	)result=_wsopen_s(&fp,fn,_O_BINARY|_O_WRONLY|_O_CREAT|_O_TRUNC	,_SH_DENYNO,S_IREAD|_S_IWRITE);else
-			if(fom==fomOnlyRead		)result=_wsopen_s(&fp,fn,_O_BINARY|_O_RDONLY					,_SH_DENYNO,S_IREAD|_S_IWRITE);else
-			if(fom==fomOnlyWrite	)result=_wsopen_s(&fp,fn,_O_BINARY|_O_WRONLY					,_SH_DENYNO,S_IREAD|_S_IWRITE);else
-			if(fom==fomReadWrite	)result=_wsopen_s(&fp,fn,_O_BINARY|_O_RDWR						,_SH_DENYNO,S_IREAD|_S_IWRITE);else
-			if(fom==fomAppend		)result=_wsopen_s(&fp,fn,_O_BINARY|_O_APPEND					,_SH_DENYNO,S_IREAD|_S_IWRITE);else
-#else
-			if(fom==fomCreate		)fp=open64(fn.c_str(),O_WRONLY|O_CREAT,			S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);else
-			if(fom==fomCreateTrunc	)fp=open64(fn.c_str(),O_WRONLY|O_CREAT|O_TRUNC,	S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);else
-			if(fom==fomOnlyRead		)fp=open64(fn.c_str(),O_RDONLY	);else
-			if(fom==fomOnlyWrite	)fp=open64(fn.c_str(),O_WRONLY	);else
-			if(fom==fomReadWrite	)fp=open64(fn.c_str(),O_RDWR	);else
-			if(fom==fomAppend		)fp=open64(fn.c_str(),O_APPEND	);else
-#endif//HGL_OS == HGL_OS_Windows
-			{
-				LOG_ERROR(OS_TEXT("Error FileOpenMode,filename: ")+fn);
-				return(false);
-			}
+            fp=OpenFile(fn.c_str(),fom);
 
 			if(fp==-1)
 			{
@@ -94,15 +41,14 @@ namespace hgl
 			return(true);
 		}
 
+		void CloseFile(int fp);
+
 		void FileAccess::Close()
 		{
 			if(fp==-1)return;
 
-#if HGL_OS == HGL_OS_Windows
-			_close(fp);
-#else
-			close(fp);
-#endif//HGL_OS == HGL_OS_Windows
+            CloseFile(fp);
+
 			fp=-1;
 			mode=fomNone;
 		}
@@ -217,34 +163,6 @@ namespace hgl
 			if(!CanWrite())return(-1);
 
 			return write64(fp,buf,size);
-		}
-
-		int64 FileAccess::Read(int64 offset,void *buf,int64 size)
-		{
-			if(!CanRead())return(-1);
-
-#if HGL_OS == HGL_OS_Windows
-			if(_lseeki64(fp,offset,soBegin)==offset)
-				return _read(fp,buf,size);
-			else
-				return -1;
-#else
-			return pread64(fp,buf,size,offset);
-#endif//HGL_OS == HGL_OS_Windows
-		}
-
-		int64 FileAccess::Write(int64 offset,const void *buf,int64 size)
-		{
-			if(!CanWrite())return(-1);
-
-#if HGL_OS == HGL_OS_Windows
-			if(_lseeki64(fp,offset,soBegin)==offset)
-				return _write(fp,buf,size);
-			else
-				return -1;
-#else
-			return pwrite64(fp,buf,size,offset);
-#endif//HGL_OS == HGL_OS_Windows
 		}
 	}//namespace io
 }//namespace hgl
