@@ -5,8 +5,10 @@ namespace hgl
 	{
 		namespace
 		{
-			static unsigned int ClearBuffer= GL_COLOR_BUFFER_BIT
-											|GL_DEPTH_BUFFER_BIT;
+			float ClearColor[4] = { 0.0f,0.0f,0.0f,0.0f };
+			float ClearDepth = 1.0f;
+			int ClearStencil = 0;
+			float ClearAccum = 0.0f;
 
 			static struct
 			{
@@ -89,6 +91,10 @@ namespace hgl
 		*/
 		void SetClearColor(float red,float green,float blue)
 		{
+			ClearColor[0] = red;
+			ClearColor[1] = green;
+			ClearColor[2] = blue;
+
 			glClearColor(red,green,blue,1.0f);
 		}
 
@@ -102,35 +108,11 @@ namespace hgl
 			glClearDepth(clear_depth);
 		}
 
-		/**
-		* 设置清屏时清除那些缓冲区
-		* @param color 颜色缓冲区
-		* @param depth 深度缓冲区
-		* @param stencil 模板缓冲区
-		* @param accum 累积缓冲区
-		*/
-		void SetClearBuffer(bool color,bool depth,bool stencil,bool accum)
-		{
-			ClearBuffer=0;
-
-			if(color	)ClearBuffer|=GL_COLOR_BUFFER_BIT;
-			if(depth	)ClearBuffer|=GL_DEPTH_BUFFER_BIT;
-			if(stencil	)ClearBuffer|=GL_STENCIL_BUFFER_BIT;
-			if(accum	)ClearBuffer|=GL_ACCUM_BUFFER_BIT;
-		}
-
-		void ClearScreen()
-		{
-			if(ClearBuffer&GL_DEPTH_BUFFER_BIT)
-				SetDepthMask(true);
-
-			glClear(ClearBuffer);
-		}
-
-		void ClearColorBuffer()		{glClear(GL_COLOR_BUFFER_BIT);}
-		void ClearDepthBuffer()		{SetDepthMask(true);glClear(GL_DEPTH_BUFFER_BIT);}
-		void ClearColorDepthBuffer(){SetDepthMask(true);glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);}
-		void ClearStencilBuffer()	{glClear(GL_STENCIL_BUFFER_BIT);}
-		void ClearAccumBuffer()		{glClear(GL_ACCUM_BUFFER_BIT);}
+		//glClearBufferfv系列函数最低需求OpenGL 3.0
+		void ClearColorBuffer()		{glClearBufferfv(GL_COLOR,0,ClearColor);}
+		void ClearDepthBuffer()		{SetDepthMask(true);glClearBufferfv(GL_DEPTH,0,&ClearDepth);}
+		void ClearColorDepthBuffer(){ClearColorBuffer();ClearDepthBuffer();}
+		void ClearStencilBuffer()	{glClearBufferiv(GL_STENCIL,0,&ClearStencil);}
+		void ClearAccumBuffer()		{glClearBufferfv(GL_ACCUM,0,&ClearAccum);}
 	}//namespace graph
 }//namespace hgl

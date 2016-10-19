@@ -340,7 +340,7 @@ namespace hgl
 		* 生成Vertex Shader代码
 		* @param state 渲染状态
 		* @return 生成的Vertex Shader代码
-		* @return NULL 生成失身为
+		* @return NULL 生成失败
 		*/
 #ifdef _DEBUG
 		char *MakeVertexShader(const RenderState *state,const os_char *filename)

@@ -19,7 +19,7 @@ SpiralSphere::SpiralSphere(const Vector3f &up_vector)
 
 //		sphere_mtl[i]->SetTexture(mtcDiffuse,GrayWhiteGrid);
 
-		sphere_obj[i]=new Renderable(sphere_data[i/(SPHERE_NUMBER/SPHERE_LOD_LEVEL)],sphere_mtl[i]);					///<两个可渲染对像使用同一个顶点数据
+		sphere_obj[i]=new Renderable(sphere_data[i/(SPHERE_NUMBER/SPHERE_LOD_LEVEL)],sphere_mtl[i]);					///<多个可渲染对像使用同一个顶点数据
 //		sphere_obj[i]->SetTexCoord(mtcDiffuse,vbtDiffuseTexCoord);			///<设定指定通道使用的纹理坐标数据
 
 		sphere_obj[i]->AutoCreateShader();
