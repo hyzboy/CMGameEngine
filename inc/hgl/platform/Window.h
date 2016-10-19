@@ -1,4 +1,4 @@
-#ifndef HGL_WINDOW_INCLUDE
+﻿#ifndef HGL_WINDOW_INCLUDE
 #define HGL_WINDOW_INCLUDE
 
 #include<hgl/platform/GraphicsSystemInitInfo.h>
