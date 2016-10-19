@@ -12,22 +12,6 @@
 #else
 	#if _MSC_VER == 1900
 		#define HGL_LIB_COMPILER_VERSION	OS_TEXT("19")        //Visual C++ 2015
-	#elif _MSC_VER == 1800
-		#define HGL_LIB_COMPILER_VERSION	OS_TEXT("18")        //Visual C++ 2013
-	#elif _MSC_VER == 1700
-		#define HGL_LIB_COMPILER_VERSION	OS_TEXT("17")        //Visual C++ 2012
-	#elif _MSC_VER == 1600
-		#if _MSC_FULL_VER < 160040219		//Visual C++ 2010 SP1
-			#error Please install Visual C++ 2010 Service Pack 1 and Windows SDK v7.1.
-		#endif//_MSC_FULL_VER
-
-		#define HGL_LIB_COMPILER_VERSION	OS_TEXT("16")
-	#elif _MSC_VER == 1500
-		#if _MSC_FULL_VER < 150030729		//Visual C++ 2008 SP1
-			#error Please install Visual C++ 2008 Service Pack 1 and Windows SDK v7.1.
-		#endif//_MSC_FULL_VER
-
-		#define HGL_LIB_COMPILER_VERSION	OS_TEXT("15")
 	#endif//_MSC_VER
 
 	#define enum_uint(name)	enum name:unsigned int
