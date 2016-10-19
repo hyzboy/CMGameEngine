@@ -28,7 +28,7 @@ namespace hgl
 												"uniform sampler
 												"\n"
 												"in vec2 " HGL_FS_TEXCOORD_GBUFFER ";\n"
-												
+
 												"}";
 		}//namespace shadergen
 	}//namespace graph

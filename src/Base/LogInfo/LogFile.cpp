@@ -6,24 +6,19 @@
 #include<hgl/io/DataOutputStream.h>
 #include<hgl/io/TextOutputStream.h>
 
-#if HGL_OS == HGL_OS_Windows
-	#include<windows.h>
-	#include<shlobj.h>
-#else
-	#include<pwd.h>
-	#include<unistd.h>
-#endif//HGL_OS == HGL_OS_Windows
-
 namespace hgl
 {
 	namespace logger
 	{
+        void GetLocalAppdataPath(os_char fn[HGL_MAX_PATH]);
+        io::TextOutputStream *CreateTextOutputStream(io::OutputStream *);
+
 		class LogFile:public Logger
 		{
 			ThreadMutex lock;
 
-			io::FileOutputStream 	fos;
-			io::UTF16LETextOutputStream *tos;
+			io::FileOutputStream fos;
+			io::TextOutputStream *tos;
 
 		public:
 
@@ -43,25 +38,7 @@ namespace hgl
 				os_char fn[HGL_MAX_PATH];
 				os_char num[16]={'.',0};
 
-			#if HGL_OS == HGL_OS_Windows
-				SHGetFolderPathW(nullptr,CSIDL_LOCAL_APPDATA,nullptr,0,fn);
-			#else
-				struct passwd pwd;
-				struct passwd *result;
-				char *buf;
-				size_t bufsize=sysconf(_SC_GETPW_R_SIZE_MAX);
-
-				if(bufsize==-1)
-					bufsize=16384;
-
-				buf=(char *)malloc(bufsize);
-
-				getpwuid_r(getuid(),&pwd,buf,bufsize,&result);
-
-				strcpy(fn,HGL_MAX_PATH,pwd.pw_dir);
-
-				free(buf);
-			#endif//HGL_OS == HGL_OS_Windows
+                GetLocalAppdataPath(fn);
 
 				strcat(fn,HGL_MAX_PATH,HGL_DIRECTORY_SEPARATOR);
 				strcat(fn,HGL_MAX_PATH,OS_TEXT(".cmgdk"),6);
@@ -69,11 +46,7 @@ namespace hgl
 
 				strcat(fn,HGL_MAX_PATH,HGL_DIRECTORY_SEPARATOR);
 
-#if HGL_OS == HGL_OS_Windows
-				strcat(fn, HGL_MAX_PATH,project_code);
-#else
 				strcat(fn,HGL_MAX_PATH,project_code);
-#endif//HGL_OS == HGL_OS_Windows
 
 				for(uint i=0;i<=0xFFFF;i++)
 				{
@@ -87,9 +60,9 @@ namespace hgl
 
 					strcat(filename,HGL_MAX_PATH,OS_TEXT(".Loginfo"),8);
 
-					if(fos.Create(filename))//创建成功
+					if(fos.CreateTrunc(filename))//创建成功
 					{
-						tos=new io::UTF16LETextOutputStream(&fos);
+						tos=CreateTextOutputStream(&fos);
 						tos->WriteBOM();
 
 						return(true);

@@ -39,7 +39,12 @@
 #define hgl_realloc(ptr,size)	realloc(ptr,size)
 #define hgl_free				free
 
-typedef pthread_mutex_t hgl_thread_mutex;
+#define OS_EXTERNAL_H           <dlfcn.h>
+typedef void *                  ExternalModulePointer;
+#define pi_get                  dlsym
+#define pi_close                dlclose
+
+typedef pthread_mutex_t         hgl_thread_mutex;
 
 #define iconv_str				char *
 

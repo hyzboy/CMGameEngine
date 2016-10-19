@@ -61,6 +61,11 @@
     #define hgl_free                free
 #endif//
 
+#define OS_EXTERNAL_H           <winbase.h>
+typedef HMODULE                 ExternalModulePointer;
+#define pi_get                  GetProcAddress
+#define pi_close                FreeLibrary
+
 typedef	CRITICAL_SECTION		hgl_thread_mutex;
 
 #define struct_stat64			struct _stat64

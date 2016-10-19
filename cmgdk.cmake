@@ -27,7 +27,7 @@ OPTION(LOG_CDB_LOADER_LOG		"Output CDBLoader log"						FALSE	)
 
 IF(BUILD_OPENAL_LIB)
     OPTION(AUDIO_VORBIS_USE_TREMOR  "Vorbis Decode use Tremor"                  FALSE   )
-    
+
     IF(UNIX)
         OPTION(AUDIO_VORBIS_USE_TREMOLO "Vorbis Decode use Tremolo"                 FALSE   )
     ENDIF()
@@ -286,8 +286,8 @@ ENDIF()
 IF(UNIX)
 	MESSAGE("Host OS is UNIX")
 
-	SET(HGL_CONSOLE_MAIN_SOURCE ${CMGDK_PATH}/src/Platform/UNIX/UnixConsole.cpp)
-	SET(HGL_GRAPHICS_MAIN_SOURCE ${CMGDK_PATH}/src/Platform/UNIX/UnixOpenGL.cpp)
+	SET(HGL_CONSOLE_MAIN_SOURCE ${CMGDK_PATH}/src/Platform/UNIX/Console.cpp)
+	SET(HGL_GRAPHICS_MAIN_SOURCE ${CMGDK_PATH}/src/Platform/UNIX/OpenGL.cpp)
 
 	SET(HGL_BASE_LIB ${HGL_BASE_LIB} pthread dl rt)
 
@@ -327,8 +327,8 @@ IF(UNIX)
 		add_definitions("-DHGL_NETWORK_SCTP_SUPPORT")
 	ENDIF(BUILD_NETWORK_SCTP)
 
-	SET(HGL_CONSOLE_LIB ${HGL_BASE_LIB} ${HGL_NETWORK_LIB} expat)
-	SET(HGL_GRAPHICS_LIB ${HGL_CONSOLE_LIB} CM.SceneGraphRender CM.RenderDevice glfw GLEW ${HGL_OpenGL_LIB} X11 Xxf86vm Xrandr Xcursor Xinerama Xi)
+	SET(HGL_CONSOLE_LIB ${HGL_BASE_LIB} ${HGL_NETWORK_LIB} CM.Platform expat)
+	SET(HGL_GRAPHICS_LIB ${HGL_CONSOLE_LIB} CM.SceneGraphRender CM.RenderDevice CM.Platform GLEW ${HGL_OpenGL_LIB} glfw X11 Xxf86vm Xrandr Xcursor Xinerama Xi)
 ELSE(UNIX)
 	MESSAGE("Host OS don't is UNIX")
 ENDIF(UNIX)
@@ -336,10 +336,10 @@ ENDIF(UNIX)
 IF(WIN32)
 	MESSAGE("Host OS is Windows")
 
-	SET(HGL_CONSOLE_MAIN_SOURCE ${CMGDK_PATH}/src/Platform/Win/WinConsole.cpp)
-	SET(HGL_GRAPHICS_MAIN_SOURCE ${CMGDK_PATH}/src/Platform/Win/WinOpenGL.cpp)
-	SET(HGL_CONSOLE_LIB ${HGL_BASE_LIB} ${HGL_NETWORK_LIB} ws2_32.lib)
-	SET(HGL_GRAPHICS_LIB ${HGL_CONSOLE_LIB} CM.SceneGraphRender CM.RenderDevice ${HGL_OpenGL_LIB} OpenGL32.lib)
+	SET(HGL_CONSOLE_MAIN_SOURCE ${CMGDK_PATH}/src/Platform/Win/Console.cpp)
+	SET(HGL_GRAPHICS_MAIN_SOURCE ${CMGDK_PATH}/src/Platform/Win/OpenGL.cpp)
+	SET(HGL_CONSOLE_LIB ${HGL_BASE_LIB} ${HGL_NETWORK_LIB} CM.Platform ws2_32.lib)
+	SET(HGL_GRAPHICS_LIB ${HGL_CONSOLE_LIB} CM.SceneGraphRender CM.RenderDevice CM.Platform ${HGL_OpenGL_LIB} OpenGL32.lib)
 
 	SET(CMAKE_EXE_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} /NODEFAULTLIB:msvcrt.lib ")
 	SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:libcmtd.lib;libcmt.lib")

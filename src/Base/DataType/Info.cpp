@@ -11,7 +11,7 @@ namespace hgl
 
 		void InitString()
 		{
-			hgl_status_string[hfsName	]=OS_TEXT("Classical Moon Game Development Kit");
+			hgl_status_string[hfsName	]=OS_TEXT("CMGDK");
 			hgl_status_string[hfsVersion]=HGL_VERSION_STRING OS_TEXT(" for ") HGL_OS_NAME OS_TEXT("(") HGL_CPU_NAME OS_TEXT(") , ") HGL_COMPILER_NAME OS_TEXT(" (ver:") HGL_LIB_COMPILER_VERSION OS_TEXT(") Edition");
 
 			for(int i=hfsCMGDKPath;i<hfsEnd;i++)
