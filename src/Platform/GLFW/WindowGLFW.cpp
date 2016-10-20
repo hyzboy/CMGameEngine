@@ -34,10 +34,6 @@ namespace hgl
             this->caption=name;
         }
 
-        void WindowGLFW::SetViewport(int l,int t,int w,int h)
-        {
-        }
-
         void WindowGLFW::SetMouseCoord(const Vertex2i &coord)
         {
             glfwSetCursorPos(glfw_win,coord.x,coord.y);

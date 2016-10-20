@@ -49,10 +49,6 @@ namespace hgl
             virtual const OSString &GetCaption()const{return caption;}
             virtual void SetCaption(const OSString &)=0;
 
-            virtual void SetViewport(int,int,int,int)=0;												///<设定可视范围
-                    void SetViewport(){SetViewport(0,0,width,height);}									///<设定可视范围为整个屏幕或窗口
-                    void SetViewport(int w,int h){SetViewport((width-w)/2,(height-h)/2,w,h);}			///<设定可视范围为居中显示的部分屏幕或窗口
-
         public:	//被实际操作系统接口层所调用的函数，在不了解的情况下请不要使用
 
             virtual void SetMouseCoord(const Vertex2i &coord){mouse_coord=coord;}						///<设置鼠标坐标
