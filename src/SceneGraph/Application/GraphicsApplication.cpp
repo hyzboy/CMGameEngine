@@ -4,6 +4,8 @@
 #include<hgl/graph/Render.h>
 #include<hgl/graph/TileFont.h>
 #include<glew/include/GL/glew.h>
+#include <hgl/platform/compiler/EventFunc.h>
+#include <hgl/platform/compiler/EventFunc.h>
 
 extern "C"
 {
@@ -155,6 +157,11 @@ namespace hgl
 
 			default_font=nullptr;
 
+            app_event_base=new AppEventBase;
+
+            SetEventCall(app_event_base->Resize.OnProc,this,GraphicsApplication,ProcResize);
+            SetEventCall(app_event_base->Close.OnProc,this,GraphicsApplication,ProcClose);
+
 			OnResize=nullptr;
 			OnClose=nullptr;
 
@@ -177,6 +184,8 @@ namespace hgl
 			SAFE_CLEAR(flow);
 
 	/*		gui::CloseGUI();*/
+
+            delete app_event_base;
 		}
 
 		void GraphicsApplication::SetFPS(uint fps)
@@ -300,7 +309,7 @@ namespace hgl
 			else
 				PutInfo(u"不使用GUI系统！");
 	*/
-//             win->InitProcEvent(this);		//设置GLFW事件函数回调
+            win->InitProcEvent(app_event_base);		//设置GLFW事件函数回调
 
 			return(true);
 		}
@@ -374,37 +383,37 @@ namespace hgl
 
 	namespace graph
 	{
-		bool GraphicsApplication::Proc_CursorPos(int x,int y)
-		{
-			return flow->Proc_CursorPos(x,y);
-		}
+// 		bool GraphicsApplication::Proc_CursorPos(int x,int y)
+// 		{
+// 			return flow->Proc_CursorPos(x,y);
+// 		}
+//
+// 		bool GraphicsApplication::Proc_Scroll(int x,int y)
+// 		{
+// 			return flow->Proc_Scroll(x,y);
+// 		}
+//
+// 		#define PROC(func_name,type)	bool GraphicsApplication::func_name(type key,bool press)	\
+// 		{	\
+// 			return flow->func_name(key,press);	\
+// 		}
+//
+// 		PROC(Proc_MouseButton	,int);
+// 		PROC(Proc_JoystickButton,int);
+// 		PROC(Proc_Key			,int);
+// 		#undef PROC
+//
+// 		bool GraphicsApplication::Proc_Char				(os_char ch)
+// 		{
+// 			return flow->Proc_Char(ch);
+// 		}
+//
+// 		bool GraphicsApplication::Proc_Event            (int id,void *event_id)
+// 		{
+// 			return flow->Proc_Event(id,event_id);
+// 		}
 
-		bool GraphicsApplication::Proc_Scroll(int x,int y)
-		{
-			return flow->Proc_Scroll(x,y);
-		}
-
-		#define PROC(func_name,type)	bool GraphicsApplication::func_name(type key,bool press)	\
-		{	\
-			return flow->func_name(key,press);	\
-		}
-
-		PROC(Proc_MouseButton	,int);
-		PROC(Proc_JoystickButton,int);
-		PROC(Proc_Key			,int);
-		#undef PROC
-
-		bool GraphicsApplication::Proc_Char				(u16char ch)
-		{
-			return flow->Proc_Char(ch);
-		}
-
-		bool GraphicsApplication::Proc_Event            (int id,void *event_id)
-		{
-			return flow->Proc_Event(id,event_id);
-		}
-
-		void GraphicsApplication::ProcResize(int w,int h)
+		bool GraphicsApplication::ProcResize(int w,int h)
 		{
 			graph::SetViewport(0,0,w,h);
 
@@ -414,11 +423,16 @@ namespace hgl
 				graph::Ortho2DMatrix = ortho2d(w, h);
 			}
 			else
+            {
 				visible = false;
+                return(false);
+            }
 
 			SafeCallEvent(OnResize,(w,h));
 
 			flow->Proc_Resize(w,h);
+
+            return(true);
 		}
 
 		bool GraphicsApplication::ProcClose()

@@ -11,65 +11,64 @@ namespace hgl
 		{
 			void ProcGLFWwindowSize(GLFWwindow *win,int width,int height)
 			{
-                GraphicsApplication *app=(GraphicsApplication *)glfwGetWindowUserPointer(win);
+                AppEventBase *ev=(AppEventBase *)glfwGetWindowUserPointer(win);
 
-                if(app)
-                    app->ProcResize(width,height);
+                if(ev)
+                    ev->Resize.Proc(width,height);
 			}
 
 			void ProcGLFWwindowClose(GLFWwindow *win)
 			{
-                GraphicsApplication *app=(GraphicsApplication *)glfwGetWindowUserPointer(win);
+                AppEventBase *ev=(AppEventBase *)glfwGetWindowUserPointer(win);
 
-                if(app)
-                    app->ProcClose();
+                if(ev)
+                    ev->Close.Proc();
 			}
 
 			void ProcGLFWwindowCursorPos(GLFWwindow *win,double x,double y)
 			{
-                GraphicsApplication *app=(GraphicsApplication *)glfwGetWindowUserPointer(win);
+                AppEventBase *ev=(AppEventBase *)glfwGetWindowUserPointer(win);
 
-                if(app)
-                    app->Proc_CursorPos(x,y);
+                if(ev)
+                    ev->MouseMove.Proc(x,y);
 			}
 
 			void ProcGLFWwindowScroll(GLFWwindow *win,double x,double y)
 			{
-                GraphicsApplication *app=(GraphicsApplication *)glfwGetWindowUserPointer(win);
+                AppEventBase *ev=(AppEventBase *)glfwGetWindowUserPointer(win);
 
-                if(app)
-                    app->Proc_Scroll(x,y);
+                if(ev)
+                    ev->MouseWheel.Proc(x,y);
 			}
 
 			void ProcGLFWwindowMouseButton(GLFWwindow *win,int button,int action,int mods)
 			{
-                GraphicsApplication *app=(GraphicsApplication *)glfwGetWindowUserPointer(win);
+                AppEventBase *ev=(AppEventBase *)glfwGetWindowUserPointer(win);
 
-                if(app)
-                    app->Proc_MouseButton(button,action&GLFW_PRESS);
+                if(ev)
+                    ev->MouseButton.Proc(button,action&GLFW_PRESS);
 			}
 
 			void ProcGLFWwindowKey(GLFWwindow *win,int key,int scancode,int action,int mods)
 			{
-                GraphicsApplication *app=(GraphicsApplication *)glfwGetWindowUserPointer(win);
+                AppEventBase *ev=(AppEventBase *)glfwGetWindowUserPointer(win);
 
-                if(app)
-                    app->Proc_Key(key,action&GLFW_PRESS);
+                if(ev)
+                    ev->Key.Proc(key,action&GLFW_PRESS);
 			}
 
 			void ProcGLFWwindowChar(GLFWwindow *win,unsigned int character)
 			{
-                GraphicsApplication *app=(GraphicsApplication *)glfwGetWindowUserPointer(win);
+                AppEventBase *ev=(AppEventBase *)glfwGetWindowUserPointer(win);
 
-                if(app)
-                    app->Proc_Char(character);
+                if(ev)
+                    ev->Char.Proc((os_char)character);
 			}
 		}
-/*
-        void JoinWindowEvent(graph::GraphicsApplication *app,Window *win)
+
+        void WindowGLFW::InitProcEvent(AppEventBase *ev)
 		{
-            GLFWwindow *glfw_win=((WindowGLFW *)win)->gl
-            glfwSetWindowUserPointer(glfw_win,app);
+            glfwSetWindowUserPointer(glfw_win,ev);
 
 			glfwSetWindowSizeCallback(glfw_win,ProcGLFWwindowSize);
 			glfwSetWindowCloseCallback(glfw_win,ProcGLFWwindowClose);
@@ -80,10 +79,5 @@ namespace hgl
 			glfwSetKeyCallback(glfw_win,ProcGLFWwindowKey);
 			glfwSetCharCallback(glfw_win,ProcGLFWwindowChar);
 		}
-
-		void UnjonGLFWWindowEvent(GLFWwindow *glfw_win);
-        {
-            glfw_win_map.DeleteByIndex(glfw_win);
-        }*/
     }//namespace platform
 }//namespace hgl

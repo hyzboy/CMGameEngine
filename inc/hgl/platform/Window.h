@@ -3,6 +3,7 @@
 
 #include<hgl/type/Vertex2.h>
 #include<hgl/type/BaseString.h>
+#include<hgl/platform/EventBase.h>
 namespace hgl
 {
     namespace platform
@@ -62,6 +63,7 @@ namespace hgl
             virtual void WaitEvent(const double &time_out=0)=0;                                         ///<等待下一个事件
             virtual void PollEvent()=0;                                                                 ///<轮询事件
             virtual bool IsOpen()=0;                                                                    ///<是否依然存在
+            virtual void InitProcEvent(AppEventBase *)=0;                                               ///<初始化事件处理接收器
         };//class Window
     }//namespace platform
 }//namespace hgl

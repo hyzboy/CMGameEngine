@@ -3,6 +3,7 @@
 
 #include<hgl/platform/BaseApplication.h>
 #include<hgl/platform/GraphicsSystemInitInfo.h>
+#include<hgl/platform/EventBase.h>
 #include<hgl/object/FlowControl.h>
 
 namespace hgl
@@ -11,6 +12,8 @@ namespace hgl
     {
         class Window;
     }//namespace platform
+
+    using namespace platform;
 
 	namespace graph
 	{
@@ -24,7 +27,7 @@ namespace hgl
 			Window *win;
 			bool wait_active;
 
-			#include<hgl/object/Object.ProcEvent.h>
+            AppEventBase *app_event_base;                                                               ///<根事件
 
 		protected:
 
@@ -55,7 +58,7 @@ namespace hgl
 		public:	//事件
 
             virtual bool ProcClose();
-            virtual void ProcResize(int,int);
+            virtual bool ProcResize(int,int);
 
 			DefEvent(void,OnResize,(int,int));															///<窗口大小被调整了
 			DefEvent(bool,OnClose,());																	///<窗口被关闭了
@@ -64,6 +67,8 @@ namespace hgl
 
 			GraphicsApplication(FlowControl *fc=nullptr);
 			virtual ~GraphicsApplication();
+
+            AppEventBase *GetEventBase(){return app_event_base;}                                        ///<取得根事件收发器
 
 			virtual bool Init(GraphicsSystemInitInfo *);												///<初始化当前应用程序
 
