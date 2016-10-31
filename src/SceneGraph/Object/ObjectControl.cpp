@@ -130,7 +130,7 @@ namespace hgl
 			while(n--)
 				all_object[n]->SuperObject=nullptr;
 
-			SuperClass::Clear();
+			obj_clas.Clear();
 		}
 
 		/**
@@ -155,7 +155,7 @@ namespace hgl
 				SetKeyFocus(nullptr);
 
 			obj->SuperObject=nullptr;
-			SuperClass::Unlink(obj);
+			obj_clas.Unlink(obj);
 
 			if(CheckObjectAttrib(obj,ocAlign))
 				SetRefresh();
@@ -180,7 +180,7 @@ namespace hgl
 			while(n--)
 				all_object[n]->SuperObject=nullptr;
 
-			SuperClass::UnlinkAll();
+			obj_clas.UnlinkAll();
 		}
 
 		/**
@@ -212,7 +212,7 @@ namespace hgl
 				return;
 			}
 
-			SuperClass::Add(obj);
+			obj_clas.Add(obj);
 
 			obj->SuperObject=this;				// Form 会在设置 SuperObject时设置自己为活动对象
 												// 所以必须先将Form添加到ClasList后再设置SuperObject
@@ -666,7 +666,7 @@ namespace hgl
 				{
 					GUIObject *go=(GUIObject *)obj;
 
-					LOG_INFO(str 
+					LOG_INFO(str
 						+(go->mouse_focus ? U16_TEXT("●") : U16_TEXT("○"))
 						+UTF16String(go->view_scope.Left)
 						+UTF16String(go->view_scope.Top)

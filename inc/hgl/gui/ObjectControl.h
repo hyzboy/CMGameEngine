@@ -18,9 +18,11 @@ namespace hgl
 		/**
 		* 对象控制器，这是一个最基本的对象控制器，可以添加若干个对象到里面。然后由它控制显示、刷新、清除。它也可以被继承。
 		*/
-		class ObjectControl:public ClasList<Object,Object::ObjectClas::ocEnd>,public GUIObject			///对象控制器
+		class ObjectControl:public GUIObject			///对象控制器
 		{
-			typedef ClasList<Object,Object::ObjectClas::ocEnd> SuperClass;
+			using ObjectClasList=ClasList<Object,Object::ObjectClas::ocEnd>;
+
+            ObjectClasList obj_clas;
 
 			#include<hgl/object/Object.ProcEvent.h>
 			#include<hgl/gui/ObjectControl.Private.h>
