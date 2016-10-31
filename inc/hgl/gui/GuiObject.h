@@ -1,9 +1,10 @@
 ﻿#ifndef HGL_GUI_OBJECT_INCLUDE
 #define HGL_GUI_OBJECT_INCLUDE
 
-#include<hgl/object/EventObject.h>
+#include<hgl/object/VisualObject.h>
 #include<hgl/type/BaseString.h>
 #include<hgl/type/RectScope.h>
+#include<hgl/type/Vertex2.h>
 namespace hgl
 {
 	namespace graph
@@ -42,10 +43,12 @@ namespace hgl
 				alEnd                       ///<结束定义，无意义
 			};
 
+            using MouseCoord=Vertex2i;
+
 			/**
 			* GUI对象是所有GUI控件的基类，它主要是使用了相对坐标设计，并且支持对齐属性，以及一些通用自动事件
 			*/
-			class GUIObject:public EventObject                                                              ///GUI对象
+			class GUIObject:public VisualObject                                                              ///GUI对象
 			{
 				#include<hgl/gui/GuiObject.Attrib.h>
 
@@ -78,8 +81,7 @@ namespace hgl
 				Property<int>		CenterX;                                                                ///<控件中心X
 				Property<int>		CenterY;                                                                ///<控件中心Y
 
-				Property<int>		MenuX;                                                                  ///<画面坐标X
-				Property<int>		MenuY;                                                                  ///<画面坐标Y
+				Property<Vertex2i>	MenuCoord;                                                              ///<画面绝对坐标
 
 				Property<bool>		MouseFocus;                                                             ///<鼠标是否在上面
 
@@ -99,7 +101,7 @@ namespace hgl
 				GUIObject(int,int,int,int);																	///<本类构造函数
 				virtual ~GUIObject()=default;																///<本类析构函数
 
-				virtual void SetMenuCoord(int,int);															///<设置对象绝对坐标
+				virtual void SetMenuCoord(const Vertex2i &);												///<设置对象绝对坐标
 
 				RectScope2i &GetViewScope(){return view_scope;}												///<取得显示范围
 				virtual void SetViewScope(const RectScope2i &rs);											///<设置显示范围
@@ -119,11 +121,7 @@ namespace hgl
 				virtual void DrawObject(const Matrix4f *);
 				virtual void SetScissor(int *);
 
-				void GetMouseCoord(int &x,int &y)
-				{
-					x=mouse_coord[0];
-					y=mouse_coord[1];
-				}
+				const MouseCoord &GetMouseCoord()const{return mouse_coord;}
 			};//class GUIObject
 
 			#define ON_DRAW_AND_RETURN(param)		if(OnDraw){OnDraw(param);return;}

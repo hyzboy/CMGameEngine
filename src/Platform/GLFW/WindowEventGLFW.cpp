@@ -30,7 +30,7 @@ namespace hgl
                 AppEventBase *ev=(AppEventBase *)glfwGetWindowUserPointer(win);
 
                 if(ev)
-                    ev->MouseMove.Proc(x,y);
+                    ev->MouseMove.Proc(Vertex2i(x,y));
 			}
 
 			void ProcGLFWwindowScroll(GLFWwindow *win,double x,double y)
