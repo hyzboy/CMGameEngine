@@ -10,7 +10,7 @@ namespace hgl
 	{
 	public:
 
-		virtual ~_Object(){};																			///<本类析构函数
+		virtual ~_Object()=default;																		///<本类析构函数
 	};//class _Object
 
 	typedef void (_Object::*ObjectMemberFunc)();

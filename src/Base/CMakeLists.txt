@@ -3,12 +3,8 @@
 
 SOURCE_GROUP("Common" FILES ${BASE_COMMON_SOURCE})
 
-SET(BASE_OBJECT_SOURCE
-	Object/Object.cpp
-	Object/EnumObject.cpp
-	Object/ConsoleFlowControl.cpp
-	Object/ConsoleFlowObject.cpp
-	Object/ConsoleObjectControl.cpp)
+SET(BASE_OBJECT_SOURCE)
+# 	Object/ConsoleObjectControl.cpp)
 
 SOURCE_GROUP("Object"	FILES ${BASE_OBJECT_SOURCE})
 
