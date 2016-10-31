@@ -7,16 +7,9 @@ namespace hgl
 	*/
 	ConsoleFlowObject::ConsoleFlowObject()
 	{
-		object_attrib|=oaFlow;
-
 		fos=fosNotInit;
 
 		NextObject		=nullptr;
-
-		OnDestroy		=nullptr;
-		OnFlowReturn	=nullptr;
-
-		hglSetPropertyRead(ObjectState,this,ConsoleFlowObject::GetState);
 	}
 
 	/**
@@ -25,8 +18,6 @@ namespace hgl
 	*/
 	ConsoleFlowObject::~ConsoleFlowObject()
 	{
-    	SafeCallEvent(OnDestroy,(this));
-
 		delete NextObject;
 	}
 
@@ -45,12 +36,7 @@ namespace hgl
 
 			return(result);
 		}
-		else
-        	return(nullptr);
-	}
 
-	void ConsoleFlowObject::ObjectReturn(ConsoleFlowObject *fo)
-	{
-    	SafeCallEvent(OnFlowReturn,(fo));
+       	return(nullptr);
 	}
 }//namespace hgl
