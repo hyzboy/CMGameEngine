@@ -1,6 +1,7 @@
-#ifndef HGL_CLASLIST_INCLUDE
+﻿#ifndef HGL_CLASLIST_INCLUDE
 #define HGL_CLASLIST_INCLUDE
 
+#include<hgl/type/Set.h>
 #include<hgl/type/List.h>
 namespace hgl
 {
@@ -12,15 +13,19 @@ namespace hgl
 	{
 	protected:
 
-		ObjectList<T> all_object;                                                                   ///<全部对象列表
-		List<T *> clas_object[TypeCount];                                                           ///<分类对象列表
+        ObjectList<T> all_object;                                                                   ///<全部对象列表
+        Set<T *> clas_object[TypeCount];                                                            ///<分类对象列表
 
 	public:
+
+        virtual int CheckObjectAttrib(T *,int)=0;                                                   ///<返回对象分类虚拟函数，用于识别函数类型
+
+    public:
 
 		ClasList()=default;
 		virtual ~ClasList()=default;
 
-		virtual void Add(T *);																		///<添加一个对象到当前控制器器
+		virtual uint Add(T *);																		///<添加一个对象到当前控制器器
 		virtual void Clear();                                                                       ///<清除所有对象
 
 		virtual bool Unlink(T *);                                                                   ///<将指定对象与当前控制器断开关联
@@ -30,9 +35,9 @@ namespace hgl
 				void DeleteAll(){Clear();}															///<删除所有对象
 
 				void operator += (T *obj){Add(obj);}                                                ///<添加一个对象到当前控制器器
-				void operator << (T *obj){Add(obj);}
+				void operator << (T *obj){Add(obj);}                                                ///<添加一个对象到当前控制器器
 
-		List<T *> &operator[](int index){return clas_object[index];}								///<按分类使用列表
+        Set<T *> &operator[](int index){return clas_object[index];}                                 ///<按分类使用列表
 	};//template<typename T,int TypeCount> class ClasList
 }//namespace hgl
 #include<hgl/type/ClasList.cpp>
