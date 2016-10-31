@@ -9,9 +9,15 @@ namespace hgl
 	*/
     class ConsoleFlowObject:public _FlowObject<ConsoleFlowObject>                                   ///流程对象基类
 	{
+        bool is_back=false;
+
     public:
 
         using _FlowObject<ConsoleFlowObject>::_FlowObject;
+
+        virtual void OnToBack()override{is_back=true;}
+        virtual void OnResume()override{is_back=false;}
+        virtual bool CanUpdate(){return !is_back;}
 
 		virtual void Update(){}																		///<刷新函数
 	};//class ConsoleFlowObject

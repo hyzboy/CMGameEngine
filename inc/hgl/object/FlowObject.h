@@ -10,18 +10,25 @@ namespace hgl
 	*/
     class FlowObject:public _FlowObject<FlowObject>                                                 ///作业流程对象基类
 	{
-	protected:
-
-        virtual void OnResize(int,int){}                                                            ///<画布尺寸调整事件
-        virtual void OnRotate(int){}                                                                ///<屏幕旋转事件
+        bool is_back=false;
+        bool is_draw=true;
 
 	public: //方法
 
         using _FlowObject<FlowObject>::_FlowObject;                                                 ///<本类构造函数
 		virtual ~FlowObject(){}                                                                    	///<本类析构函数
 
+        virtual void OnResize(int,int){}                                                            ///<画布尺寸调整事件
+        virtual void OnRotate(int){}                                                                ///<屏幕旋转事件
+
+        virtual void OnToBack()override{is_back=true;}
+        virtual void OnResume()override{is_back=false;is_draw=true;}
+
+        virtual bool CanUpdate(){return !is_back;}                                                  ///<是否可以刷新
+        virtual bool CanDraw(){return is_draw;}                                                     ///<是否可以绘制函数
+
 		virtual void Update(){}																		///<刷新函数
-        virtual void Draw(){}                                                                       ///<画面绘制
+        virtual void Draw(const Matrix4f *){}                                                       ///<画面绘制
 	};//class FlowObject
 }//namespace hgl
 #endif//HGL_FLOW_OBJECT_INCLUDE

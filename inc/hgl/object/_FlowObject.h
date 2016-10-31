@@ -16,8 +16,10 @@ namespace hgl
 
         FlowObjectState fos;                                                                        ///<当前对象状态
 
-    protected:  //事件
+    public:  //事件
 
+        virtual void OnToBack(){}                                                                   ///<将当前流程切入后台
+        virtual void OnResume(){}                                                                   ///<将当前流恢复到前台
         virtual void OnDestroy(){/*重载此处理本对象销毁事件*/}                                          ///<当前对象销毁事件
 
 	public: //方法
@@ -44,12 +46,13 @@ namespace hgl
          * 结束当前流程并进入下一个流程
          * @param next_obj 下一个流程对象
          */
-        virtual void ExitToNext(T *next_obj)
+        virtual void Exit(T *next_obj,FlowObjectState os)
         {
             if(NextObject)                      //有一个没用，，，奇怪的错误
                 NextObject->OnDestroy();
 
             NextObject=next_obj;
+            fos=os;
         }
 
         /**
@@ -73,7 +76,12 @@ namespace hgl
          * 流程返回事件
          * @param prev_fo 之前执行的对象
          */
-        virtual void ObjectReturn(T *prev_fo){/*重载此函数以处理返回事件*/}                             ///<对象返回函数
+        virtual void ObjectReturn(T *prev_fo)                                                       ///<对象返回函数
+        {
+            OnResume();
+            fos=fosOK;
+            NextObject=nullptr;
+        }
 	};//template<typename T> class _FlowObject
 }//namespace hgl
 #endif//HGL__FLOW_OBJECT_INCLUDE
