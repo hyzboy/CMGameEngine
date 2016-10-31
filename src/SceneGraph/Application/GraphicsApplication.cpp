@@ -164,8 +164,6 @@ namespace hgl
 
 			OnResize=nullptr;
 			OnClose=nullptr;
-
-			SetEventCall(flow->OnChange,this,GraphicsApplication,ProcActiveObject);
 		}
 
 		GraphicsApplication::~GraphicsApplication()
@@ -310,6 +308,7 @@ namespace hgl
 				PutInfo(u"不使用GUI系统！");
 	*/
             win->InitProcEvent(app_event_base);		//设置GLFW事件函数回调
+            app_event_base->Join(flow->GetEventBase()); //绑定应用事件收发
 
 			return(true);
 		}
@@ -375,7 +374,7 @@ namespace hgl
 
 				WaitActive();
 			}
-			while(flow->ObjectState!=fosExitApp);
+			while(flow->GetState()!=fosExitApp);
 
 			return(0);
 		}
@@ -383,36 +382,6 @@ namespace hgl
 
 	namespace graph
 	{
-// 		bool GraphicsApplication::Proc_CursorPos(int x,int y)
-// 		{
-// 			return flow->Proc_CursorPos(x,y);
-// 		}
-//
-// 		bool GraphicsApplication::Proc_Scroll(int x,int y)
-// 		{
-// 			return flow->Proc_Scroll(x,y);
-// 		}
-//
-// 		#define PROC(func_name,type)	bool GraphicsApplication::func_name(type key,bool press)	\
-// 		{	\
-// 			return flow->func_name(key,press);	\
-// 		}
-//
-// 		PROC(Proc_MouseButton	,int);
-// 		PROC(Proc_JoystickButton,int);
-// 		PROC(Proc_Key			,int);
-// 		#undef PROC
-//
-// 		bool GraphicsApplication::Proc_Char				(os_char ch)
-// 		{
-// 			return flow->Proc_Char(ch);
-// 		}
-//
-// 		bool GraphicsApplication::Proc_Event            (int id,void *event_id)
-// 		{
-// 			return flow->Proc_Event(id,event_id);
-// 		}
-
 		bool GraphicsApplication::ProcResize(int w,int h)
 		{
 			graph::SetViewport(0,0,w,h);
@@ -430,7 +399,7 @@ namespace hgl
 
 			SafeCallEvent(OnResize,(w,h));
 
-			flow->Proc_Resize(w,h);
+			flow->OnResize(w,h);
 
             return(true);
 		}
