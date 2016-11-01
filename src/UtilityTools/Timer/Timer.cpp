@@ -1,4 +1,4 @@
-#include<hgl/ut/Timer.h>
+﻿#include<hgl/ut/Timer.h>
 #include<hgl/Other.h>
 
 namespace hgl
@@ -10,13 +10,9 @@ namespace hgl
 		if(t)
 			Interval=t;
 		else
-			Enabled=false;
+            SetEnabled(false);
 
 		OnTimer=nullptr;
-	}
-
-	Timer::~Timer()
-	{
 	}
 
 	void Timer::SetInterval(double t)
@@ -28,7 +24,7 @@ namespace hgl
 	void Timer::Update()
 	{
 		if(OnTimer==nullptr)    //没有设置事件函数
-			Enabled=false;
+            SetEnabled(false);
 
 		double cur_time=GetDoubleTime();
 

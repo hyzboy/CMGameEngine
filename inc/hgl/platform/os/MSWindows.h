@@ -9,30 +9,14 @@
 #define os_char			wchar_t
 #define to_oschar		to_u16
 #define OS_TEXT(str)	L##str
-
-#if defined(_MSC_VER)&&(_MSC_VER<1900)		// < vc2015
-	#define U8_TEXT(str)	str
-#else
-	#define U8_TEXT(str)	u8##str
-#endif//
+#define U8_TEXT(str)	u8##str
 #define U16_TEXT(str)	L##str
 
 #define HGL_OS_NAME				OS_TEXT("Windows")
 
 #if HGL_CPU == HGL_CPU_X86_32
-	#if (!defined(_WIN32_WINNT))||(_WIN32_WINNT<0x0501)
-		#undef _WIN32_WINNT
-		#define _WIN32_WINNT 0x0501			//声明可以使用Windows XP级别的Windows API
-	#endif//_WIN32_WINNT
-
 	#define HGL_LIB_OS					"Win32"											//库操作系统前缀
-
 #elif HGL_CPU == HGL_CPU_X86_64
-	#if (!defined(_WIN32_WINNT))||(_WIN32_WINNT<0x0502)
-		#undef _WIN32_WINNT
-		#define _WIN32_WINNT 0x0502			//声明可以使用Windows Server 2003/XP-64级别的Windows API
-	#endif//_WIN32_WINNT
-
 	#define HGL_LIB_OS					"Win64"											//库操作系统前缀
 #endif//HGL_CPU
 //--------------------------------------------------------------------------------------------------

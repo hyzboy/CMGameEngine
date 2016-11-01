@@ -1,18 +1,16 @@
-﻿	friend class hgl::graph::ObjectControl;
-
-  	void SetSuperObject(ObjectControl *);
+﻿  	void SetSuperObject(Object *);
 
 protected:
 
 	GuiAlign align;								//对齐属性
 	bool move;									//是否可移动
 	RectScope2i view_scope;						//控件显示范围
-	int menux,menuy;							//屏幕绝对坐标
+	Vertex2i menu_coord;						//屏幕绝对坐标
 	int scissor[4];								//裁剪坐标
 
 	bool mouse_focus;							//鼠标是否在内部
 
-	Vector2f mouse_coord;						//鼠标最近一次坐标
+	MouseCoord mouse_coord;						//鼠标最近一次坐标
 	bool mouse_down[mbEnd];						//鼠标是否按下
 	Vector2f mouse_down_point[mbEnd];			//鼠标按下时的坐标点
 
@@ -37,8 +35,7 @@ protected:
 			int			GetCenterX	()const{return view_scope.GetCenterX();}
 			int			GetCenterY	()const{return view_scope.GetCenterY();}
 
-			int			GetMenuX	()const{return menux;}
-			int			GetMenuY	()const{return menuy;}
+	const Vertex2i &	GetMenuCoord()const{return menu_coord;}
 
 			bool		GetFocus	()const{return mouse_focus;}
 

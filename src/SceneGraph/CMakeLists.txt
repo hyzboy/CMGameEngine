@@ -1,20 +1,17 @@
-﻿SET(BASE_GRAPH_OBJECT_SOURCE 	Object/EventObject.cpp
-								Object/FlowObject.cpp
-								Object/FlowControl.cpp
-								Object/MultiFlowControl.cpp
-								Object/RadioObject.cpp
-								Object/VisualObject.cpp
-								Object/ObjectControl.cpp
-								Object/ObjectControl.KeyFocus.cpp
-								Object/ObjectControl.Makeup.cpp
-								Object/ObjectControl.Proc.cpp
-								Object/GUIObject.cpp)
+﻿SET(BASE_GRAPH_OBJECT_SOURCE 	Object/FlowControl.cpp)
+# 								Object/MultiFlowControl.cpp
+# 								Object/RadioObject.cpp
+# 								Object/VisualObject.cpp
+# 								Object/ObjectControl.cpp
+# 								Object/ObjectControl.KeyFocus.cpp
+# 								Object/ObjectControl.Makeup.cpp
+# 								Object/ObjectControl.Proc.cpp
+# 								Object/GUIObject.cpp)
 
 SOURCE_GROUP("Object" FILES ${BASE_GRAPH_OBJECT_SOURCE})
 
 SET(GRAPHICS_APPLICATION_SOURCE
 		Application/GraphicsApplication.cpp
-		Application/GraphicsApplicationEvent.cpp
 		Application/GraphicsSystemInitInfo.cpp)
 
 SOURCE_GROUP("Application" FILES ${GRAPHICS_APPLICATION_SOURCE})

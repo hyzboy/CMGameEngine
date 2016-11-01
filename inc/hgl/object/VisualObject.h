@@ -1,7 +1,7 @@
 ﻿#ifndef HGL_VISUALOBJECT_INCLUDE
 #define HGL_VISUALOBJECT_INCLUDE
 
-#include<hgl/object/EnumObject.h>
+#include<hgl/object/Object.h>
 namespace hgl
 {
 	namespace graph
@@ -9,9 +9,28 @@ namespace hgl
 		/**
 		* 可视对象基类，这个类定义了可视对象的基本操作方法
 		*/
-		class VisualObject:public EnumObject                                                            ///可视对象基类
+		class VisualObject:public Object                                                            ///可视对象基类
 		{
-			#include<hgl/object/VisualObject.Private.h>
+            friend class ObjectControl;
+
+        protected:
+
+            bool visible;
+            bool topmost;
+            bool bottommost;
+
+            virtual const bool is_visual	()const{return visible;}
+            virtual const bool is_proc_event()const{return(visible&&enabled);}
+
+        protected:
+
+            bool GetVisible(){return visible;}
+            bool GetTopMost(){return topmost;}
+            bool GetBottomMost(){return bottommost;}
+
+            virtual void SetVisible(bool);
+            virtual void SetTopMost(bool);
+            virtual void SetBottomMost(bool);
 
 		public: //属性
 

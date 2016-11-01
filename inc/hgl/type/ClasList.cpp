@@ -1,4 +1,4 @@
-#ifndef HGL_CLASLIST_CPP
+﻿#ifndef HGL_CLASLIST_CPP
 #define HGL_CLASLIST_CPP
 
 #include<hgl/type/ClasList.h>
@@ -45,15 +45,23 @@ namespace hgl
 	}
 
 	template<typename T,int TypeCount>
-	void ClasList<T,TypeCount>::Add(T *obj)
+	uint ClasList<T,TypeCount>::Add(T *obj)
 	{
-		if(!obj)return;
+		if(!obj)return(0);
+
+        int count=0;
 
 		for(int i=0;i<TypeCount;i++)
-			if(obj->CheckObjectAttrib(i))
+            if(CheckObjectAttrib(obj,i))
+            {
 				clas_object[i].Add(obj);
+                ++count;
+            }
+
+        if(count<=0)return(0);
 
 		all_object+=obj;
+        return(count);
 	}
 }//namespace hgl
 #endif//HGL_CLASLIST_CPP

@@ -65,7 +65,7 @@ public:
 		delete grid;
 	}
 
-	void Draw()
+	void Draw(const Matrix4f *)
 	{
 		ClearColorDepthBuffer();
 

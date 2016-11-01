@@ -2,14 +2,14 @@
 #define HGL_TIMER_INCLUDE
 
 #include<hgl/type/DataType.h>
-#include<hgl/object/EnumObject.h>
+#include<hgl/object/Object.h>
 namespace hgl
 {
 	/**
 	* 计时器是一个简单封装的组件。通过操作OnTimer事件通知应用程序时间到了！
 	* 注意如果间隔时间为0那表示不使用定时器，但这样不如将Enable设为false更为高效。
 	*/
-	class Timer:public EnumObject                                                                   ///计时器类
+    class Timer:public Object                                                                      ///计时器类
 	{
 	protected:
 
@@ -30,9 +30,9 @@ namespace hgl
 	public:
 
 		Timer(double=0);
-		virtual ~Timer();
+		virtual ~Timer()=default;
 
 		virtual void Update();
-	};
-}
+    };//class Timer:public Object
+}//namespace hgl
 #endif//HGL_TIMER_INCLUDE

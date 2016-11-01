@@ -1,56 +1,25 @@
 ﻿#ifndef HGL_CONSOLE_FLOW_OBJECT_INCLUDE
 #define HGL_CONSOLE_FLOW_OBJECT_INCLUDE
 
-#include<hgl/platform/BaseApplication.h>
-#include<hgl/object/EnumObject.h>
-#include<hgl/object/ConsoleObjectControl.h>
+#include<hgl/object/_FlowObject.h>
 namespace hgl
 {
-	class BaseApplication;
-
 	/**
 	* 流程对象是指可以放在流程控制器里的一种特殊对象
 	*/
-	class ConsoleFlowObject:public EnumObject                                         	            ///流程对象基类
+    class ConsoleFlowObject:public _FlowObject<ConsoleFlowObject>                                   ///流程对象基类
 	{
-		friend class ConsoleFlowControl;
+        bool is_back=false;
 
-	protected:
+    public:
 
-		ConsoleFlowObject *NextObject;                                                              ///<下一个对象
+        using _FlowObject<ConsoleFlowObject>::_FlowObject;
 
-		FlowObjectState fos;                                                                        ///<当前对象状态
-
-		FlowObjectState GetState(){return fos;}
-
-	public: //属性
-
-		ConsoleObjectControl Control;                                                               ///<对象控制器
-
-		Property<FlowObjectState> ObjectState;                                                      ///<当前对象状态虚拟变量
-
-	public:	//事件
-
-		DefEvent(void,OnDestroy,(ConsoleFlowObject *));												///<销毁事件
-
-		DefEvent(void,OnFlowReturn,(ConsoleFlowObject *));											///<流程返回事件
-
-	public: //方法
-
-		ConsoleFlowObject();																		///<本类构造函数
-		virtual ~ConsoleFlowObject();																///<本类析构函数
-
-		virtual ConsoleFlowObject *GetNextObject();													///<取得下一个对象
-		virtual void ObjectReturn(ConsoleFlowObject *);												///<对象返回函数
+        virtual void OnToBack()override{is_back=true;}
+        virtual void OnResume()override{is_back=false;}
+        virtual bool CanUpdate(){return !is_back;}
 
 		virtual void Update(){}																		///<刷新函数
-		virtual void UpdateObject()
-		{
-			Update();
-
-			if(Control.Enabled)
-				Control.Update();
-		}
 	};//class ConsoleFlowObject
 }//namespace hgl
 #endif//HGL_CONSOLE_FLOW_OBJECT_INCLUDE

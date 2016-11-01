@@ -1,74 +1,78 @@
-﻿#include"PlatformGLFW.h"
-#include<hgl/platform/Window.h>
+﻿#include"WindowGLFW.h"
+#include"PlatformGLFW.h"
+#include<hgl/platform/PlatformInterface.h>
+#include<GLFW/glfw3.h>
 
 namespace hgl
 {
     namespace platform
     {
-        class WindowGLFW:public Window
+        WindowGLFW::WindowGLFW(GLFWwindow *w,bool fs)
         {
-            GLFWwindow *glfw_win;
+            glfw_win=w;
+            this->full_screen=fs;
+        }
 
-        public:
+        WindowGLFW::~WindowGLFW()
+        {
+            glfwDestroyWindow(glfw_win);
+        }
 
-            WindowGLFW(GLFWwindow *w,bool fs)
-            {
-                glfw_win=w;
-                this->full_screen=fs;
-            }
+        void WindowGLFW::ToMin(){glfwIconifyWindow(glfw_win);}
+        void WindowGLFW::ToMax(){glfwMaximizeWindow(glfw_win);}
 
-            ~WindowGLFW()override{glfwDestroyWindow(glfw_win);}
+        void WindowGLFW::Show(){glfwShowWindow(glfw_win);}
+        void WindowGLFW::Hide(){glfwHideWindow(glfw_win);}
 
-            void ToMin()override{glfwIconifyWindow(glfw_win);}
-            void ToMax()override{glfwMaximizeWindow(glfw_win);}
-
-            void Show()override{glfwShowWindow(glfw_win);}
-            void Hide()override{glfwHideWindow(glfw_win);}
-
-            void SetCaption(const OSString &name)override
-            {
+        void WindowGLFW::SetCaption(const OSString &name)
+        {
 #if HGL_OS == HGL_OS_Windows
-				glfwSetWindowTitle(glfw_win,to_u8(name));
+            glfwSetWindowTitle(glfw_win,to_u8(name));
 #else
-                glfwSetWindowTitle(glfw_win,name);
+            glfwSetWindowTitle(glfw_win,name);
 #endif//
-                this->caption=name;
-            }
+            this->caption=name;
+        }
 
-            void SetViewport(int l,int t,int w,int h)override
-            {
-            }
+        void WindowGLFW::SetMouseCoord(const Vertex2i &coord)
+        {
+            glfwSetCursorPos(glfw_win,coord.x,coord.y);
+            mouse_coord=coord;
+        }
 
-            void SetMouseCoord(const Vertex2i &coord)override
-            {
-                glfwSetCursorPos(glfw_win,coord.x,coord.y);
-                mouse_coord=coord;
-            }
+        void WindowGLFW::SetSize(int w,int h)
+        {
+            glfwSetWindowSize(glfw_win,w,h);
+            this->width=w;
+            this->height=h;
+        }
 
-            void SetSize(int w,int h)override{glfwSetWindowSize(glfw_win,w,h);}
+        void WindowGLFW::MakeToCurrent(){glfwMakeContextCurrent(glfw_win);}
 
-            void MakeToCurrent()override{glfwMakeContextCurrent(glfw_win);}
+        void WindowGLFW::SwapBuffer(){glfwSwapBuffers(glfw_win);}
 
-            void SwapBuffer()override{glfwSwapBuffers(glfw_win);}
+        void WindowGLFW::WaitEvent(const double &time_out)
+        {
+            if(time_out>0)
+                glfwWaitEventsTimeout(time_out);
+            else
+                glfwWaitEvents();
+        }
 
-            void WaitEvent(const double &time_out)override
-            {
-                if(time_out>0)
-                    glfwWaitEventsTimeout(time_out);
-                else
-                    glfwWaitEvents();
-            }
+        void WindowGLFW::PollEvent(){glfwPollEvents();}
 
-            void PollEvent()override{glfwPollEvents();}
-        };//class WindowGLFW
+        bool WindowGLFW::IsOpen(){return(!glfwWindowShouldClose(glfw_win));}
+    }//namespace platform
 
+    namespace platform
+    {
         void SetGLFWWindowHint(const OpenGLSetup *gs)
         {
 			glfwWindowHint(GLFW_SAMPLES,				gs->MultiSample);
 
 			glfwWindowHint(GLFW_CLIENT_API,				gs->opengl_es?GLFW_OPENGL_ES_API:GLFW_OPENGL_API);
 
-            glfwWindowHint(GLFW_CONTEXT_CREATION_API,   gs->egl?GLFW_NATIVE_CONTEXT_API:GLFW_EGL_CONTEXT_API);
+            glfwWindowHint(GLFW_CONTEXT_CREATION_API,   gs->egl?GLFW_EGL_CONTEXT_API:GLFW_NATIVE_CONTEXT_API);
 
             if(gs->opengl_es)
             {
@@ -125,7 +129,7 @@ namespace hgl
 			GLFWwindow *win=glfwCreateWindow(	vm->width,
                                                 vm->height,
                                                 "CMGDK Window",
-                                                ((MonitorGLFW *)monitor)->glfw_monitor,
+                                                monitor?((MonitorGLFW *)monitor)->glfw_monitor:nullptr,
                                                 nullptr);
 
             if(!win)RETURN_ERROR_NULL;

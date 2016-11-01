@@ -2,8 +2,9 @@
 #define HGL_PLATFORM_GLFW_INCLUDE
 
 #include<hgl/platform/PlatformInterface.h>
-#include<GLFW/glfw3.h>
 #include<hgl/type/List.h>
+
+struct GLFWmonitor;
 
 namespace hgl
 {
