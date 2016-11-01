@@ -1,4 +1,5 @@
-﻿set(CM_OPENGL_SOURCE                glBuffer.cpp
+﻿set(CM_OPENGL_SOURCE                glDebug.cpp
+                                    glBuffer.cpp
                                     glCaps.cpp
                                     glFace.cpp
                                     glTexture.cpp
