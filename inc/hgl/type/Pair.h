@@ -1,4 +1,4 @@
-#ifndef HGL_TYPE_PAIR_INCLUDE
+﻿#ifndef HGL_TYPE_PAIR_INCLUDE
 #define HGL_TYPE_PAIR_INCLUDE
 
 #include<hgl/platform/Platform.h>
@@ -61,118 +61,22 @@ namespace hgl
 			p.left=right;
 			p.right=left;
 		}
+
+		//不使用CompOperator是因为某些类型无法做+-处理
+
+        const bool operator == (const SelfClass &p)const
+        {
+            if(this->left!=p.left)return(false);
+
+            return this->right==p.right;
+        }
+
+        const bool operator != (const SelfClass &p)const
+        {
+            if(this->left==p.left)return(false);
+
+            return this->right!=p.right;
+        }
 	};//template<typename L,typename R> struct Pair
-
-	///**
- //    * 左值比较数据对
- //    */
-	//template<typename L,typename R> struct LeftIndexPair:public Pair<L,R>
-	//{
- //       using SuperClass=Pair<L,R>;
- //       using LIPCalss=struct LeftIndexPair<L,R>;
-
- //       virtual int Comp(const L &l)
- //       {
- //           return this->left-l;
- //       }
-
- //       virtual int Comp(const SuperClass &p)
- //       {
- //           return this->left-p.left;
- //       }
-
- //       virtual int Comp(const LIPCalss &p)
- //       {
- //           return this->left-p.left;
- //       }
-
- //       CompOperator(const L &,Comp);
- //       CompOperator(const SuperClass &,Comp);
- //       CompOperator(const LIPCalss &,Comp);
- //   };//template<typename L,typename R> struct LeftIndexPair:public Pair<L,R>
-
- //   /**
- //    * 右值比较数据对
- //    */
- //   template<typename L,typename R> struct RightIndexPair:public Pair<L,R>
-	//{
- //       using SuperClass=Pair<L,R>;
- //       using RIPClass=struct RightIndexPair<L,R>;
-
- //       virtual int Comp(const R &r)
- //       {
- //           return this->right-r;
- //       }
-
- //       virtual int Comp(const SuperClass &p)
- //       {
- //           return this->right-p.right;
- //       }
-
- //       virtual int Comp(const RIPClass &p)
- //       {
- //           return this->right-p.right;
- //       }
-
- //       CompOperator(const R &,Comp);
- //       CompOperator(const SuperClass &,Comp);
- //       CompOperator(const RIPClass &,Comp);
- //   };//template<typename L,typename R> struct RightIndexPair:public Pair<L,R>
-
- //   template<typename L,typename R> struct LeftPointerPair
- //   {
- //       using PairClass=Pair<L,R>;
- //       using SelfClass=LeftPointerPair<L,R>;
-
- //       PairClass *data;
-
- //   public:
-
- //       LeftPointerPair(PairClass *p)
- //       {
- //           data=p;
- //       }
-
- //       virtual int Comp(const PairClass &p)
- //       {
- //           return data->left-p.left;
- //       }
-
- //       virtual int Comp(const SelfClass &p)
- //       {
- //           return data->left-p.data->left;
- //       }
-
- //       CompOperator(const PairClass &,Comp);
- //       CompOperator(const SelfClass &,Comp);
- //   };//template<typename L,typename R> struct LeftPointerPair
-
- //   template<typename L,typename R> struct RightPointerPair
- //   {
- //       using PairClass=Pair<L,R>;
- //       using SelfClass=RightPointerPair<L,R>;
-
- //       PairClass *data;
-
- //   public:
-
- //       RightPointerPair(PairClass *p)
- //       {
- //           data=p;
- //       }
-
- //       virtual int Comp(const PairClass &p)
- //       {
- //           return data->right-p.right;
- //       }
-
- //       virtual int Comp(const SelfClass &p)
- //       {
- //           return data->right-p.data->right;
- //       }
-
- //       CompOperator(const PairClass &,Comp);
- //       CompOperator(const SelfClass &,Comp);
- //   };//template<typename L,typename R> struct RightPointerPair
 }//namespace hgl
 #endif//HGL_TYPE_PAIR_INCLUDE
