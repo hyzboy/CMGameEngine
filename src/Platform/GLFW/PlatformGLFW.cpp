@@ -1,5 +1,5 @@
-﻿#include<hgl/type/Map.h>
-#include"PlatformGLFW.h"
+﻿#include"PlatformGLFW.h"
+#include<GLFW/glfw3.h>
 
 namespace hgl
 {

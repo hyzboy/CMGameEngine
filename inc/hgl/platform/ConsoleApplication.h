@@ -16,10 +16,6 @@ namespace hgl
 
 		ConsoleFlowControl *flow;                                                       			///<流程控制器
 
-	protected:
-
-		virtual void ProcActiveObject(ConsoleFlowObject *){}
-
 	public:
 
 		ConsoleApplication(ConsoleFlowControl *cus_control=nullptr);
@@ -27,7 +23,7 @@ namespace hgl
 
 		virtual bool Init(ConsoleSystemInitInfo *);													///<初始化当前应用程序
 
-		virtual void SetStart(ConsoleFlowObject *);													///<设定起始流程对象
+		virtual void SetStart(ConsoleFlowObject *fo){flow->SetStart(fo);}							///<设定起始流程对象
 
         virtual void Frame()                                                                        ///<更新一帧
         {
@@ -45,7 +41,7 @@ namespace hgl
             {
                 Frame();                                                                            ///<调用一帧刷新
             }
-		    while(flow->ObjectState!=fosExitApp);
+		    while(flow->GetState()!=fosExitApp);
 
 			return(0);
         }

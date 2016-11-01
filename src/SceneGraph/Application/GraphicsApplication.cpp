@@ -1,10 +1,11 @@
 ﻿#include<hgl/platform/GraphicsApplication.h>
-#include<hgl/platform/GraphicsSystemInitInfo.h>
+#include<hgl/platform/Window.h>
 #include<hgl/object/FlowControl.h>
 #include<hgl/graph/Render.h>
 #include<hgl/graph/TileFont.h>
 #include<glew/include/GL/glew.h>
-#include<GLFW/glfw3.h>
+#include <hgl/platform/compiler/EventFunc.h>
+#include <hgl/platform/compiler/EventFunc.h>
 
 extern "C"
 {
@@ -121,8 +122,6 @@ namespace hgl
 
 	namespace graph
 	{
-		GraphicsApplication *graphics_application=nullptr;
-
 		void InitRender();																			//初始化渲染器
 		void CloseRender();																			//关闭渲染器
 
@@ -152,39 +151,39 @@ namespace hgl
 			hglSetProperty(		FPS, this,GraphicsApplication::GetFPS,GraphicsApplication::SetFPS);
 			cur_fps=0;
 
-			glfw_win=nullptr;
+			win=nullptr;
 			wait_active=true;
 			visible = true;
 
 			default_font=nullptr;
 
+            app_event_base=new AppEventBase;
+
+            SetEventCall(app_event_base->Resize.OnProc,this,GraphicsApplication,ProcResize);
+            SetEventCall(app_event_base->Close.OnProc,this,GraphicsApplication,ProcClose);
+
 			OnResize=nullptr;
 			OnClose=nullptr;
-
-			SetEventCall(flow->OnChange,this,GraphicsApplication,ProcActiveObject);
-
-			graphics_application=this;
 		}
 
 		GraphicsApplication::~GraphicsApplication()
 		{
-			graphics_application=nullptr;
-
 			SAFE_CLEAR(default_font);
 
 			graph::CloseRender();
 
 			ClearOpenGLCoreExtension();
 
-			if(glfw_win)
-				glfwDestroyWindow(glfw_win);
-			glfwTerminate();
+            SAFE_CLEAR(win);
+            platform::ClosePlatform();
 
 	//		openal::CloseOpenAL();
 
 			SAFE_CLEAR(flow);
 
 	/*		gui::CloseGUI();*/
+
+            delete app_event_base;
 		}
 
 		void GraphicsApplication::SetFPS(uint fps)
@@ -220,39 +219,29 @@ namespace hgl
 
 	//		openal::InitOpenAL(nullptr,sii->audio.DeviceName,sii->audio.enum_device);
 
-			if(!glfwInit())
+			if(!platform::InitPlatform())
 			{
-				LOG_ERROR(OS_TEXT("GLFW初始化失败！"));
+				LOG_ERROR(OS_TEXT("Init Platform failed！"));
 				return(false);
 			}
 
 // 			InitKeyConvert();		//位于GLEWInterface.CPP中
 
-			glfwWindowHint(GLFW_RESIZABLE,				_sii->win.Resize);
-			glfwWindowHint(GLFW_REFRESH_RATE,			_sii->graphics.VSync);
-			glfwWindowHint(GLFW_SAMPLES,				_sii->graphics.gl.MultiSample);
+            if(_sii->graphics.FullScreen)
+            {
+                platform::VideoMode vm;
 
-			glfwWindowHint(GLFW_CLIENT_API,				_sii->graphics.gl.opengl_es?GLFW_OPENGL_ES_API:GLFW_OPENGL_API);
+                vm.width=_sii->graphics.Width;
+                vm.height=_sii->graphics.Height;
 
-			glfwWindowHint(GLFW_OPENGL_PROFILE,			GLFW_OPENGL_CORE_PROFILE);			//核心模式
-			glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT,	true);								//向前兼容模式(无旧特性)
-			glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT,	_sii->graphics.gl.debug);			//调试模式
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,	_sii->graphics.gl.major);
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,	_sii->graphics.gl.minor);
+                win=platform::Create(nullptr,&vm,&(_sii->graphics.gl));
+            }
+            else
+            {
+                win=platform::Create(_sii->graphics.Width,_sii->graphics.Height,&(_sii->win),&(_sii->graphics.gl));
+            }
 
-			glfwWindowHint(GLFW_VISIBLE,				true);								//是否显示
-
-			if(_sii->graphics.gl.AlphaBits	>0)glfwWindowHint(GLFW_ALPHA_BITS	,_sii->graphics.gl.AlphaBits	);
-			if(_sii->graphics.gl.DepthBits	>0)glfwWindowHint(GLFW_DEPTH_BITS	,_sii->graphics.gl.DepthBits	);
-			if(_sii->graphics.gl.StencilBits>0)glfwWindowHint(GLFW_STENCIL_BITS	,_sii->graphics.gl.StencilBits	);
-
-			glfw_win=glfwCreateWindow(	_sii->graphics.Width,
-										_sii->graphics.Height,
-										_sii->win.Name,
-										NULL,//glfwGetPrimaryMonitor(),
-										NULL);
-
-			if(!glfw_win)
+			if(!win)
 			{
 				LOG_ERROR(OS_TEXT("创建窗口失败！另一种可能是您的显卡或驱动不支持 OpenGL Core ")+OSString(_sii->graphics.gl.major)+OS_TEXT(".")+OSString(_sii->graphics.gl.minor));
 				return(false);
@@ -260,7 +249,7 @@ namespace hgl
 
 			wait_active=_sii->WaitActive;
 
-			glfwMakeContextCurrent(glfw_win);
+            win->MakeToCurrent();
 
 			InitOpenGLCoreExtensions();		//初始化OpenGL Core扩展管理
 											//GLEW(至少1.11版本还是)在OpenGL Core模式下的扩展检测是不可用的，所以不要使用原始的glew代码，并一定在glew初始化之前调用InitOpenGLCoreExtensions
@@ -318,7 +307,8 @@ namespace hgl
 			else
 				PutInfo(u"不使用GUI系统！");
 	*/
-			InitProcEvent();		//设置GLFW事件函数回调
+            win->InitProcEvent(app_event_base);		//设置GLFW事件函数回调
+            app_event_base->Join(flow->GetEventBase()); //绑定应用事件收发
 
 			return(true);
 		}
@@ -337,15 +327,15 @@ namespace hgl
 
         void GraphicsApplication::SwapBuffer()
         {
-            glfwSwapBuffers(glfw_win);              //交换缓冲区
+            win->SwapBuffer();                              //交换缓冲区
         }
 
 		void GraphicsApplication::WaitActive()
 		{
 			if(wait_active)
-				glfwWaitEvents();							//Windows版代码是先WaitMessage再glfwPollEvents
-			else
-				glfwPollEvents();
+                win->WaitEvent();							//Windows版代码是先WaitMessage再glfwPollEvents
+
+			win->PollEvent();
 		}
 
 		int GraphicsApplication::Run()
@@ -368,7 +358,7 @@ namespace hgl
 				{
 					prev_time=cur_time;
 
-					if(!glfwWindowShouldClose(glfw_win))		//如果窗口还开着
+					if(win->IsOpen())		                    //如果窗口还开着
 					{
 						flow->Draw(&mv);						//调用流程绘制代码
 						flow->ProcCurState();					//处理流程状态
@@ -384,7 +374,7 @@ namespace hgl
 
 				WaitActive();
 			}
-			while(flow->ObjectState!=fosExitApp);
+			while(flow->GetState()!=fosExitApp);
 
 			return(0);
 		}
@@ -392,37 +382,7 @@ namespace hgl
 
 	namespace graph
 	{
-		bool GraphicsApplication::Proc_CursorPos(int x,int y)
-		{
-			return flow->Proc_CursorPos(x,y);
-		}
-
-		bool GraphicsApplication::Proc_Scroll(int x,int y)
-		{
-			return flow->Proc_Scroll(x,y);
-		}
-
-		#define PROC(func_name,type)	bool GraphicsApplication::func_name(type key,bool press)	\
-		{	\
-			return flow->func_name(key,press);	\
-		}
-
-		PROC(Proc_MouseButton	,int);
-		PROC(Proc_JoystickButton,int);
-		PROC(Proc_Key			,int);
-		#undef PROC
-
-		bool GraphicsApplication::Proc_Char				(u16char ch)
-		{
-			return flow->Proc_Char(ch);
-		}
-
-		bool GraphicsApplication::Proc_Event            (int id,void *event_id)
-		{
-			return flow->Proc_Event(id,event_id);
-		}
-
-		void GraphicsApplication::ProcResize(int w,int h)
+		bool GraphicsApplication::ProcResize(int w,int h)
 		{
 			graph::SetViewport(0,0,w,h);
 
@@ -432,11 +392,16 @@ namespace hgl
 				graph::Ortho2DMatrix = ortho2d(w, h);
 			}
 			else
+            {
 				visible = false;
+                return(false);
+            }
 
 			SafeCallEvent(OnResize,(w,h));
 
-			flow->Proc_Resize(w,h);
+			flow->OnResize(w,h);
+
+            return(true);
 		}
 
 		bool GraphicsApplication::ProcClose()

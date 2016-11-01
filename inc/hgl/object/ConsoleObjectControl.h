@@ -1,21 +1,29 @@
 ﻿#ifndef HGL_CONSOLE_OBJECT_CONTROL_INCLUDE
 #define HGL_CONSOLE_OBJECT_CONTROL_INCLUDE
 
-#include<hgl/object/EnumObject.h>
-#include<hgl/type/Stack.h>
+#include<hgl/object/Object.h>
+#include<hgl/object/ObjectAttrib.h>
 #include<hgl/type/ClasList.h>
 namespace hgl
 {
+    class ConsoleObjectClasList:public ClasList<Object,ObjectClas::ocEnd>
+    {
+    public:
+
+        bool CheckObjectAttrib(Object *,int type) override
+        {
+        }
+    };//class ConsoleObjectClasList
+
+
 	/**
 	* 对象控制器，这是一个最基本的对象控制器，可以添加若干个对象到里面。然后由它控制显示、刷新、清除。它也可以被继承。
 	*/
-	class ConsoleObjectControl:public ClasList<Object,Object::ObjectClas::ocEnd>,public EnumObject	///对象控制器
+	class ConsoleObjectControl:public Object     ///对象控制器
 	{
 	private:
 
-		typedef ClasList<Object,Object::ObjectClas::ocEnd> SuperClass;
-
-		bool CheckObjectAttrib(Object *,int);
+        ConsoleObjectClasList clas;
 
 	protected:
 
@@ -24,7 +32,7 @@ namespace hgl
 	public: //设置对象属性(内部方法，请不要调用)
 
 		virtual void SetEnabledAttrib(Object *,bool);
-		virtual void SetUpdateAttrib(EnumObject *,bool);
+		virtual void SetUpdateAttrib(Object *,bool);
 		virtual void SetDestroyAttrib(Object *);
 
 	public: //方法

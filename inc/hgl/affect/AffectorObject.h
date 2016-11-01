@@ -1,7 +1,7 @@
 ﻿#ifndef HGL_AFFECTOR_OBJECT_INCLUDE
 #define HGL_AFFECTOR_OBJECT_INCLUDE
 
-#include<hgl/object/EnumObject.h>
+#include<hgl/object/Object.h>
 namespace hgl
 {
 	class TDFNode;
@@ -10,7 +10,7 @@ namespace hgl
 	/**
 	* 影响器对像
 	*/
-	class AffectorObject:public EnumObject															///影响器对像
+    class AffectorObject:public Object                                                             ///影响器对像
 	{
 	protected:
 
@@ -30,7 +30,7 @@ namespace hgl
 		virtual bool Resume(){return(true);}														///<恢复
 		virtual bool Stop(){return(true);}															///<停止
 
-		virtual void Update(){};																	///<刷新
+		virtual void Update(){};																  ///<刷新
 	};//class AffectorObject
 }//namespace hgl
 #endif//HGL_AFFECTOR_OBJECT_INCLUDE

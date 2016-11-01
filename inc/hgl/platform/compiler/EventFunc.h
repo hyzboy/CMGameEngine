@@ -35,8 +35,13 @@ namespace hgl
 
 			EventFunc()
 			{
-				memset(this,0,sizeof(SelfClass));
+				ClearFunc();
 			}
+
+			void ClearFunc()
+            {
+                memset(this,0,sizeof(SelfClass));
+            }
 
 			bool operator !()const
 			{

@@ -28,8 +28,7 @@ namespace hgl
 
 		//		hglSetProperty(		ViewScope,	this,GUIObject::GetViewScope,GUIObject::SetViewScope);
 
-				hglSetPropertyRead(	MenuX,		this,GUIObject::GetMenuX	);
-				hglSetPropertyRead(	MenuY,		this,GUIObject::GetMenuY	);
+				hglSetPropertyRead(	MenuCoord,	this,GUIObject::GetMenuCoord);
 
 				hglSetPropertyRead(	MouseFocus,	this,GUIObject::GetFocus	);
 
@@ -49,8 +48,7 @@ namespace hgl
 
 				view_scope=rs;
 
-				menux   =0;
-				menuy   =0;
+				menu_coord.Zero();
 
 				AutoActive=false;
 
@@ -245,10 +243,10 @@ namespace hgl
 				return(false);
 			}
 
-			void GUIObject::SetMenuCoord(int ox,int oy)
+			void GUIObject::SetMenuCoord(const Vertex2i &off)
 			{
-				menux=ox+view_scope.Left;
-				menuy=oy+view_scope.Top;
+				menu_coord.x=off.x+view_scope.Left;
+				menu_coord.y=off.y+view_scope.Top;
 			}
 
 			void GUIObject::DrawObject(const Matrix4f *mv)

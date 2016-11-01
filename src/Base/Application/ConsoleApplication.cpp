@@ -23,8 +23,6 @@ namespace hgl
 			flow=cus_control;
 		else
 			flow=new ConsoleFlowControl();
-
-		SetEventCall(flow->OnChange,this,ConsoleApplication,ProcActiveObject);
 	}
 
 	ConsoleApplication::~ConsoleApplication()
@@ -82,12 +80,5 @@ namespace hgl
     		return(true);
         else
             return(false);
-	}
-
-	void ConsoleApplication::SetStart(ConsoleFlowObject *fo)
-	{
-		flow->SetStart(fo);
-
-		ProcActiveObject(fo);
 	}
 }//namespace hgl

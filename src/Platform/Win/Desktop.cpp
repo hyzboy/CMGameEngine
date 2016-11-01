@@ -8,7 +8,7 @@
 namespace hgl
 {
     /**
-    * 弹出一个网页浏览器,并自动打开指定的网址。示例: PopupWebBrowser(u"http://www.hyzgame.com.cn");
+    * 弹出一个网页浏览器,并自动打开指定的网址。示例: PopupWebBrowser(L"http://www.hyzgame.com.cn");
     * @param url 网址
     */
     void PopupWebBrowser(const u16char *url)
@@ -17,7 +17,7 @@ namespace hgl
     }
 
     /**
-    * 弹出邮件客户端软件,并自动指定收件人的email地址。示例: PopupEmailClient(u"hyz@hyzgame.com.cn",u"您好!");
+    * 弹出邮件客户端软件,并自动指定收件人的email地址。示例: PopupEmailClient(L"hyz@hyzgame.com.cn",L"您好!");
     * @param email 电子邮件地址
     * @param subject 邮件主题
     */
