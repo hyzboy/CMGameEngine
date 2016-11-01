@@ -19,7 +19,7 @@ namespace hgl
     * 现这个模板使用双头链表，每次添加或使用的数据会被移到链表的最前端。<br>
     * 这样使用率最低的数据会被存在链表的最末端，当缓冲区满时，最末端的数据将会被清除。
     */
-    template<typename F,typename T> class ActiveChain:public Object									///缓冲区管理模板(以最终使用时间为基准)
+    template<typename F,typename T> class ActiveChain                                               ///缓冲区管理模板(以最终使用时间为基准)
     {
         typedef ActiveChain<F,T> this_class;
 

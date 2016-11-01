@@ -1,7 +1,6 @@
 ﻿#ifndef HGL_LIST_INCLUDE
 #define HGL_LIST_INCLUDE
 
-#include<hgl/object/Object.h>
 #include<hgl/LogInfo.h>
 #include<stdlib.h>
 #include<initializer_list>
@@ -15,7 +14,7 @@ namespace hgl
 	/**
 	* List类用于保存数据列表。可以在列表中添加、删除、查找、访问和排序数据。
 	*/
-	template <typename T> class List:public _Object													///列表处理类
+    template <typename T> class List                                                                ///列表处理类
 	{
 	protected:
 
