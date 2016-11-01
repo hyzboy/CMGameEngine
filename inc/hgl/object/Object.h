@@ -12,19 +12,19 @@ namespace hgl
 	{
     protected:  //私有属性
 
-        bool enabled;                                                                               ///<是否可以刷新
-        bool visible;                                                                               ///<是否可以显示
-        bool give_event;                                                                            ///<是否接收事件
+        bool enabled=false;                                                                         ///<是否可以刷新
+        bool visible=false;                                                                         ///<是否可以显示
+        bool give_event=false;                                                                      ///<是否接收事件
 
 	public:	//属性
 
-		UTF16String      				Name;                                                       ///<对象名称
+        UTF16String Name;                                                                           ///<对象名称
 
 	public:
 
         Object(){}                                                                                  ///<本类构造函数
         Object(const UTF16String &n){Name=n;}                                                       ///<本类构造函数
-        virtual ~Object(){}                                                                         ///<本类析构函数
+        virtual ~Object()=default;                                                                  ///<本类析构函数
 
         virtual void SetEnabled(bool e){enabled=e;}
         virtual void SetVisible(bool v){visible=v;}
