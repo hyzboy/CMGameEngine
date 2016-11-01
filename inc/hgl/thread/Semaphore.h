@@ -1,14 +1,13 @@
 ﻿#ifndef HGL_SEMAPHORE_INCLUDE
 #define HGL_SEMAPHORE_INCLUDE
 
-#include<hgl/object/_Object.h>
 namespace hgl
 {
 	/**
 	* 信号是用于多线程同步中常用的一种技术<br>
 	* 注意信号的用法是要有信号释放出来，才能获取到信号。
 	*/
-	class Semaphore:public _Object                                                                  ///信号
+    class Semaphore                                                                                 ///信号
 	{
 		void *ptr;
 

@@ -13,7 +13,7 @@ namespace hgl
 	/**
 	* 索引数据模板
 	*/
-	template<typename F,typename T,typename DataPair> class _Map:public _Object
+	template<typename F,typename T,typename DataPair> class _Map
 	{
 	public:
 

@@ -1,7 +1,6 @@
 ﻿#ifndef HGL_RES_MANAGE_INCLUDE
 #define HGL_RES_MANAGE_INCLUDE
 
-#include<hgl/object/Object.h>
 #include<hgl/type/Map.h>
 namespace hgl
 {
@@ -20,7 +19,7 @@ namespace hgl
 	/**
 	* 资源管理器,它没有缓冲管理，仅仅是管理数据，并保证不会被重复加载
 	*/
-	template<typename F,typename T> class ResManage:public Object
+	template<typename F,typename T> class ResManage
 	{
 	protected:
 
