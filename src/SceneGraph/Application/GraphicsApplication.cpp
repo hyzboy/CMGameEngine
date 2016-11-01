@@ -274,6 +274,8 @@ namespace hgl
             {
                 if(GLEW_VERSION_4_3||GLEW_KHR_debug)
                 {
+                    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+
                     glDebugMessageCallback(opengl_debug_message::OpenGLDebugProc,nullptr);
 
                     glDebugMessageControl(GL_DEBUG_SOURCE_API, GL_DEBUG_TYPE_OTHER, GL_DEBUG_SEVERITY_NOTIFICATION, 0,nullptr,GL_FALSE);
@@ -281,6 +283,8 @@ namespace hgl
                 else
                 if(GLEW_ARB_debug_output)
                 {
+                    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS_ARB);
+
                     glDebugMessageCallbackARB(opengl_debug_message::OpenGLDebugProc,nullptr);
 
                     glDebugMessageControlARB(GL_DEBUG_SOURCE_API_ARB, GL_DEBUG_TYPE_OTHER_ARB, GL_DEBUG_SEVERITY_NOTIFICATION, 0,nullptr,GL_FALSE);
