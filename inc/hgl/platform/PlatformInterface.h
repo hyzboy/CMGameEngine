@@ -90,8 +90,8 @@ namespace hgl
             bool debug;																			///<是否使用硬件Debug信息(默认不产生，并且此功能不对所有显卡以及驱动有效)
         };
 
-        const bool InitPlatform();                                                                  ///<初始化平台接口
-        void ClosePlatform();                                                                       ///<关闭平台接口
+        const bool InitGraphicsPlatform();                                                          ///<初始化平台接口
+        void CloseGraphicsPlatform();                                                               ///<关闭平台接口
 
         const UTF8String &GetPlatformName();                                                        ///<获取平台名称
 
