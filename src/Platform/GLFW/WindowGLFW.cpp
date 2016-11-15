@@ -128,7 +128,7 @@ namespace hgl
 
 			GLFWwindow *win=glfwCreateWindow(	vm->width,
                                                 vm->height,
-                                                "CMGDK Window",
+                                                hglGetString(hfsName),
                                                 monitor?((MonitorGLFW *)monitor)->glfw_monitor:nullptr,
                                                 nullptr);
 
