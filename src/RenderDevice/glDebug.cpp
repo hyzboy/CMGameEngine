@@ -1,4 +1,5 @@
 ﻿#include<hgl/type/BaseString.h>
+#include<hgl/LogInfo.h>
 #include<glew/include/GL/glew.h>
 
 namespace hgl

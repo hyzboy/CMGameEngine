@@ -1,5 +1,6 @@
 ﻿#include"WindowGLFW.h"
 #include"PlatformGLFW.h"
+#include<hgl/Info.h>
 #include<hgl/platform/PlatformInterface.h>
 #include<GLFW/glfw3.h>
 

@@ -78,8 +78,8 @@ namespace hgl
                 //未来使用Sampler Object，则不再需要以下部分
                 glTextureParameteri(texture_id,GL_TEXTURE_MIN_FILTER,min_filter);
                 glTextureParameteri(texture_id,GL_TEXTURE_MAG_FILTER,mag_filter);
-                glTextureParameteri(texture_id,GL_TEXTURE_WRAP_S,GL_REPEAT);
-                glTextureParameteri(texture_id,GL_TEXTURE_WRAP_T,GL_REPEAT);
+                glTextureParameteri(texture_id,GL_TEXTURE_WRAP_S,wrap_s);
+                glTextureParameteri(texture_id,GL_TEXTURE_WRAP_T,wrap_t);
             }
 
             return(true);

@@ -15,7 +15,7 @@ IF(UNIX)
 
     SET(PLATFORM_APPLICATION_SOURCE     UNIX/SystemInfo.cpp)
 
-	SET(PLATFORM_LOG_SOURCE                UNIX/LogConsole.cpp
+	SET(PLATFORM_LOG_SOURCE             UNIX/LogConsole.cpp
                                         UNIX/LogFile.cpp)
 
 	SET(PLATFORM_MULTI_THREAD_SOURCE    UNIX/CondVar.cpp
@@ -45,7 +45,7 @@ IF(WIN32)
 
     SET(PLATFORM_APPLICATION_SOURCE     Win/SystemInfo.cpp)
 
-	SET(PLATFORM_LOG_SOURCE                Win/LogConsole.cpp
+	SET(PLATFORM_LOG_SOURCE             Win/LogConsole.cpp
                                         Win/LogDialog.cpp
                                         Win/LogFile.cpp)
 
@@ -93,39 +93,53 @@ IF(BUILD_OPENGL_LIB)
 
     SOURCE_GROUP("Graphics" FILES Window.cpp)
 
-    SET(PLATFORM_GLFW_SUPPORT_SOURCE    GLFW/PlatformGLFW.cpp
-                                        GLFW/WindowGLFW.cpp
-                                        GLFW/WindowEventGLFW.cpp)
-
-    SET(PLATFORM_SOURCE ${PLATFORM_SOURCE}
-                        ${PLATFORM_GLFW_SUPPORT_SOURCE})
-
-    SOURCE_GROUP("Graphics" FILES ${PLATFORM_GLFW_SUPPORT_SOURCE})
-
-    IF(WIN32)
-        add_definitions("-D_GLFW_WIN32")
-        add_definitions("-D_GLFW_WGL")
-
-        set(GLFW_SOURCE		GLFW/GLFW3/context.c
-                            GLFW/GLFW3/egl_context.c
-                            GLFW/GLFW3/init.c
-                            GLFW/GLFW3/input.c
-                            GLFW/GLFW3/monitor.c
-                            GLFW/GLFW3/vulkan.c
-                            GLFW/GLFW3/wgl_context.c
-                            GLFW/GLFW3/win32_init.c
-                            GLFW/GLFW3/win32_joystick.c
-                            GLFW/GLFW3/win32_monitor.c
-                            GLFW/GLFW3/win32_time.c
-                            GLFW/GLFW3/win32_tls.c
-                            GLFW/GLFW3/win32_window.c
-                            GLFW/GLFW3/window.c)
-
-        SOURCE_GROUP("Graphics\\GLFW3"   FILES ${GLFW_SOURCE})
+    IF(USE_GLFW)
+        SET(PLATFORM_GLFW_SUPPORT_SOURCE    GLFW/PlatformGLFW.cpp
+                                            GLFW/WindowGLFW.cpp
+                                            GLFW/WindowEventGLFW.cpp)
 
         SET(PLATFORM_SOURCE ${PLATFORM_SOURCE}
-                            ${GLFW_SOURCE})
-    ENDIF(WIN32)
+                            ${PLATFORM_GLFW_SUPPORT_SOURCE})
+
+        SOURCE_GROUP("Graphics\\GLFW3" FILES ${PLATFORM_GLFW_SUPPORT_SOURCE})
+
+        IF(WIN32)
+            add_definitions("-D_GLFW_WIN32")
+            add_definitions("-D_GLFW_WGL")
+
+            set(GLFW_SOURCE		GLFW/GLFW3/context.c
+                                GLFW/GLFW3/egl_context.c
+                                GLFW/GLFW3/init.c
+                                GLFW/GLFW3/input.c
+                                GLFW/GLFW3/monitor.c
+                                GLFW/GLFW3/vulkan.c
+                                GLFW/GLFW3/wgl_context.c
+                                GLFW/GLFW3/win32_init.c
+                                GLFW/GLFW3/win32_joystick.c
+                                GLFW/GLFW3/win32_monitor.c
+                                GLFW/GLFW3/win32_time.c
+                                GLFW/GLFW3/win32_tls.c
+                                GLFW/GLFW3/win32_window.c
+                                GLFW/GLFW3/window.c)
+
+            SOURCE_GROUP("Graphics\\GLFW3"   FILES ${GLFW_SOURCE})
+
+            SET(PLATFORM_SOURCE ${PLATFORM_SOURCE}
+                                ${GLFW_SOURCE})
+        ENDIF(WIN32)
+    ELSE(USE_GLFW)
+        IF(UNIX)
+            set(X11_PLATFORM_SOURCE X11/X11Window.cpp)
+
+            SOURCE_GRAPH("Graphics\\X11" FILES ${X11_PLATFORM_SOURCE})
+
+            SET(PLATFORM_SOURCE ${PLATFORM_SOURCE}
+                                ${X11_PLATFORM_SOURCE})
+        ENDIF(UNIX)
+
+        IF(APPLE)
+        ENDIF(APPLE)
+    ENDIF(USE_GLFW)
 ENDIF(BUILD_OPENGL_LIB)
 
 add_library(CM.Platform STATIC ${PLATFORM_SOURCE})

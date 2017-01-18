@@ -5,7 +5,6 @@
 #include<hgl/graph/TileFont.h>
 #include<glew/include/GL/glew.h>
 #include <hgl/platform/compiler/EventFunc.h>
-#include <hgl/platform/compiler/EventFunc.h>
 
 extern "C"
 {
@@ -79,7 +78,7 @@ namespace hgl
 			ClearOpenGLCoreExtension();
 
             SAFE_CLEAR(win);
-            platform::ClosePlatform();
+            platform::CloseGraphicsPlatform();
 
 	//		openal::CloseOpenAL();
 
@@ -123,7 +122,7 @@ namespace hgl
 
 	//		openal::InitOpenAL(nullptr,sii->audio.DeviceName,sii->audio.enum_device);
 
-			if(!platform::InitPlatform())
+			if(!platform::InitGraphicsPlatform())
 			{
 				LOG_ERROR(OS_TEXT("Init Platform failed！"));
 				return(false);
