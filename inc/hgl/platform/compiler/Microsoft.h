@@ -4,9 +4,6 @@
 #define HGL_COMPILER_NAME			OS_TEXT("Microsoft C/C++")
 #define HGL_LIB_COMPILER_NAME		OS_TEXT("MSC")
 
-#define HGL_USE_APR			//使用Apache Portable Runtime
-//#define HGL_USE_C_IO		//使用C IO库
-
 #if _MSC_VER < 1900							//Visual C++ 2015(19)
 	#error Please upgrade your compiler or development tools to Microsoft C/C++ 19.0 (Visual C++ 2015) or later.
 #else
