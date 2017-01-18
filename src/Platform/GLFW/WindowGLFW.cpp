@@ -1,5 +1,6 @@
 ﻿#include"WindowGLFW.h"
 #include"PlatformGLFW.h"
+#include<hgl/Info.h>
 #include<hgl/platform/PlatformInterface.h>
 #include<GLFW/glfw3.h>
 
@@ -128,7 +129,7 @@ namespace hgl
 
 			GLFWwindow *win=glfwCreateWindow(	vm->width,
                                                 vm->height,
-                                                hglGetString(hfsName),
+                                                "CMGDK Window",
                                                 monitor?((MonitorGLFW *)monitor)->glfw_monitor:nullptr,
                                                 nullptr);
 
