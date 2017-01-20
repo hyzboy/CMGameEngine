@@ -8,12 +8,13 @@
  * Initial author: niteice
  */
 
-typedef hgl::uint64 asQWORD;
-typedef asQWORD ( *funcptr_t )( void );
+using namespace hgl;
 
-static asQWORD __attribute__((noinline)) CallX64(const asQWORD *args, int cnt, funcptr_t func, asQWORD &retQW2, bool returnFloat)
+typedef uint64 ( *funcptr_t )( void );
+
+static uint64 __attribute__((noinline)) CallX64(const uint64 *args, int cnt, funcptr_t func, uint64 &retQW2, bool returnFloat)
 {
-    asQWORD   retQW1;
+    uint64   retQW1;
 
     // Reference: http://www.x86-64.org/documentation/abi.pdf
 
@@ -91,7 +92,7 @@ static asQWORD __attribute__((noinline)) CallX64(const asQWORD *args, int cnt, f
         "  movq %%rdx, %4 \n"
         "endcall: \n"
 
-        : : "r" ((asQWORD)cnt), "r" (args), "r" (func), "m" (retQW1), "m" (retQW2), "m" (returnFloat)
+        : : "r" ((uint64)cnt), "r" (args), "r" (func), "m" (retQW1), "m" (retQW2), "m" (returnFloat)
         : "%xmm0", "%xmm1", "%xmm2", "%xmm3", "%xmm4", "%xmm5", "%xmm6", "%xmm7",
           "%rdi", "%rsi", "%rax", "%rdx", "%rcx", "%r8", "%r9", "%r10", "%r11", "%r15");
 
