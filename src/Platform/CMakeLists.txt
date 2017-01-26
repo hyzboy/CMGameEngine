@@ -131,7 +131,7 @@ IF(BUILD_OPENGL_LIB)
         IF(UNIX)
             set(X11_PLATFORM_SOURCE X11/X11Window.cpp)
 
-            SOURCE_GRAPH("Graphics\\X11" FILES ${X11_PLATFORM_SOURCE})
+            SOURCE_GROUP("Graphics\\X11" FILES ${X11_PLATFORM_SOURCE})
 
             SET(PLATFORM_SOURCE ${PLATFORM_SOURCE}
                                 ${X11_PLATFORM_SOURCE})
