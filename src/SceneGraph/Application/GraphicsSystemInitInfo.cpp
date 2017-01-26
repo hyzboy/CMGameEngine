@@ -48,6 +48,8 @@ namespace hgl
 				graphics.gl.fbo=true;
 				graphics.gl.glsl=true;
 				graphics.gl.multi_texture=true;
+				graphics.gl.texture_storage = false;
+				graphics.gl.dsa = true;
 
 				graphics.gl.major=3;
 				graphics.gl.minor=3;

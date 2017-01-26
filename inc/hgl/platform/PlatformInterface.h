@@ -59,35 +59,35 @@ namespace hgl
 
         struct OpenGLSetup
         {
-            int32 AlphaBits;                                                                    ///<Alpha缓冲区位深度,默认8位
-            int32 DepthBits;                                                                    ///<Depth缓冲区位深度,默认24
-            int32 StencilBits;                                                                  ///<Stencil缓冲区位深度,默认8
+            int32 AlphaBits;																		///<Alpha缓冲区位深度,默认8位
+            int32 DepthBits;																		///<Depth缓冲区位深度,默认24
+            int32 StencilBits;																		///<Stencil缓冲区位深度,默认8
 
-            int32 AccumRedBits;                                                                 ///<Accum缓冲区红色位深度,默认0
-            int32 AccumGreenBits;                                                               ///<Accum缓冲区绿色位深度,默认0
-            int32 AccumBlueBits;                                                                ///<Accum缓冲区蓝色位深度,默认0
-            int32 AccumAlphaBits;                                                               ///<Accum缓冲区Alpha位深度,默认0
+            int32 AccumRedBits;																		///<Accum缓冲区红色位深度,默认0
+            int32 AccumGreenBits;																	///<Accum缓冲区绿色位深度,默认0
+            int32 AccumBlueBits;																	///<Accum缓冲区蓝色位深度,默认0
+            int32 AccumAlphaBits;																	///<Accum缓冲区Alpha位深度,默认0
 
-            int32 MultiSample;                                                                  ///<多重采样级别(全屏抗矩齿级别)
+            int32 MultiSample;																		///<多重采样级别(全屏抗矩齿级别)
 
-            bool NicestTextureCompress;															///<高质量贴图压缩,默认为真
+            bool NicestTextureCompress;																///<高质量贴图压缩,默认为真
 
-            bool texture_rectangle;																///<是否启用矩形贴图
-            bool texture_non_power_of_two;														///<是否启用非2次幂贴图
-            bool vbo;																			///<是否启用vbo
-            bool pbo;																			///<是否启用pbo
-            bool fbo;																			///<是否启用fbo
-            bool glsl;																			///<是否启用glsl
-            bool multi_texture;																	///<是否启用多重贴图
-            bool texture_storage;                                                               ///<是否启用
-            bool dsa;                                                                           ///<是否启用DSA
+            bool texture_rectangle;																	///<是否启用矩形贴图
+            bool texture_non_power_of_two;															///<是否启用非2次幂贴图
+            bool vbo;																				///<是否启用vbo
+            bool pbo;																				///<是否启用pbo
+            bool fbo;																				///<是否启用fbo
+            bool glsl;																				///<是否启用glsl
+            bool multi_texture;																		///<是否启用多重贴图
+            bool texture_storage;																	///<是否启用
+            bool dsa;																				///<是否启用DSA
 
-            bool opengl_es;																	    ///<是否使用OpenGL ES模式
-            bool egl;                                                                           ///<是否使用EGL
+            bool opengl_es;																			///<是否使用OpenGL ES模式
+            bool egl;																				///<是否使用EGL
 
-            int32 major,minor;																	///<OpenGL模式版本需求(默认为0,0表示无需求使用兼容模式)
+            int32 major,minor;																		///<OpenGL模式版本需求(默认为0,0表示无需求使用兼容模式)
 
-            bool debug;																			///<是否使用硬件Debug信息(默认不产生，并且此功能不对所有显卡以及驱动有效)
+            bool debug;																				///<是否使用硬件Debug信息(默认不产生，并且此功能不对所有显卡以及驱动有效)
         };
 
         const bool InitGraphicsPlatform();                                                          ///<初始化平台接口
