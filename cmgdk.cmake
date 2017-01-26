@@ -330,7 +330,7 @@ IF(UNIX)
 	ENDIF(BUILD_NETWORK_SCTP)
 
 	SET(HGL_CONSOLE_LIB ${HGL_BASE_LIB} ${HGL_NETWORK_LIB} CM.Platform expat)
-	SET(HGL_GRAPHICS_LIB ${HGL_CONSOLE_LIB} CM.SceneGraphRender CM.RenderDevice CM.Platform GLEW ${HGL_OpenGL_LIB} X11 Xxf86vm Xrandr Xcursor Xinerama Xi)
+	SET(HGL_GRAPHICS_LIB ${HGL_CONSOLE_LIB} CM.SceneGraphRender CM.RenderDevice CM.Platform ${HGL_OpenGL_LIB} X11 Xxf86vm Xrandr Xcursor Xinerama Xi)
 
 	IF(USE_GLFW)
         SET(HGL_GRAPHICS_LIB ${HGL_GRAPHICS_LIB} glfw)

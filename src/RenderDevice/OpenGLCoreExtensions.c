@@ -13,7 +13,7 @@
 #include<GL/wglew.h>
 #  define glewGetProcAddress(name) wglGetProcAddress((LPCSTR)name)
 #else
-#  include <GL/glxew.h>
+#  include <glew/include/GL/glxew.h>
 #  if defined(__APPLE__)
 #    define glewGetProcAddress(name) NSGLGetProcAddress(name)
 #  else
