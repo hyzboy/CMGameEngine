@@ -39,6 +39,7 @@ namespace hgl
 			uint texture_id;																		///<纹理ID
 
 			uint type;																				///<贴图类型
+			uint binding_type;                                                                       ///<绑定类型
 
 			uint color_format;																		///<色彩格式(如RED,RG,RGB,RGBA,SRGB,SRGBA之类)
 			uint video_format;																		///<显存格式
@@ -49,7 +50,7 @@ namespace hgl
 
 		public:
 
-							Texture();																//请使用CreateTexture()来创建贴图,函数在Render.h中定义
+							Texture(uint t,uint bt);												//请使用CreateTexture()来创建贴图,函数在Render.h中定义
 			virtual			~Texture(){if(bitmap_data)hgl_free(bitmap_data);}
 
 		public:

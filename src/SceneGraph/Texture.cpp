@@ -4,7 +4,7 @@ namespace hgl
 {
 	namespace graph
 	{
-		Texture::Texture()
+		Texture::Texture(uint t,uint bt):type(t),binding_type(bt)
 		{
 			texture_id=type=color_format=video_format=0;
 
