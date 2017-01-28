@@ -1,4 +1,4 @@
-﻿#include<hgl/graph/Font.h>
+﻿#include<hgl/graph/FontInfo.h>
 
 namespace hgl
 {
