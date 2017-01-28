@@ -5,6 +5,7 @@ PROJECT(CMGDK VERSION 50)
 set(CMGDK_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 
 include(common.cmake REQUIRED)
+include(openal.cmake REQUIRED)
 include(cmgdk.cmake REQUIRED)
 
 add_subdirectory(src)
