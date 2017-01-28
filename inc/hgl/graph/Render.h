@@ -87,19 +87,6 @@ namespace hgl
 			return tex;
 		}
 
-		class Texture2DList:public CusObjectList<Texture2D>
-		{
-			Texture2D *CreateObject()
-			{
-				return(new Texture2D);
-			}
-
-			void DeleteObject(Texture2D *tex)
-			{
-				delete tex;
-			}
-		};//class Texture2DList
-
 		//贴图采样器数据结构
 		struct TextureSampler
 		{
