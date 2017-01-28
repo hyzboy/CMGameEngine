@@ -7,6 +7,7 @@ set(CMGDK_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 include(common.cmake REQUIRED)
 include(openal.cmake REQUIRED)
 include(opengl.cmake REQUIRED)
+include(loginfo.cmake REQUIRED)
 include(cmgdk.cmake REQUIRED)
 
 add_subdirectory(src)
