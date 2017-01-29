@@ -41,7 +41,7 @@ SET(BASE_TYPE_SOURCE
 	DataType/Color.cpp
 	DataType/Color3f.cpp
 	DataType/Color4f.cpp
-	DataType/Font.cpp
+	DataType/FontInfo.cpp
     DataType/StringList.cpp)
 
 SET(BASE_OPENGL_TYPE_SOURCE

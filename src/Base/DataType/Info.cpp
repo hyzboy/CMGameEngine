@@ -15,7 +15,7 @@ namespace hgl
 			hgl_status_string[hfsVersion]=HGL_VERSION_STRING OS_TEXT(" for ") HGL_OS_NAME OS_TEXT("(") HGL_CPU_NAME OS_TEXT(") , ") HGL_COMPILER_NAME OS_TEXT(" (ver:") HGL_LIB_COMPILER_VERSION OS_TEXT(") Edition");
 
 			for(int i=hfsCMGDKPath;i<hfsEnd;i++)
-				hgl_status_string[i]=OS_TEXT("");
+				hgl_status_string[i].Clear();
 		}
 
 		/**

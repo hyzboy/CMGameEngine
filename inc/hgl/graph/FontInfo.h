@@ -1,5 +1,5 @@
-﻿#ifndef HGL_FONT_INCLUDE
-#define HGL_FONT_INCLUDE
+﻿#ifndef HGL_FONT_INFO_INCLUDE
+#define HGL_FONT_INFO_INCLUDE
 
 #include<hgl/type/DataType.h>
 #include<hgl/type/Color4f.h>
@@ -10,9 +10,9 @@ namespace hgl
     * 字体数据结构<br>
     * 用于记录字体名称，粗体，斜体，下划线等等信息
     */
-    class Font																						///字体数据结构
+    class FontInfo																					///字体数据结构
 	{
-    	#include<hgl/graph/Font.Attrib.h>
+    	#include<hgl/graph/FontInfo.Attrib.h>
 
 	public:	//属性
 
@@ -26,26 +26,26 @@ namespace hgl
 
 	public:	//事件
 
-		DefEvent(void,OnChange,(Font *));															///<字体改变事件
+		DefEvent(void,OnChange,(FontInfo *));														///<字体改变事件
 
     public:	//方法
 
-        Font();
-        Font(const Font &);
-		Font(const UTF16String &,int,int,bool=false,bool=false);
+		FontInfo();
+		FontInfo(const FontInfo &);
+		FontInfo(const UTF16String &,int,int,bool=false,bool=false);
 
         static void SetDefaultFont(const UTF16String &,int,int,bool,bool);							///<设置缺省字体
-		static void SetDefaultFont(const Font &);													///<设置缺省字体
+		static void SetDefaultFont(const FontInfo &);												///<设置缺省字体
 		static void ClearDefaultFont();																///<清除缺省字体
 
 		void Set(const UTF16String &,int,int,bool=false,bool=false);								///<设置字体
 
 	public:	//操作符重载
 
-		bool operator == (const Font &);
-		bool operator != (const Font &);
+		bool operator == (const FontInfo &);
+		bool operator != (const FontInfo &);
 
-        void operator = (const Font &);
-	};//class Font
+        void operator = (const FontInfo &);
+	};//class FontInfo
 }//namespace hgl
-#endif//HGL_FONT_INCLUDE
+#endif//HGL_FONT_INFO_INCLUDE

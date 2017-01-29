@@ -1,4 +1,4 @@
-	static Font *DefaultFont;
+	static FontInfo *DefaultFont;
 
 private:
 

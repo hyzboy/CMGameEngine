@@ -1,10 +1,10 @@
-﻿#include<hgl/graph/Font.h>
+﻿#include<hgl/graph/FontInfo.h>
 
 namespace hgl
 {
-    Font *Font::DefaultFont=nullptr;
+    FontInfo *FontInfo::DefaultFont=nullptr;
 
-	void Font::InitPrivate()
+	void FontInfo::InitPrivate()
 	{
 		name.Clear();
 		width=0;
@@ -12,18 +12,18 @@ namespace hgl
 		bold=false;
 		italic=false;
 
-		hglSetProperty(Name,	this,Font::GetName,		Font::SetName	);
+		hglSetProperty(Name,	this,FontInfo::GetName,		FontInfo::SetName	);
 
-		hglSetProperty(Width,	this,Font::GetWidth,	Font::SetWidth	);
-		hglSetProperty(Height,	this,Font::GetHeight,	Font::SetHeight	);
+		hglSetProperty(Width,	this,FontInfo::GetWidth,	FontInfo::SetWidth	);
+		hglSetProperty(Height,	this,FontInfo::GetHeight,	FontInfo::SetHeight	);
 
-		hglSetProperty(Bold,	this,Font::GetBold,		Font::SetBold	);
-		hglSetProperty(Italic,	this,Font::GetItalic,	Font::SetItalic	);
+		hglSetProperty(Bold,	this,FontInfo::GetBold,		FontInfo::SetBold	);
+		hglSetProperty(Italic,	this,FontInfo::GetItalic,	FontInfo::SetItalic	);
 
 		OnChange=nullptr;
 	}
 
-	Font::Font()
+	FontInfo::FontInfo()
 	{
 		InitPrivate();
 
@@ -35,7 +35,7 @@ namespace hgl
 	* 字体数据类构造函数，从一个现有的字体结构复制
 	* @param fnt 现有的字体数据结构
 	*/
-    Font::Font(const Font &fnt)
+    FontInfo::FontInfo(const FontInfo &fnt)
 	{
 		InitPrivate();
 
@@ -50,7 +50,7 @@ namespace hgl
     * @param b 是否使用粗体
 	* @param i 是否使用斜体
 	*/
-	Font::Font(const UTF16String &n,int w,int h,bool b,bool i)
+	FontInfo::FontInfo(const UTF16String &n,int w,int h,bool b,bool i)
 	{
 		InitPrivate();
 
@@ -65,7 +65,7 @@ namespace hgl
 	* @param b 是否使用粗体
 	* @param i 是否使用斜体
 	*/
-	void Font::Set(const UTF16String &n,int w,int h,bool b,bool i)
+	void FontInfo::Set(const UTF16String &n,int w,int h,bool b,bool i)
 	{
 		InitPrivate();
 
@@ -80,7 +80,7 @@ namespace hgl
 		SafeCallEvent(OnChange,(this));
     }
 
-	#define FONTCOMP(func_name,parm_type,this_data,parm_data)	void Font::func_name(parm_type param_data)	\
+	#define FONTCOMP(func_name,parm_type,this_data,parm_data)	void FontInfo::func_name(parm_type param_data)	\
 																{	\
 																	if(this_data==param_data)return;	\
 																	\
@@ -95,7 +95,7 @@ namespace hgl
 
 	#undef FONTCOMP
 
-	void Font::SetName(UTF16String &ws)
+	void FontInfo::SetName(UTF16String &ws)
 	{
 		UTF16String old_name=name;
 
@@ -112,10 +112,10 @@ namespace hgl
     * @param b 是否使用粗体
     * @param i 是否使用斜体
     */
-    void Font::SetDefaultFont(const UTF16String &n,int w,int h,bool b,bool i)
+    void FontInfo::SetDefaultFont(const UTF16String &n,int w,int h,bool b,bool i)
     {
 		if(!DefaultFont)
-			DefaultFont=new Font;
+			DefaultFont=new FontInfo;
 
         DefaultFont->Name		=n;
 
@@ -126,10 +126,10 @@ namespace hgl
         DefaultFont->Italic		=i;
     }
 
-    void Font::SetDefaultFont(const Font &fnt)
+    void FontInfo::SetDefaultFont(const FontInfo &fnt)
 	{
 		if(!DefaultFont)
-			DefaultFont=new Font;
+			DefaultFont=new FontInfo;
 
     	DefaultFont->Name	=fnt.Name;
 
@@ -140,12 +140,12 @@ namespace hgl
     	DefaultFont->Italic	=fnt.Italic;
     }
 
-	void Font::ClearDefaultFont()
+	void FontInfo::ClearDefaultFont()
 	{
 		SAFE_CLEAR(DefaultFont);
 	}
 
-    bool Font::operator == (const Font &fnt)
+    bool FontInfo::operator == (const FontInfo &fnt)
     {
         if(Name		!=fnt.Name	)return(false);
 		if(Width	!=fnt.Width	)return(false);
@@ -156,12 +156,12 @@ namespace hgl
         return(true);
     }
 
-    bool Font::operator != (const Font &fnt)
+    bool FontInfo::operator != (const FontInfo &fnt)
 	{
 		return(!(operator==(fnt)));
 	}
 
-	void Font::operator = (const Font &src)
+	void FontInfo::operator = (const FontInfo &src)
 	{
 		if(this==&src)return;
 
