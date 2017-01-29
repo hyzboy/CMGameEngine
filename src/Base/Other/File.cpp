@@ -272,10 +272,8 @@ namespace hgl
 		lfi->Add(fi);
 	}
 
-	List<FileInfo> GetListFiles(const OSString &folder_name,bool proc_folder,bool proc_file,bool sub_folder)
+	int GetListFiles(List<FileInfo> &fi_list,const OSString &folder_name,bool proc_folder,bool proc_file,bool sub_folder)
 	{
-		List<FileInfo> fi_list;
-		EnumFile(folder_name,&fi_list,folder_name,proc_file,sub_folder,(void (*)(void *,hgl::FileInfo &))AddToList);
-		return fi_list;
+		return EnumFile(folder_name,&fi_list,folder_name,proc_file,sub_folder,(void (*)(void *,hgl::FileInfo &))AddToList);
 	}
 }//namespace hgl
