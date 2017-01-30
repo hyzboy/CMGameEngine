@@ -1,4 +1,4 @@
-#ifndef HGL_GRAPH_FONT_SOURCE_WINDOWS_INCLUDE
+ï»¿#ifndef HGL_GRAPH_FONT_SOURCE_WINDOWS_INCLUDE
 #define HGL_GRAPH_FONT_SOURCE_WINDOWS_INCLUDE
 
 #include<hgl/graph/FontSource.h>
@@ -11,8 +11,8 @@ namespace hgl
 		class WinBitmapFont:public FontSource
 		{
     		HDC hdc;
-			HFONT hfont;    		
-			
+			HFONT hfont;
+
 			GLYPHMETRICS gm;
 			MAT2 mat;
 
@@ -27,11 +27,11 @@ namespace hgl
 
 		public:
 
-			WinBitmapFont(const Font &);
+			WinBitmapFont(const FontInfo &);
 			~WinBitmapFont();
 
-			bool MakeCharBitmap(wchar_t);					///<²úÉú×ÖÌåÊý¾Ý
-			int GetLineHeight()const{return LineHeight;}	///<È¡µÃÐÐ¸ß
+			bool MakeCharBitmap(wchar_t);					///<äº§ç”Ÿå­—ä½“æ•°æ®
+			int GetLineHeight()const{return LineHeight;}	///<å–å¾—è¡Œé«˜
 		};//class WinBitmapFont
 	}//namespace graph
 }//namespace hgl

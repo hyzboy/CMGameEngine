@@ -1,8 +1,8 @@
-#ifndef HGL_GUI_EDITBOX_INCLUDE
+﻿#ifndef HGL_GUI_EDITBOX_INCLUDE
 #define HGL_GUI_EDITBOX_INCLUDE
 
 #include<hgl/gui/GuiObject.h>
-#include<hgl/graph/Font.h>
+#include<hgl/graph/FontInfo.h>
 namespace hgl
 {
 	namespace graph

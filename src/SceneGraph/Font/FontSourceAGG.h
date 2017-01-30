@@ -1,4 +1,4 @@
-#ifndef HGL_GRAPH_FONT_SOURCE_AGG_INCLUDE
+ï»¿#ifndef HGL_GRAPH_FONT_SOURCE_AGG_INCLUDE
 #define HGL_GRAPH_FONT_SOURCE_AGG_INCLUDE
 
 #include<hgl/graph/FontSource.h>
@@ -17,7 +17,7 @@ namespace hgl
 	namespace graph
 	{
 		using namespace agg;
-		
+
 		typedef font_engine_win32_tt_int32 font_engine_type;
 		typedef font_cache_manager<font_engine_type> font_manager_type;
 
@@ -29,18 +29,18 @@ namespace hgl
 		class AGGBitmapFont:public FontSource
 		{
     		HDC fnt_hdc;
-			
+
 			int fnt_size;
-			
+
 			int8u *data;
-			
+
 			rendering_buffer *buf;
 
 			font_pixfmt *fmt;
 			renderer_base<font_pixfmt> *base;
-			
-			font_engine_type *	fnt_engine;		//×Ö·ûÒıÇæ
-			font_manager_type *	fnt_manage;		//×Ö·û¹ÜÀí»º³å
+
+			font_engine_type *	fnt_engine;		//å­—ç¬¦å¼•æ“
+			font_manager_type *	fnt_manage;		//å­—ç¬¦ç®¡ç†ç¼“å†²
 
 		protected:
 
@@ -49,11 +49,11 @@ namespace hgl
 
 		public:
 
-			AGGBitmapFont(const Font &fnt);			
+			AGGBitmapFont(const FontInfo &fnt);
 			~AGGBitmapFont();
 
-			bool MakeCharBitmap(wchar_t ch);				///<²úÉú×ÖÌåÊı¾İ
-			int GetLineHeight()const{return LineHeight;}	///<È¡µÃĞĞ¸ß
+			bool MakeCharBitmap(wchar_t ch);				///<äº§ç”Ÿå­—ä½“æ•°æ®
+			int GetLineHeight()const{return LineHeight;}	///<å–å¾—è¡Œé«˜
 		};//class AGGBitmapFont
 	}//namespace graph
 }//namespace hgl

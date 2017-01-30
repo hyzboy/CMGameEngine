@@ -1,4 +1,4 @@
-#define HGL_API_TEXTURE_INCLUDE
+﻿#ifndef HGL_API_TEXTURE_INCLUDE
 #define HGL_API_TEXTURE_INCLUDE
 
 #include<hgl/graph/Texture.h>

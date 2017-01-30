@@ -1,4 +1,4 @@
-#include"FontSourceAGG.h"
+ï»¿#include"FontSourceAGG.h"
 #include"agg_conv_curve.h"
 #include"agg_conv_contour.h"
 #include"agg_renderer_primitives.h"
@@ -13,13 +13,13 @@ namespace hgl
 		//{
 		//public:
 
-		//	faux_weight(VertexSource& vs) : 
+		//	faux_weight(VertexSource& vs) :
 		//		m_mtx_zoom_in_y(agg::trans_affine_scaling(1, 100)),
 		//		m_mtx_zoom_out_y(agg::trans_affine_scaling(1, 1.0/100.0)),
 		//		m_source(&vs),
 		//		m_trans_zoom_in_y(*m_source, m_mtx_zoom_in_y),
 		//		m_contour(m_trans_zoom_in_y),
-		//		m_trans_zoom_out(m_contour, m_mtx_zoom_out_y) 
+		//		m_trans_zoom_out(m_contour, m_mtx_zoom_out_y)
 		//	{
 		//		m_contour.auto_detect_orientation(false);
 		//	}
@@ -39,18 +39,18 @@ namespace hgl
 		//	agg::conv_transform<agg::conv_contour<agg::conv_transform<VertexSource> > > m_trans_zoom_out;
 		//};
 
-		AGGBitmapFont::AGGBitmapFont(const Font &fnt):FontSource(fnt)
-		{			
+		AGGBitmapFont::AGGBitmapFont(const FontInfo &fnt):FontSource(fnt)
+		{
 			fnt_size=fnt.height;
-			
+
 			data=new int8u[fnt_size*fnt_size*font_pixel_bytes];
-			
+
 			memset(data,0,fnt_size*fnt_size*font_pixel_bytes);
-		
+
 			buf=new rendering_buffer(data,fnt_size,fnt_size,fnt_size*font_pixel_bytes);
 			fmt=new font_pixfmt(*buf);
 			base=new renderer_base<font_pixfmt>(*fmt);
-			
+
 			fnt_hdc=CreateCompatibleDC(0);
 
 			fnt_engine=new font_engine_type(fnt_hdc);
@@ -58,7 +58,7 @@ namespace hgl
 
 			fnt_engine->hinting(true);
 			fnt_engine->flip_y(true);
-			
+
 			fnt_engine->height(fnt.height);
 			fnt_engine->width(fnt.width);
 			fnt_engine->italic(fnt.italic);
@@ -67,7 +67,7 @@ namespace hgl
 			//fnt_engine->create_font(fnt.name,fnt.anti?glyph_ren_agg_gray8:glyph_ren_native_mono);
 			fnt_engine->create_font(fnt.name,fnt.anti?glyph_ren_outline:glyph_ren_native_mono);
 		}
-		
+
 		AGGBitmapFont::~AGGBitmapFont()
 		{
 			delete fnt_manage;
@@ -79,22 +79,22 @@ namespace hgl
     		DeleteDC(fnt_hdc);
 		}
 
-		bool AGGBitmapFont::MakeCharBitmap(wchar_t ch)										///<²úÉú×ÖÌåÊý¾Ý
+		bool AGGBitmapFont::MakeCharBitmap(wchar_t ch)										///<äº§ç”Ÿå­—ä½“æ•°æ®
 		{
 			const agg::glyph_cache *glyph = fnt_manage->glyph(ch);
-				
+
 			if(!glyph)
 				return(false);
 
 			FontSource::Bitmap *bmp=char_bitmap+ch;
-				
+
 			bmp->w		=fnt_size;//glyph->bounds.x2-glyph->bounds.x1;
 			bmp->h		=fnt_size;//glyph->bounds.y2-glyph->bounds.y1;
 			bmp->adv_x	=glyph->advance_x+0.9;
 			bmp->adv_y	=glyph->advance_y;
 			bmp->x		=glyph->bounds.x1;
 			bmp->y		=fnt_size+glyph->bounds.y1;
-						
+
 			double cur_x=-glyph->bounds.x1;
 			double cur_y=-glyph->bounds.y1;
 
@@ -103,20 +103,20 @@ namespace hgl
 
 			buf->attach(bmp->data,fnt_size,fnt_size,fnt_size*font_pixel_bytes);
 
-			//fnt_manage->add_kerning(&cur_x, &cur_y);		//ÅÅ°æËõ½øÓÃ£¬ÒòÎªÎÒÃÇÊÇ×Ô¼ºÅÅ°æ£¬ËùÒÔÕâ¸öÓÃ²»µ½
+			//fnt_manage->add_kerning(&cur_x, &cur_y);		//æŽ’ç‰ˆç¼©è¿›ç”¨ï¼Œå› ä¸ºæˆ‘ä»¬æ˜¯è‡ªå·±æŽ’ç‰ˆï¼Œæ‰€ä»¥è¿™ä¸ªç”¨ä¸åˆ°
 			fnt_manage->init_embedded_adaptors(glyph,cur_x,cur_y);
 
 			if(glyph->data_type==glyph_data_outline)
-			{				
+			{
 				rasterizer_scanline_aa<> ras;
 				renderer_scanline_aa_solid<renderer_base<font_pixfmt>>	ras_aa_solid(*base);
 				scanline32_u8 sl;
-				
+
 				agg::trans_affine m_mtx;
 				agg::conv_curve<font_manager_type::path_adaptor_type> m_curves(fnt_manage->path_adaptor());
 				agg::conv_transform<agg::conv_curve<font_manager_type::path_adaptor_type> > m_trans(m_curves,m_mtx);
 				//faux_weight<agg::conv_transform<agg::conv_curve<font_manager_type::path_adaptor_type> > > m_weight(m_trans);
-                
+
 				agg::gamma_lut<> gamma(1.9f);
 				fmt->apply_gamma_inv(gamma);
 
@@ -136,22 +136,22 @@ namespace hgl
 			//	ras_aa_solid.color(rgba(1,1,1,1));
 			//
 			//	render_scanlines(	fnt_manage->gray8_adaptor(),
-			//						fnt_manage->gray8_scanline(), 
+			//						fnt_manage->gray8_scanline(),
 			//						ras_aa_solid);
 			//}
 			else
 			if(glyph->data_type==glyph_data_mono)
 			{
-				renderer_scanline_bin_solid<renderer_base<font_pixfmt>> ras_bin_solid(*base);					
+				renderer_scanline_bin_solid<renderer_base<font_pixfmt>> ras_bin_solid(*base);
 				ras_bin_solid.color(rgba(1,1,1,1));
-			
-				render_scanlines(	fnt_manage->mono_adaptor(), 
-									fnt_manage->mono_scanline(), 
+
+				render_scanlines(	fnt_manage->mono_adaptor(),
+									fnt_manage->mono_scanline(),
 									ras_bin_solid);
 			}
 
 
 			return(true);
-		}			
+		}
 	}//namespace graph
 }//namespace hgl

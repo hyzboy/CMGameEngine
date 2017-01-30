@@ -1,4 +1,4 @@
-#ifndef HGL_GRAPH_TILE_FONT_INCLUDE
+﻿#ifndef HGL_GRAPH_TILE_FONT_INCLUDE
 #define HGL_GRAPH_TILE_FONT_INCLUDE
 
 #include<hgl/VectorMath.h>
@@ -12,7 +12,7 @@ namespace hgl
 {
 	namespace graph
 	{
-		struct Font;
+		struct FontInfo;
 		class Renderable;
 		class Material;
 
@@ -128,7 +128,7 @@ namespace hgl
 			float DrawFormat(float,float,const u16char *,...);										///<绘制一个格式化的字符串
 		};//class TileFont
 
-		TileFont *CreateTileFont(const Font &,const Font &,int=-1);									///<创建一个字体,使用系统字体
+		TileFont *CreateTileFont(const FontInfo &,const FontInfo &,int=-1);							///<创建一个字体,使用系统字体
 
 		/**
 		* 通过系统字体创建一个Tile字体

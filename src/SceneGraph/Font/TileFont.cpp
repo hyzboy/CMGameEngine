@@ -1,7 +1,7 @@
-#include<hgl/graph/TileFont.H>
-#include<hgl/graph/Render.H>
-#include<hgl/graph/Material.H>
-#include<hgl/graph/Renderable.H>
+#include<hgl/graph/TileFont.h>
+#include<hgl/graph/Render.h>
+#include<hgl/graph/Material.h>
+#include<hgl/graph/Renderable.h>
 #include<stdarg.h>
 
 namespace hgl

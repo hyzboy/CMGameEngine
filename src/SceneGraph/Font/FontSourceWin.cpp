@@ -1,4 +1,4 @@
-#include"FontSourceWin.H"
+ï»¿#include"FontSourceWin.H"
 
 namespace hgl
 {
@@ -54,17 +54,17 @@ namespace hgl
 						else bit>>=1;
 					}
 
-					sp+=line_bytes;				
+					sp+=line_bytes;
 				}//while(h--)
 			}
 		}//namespace
 
-		FontSource *CreateWinBitmapFont(const Font &f)
+		FontSource *CreateWinBitmapFont(const FontInfo &f)
 		{
 			return(new WinBitmapFont(f));
 		}
 
-		WinBitmapFont::WinBitmapFont(const Font &f):FontSource(f)
+		WinBitmapFont::WinBitmapFont(const FontInfo &f):FontSource(f)
 		{
 			hdc=CreateCompatibleDC(0);
 
@@ -88,7 +88,7 @@ namespace hgl
 
 			SelectObject(hdc,hfont);
 
-			if(!fnt.anti||fnt.height<=10)		//<=10ÏóËØÇ¿ÖÆÓÃÎÞ¿¹¾Ø³Ý×ÖÌå
+			if(!fnt.anti||fnt.height<=10)		//<=10è±¡ç´ å¼ºåˆ¶ç”¨æ— æŠ—çŸ©é½¿å­—ä½“
 				ggo=GGO_BITMAP;
 			else
 				ggo=GGO_GRAY8_BITMAP;
@@ -103,7 +103,7 @@ namespace hgl
     		DeleteObject(hfont);
     		DeleteDC(hdc);
 		}
-		
+
 		bool WinBitmapFont::MakeCharBitmap(wchar_t ch)
 		{
 			memset(&gm,0,sizeof(GLYPHMETRICS));

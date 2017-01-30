@@ -3,7 +3,7 @@
 
 #include<hgl/platform/ConsoleSystemInitInfo.h>
 #include<hgl/platform/PlatformInterface.h>
-#include<hgl/graph/Font.h>
+#include<hgl/graph/FontInfo.h>
 namespace hgl
 {
     using namespace platform;
@@ -51,8 +51,8 @@ namespace hgl
 			{
 				bool use;																			///<默认不使用
 
-				Font eng_fnt;																		///<缺省英文字体
-				Font chs_fnt;																		///<缺省中文字体
+				FontInfo eng_fnt;																	///<缺省英文字体
+				FontInfo chs_fnt;																	///<缺省中文字体
 				int fnt_buf;																		///<缺省字体缓冲区大小,默认2000
 			}fnt;
 		}graphics;

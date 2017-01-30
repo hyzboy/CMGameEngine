@@ -1,7 +1,7 @@
 ﻿#ifndef HGL_GRAPH_FONT_SOURCE_INCLUDE
 #define HGL_GRAPH_FONT_SOURCE_INCLUDE
 
-#include<hgl/graph/Font.h>
+#include<hgl/graph/FontInfo.h>
 namespace hgl
 {
 	namespace graph
@@ -29,7 +29,7 @@ namespace hgl
 
 		protected:
 
-			Font fnt;
+			FontInfo fnt;
 
 			FontSource::Bitmap char_bitmap[0xFFFF];					///<字符位图数据
 
@@ -40,7 +40,7 @@ namespace hgl
 
 		public:
 
-			FontSource(const Font &);
+			FontSource(const FontInfo &);
 			virtual ~FontSource();
 
 			FontSource::Bitmap *GetCharBitmap(u16char);				///<取得字体数据
