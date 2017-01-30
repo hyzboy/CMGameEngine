@@ -21,7 +21,7 @@ namespace hgl
 			**/
 			bool InitTextureAPI()
 			{
-				if(GLEW_ARB_direct_state_access||GLEW_EXT_direct_state_access)
+				if(GLEW_ARB_direct_state_access)
 					if (InitTextureDSAStorage())return(true);
 
 				if (GLEW_ARB_texture_storage)
