@@ -8,12 +8,17 @@ namespace hgl
 {
 	namespace graph
 	{
+		namespace api
+		{
+			bool InitTextureAPI();
+		}//namespace api
+
 		bool InitOpenGLAPI()
 		{
 			IF_FALSE_RETURN(api::InitTextureAPI())
-			IF_FALSE_RETURN(api::InitVertexBufferObjectAPI())
-			IF_FALSE_RETURN(api::InitRenderableAPI())
-			IF_FALSE_RETURN(api::InitDrawAPI())
+			//IF_FALSE_RETURN(api::InitVertexBufferObjectAPI())
+			//IF_FALSE_RETURN(api::InitRenderableAPI())
+			//IF_FALSE_RETURN(api::InitDrawAPI())
 
 			return(true);
 		}
