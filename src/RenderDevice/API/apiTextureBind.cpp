@@ -35,12 +35,14 @@ namespace hgl
 				}
 			}//namespace texture_bind
 
+#define BIND_TEXTURE_API(name)	hgl::graph::api::name		= hgl::graph::api::texture_bind::name;
+
 			void InitTextureBind()
 			{
-				hgl::graph::api::CreateTexture		= hgl::graph::api::texture_bind::CreateTexture;
-				hgl::graph::api::CreateMultiTextures= hgl::graph::api::texture_bind::CreateMultiTextures;
-				hgl::graph::api::DeleteTexture		= hgl::graph::api::texture_bind::DeleteTexture;
-				hgl::graph::api::DeleteMultiTextures= hgl::graph::api::texture_bind::DeleteMultiTextures;
+				BIND_TEXTURE_API(CreateTexture)
+				BIND_TEXTURE_API(CreateMultiTextures)
+				BIND_TEXTURE_API(DeleteTexture)
+				BIND_TEXTURE_API(DeleteMultiTextures)
 			}
 
 			namespace texture_bind_storage
@@ -49,11 +51,13 @@ namespace hgl
 			
 			void InitTextureBindStorage()
 			{
-				hgl::graph::api::CreateTexture		= hgl::graph::api::texture_bind::CreateTexture;
-				hgl::graph::api::CreateMultiTextures= hgl::graph::api::texture_bind::CreateMultiTextures;
-				hgl::graph::api::DeleteTexture		= hgl::graph::api::texture_bind::DeleteTexture;
-				hgl::graph::api::DeleteMultiTextures= hgl::graph::api::texture_bind::DeleteMultiTextures;
+				BIND_TEXTURE_API(CreateTexture)
+				BIND_TEXTURE_API(CreateMultiTextures)
+				BIND_TEXTURE_API(DeleteTexture)
+				BIND_TEXTURE_API(DeleteMultiTextures)
 			}
+
+#undef DSA_STORAGE_TEXTURE_API
 		}//namespace api
 	}//namespace graph
 }//namespace hgl

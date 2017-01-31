@@ -80,10 +80,14 @@ namespace hgl
 //				if (!GLEW_ARB_direct_state_access&&GLEW_EXT_direct_state_access)
 //					hgl::graph::api::texture_dsa_storage::InitDSATextureEXTAPI();
 
-				hgl::graph::api::CreateTexture		= hgl::graph::api::texture_dsa_storage::CreateTexture;
-				hgl::graph::api::CreateMultiTextures= hgl::graph::api::texture_dsa_storage::CreateMultiTextures;
-				hgl::graph::api::DeleteTexture		= hgl::graph::api::texture_dsa_storage::DeleteTexture;
-				hgl::graph::api::DeleteMultiTextures= hgl::graph::api::texture_dsa_storage::DeleteMultiTextures;
+#define DSA_STORAGE_TEXTURE_API(name)	hgl::graph::api::name		= hgl::graph::api::texture_dsa_storage::name;
+
+				DSA_STORAGE_TEXTURE_API(CreateTexture)
+				DSA_STORAGE_TEXTURE_API(CreateMultiTextures)
+				DSA_STORAGE_TEXTURE_API(DeleteTexture)
+				DSA_STORAGE_TEXTURE_API(DeleteMultiTextures)
+
+#undef DSA_STORAGE_TEXTURE_API
 			}
 		}//namespace api
 	}//namespace graph
