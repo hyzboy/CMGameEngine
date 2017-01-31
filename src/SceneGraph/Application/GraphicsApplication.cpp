@@ -25,7 +25,6 @@ namespace hgl
 	namespace graph
 	{
         void InitOpenGLDebug();                                                                     //初始化OpenGL调试输出
-		bool InitOpenGLAPI();																		//初始化OpenGL API支持
 		void InitRender();																			//初始化渲染器
 		void CloseRender();																			//关闭渲染器
 
@@ -166,7 +165,6 @@ namespace hgl
             if(_sii->graphics.gl.debug)     //如果是OpenGL调试模式
                 graph::InitOpenGLDebug();
 
-			graph::InitOpenGLAPI();			//初始化OpenGL API支持
 			graph::InitRender();
 			graph::SetViewport(0,0,_sii->graphics.Width,_sii->graphics.Height);
             graph::Ortho2DMatrix=ortho2d(_sii->graphics.Width,_sii->graphics.Height);

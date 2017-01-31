@@ -17,6 +17,8 @@ namespace hgl
 
 	namespace graph
 	{
+		bool InitOpenGLAPI();																		//初始化OpenGL API支持
+
 		namespace OpenGLCore
 		{
 			void PutOpenGLInfo();	//输出OpenGL特性信息
@@ -53,6 +55,7 @@ namespace hgl
 		void InitRender()
 		{
 			PutOpenGLInfo();
+			InitOpenGLAPI();			//初始化OpenGL API支持
 			InitScissor();
 			InitTexture();
 			InitBuffer();
