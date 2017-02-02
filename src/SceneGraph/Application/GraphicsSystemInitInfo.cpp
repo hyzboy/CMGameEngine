@@ -51,6 +51,8 @@ namespace hgl
 				graphics.gl.texture_storage = false;
 				graphics.gl.dsa = true;
 
+				graphics.gl.es = false;
+
 				graphics.gl.major=3;
 				graphics.gl.minor=3;
 

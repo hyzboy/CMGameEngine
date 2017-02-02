@@ -80,7 +80,7 @@ namespace hgl
 //				if (!GLEW_ARB_direct_state_access&&GLEW_EXT_direct_state_access)
 //					hgl::graph::api::texture_dsa_storage::InitDSATextureEXTAPI();
 
-#define DSA_STORAGE_TEXTURE_API(name)	hgl::graph::api::name		= hgl::graph::api::texture_dsa_storage::name;
+#define DSA_STORAGE_TEXTURE_API(name)	hgl::graph::api::name=hgl::graph::api::texture_dsa_storage::name;
 
 				DSA_STORAGE_TEXTURE_API(CreateTexture)
 				DSA_STORAGE_TEXTURE_API(CreateMultiTextures)

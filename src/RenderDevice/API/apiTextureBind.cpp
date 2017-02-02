@@ -35,7 +35,7 @@ namespace hgl
 				}
 			}//namespace texture_bind
 
-#define BIND_TEXTURE_API(name)	hgl::graph::api::name		= hgl::graph::api::texture_bind::name;
+#define BIND_TEXTURE_API(name)	hgl::graph::api::name=hgl::graph::api::texture_bind::name;
 
 			void InitTextureBind()
 			{

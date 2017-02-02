@@ -71,11 +71,11 @@ namespace hgl
         {
 			glfwWindowHint(GLFW_SAMPLES,				gs->MultiSample);
 
-			glfwWindowHint(GLFW_CLIENT_API,				gs->opengl_es?GLFW_OPENGL_ES_API:GLFW_OPENGL_API);
+			glfwWindowHint(GLFW_CLIENT_API,				gs->es?GLFW_OPENGL_ES_API:GLFW_OPENGL_API);
 
             glfwWindowHint(GLFW_CONTEXT_CREATION_API,   gs->egl?GLFW_EGL_CONTEXT_API:GLFW_NATIVE_CONTEXT_API);
 
-            if(gs->opengl_es)
+            if(gs->es)
             {
             }
             else

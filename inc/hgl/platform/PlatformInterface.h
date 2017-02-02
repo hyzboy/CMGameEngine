@@ -82,7 +82,7 @@ namespace hgl
             bool texture_storage;																	///<是否启用
             bool dsa;																				///<是否启用DSA
 
-            bool opengl_es;																			///<是否使用OpenGL ES模式
+            bool es;																				///<是否使用OpenGL ES模式
             bool egl;																				///<是否使用EGL
 
             int32 major,minor;																		///<OpenGL模式版本需求(默认为0,0表示无需求使用兼容模式)

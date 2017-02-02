@@ -146,7 +146,7 @@ namespace hgl
 
 			if(!win)
 			{
-				LOG_ERROR(OS_TEXT("创建窗口失败！另一种可能是您的显卡或驱动不支持 OpenGL Core ")+OSString(_sii->graphics.gl.major)+OS_TEXT(".")+OSString(_sii->graphics.gl.minor));
+				LOG_ERROR(OS_TEXT("创建窗口失败！另一种可能是您的显卡或驱动不支持 OpenGL ")+OSString(_sii->graphics.gl.es?OS_TEXT("ES "):OS_TEXT("Core "))+OSString(_sii->graphics.gl.major)+OS_TEXT(".")+OSString(_sii->graphics.gl.minor));
 				return(false);
 			}
 
