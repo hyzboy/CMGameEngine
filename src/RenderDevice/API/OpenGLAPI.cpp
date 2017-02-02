@@ -3,6 +3,7 @@
 #include"apiRenderable.h"
 #include"apiTexture.h"
 #include"apiVertexBufferObject.h"
+#include"apiUniformBufferObject.h"
 
 namespace hgl
 {
@@ -17,6 +18,7 @@ namespace hgl
 		{
 			IF_FALSE_RETURN(api::InitTextureAPI())
 			//IF_FALSE_RETURN(api::InitVertexBufferObjectAPI())
+			//IF_FALSE_RETURN(api::InitUniformBufferObjectAPI())
 			//IF_FALSE_RETURN(api::InitRenderableAPI())
 			//IF_FALSE_RETURN(api::InitDrawAPI())
 
