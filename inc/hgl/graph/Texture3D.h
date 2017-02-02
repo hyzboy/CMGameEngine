@@ -17,8 +17,8 @@ namespace hgl
 
 		public:
 
-					uint	GetType         ()const{return HGL_TEXTURE_3D;}												///<取得类型
-					uint	GetBindingType  ()const{return HGL_TEX_BIND_3D;}										    ///<取得绑定类型
+					uint	GetType         ()const{return HGL_TEXTURE_3D;}override										///<取得类型
+					uint	GetBindingType  ()const{return HGL_TEX_BIND_3D;}override								    ///<取得绑定类型
 					int		GetWidth		(){return width;}
 					int		GetHeight		(){return height;}
 					int		GetDepth		(){return depth;}
