@@ -2,7 +2,6 @@
 
 set(CM_API_TEXTURE_SOURCE           API/apiTexture.cpp
                                     API/apiTextureBind.cpp
-                                    API/apiTextureBindStorage.cpp
                                     API/apiTextureDSA.cpp)
 
 set(CM_API_VBO_SOURCE               API/apiVertexBufferObject.cpp
