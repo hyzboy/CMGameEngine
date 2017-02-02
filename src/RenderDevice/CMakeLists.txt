@@ -4,30 +4,37 @@ set(CM_API_TEXTURE_SOURCE           API/apiTexture.cpp
                                     API/apiTextureBind.cpp
                                     API/apiTextureBindStorage.cpp
                                     API/apiTextureDSA.cpp)
-                                    
+
 set(CM_API_VBO_SOURCE               API/apiVertexBufferObject.cpp
                                     API/apiVertexBufferObjectBind.cpp
                                     API/apiVertexBufferObjectBindStorage.cpp
                                     API/apiVertexBufferObjectDSA.cpp)
-                                    
+
+set(CM_API_UBO_SOURCE               API/apiUniformBufferObject.cpp
+                                    API/apiUniformBufferObjectBind.cpp
+                                    API/apiUniformBufferObjectBindStorage.cpp
+                                    API/apiUniformBufferObjectDSA.cpp)
+
 set(CM_API_RENDERABLE_SOURCE        API/apiRenderable.cpp
-                                    API/apiRenderableVBO.cpp                                    
+                                    API/apiRenderableVBO.cpp
                                     API/apiRenderableVBOVAO.cpp)
-                                    
+
 set(CM_API_DRAW_SOURCE              API/apiDraw.cpp
                                     API/apiDrawMulti.cpp
                                     API/apiDrawInstance.cpp
                                     API/apiDrawIndirect.cpp)
 
-SOURCE_GROUP("OpenGL\\API"                      FILES ${CM_API_ROOT_SOURCE})                                    
+SOURCE_GROUP("OpenGL\\API"                      FILES ${CM_API_ROOT_SOURCE})
 SOURCE_GROUP("OpenGL\\API\\Texture"             FILES ${CM_API_TEXTURE_SOURCE})
 SOURCE_GROUP("OpenGL\\API\\VertexBufferObject"  FILES ${CM_API_VBO_SOURCE})
+SOURCE_GROUP("OpenGL\\API\\UniformBufferObject" FILES ${CM_API_UBO_SOURCE})
 SOURCE_GROUP("OpenGL\\API\\Renderable"          FILES ${CM_API_RENDERABLE_SOURCE})
 SOURCE_GROUP("OpenGL\\API\\Draw"                FILES ${CM_API_DRAW_SOURCE})
 
 set(CM_OPENGL_API_SOURCE            ${CM_API_ROOT_SOURCE}
                                     ${CM_API_TEXTURE_SOURCE}
                                     ${CM_API_VBO_SOURCE}
+                                    ${CM_API_UBO_SOURCE}
                                     ${CM_API_RENDERABLE_SOURCE}
                                     ${CM_API_DRAW_SOURCE})
 
