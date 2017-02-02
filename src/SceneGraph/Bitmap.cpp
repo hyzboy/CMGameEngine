@@ -1,38 +1,10 @@
-﻿#include<hgl/graph/Image.h>
+﻿#include<hgl/graph/Bitmap.h>
 #include<hgl/Other.h>
 #include<hgl/PlugIn.h>
 #include<string.h>
 
 namespace hgl
 {
-	namespace graph
-	{
-		TextureSourceFormat GetColorFormat(const char *str);
-
-		bool Bitmap2D::LoadFromTextureFile(const OSString &filename)
-		{
-			delete[] data;
-
-			const int length=LoadFileToMemory(filename,(void **)&data);	//将整个文件加载到内存
-
-			if(length<Tex2DHeaderLength
-			 ||memcmp(data,Tex2DFlag,Tex2DFlagLength))					//比较头件标识头
-			{
-				delete[] data;
-				data=nullptr;
-				return(false);
-			}
-
-			//const float ver=*((float *)(data+Tex2DFlagLength));		//取得文件版本号
-
-			header=(Tex2DFileHeader *)(data+Tex2DHeaderLength);			//取得贴图信息头
-
-			format=GetColorFormat(header->format);
-
-			return(true);
-		}
-	}//namespace graph
-
 	namespace graph
 	{
 		void L2LA(uint8 *tar,uint8 *src,uint8 *tcolor,uint32 size)
