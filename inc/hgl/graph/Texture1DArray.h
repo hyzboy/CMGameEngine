@@ -18,6 +18,9 @@ namespace hgl
 			uint wrap;
 
 		public:
+
+					uint	GetType         ()const{return HGL_TEXTURE_1D_ARRAY;}										///<取得类型
+					uint	GetBindingType  ()const{return HGL_TEX_BIND_1D_ARRAY;}									    ///<取得绑定类型
 					int		GetLength		()const{return length;}														///<取得纹理长度
 					int		GetCount		()const{return count;}														///<取得纹理数量
 

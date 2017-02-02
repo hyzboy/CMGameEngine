@@ -21,6 +21,18 @@ namespace hgl
 
 		#define HGL_TEXTURE_BUFFER				GL_TEXTURE_BUFFER				//TBO(OpenGL 3.1)
 
+        #define HGL_TEX_BIND_1D                 GL_TEXTURE_BINDING_1D
+        #define HGL_TEX_BIND_2D                 GL_TEXTURE_BINDING_2D
+        #define HGL_TEX_BIND_3D                 GL_TEXTURE_BINDING_3D
+        #define HGL_TEX_BIND_RECTANGLE          GL_TEXTURE_BINDING_RECTANGLE
+        #define HGL_TEX_BIND_1D_ARRAY           GL_TEXTURE_BINDING_1D_ARRAY
+        #define HGL_TEX_BIND_2D_ARRAY           GL_TEXTURE_BINDING_2D_ARRAY
+        #define HGL_TEX_BIND_CUBE_MAP           GL_TEXTURE_BINDING_CUBE_MAP
+        #define HGL_TEX_BIND_CUBE_MAP_ARRAY     GL_TEXTURE_BINDING_CUBE_MAP_ARRAY
+        #define HGL_TEX_BIND_2D_MS              GL_TEXTURE_BINDING_2D_MULTISAMPLE
+        #define HGL_TEX_BIND_2D_MS_ARRAY        GL_TEXTURE_BINDING_2D_MULTISAMPLE_ARRAY
+        #define HGL_TEX_BIND_BUFFER             GL_TEXTURE_BINDING_BUFFER
+
 		//采样属性
 
 		//贴图寻址模式

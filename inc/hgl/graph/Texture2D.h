@@ -20,6 +20,9 @@ namespace hgl
 			uint wrap_s,wrap_t;
 
 		public:
+
+					uint	GetType         ()const{return HGL_TEXTURE_2D;}												///<取得类型
+					uint	GetBindingType  ()const{return HGL_TEX_BIND_2D;}										    ///<取得绑定类型
 					int		GetWidth		()const{return width;}														///<取得纹理宽度
 					int		GetHeight		()const{return height;}														///<取得纹理高度
 

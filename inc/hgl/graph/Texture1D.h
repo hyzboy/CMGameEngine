@@ -19,6 +19,8 @@ namespace hgl
 
 		public:	//
 
+					uint	GetType         ()const{return HGL_TEXTURE_1D;}												///<取得类型
+					uint	GetBindingType  ()const{return HGL_TEX_BIND_1D;}										    ///<取得绑定类型
 					int		GetLength		()const{return length;}														///<取得纹理长度
 
 		public:
