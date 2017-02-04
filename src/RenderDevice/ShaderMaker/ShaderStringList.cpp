@@ -30,7 +30,7 @@ namespace hgl
 					case HGL_TEXTURE_3D:			return "sampler3D";
 
 					case HGL_TEXTURE_1D_ARRAY:		return "sampler1DArray";
-					case HGL_TEXTURE_2D_ARRAY:		return "sampler1DArray";
+					case HGL_TEXTURE_2D_ARRAY:		return "sampler2DArray";
 
 					case HGL_TEXTURE_RECTANGLE:		return "samplerRect";
 
