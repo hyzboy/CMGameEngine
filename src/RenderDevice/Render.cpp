@@ -35,6 +35,8 @@ namespace hgl
 		bool BindTexture(int active,unsigned int type,unsigned int texture_index);
         void BindTextures(int first_active,int count,unsigned int *texture_index);
 
+        void InitTextureMaxAnistropy(float pos);
+
 		void InitPrimaryRenderBuffer();
 		void ClosePrimaryRenderBuffer();
 
@@ -57,6 +59,7 @@ namespace hgl
 			PutOpenGLInfo();
 			InitOpenGLAPI();			//初始化OpenGL API支持
 			InitScissor();
+            InitTextureMaxAnistropy(0.5);
 			InitTexture();
 			InitBuffer();
 			InitFace();

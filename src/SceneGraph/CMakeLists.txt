@@ -37,7 +37,7 @@ IF(BUILD_OPENGL_LIB)
 	# 	HeightMapTerrain.cpp
         VertexBufferType.cpp
         VertexArray.cpp
-		Image.cpp
+		Bitmap.cpp
 		InlineRenderable.cpp
 		Material.cpp
 		Renderable.cpp
@@ -46,8 +46,6 @@ IF(BUILD_OPENGL_LIB)
 		SceneNode.cpp
 		SceneOrient.cpp
 		SkyLight.cpp
-		Texture.cpp
-		Texture2D.cpp
 		TileData.cpp
 		Transform.cpp
 	)
