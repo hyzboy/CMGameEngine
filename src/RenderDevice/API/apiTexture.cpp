@@ -19,7 +19,9 @@ namespace hgl
             HGL_API_SET_TEX_IMAGE_2D_ARRAY   SetTexImage2DArray = nullptr;
 
             HGL_API_GET_TEX_IMAGE_1D         GetTexImage1D = nullptr;
+            HGL_API_GET_TEX_IMAGE_2D         GetTexImage2D = nullptr;
             HGL_API_CHANGE_TEX_IMAGE_1D      ChangeTexImage1D = nullptr;
+            HGL_API_CHANGE_TEX_IMAGE_2D      ChangeTexImage2D = nullptr;
 
 			// 1.glBindTexture+glTexImage(OpenGL 1.0)
 			// 2.glBindTexture+glTexStorage(4.2)

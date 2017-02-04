@@ -57,10 +57,7 @@ namespace hgl
 				|| l>length - s
 				|| !data
 				|| !TextureSourceFormatCheck(sf))
-			{
-				LOG_ERROR(OS_TEXT("fmt error =") + OSString(sf));
-				return(false);
-			}
+            RETURN_FALSE;
 
             return api::ChangeTexImage1D(texture_id,s,l,data,bytes,sf);
 		}

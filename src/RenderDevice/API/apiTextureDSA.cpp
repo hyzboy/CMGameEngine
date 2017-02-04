@@ -101,7 +101,7 @@ namespace hgl
                 {
                     if (!TextureSourceFormatCheck(fmt))
                     {
-                        LOG_ERROR(OS_TEXT("glTexture1D::GetImage,fmt error =") + OSString(fmt));
+                        LOG_ERROR(OS_TEXT("GetTexImage1D,fmt error =") + OSString(fmt));
                         return(-1);
                     }
 
@@ -132,6 +132,42 @@ namespace hgl
                     return(bytes);
                 }
 
+
+                int GetTexImage2D(uint texture_id,void *data_pointer, TSF fmt, int level,int width,int height)
+                {
+                    if (!TextureSourceFormatCheck(fmt))
+                    {
+                        LOG_ERROR(OS_TEXT("GetTexImage2D,fmt error =") + OSString(fmt));
+                        return(-1);
+                    }
+
+                    int compress;
+                    int bytes;
+
+                    const TextureFormat *tsf = TextureFormatInfoList + fmt;
+
+                    glGetTextureLevelParameteriv(texture_id, level, GL_TEXTURE_COMPRESSED, &compress);
+
+                    if (compress)
+                    {
+                        glGetTextureLevelParameteriv(texture_id, level, GL_TEXTURE_COMPRESSED_IMAGE_SIZE, &bytes);
+
+                        if (data_pointer)
+                            glGetCompressedTextureImage(texture_id, level, bytes, data_pointer);
+                    }
+                    else
+                    {
+                        if (tsf->video_bytes == 0)return(-1);
+
+                        bytes = width*height*tsf->video_bytes;
+
+                        if (data_pointer)
+                            glGetTextureImage(texture_id, level, tsf->color_format, tsf->data_type, bytes, data_pointer);
+                    }
+
+                    return(bytes);
+                }
+
                 bool ChangeTexImage1D(uint texture_id,uint s, uint l, void *data, uint bytes, TSF sf)
                 {
                     const TextureFormat *sfmt = TextureFormatInfoList + sf;       //原始数据格式
@@ -140,6 +176,19 @@ namespace hgl
                         glCompressedTextureSubImage1D(texture_id, 0, s, l, sfmt->video_format, bytes, data);
                     else
                         glTextureSubImage1D(texture_id, 0, s, l, sfmt->color_format, sfmt->data_type, data);
+
+                    return(true);
+                }
+
+
+                bool ChangeTexImage2D(uint texture_id,uint l, uint t, uint w, uint h, void *data, uint bytes, TSF sf)
+                {
+                    const TextureFormat *sfmt = TextureFormatInfoList + sf;       //原始数据格式
+
+                    if (sfmt->compress)
+                        glCompressedTextureSubImage2D(texture_id, 0, l, t, w, h, sfmt->video_format, bytes, data);
+                    else
+                        glTextureSubImage2D(texture_id, 0, l, t, w, h, sfmt->color_format, sfmt->data_type, data);
 
                     return(true);
                 }

@@ -23,8 +23,10 @@ namespace hgl
             using HGL_API_SET_TEX_IMAGE_2D_ARRAY=bool (*)(uint, Texture2DArrayData *);
 
             using HGL_API_GET_TEX_IMAGE_1D      =int (*)(uint, void *, TSF, int, int);
+            using HGL_API_GET_TEX_IMAGE_2D      =int (*)(uint, void *, TSF, int, int,int);
 
             using HGL_API_CHANGE_TEX_IMAGE_1D   =bool (*)(uint,uint,uint,void *,uint,TSF);
+            using HGL_API_CHANGE_TEX_IMAGE_2D   =bool (*)(uint,uint,uint,uint, uint, void *, uint, TSF);
 
 			extern HGL_API_CREATE_TEXTURE		    CreateTexture;									///<创建纹理
             extern HGL_API_CREATE_MULTI_TEXTURES	CreateMultiTextures;							///<创建多个纹理
@@ -38,7 +40,10 @@ namespace hgl
             extern HGL_API_SET_TEX_IMAGE_2D_ARRAY   SetTexImage2DArray;
 
             extern HGL_API_GET_TEX_IMAGE_1D         GetTexImage1D;
+            extern HGL_API_GET_TEX_IMAGE_2D         GetTexImage2D;
+
             extern HGL_API_CHANGE_TEX_IMAGE_1D      ChangeTexImage1D;
+            extern HGL_API_CHANGE_TEX_IMAGE_2D      ChangeTexImage2D;
 		}//namespace api
 	}//namespace graph
 }//namespace hgl
