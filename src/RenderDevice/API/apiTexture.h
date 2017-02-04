@@ -16,6 +16,8 @@ namespace hgl
 			using HGL_API_DELETE_TEXTURE		=void (*)(const uint);
 			using HGL_API_DELETE_MULTI_TEXTURES	=void (*)(const uint *,const uint);
 
+            using HGL_API_GEN_MIPMAPS           =void (*)(uint,uint,uint);
+
             using HGL_API_SET_TEX_IMAGE_1D      =bool (*)(uint, Texture1DData *);
             using HGL_API_SET_TEX_IMAGE_2D      =bool (*)(uint, Texture2DData *);
             using HGL_API_SET_TEX_IMAGE_3D      =bool (*)(uint, Texture3DData *);
@@ -32,6 +34,8 @@ namespace hgl
             extern HGL_API_CREATE_MULTI_TEXTURES	CreateMultiTextures;							///<创建多个纹理
             extern HGL_API_DELETE_TEXTURE			DeleteTexture;
             extern HGL_API_DELETE_MULTI_TEXTURES	DeleteMultiTextures;
+
+            extern HGL_API_GEN_MIPMAPS              GenMipmaps;
 
             extern HGL_API_SET_TEX_IMAGE_1D         SetTexImage1D;
             extern HGL_API_SET_TEX_IMAGE_2D         SetTexImage2D;

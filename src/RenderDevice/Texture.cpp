@@ -20,6 +20,11 @@ namespace hgl
             api::DeleteTexture(texture_id);
         }
 
+        void Texture::GenMipmaps()
+        {
+            api::GenMipmaps(type,binding_type,texture_id);
+        }
+
         //void Texture::GetMipmapLevel(int &base_level,int &max_level)
         //{
         //    glGetTextureParameteriv(texture_id,GL_TEXTURE_BASE_LEVEL,&base_level);

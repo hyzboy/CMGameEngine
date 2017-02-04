@@ -1,7 +1,7 @@
 ﻿#ifndef HGL_GRAPH_TEXTURE_INCLUDE
 #define HGL_GRAPH_TEXTURE_INCLUDE
 
-#include<hgl/graph/TextureFormat.h>
+#include<hgl/graph/TextureData.h>
 #include<hgl/type/BaseString.h>
 namespace hgl
 {
@@ -45,7 +45,9 @@ namespace hgl
 					uint	GetColorFormat	()const{return color_format;}							///<取得颜色格式
 					uint	GetVideoFormat	()const{return video_format;}							///<取得显存中的数据格式
 
-		//public:
+		public:
+
+                    void    GenMipmaps      ();                                                     ///<生成mipmaps
 
 		//	virtual void	GetMipmapLevel	(int &,int &)=0;										///<取得贴图mipmaps级别
 		};//class Texture

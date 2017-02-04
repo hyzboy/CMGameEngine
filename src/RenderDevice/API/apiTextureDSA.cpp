@@ -75,6 +75,11 @@ namespace hgl
 					glDeleteTextures(count,id_list);
 				}
 
+                void GenMipmaps(uint,uint,uint id)
+                {
+                    glGenerateTextureMipmap(id);
+                }
+
                 bool SetTexImage1D(uint id,Texture1DData *tex)
                 {
                     if (tex->source_format->compress)      //原本就是压缩格式
@@ -92,7 +97,8 @@ namespace hgl
 
                     if (tex->gen_mipmaps)
                     {
-                        glGenerateTextureMipmap(id);
+                        if(tex->bitmap)
+                            glGenerateTextureMipmap(id);
 
                         //                  glTexEnvf(GL_TEXTURE_FILTER_CONTROL,GL_TEXTURE_LOD_BIAS,-1.5f);     //设置LOD偏向,负是更精细，正是更模糊
                     }
@@ -117,7 +123,8 @@ namespace hgl
 
                     if (tex->gen_mipmaps)
                     {
-                        glGenerateTextureMipmap(id);
+                        if (tex->bitmap)
+                            glGenerateTextureMipmap(id);
 
                         //                  glTexEnvf(GL_TEXTURE_FILTER_CONTROL,GL_TEXTURE_LOD_BIAS,-1.5f);     //设置LOD偏向,负是更精细，正是更模糊
                     }
@@ -238,6 +245,8 @@ namespace hgl
 				DSA_STORAGE_TEXTURE_API(CreateMultiTextures)
 				DSA_STORAGE_TEXTURE_API(DeleteTexture)
 				DSA_STORAGE_TEXTURE_API(DeleteMultiTextures)
+
+                DSA_STORAGE_TEXTURE_API(GenMipmaps)
 
                 DSA_STORAGE_TEXTURE_API(SetTexImage1D)
                 DSA_STORAGE_TEXTURE_API(SetTexImage2D)

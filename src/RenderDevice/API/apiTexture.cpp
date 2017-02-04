@@ -20,6 +20,7 @@ namespace hgl
 
             HGL_API_GET_TEX_IMAGE_1D         GetTexImage1D = nullptr;
             HGL_API_GET_TEX_IMAGE_2D         GetTexImage2D = nullptr;
+
             HGL_API_CHANGE_TEX_IMAGE_1D      ChangeTexImage1D = nullptr;
             HGL_API_CHANGE_TEX_IMAGE_2D      ChangeTexImage2D = nullptr;
 
