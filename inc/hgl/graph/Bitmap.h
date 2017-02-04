@@ -3,6 +3,7 @@
 
 #include<hgl/graph/TextureFormat.h>
 #include<hgl/type/BaseString.h>
+#include<hgl/LogInfo.h>
 namespace hgl
 {
 	namespace graph
