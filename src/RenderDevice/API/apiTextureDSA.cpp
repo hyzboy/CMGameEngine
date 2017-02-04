@@ -1,4 +1,6 @@
 ﻿#include"apiTexture.h"
+#include<hgl/graph/TextureData.h>
+#include<hgl/LogInfo.h>
 namespace hgl
 {
 	namespace graph
@@ -72,6 +74,80 @@ namespace hgl
 				{
 					glDeleteTextures(count,id_list);
 				}
+
+                bool SetTexImage1D(uint id,Texture1DData *tex)
+                {
+                    if (tex->source_format->compress)      //原本就是压缩格式
+                    {
+                        glCompressedTextureSubImage1D(id, 0, 0, tex->length, tex->video_format, tex->bitmap_bytes, tex->bitmap);
+                    }
+                    else                    //正常非压缩格式
+                    {
+                        glTextureStorage1D(id, 1, tex->video_format, tex->length);
+                        glTextureSubImage1D(id, 0, 0, tex->length, tex->source_format->color_format, tex->source_format->data_type, tex->bitmap);
+                    }
+
+                    if (tex->gen_mipmaps)
+                    {
+                        glGenerateTextureMipmap(id);
+
+                        //                  glTexEnvf(GL_TEXTURE_FILTER_CONTROL,GL_TEXTURE_LOD_BIAS,-1.5f);     //设置LOD偏向,负是更精细，正是更模糊
+                    }
+
+                    return(true);
+                }
+
+                int GetTexImage1D(uint texture_id,void *data_pointer, TSF fmt, int level,int length)
+                {
+                    if (!TextureSourceFormatCheck(fmt))
+                    {
+                        LOG_ERROR(OS_TEXT("glTexture1D::GetImage,fmt error =") + OSString(fmt));
+                        return(-1);
+                    }
+
+                    int compress;
+                    int bytes;
+
+                    const TextureFormat *tsf = TextureFormatInfoList + fmt;
+
+                    glGetTextureLevelParameteriv(texture_id, level, GL_TEXTURE_COMPRESSED, &compress);
+
+                    if (compress)
+                    {
+                        glGetTextureLevelParameteriv(texture_id, level, GL_TEXTURE_COMPRESSED_IMAGE_SIZE, &bytes);
+
+                        if (data_pointer)
+                            glGetCompressedTextureImage(texture_id, level, bytes, data_pointer);
+                    }
+                    else
+                    {
+                        if (tsf->video_bytes == 0)return(-1);
+
+                        bytes = length*tsf->video_bytes;
+
+                        if (data_pointer)
+                            glGetTextureImage(texture_id, level, tsf->color_format, tsf->data_type, bytes, data_pointer);
+                    }
+
+                    return(bytes);
+                }
+
+                bool ChangeTexImage1D(uint texture_id,uint s, uint l, void *data, uint bytes, TSF sf)
+                {
+                    const TextureFormat *sfmt = TextureFormatInfoList + sf;       //原始数据格式
+
+                    if (sfmt->compress)
+                        glCompressedTextureSubImage1D(texture_id, 0, s, l, sfmt->video_format, bytes, data);
+                    else
+                        glTextureSubImage1D(texture_id, 0, s, l, sfmt->color_format, sfmt->data_type, data);
+
+                    return(true);
+                }
+
+//                bool SetTexImage2D(Texture2DData *);
+//                 bool SetTexImage3D(Texture3DData *);
+//                 bool SetTexImage1DArray(Texture1DArrayData *);
+//                 bool SetTexImage2DArray(Texture2DArrayData *);
 			}//namespace texture_dsa_storage
 
 			void InitTextureDSAStorage()
@@ -86,6 +162,8 @@ namespace hgl
 				DSA_STORAGE_TEXTURE_API(CreateMultiTextures)
 				DSA_STORAGE_TEXTURE_API(DeleteTexture)
 				DSA_STORAGE_TEXTURE_API(DeleteMultiTextures)
+
+                DSA_STORAGE_TEXTURE_API(SetTexImage1D)
 
 #undef DSA_STORAGE_TEXTURE_API
 			}
