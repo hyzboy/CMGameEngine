@@ -22,7 +22,7 @@ namespace hgl
 
 			if (!ptr->length)
 			{
-				LOG_ERROR(OS_TEXT("size error,length=") + OSString(ptr->length));
+				LOG_ERROR(OS_TEXT("size error,image length=") + OSString(ptr->length));
                 RETURN_FALSE;
 			}
 
