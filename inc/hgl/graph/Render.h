@@ -72,32 +72,6 @@ namespace hgl
 	//贴图函数
 	namespace graph
 	{
-		/**
-		* 创建2D贴图
-		* @param width 宽
-		* @param height 高
-		* @param video_format 显存格式
-		*/
-		inline Texture2D *CreateTexture2D(int width,int height,uint video_format)
-		{
-			Texture2D *tex=new Texture2D;
-
-			tex->SetImage(width,height,0,0,HGL_SF_NONE,video_format);
-
-			return tex;
-		}
-
-		//贴图采样器数据结构
-		struct TextureSampler
-		{
-			int id;									//采样器ID
-
-			uint texture_type;						//贴图类型
-
-			uint mag_filter[3];						//放大过滤
-			uint min_filter[3];						//缩小过滤
-		};//struct TextureSampler
-
 		//材质
 		Material *CreateMaterial();					///<创建材质
 

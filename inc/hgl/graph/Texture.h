@@ -34,7 +34,7 @@ namespace hgl
 
 		public:
 
-							Texture(uint t,uint bt);												//请使用CreateTexture()来创建贴图,函数在Render.h中定义
+							Texture(uint t,uint bt);
 			virtual			~Texture();
 
 		public:
