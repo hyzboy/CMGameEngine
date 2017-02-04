@@ -240,6 +240,13 @@ namespace hgl
 				DSA_STORAGE_TEXTURE_API(DeleteMultiTextures)
 
                 DSA_STORAGE_TEXTURE_API(SetTexImage1D)
+                DSA_STORAGE_TEXTURE_API(SetTexImage2D)
+
+                DSA_STORAGE_TEXTURE_API(GetTexImage1D)
+                DSA_STORAGE_TEXTURE_API(GetTexImage2D)
+
+                DSA_STORAGE_TEXTURE_API(ChangeTexImage1D)
+                DSA_STORAGE_TEXTURE_API(ChangeTexImage2D)
 
 #undef DSA_STORAGE_TEXTURE_API
 			}
