@@ -50,6 +50,8 @@ namespace hgl
 				graphics.gl.multi_texture=true;
 				graphics.gl.texture_storage = false;
 				graphics.gl.dsa = true;
+                graphics.gl.texture_lod_bias=0;
+                graphics.gl.texture_max_anistropy=0.5;
 
 				graphics.gl.es = false;
 

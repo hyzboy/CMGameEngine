@@ -79,8 +79,10 @@ namespace hgl
             bool fbo;																				///<是否启用fbo
             bool glsl;																				///<是否启用glsl
             bool multi_texture;																		///<是否启用多重贴图
-            bool texture_storage;																	///<是否启用
+            bool texture_storage;																	///<是否启用纹理存储api
             bool dsa;																				///<是否启用DSA
+            float texture_lod_bias;                                                                 ///<默认纹理LOD Bias(默认0)
+            float texture_max_anistropy;                                                            ///<纹理最大各向异性过滤值比例(使用0.0-1.0，默认0.5)
 
             bool es;																				///<是否使用OpenGL ES模式
             bool egl;																				///<是否使用EGL

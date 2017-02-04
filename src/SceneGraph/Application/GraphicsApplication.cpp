@@ -26,6 +26,7 @@ namespace hgl
 	{
         void InitOpenGLDebug();                                                                     //初始化OpenGL调试输出
 		void InitRender();																			//初始化渲染器
+        void InitSamplerObject(float,float);                                                        //初始化SamplerObject
 		void CloseRender();																			//关闭渲染器
 
 		void SetViewport(int,int,int,int);
@@ -166,6 +167,7 @@ namespace hgl
                 graph::InitOpenGLDebug();
 
 			graph::InitRender();
+            graph::InitSamplerObject(_sii->graphics.gl.texture_max_anistropy,_sii->graphics.gl.texture_lod_bias);
 			graph::SetViewport(0,0,_sii->graphics.Width,_sii->graphics.Height);
             graph::Ortho2DMatrix=ortho2d(_sii->graphics.Width,_sii->graphics.Height);
 

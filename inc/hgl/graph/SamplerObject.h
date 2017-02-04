@@ -11,8 +11,9 @@ namespace hgl
         {
             static float max_texture_max_anistropy;
             static float default_max_anistropy;
+            static float default_lod_bias;
 
-            friend void InitTextureMaxAnistropy(float);
+            friend void InitSamplerObject(float,float);
 
         protected:
 
