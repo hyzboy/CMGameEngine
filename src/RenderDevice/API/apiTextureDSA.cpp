@@ -79,12 +79,40 @@ namespace hgl
                 {
                     if (tex->source_format->compress)      //原本就是压缩格式
                     {
-                        glCompressedTextureSubImage1D(id, 0, 0, tex->length, tex->video_format, tex->bitmap_bytes, tex->bitmap);
+                        if(tex->bitmap)
+                            glCompressedTextureSubImage1D(id, 0, 0, tex->length, tex->video_format, tex->bitmap_bytes, tex->bitmap);
                     }
                     else                    //正常非压缩格式
                     {
                         glTextureStorage1D(id, 1, tex->video_format, tex->length);
-                        glTextureSubImage1D(id, 0, 0, tex->length, tex->source_format->color_format, tex->source_format->data_type, tex->bitmap);
+
+                        if(tex->bitmap)
+                            glTextureSubImage1D(id, 0, 0, tex->length, tex->source_format->color_format, tex->source_format->data_type, tex->bitmap);
+                    }
+
+                    if (tex->gen_mipmaps)
+                    {
+                        glGenerateTextureMipmap(id);
+
+                        //                  glTexEnvf(GL_TEXTURE_FILTER_CONTROL,GL_TEXTURE_LOD_BIAS,-1.5f);     //设置LOD偏向,负是更精细，正是更模糊
+                    }
+
+                    return(true);
+                }
+
+                bool SetTexImage2D(uint id,Texture2DData *tex)
+                {
+                    if (tex->source_format->compress)      //原本就是压缩格式
+                    {
+                        if (tex->bitmap)
+                            glCompressedTextureSubImage2D(id, 0, 0, 0, tex->width, tex->height, tex->video_format, tex->bitmap_bytes, tex->bitmap);
+                    }
+                    else                    //正常非压缩格式
+                    {
+                        glTextureStorage2D(id, 1, tex->video_format, tex->width, tex->height);
+
+                        if (tex->bitmap)
+                            glTextureSubImage2D(id, 0, 0, 0, tex->width, tex->height, tex->source_format->color_format, tex->source_format->data_type, tex->bitmap);
                     }
 
                     if (tex->gen_mipmaps)
@@ -193,7 +221,6 @@ namespace hgl
                     return(true);
                 }
 
-//                bool SetTexImage2D(Texture2DData *);
 //                 bool SetTexImage3D(Texture3DData *);
 //                 bool SetTexImage1DArray(Texture1DArrayData *);
 //                 bool SetTexImage2DArray(Texture2DArrayData *);
