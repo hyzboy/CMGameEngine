@@ -1,7 +1,6 @@
 ﻿#include<hgl/graph/TileData.h>
 #include<hgl/graph/Texture.h>
 #include<hgl/graph/Render.h>
-#include<hgl/graph/Image.h>
 
 namespace hgl
 {
@@ -84,7 +83,7 @@ namespace hgl
 			tile_count	=0;
 			tile_total	=tile_rows*tile_cols;
 
-			tile_texture=CreateTexture2D(tw,th,video_format);
+			tile_texture=new Texture2D(tw,th,video_format);
 
 			//tile_object=new TileData::Object *[tile_total];
 			//memset(tile_object,0,tile_total*sizeof(TileData::Object *));
@@ -184,20 +183,6 @@ namespace hgl
 
 			tile_count++;
 			return(obj);
-		}
-
-		/**
-		* 增加一个Tile
-		* @param bmp 位图数据
-		* @param ctw 当前tile宽度,-1表示等同全局设置
-		* @param cth 当前tile高度,-1表示等同全局设置
-		* @return 为增加的Tile创建的对象
-		*/
-		TileData::Object *TileData::Add(Bitmap2D *bmp,int ctw,int cth)
-		{
-			if(!bmp||!tile_object)return(nullptr);
-
-			return Add(bmp->GetData(),bmp->GetDataLength(),bmp->GetFormat(),ctw,cth);
 		}
 
 		/**
