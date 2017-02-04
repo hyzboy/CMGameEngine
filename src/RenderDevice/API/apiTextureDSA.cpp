@@ -233,7 +233,7 @@ namespace hgl
 //                 bool SetTexImage2DArray(Texture2DArrayData *);
 			}//namespace texture_dsa_storage
 
-			void InitTextureDSAStorage()
+			bool InitTextureDSAStorage()
 			{
 				//ext版设计和ARB版不同，而且有一定陈旧设计，所以不支持EXT版DSA
 //				if (!GLEW_ARB_direct_state_access&&GLEW_EXT_direct_state_access)
@@ -258,6 +258,8 @@ namespace hgl
                 DSA_STORAGE_TEXTURE_API(ChangeTexImage2D)
 
 #undef DSA_STORAGE_TEXTURE_API
+
+                return(true);
 			}
 		}//namespace api
 	}//namespace graph
