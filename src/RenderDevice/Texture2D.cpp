@@ -1,5 +1,4 @@
 #include<hgl/graph/Texture2D.h>
-#include<hgl/graph/TextureData.h>
 #include"API/apiTexture.h"
 #include<hgl/LogInfo.h>
 
@@ -10,6 +9,24 @@ namespace hgl
         Texture2D::Texture2D():Texture(HGL_TEXTURE_2D, HGL_TEX_BIND_2D)
         {
             width = height = 0;
+        }
+
+        Texture2D::Texture2D(Texture2DData *ptr) : Texture(HGL_TEXTURE_2D, HGL_TEX_BIND_2D)
+        {
+            width = height = 0;
+            SetImage(ptr);
+        }
+
+        Texture2D::Texture2D(uint w, uint h, uint vf) : Texture(HGL_TEXTURE_2D, HGL_TEX_BIND_2D)
+        {
+            width = height = 0;
+            SetImage(w, h, nullptr,0,HGL_SF_NONE, vf);
+        }
+
+        Texture2D::Texture2D(uint w, uint h, void *data, uint size, TSF sf, uint vf) : Texture(HGL_TEXTURE_2D, HGL_TEX_BIND_2D)
+        {
+            width = height = 0;
+            SetImage(w,h,data,size,sf,vf);
         }
 
         bool Texture2D::SetImage(Texture2DData *ptr)
@@ -30,7 +47,7 @@ namespace hgl
             height = ptr->height;
 
             video_format = ptr->GetVideoFormat();
-            color_format = ptr->source_format->color_format;
+            color_format = ptr->GetColorFormat();
 
             if (!api::SetTexImage2D(this->texture_id, ptr))
             {

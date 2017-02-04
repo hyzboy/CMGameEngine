@@ -1,5 +1,4 @@
 #include<hgl/graph/Texture1D.h>
-#include<hgl/graph/TextureData.h>
 #include"API/apiTexture.h"
 #include<hgl/LogInfo.h>
 
@@ -11,6 +10,24 @@ namespace hgl
 		{
             length=0;
 		}
+
+        Texture1D::Texture1D(Texture1DData *ptr) : Texture(HGL_TEXTURE_1D, HGL_TEX_BIND_1D)
+        {
+            length = 0;
+            SetImage(ptr);
+        }
+
+        Texture1D::Texture1D(uint l,uint vf) : Texture(HGL_TEXTURE_1D, HGL_TEX_BIND_1D)
+        {
+            length = 0;
+            SetImage(l, nullptr,0,HGL_SF_NONE, vf);
+        }
+
+        Texture1D::Texture1D(uint l, void *data, uint size, TSF sf, uint vf) : Texture(HGL_TEXTURE_1D, HGL_TEX_BIND_1D)
+        {
+            length = 0;
+            SetImage(l,data,size,sf,vf);
+        }
 
 		bool Texture1D::SetImage(Texture1DData *ptr)
 		{
@@ -29,7 +46,7 @@ namespace hgl
 			length = ptr->length;
 
             video_format = ptr->GetVideoFormat();
-			color_format = ptr->source_format->color_format;
+			color_format = ptr->GetColorFormat();
 
             if (!api::SetTexImage1D(this->texture_id,ptr))
             {

@@ -24,8 +24,18 @@ namespace hgl
 		public:
 
 					Texture1D       ();
+                    Texture1D       (Texture1DData *);
+                    Texture1D       (uint, uint);
+                    Texture1D       (uint, void *, uint , TSF , uint );
 
 			bool	SetImage		(Texture1DData *);					                            ///<创建1D贴图数据
+            bool    SetImage        (uint l, void *data, uint size, TSF sf, uint vf)
+                                    {
+                                        Texture1DData tex(l, data, size, sf, vf);
+
+                                        return SetImage(&tex);
+                                    }
+
 			bool	ChangeImage		(uint s,uint l,void *data,uint size,TSF sf);					///<更改1D贴图数据
 
 			int		GetImage		(void *data_pointer,TSF fmt,int level=0);						///<取得1D贴图数据
