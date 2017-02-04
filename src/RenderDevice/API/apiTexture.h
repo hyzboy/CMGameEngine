@@ -26,19 +26,19 @@ namespace hgl
 
             using HGL_API_CHANGE_TEX_IMAGE_1D   =bool (*)(uint,uint,uint,void *,uint,TSF);
 
-			HGL_API_CREATE_TEXTURE			CreateTexture=nullptr;									///<创建纹理
-			HGL_API_CREATE_MULTI_TEXTURES	CreateMultiTextures = nullptr;							///<创建多个纹理
-			HGL_API_DELETE_TEXTURE			DeleteTexture = nullptr;
-			HGL_API_DELETE_MULTI_TEXTURES	DeleteMultiTextures = nullptr;
+			extern HGL_API_CREATE_TEXTURE		    CreateTexture;									///<创建纹理
+            extern HGL_API_CREATE_MULTI_TEXTURES	CreateMultiTextures;							///<创建多个纹理
+            extern HGL_API_DELETE_TEXTURE			DeleteTexture;
+            extern HGL_API_DELETE_MULTI_TEXTURES	DeleteMultiTextures;
 
-            HGL_API_SET_TEX_IMAGE_1D        SetTexImage1D=nullptr;
-            HGL_API_SET_TEX_IMAGE_2D        SetTexImage2D=nullptr;
-            HGL_API_SET_TEX_IMAGE_3D        SetTexImage3D=nullptr;
-            HGL_API_SET_TEX_IMAGE_1D_ARRAY  SetTexImage1DArray=nullptr;
-            HGL_API_SET_TEX_IMAGE_2D_ARRAY  SetTexImage2DArray=nullptr;
+            extern HGL_API_SET_TEX_IMAGE_1D         SetTexImage1D;
+            extern HGL_API_SET_TEX_IMAGE_2D         SetTexImage2D;
+            extern HGL_API_SET_TEX_IMAGE_3D         SetTexImage3D;
+            extern HGL_API_SET_TEX_IMAGE_1D_ARRAY   SetTexImage1DArray;
+            extern HGL_API_SET_TEX_IMAGE_2D_ARRAY   SetTexImage2DArray;
 
-            HGL_API_GET_TEX_IMAGE_1D        GetTexImage1D=nullptr;
-            HGL_API_CHANGE_TEX_IMAGE_1D     ChangeTexImage1D=nullptr;
+            extern HGL_API_GET_TEX_IMAGE_1D         GetTexImage1D;
+            extern HGL_API_CHANGE_TEX_IMAGE_1D      ChangeTexImage1D;
 		}//namespace api
 	}//namespace graph
 }//namespace hgl

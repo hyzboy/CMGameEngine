@@ -7,6 +7,20 @@ namespace hgl
 	{
 		namespace api
 		{
+            HGL_API_CREATE_TEXTURE		    CreateTexture = nullptr;									///<创建纹理
+            HGL_API_CREATE_MULTI_TEXTURES	CreateMultiTextures = nullptr;							///<创建多个纹理
+            HGL_API_DELETE_TEXTURE			DeleteTexture = nullptr;
+            HGL_API_DELETE_MULTI_TEXTURES	DeleteMultiTextures = nullptr;
+
+            HGL_API_SET_TEX_IMAGE_1D         SetTexImage1D = nullptr;
+            HGL_API_SET_TEX_IMAGE_2D         SetTexImage2D = nullptr;
+            HGL_API_SET_TEX_IMAGE_3D         SetTexImage3D = nullptr;
+            HGL_API_SET_TEX_IMAGE_1D_ARRAY   SetTexImage1DArray = nullptr;
+            HGL_API_SET_TEX_IMAGE_2D_ARRAY   SetTexImage2DArray = nullptr;
+
+            HGL_API_GET_TEX_IMAGE_1D         GetTexImage1D = nullptr;
+            HGL_API_CHANGE_TEX_IMAGE_1D      ChangeTexImage1D = nullptr;
+
 			// 1.glBindTexture+glTexImage(OpenGL 1.0)
 			// 2.glBindTexture+glTexStorage(4.2)
 			// 3.glTextureImage(OpenGL 4.5)
