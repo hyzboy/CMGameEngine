@@ -17,7 +17,7 @@ namespace hgl
 
         protected:
 
-            int     id;
+            uint    id;
 
             int     min_filter;
             int     mag_filter;
@@ -127,7 +127,7 @@ namespace hgl
 
                 wrap=w;
 
-                glSamplerParmeteri(id, GL_TEXTURE_WRAP_S,wrap);
+                glSamplerParameteri(id, GL_TEXTURE_WRAP_S,wrap);
             }
         };//class SamplerObject1D:public SamplerObject
 
@@ -147,7 +147,7 @@ namespace hgl
 
                 wrap_s = s;
 
-                glSamplerParmeteri(id, GL_TEXTURE_WRAP_S, wrap_s);
+                glSamplerParameteri(id, GL_TEXTURE_WRAP_S, wrap_s);
             }
 
             void SetWrapT(int t)
@@ -156,7 +156,7 @@ namespace hgl
 
                 wrap_t = t;
 
-                glSamplerParmeteri(id, GL_TEXTURE_WRAP_T, wrap_t);
+                glSamplerParameteri(id, GL_TEXTURE_WRAP_T, wrap_t);
             }
 
             void SetWrap(int s,int t)
@@ -165,14 +165,14 @@ namespace hgl
                 {
                     wrap_s = s;
 
-                    glSamplerParmeteri(id, GL_TEXTURE_WRAP_S, wrap_s);
+                    glSamplerParameteri(id, GL_TEXTURE_WRAP_S, wrap_s);
                 }
 
                 if (wrap_t != t)
                 {
                     wrap_t = t;
 
-                    glSamplerParmeteri(id, GL_TEXTURE_WRAP_T, wrap_t);
+                    glSamplerParameteri(id, GL_TEXTURE_WRAP_T, wrap_t);
                 }
             }
         };//class SamplerObject2D :public SamplerObject
@@ -193,7 +193,7 @@ namespace hgl
 
                 wrap_s = s;
 
-                glSamplerParmeteri(id, GL_TEXTURE_WRAP_S, wrap_s);
+                glSamplerParameteri(id, GL_TEXTURE_WRAP_S, wrap_s);
             }
 
             void SetWrapT(int t)
@@ -202,7 +202,7 @@ namespace hgl
 
                 wrap_t = t;
 
-                glSamplerParmeteri(id, GL_TEXTURE_WRAP_T, wrap_t);
+                glSamplerParameteri(id, GL_TEXTURE_WRAP_T, wrap_t);
             }
 
             void SetWrapR(int r)
@@ -211,30 +211,30 @@ namespace hgl
 
                 wrap_r = r;
 
-                glSamplerParmeteri(id, GL_TEXTURE_WRAP_R, wrap_r);
+                glSamplerParameteri(id, GL_TEXTURE_WRAP_R, wrap_r);
             }
 
-            void SetWrap(int s, int t)
+            void SetWrap(int s, int t,int r)
             {
                 if (wrap_s != s)
                 {
                     wrap_s = s;
 
-                    glSamplerParmeteri(id, GL_TEXTURE_WRAP_S, wrap_s);
+                    glSamplerParameteri(id, GL_TEXTURE_WRAP_S, wrap_s);
                 }
 
                 if (wrap_t != t)
                 {
                     wrap_t = t;
 
-                    glSamplerParmeteri(id, GL_TEXTURE_WRAP_T, wrap_t);
+                    glSamplerParameteri(id, GL_TEXTURE_WRAP_T, wrap_t);
                 }
 
                 if (wrap_r != r)
                 {
                     wrap_r = r;
 
-                    glSamplerParmeteri(id, GL_TEXTURE_WRAP_R, wrap_r);
+                    glSamplerParameteri(id, GL_TEXTURE_WRAP_R, wrap_r);
                 }
             }
         };//class SamplerObject3D :public SamplerObject
