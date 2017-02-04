@@ -15,20 +15,20 @@ namespace hgl
 		{
 		protected:
 
-            uint length;
+            uint    length;
 
 		public:	//
 
-					uint	GetLength		()const{return length;}										                ///<取得纹理长度
+			uint	GetLength       ()const{return length;}										    ///<取得纹理长度
 
 		public:
 
-							Texture1D();
+					Texture1D       ();
 
-			virtual bool	SetImage		(Texture1DData *);					                                        ///<创建1D贴图数据
-			virtual bool	ChangeImage		(uint s,uint l,void *data,uint size,TSF sf);								///<更改1D贴图数据
+			bool	SetImage		(Texture1DData *);					                            ///<创建1D贴图数据
+			bool	ChangeImage		(uint s,uint l,void *data,uint size,TSF sf);					///<更改1D贴图数据
 
-			virtual int		GetImage		(void *data_pointer,TSF fmt,int level=0);									///<取得1D贴图数据
+			int		GetImage		(void *data_pointer,TSF fmt,int level=0);						///<取得1D贴图数据
 		};//class Texture1D
 	}//namespace graph
 }//namespace hgl
