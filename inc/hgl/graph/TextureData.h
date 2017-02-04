@@ -27,6 +27,11 @@ namespace hgl
             {
                 return(video_format?video_format:source_format->video_format);
             }
+
+            uint GetColorFormat()const
+            {
+                return(source_format?source_format->color_format:0);
+            }
         };//struct TextureData
 
         struct Texture1DData :public TextureData
@@ -38,6 +43,23 @@ namespace hgl
             Texture1DData()
             {
                 hgl_zero(this, sizeof(Texture1DData));
+            }
+
+            Texture1DData(uint l, void *data, uint size, TSF sf, uint vf)
+            {
+                if (!TextureSourceFormatCheck(sf))
+                {
+                    hgl_zero(this, sizeof(Texture1DData));
+                    return;
+                }
+
+                length=l;
+
+                bitmap = data;
+                bitmap_bytes = size;
+
+                source_format = TextureFormatInfoList + sf;             //原始数据格式
+                video_format = vf ? vf : source_format->video_format;   //显存格式
             }
         };//struct Texture1DData:public TextureData
 
@@ -51,7 +73,25 @@ namespace hgl
             {
                 hgl_zero(this, sizeof(Texture2DData));
             }
-        };
+
+            Texture2DData(uint w,uint h,void *data,uint size,TSF sf,uint vf)
+            {
+                if (!TextureSourceFormatCheck(sf))
+                {
+                    hgl_zero(this, sizeof(Texture2DData));
+                    return;                    
+                }
+
+                width=w;
+                height=h;
+
+                bitmap=data;
+                bitmap_bytes=size;
+
+                source_format=TextureFormatInfoList + sf;       //原始数据格式
+                video_format=vf?vf:source_format->video_format; //显存格式
+            }
+        };//struct Texture2DData :public TextureData
 
         struct Texture1DArrayData :public TextureData
         {
