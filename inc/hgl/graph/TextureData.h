@@ -1,4 +1,4 @@
-#ifndef HGL_GRAPH_TEXTURE_DATA_INCLUDE
+ï»¿#ifndef HGL_GRAPH_TEXTURE_DATA_INCLUDE
 #define HGL_GRAPH_TEXTURE_DATA_INCLUDE
 
 #include<hgl/graph/TextureFormat.h>
@@ -7,19 +7,19 @@ namespace hgl
     namespace graph
     {
         /**
-        * ÎÆÀíÊı¾İ
+        * çº¹ç†æ•°æ®
         */
         struct TextureData
         {
-            const TextureFormat   * source_format;                  ///<Ô´Ê¼ÎÆÀí¸ñÊ½
+            const TextureFormat   * source_format;                  ///<æºå§‹çº¹ç†æ ¼å¼
 
-            uint                    video_format;                   ///<ÏÔ´æ¸ñÊ½
+            uint                    video_format;                   ///<æ˜¾å­˜æ ¼å¼
 
-            bool                    gen_mipmaps;                    ///<ÊÇ·ñ²úÉúmipmaps
+            bool                    gen_mipmaps;                    ///<æ˜¯å¦äº§ç”Ÿmipmaps
 
-            void *                  bitmap;                         ///<Î»Í¼Êı¾İ
+            void *                  bitmap;                         ///<ä½å›¾æ•°æ®
 
-            uint                    bitmap_bytes;                   ///<Î»Í¼Êı¾İ×Ö½ÚÊı
+            uint                    bitmap_bytes;                   ///<ä½å›¾æ•°æ®å­—èŠ‚æ•°
 
         public:
 
@@ -58,8 +58,8 @@ namespace hgl
                 bitmap = data;
                 bitmap_bytes = size;
 
-                source_format = TextureFormatInfoList + sf;             //Ô­Ê¼Êı¾İ¸ñÊ½
-                video_format = vf ? vf : source_format->video_format;   //ÏÔ´æ¸ñÊ½
+                source_format = TextureFormatInfoList + sf;             //åŸå§‹æ•°æ®æ ¼å¼
+                video_format = vf ? vf : source_format->video_format;   //æ˜¾å­˜æ ¼å¼
             }
         };//struct Texture1DData:public TextureData
 
@@ -88,8 +88,8 @@ namespace hgl
                 bitmap=data;
                 bitmap_bytes=size;
 
-                source_format=TextureFormatInfoList + sf;       //Ô­Ê¼Êı¾İ¸ñÊ½
-                video_format=vf?vf:source_format->video_format; //ÏÔ´æ¸ñÊ½
+                source_format=TextureFormatInfoList + sf;       //åŸå§‹æ•°æ®æ ¼å¼
+                video_format=vf?vf:source_format->video_format; //æ˜¾å­˜æ ¼å¼
             }
         };//struct Texture2DData :public TextureData
 
