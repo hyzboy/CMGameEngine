@@ -27,7 +27,7 @@ namespace hgl
             virtual void	GetMipmapLevel	(int &,int &)=0;										///<取得贴图mipmaps级别
         };//class TextureBaseControl
 
-        using HGL_TBC_CREATE=TextureBaseControl * (*)(uint t,uint bt,uint id);
+        using HGL_TBC_CREATE=TextureBaseControl * (*)(uint t,uint bt);
 
         extern HGL_TBC_CREATE TextureBaseControlCreate;
 	}//namespace graph

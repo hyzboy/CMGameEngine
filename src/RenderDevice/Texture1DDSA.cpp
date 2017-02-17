@@ -1,4 +1,6 @@
 ﻿#include<hgl/graph/Texture1D.h>
+#include<hgl/LogInfo.h>
+#include"TextureBaseControl.h"
 
 namespace hgl
 {
@@ -78,9 +80,12 @@ namespace hgl
             }
         };//class TextureDSA1D:public Texture1D
 
-        Texture1D *CreateTexture1D(uint texture_id)
+        Texture1D *CreateTexture1D()
         {
-            return(new TextureDSA1D());
+            TextureBaseControl *tbc=TextureBaseControlCreate(HGL_TEXTURE_1D,HGL_TEX_BIND_1D);
+
+            if(!tbc)RETURN_ERROR_NULL;
+            return(new TextureDSA1D(tbc));
         }
     }//namespace graph
 }//namespace hgl

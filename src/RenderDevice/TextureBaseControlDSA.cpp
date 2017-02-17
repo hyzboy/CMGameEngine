@@ -1,7 +1,5 @@
-#ifndef HGL_GRAPH_TEXTURE_BASE_CONTROL_DSA_INCLUDE
-#define HGL_GRAPH_TEXTURE_BASE_CONTROL_DSA_INCLUDE
-
-#include<hgl/graph/TextureBaseControl.h>
+#include"TextureBaseControl.h"
+#include<glew/include/GL/glew.h>
 namespace hgl
 {
     namespace graph
@@ -26,10 +24,13 @@ namespace hgl
             }
         };//class TextureBaseControlDSA
         
-        inline TextureBaseControl *TextureBaseControlCreateDSA(uint t,uint bt,uint id)
+        TextureBaseControl *TextureBaseControlCreateDSA(uint t,uint bt)
         {
+            uint id;
+
+            glCreateTextures(t,1,&id);
+
             return(new TextureBaseControlDSA(t,bt,id));
         }
     }//namespace graph
 }//namespace hgl
-#endif//HGL_GRAPH_TEXTURE_BASE_CONTROL_DSA_INCLUDE

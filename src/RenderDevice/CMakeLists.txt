@@ -1,5 +1,7 @@
 ﻿set(CM_OPENGL_TEXTURE_SOURCE        Texture.cpp
                                     TextureBaseControl.cpp
+                                    TextureBaseControlBind.cpp
+                                    TextureBaseControlDSA.cpp
                                     Texture1D.cpp
                                     Texture1DDSA.cpp
                                     Texture2D.cpp

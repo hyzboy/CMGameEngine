@@ -1,7 +1,5 @@
-#ifndef HGL_GRAPH_TEXTURE_BASE_CONTROL_BIND_INCLUDE
-#define HGL_GRAPH_TEXTURE_BASE_CONTROL_BIND_INCLUDE
-
-#include<hgl/graph/TextureBaseControl.h>
+#include"TextureBaseControl.h"
+#include<glew/include/GL/glew.h>
 namespace hgl
 {
     namespace graph
@@ -9,11 +7,11 @@ namespace hgl
         class TextureBind
         {
             uint type;
-            GLint old_id;            
+            int old_id;            
 
         public:
 
-            TextureBind(uint t, uint binding_type, GLint id):type(t)
+            TextureBind(uint t, uint binding_type, int id):type(t)
             {
                 glGetIntegerv(binding_type,&old_id);
                 glBindTexture(type,id);
@@ -29,7 +27,7 @@ namespace hgl
         {
         public:
 
-            using TextureInstance::TextureInstance;
+            using TextureBaseControl::TextureBaseControl;
 
 		public:     //mipmaps
 
@@ -49,10 +47,13 @@ namespace hgl
             }
         };//class TextureBaseControlBind
         
-        inline TextureBaseControl *TextureBaseControlCreateBind(uint t,uint bt,uint id)
+        TextureBaseControl *TextureBaseControlCreateBind(uint t,uint bt)
         {
+            uint id;
+
+            glGenTextures(1,&id);
+
             return(new TextureBaseControlBind(t,bt,id));
         }
     }//namespace graph
 }//namespace hgl
-#endif//HGL_GRAPH_TEXTURE_BASE_CONTROL_BIND_INCLUDE

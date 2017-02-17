@@ -6,8 +6,8 @@ namespace hgl
 	{
         static HGL_TBC_CREATE TextureBaseControlCreate=nullptr;
 
-        TextureBaseControl *TextureBaseControlCreateDSA(uint t,uint bt,uint id);
-        TextureBaseControl *TextureBaseControlCreateBind(uint t,uint bt,uint id);
+        TextureBaseControl *TextureBaseControlCreateDSA(uint t,uint bt);
+        TextureBaseControl *TextureBaseControlCreateBind(uint t,uint bt);
 
         void InitTextureBaseControl(bool use_dsa)
         {
