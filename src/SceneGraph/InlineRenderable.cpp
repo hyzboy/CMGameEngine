@@ -549,13 +549,13 @@ namespace hgl
 			{
 				const uint8 white_line[4]={245,255,248,255};
 
-				WhiteLine=new Texture1D(4,(void *)white_line,4,HGL_SF_R8,HGL_R8);
+				WhiteLine=CreateTexture1D(4,(void *)white_line,4,HGL_SF_R8,HGL_R8);
 			}
 
 			{
 				const uint8 black_white_line[4] = { 255,0,255,0 };
 
-				BlackWhiteLine = new Texture1D(4, (void *)black_white_line, 4, HGL_SF_R8, HGL_R8);
+				BlackWhiteLine = CreateTexture1D(4, (void *)black_white_line, 4, HGL_SF_R8, HGL_R8);
 			}
 
 			{
@@ -564,7 +564,7 @@ namespace hgl
 													0x00,0x00,0xFF,0xFF,
 													0x00,0x00,0xFF,0xFF};
 
-				BlackWhiteGrid=new Texture2D(4,4,(void *)black_white_grid,16,HGL_SF_R8,HGL_R8);
+				BlackWhiteGrid=CreateTexture2D(4,4,(void *)black_white_grid,16,HGL_SF_R8,HGL_R8);
 			}
 
 			{
@@ -573,7 +573,7 @@ namespace hgl
 													0x7F,0x7F,0xFF,0xFF,
 													0x7F,0x7F,0xFF,0xFF};
 
-				GrayWhiteGrid=new Texture2D(4,4,(void *)gray_white_grid,16,HGL_SF_R8,HGL_R8);
+				GrayWhiteGrid=CreateTexture2D(4,4,(void *)gray_white_grid,16,HGL_SF_R8,HGL_R8);
 			}
 
 			{
@@ -585,7 +585,7 @@ namespace hgl
 					61,174,233,	61,174,233,		255,255,255,	255,255,255
 				};
 
-				BlueWhiteGrid=new Texture2D(4,4,(void *)blue_white_grid,48,HGL_SF_RGB8,HGL_RGB8);
+				BlueWhiteGrid=CreateTexture2D(4,4,(void *)blue_white_grid,48,HGL_SF_RGB8,HGL_RGB8);
 			}
 		}
 

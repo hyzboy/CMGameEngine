@@ -83,7 +83,7 @@ namespace hgl
 			tile_count	=0;
 			tile_total	=tile_rows*tile_cols;
 
-			tile_texture=new Texture2D(tw,th,video_format);
+			tile_texture=CreateTexture2D(tw,th,video_format);
 
 			//tile_object=new TileData::Object *[tile_total];
 			//memset(tile_object,0,tile_total*sizeof(TileData::Object *));
