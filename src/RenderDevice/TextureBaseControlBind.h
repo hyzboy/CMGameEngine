@@ -1,7 +1,7 @@
-#ifndef HGL_GRAPH_TEXTURE_INSTANCE_BIND_INCLUDE
-#define HGL_GRAPH_TEXTURE_INSTANCE_BIND_INCLUDE
+#ifndef HGL_GRAPH_TEXTURE_BASE_CONTROL_BIND_INCLUDE
+#define HGL_GRAPH_TEXTURE_BASE_CONTROL_BIND_INCLUDE
 
-#include"TextureInstace.h"
+#include<hgl/graph/TextureBaseControl.h>
 namespace hgl
 {
     namespace graph
@@ -25,7 +25,7 @@ namespace hgl
             }
         };//class TextureBind
 
-        class TextureInstaceBind:public TextureInstace
+        class TextureBaseControlBind:public TextureBaseControl
         {
         public:
 
@@ -47,7 +47,12 @@ namespace hgl
                 glGetTexParameteriv(type,GL_TEXTURE_BASE_LEVEL,&base_level);
                 glGetTexParameteriv(type,GL_TEXTURE_MAX_LEVEL,&max_level);
             }
-        };//class TextureInstaceBind
+        };//class TextureBaseControlBind
+        
+        inline TextureBaseControl *TextureBaseControlCreateBind(uint t,uint bt,uint id)
+        {
+            return(new TextureBaseControlBind(t,bt,id));
+        }
     }//namespace graph
 }//namespace hgl
-#endif//HGL_GRAPH_TEXTURE_INSTANCE_BIND_INCLUDE
+#endif//HGL_GRAPH_TEXTURE_BASE_CONTROL_BIND_INCLUDE

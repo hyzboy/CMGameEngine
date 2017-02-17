@@ -1,5 +1,4 @@
 #include<hgl/graph/Texture2D.h>
-#include"API/apiTexture.h"
 #include<hgl/LogInfo.h>
 
 namespace hgl
@@ -49,7 +48,7 @@ namespace hgl
             video_format = ptr->GetVideoFormat();
             color_format = ptr->GetColorFormat();
 
-            if (!api::SetTexImage2D(this->texture_id, ptr))
+            if (!_SetImage(ptr))
             {
                 width=height= 0;
                 RETURN_FALSE;
@@ -66,7 +65,7 @@ namespace hgl
                 return(-1);
             }
             
-            return api::GetTexImage2D(texture_id,data_pointer,fmt,level,width,height);
+            return _GetImage(data_pointer,fmt,level,width,height);
         }
 
         bool Texture2D::ChangeImage(uint l, uint t, uint w, uint h, void *data, uint bytes, TSF sf)
@@ -78,7 +77,7 @@ namespace hgl
                 || !TextureSourceFormatCheck(sf))
                 RETURN_FALSE;
 
-            return api::ChangeTexImage2D(texture_id, l,t,w,h, data, bytes, sf);
+            return _ChangeImage(l,t,w,h, data, bytes, sf);
         }
     }//namespace graph
 }//namespace hgl

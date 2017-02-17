@@ -2,6 +2,7 @@
 #define HGL_GRAPH_TEXTURE_INCLUDE
 
 #include<hgl/graph/TextureData.h>
+#include<hgl/graph/TextureInstance.h>
 #include<hgl/type/BaseString.h>
 namespace hgl
 {
@@ -17,6 +18,8 @@ namespace hgl
         extern int HGL_MAX_TEXTURE_SIZE;            ///<最大纹理尺寸
         extern int HGL_MAX_CUBE_MAP_SIZE;           ///<最大CubeMap纹理尺寸
 
+		class TextureBaseControl;
+
 		/**
 		* 贴图类
 		*/
@@ -30,11 +33,13 @@ namespace hgl
 			uint texture_id;																		///<纹理ID
 
 			uint color_format;																		///<色彩格式(如RED,RG,RGB,RGBA,SRGB,SRGBA之类)
-			uint video_format;																		///<显存格式
+			uint video_format;		
 
-		public:
+			TextureBaseControl *tbc;																///<纹理基本控制
 
-							Texture(uint t,uint bt);
+        private:
+
+            				Texture(TextureBaseControl *c){tbc=c;}
 			virtual			~Texture();
 
 		public:
@@ -47,9 +52,8 @@ namespace hgl
 
 		public:
 
-                    void    GenMipmaps      ();                                                     ///<生成mipmaps
-
-		//	virtual void	GetMipmapLevel	(int &,int &)=0;										///<取得贴图mipmaps级别
+            		void    GenMipmaps      ();                      								///<生成mipmaps
+					void	GetMipmapLevel	(int &base_level,int &max_level);						///<取得贴图mipmaps级别	
 		};//class Texture
 	}//namespace graph
 }//namespace hgl

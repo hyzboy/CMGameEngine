@@ -1,11 +1,10 @@
 #include<hgl/graph/Texture1D.h>
-#include"API/apiTexture.h"
 #include<hgl/LogInfo.h>
 
 namespace hgl
 {
-	namespace graph
-	{
+    namespace graph
+    {
 		Texture1D::Texture1D():Texture(HGL_TEXTURE_1D,HGL_TEX_BIND_1D)
 		{
             length=0;
@@ -48,7 +47,7 @@ namespace hgl
             video_format = ptr->GetVideoFormat();
 			color_format = ptr->GetColorFormat();
 
-            if (!api::SetTexImage1D(this->texture_id,ptr))
+            if (!_SetImage(ptr))
             {
                 length=0;
                 RETURN_FALSE;
@@ -65,7 +64,7 @@ namespace hgl
 				return(-1);
 			}
 
-            return api::GetTexImage1D(texture_id,data_pointer,fmt,level,length);
+            return _GetImage(data_pointer,fmt,level);
 		}
 
 		bool Texture1D::ChangeImage(uint s, uint l, void *data, uint bytes, TSF sf)
@@ -76,7 +75,7 @@ namespace hgl
 				|| !TextureSourceFormatCheck(sf))
             RETURN_FALSE;
 
-            return api::ChangeTexImage1D(texture_id,s,l,data,bytes,sf);
+            return _ChangeImage(s,l,data,bytes,sf);
 		}
 	}//namespace graph
 }//namespace hgl

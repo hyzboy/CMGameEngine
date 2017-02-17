@@ -1,16 +1,16 @@
-#ifndef HGL_GRAPH_TEXTURE_INSTANCE_DSA_INCLUDE
-#define HGL_GRAPH_TEXTURE_INSTANCE_DSA_INCLUDE
+#ifndef HGL_GRAPH_TEXTURE_BASE_CONTROL_DSA_INCLUDE
+#define HGL_GRAPH_TEXTURE_BASE_CONTROL_DSA_INCLUDE
 
-#include"TextureInstace.h"
+#include<hgl/graph/TextureBaseControl.h>
 namespace hgl
 {
     namespace graph
     {
-        class TextureInstaceDSA:public TextureInstace
+        class TextureBaseControlDSA:public TextureBaseControl
         {
         public:
 
-            using TextureInstance::TextureInstance;
+            using TextureBaseControl::TextureBaseControl;
 
 		public:     //mipmaps
 
@@ -24,7 +24,12 @@ namespace hgl
                 glGetTextureParameteriv(texture_id,GL_TEXTURE_BASE_LEVEL,&base_level);
                 glGetTextureParameteriv(texture_id,GL_TEXTURE_MAX_LEVEL,&max_level);
             }
-        };//class TextureInstaceDSA
+        };//class TextureBaseControlDSA
+        
+        inline TextureBaseControl *TextureBaseControlCreateDSA(uint t,uint bt,uint id)
+        {
+            return(new TextureBaseControlDSA(t,bt,id));
+        }
     }//namespace graph
 }//namespace hgl
-#endif//HGL_GRAPH_TEXTURE_INSTANCE_DSA_INCLUDE
+#endif//HGL_GRAPH_TEXTURE_BASE_CONTROL_DSA_INCLUDE

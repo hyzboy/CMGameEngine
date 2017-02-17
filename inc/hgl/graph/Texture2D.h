@@ -17,6 +17,10 @@ namespace hgl
 
 			uint    width,height;																				///<宽、高
 
+			virtual bool	_SetImage	(Texture2DData *tex)=0;
+            virtual int		_GetImage	(void *data_pointer, TSF fmt, int level,int width,int height)=0;
+            virtual bool	_ChangeImage(uint l, uint t, uint w, uint h, void *data, uint bytes, TSF sf)=0;
+
 		public:
 
 			int		GetWidth		()const{return width;}														///<取得纹理宽度
@@ -41,6 +45,11 @@ namespace hgl
 
             int		GetImage		(void *data_pointer,TSF fmt,int level=0);									///<取得2D贴图数据
 		};//class Texture2D
+
+		Texture2D *CreateTexture2D();
+		Texture2D *CreateTexture2D(Texture2DData *);
+		Texture2D *CreateTexture2D(uint width,uint height,uint video_format);
+		Texture2D *CreateTexture2D(uint width,uint height,void *bitmap,uint bitmap_bytes,TSF source_format,uint video_format);
 	}//namespace graph
 }//namespace hgl
 #endif//HGL_GRAPH_TEXTURE_2D_INCLUDE
