@@ -1,4 +1,5 @@
 ﻿#include<hgl/graph/Texture.h>
+#include"TextureBaseControl.h"
 
 namespace hgl
 {
@@ -16,7 +17,7 @@ namespace hgl
 
         Texture::~Texture() 
         {
-            glDeleteTexture(1,&texture_id);
+            glDeleteTextures(1,&texture_id);
         }
 
         void Texture::GenMipmaps()

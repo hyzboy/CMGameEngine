@@ -44,7 +44,7 @@ set(CM_RENDER_SOURCE    # 			Debugger_ATI_GPU_Perf.cpp
                                     )
 
 set(CM_RENDER_DEVICE_SOURCE         ${CM_PLATFORM_BASE_SOURCE}
-                                    ${CM_OPENGL_API_SOURCE}
+                                    ${CM_OPENGL_TEXTURE_SOURCE}
 									${CM_OPENGL_SOURCE}
 #                                    ${CM_OPENGL_CORE_45_SOURCE}
                                     ${CM_GLSL_SHADER_MAKER_SOURCE}

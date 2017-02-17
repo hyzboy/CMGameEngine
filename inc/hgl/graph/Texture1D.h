@@ -29,7 +29,7 @@ namespace hgl
 
 		public:
 
-					Texture1D       (TextureBaseControl *);
+					Texture1D       (TextureBaseControl *t):Texture(t){length=0;}
 
 			bool	SetImage		(Texture1DData *);					                            ///<创建1D贴图数据
             bool    SetImage        (uint l, void *data, uint size, TSF sf, uint vf)

@@ -2,7 +2,6 @@
 #define HGL_GRAPH_TEXTURE_INCLUDE
 
 #include<hgl/graph/TextureData.h>
-#include<hgl/graph/TextureInstance.h>
 #include<hgl/type/BaseString.h>
 namespace hgl
 {
@@ -37,9 +36,9 @@ namespace hgl
 
 			TextureBaseControl *tbc;																///<纹理基本控制
 
-        private:
+        public:
 
-            				Texture(TextureBaseControl *c){tbc=c;}
+            				Texture(TextureBaseControl *);
 			virtual			~Texture();
 
 		public:

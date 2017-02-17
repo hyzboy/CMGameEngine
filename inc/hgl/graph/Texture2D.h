@@ -28,10 +28,7 @@ namespace hgl
 
 		public:
 
-                    Texture2D       ();
-                    Texture2D       (Texture2DData *);
-                    Texture2D       (uint w, uint h, uint vf);
-                    Texture2D       (uint w, uint h, void *data, uint size, TSF sf, uint vf);
+                    Texture2D       (TextureBaseControl *t):Texture(t){width=height=0;}
 
 			bool	SetImage		(Texture2DData *);											                ///<创建2D贴图数据
             bool    SetImage        (uint w, uint h, void *data, uint size, TSF sf, uint vf)

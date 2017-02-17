@@ -1,4 +1,4 @@
-#include"TextureBaseControl.h";
+#include"TextureBaseControl.h"
 
 namespace hgl
 {
