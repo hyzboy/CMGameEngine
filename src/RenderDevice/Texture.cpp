@@ -39,17 +39,38 @@ namespace hgl
 
         void InitTextureBaseControlDSA();
         void InitTextureBaseControlBind();
+
 		void InitTexture1DDSA();
         void InitTexture2DDSA();
 
+        //void InitTexture1DBindStorage();
+        //void InitTexture2DBindStorage();
+        //void InitTexture1DBind();
+        //void InitTexture2DBind();
+
         bool InitTextureAPI()
         {
-            if(GLEW_ARB_direct_state_access)
+            if(GLEW_ARB_direct_state_access)            //4.5
             {
                 InitTextureBaseControlDSA();
                 InitTexture1DDSA();
                 InitTexture2DDSA();
             }
+            //else
+            //{ 
+            //    InitTextureBaseControlBind();
+
+            //    if (GL_ARB_texture_storage)             //4.2
+            //    {
+            //        InitTexture1DBindStorage();
+            //        InitTexture2DBindStorage();
+            //    }
+            //    else
+            //    {
+            //        InitTexture1DBind();
+            //        InitTexture2DBind();
+            //    }
+            //}
 
             return(true);
         }
