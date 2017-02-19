@@ -76,7 +76,7 @@
 // If MATH_ENABLE_STL_SUPPORT is defined, MathGeoLib utilizes STL data structures. Otherwise,
 // features requiring STL are disabled (but the library can still be built).
 #ifndef MATH_ENABLE_STL_SUPPORT
-#define MATH_ENABLE_STL_SUPPORT
+//#define MATH_ENABLE_STL_SUPPORT
 #endif
 
 // If MATH_TINYXML_INTEROP is defined, MathGeoLib integrates with TinyXML to provide
@@ -136,9 +136,12 @@
 // Uncomment to specify the SIMD instruction set level in use.
 //#define MATH_AVX
 //#define MATH_SSE41
+#ifndef MATH_SSE3
 #define MATH_SSE3
-#define MATH_SSE2
-#define MATH_SSE // SSE1.
+#endif//MATH_SSE3
+
+//#define MATH_SSE2
+//#define MATH_SSE // SSE1.
 
 ///\todo Test iOS support.
 ///\todo Enable NEON only on ARMv7, not older.
