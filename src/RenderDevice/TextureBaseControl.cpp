@@ -9,12 +9,14 @@ namespace hgl
         TextureBaseControl *TextureBaseControlCreateDSA(uint t,uint bt);
         TextureBaseControl *TextureBaseControlCreateBind(uint t,uint bt);
 
-        void InitTextureBaseControl(bool use_dsa)
+        void InitTextureBaseControlDSA()
         {
-            if(use_dsa)
-                TextureBaseControlCreate=TextureBaseControlCreateDSA;
-            else
-                TextureBaseControlCreate=TextureBaseControlCreateBind;
+            TextureBaseControlCreate=TextureBaseControlCreateDSA;
+        }
+
+        void InitTextureBaseControlBind()
+        {
+            TextureBaseControlCreate=TextureBaseControlCreateBind;
         }
     }//namespace graph
 }//namespace hgl

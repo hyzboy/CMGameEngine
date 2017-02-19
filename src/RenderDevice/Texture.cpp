@@ -37,7 +37,8 @@ namespace hgl
         class Texture1D;
         class Texture2D;
 
-        void InitTextureBaseControl(bool use_dsa);
+        void InitTextureBaseControlDSA();
+        void InitTextureBaseControlBind();
 		void InitTexture1DDSA();
         void InitTexture2DDSA();
 
@@ -45,7 +46,7 @@ namespace hgl
         {
             if(GLEW_ARB_direct_state_access)
             {
-                InitTextureBaseControl(true);
+                InitTextureBaseControlDSA();
                 InitTexture1DDSA();
                 InitTexture2DDSA();
             }
