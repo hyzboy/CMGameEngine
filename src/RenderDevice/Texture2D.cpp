@@ -75,6 +75,36 @@ namespace hgl
             return(_CreateTexture2D(tbc));
         }
 
+        Texture2D *CreateTexture2D(Texture2DData *ptr)
+        {
+            Texture2D *tex = CreateTexture2D();
+
+            if (!tex)RETURN_ERROR_NULL;
+
+            tex->SetImage(ptr);
+            return(tex);
+        }
+
+        Texture2D *CreateTexture2D(uint width, uint height, uint video_format)
+        {
+            Texture2D *tex = CreateTexture2D();
+
+            if (!tex)RETURN_ERROR_NULL;
+
+            tex->SetImage(width,height, nullptr, 0, HGL_SF_NONE, video_format);
+            return(tex);
+        }
+
+        Texture2D *CreateTexture2D(uint width, uint height, void *bitmap, uint bitmap_bytes, TSF source_format, uint video_format)
+        {
+            Texture2D *tex = CreateTexture2D();
+
+            if (!tex)RETURN_ERROR_NULL;
+
+            tex->SetImage(width,height, bitmap, bitmap_bytes, source_format, video_format);
+            return(tex);
+        }
+
         void InitTexture2DDSA()
         {
             _CreateTexture2D = CreateTexture2DDSA;

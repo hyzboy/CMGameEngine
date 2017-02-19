@@ -73,6 +73,36 @@ namespace hgl
             return(_CreateTexture1D(tbc));
         }
 
+        Texture1D *CreateTexture1D(Texture1DData *ptr)
+        {
+            Texture1D *tex=CreateTexture1D();
+
+            if(!tex)RETURN_ERROR_NULL;
+
+            tex->SetImage(ptr);
+            return(tex);
+        }
+
+        Texture1D *CreateTexture1D(uint length, uint video_format)
+        {
+            Texture1D *tex = CreateTexture1D();
+
+            if (!tex)RETURN_ERROR_NULL;
+
+            tex->SetImage(length,nullptr,0, HGL_SF_NONE,video_format);
+            return(tex);
+        }
+
+        Texture1D *CreateTexture1D(uint length, void *bitmap, uint bitmap_bytes, TSF source_format, uint video_format)
+        {
+            Texture1D *tex = CreateTexture1D();
+
+            if (!tex)RETURN_ERROR_NULL;
+
+            tex->SetImage(length, bitmap,bitmap_bytes,source_format, video_format);
+            return(tex);
+        }
+
 		void InitTexture1DDSA()
 		{
 			_CreateTexture1D=CreateTexture1DDSA;
