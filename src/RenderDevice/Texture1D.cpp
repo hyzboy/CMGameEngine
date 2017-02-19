@@ -1,5 +1,6 @@
 #include<hgl/graph/Texture1D.h>
 #include<hgl/LogInfo.h>
+#include"TextureBaseControl.h"
 
 namespace hgl
 {
@@ -53,6 +54,28 @@ namespace hgl
             RETURN_FALSE;
 
             return _ChangeImage(s,l,data,bytes,sf);
+		}
+	}//namespace graph
+
+	namespace graph
+	{		
+        Texture1D *CreateTexture1DDSA(TextureBaseControl *tbc);
+		Texture1D *CreateTexture1DBind(TextureBaseControl *tbc);
+        
+        Texture1D *(*_CreateTexture1D)(TextureBaseControl *tbc)=nullptr;
+        
+        Texture1D *CreateTexture1D()
+        {
+            TextureBaseControl *tbc=TextureBaseControlCreate(HGL_TEXTURE_1D,HGL_TEX_BIND_1D);
+
+            if(!tbc)RETURN_ERROR_NULL;
+            
+            return(_CreateTexture1D(tbc));
+        }
+
+		void InitTexture1DDSA()
+		{
+			_CreateTexture1D=CreateTexture1DDSA;
 		}
 	}//namespace graph
 }//namespace hgl

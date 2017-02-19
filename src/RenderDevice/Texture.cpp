@@ -38,12 +38,16 @@ namespace hgl
         class Texture2D;
 
         void InitTextureBaseControl(bool use_dsa);
+		void InitTexture1DDSA();
+        void InitTexture2DDSA();
 
         bool InitTextureAPI()
         {
             if(GLEW_ARB_direct_state_access)
             {
                 InitTextureBaseControl(true);
+                InitTexture1DDSA();
+                InitTexture2DDSA();
             }
 
             return(true);

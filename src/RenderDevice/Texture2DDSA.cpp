@@ -1,6 +1,5 @@
 ﻿#include<hgl/graph/Texture2D.h>
 #include<hgl/LogInfo.h>
-#include"TextureBaseControl.h"
 
 namespace hgl
 {
@@ -80,11 +79,8 @@ namespace hgl
             }
         };//class TextureDSA2D
 
-        Texture2D *CreateTexture2D()
+        Texture2D *CreateTexture2DDSA(TextureBaseControl *tbc)
         {
-            TextureBaseControl *tbc = TextureBaseControlCreate(HGL_TEXTURE_2D, HGL_TEX_BIND_2D);
-
-            if (!tbc)RETURN_ERROR_NULL;
             return(new TextureDSA2D(tbc));
         }
     }//namespace graph
