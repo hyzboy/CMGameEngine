@@ -1,4 +1,8 @@
-﻿set(CM_OPENGL_TEXTURE_SOURCE        Texture.cpp
+﻿set(CM_OPENGL_VBO_SOURCE            VertexBuffer.cpp
+									VertexBufferControlBind.cpp
+                                    VertexBufferControlDSA.cpp)
+
+set(CM_OPENGL_TEXTURE_SOURCE        Texture.cpp
                                     TextureBaseControl.cpp
                                     TextureBaseControlBind.cpp
                                     TextureBaseControlDSA.cpp
@@ -47,8 +51,8 @@ set(CM_RENDER_SOURCE    # 			Debugger_ATI_GPU_Perf.cpp
 
 set(CM_RENDER_DEVICE_SOURCE         ${CM_PLATFORM_BASE_SOURCE}
                                     ${CM_OPENGL_TEXTURE_SOURCE}
+                                    ${CM_OPENGL_VBO_SOURCE}
 									${CM_OPENGL_SOURCE}
-#                                    ${CM_OPENGL_CORE_45_SOURCE}
                                     ${CM_GLSL_SHADER_MAKER_SOURCE}
                                     ${CM_GLSL_SOURCE}
                                     ${CM_RENDER_SOURCE})
@@ -58,8 +62,8 @@ SET(GLEW_SOURCE                     GLEW/glew.c)
 SOURCE_GROUP("OpenGL\\GLEW"                 FILES ${GLEW_SOURCE})
 
 SOURCE_GROUP("OpenGL"						FILES ${CM_OPENGL_SOURCE})
+SOURCE_GROUP("OpenGL\\VertexBuffer"         FILES ${CM_OPENGL_VBO_SOURCE})
 SOURCE_GROUP("OpenGL\\Texture"              FILES ${CM_OPENGL_TEXTURE_SOURCE})
-#SOURCE_GROUP("OpenGL\\Core45"				FILES ${CM_OPENGL_CORE_45_SOURCE})
 SOURCE_GROUP("OpenGL\\GLSL"					FILES ${CM_GLSL_SOURCE})
 SOURCE_GROUP("OpenGL\\GLSL\\ShaderMaker"	FILES ${CM_GLSL_SHADER_MAKER_SOURCE})
 

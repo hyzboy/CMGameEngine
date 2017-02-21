@@ -11,6 +11,8 @@ namespace hgl
 {
 	namespace graph
 	{
+        class VertexBufferControl;
+
 		class VertexBufferBase
 		{
 			void *mem_data;																				///<内存中的数据
@@ -28,48 +30,16 @@ namespace hgl
 
 			uint data_level;																			///<数据级别
 
-			uint video_buffer_index;																	///<对应显存访问区
-			uint video_buffer_type;																		///<对应显存访问区类型
+            VertexBufferControl *vbc;                                                                   ///<顶点缓冲区控制器
 
 		protected:
 
-			void SetDataSize(int size)
-			{
-				if(bytes==size)return;
-
-				bytes=size;
-
-				if(mem_data)
-					mem_data=hgl_realloc(mem_data,size);
-				else
-					mem_data=hgl_malloc(size);
-
-				mem_end=((char *)mem_data)+size;
-			}
+			void SetDataSize(int size);
 
 		public:
 
-			VertexBufferBase(uint level,uint size)
-			{
-				dc_num=0;
-
-				bytes=size;
-
-				mem_data=hgl_malloc(size);			//在很多情况下，hgl_malloc分配的内存是对齐的，这样有效率上的提升
-				mem_end=((char *)mem_data)+size;
-
-				data_level=level;
-
-				video_buffer_index=0;
-				video_buffer_type=0;
-			}
-
-			virtual ~VertexBufferBase()
-			{
-				CloseVertexBuffer();
-
-				hgl_free(mem_data);
-			}
+			VertexBufferBase(uint level,uint size);
+			virtual ~VertexBufferBase();
 
 			virtual uint	GetDataType()const=0;														///<取得数据类型
 			virtual size_t	GetDataBytes()const=0;														///<取得每数据字节数
@@ -84,7 +54,7 @@ namespace hgl
 					bool	CreateVertexBuffer(uint type);
 					void	ChangeVertexBuffer(int,int,void *);
 					//void	BindVertexBuffer();
-                    int     GetBufferIndex()const{return video_buffer_index;}                           ///<取得缓冲区索引
+                    int     GetBufferIndex()const;                                                  ///<取得缓冲区索引
 					void	CloseVertexBuffer();
 		};//class VertexBufferBase
 
