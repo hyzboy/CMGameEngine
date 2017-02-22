@@ -1,4 +1,5 @@
 ﻿#include<hgl/graph/VertexBuffer.h>
+#include<hgl/graph/VertexArray.h>
 #include<glew/include/GL/glew.h>
 #include"VertexBufferControl.h"
 
@@ -16,10 +17,10 @@ namespace hgl
 
     namespace graph
     {
-        VertexBufferControl *CreateVertexBufferControlDSA();
-        VertexBufferControl *CreateVertexBufferControlBind();
+        VertexBufferControl *CreateVertexBufferControlDSA(uint);
+        VertexBufferControl *CreateVertexBufferControlBind(uint);
 
-        VertexBufferControl *(*CreateVertexBufferControl)()=nullptr;
+        VertexBufferControl *(*CreateVertexBufferControl)(uint)=nullptr;
 
         void InitVertexBufferDSA()
         {
@@ -84,8 +85,7 @@ namespace hgl
         }
         void VertexBufferBase::CloseVertexBuffer()
         {
-            if(vbc)
-                vbc->Clear();
+            SAFE_CLEAR(vbc);
         }
 
         void VertexBufferBase::ChangeVertexBuffer(int start, int size, void *data)
@@ -99,7 +99,7 @@ namespace hgl
         {
             SAFE_CLEAR(vbc);
 
-            vbc=CreateVertexBufferControl();
+            vbc=CreateVertexBufferControl(type);
             return vbc;
         }
 
@@ -113,6 +113,22 @@ namespace hgl
         int VertexBufferBase::GetBufferIndex()const
         {
             return vbc?vbc->GetIndex():-1;
+        }
+    }//namespace graph
+
+    namespace graph
+    {
+        /**
+        * 设置顶点缓冲区数据
+        * @param vbt 顶点缓冲区类型
+        * @param vb 数据缓冲区
+        * @return 是否设置成功
+        */
+        bool VertexArray::_SetVertexBuffer(VertexBufferType vbt, VertexBufferBase *vb)
+        {
+            vb->CreateVertexBuffer(vbt == vbtIndex ? GL_ELEMENT_ARRAY_BUFFER : GL_ARRAY_BUFFER);
+
+            return(true);
         }
     }//namespace graph
 }//namespace hgl

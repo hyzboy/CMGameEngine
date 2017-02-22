@@ -23,12 +23,18 @@ namespace hgl
             VertexBufferControl(uint t, uint i) { type = t; index = i; }
             ~VertexBufferControl()
             {
-                glDeleteBuffers(1, &index);
+                Clear();
             }
 
-            virtual void Set(int, void *,uint);
-            virtual void Change(int, int, void *);
-            virtual void Clear();
+            virtual void Set(int, void *,uint)=0;
+            virtual void Change(int, int, void *)=0;
+            void Clear()
+            {
+                if(!type||!index)return;
+
+                glDeleteBuffers(1, &index);
+                type = index = 0;
+            }
         };//class VertexBufferControl
     }//namespace graph
 }//namespace hgl

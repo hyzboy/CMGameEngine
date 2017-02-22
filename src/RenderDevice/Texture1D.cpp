@@ -6,24 +6,24 @@ namespace hgl
 {
     namespace graph
     {
-		bool Texture1D::SetImage(Texture1DData *ptr)
-		{
+        bool Texture1D::SetImage(Texture1DData *ptr)
+        {
             if (!ptr)
             {
                 LOG_ERROR(OS_TEXT("param error,ptr=nullptr"));
                 RETURN_FALSE;
             }
 
-			if (!ptr->length)
-			{
-				LOG_ERROR(OS_TEXT("size error,image length=") + OSString(ptr->length));
+            if (!ptr->length)
+            {
+                LOG_ERROR(OS_TEXT("size error,image length=") + OSString(ptr->length));
                 RETURN_FALSE;
-			}
+            }
 
-			length = ptr->length;
+            length = ptr->length;
 
             video_format = ptr->GetVideoFormat();
-			color_format = ptr->GetColorFormat();
+            color_format = ptr->GetColorFormat();
 
             if (!_SetImage(ptr))
             {
@@ -31,36 +31,36 @@ namespace hgl
                 RETURN_FALSE;
             }
 
-			return(true);
-		}
+            return(true);
+        }
 
-		int Texture1D::GetImage(void *data_pointer, TSF fmt, int level)
-		{
-			if (!TextureSourceFormatCheck(fmt))
-			{
-				LOG_ERROR(OS_TEXT("glTexture1D::GetImage,fmt error =") + OSString(fmt));
-				return(-1);
-			}
+        int Texture1D::GetImage(void *data_pointer, TSF fmt, int level)
+        {
+            if (!TextureSourceFormatCheck(fmt))
+            {
+                LOG_ERROR(OS_TEXT("glTexture1D::GetImage,fmt error =") + OSString(fmt));
+                return(-1);
+            }
 
             return _GetImage(data_pointer,fmt,level);
-		}
+        }
 
-		bool Texture1D::ChangeImage(uint s, uint l, void *data, uint bytes, TSF sf)
-		{
-			if (s >= length
-				|| l>length - s
-				|| !data
-				|| !TextureSourceFormatCheck(sf))
+        bool Texture1D::ChangeImage(uint s, uint l, void *data, uint bytes, TSF sf)
+        {
+            if (s >= length
+                || l>length - s
+                || !data
+                || !TextureSourceFormatCheck(sf))
             RETURN_FALSE;
 
             return _ChangeImage(s,l,data,bytes,sf);
-		}
-	}//namespace graph
+        }
+    }//namespace graph
 
-	namespace graph
-	{		
+    namespace graph
+    {		
         Texture1D *CreateTexture1DDSA(TextureBaseControl *tbc);
-		Texture1D *CreateTexture1DBind(TextureBaseControl *tbc);
+        Texture1D *CreateTexture1DBind(TextureBaseControl *tbc);
         
         Texture1D *(*_CreateTexture1D)(TextureBaseControl *tbc)=nullptr;
         
@@ -103,9 +103,9 @@ namespace hgl
             return(tex);
         }
 
-		void InitTexture1DDSA()
-		{
-			_CreateTexture1D=CreateTexture1DDSA;
-		}
-	}//namespace graph
+        void InitTexture1DDSA()
+        {
+            _CreateTexture1D=CreateTexture1DDSA;
+        }
+    }//namespace graph
 }//namespace hgl
