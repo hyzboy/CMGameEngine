@@ -2,7 +2,7 @@
 #include<hgl/File.h>
 namespace hgl
 {
-	/**
+    /**
      * 加载一个原始文本块到UTF8StringList
      */
     int LoadStringListFromText(UTF8StringList &sl,uchar *data,const int size,const CharSet &cs)
@@ -23,7 +23,7 @@ namespace hgl
             {
                 int u16_count;
 
-                if(data[0]==0xFF&&data[1]==0xFE)								//LE
+                if(data[0]==0xFF&&data[1]==0xFE)                                //LE
                 {
                     if(size>=4&&data[2]==0&&data[3]==0)                         //utf32-le
                     {
@@ -74,7 +74,7 @@ namespace hgl
         return line_count;
     }
 
-	/**
+    /**
      * 加载一个原始文本块到UTF16StringList
      */
     int LoadStringListFromText(UTF16StringList &sl,uchar *data,const int size,const CharSet &cs)
@@ -86,9 +86,9 @@ namespace hgl
 
         if(size>=2)
         {
-			if(data[0]==0xFF&&data[1]==0xFE)								//LE
-			{
-				if(size>=4&&data[2]==0&&data[3]==0)                         //utf32-le
+            if(data[0]==0xFF&&data[1]==0xFE)                                //LE
+            {
+                if(size>=4&&data[2]==0&&data[3]==0)                         //utf32-le
                 {
                     str=(u16char *)data;        //32->16使用原缓冲区覆盖
                     char_count=(size-4)>>2;
@@ -100,8 +100,8 @@ namespace hgl
                     char_count=(size-2)>>1;
                     LittleToCurrentEndian(str,char_count);
                 }
-			}
-			else
+            }
+            else
             if(data[0]==0&&data[1]==0&&data[2]==0xFE&&data[3]==0xFF)        //utf32-be
             {
                 str=(u16char *)data;            ////32->16使用原缓冲区覆盖
@@ -155,7 +155,7 @@ namespace hgl
         return LoadStringListFromText(sl,data,size,cs);
     }
 
-  	/**
+      /**
      * 加载一个原始文本文件到UTF16StringList
      */
     int LoadStringListFromText(UTF16StringList &sl,const OSString &filename,const CharSet &cs)

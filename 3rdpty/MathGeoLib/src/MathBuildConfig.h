@@ -13,8 +13,8 @@
    limitations under the License. */
 
 /** @file MathBuildConfig.h
-	@author Jukka Jyl�nki
-	@brief Specifies all build flags for the library. */
+    @author Jukka Jyl�nki
+    @brief Specifies all build flags for the library. */
 #pragma once
 
 // If MATH_ENABLE_NAMESPACE is defined, all math symbols are put inside a namespace.

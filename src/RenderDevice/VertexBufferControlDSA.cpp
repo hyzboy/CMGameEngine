@@ -3,8 +3,8 @@
 
 namespace hgl
 {
-	namespace graph
-	{
+    namespace graph
+    {
         class VertexBufferControlDSA:public VertexBufferControl
         {
         public:
@@ -29,5 +29,5 @@ namespace hgl
             glCreateBuffers(1,&index);
             return(new VertexBufferControlDSA(type,index));
         }
-	}//namespace graph
+    }//namespace graph
 }//namespace hgl

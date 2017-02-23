@@ -16,9 +16,9 @@ const Vector3f  eye(100,70,80),
 
 class TestObject:public FlowObject
 {
-	VertexArray *cube_data;				///<立方体顶点数据
-	Material *mtl1,*mtl2;				///<两个材质
-	Renderable *cube1,*cube2;			///<两个渲染对象
+    VertexArray *cube_data;                ///<立方体顶点数据
+    Material *mtl1,*mtl2;                ///<两个材质
+    Renderable *cube1,*cube2;            ///<两个渲染对象
 
     Camera cam;
 
@@ -47,65 +47,65 @@ private:
     Renderable *CreateCube(Material *mtl,float r,float g,float b,Texture2D *tex)
     {
         //创建材质
-		mtl->SetTexture(mtcDiffuse,tex);
+        mtl->SetTexture(mtcDiffuse,tex);
 
-		Renderable *obj=new Renderable(cube_data,mtl);		///<两个可渲染对像使用同一个顶点数据
+        Renderable *obj=new Renderable(cube_data,mtl);        ///<两个可渲染对像使用同一个顶点数据
 
-		obj->SetTexCoord(mtcDiffuse,vbtDiffuseTexCoord);	///<设定指定通道使用的纹理坐标数据
+        obj->SetTexCoord(mtcDiffuse,vbtDiffuseTexCoord);    ///<设定指定通道使用的纹理坐标数据
 
-		return obj;
+        return obj;
     }
 
     void CreateDualCube()
     {
-		cube_data=CreateRenderableCube(false,vbtDiffuseTexCoord);				///<创建一个Cube的顶点数据，并指定纹理坐标写在那一个位置上
+        cube_data=CreateRenderableCube(false,vbtDiffuseTexCoord);                ///<创建一个Cube的顶点数据，并指定纹理坐标写在那一个位置上
 
-        cube1=CreateCube(mtl1=new Material,1,0,0,GrayWhiteGrid);				///<使用内置灰白格子纹理
-        cube2=CreateCube(mtl2=new Material,0,0,1,BlueWhiteGrid);				///<使用内置蓝白格子纹理
+        cube1=CreateCube(mtl1=new Material,1,0,0,GrayWhiteGrid);                ///<使用内置灰白格子纹理
+        cube2=CreateCube(mtl2=new Material,0,0,1,BlueWhiteGrid);                ///<使用内置蓝白格子纹理
 
-#ifdef _DEBUG	//debug模式下将shader保存成文件
-		cube1->AutoCreateShader(true,nullptr,OS_TEXT("Cube1"));					///<自动生成Cube1渲染所需的shader
-		cube2->AutoCreateShader(true,nullptr,OS_TEXT("Cube2"));					///<自动生成Cube1渲染所需的shader，由于使用的纹理格式不同，产生的shader也会不同
+#ifdef _DEBUG    //debug模式下将shader保存成文件
+        cube1->AutoCreateShader(true,nullptr,OS_TEXT("Cube1"));                    ///<自动生成Cube1渲染所需的shader
+        cube2->AutoCreateShader(true,nullptr,OS_TEXT("Cube2"));                    ///<自动生成Cube1渲染所需的shader，由于使用的纹理格式不同，产生的shader也会不同
 #else
-		cube1->AutoCreateShader();		//默认参数是true,nullptr
-		cube2->AutoCreateShader();
+        cube1->AutoCreateShader();        //默认参数是true,nullptr
+        cube2->AutoCreateShader();
 #endif//_DEBUG
 
-	}
+    }
 
 public:
 
-	TestObject()
-	{
-		SetClearColor(0.2f,0.2f,0.2f);
+    TestObject()
+    {
+        SetClearColor(0.2f,0.2f,0.2f);
 
-		CreateDualCube();
-		SetCamera();
+        CreateDualCube();
+        SetCamera();
 
-		MakeCameraMatrix(&proj,&look,&cam);
+        MakeCameraMatrix(&proj,&look,&cam);
 
-		ltw1=scale(20,20,20);
-		ltw2=translate(0,0,-30)*scale(30,30,30);
-	}
+        ltw1=scale(20,20,20);
+        ltw2=translate(0,0,-30)*scale(30,30,30);
+    }
 
-	~TestObject()
-	{
-		delete cube1;
-		delete cube2;
+    ~TestObject()
+    {
+        delete cube1;
+        delete cube2;
 
-		delete cube_data;
+        delete cube_data;
 
-		delete mtl1;
-		delete mtl2;
-	}
+        delete mtl1;
+        delete mtl2;
+    }
 
-	void Draw()
-	{
-		ClearColorDepthBuffer();
+    void Draw()
+    {
+        ClearColorDepthBuffer();
 
-		DirectRender(cube1,&proj,&look,&ltw1);
-		DirectRender(cube2,&proj,&look,&ltw2);
-	}
+        DirectRender(cube1,&proj,&look,&ltw1);
+        DirectRender(cube2,&proj,&look,&ltw2);
+    }
 };//class TestObject
 
 HGL_GRAPHICS_APPLICATION("带纹理的立方体","TextureCube",new TestObject());

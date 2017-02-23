@@ -9,9 +9,9 @@ IF(WIN32)
     INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/opus/silk/float)
     INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/opus/silk/fixed)
     
-	add_definitions(-DHAVE_CONFIG_H)
-	add_definitions(-D_LIB)
-	
+    add_definitions(-DHAVE_CONFIG_H)
+    add_definitions(-D_LIB)
+    
     SET(SILK_COMMON_SOURCE  opus/silk/A2NLSF.c
                             opus/silk/ana_filt_bank_1.c
                             opus/silk/biquad_alt.c
@@ -180,7 +180,7 @@ IF(WIN32)
                     opus/celt/x86/x86_celt_map.c
                     opus/celt/x86/x86cpu.c)
     
-    SET(OPUS_SOURCE	opus/src/analysis.c
+    SET(OPUS_SOURCE    opus/src/analysis.c
                     opus/src/mlp.c
                     opus/src/mlp_data.c
                     opus/src/opus.c
@@ -195,20 +195,20 @@ IF(WIN32)
     INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/opusfile/include)
     INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/opusfile/src)
 
-    SET(OPUSFILE_SOURCE	opusfile/src/info.c
+    SET(OPUSFILE_SOURCE    opusfile/src/info.c
                         opusfile/src/internal.c
                         opusfile/src/opusfile.c
                         opusfile/src/stream.c)
 
     add_library(CMP.Audio.Opus SHARED OpusRead.cpp ${OGG_SOURCE} ${SILK_COMMON_SOURCE} ${SILK_FIXED_SOURCE} ${SILK_FLOAT_SOURCE} ${CELT_SOURCE} ${OPUS_SOURCE} ${OPUSFILE_SOURCE})
 
-    SOURCE_GROUP("LibOGG"		            FILES ${OGG_SOURCE})
-    SOURCE_GROUP("LibOpus"		            FILES ${OPUS_SOURCE})
-    SOURCE_GROUP("LibOpus\\CELT"	        FILES ${CELT_SOURCE})
+    SOURCE_GROUP("LibOGG"                    FILES ${OGG_SOURCE})
+    SOURCE_GROUP("LibOpus"                    FILES ${OPUS_SOURCE})
+    SOURCE_GROUP("LibOpus\\CELT"            FILES ${CELT_SOURCE})
     SOURCE_GROUP("LibOpus\\SILK\\Common"    FILES ${SILK_COMMON_SOURCE})
     SOURCE_GROUP("LibOpus\\SILK\\Fixed"     FILES ${SILK_FIXED_SOURCE})
     SOURCE_GROUP("LibOpus\\SILK\\Float"     FILES ${SILK_FLOAT_SOURCE})
-    SOURCE_GROUP("LibOpusFile"	            FILES ${OPUSFILE_SOURCE})
+    SOURCE_GROUP("LibOpusFile"                FILES ${OPUSFILE_SOURCE})
 ELSE()
     FIND_PATH(OPUS_INCLUDE_DIR
         NAMES opus.h

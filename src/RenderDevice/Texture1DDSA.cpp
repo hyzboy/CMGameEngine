@@ -3,8 +3,8 @@
 
 namespace hgl
 {
-	namespace graph
-	{
+    namespace graph
+    {
         class TextureDSA1D:public Texture1D
         {
         public:

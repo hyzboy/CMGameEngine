@@ -2,8 +2,8 @@
 
 namespace hgl
 {
-	namespace graph
-	{
+    namespace graph
+    {
         HGL_TBC_CREATE TextureBaseControlCreate=nullptr;
 
         TextureBaseControl *TextureBaseControlCreateDSA(uint t,uint bt);

@@ -5,81 +5,81 @@
 
 namespace hgl
 {
-	AudioManage::AudioItem::AudioItem()
-	{
-		source=new AudioSource;
-		buffer=nullptr;
-	}
+    AudioManage::AudioItem::AudioItem()
+    {
+        source=new AudioSource;
+        buffer=nullptr;
+    }
 
-	AudioManage::AudioItem::~AudioItem()
-	{
-		source->Unlink();
+    AudioManage::AudioItem::~AudioItem()
+    {
+        source->Unlink();
 
-		delete source;
+        delete source;
 
-		if(buffer)
-			delete buffer;
-	}
+        if(buffer)
+            delete buffer;
+    }
 
-	bool AudioManage::AudioItem::Check()
-	{
-		if(!buffer)return(true);
+    bool AudioManage::AudioItem::Check()
+    {
+        if(!buffer)return(true);
 
-		if(source->State==AL_PLAYING)return(false);
+        if(source->State==AL_PLAYING)return(false);
 
-		source->Unlink();
+        source->Unlink();
 
-		delete source;				//这么做的原因是有些声卡上一个音源上播放的数据格式必须一致，否则新格式的数据会发不出来
-		source=new AudioSource;
+        delete source;                //这么做的原因是有些声卡上一个音源上播放的数据格式必须一致，否则新格式的数据会发不出来
+        source=new AudioSource;
 
-		delete buffer;
-		buffer=nullptr;
+        delete buffer;
+        buffer=nullptr;
 
-		return(true);
-	}
+        return(true);
+    }
 
-	void AudioManage::AudioItem::Play(const os_char *filename,float gain)
-	{
-		if(buffer)
-		{	//实质上绝对不可能到这一段
-			source->Unlink();
-			delete buffer;
-		}
+    void AudioManage::AudioItem::Play(const os_char *filename,float gain)
+    {
+        if(buffer)
+        {    //实质上绝对不可能到这一段
+            source->Unlink();
+            delete buffer;
+        }
 
-		buffer=new AudioBuffer(filename);
+        buffer=new AudioBuffer(filename);
 
-		source->Link(buffer);
-		source->Gain=gain;
-		source->Play(false);
-	}
+        source->Link(buffer);
+        source->Gain=gain;
+        source->Play(false);
+    }
 }//namespace hgl
 
 namespace hgl
 {
-	AudioManage::AudioManage(int count)
-	{
-		Items.PreMalloc(count);
-	}
+    AudioManage::AudioManage(int count)
+    {
+        Items.PreMalloc(count);
+    }
 
-	AudioManage::~AudioManage()
-	{
-	}
+    AudioManage::~AudioManage()
+    {
+    }
 
-	bool AudioManage::Play(const os_char *filename,float gain)
-	{
-		int n=Items.GetCount();
+    bool AudioManage::Play(const os_char *filename,float gain)
+    {
+        int n=Items.GetCount();
 
-		while(n--)
-		{
-			AudioItem *item=Items[n];
+        while(n--)
+        {
+            AudioItem *item=Items[n];
 
-			if(item->Check())
-			{
-				item->Play(filename,gain);
-				return(true);
-			}
-		}
+            if(item->Check())
+            {
+                item->Play(filename,gain);
+                return(true);
+            }
+        }
 
-		return(false);
-	}
+        return(false);
+    }
 }//namespace hgl

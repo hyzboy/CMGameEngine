@@ -1,9 +1,9 @@
 ﻿IF(APPLE)
-	add_library(OSXGUI Clipboard.cpp)
+    add_library(OSXGUI Clipboard.cpp)
 ENDIF(APPLE)
 
 IF(BUILD_QT5_SUPPORT_LIB)
-	add_subdirectory(QT)
+    add_subdirectory(QT)
 ENDIF()
 
 IF(UNIX)
@@ -15,16 +15,16 @@ IF(UNIX)
 
     SET(PLATFORM_APPLICATION_SOURCE     UNIX/SystemInfo.cpp)
 
-	SET(PLATFORM_LOG_SOURCE             UNIX/LogConsole.cpp
+    SET(PLATFORM_LOG_SOURCE             UNIX/LogConsole.cpp
                                         UNIX/LogFile.cpp)
 
-	SET(PLATFORM_MULTI_THREAD_SOURCE    UNIX/CondVar.cpp
+    SET(PLATFORM_MULTI_THREAD_SOURCE    UNIX/CondVar.cpp
                                         UNIX/RWLock.cpp
                                         UNIX/Semaphore.cpp
                                         UNIX/Thread.cpp
                                         UNIX/ThreadMutex.cpp)
 
-	SET(PLATFORM_MULTI_PROCESS_SOURCE   UNIX/ProcMutex.cpp
+    SET(PLATFORM_MULTI_PROCESS_SOURCE   UNIX/ProcMutex.cpp
                                         UNIX/Process.cpp
                                         UNIX/Pipe.cpp
                                         UNIX/Fifo.cpp)
@@ -45,18 +45,18 @@ IF(WIN32)
 
     SET(PLATFORM_APPLICATION_SOURCE     Win/SystemInfo.cpp)
 
-	SET(PLATFORM_LOG_SOURCE             Win/LogConsole.cpp
+    SET(PLATFORM_LOG_SOURCE             Win/LogConsole.cpp
                                         Win/LogDialog.cpp
                                         Win/LogFile.cpp)
 
-	SET(PLATFORM_MULTI_THREAD_SOURCE
+    SET(PLATFORM_MULTI_THREAD_SOURCE
                                         Win/CondVar.cpp
                                         Win/RWLock.cpp
                                         Win/Semaphore.cpp
                                         Win/Thread.cpp
                                         Win/ThreadMutex.cpp)
 
-	SET(PLATFORM_MULTI_PROCESS_SOURCE  Win/ProcMutex.cpp)
+    SET(PLATFORM_MULTI_PROCESS_SOURCE  Win/ProcMutex.cpp)
 
     SET(PLATFORM_TIME_SOURCE            Win/Time.cpp
                                         Win/DateTime.cpp)
@@ -107,7 +107,7 @@ IF(BUILD_OPENGL_LIB)
             add_definitions("-D_GLFW_WIN32")
             add_definitions("-D_GLFW_WGL")
 
-            set(GLFW_SOURCE		GLFW/GLFW3/context.c
+            set(GLFW_SOURCE        GLFW/GLFW3/context.c
                                 GLFW/GLFW3/egl_context.c
                                 GLFW/GLFW3/init.c
                                 GLFW/GLFW3/input.c

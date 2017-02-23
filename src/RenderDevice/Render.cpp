@@ -17,24 +17,24 @@ namespace hgl
 
     namespace graph
     {
-        bool InitOpenGLAPI();																		//初始化OpenGL API支持
+        bool InitOpenGLAPI();                                                                        //初始化OpenGL API支持
 
-        bool InitTextureAPI();		//初始化贴图API
+        bool InitTextureAPI();        //初始化贴图API
         bool InitVertexBufferAPI(); //初始化顶点缓冲区API
 
         namespace OpenGLCore
         {
-            void PutOpenGLInfo();	//输出OpenGL特性信息
-            void InitScissor();		//初始化裁剪区
-            void InitTexture();		//初始化贴图            
-            void CloseTexture();	//关闭贴图
-            void InitBuffer();		//初始化缓冲区
-            void InitFace();		//初始化面处理
+            void PutOpenGLInfo();    //输出OpenGL特性信息
+            void InitScissor();        //初始化裁剪区
+            void InitTexture();        //初始化贴图            
+            void CloseTexture();    //关闭贴图
+            void InitBuffer();        //初始化缓冲区
+            void InitFace();        //初始化面处理
         }//namespace OpenGLCore
 
         using namespace OpenGLCore;
 
-        void InitVertexBuffer();	//初始化顶点缓冲区
+        void InitVertexBuffer();    //初始化顶点缓冲区
         bool BindTexture(int active,unsigned int type,unsigned int texture_index);
         void BindTextures(int first_active,int count,unsigned int *texture_index);
 
@@ -46,8 +46,8 @@ namespace hgl
         void InitGlobalShaderStorage();
         void ClearGlobalShaderStorage();
         bool InitUBO();
-// 		void InitFontStorage();
-// 		void ClearFontStorage();
+//         void InitFontStorage();
+//         void ClearFontStorage();
 
         void InitInlineRenderable();
         void ClearInlineRenderable();
@@ -73,7 +73,7 @@ namespace hgl
             InitDefaultMaterial();
             InitGlobalShaderStorage();
             InitPrimaryRenderBuffer();
-// 			InitFontStorage();
+//             InitFontStorage();
 
             InitInlineRenderable();
         }
@@ -82,7 +82,7 @@ namespace hgl
         {
             ClearInlineRenderable();
 
-// 			ClearFontStorage();
+//             ClearFontStorage();
             ClearDefaultMaterial();
             ClearGlobalShaderStorage();
             CloseTexture();
@@ -129,23 +129,23 @@ namespace hgl
 
         bool BindShaderVertexAttrib(Renderable *obj,Shader *glsl,int vbt)
         {
-            VertexBufferBase *vb=obj->GetVertexBuffer((VertexBufferType)vbt);				//取得缓冲区
+            VertexBufferBase *vb=obj->GetVertexBuffer((VertexBufferType)vbt);                //取得缓冲区
 
-            if(!vb)return(true);															//没有这个缓冲区
+            if(!vb)return(true);                                                            //没有这个缓冲区
 
             VERTEX_BUFFER_NAME vertex_buffer_name;
 
             if(!GetVertexBufferName(vertex_buffer_name,vbt))return(false);
 
-            int location=glsl->GetAttribLocation(vertex_buffer_name);					//取得缓冲区对应shader属性地址
+            int location=glsl->GetAttribLocation(vertex_buffer_name);                    //取得缓冲区对应shader属性地址
 
-            if(location==-1)																//如果取得地址失败
+            if(location==-1)                                                                //如果取得地址失败
             {
                 LOG_HINT(u8"buffer \""+UTF8String(vertex_buffer_name)+u8"\" attrib location =-1");
                 return(false);
             }
 
-            obj->SetShaderLocation((VertexBufferType)vbt,location);							//设定缓冲区对应glsl属性
+            obj->SetShaderLocation((VertexBufferType)vbt,location);                            //设定缓冲区对应glsl属性
 
             return(true);
         }
@@ -155,13 +155,13 @@ namespace hgl
             if (obj->GetBindShader() != glsl)
             {
                 //本来这段可以写到OpenGLCoreRenderable类中的，为了一些变数，写在这里
-                obj->ClearShaderLocation();														//清除原有shader与顶点缓冲区的绑定
+                obj->ClearShaderLocation();                                                        //清除原有shader与顶点缓冲区的绑定
 
                 //非贴图坐标数据
                 for (int i = vbtVertex; i < vbtDiffuseTexCoord; i++)
                 {
                     if (i == vbtNormal
-                        &&!state->lighting)continue;												//有法线但确定不用光照，则不传递法线
+                        &&!state->lighting)continue;                                                //有法线但确定不用光照，则不传递法线
 
                     if (!BindShaderVertexAttrib(obj, glsl, i))
                     {
@@ -179,7 +179,7 @@ namespace hgl
                         BindShaderVertexAttrib(obj, glsl, vbt);
                 }
 
-                obj->Bind(glsl);																	//缓定glsl与缓冲区
+                obj->Bind(glsl);                                                                    //缓定glsl与缓冲区
             }
 
             obj->Use();
@@ -217,21 +217,21 @@ namespace hgl
 
             int tex_count=0;
 
-            if(mat->GetTextureNumber())					//如果有贴图
+            if(mat->GetTextureNumber())                    //如果有贴图
             {
                 MATERIAL_TEXTURE_CHANNEL_NAME mtc_name;
 
                 for(int i=0;i<mtcMax;i++)
                 {
-                    Texture *tex=mat->GetTexture(i);									//取指定通道贴图
+                    Texture *tex=mat->GetTexture(i);                                    //取指定通道贴图
 
-                    if(!tex)continue;													//贴图不存在
+                    if(!tex)continue;                                                    //贴图不存在
 
-                    BindTexture(tex_count,tex->GetType(),tex->GetID());			        //绑定贴图
+                    BindTexture(tex_count,tex->GetType(),tex->GetID());                    //绑定贴图
 
                     GetMaterialTextureName(mtc_name,i);
 
-                    if(!glsl->Shader::SetUniform1i(mtc_name,tex_count))	//设定贴图对应索引
+                    if(!glsl->Shader::SetUniform1i(mtc_name,tex_count))    //设定贴图对应索引
                     {
                         LOG_PROBLEM(u8"attach Shader sampler \""+UTF8String(mtc_name)+u8"\" to texture "+UTF8String(tex_count)+u8" error!");
                         return(false);
@@ -259,15 +259,15 @@ namespace hgl
                 if(!glsl->Shader::SetUniformMatrix4fv(HGL_VS_MVP_MATRIX,mvp))
                     return(false);
             }
-            else	//没modelview时将projection传为mvp
+            else    //没modelview时将projection传为mvp
             {
                 if(!glsl->Shader::SetUniformMatrix4fv(HGL_VS_MVP_MATRIX,*projection))
                     return(false);
             }
 
-            if((state->vertex_normal||state->normal_map)&&state->lighting)	//需要法线
+            if((state->vertex_normal||state->normal_map)&&state->lighting)    //需要法线
             {
-                //const Matrix3f normal_matrix=*modelview;		//法线矩阵为3x3
+                //const Matrix3f normal_matrix=*modelview;        //法线矩阵为3x3
 
 
 
@@ -319,11 +319,11 @@ namespace hgl
         {
             if(!obj)return(false);
 
-            Shader *	glsl		=obj->GetShader();	        //取得glsl
-            Material *	mtl			=obj->GetMaterial();		//取得材质
-            uint		draw_prim	=obj->GetPrimitive();		//取得图元类型
-            int			draw_start;
-            int			draw_count;
+            Shader *    glsl        =obj->GetShader();            //取得glsl
+            Material *    mtl            =obj->GetMaterial();        //取得材质
+            uint        draw_prim    =obj->GetPrimitive();        //取得图元类型
+            int            draw_start;
+            int            draw_count;
 
             if(!glsl||!mtl)return(false);
 
@@ -331,35 +331,35 @@ namespace hgl
 
             obj->GetDrawCount(draw_start,draw_count);               //取得所需绘制的顶点数
 
-            if(draw_count<=0)return(false);							//如果数量为0
+            if(draw_count<=0)return(false);                            //如果数量为0
 
             SetPolygonMode(mtl);
 
             //绑定shader
             {
-                const RenderState *state=(obj)->GetRenderState();		                        //渲染状态
+                const RenderState *state=(obj)->GetRenderState();                                //渲染状态
 
-                glsl->Use();																	//启用glsl
+                glsl->Use();                                                                    //启用glsl
 
-                if(!BindShaderVertexAttrib(obj,glsl,state))				                        //绑定shader顶点属性
+                if(!BindShaderVertexAttrib(obj,glsl,state))                                        //绑定shader顶点属性
                 {
                     LOG_PROBLEM(OS_TEXT("BindShaderVertexAttrib error"));
                     return(false);
                 }
 
-                if(!BindShaderUniform(obj,glsl,modelview,state))								//绑定shader一致变量
+                if(!BindShaderUniform(obj,glsl,modelview,state))                                //绑定shader一致变量
                 {
                     LOG_PROBLEM(OS_TEXT("BindShaderUniform error"));
                     return(false);
                 }
 
-                if(!BindShaderMatrix(glsl,projection,modelview,state))							//绑定shader矩阵
+                if(!BindShaderMatrix(glsl,projection,modelview,state))                            //绑定shader矩阵
                 {
                     LOG_PROBLEM(OS_TEXT("BindShaderMatrix error"));
                     return(false);
                 }
 
-                if(!BindShaderTexture(obj,glsl))												//绑定shader与贴图
+                if(!BindShaderTexture(obj,glsl))                                                //绑定shader与贴图
                 {
                     LOG_PROBLEM(OS_TEXT("BindShaderTexture error"));
                     return(false);
@@ -374,7 +374,7 @@ namespace hgl
                 if(vb_index)
                     glDrawElements(draw_prim,draw_count,vb_index->GetDataType(),(const void *)(draw_start*vb_index->GetDataBytes()));
                 else
-                    glDrawArrays(draw_prim,draw_start,draw_count);								//绘制数据
+                    glDrawArrays(draw_prim,draw_start,draw_count);                                //绘制数据
             }
 
             return(true);

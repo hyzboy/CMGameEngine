@@ -1,5 +1,5 @@
 ﻿set(CM_OPENGL_VBO_SOURCE            VertexBuffer.cpp
-									VertexBufferControlBind.cpp
+                                    VertexBufferControlBind.cpp
                                     VertexBufferControlDSA.cpp)
 
 set(CM_OPENGL_TEXTURE_SOURCE        Texture.cpp
@@ -10,7 +10,7 @@ set(CM_OPENGL_TEXTURE_SOURCE        Texture.cpp
                                     Texture1DDSA.cpp
                                     Texture2D.cpp
                                     Texture2DDSA.cpp
-									SamplerObject.cpp)
+                                    SamplerObject.cpp)
 
 set(CM_OPENGL_SOURCE                glDebug.cpp
                                     glBuffer.cpp
@@ -41,18 +41,18 @@ set(CM_GLSL_SOURCE                  GLSL/Shader.cpp
                                     GLSL/ShaderStorage.cpp
                                     GLSL/UBO.cpp)
 
-set(CM_RENDER_SOURCE    # 			Debugger_ATI_GPU_Perf.cpp
+set(CM_RENDER_SOURCE    #             Debugger_ATI_GPU_Perf.cpp
                                     Render.cpp
                                     RenderBuffer.cpp
                                     TextureChannels.cpp
                                     TextureFormat.cpp
-                        # 			ScreenShot.cpp
+                        #             ScreenShot.cpp
                                     )
 
 set(CM_RENDER_DEVICE_SOURCE         ${CM_PLATFORM_BASE_SOURCE}
                                     ${CM_OPENGL_TEXTURE_SOURCE}
                                     ${CM_OPENGL_VBO_SOURCE}
-									${CM_OPENGL_SOURCE}
+                                    ${CM_OPENGL_SOURCE}
                                     ${CM_GLSL_SHADER_MAKER_SOURCE}
                                     ${CM_GLSL_SOURCE}
                                     ${CM_RENDER_SOURCE})
@@ -61,14 +61,14 @@ SET(GLEW_SOURCE                     GLEW/glew.c)
 
 SOURCE_GROUP("OpenGL\\GLEW"                 FILES ${GLEW_SOURCE})
 
-SOURCE_GROUP("OpenGL"						FILES ${CM_OPENGL_SOURCE})
+SOURCE_GROUP("OpenGL"                        FILES ${CM_OPENGL_SOURCE})
 SOURCE_GROUP("OpenGL\\VertexBuffer"         FILES ${CM_OPENGL_VBO_SOURCE})
 SOURCE_GROUP("OpenGL\\Texture"              FILES ${CM_OPENGL_TEXTURE_SOURCE})
-SOURCE_GROUP("OpenGL\\GLSL"					FILES ${CM_GLSL_SOURCE})
-SOURCE_GROUP("OpenGL\\GLSL\\ShaderMaker"	FILES ${CM_GLSL_SHADER_MAKER_SOURCE})
+SOURCE_GROUP("OpenGL\\GLSL"                    FILES ${CM_GLSL_SOURCE})
+SOURCE_GROUP("OpenGL\\GLSL\\ShaderMaker"    FILES ${CM_GLSL_SHADER_MAKER_SOURCE})
 
 IF(WIN32)
-	add_library(CM.RenderDevice STATIC ${CM_RENDER_DEVICE_SOURCE} ${GLEW_SOURCE})
+    add_library(CM.RenderDevice STATIC ${CM_RENDER_DEVICE_SOURCE} ${GLEW_SOURCE})
 ELSE()
-	add_library(CM.RenderDevice SHARED ${CM_RENDER_DEVICE_SOURCE} ${GLEW_SOURCE})
+    add_library(CM.RenderDevice SHARED ${CM_RENDER_DEVICE_SOURCE} ${GLEW_SOURCE})
 ENDIF()

@@ -4,8 +4,8 @@
 
 namespace hgl
 {
-	namespace logger
-	{
+    namespace logger
+    {
         void GetLocalAppdataPath(os_char fn[HGL_MAX_PATH])
         {
             SHGetFolderPathW(nullptr,CSIDL_LOCAL_APPDATA,nullptr,0,fn);
@@ -15,5 +15,5 @@ namespace hgl
         {
             return(new io::UTF16LETextOutputStream(os));
         }
-	}//namespace logger
+    }//namespace logger
 }//namespace hgl

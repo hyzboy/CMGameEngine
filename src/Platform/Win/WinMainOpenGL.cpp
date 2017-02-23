@@ -18,27 +18,27 @@ using namespace hgl::graph;
 extern "C" int WINAPI wWinMain(HINSTANCE,HINSTANCE,wchar_t *cmd_line,int)
 {
 #ifdef _DEBUG
-	try
-	{
+    try
+    {
 #endif//_DEBUG
         GraphicsSystemInitInfo sii;
         GraphicsApplication app;
-		OSStringList sl;
+        OSStringList sl;
 
-		wchar_t **argv;
-		int argc;
+        wchar_t **argv;
+        int argc;
 
-		argv = CommandLineToArgvW(cmd_line, &argc);
+        argv = CommandLineToArgvW(cmd_line, &argc);
 
-		for(int i=0;i<argc;i++)
-			sl.Add(argv[i]);
+        for(int i=0;i<argc;i++)
+            sl.Add(argv[i]);
 
-		return GraphicsAppMain(sii,app,sl);
+        return GraphicsAppMain(sii,app,sl);
 #ifdef _DEBUG
-	}
-	catch(...)
-	{
-		return(-1);
-	}
+    }
+    catch(...)
+    {
+        return(-1);
+    }
 #endif//_DEBUG
 }

@@ -10,14 +10,14 @@ namespace hgl
 
             using TextureBaseControl::TextureBaseControl;
 
-		public:     //mipmaps
+        public:     //mipmaps
 
             void GenMipmaps()                                                                       ///<生成mipmaps
             {
                 glGenerateTextureMipmap(texture_id);
             }
 
-			void GetMipmapLevel(int &base_level,int &max_level)									    ///<取得贴图mipmaps级别
+            void GetMipmapLevel(int &base_level,int &max_level)                                        ///<取得贴图mipmaps级别
             {
                 glGetTextureParameteriv(texture_id,GL_TEXTURE_BASE_LEVEL,&base_level);
                 glGetTextureParameteriv(texture_id,GL_TEXTURE_MAX_LEVEL,&max_level);

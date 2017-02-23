@@ -11,11 +11,11 @@ namespace hgl
         {
             caption=OS_TEXT("CMGDK Window");
 
-            hglSetPropertyRead(FullScreen,	this,Window::GetFullScreen);
-            hglSetPropertyRead(MouseCoord,	this,Window::GetMouseCoord);
+            hglSetPropertyRead(FullScreen,    this,Window::GetFullScreen);
+            hglSetPropertyRead(MouseCoord,    this,Window::GetMouseCoord);
 
-            hglSetPropertyRead(Width,		this,Window::GetWidth);
-            hglSetPropertyRead(Height,		this,Window::GetHeight);
+            hglSetPropertyRead(Width,        this,Window::GetWidth);
+            hglSetPropertyRead(Height,        this,Window::GetHeight);
 
             width=0;
             height=0;

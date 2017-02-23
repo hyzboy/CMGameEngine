@@ -13,9 +13,9 @@ int main(int,char **)
     List<IPSupport> ipsl;
 
 #if HGL_OS == HGL_OS_Windows
-	WSADATA wsa;
+    WSADATA wsa;
 
-	WSAStartup(MAKEWORD(2, 2), &wsa);
+    WSAStartup(MAKEWORD(2, 2), &wsa);
 #endif//
 
     const int count=GetIPSupport(ipsl);

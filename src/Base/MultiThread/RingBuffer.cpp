@@ -6,46 +6,46 @@
 //--------------------------------------------------------------------------------------------------
 namespace hgl
 {
-	RingBuffer::RingBuffer(int size)
-	{
-		buffer_size=size;
+    RingBuffer::RingBuffer(int size)
+    {
+        buffer_size=size;
 
-		buffer=new char[size];
+        buffer=new char[size];
 
-// 		memset(buffer,0,size);		//有write_pos/read_pos没有根本读不出数据，所以无需清0
+//         memset(buffer,0,size);        //有write_pos/read_pos没有根本读不出数据，所以无需清0
 
-		read_pos=0;
-		write_pos=0;
-	}
+        read_pos=0;
+        write_pos=0;
+    }
 
-	RingBuffer::~RingBuffer()
-	{
-		delete[] buffer;
-	}
+    RingBuffer::~RingBuffer()
+    {
+        delete[] buffer;
+    }
 
-	void RingBuffer::Clear()
-	{
-		read_pos=0;
-		write_pos=0;
-	}
+    void RingBuffer::Clear()
+    {
+        read_pos=0;
+        write_pos=0;
+    }
 
-	void RingBuffer::SafeClear()
-	{
-		Lock();
-		Clear();
-		Unlock();
-	}
+    void RingBuffer::SafeClear()
+    {
+        Lock();
+        Clear();
+        Unlock();
+    }
 
-	void RingBuffer::ClampPosition()
-	{
-		if(read_pos<buffer_size
-		 ||write_pos<buffer_size)return;	//将指针减去整数部分，以免溢出
+    void RingBuffer::ClampPosition()
+    {
+        if(read_pos<buffer_size
+         ||write_pos<buffer_size)return;    //将指针减去整数部分，以免溢出
 
-		//不可以用read_pos%=buffer_size，write_pos%=buffer_size。
-		//因为有可能read_pos=0,write_pos=buffersize，都用%buffer_size就会形成两个都为0的错误。
-		//一般也就破一次界限，所以效能影响无所谓。
+        //不可以用read_pos%=buffer_size，write_pos%=buffer_size。
+        //因为有可能read_pos=0,write_pos=buffersize，都用%buffer_size就会形成两个都为0的错误。
+        //一般也就破一次界限，所以效能影响无所谓。
 
-		read_pos-=buffer_size;
-		write_pos-=buffer_size;
-	}
+        read_pos-=buffer_size;
+        write_pos-=buffer_size;
+    }
 }//namespace hgl

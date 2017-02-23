@@ -5,33 +5,33 @@
 using namespace openal;
 namespace hgl
 {
-	inline void alGetListenerfv(ALenum param, Vector3f &v3f)
-	{
-		openal::alGetListenerfv(param, (ALfloat *)&v3f);
-	}
-	
-	inline void alGetListenerfv(ALenum param, ListenerOrientation &v3f)
-	{
-		openal::alGetListenerfv(param, (ALfloat *)&v3f);
-	}
+    inline void alGetListenerfv(ALenum param, Vector3f &v3f)
+    {
+        openal::alGetListenerfv(param, (ALfloat *)&v3f);
+    }
+    
+    inline void alGetListenerfv(ALenum param, ListenerOrientation &v3f)
+    {
+        openal::alGetListenerfv(param, (ALfloat *)&v3f);
+    }
 
-	inline void alListenerfv(ALenum param, const Vector3f &v3f)
-	{
-		openal::alListenerfv(param, (const ALfloat *)&v3f);
-	}
+    inline void alListenerfv(ALenum param, const Vector3f &v3f)
+    {
+        openal::alListenerfv(param, (const ALfloat *)&v3f);
+    }
 
-	inline void alListenerfv(ALenum param, const ListenerOrientation &v3f)
-	{
-		openal::alListenerfv(param, (const ALfloat *)&v3f);
-	}
+    inline void alListenerfv(ALenum param, const ListenerOrientation &v3f)
+    {
+        openal::alListenerfv(param, (const ALfloat *)&v3f);
+    }
 
     AudioListener::AudioListener()
     {
-		if(!alGetListenerf)
-		{
-			LOG_ERROR(OS_TEXT("OpenAL/EE 还未初始化!"));
-			return;
-		}
+        if(!alGetListenerf)
+        {
+            LOG_ERROR(OS_TEXT("OpenAL/EE 还未初始化!"));
+            return;
+        }
 
         alGetListenerf(AL_GAIN,&gain);
         alGetListenerfv(AL_POSITION,position);
@@ -49,7 +49,7 @@ namespace hgl
         alListenerf(AL_GAIN,gain);
     }
 
-	void AudioListener::SetPosition(const Vector3f &pos)
+    void AudioListener::SetPosition(const Vector3f &pos)
     {
         position=pos;
         alListenerfv(AL_POSITION,position);

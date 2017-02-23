@@ -29,7 +29,7 @@ namespace hgl
 
             using TextureBaseControl::TextureBaseControl;
 
-		public:     //mipmaps
+        public:     //mipmaps
 
             void GenMipmaps()                                                                       ///<生成mipmaps
             {
@@ -38,7 +38,7 @@ namespace hgl
                 glGenerateMipmap(type);
             }
 
-			void GetMipmapLevel(int &base_level,int &max_level)									    ///<取得贴图mipmaps级别
+            void GetMipmapLevel(int &base_level,int &max_level)                                        ///<取得贴图mipmaps级别
             {
                 TextureBind tb(type,binding_type,texture_id);
 

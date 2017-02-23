@@ -11,27 +11,27 @@ using namespace hgl;
 int main()
 {
 #ifdef _DEBUG
-	try
-	{
+    try
+    {
 #endif//_DEBUG
         ConsoleSystemInitInfo sii;
         ConsoleApplication app;
-		StringList<WideString> sl;
+        StringList<WideString> sl;
 
-		wchar_t **argv;
-		int argc;
+        wchar_t **argv;
+        int argc;
 
-		argv = CommandLineToArgvW(GetCommandLineW(), &argc);
+        argv = CommandLineToArgvW(GetCommandLineW(), &argc);
 
-		for(int i=0;i<argc;i++)
-			sl.Add(argv[i]);
+        for(int i=0;i<argc;i++)
+            sl.Add(argv[i]);
 
-		return ConsoleAppMain(sii,app,sl);
+        return ConsoleAppMain(sii,app,sl);
 #ifdef _DEBUG
-	}
-	catch(...)
-	{
-		return(-1);
-	}
+    }
+    catch(...)
+    {
+        return(-1);
+    }
 #endif//_DEBUG
 }

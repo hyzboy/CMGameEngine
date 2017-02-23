@@ -4,61 +4,61 @@
 
 namespace hgl
 {
-	namespace logger
-	{
-		class LogWinConsole:public Logger
-		{
-		private:
+    namespace logger
+    {
+        class LogWinConsole:public Logger
+        {
+        private:
 
-			DWORD result;
+            DWORD result;
 
-			void *console_handle;
+            void *console_handle;
 
-			u16char buf[4096];
+            u16char buf[4096];
 
-		public:
+        public:
 
-			LogWinConsole(LogLevel ll):Logger(ll)
-			{
-				console_handle=GetStdHandle(STD_OUTPUT_HANDLE);
-			}
+            LogWinConsole(LogLevel ll):Logger(ll)
+            {
+                console_handle=GetStdHandle(STD_OUTPUT_HANDLE);
+            }
 
-			bool Create(const UTF16String &)
-			{
-				return(true);
-			}
+            bool Create(const UTF16String &)
+            {
+                return(true);
+            }
 
-			~LogWinConsole()
-			{
-				Close();
-			}
+            ~LogWinConsole()
+            {
+                Close();
+            }
 
-			void Close()
-			{
-				CloseHandle(console_handle);
-			}
+            void Close()
+            {
+                CloseHandle(console_handle);
+            }
 
-			void Write(const u16char *str,int size)
-			{
-				WriteConsoleW(console_handle,str,size,&result,nullptr);
-				WriteConsoleW(console_handle,L"\n", 1, &result, nullptr);
-			}
+            void Write(const u16char *str,int size)
+            {
+                WriteConsoleW(console_handle,str,size,&result,nullptr);
+                WriteConsoleW(console_handle,L"\n", 1, &result, nullptr);
+            }
 
-			void Write(const char *str,int size)
-			{
-				const int len=u8_to_u16(buf,4096,str,size);
+            void Write(const char *str,int size)
+            {
+                const int len=u8_to_u16(buf,4096,str,size);
 
-				if(len<=0)return;
+                if(len<=0)return;
 
-				buf[len]=L'\n';
+                buf[len]=L'\n';
 
-				WriteConsoleW(console_handle,buf,len+1,&result,nullptr);
-			}
-		};//class LogWinConsole
+                WriteConsoleW(console_handle,buf,len+1,&result,nullptr);
+            }
+        };//class LogWinConsole
 
-		Logger *CreateLoggerConsole(const OSString &,LogLevel ll)
-		{
-			return(new LogWinConsole(ll));
-		}
-	}//namespace logger
+        Logger *CreateLoggerConsole(const OSString &,LogLevel ll)
+        {
+            return(new LogWinConsole(ll));
+        }
+    }//namespace logger
 }//namespace hgl

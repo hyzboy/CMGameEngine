@@ -5,15 +5,15 @@
 
 namespace hgl
 {
-	namespace graph
-	{
-		int HGL_MAX_VERTEX_ATTRIBS;		///<最大顶点属性数量
+    namespace graph
+    {
+        int HGL_MAX_VERTEX_ATTRIBS;        ///<最大顶点属性数量
 
-		void InitVertexBuffer()
-		{
-			glGetIntegerv(GL_MAX_VERTEX_ATTRIBS,&HGL_MAX_VERTEX_ATTRIBS);
-		}
-	}//namespace graph
+        void InitVertexBuffer()
+        {
+            glGetIntegerv(GL_MAX_VERTEX_ATTRIBS,&HGL_MAX_VERTEX_ATTRIBS);
+        }
+    }//namespace graph
 
     namespace graph
     {
@@ -67,7 +67,7 @@ namespace hgl
 
             bytes = size;
 
-            mem_data = hgl_malloc(size);			//在很多情况下，hgl_malloc分配的内存是对齐的，这样有效率上的提升
+            mem_data = hgl_malloc(size);            //在很多情况下，hgl_malloc分配的内存是对齐的，这样有效率上的提升
             mem_end = ((char *)mem_data) + size;
 
             data_level = level;
@@ -103,12 +103,12 @@ namespace hgl
             return vbc;
         }
 
-        // 		void VertexBufferBase::BindVertexBuffer()
-        // 		{
-        // 			if(!video_buffer_type)return;
+        //         void VertexBufferBase::BindVertexBuffer()
+        //         {
+        //             if(!video_buffer_type)return;
         //
-        // 			glBindBuffer(video_buffer_type,video_buffer_index);
-        // 		}
+        //             glBindBuffer(video_buffer_type,video_buffer_index);
+        //         }
 
         int VertexBufferBase::GetBufferIndex()const
         {

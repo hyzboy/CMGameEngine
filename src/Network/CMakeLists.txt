@@ -1,102 +1,102 @@
 ﻿SET(NETWORK_BASE_SOURCE
     IPAddress.cpp
-	Socket.cpp
-	ServerSocket.cpp
-	AcceptServer.cpp
-	)
+    Socket.cpp
+    ServerSocket.cpp
+    AcceptServer.cpp
+    )
 
 SET(NETWORK_UDP_SOURCE
-	UdpSocket.cpp)
+    UdpSocket.cpp)
 
 IF(BUILD_NETWORK_UDP_LITE)
     SET(NETWORK_UDP_SOURCE ${NETWORK_UDP_SOURCE} UdpLiteSocket.cpp)
 ENDIF()
 
 SET(NETWORK_TCP_COMMON_SOURCE
-	TCPSocket.cpp
-	TCPSocketRB.cpp
-	SocketInputStream.cpp
-	SocketOutputStream.cpp
+    TCPSocket.cpp
+    TCPSocketRB.cpp
+    SocketInputStream.cpp
+    SocketOutputStream.cpp
 )
 
 SET(NETWORK_TCP_CLIENT_SOURCE
-	TCPClient.cpp)
+    TCPClient.cpp)
 
 SET(NETWORK_TCP_SERVER_SOURCE
-	TCPServer.cpp
+    TCPServer.cpp
 )
 
 SET(NETWORK_SCTP_SOURCE
-	SCTPSocket.cpp
-	SCTPO2OClient.cpp
-	SCTPO2OServer.cpp
-	SCTPO2MServer.cpp
+    SCTPSocket.cpp
+    SCTPO2OClient.cpp
+    SCTPO2OServer.cpp
+    SCTPO2MServer.cpp
 )
 
 SET(NETWORK_HTTP_SOURCE
-# 	HTTPInputStream.cpp
-# 	HTTPOutputStream.cpp
-	HTTPTools.cpp
-	WebApi_Currency.cpp)
+#     HTTPInputStream.cpp
+#     HTTPOutputStream.cpp
+    HTTPTools.cpp
+    WebApi_Currency.cpp)
 
-SOURCE_GROUP("Base"						FILES ${NETWORK_BASE_SOURCE})
-SOURCE_GROUP("Transport\\UDP"			FILES ${NETWORK_UDP_SOURCE})
-SOURCE_GROUP("Transport\\TCP"			FILES ${NETWORK_TCP_COMMON_SOURCE})
-SOURCE_GROUP("Transport\\TCP\\Client"	FILES ${NETWORK_TCP_CLIENT_SOURCE})
-SOURCE_GROUP("Transport\\TCP\\Server"	FILES ${NETWORK_TCP_SERVER_SOURCE})
-SOURCE_GROUP("Application\\HTTP"		FILES ${NETWORK_HTTP_SOURCE})
+SOURCE_GROUP("Base"                        FILES ${NETWORK_BASE_SOURCE})
+SOURCE_GROUP("Transport\\UDP"            FILES ${NETWORK_UDP_SOURCE})
+SOURCE_GROUP("Transport\\TCP"            FILES ${NETWORK_TCP_COMMON_SOURCE})
+SOURCE_GROUP("Transport\\TCP\\Client"    FILES ${NETWORK_TCP_CLIENT_SOURCE})
+SOURCE_GROUP("Transport\\TCP\\Server"    FILES ${NETWORK_TCP_SERVER_SOURCE})
+SOURCE_GROUP("Application\\HTTP"        FILES ${NETWORK_HTTP_SOURCE})
 
 IF(BUILD_NETWORK_SCTP)
-	SOURCE_GROUP("Transport\\SCTP" 			FILES ${NETWORK_SCTP_SOURCE})
+    SOURCE_GROUP("Transport\\SCTP"             FILES ${NETWORK_SCTP_SOURCE})
 
-	SET(NETWORK_BASE_SOURCE ${NETWORK_BASE_SOURCE} ${NETWORK_SCTP_SOURCE})
+    SET(NETWORK_BASE_SOURCE ${NETWORK_BASE_SOURCE} ${NETWORK_SCTP_SOURCE})
 ENDIF(BUILD_NETWORK_SCTP)
 
 IF(WIN32)
-	SET(NETWORK_OS_SOURCE
-		WinFireWall.cpp)
+    SET(NETWORK_OS_SOURCE
+        WinFireWall.cpp)
 ENDIF(WIN32)
 
 IF(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
-		SET(NETWORK_OS_SOURCE TCPSocketRBEpoll.cpp SocketManageEpoll.cpp)
+        SET(NETWORK_OS_SOURCE TCPSocketRBEpoll.cpp SocketManageEpoll.cpp)
 ENDIF(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 
 IF(APPLE)
-		SET(NETWORK_OS_SOURCE TCPSocketRBKqueue.cpp TCPSocketManageKqueue.cpp)
+        SET(NETWORK_OS_SOURCE TCPSocketRBKqueue.cpp TCPSocketManageKqueue.cpp)
 elseif(APPLE)
-	IF(${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
-		SET(NETWORK_OS_SOURCE TCPSocketRBKqueue.cpp TCPSocketManageKqueue.cpp)
-	ENDIF(${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
+    IF(${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
+        SET(NETWORK_OS_SOURCE TCPSocketRBKqueue.cpp TCPSocketManageKqueue.cpp)
+    ENDIF(${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
 
-	IF(${CMAKE_SYSTEM_NAME} STREQUAL "OpenBSD")
-		SET(NETWORK_OS_SOURCE TCPSocketRBKqueue.cpp TCPSocketManageKqueue.cpp)
-	ENDIF(${CMAKE_SYSTEM_NAME} STREQUAL "OpenBSD")
+    IF(${CMAKE_SYSTEM_NAME} STREQUAL "OpenBSD")
+        SET(NETWORK_OS_SOURCE TCPSocketRBKqueue.cpp TCPSocketManageKqueue.cpp)
+    ENDIF(${CMAKE_SYSTEM_NAME} STREQUAL "OpenBSD")
 
-	IF(${CMAKE_SYSTEM_NAME} STREQUAL "NetBSD")
-		SET(NETWORK_OS_SOURCE TCPSocketRBKqueue.cpp TCPSocketManageKqueue.cpp)
-	ENDIF(${CMAKE_SYSTEM_NAME} STREQUAL "NetBSD")
+    IF(${CMAKE_SYSTEM_NAME} STREQUAL "NetBSD")
+        SET(NETWORK_OS_SOURCE TCPSocketRBKqueue.cpp TCPSocketManageKqueue.cpp)
+    ENDIF(${CMAKE_SYSTEM_NAME} STREQUAL "NetBSD")
 ENDIF(APPLE)
 
 SET(NETWORK_OS_SOURCE_GROUP ${CMAKE_SYSTEM_NAME})
 SOURCE_GROUP(${NETWORK_OS_SOURCE_GROUP} FILES ${NETWORK_OS_SOURCE})
 
 SET(CM_NETWORK_ALL_SOURCE
-	${NETWORK_BASE_SOURCE}
-	${NETWORK_UDP_SOURCE}
-	${NETWORK_TCP_COMMON_SOURCE}
-	${NETWORK_TCP_CLIENT_SOURCE}
-	${NETWORK_TCP_SERVER_SOURCE}
+    ${NETWORK_BASE_SOURCE}
+    ${NETWORK_UDP_SOURCE}
+    ${NETWORK_TCP_COMMON_SOURCE}
+    ${NETWORK_TCP_CLIENT_SOURCE}
+    ${NETWORK_TCP_SERVER_SOURCE}
 
-	SocketManageThread.cpp
-	MTSocketManage.cpp
+    SocketManageThread.cpp
+    MTSocketManage.cpp
 
-# 	SocketManageSelect.cpp
-# 	TCPSocketRBThread.cpp
-	${NETWORK_OS_SOURCE})
+#     SocketManageSelect.cpp
+#     TCPSocketRBThread.cpp
+    ${NETWORK_OS_SOURCE})
 
 IF(WIN32)
-	ADD_LIBRARY(CM.Network STATIC ${CM_NETWORK_ALL_SOURCE})
+    ADD_LIBRARY(CM.Network STATIC ${CM_NETWORK_ALL_SOURCE})
 ELSE()
-	ADD_LIBRARY(CM.Network SHARED ${CM_NETWORK_ALL_SOURCE} ${NETWORK_HTTP_SOURCE})
-	target_link_libraries(CM.Network curl)
+    ADD_LIBRARY(CM.Network SHARED ${CM_NETWORK_ALL_SOURCE} ${NETWORK_HTTP_SOURCE})
+    target_link_libraries(CM.Network curl)
 ENDIF()

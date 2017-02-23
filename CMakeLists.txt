@@ -13,11 +13,11 @@ include(cmgdk.cmake REQUIRED)
 add_subdirectory(src)
 
 IF(BUILD_TEST_PROJECT)
-	add_subdirectory(test)
+    add_subdirectory(test)
 ENDIF(BUILD_TEST_PROJECT)
 
 IF(BUILD_EXAMPLES_PROJECT)
-	add_subdirectory(examples)
+    add_subdirectory(examples)
 ENDIF(BUILD_EXAMPLES_PROJECT)
 
 add_subdirectory(tools)

@@ -58,7 +58,7 @@ namespace hgl
     }//namespace graph
 
     namespace graph
-    {		
+    {        
         Texture1D *CreateTexture1DDSA(TextureBaseControl *tbc);
         Texture1D *CreateTexture1DBind(TextureBaseControl *tbc);
         
