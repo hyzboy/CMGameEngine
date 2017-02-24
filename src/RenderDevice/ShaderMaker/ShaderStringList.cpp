@@ -75,7 +75,7 @@ namespace hgl
             {
                 add("vec2 normal_3to2(vec3 normal)\n"
                     "{\n"
-                    "\treturn normalize(normal.xy)*sqrt(normal.z*0.5,0.5);\n"
+                    "\treturn normalize(normal.xy)*sqrt(normal.z*0.5+0.5);\n"
                     "}\n\n");
             }
 
