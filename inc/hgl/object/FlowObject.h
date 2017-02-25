@@ -28,7 +28,7 @@ namespace hgl
         virtual bool CanDraw(){return is_draw;}                                                     ///<是否可以绘制函数
 
 		virtual void Update(){}																		///<刷新函数
-        virtual void Draw(const Matrix4f *){}                                                       ///<画面绘制
+        virtual void Draw(const Matrix4f *)=0;                                                      ///<画面绘制
 	};//class FlowObject
 }//namespace hgl
 #endif//HGL_FLOW_OBJECT_INCLUDE
