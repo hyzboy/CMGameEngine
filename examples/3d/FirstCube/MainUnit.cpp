@@ -95,7 +95,7 @@ public:
         delete mtl2;
     }
 
-    void Draw()
+    void Draw(const Matrix4f *)
     {
         ClearColorDepthBuffer();
 
