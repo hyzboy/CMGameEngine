@@ -100,6 +100,10 @@ namespace hgl
             SAFE_CLEAR(vbc);
 
             vbc=CreateVertexBufferControl(type);
+
+            if(vbc)
+                vbc->Set(bytes,mem_data,data_level);
+
             return vbc;
         }
 

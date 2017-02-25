@@ -237,15 +237,15 @@ namespace hgl
                 flow->Update();             //流程刷新
                 flow->ProcCurState();       //处理流程状态
 
-                if(visible                                        //显示画面
-                 &&cur_time-prev_time>=interval_time)            //刷新时间到了
+                if(visible                                      //显示画面
+                 &&cur_time-prev_time>=interval_time)           //刷新时间到了
                 {
                     prev_time=cur_time;
 
-                    if(win->IsOpen())                            //如果窗口还开着
+                    if(win->IsOpen())                           //如果窗口还开着
                     {
                         flow->Draw(&mv);                        //调用流程绘制代码
-                        flow->ProcCurState();                    //处理流程状态
+                        flow->ProcCurState();                   //处理流程状态
 
                         SwapBuffer();                           //交换缓冲区
                     }

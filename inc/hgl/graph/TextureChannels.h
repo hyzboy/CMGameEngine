@@ -17,6 +17,7 @@ namespace hgl
             mtcSpecular,                ///<镜面光
             mtcNormal,                  ///<法线
             mtcTangent,                 ///<切线
+            mtcBiTangent,               ///<副切线
             mtcLight,                   ///<光照贴图
             mtcAlpha,                   ///<透明度贴图
 			mtcDepth,
@@ -25,7 +26,11 @@ namespace hgl
             mtcPalette,                 ///<调色板
 
             mtcHeight,                  ///<高度图
+
+            mtcDiffuseSpecular,         ///<漫反射+镜面光
+
             mtcNormalHeight,            ///<法线+高度
+            mtcNormalTangent,           ///<法线+切线
 
 			mtcGBuffer,					///<延迟渲染用GBuffer
 

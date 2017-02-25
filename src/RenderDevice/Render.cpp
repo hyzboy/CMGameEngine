@@ -319,29 +319,29 @@ namespace hgl
         {
             if(!obj)return(false);
 
-            Shader *    glsl        =obj->GetShader();            //取得glsl
-            Material *    mtl            =obj->GetMaterial();        //取得材质
-            uint        draw_prim    =obj->GetPrimitive();        //取得图元类型
-            int            draw_start;
-            int            draw_count;
+            Shader *    glsl        =obj->GetShader();          //取得glsl
+            Material *  mtl         =obj->GetMaterial();        //取得材质
+            uint        draw_prim   =obj->GetPrimitive();       //取得图元类型
+            int         draw_start;
+            int         draw_count;
 
             if(!glsl||!mtl)return(false);
 
             VertexBufferBase *vb_index=obj->GetVertexBuffer(vbtIndex);
 
-            obj->GetDrawCount(draw_start,draw_count);               //取得所需绘制的顶点数
+            obj->GetDrawCount(draw_start,draw_count);                   //取得所需绘制的顶点数
 
-            if(draw_count<=0)return(false);                            //如果数量为0
+            if(draw_count<=0)return(false);                             //如果数量为0
 
             SetPolygonMode(mtl);
 
             //绑定shader
             {
-                const RenderState *state=(obj)->GetRenderState();                                //渲染状态
+                const RenderState *state=(obj)->GetRenderState();                               //渲染状态
 
                 glsl->Use();                                                                    //启用glsl
 
-                if(!BindShaderVertexAttrib(obj,glsl,state))                                        //绑定shader顶点属性
+                if(!BindShaderVertexAttrib(obj,glsl,state))                                     //绑定shader顶点属性
                 {
                     LOG_PROBLEM(OS_TEXT("BindShaderVertexAttrib error"));
                     return(false);
@@ -353,7 +353,7 @@ namespace hgl
                     return(false);
                 }
 
-                if(!BindShaderMatrix(glsl,projection,modelview,state))                            //绑定shader矩阵
+                if(!BindShaderMatrix(glsl,projection,modelview,state))                          //绑定shader矩阵
                 {
                     LOG_PROBLEM(OS_TEXT("BindShaderMatrix error"));
                     return(false);

@@ -61,7 +61,7 @@ namespace hgl
 					return shader_string.Discard();
 				}
 
-				void add(const char *line="\n"){shader_string.Strcat(line,::strlen(line));}
+				void add(const char *line="\n"){shader_string.Strcat(line,hgl::strlen(line));}
 
 				void debug_out(const os_char *filename);
 
