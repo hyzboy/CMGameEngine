@@ -45,12 +45,12 @@ public:
         }
 
         {
-            triangle=new Renderable(vertex_data);                                ///<创建可渲染对象
+            triangle=new Renderable(vertex_data);                               ///<创建可渲染对象
 
 #ifdef _DEBUG
-            triangle->AutoCreateShader(true,nullptr,"triangle");                ///<自动创建shader，DEBUG模式下如果是新生成shader，输出成指定文件名的文件
+            triangle->AutoCreateShader(true,nullptr,OS_TEXT("triangle"));       ///<自动创建shader，DEBUG模式下如果是新生成shader，输出成指定文件名的文件
 #else
-            triangle->AutoCreateShader();                                        ///<自动创建shader,正常模式下无参数
+            triangle->AutoCreateShader();                                       ///<自动创建shader,正常模式下无参数
 #endif//_DEBUG
         }
     }
@@ -61,7 +61,7 @@ public:
         delete vertex_data;
     }
 
-    void Draw()
+    void Draw(const Matrix4f *)
     {
         ClearColorDepthBuffer();
 
