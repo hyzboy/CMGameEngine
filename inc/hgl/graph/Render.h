@@ -179,17 +179,17 @@ namespace hgl
 
 		inline	bool DirectRender(Renderable *obj)													///<直接渲染一个可渲染数据
 		{
-			return DirectRender(obj,0,0);
+			return DirectRender(obj,nullptr,nullptr);
 		}
 
 		inline	bool DirectRender(Renderable *obj,const Matrix4f *proj)								///<直接渲染一个可渲染数据
 		{
-			return DirectRender(obj,proj,0);
+			return DirectRender(obj,proj,nullptr);
 		}
 
 		inline	bool DirectRender(Renderable *obj,const Matrix4f &proj)								///<直接渲染一个可渲染数据
 		{
-			return DirectRender(obj,&proj,0);
+			return DirectRender(obj,&proj,nullptr);
 		}
 
 		inline	bool DirectRender(Renderable *obj,const Matrix4f *proj,const Matrix4f *mv,const Matrix4f *ltw)
@@ -213,7 +213,7 @@ namespace hgl
 
 		inline	bool DirectRender2D(Renderable *obj)
 		{
-			return DirectRender(obj,&Ortho2DMatrix,0);
+			return DirectRender(obj,&Ortho2DMatrix,nullptr);
 		}
 
 		inline	bool DirectRender2D(Renderable *obj,const Matrix4f *mv)
