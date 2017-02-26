@@ -39,6 +39,8 @@ namespace hgl
             {
                 hgl_zero(graphics.gl);
 
+                graphics.gl.no_use_stencil=true;
+
                 graphics.gl.NicestTextureCompress=true;
 
                 graphics.gl.texture_rectangle=true;

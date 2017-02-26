@@ -63,6 +63,8 @@ namespace hgl
             int32 DepthBits;																		///<Depth缓冲区位深度,默认24
             int32 StencilBits;																		///<Stencil缓冲区位深度,默认8
 
+            bool no_use_stencil;                                                                    ///<不使用Stencil缓冲区
+
             int32 AccumRedBits;																		///<Accum缓冲区红色位深度,默认0
             int32 AccumGreenBits;																	///<Accum缓冲区绿色位深度,默认0
             int32 AccumBlueBits;																	///<Accum缓冲区蓝色位深度,默认0

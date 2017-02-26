@@ -90,9 +90,10 @@ namespace hgl
 
             glfwWindowHint(GLFW_VISIBLE,                    true);                            //是否显示
 
-            if(gs->AlphaBits    >0)glfwWindowHint(GLFW_ALPHA_BITS,         gs->AlphaBits   );
-            if(gs->DepthBits    >0)glfwWindowHint(GLFW_DEPTH_BITS,         gs->DepthBits   );
-            if(gs->StencilBits  >0)glfwWindowHint(GLFW_STENCIL_BITS,       gs->StencilBits );
+            if(gs->no_use_stencil   )glfwWindowHint(GLFW_STENCIL_BITS,  0); else
+            if(gs->StencilBits  >0  )glfwWindowHint(GLFW_STENCIL_BITS,  gs->StencilBits);
+            if(gs->AlphaBits    >0  )glfwWindowHint(GLFW_ALPHA_BITS,    gs->AlphaBits   );
+            if(gs->DepthBits    >0  )glfwWindowHint(GLFW_DEPTH_BITS,    gs->DepthBits   );
 
             if(gs->AccumRedBits     >0)glfwWindowHint(GLFW_ACCUM_RED_BITS,     gs->AccumRedBits    );
             if(gs->AccumGreenBits   >0)glfwWindowHint(GLFW_ACCUM_GREEN_BITS,   gs->AccumGreenBits  );
