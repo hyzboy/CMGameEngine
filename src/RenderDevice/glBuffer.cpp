@@ -112,7 +112,7 @@ namespace hgl
         void ClearColorBuffer()        {glClearBufferfv(GL_COLOR,0,ClearColor);}
         void ClearDepthBuffer()        {SetDepthMask(true);glClearBufferfv(GL_DEPTH,0,&ClearDepth);}
         void ClearColorDepthBuffer(){ClearColorBuffer();ClearDepthBuffer();}
-        //void ClearColorDepthBuffer(){SetDepthMask(true);glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);}
+//        void ClearColorDepthBuffer(){SetDepthMask(true);glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);}
         void ClearStencilBuffer()    {glClearBufferiv(GL_STENCIL,0,&ClearStencil);}
         void ClearAccumBuffer()        {glClearBufferfv(GL_ACCUM,0,&ClearAccum);}
     }//namespace graph

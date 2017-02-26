@@ -282,6 +282,7 @@ namespace hgl
             addr.sin6_family = AF_INET6;
             addr.sin6_port = htons(port);
         }
+
         bool IPv6Address::Bind(int ThisSocket,int reuse)const{return BindAddr<sockaddr,sockaddr_in6>(ThisSocket,addr,reuse);}
         bool IPv6Address::GetHostname(UTF8String &name)const{return hgl::network::GetHostname(name,(sockaddr *)&addr);}
 
