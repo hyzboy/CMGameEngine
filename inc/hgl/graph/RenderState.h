@@ -10,6 +10,21 @@ namespace hgl
 {
     namespace graph
     {
+        /**
+        * 渲染模式
+        */
+        enum RenderMode
+        {
+            rmNone=0,
+
+            rmForward,              //前向
+            rmDeferredLighting,     //前向+延迟灯光
+
+            rmDeferredShading128,   //延迟,128位GBuffer模式(16位RGB,16位Specular,16位法线)
+
+            rmEnd
+        };
+
         struct RenderState
         {
             bool				mvp;                   	///<是否包含MVP矩阵
@@ -47,7 +62,7 @@ namespace hgl
 
             bool				two_side;				///<双面材质
 
-            bool				ds_render;				///<是否是延迟渲染
+            RenderMode          render_mode;			///<渲染模式
 
         public:
 
