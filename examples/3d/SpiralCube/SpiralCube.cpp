@@ -22,7 +22,7 @@ SpiralCube::SpiralCube(const Vector3f &up_vector)
 
         cube_obj[i]->AutoCreateShader();
 
-        cube_matrix[i]=    rotate(float(i)/5.0f,up_vector)*
+        cube_matrix[i]= rotate(float(i)/5.0f,up_vector)*
                         translate(float(i)/4.0f,0,0)*
                         scale(float(i+1)/100.0f);
     }
