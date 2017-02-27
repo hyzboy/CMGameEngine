@@ -31,7 +31,7 @@ namespace hgl
 
             uint texture_id;                                                                        ///<纹理ID
 
-            uint color_format;                                                                        ///<色彩格式(如RED,RG,RGB,RGBA,SRGB,SRGBA之类)
+            uint color_format;                                                                      ///<色彩格式(如RED,RG,RGB,RGBA,SRGB,SRGBA之类)
             uint video_format;        
 
             TextureBaseControl *tbc;                                                                ///<纹理基本控制
@@ -43,16 +43,16 @@ namespace hgl
 
         public:
 
-                    int        GetID            ()const{return texture_id;}                                ///<取得纹理ID
-                    uint    GetType            ()const{return type;}                                    ///<取得类型
-                    uint    GetBindingType    ()const{return binding_type;}                            ///<取得绑定类型
-                    uint    GetColorFormat    ()const{return color_format;}                            ///<取得颜色格式
-                    uint    GetVideoFormat    ()const{return video_format;}                            ///<取得显存中的数据格式
+                    int     GetID           ()const{return texture_id;}                             ///<取得纹理ID
+                    uint    GetType         ()const{return type;}                                   ///<取得类型
+                    uint    GetBindingType  ()const{return binding_type;}                           ///<取得绑定类型
+                    uint    GetColorFormat  ()const{return color_format;}                           ///<取得颜色格式
+                    uint    GetVideoFormat  ()const{return video_format;}                           ///<取得显存中的数据格式
 
         public:
 
-                    void    GenMipmaps      ();                                                      ///<生成mipmaps
-                    void    GetMipmapLevel    (int &base_level,int &max_level);                        ///<取得贴图mipmaps级别    
+                    void    GenMipmaps      ();                                                     ///<生成mipmaps
+                    void    GetMipmapLevel  (int &base_level,int &max_level);                       ///<取得贴图mipmaps级别    
         };//class Texture
     }//namespace graph
 }//namespace hgl

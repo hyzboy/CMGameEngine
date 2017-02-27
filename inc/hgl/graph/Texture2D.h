@@ -31,6 +31,12 @@ namespace hgl
                     Texture2D       (TextureBaseControl *t):Texture(t){width=height=0;}
 
 			bool	SetImage		(Texture2DData *);											                ///<创建2D贴图数据
+            bool    SetImage        (uint w, uint h, TSF fmt)
+                                    {
+                                        Texture2DData tex(w, h, fmt);
+
+                                        return SetImage(&tex);
+                                    }
             bool    SetImage        (uint w, uint h, void *data, uint size, TSF sf, uint vf)
                                     {
                                         Texture2DData tex(w,h,data,size,sf,vf);
@@ -45,7 +51,7 @@ namespace hgl
 
 		Texture2D *CreateTexture2D();
 		Texture2D *CreateTexture2D(Texture2DData *);
-		Texture2D *CreateTexture2D(uint width,uint height,uint video_format);
+		Texture2D *CreateTexture2D(uint width,uint height,TSF format);
 		Texture2D *CreateTexture2D(uint width,uint height,void *bitmap,uint bitmap_bytes,TSF source_format,uint video_format);
 	}//namespace graph
 }//namespace hgl
