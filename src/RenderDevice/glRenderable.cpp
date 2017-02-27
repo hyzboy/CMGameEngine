@@ -173,7 +173,7 @@ namespace hgl
 			state.alpha_test			= material->GetAlphaTest()>0;
 			state.outside_discard		= material->GetOutsideDiscard();
 
-			state.vertex_color_format	= va->GetVertexColorFormat();
+			state.vertex_pixel_compoment= va->GetVertexPixelCompoment();
 			state.vertex_coord			= vb_vertex->GetComponent();
 
 			state.height_map			= material->GetTexture(mtcHeight);

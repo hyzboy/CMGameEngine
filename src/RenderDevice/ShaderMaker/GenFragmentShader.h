@@ -3,7 +3,7 @@
 
 #include"ShaderStringList.h"
 #include<hgl/graph/Material.h>
-#include<hgl/graph/ColorFormat.h>
+#include<hgl/graph/PixelCompoment.h>
 namespace hgl
 {
 	namespace graph

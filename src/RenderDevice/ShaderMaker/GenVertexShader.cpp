@@ -90,15 +90,15 @@ namespace hgl
                 in_normal=sitUniform;
             }
 
-            int vs::SetVertexColorFormat(ColorFormat fmt)
+            int vs::SetVertexPixelCompoment(PixelCompoment fmt)
             {
-                if(fmt<=HGL_COLOR_NONE||fmt>=HGL_COLOR_END)return(0);
+                if(fmt<=HGL_PC_NONE||fmt>=HGL_PC_END)return(0);
 
-                if(fmt==HGL_COLOR_ALPHA                ){vertex_color_to_vec4="vec4(1.0,1.0,1.0," HGL_VS_COLOR ")";return(1);}
-                if(fmt==HGL_COLOR_LUMINANCE            ){vertex_color_to_vec4="vec4(vec3(" HGL_VS_COLOR "),1.0)";return(1);}
-                if(fmt==HGL_COLOR_LUMINANCE_ALPHA    ){vertex_color_to_vec4="vec4(vec3(" HGL_VS_COLOR ".x)," HGL_VS_COLOR ".y)";return(2);}
-                if(fmt==HGL_COLOR_RGB                ){vertex_color_to_vec4="vec4(" HGL_VS_COLOR ",1.0)";return(3);}
-                if(fmt==HGL_COLOR_RGBA                ){vertex_color_to_vec4=HGL_VS_COLOR;return(4);}
+                if(fmt==HGL_PC_ALPHA            ){vertex_color_to_vec4="vec4(1.0,1.0,1.0," HGL_VS_COLOR ")";return(1);}
+                if(fmt==HGL_PC_LUMINANCE        ){vertex_color_to_vec4="vec4(vec3(" HGL_VS_COLOR "),1.0)";return(1);}
+                if(fmt==HGL_PC_LUMINANCE_ALPHA  ){vertex_color_to_vec4="vec4(vec3(" HGL_VS_COLOR ".x)," HGL_VS_COLOR ".y)";return(2);}
+                if(fmt==HGL_PC_RGB              ){vertex_color_to_vec4="vec4(" HGL_VS_COLOR ",1.0)";return(3);}
+                if(fmt==HGL_PC_RGBA             ){vertex_color_to_vec4=HGL_VS_COLOR;return(4);}
 
                 LOG_ERROR(OS_TEXT("输入的颜色格式无法处理：")+OSString(fmt));
                 return(0);
@@ -111,9 +111,9 @@ namespace hgl
                 add_uniform_vec4(HGL_MATERIAL_COLOR);
             }
 
-            void vs::add_in_color(ColorFormat fmt)
+            void vs::add_in_color(PixelCompoment fmt)
             {
-                const int num=SetVertexColorFormat(fmt);
+                const int num=SetVertexPixelCompoment(fmt);
 
                 if(num<=0)
                 {
@@ -376,7 +376,7 @@ namespace hgl
             //颜色
             if(state->vertex_color)                    //使用顶点颜色
             {
-                code.add_in_color(state->vertex_color_format);
+                code.add_in_color(state->vertex_pixel_compoment);
                 code.add();
 
                 if(state->color_material)            //使用颜色材质传入,但没顶点颜色,也无需使用材质颜色

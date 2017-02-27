@@ -126,7 +126,7 @@ namespace hgl
 //             color->End();
 //
 //             obj->SetVertex(vertex);
-//             obj->SetColor(color,HGL_COLOR_RGB);
+//             obj->SetColor(color,HGL_PC_RGB);
 //
 //             obj->AutoCreateShader();
 //

@@ -35,12 +35,12 @@ public:
 //             vertex->End();color->End();
 //
 //             triangle->SetVertex(vertex);
-//             triangle->SetColor(color,HGL_COLOR_RGB);
+//             triangle->SetColor(color,HGL_PC_RGB);
             }
 
             {    //直接传送风格，这两行与上面整段结果一致
                 vertex_data->SetVertex(new VB2f(3,vertex));                ///<设定3个顶点的坐标数据
-                vertex_data->SetColor(new VB3f(3,color),HGL_COLOR_RGB);    ///<设定3个顶点的颜色数据
+                vertex_data->SetColor(new VB3f(3,color),HGL_PC_RGB);    ///<设定3个顶点的颜色数据
             }
         }
 

@@ -56,7 +56,7 @@ namespace hgl
             VertexBufferBase *  GetVertexBuffer     (VertexBufferType vbt)	{return va?va->GetVertexBuffer(vbt):nullptr;} 	///<取得对应顶点缓冲区数据
 
             int                 GetVertexCompoment  ()const{return va?va->GetVertexCompoment():0;}                      	///<取得顶点数据坐标轴数
-            ColorFormat         GetVertexColorFormat()const{return va?va->GetVertexColorFormat():HGL_COLOR_NONE;}       	///<取得顶点色属性格式
+            PixelCompoment      GetVertexPixelCompoment()const{return va?va->GetVertexPixelCompoment():HGL_PC_NONE;}       	///<取得顶点数据成份属性
 
 			bool				SetDrawCount		(int,int);																///<设置要绘制的数据数量
 			bool		        GetDrawCount		(int &,int &);															///<取得指定的要绘制的数据数量

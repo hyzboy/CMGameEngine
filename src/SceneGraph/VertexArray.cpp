@@ -8,7 +8,7 @@ namespace hgl
         {
             primitive=prim;
 
-            vb_color_format=HGL_COLOR_NONE;
+            vb_pixel_compoment=HGL_PC_NONE;
         }
 
         /**

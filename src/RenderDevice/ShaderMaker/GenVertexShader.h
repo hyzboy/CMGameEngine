@@ -3,7 +3,7 @@
 
 #include"ShaderStringList.h"
 #include<hgl/graph/Material.h>
-#include<hgl/graph/ColorFormat.h>
+#include<hgl/graph/PixelCompoment.h>
 namespace hgl
 {
 	namespace graph
@@ -45,7 +45,7 @@ namespace hgl
 
 			protected:
 
-				int SetVertexColorFormat(ColorFormat);
+				int SetVertexPixelCompoment(PixelCompoment);
 
 			public:
 
@@ -72,7 +72,7 @@ namespace hgl
 
 				void set_color_material();
 
-				void add_in_color(ColorFormat fmt);
+				void add_in_color(PixelCompoment fmt);
 
 			public:		//纹理
 

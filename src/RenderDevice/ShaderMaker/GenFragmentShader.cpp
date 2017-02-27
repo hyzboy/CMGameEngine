@@ -140,11 +140,11 @@ namespace hgl
                                 "\t ||diff_tex_coord.y<0||diff_tex_coord.y>1)discard;\n\n");
                     }
 
-//                    if(cf==HGL_COLOR_RGBA)
+//                    if(cf==HGL_PC_RGBA)
                     {
                         add(U8_TEXT("\tvec4 " HGL_FS_DIFFUSE_COLOR "=")+tex_sampler[mtcDiffuse]+U8_TEXT(";\n"));
                     }
-                    //else if(cf==HGL_COLOR_RGB)
+                    //else if(cf==HGL_PC_RGB)
                     //{
                     //    add_format("\tvec4 %s=vec4(%s(%s,%s).rgb,1.0)",    HGL_FS_DIFFUSE_COLOR,
                     //                                                    shader_get_sampler_color[mtc[mtcDiffuse]-1],

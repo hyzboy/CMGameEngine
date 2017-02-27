@@ -2,7 +2,7 @@
 #define HGL_GRAPH_RENDER_STATE_INCLUDE
 
 #include<hgl/graph/Axis.h>
-#include<hgl/graph/ColorFormat.h>
+#include<hgl/graph/PixelCompoment.h>
 #include<hgl/graph/VertexBufferType.h>
 #include<hgl/graph/TextureChannels.h>
 #include<string.h>
@@ -29,7 +29,7 @@ namespace hgl
 
             bool				height_map;            	///<是否是高度图
 
-            ColorFormat         vertex_color_format;    ///<顶点象素成份
+            PixelCompoment      vertex_pixel_compoment; ///<顶点象素成份
             uint8				vertex_coord;         	///<顶点坐标维数
 
             uint8				tex_number;				///<贴图数量
