@@ -261,7 +261,7 @@ namespace hgl
             if(use_normal)
             {
                 obj->SetNormal(new VB3f(24,normals));
-                obj->SetTangents(new VB3f(24,tangents));
+                //obj->SetTangents(new VB3f(24,tangents));
             }
 
             if(tex_coord_vbt!=vbtNone)
@@ -287,13 +287,13 @@ namespace hgl
             return(obj);
         }
 
-        template<typename T> VertexBuffer1<T> *CreateSphereIndices(const uint numberSlices)
+        template<typename T> VertexBuffer1<T> *CreateSphereIndices(const uint numberParallels,const uint numberSlices)
         {
-            VertexBuffer1<T> *vb=new VertexBuffer1<T>(numberSlices * numberSlices * 3);
+            VertexBuffer1<T> *vb=new VertexBuffer1<T>(numberParallels * numberSlices * 6);
 
             vb->Begin();
 
-            for (uint i = 0; i < numberSlices/2; i++)
+            for (uint i = 0; i < numberParallels; i++)
             {
                 for (uint j = 0; j < numberSlices; j++)
                 {
@@ -324,12 +324,12 @@ namespace hgl
             uint numberVertices = (numberParallels + 1) * (numberSlices + 1);
             uint numberIndices = numberParallels * numberSlices * 6;
 
-            float angleStep = (2.0f * HGL_PI) / ((float) numberSlices);
+            const double angleStep = double(2.0f * HGL_PI) / ((double) numberSlices);
 
 //            uint indexIndices;
 
             // used later to help us calculating tangents vectors
-            float helpVector[3] = { 1.0f, 0.0f, 0.0f };
+            //float helpVector[3] = { 1.0f, 0.0f, 0.0f };
 //            float helpQuaternion[4];
 //            float helpMatrix[16];
 
@@ -346,14 +346,9 @@ namespace hgl
             {
                 for (uint j = 0; j < numberSlices + 1; j++)
                 {
-                    uint vertexIndex = (i * (numberSlices + 1) + j) * 4;
-                    uint normalIndex = (i * (numberSlices + 1) + j) * 3;
-                    uint tangentIndex = (i * (numberSlices + 1) + j) * 3;
-                    uint texCoordsIndex = (i * (numberSlices + 1) + j) * 2;
-
-                    float x=sinf(angleStep * (float) i) * sinf(angleStep * (float) j);
-                    float y=cosf(angleStep * (float) i);
-                    float z=sinf(angleStep * (float) i) * cosf(angleStep * (float) j);
+                    float x=sin(angleStep * (double) i) * sin(angleStep * (double) j);
+                    float y=cos(angleStep * (double) i);
+                    float z=sin(angleStep * (double) i) * cos(angleStep * (double) j);
 
                     vertex->Write(x,y,z);
                     normal->Write(x,y,z);
@@ -375,13 +370,10 @@ namespace hgl
             obj->SetVertex(vertex);
             obj->SetNormal(normal);
 
-//             if(numberVertices<=0xff)
-//                 obj->SetIndex(CreateSphereIndices<uint8>(numberSlices));
-//             else
             if(numberVertices<=0xffff)
-                obj->SetIndex(CreateSphereIndices<uint16>(numberSlices));
+                obj->SetIndex(CreateSphereIndices<uint16>(numberParallels,numberSlices));
             else
-                obj->SetIndex(CreateSphereIndices<uint32>(numberSlices));
+                obj->SetIndex(CreateSphereIndices<uint32>(numberParallels,numberSlices));
 
             return obj;
         }

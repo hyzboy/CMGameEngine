@@ -4,7 +4,7 @@
 SpiralSphere::SpiralSphere(const Vector3f &up_vector)
 {
     for(int i=0;i<SPHERE_LOD_LEVEL;i++)
-        sphere_data[i]=CreateRenderableSphere(i+4);//false,vbtDiffuseTexCoord);                ///<创建一个球体的顶点数据，并指定纹理坐标写在那一个位置上
+        sphere_data[i]=CreateRenderableSphere(i+8);//false,vbtDiffuseTexCoord);                ///<创建一个球体的顶点数据，并指定纹理坐标写在那一个位置上
 
     for(int i=0;i<SPHERE_NUMBER;i++)
     {
