@@ -69,7 +69,7 @@ namespace hgl
         * @param max_count 最大Tile数量,(注:程序会根据显卡能力来计算最适合的贴图，所以最大数量一般会大于指定值)
         * @param video_format Tile的显存格式
         */
-        TileData::TileData(int w,int h,int max_count,uint video_format)
+        TileData::TileData(int w,int h,int max_count,TSF video_format)
         {
             int tw,th;
 

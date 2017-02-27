@@ -55,7 +55,7 @@ namespace hgl
 
 		public:
 
-			TileData(int,int,int,unsigned int);
+			TileData(int,int,int, TextureSourceFormat);
 			virtual ~TileData();
 
 			TileData::Object *Add(void *,unsigned int,TextureSourceFormat,int=-1,int=-1);			///<增加一个Tile
