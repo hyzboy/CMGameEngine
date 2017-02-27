@@ -15,13 +15,15 @@ namespace hgl
 				shader_in_type in_normal;
 				shader_in_type in_color;
 
-				bool in_light;
+                LightMode light_mode;
+                bool sun_light;
 
 				bool color_material;
 
 				uint32 mtc_tex_type[mtcMax];
                 uint32 tex_pf[mtcMax];              //纹理象素格式
-				UTF8String tex_sampler[mtcMax];
+				UTF8String tex_sampler_rgb[mtcMax];
+                UTF8String tex_sampler_alpha[mtcMax];
 				UTF8String tex_coord[mtcMax];
 
 				bool alpha_test;
@@ -46,7 +48,8 @@ namespace hgl
 
 				void add_in_color();
 
-				void add_in_light();
+				void set_light_mode(const LightMode &lm){light_mode=lm;}
+                void add_sun_light(){sun_light=true;}
 
 			public:		//贴图
 

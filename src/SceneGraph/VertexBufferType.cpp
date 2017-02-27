@@ -14,6 +14,7 @@ namespace hgl
                 "Color",
                 "Normal",
                 "Tangent",
+                "BiNormal",
                 "SecondColor",
                 "FogCoord",
 
@@ -24,6 +25,7 @@ namespace hgl
                 "TexCoord_Alpha",
                 "TexCoord_Normal",
                 "TexCoord_Tangent",
+                "TexCoord_BiNormal",
                 "TexCoord_Ambient",
                 "TexCoord_Specular",
 

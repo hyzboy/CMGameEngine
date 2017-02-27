@@ -36,14 +36,14 @@ namespace hgl
 
             blend=false;
 
-            SetBlend(    HGL_BLEND_SRC_ALPHA,
+            SetBlend(   HGL_BLEND_SRC_ALPHA,
                         HGL_BLEND_ONE_MINUS_SRC_ALPHA);
 
-            height_axis=HGL_AXIS_Y;
+            height_axis=HGL_AXIS_Z;
 
             color_material=false;
 
-            Light=false;
+            light_mode=HGL_NONE_LIGHT;
 
             Front.Emission.Set(0.0f,0.0f,0.0f,1.0f);
             Front.Ambient.Set(0.25f,0.25f,0.25f,1.0f);

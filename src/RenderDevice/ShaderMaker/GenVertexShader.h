@@ -17,6 +17,9 @@ namespace hgl
 
 				bool color_material;
 
+                LightMode light_mode;
+                bool sun_light;
+
 				UTF8String vertex_color_to_vec4;
 
 				int vertex_type;
@@ -73,6 +76,11 @@ namespace hgl
 				void set_color_material();
 
 				void add_in_color(PixelCompoment fmt);
+
+            public:     //灯光
+
+                void set_light_mode(const LightMode &);
+                void set_sun_light(bool);
 
 			public:		//纹理
 

@@ -15,6 +15,8 @@ namespace hgl
 		{
 			ltNone=0,			///<起始定义，无意义
 
+            ltSunLight,         ///<太阳光
+
 			ltPoint,			///<点光源
 			ltDirection,		///<方向光
 			ltSpot,				///<聚光灯
@@ -39,6 +41,14 @@ namespace hgl
 			Color4f		diffuse;		///<漫反射
 		};//struct Light
 
+        /**
+        * 太阳光
+        */
+        struct SunLight :public Light
+        {
+            Vector3f direction;
+        };
+
 		/**
 		 * 方向光
 		 */
@@ -47,7 +57,7 @@ namespace hgl
 			Vector3f	direction;				///<方向
 
 			float		nDotVP;					///<normal . light direction
-			float		nDotHV;					///<HalfVector
+			float		nDotHV;					///<normal . half vector
 		};//struct DirectionLight
 
 		/**

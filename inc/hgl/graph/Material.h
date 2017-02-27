@@ -8,6 +8,7 @@
 #include<hgl/graph/Texture.h>
 #include<hgl/graph/TextureChannels.h>
 #include<hgl/graph/SceneOrient.h>
+#include<hgl/graph/LightMode.h>
 #include<glew/include/GL/glew.h>
 namespace hgl
 {
@@ -115,8 +116,6 @@ namespace hgl
 
 			bool		outside_discard;															///<贴图出界放弃
 
-			int8		use_sky_light;																///<使用天空灯光
-
 			bool		smooth;																		///<是否平滑(未用)
 
 			bool		color_material;																///<是否使用颜色追踪材质
@@ -144,7 +143,7 @@ namespace hgl
 
 		protected:
 
-			bool		Light;																		///<承接光照(默认开)
+			LightMode	light_mode;																	///<光照默式(0:关,1:顶点,2:象素)
 
 			FixedArray<Texture *,mtcMax,nullptr> TextureList;										///<贴图,(未来将会使用MaterialTexture代替Texture，以支持每一层独立变换)
 
@@ -158,8 +157,6 @@ namespace hgl
 			virtual ~Material()=default;
 
 		public:
-
-			void SetSkyLight		(const int8 sl)						{use_sky_light=sl;}								///<设置如何使用天空灯光
 
 			void SetColor			(const Color4f &c)					{Color=c;}										///<设置全局颜色
 			void SetColor			(float r,float g,float b,float a)	{Color.Set(r,g,b,a);}							///<设置全局颜色
@@ -184,7 +181,7 @@ namespace hgl
 
 			void SetColorMaterial	(bool cm)							{color_material=cm;}							///<设置是否使用颜色追踪材质
 
-			void SetLight			(bool l)							{Light=l;}										///<设置是否承接光照
+			void SetLightMode		(const LightMode &lm)				{light_mode=lm;}								///<设置光照模式
 			void SetTwoSide			(bool ts)							{two_side=ts;}									///<设置量启用双面材质
 
 		public:
@@ -207,7 +204,6 @@ namespace hgl
 
 		public:	//读取方法
 
-			const int8		GetSkyLight()const					{return use_sky_light;}				///<获取如何使用天空灯光
 			const Color4f &	GetColor()const						{return Color;}
 
 			void			GetDrawMode(uint &d,uint &f)const	{d=draw_face;f=fill_mode;}			///<取得绘制模式
@@ -228,7 +224,7 @@ namespace hgl
 
 			bool			GetColorMaterial()const				{return color_material;}			///<读取是否使用颜色追踪材质
 
-			bool			GetLight()const						{return Light;}						///<读取是否承接光照
+			LightMode       GetLightMode()const					{return light_mode;}				///<读取是否承接光照
 			bool			GetTwoSide()const					{return two_side;}					///<读取是否启用双面材质
 
 		public:

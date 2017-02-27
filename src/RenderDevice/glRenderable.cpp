@@ -201,12 +201,9 @@ namespace hgl
 				}
 			}
 
-			state.lighting				= material->GetLight();
+			state.light_mode			=material->GetLightMode();
 
-			if(state.lighting)
-			{
-
-			}
+            state.sun_light=true;       //测试用
 
 			state.two_side				=material->GetTwoSide();
 
@@ -220,7 +217,6 @@ namespace hgl
 		}
 
 #ifdef _DEBUG
-
 		Shader *CreateShader(const RenderState *state,const os_char *save_filename);
 
 		Shader *Renderable::AutoCreateShader(bool mvp,ShaderStorage *storage,const os_char *debug_outname)

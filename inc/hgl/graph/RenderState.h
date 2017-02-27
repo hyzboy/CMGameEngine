@@ -5,6 +5,7 @@
 #include<hgl/graph/PixelCompoment.h>
 #include<hgl/graph/VertexBufferType.h>
 #include<hgl/graph/TextureChannels.h>
+#include<hgl/graph/LightMode.h>
 #include<string.h>
 namespace hgl
 {
@@ -20,7 +21,7 @@ namespace hgl
             rmForward,              //前向
             rmDeferredLighting,     //前向+延迟灯光
 
-            rmDeferredShading128,   //延迟,128位GBuffer模式(16位RGB,16位Specular,16位法线)
+            rmDeferredShading128,   //延迟,128位GBuffer模式(48位RGB,16位Specular,32位法线,32位XY坐标)
 
             rmEnd
         };
@@ -59,7 +60,7 @@ namespace hgl
             uint8				vbc[mtcMax];    		///<通道顶点坐标维数
             VertexBufferType	vbt[mtcMax];			///<通道对应的顶点缓冲区类型
 
-            bool				lighting;				///<是否承接光照
+            LightMode           light_mode;				///<光照模式
             bool                sun_light;              ///<是否有太阳光
 
             uint8				direction_light;		///<方向光数量
