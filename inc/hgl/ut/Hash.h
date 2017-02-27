@@ -100,25 +100,20 @@ namespace hgl
 
         template<HASH_ALGORITHML ha> Hash *CreateHash();					///<创建一个hash值计算类实例
 
-        Hash *CreateAdler32Hash();
-        Hash *CreateCRC32Hash();
-        Hash *CreateMD4Hash();
-        Hash *CreateMD5Hash();
-        Hash *CreateSHA1Hash();
-        Hash *CreateSHA224Hash();
-        Hash *CreateSHA256Hash();
-        Hash *CreateSHA384Hash();
-        Hash *CreateSHA512Hash();
+#define HGL_CREATE_HASH_FUNC(name)  Hash *Create##name##Hash(); \
+                                    template<> inline Hash *CreateHash<hash##name>(){return Create##name##Hash();}
 
-        template<> inline Hash *CreateHash<hashAdler32	>(){return CreateAdler32Hash();}
-        template<> inline Hash *CreateHash<hashCRC32	>(){return CreateCRC32Hash();}
-        template<> inline Hash *CreateHash<hashMD4		>(){return CreateMD4Hash();}
-        template<> inline Hash *CreateHash<hashMD5		>(){return CreateMD5Hash();}
-        template<> inline Hash *CreateHash<hashSHA1		>(){return CreateSHA1Hash();}
-        template<> inline Hash *CreateHash<hashSHA224	>() { return CreateSHA224Hash(); }
-        template<> inline Hash *CreateHash<hashSHA256	>() { return CreateSHA256Hash(); }
-        template<> inline Hash *CreateHash<hashSHA384	>() { return CreateSHA384Hash(); }
-        template<> inline Hash *CreateHash<hashSHA512	>() { return CreateSHA512Hash(); }
+        HGL_CREATE_HASH_FUNC(Adler32)
+        HGL_CREATE_HASH_FUNC(CRC32)
+        HGL_CREATE_HASH_FUNC(MD4)
+        HGL_CREATE_HASH_FUNC(MD5)
+        HGL_CREATE_HASH_FUNC(SHA1)
+        HGL_CREATE_HASH_FUNC(SHA224)
+        HGL_CREATE_HASH_FUNC(SHA256)
+        HGL_CREATE_HASH_FUNC(SHA384)
+        HGL_CREATE_HASH_FUNC(SHA512)
+
+#undef HGL_CREATE_HASH_FUNC
 
         inline Hash *CreateHash(HASH_ALGORITHML ha)
         {
@@ -196,16 +191,6 @@ namespace hgl
             return func[ha-1](data,size,hash_code);
         }
 
-        inline bool CountAdler32(const void *data,int size,Adler32Code &hc){return CountHash<hashAdler32>(data,size,&hc);}
-        inline bool CountCRC32	(const void *data,int size,CRC32Code &	hc){return CountHash<hashCRC32	>(data,size,&hc);}
-        inline bool CountMD4	(const void *data,int size,MD4Code &	hc){return CountHash<hashMD4	>(data,size,&hc);}
-        inline bool CountMD5	(const void *data,int size,MD5Code &	hc){return CountHash<hashMD5	>(data,size,&hc);}
-        inline bool CountSHA1	(const void *data,int size,SHA1Code &	hc){return CountHash<hashSHA1	>(data,size,&hc);}
-        inline bool CountSHA224 (const void *data, int size, SHA224Code &	hc) { return CountHash<hashSHA224	>(data, size, &hc); }
-        inline bool CountSHA256 (const void *data, int size, SHA256Code &	hc) { return CountHash<hashSHA256	>(data, size, &hc); }
-        inline bool CountSHA384 (const void *data, int size, SHA384Code &	hc) { return CountHash<hashSHA384	>(data, size, &hc); }
-        inline bool CountSHA512 (const void *data, int size, SHA512Code &	hc) { return CountHash<hashSHA512	>(data, size, &hc); }
-
         /**
         * 计算一段数据的Hash值
         * @param data 数据指针
@@ -272,10 +257,11 @@ namespace hgl
             return func[ha-1](data,size,hash_str,litter);
         }
 
-#define HGL_COUNT_HASH_FUNC(name)   inline bool Count##name(const void *data, int size, UTF8String &hash_str, bool litter = true) { return CountHashStr<hash##name>(data, size, hash_str, litter); }  \
+#define HGL_COUNT_HASH_FUNC(name)   inline bool Count##name(const void *data, int size, ##name##Code &hc) { return CountHash<hash##name>(data, size, &hc); }    \
+                                    inline bool Count##name(const void *data, int size, UTF8String &hash_str, bool litter = true) { return CountHashStr<hash##name>(data, size, hash_str, litter); }  \
                                     inline bool Count##name(const UTF8String &str, UTF8String &hash_str, bool litter = true) { return CountHashStr<hash##name>(str.c_str(), str.Length(), hash_str, litter); }
 
-        HGL_COUNT_HASH_FUNC(Alder32)
+        HGL_COUNT_HASH_FUNC(Adler32)
         HGL_COUNT_HASH_FUNC(CRC32)
         HGL_COUNT_HASH_FUNC(MD4)
         HGL_COUNT_HASH_FUNC(MD5)
