@@ -34,20 +34,23 @@ namespace hgl
             vbtColor,
             vbtNormal,
             vbtTangent,
+            vbtBiNormal,vbtBiTangen=vbtBiNormal,
             vbtSecondColor,
             vbtFogCoord,
 
-            vbtAmbient,             //环境光颜色
-            vbtSpecular,            //镜面光颜色
+            vbtAmbient,                                 ///<环境光颜色
+            vbtSpecular,                                ///<镜面光颜色
 
-            vbtDiffuseTexCoord,     //漫反射纹理坐标
-            vbtAlphaTexCoord,       //透明度纹理坐标
-            vbtNormalTexCoord,      //法线纹理坐标
-            vbtTangentTexCoord,     //切线纹理坐标
-            vbtAmbientTexCoord,     //环境光颜色纹理坐标
-            vbtSpecularTexCoord,    //镜面光颜色纹理坐标
+            vbtDiffuseTexCoord,                         ///<漫反射纹理坐标
+            vbtAlphaTexCoord,                           ///<透明度纹理坐标
+            vbtNormalTexCoord,                          ///<法线纹理坐标
+            vbtTangentTexCoord,                         ///<切线纹理坐标
+            vbtBiNormalTexCoord,                        ///<副法线纹理坐标
+            vbtBiTangentTexCoord=vbtBiNormalTexCoord,   ///<副切线纹理坐标
+            vbtAmbientTexCoord,                         ///<环境光颜色纹理坐标
+            vbtSpecularTexCoord,                        ///<镜面光颜色纹理坐标
 
-			vbtGBufferTexCoord,		//延迟渲染最终混合用纹理坐标
+			vbtGBufferTexCoord,		                    ///<延迟渲染最终混合用纹理坐标
 
             vbtEnd
         };//enum VertexBufferType

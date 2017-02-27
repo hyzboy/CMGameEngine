@@ -34,6 +34,12 @@ namespace hgl
             bool				vertex_normal;         	///<是否包含顶点法线
             bool				vertex_tangent;        	///<是否包含顶点切线
 
+            union
+            {
+                bool            vertex_bi_normal;       ///<是否包含副法线
+                bool            vertex_bi_tangent;      ///<是否包含副切线
+            };
+
             bool				diffuse_map;           	///<是否包含漫反射贴图
             bool				normal_map;            	///<是否包含法线贴图
             bool				tangent_map;           	///<是否包含切线贴图
@@ -54,6 +60,7 @@ namespace hgl
             VertexBufferType	vbt[mtcMax];			///<通道对应的顶点缓冲区类型
 
             bool				lighting;				///<是否承接光照
+            bool                sun_light;              ///<是否有太阳光
 
             uint8				direction_light;		///<方向光数量
             uint8				point_light;			///<点光源数量

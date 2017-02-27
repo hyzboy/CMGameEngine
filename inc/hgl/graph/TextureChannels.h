@@ -17,7 +17,8 @@ namespace hgl
             mtcSpecular,                ///<镜面光
             mtcNormal,                  ///<法线
             mtcTangent,                 ///<切线
-            mtcBiTangent,               ///<副切线
+            mtcBiNormal,                ///<副法线
+            mtcBiTangent=mtcBiNormal,   ///<副切线
             mtcLight,                   ///<光照贴图
             mtcAlpha,                   ///<透明度贴图
 			mtcDepth,

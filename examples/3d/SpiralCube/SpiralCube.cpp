@@ -17,7 +17,7 @@ SpiralCube::SpiralCube(const Vector3f &up_vector)
 
         cube_mtl[i]->SetTexture(mtcDiffuse,GrayWhiteGrid);
 
-        cube_obj[i]=new Renderable(cube_data,cube_mtl[i]);                    ///<两个可渲染对像使用同一个顶点数据
+        cube_obj[i]=new Renderable(cube_data,cube_mtl[i]);                  ///<两个可渲染对像使用同一个顶点数据
         cube_obj[i]->SetTexCoord(mtcDiffuse,vbtDiffuseTexCoord);            ///<设定指定通道使用的纹理坐标数据
 
         cube_obj[i]->AutoCreateShader();

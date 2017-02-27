@@ -29,16 +29,16 @@ namespace hgl
                     case HGL_TEXTURE_2D:            return "sampler2D";
                     case HGL_TEXTURE_3D:            return "sampler3D";
 
-                    case HGL_TEXTURE_1D_ARRAY:        return "sampler1DArray";
-                    case HGL_TEXTURE_2D_ARRAY:        return "sampler2DArray";
+                    case HGL_TEXTURE_1D_ARRAY:      return "sampler1DArray";
+                    case HGL_TEXTURE_2D_ARRAY:      return "sampler2DArray";
 
-                    case HGL_TEXTURE_RECTANGLE:        return "samplerRect";
+                    case HGL_TEXTURE_RECTANGLE:     return "samplerRect";
 
-                    case HGL_TEXTURE_CUBE_MAP:        return "samplerCube";
+                    case HGL_TEXTURE_CUBE_MAP:      return "samplerCube";
                     case HGL_TEXTURE_CUBE_MAP_ARRAY:return "samplerCubeArray";
 
-                    case HGL_TEXTURE_2D_MS:            return "sampler2DMS";
-                    case HGL_TEXTURE_2D_MS_ARRAY:    return "sampler2DMSArray";
+                    case HGL_TEXTURE_2D_MS:         return "sampler2DMS";
+                    case HGL_TEXTURE_2D_MS_ARRAY:   return "sampler2DMSArray";
 
                     case HGL_TEXTURE_BUFFER:        return "samplerBuffer";
 
@@ -52,8 +52,8 @@ namespace hgl
                 {
                     case HGL_TEXTURE_1D:            return "sampler1DShadow";
                     case HGL_TEXTURE_2D:            return "sampler2DShadow";
-                    case HGL_TEXTURE_RECTANGLE:        return "samplerRectShadow";
-                    case HGL_TEXTURE_CUBE_MAP:        return "samplerCubeShadow";
+                    case HGL_TEXTURE_RECTANGLE:     return "samplerRectShadow";
+                    case HGL_TEXTURE_CUBE_MAP:      return "samplerCubeShadow";
 
                     default:                        return nullptr;
                 }
@@ -109,10 +109,10 @@ namespace hgl
                     add("uniform Material BackMaterial;\n");
             }
 
-            void shader_stringlist::add_direction_light        (){add(glsl_light_directional    );}
-            void shader_stringlist::add_point_light            (){add(glsl_light_point            );}
-            void shader_stringlist::add_spot_light            (){add(glsl_light_spot            );}
-            void shader_stringlist::add_infinite_spot_light    (){add(glsl_light_infinite_spot    );}
+            void shader_stringlist::add_direction_light     (){add(glsl_light_directional   );}
+            void shader_stringlist::add_point_light         (){add(glsl_light_point         );}
+            void shader_stringlist::add_spot_light          (){add(glsl_light_spot          );}
+            void shader_stringlist::add_infinite_spot_light (){add(glsl_light_infinite_spot );}
 
             void shader_stringlist::add_light(int dl,int pl,int sl,int isl,bool sky)
             {

@@ -168,6 +168,7 @@ namespace hgl
 			state.diffuse_map			= GetTexCoord(mtcDiffuse);
 			state.normal_map			= GetTexCoord(mtcNormal);
             state.tangent_map           = GetTexCoord(mtcTangent);
+            state.vertex_bi_normal      = GetTexCoord(mtcBiNormal);
 
 			state.color_material		= material->GetColorMaterial();
 			state.alpha_test			= material->GetAlphaTest()>0;
