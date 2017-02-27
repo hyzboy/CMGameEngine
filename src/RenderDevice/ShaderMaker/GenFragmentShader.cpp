@@ -84,6 +84,8 @@ namespace hgl
 
                 mtc_tex_type[mtc_index]=tex_type;
 
+                tex_pf[mtc_index] = pixel_format;
+
                 tex_coord[mtc_index].Strcat(HGL_FS_TEXCOORD);
                 tex_coord[mtc_index].Strcat(source);
 
@@ -140,16 +142,13 @@ namespace hgl
                                 "\t ||diff_tex_coord.y<0||diff_tex_coord.y>1)discard;\n\n");
                     }
 
-//                    if(cf==HGL_PC_RGBA)
+//                    if(tex_pf[mtcDiffuse]==HGL_PC_RGBA)
                     {
                         add(U8_TEXT("\tvec4 " HGL_FS_DIFFUSE_COLOR "=")+tex_sampler[mtcDiffuse]+U8_TEXT(";\n"));
                     }
-                    //else if(cf==HGL_PC_RGB)
+                    //else if(tex_pf[mtcDiffuse]==HGL_PC_RGB)
                     //{
-                    //    add_format("\tvec4 %s=vec4(%s(%s,%s).rgb,1.0)",    HGL_FS_DIFFUSE_COLOR,
-                    //                                                    shader_get_sampler_color[mtc[mtcDiffuse]-1],
-                    //                                                    MaterialTextureName[mtcDiffuse],
-                    //                                                    texcoord_name);
+                    //    add(U8_TEXT("\tvec4 " HGL_FS_DIFFUSE_COLOR "=vec4(")+tex_sampler[mtcDiffuse]+U8_TEXT(";\n"));
                     //}
 
                     if(in_color)    //还有顶点颜色传入

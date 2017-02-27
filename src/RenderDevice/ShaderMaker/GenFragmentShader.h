@@ -20,6 +20,7 @@ namespace hgl
 				bool color_material;
 
 				uint32 mtc_tex_type[mtcMax];
+                uint32 tex_pf[mtcMax];              //纹理象素格式
 				UTF8String tex_sampler[mtcMax];
 				UTF8String tex_coord[mtcMax];
 
