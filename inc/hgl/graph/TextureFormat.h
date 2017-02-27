@@ -253,6 +253,14 @@ namespace hgl
             return TextureFormatInfoList+tsf;
         }
 
+        inline const uint GetVideoFormat(const TSF &tsf)
+        {
+            if (tsf <= HGL_SF_NONE || tsf >= HGL_SF_END)
+                return(0);
+
+            return TextureFormatInfoList[tsf].video_format;
+        }
+
         inline const TextureFormat *GetTextureFormat(const char *color_format)
         {
             const TextureSourceFormat tsf=GetColorFormat(color_format);
