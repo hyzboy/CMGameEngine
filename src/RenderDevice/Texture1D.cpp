@@ -83,13 +83,13 @@ namespace hgl
             return(tex);
         }
 
-        Texture1D *CreateTexture1D(uint length, uint video_format)
+        Texture1D *CreateTexture1D(uint length, TSF format)
         {
             Texture1D *tex = CreateTexture1D();
 
             if (!tex)RETURN_ERROR_NULL;
 
-            tex->SetImage(length,nullptr,0, HGL_SF_NONE,video_format);
+            tex->SetImage(length,format);
             return(tex);
         }
 

@@ -45,9 +45,27 @@ namespace hgl
                 hgl_zero(this, sizeof(Texture1DData));
             }
 
+            Texture1DData(uint l, TSF fmt)
+            {
+                if(!TextureSourceFormatCheck(fmt))
+                {
+                    hgl_zero(this, sizeof(Texture1DData));
+                    return;
+                }
+
+                length = l;
+
+                gen_mipmaps=false;
+                bitmap = nullptr;
+                bitmap_bytes = 0;
+
+                source_format = TextureFormatInfoList + fmt;       //原始数据格式
+                video_format = source_format->video_format;         //显存格式
+            }
+
             Texture1DData(uint l, void *data, uint size, TSF sf, uint vf)
             {
-                if (!TextureSourceFormatCheck(sf))
+                if(data&&!TextureSourceFormatCheck(sf))
                 {
                     hgl_zero(this, sizeof(Texture1DData));
                     return;
@@ -55,6 +73,7 @@ namespace hgl
 
                 length=l;
 
+                gen_mipmaps = false;
                 bitmap = data;
                 bitmap_bytes = size;
 
@@ -74,9 +93,28 @@ namespace hgl
                 hgl_zero(this, sizeof(Texture2DData));
             }
 
+            Texture2DData(uint w, uint h, TSF fmt)
+            {
+                if(!TextureSourceFormatCheck(fmt))
+                {
+                    hgl_zero(this, sizeof(Texture2DData));
+                    return;
+                }
+
+                width = w;
+                height = h;
+
+                gen_mipmaps = false;
+                bitmap = nullptr;
+                bitmap_bytes = 0;
+
+                source_format = TextureFormatInfoList + fmt;       //原始数据格式
+                video_format = source_format->video_format;         //显存格式
+            }
+
             Texture2DData(uint w,uint h,void *data,uint size,TSF sf,uint vf)
             {
-                if (!TextureSourceFormatCheck(sf))
+                if(data&&!TextureSourceFormatCheck(sf))
                 {
                     hgl_zero(this, sizeof(Texture2DData));
                     return;                    
@@ -85,6 +123,7 @@ namespace hgl
                 width=w;
                 height=h;
 
+                gen_mipmaps = false;
                 bitmap=data;
                 bitmap_bytes=size;
 

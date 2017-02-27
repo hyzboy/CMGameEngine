@@ -85,13 +85,13 @@ namespace hgl
             return(tex);
         }
 
-        Texture2D *CreateTexture2D(uint width, uint height, uint video_format)
+        Texture2D *CreateTexture2D(uint width, uint height, TSF format)
         {
             Texture2D *tex = CreateTexture2D();
 
             if (!tex)RETURN_ERROR_NULL;
 
-            tex->SetImage(width,height, nullptr, 0, HGL_SF_NONE, video_format);
+            tex->SetImage(width,height,format);
             return(tex);
         }
 
