@@ -112,6 +112,12 @@ namespace hgl
                         tex_sampler_alpha[mtc_index].Strcat(".a");
                     }
                     else
+                    if (pixel_format == GL_RGB)
+                    {
+                        tex_sampler_rgb[mtc_index].Strcat(".rgb");
+                        tex_sampler_alpha[mtc_index].Clear();
+                    }
+                    else
                     if (pixel_format == GL_RG)
                     {
                         tex_sampler_rgb[mtc_index].Strcat(".rrr");
@@ -238,7 +244,7 @@ namespace hgl
                     if(mtc_tex_type[mtcAlpha])
                         add(U8_TEXT("\t" HGL_FS_FRAG_COLOR "=vec4(")+fin_color+U8_TEXT(".rgb,")+fin_color+U8_TEXT(".a*" HGL_FS_ALPHA ");\n"));
                     else
-                        add(U8_TEXT("\t" HGL_FS_FRAG_COLOR "=")+fin_color+U8_TEXT(";\n"));
+                        add(U8_TEXT("\t" HGL_FS_FRAG_COLOR "=vec4(")+fin_color+U8_TEXT(".rgb,1);\n"));
                 }
 
                 return(true);
