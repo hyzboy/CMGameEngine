@@ -187,7 +187,7 @@ namespace hgl
 					state.tex_type[i]=tex->GetType();
 					++state.tex_number;
 
-					state.tex_color[i]=tex->GetColorFormat();
+					state.tex_pf[i]=tex->GetPixelFormat();
 				}
 
 				VertexBufferType vbt;

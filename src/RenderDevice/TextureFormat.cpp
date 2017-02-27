@@ -120,7 +120,7 @@ namespace hgl
             return (tsf>HGL_SF_DEPTH&&tsf<HGL_SF_INDEX);
         }
 
-        TSF GetColorFormat(const char *str)
+        TSF GetTextureFormatEnum(const char *str)
         {
             char fmt[17];
 

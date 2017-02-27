@@ -24,7 +24,7 @@ namespace hgl
             height = ptr->height;
 
             video_format = ptr->GetVideoFormat();
-            color_format = ptr->GetColorFormat();
+            pixel_format = ptr->GetPixelFormat();
 
             if (!_SetImage(ptr))
             {

@@ -23,7 +23,7 @@ namespace hgl
                     glTextureStorage1D(texture_id, 1, tex->video_format, tex->length);
 
                     if(tex->bitmap)
-                        glTextureSubImage1D(texture_id, 0, 0, tex->length, tex->source_format->color_format, tex->source_format->data_type, tex->bitmap);
+                        glTextureSubImage1D(texture_id, 0, 0, tex->length, tex->source_format->pixel_format, tex->source_format->data_type, tex->bitmap);
                 }
 
                 if (tex->gen_mipmaps)
@@ -60,7 +60,7 @@ namespace hgl
                     bytes = length*tsf->video_bytes;
 
                     if (data_pointer)
-                        glGetTextureImage(texture_id, level, tsf->color_format, tsf->data_type, bytes, data_pointer);
+                        glGetTextureImage(texture_id, level, tsf->pixel_format, tsf->data_type, bytes, data_pointer);
                 }
 
                 return(bytes);
@@ -73,7 +73,7 @@ namespace hgl
                 if (sfmt->compress)
                     glCompressedTextureSubImage1D(texture_id, 0, s, l, sfmt->video_format, bytes, data);
                 else
-                    glTextureSubImage1D(texture_id, 0, s, l, sfmt->color_format, sfmt->data_type, data);
+                    glTextureSubImage1D(texture_id, 0, s, l, sfmt->pixel_format, sfmt->data_type, data);
 
                 return(true);
             }

@@ -31,7 +31,7 @@ namespace hgl
 
             uint texture_id;                                                                        ///<纹理ID
 
-            uint color_format;                                                                      ///<色彩格式(如RED,RG,RGB,RGBA,SRGB,SRGBA之类)
+            uint pixel_format;                                                                      ///<象素格式(如RED,RG,RGB,RGBA,SRGB,SRGBA之类)
             uint video_format;        
 
             TextureBaseControl *tbc;                                                                ///<纹理基本控制
@@ -46,7 +46,7 @@ namespace hgl
                     int     GetID           ()const{return texture_id;}                             ///<取得纹理ID
                     uint    GetType         ()const{return type;}                                   ///<取得类型
                     uint    GetBindingType  ()const{return binding_type;}                           ///<取得绑定类型
-                    uint    GetColorFormat  ()const{return color_format;}                           ///<取得颜色格式
+                    uint    GetPixelFormat  ()const{return pixel_format;}                           ///<取得象素格式
                     uint    GetVideoFormat  ()const{return video_format;}                           ///<取得显存中的数据格式
 
         public:

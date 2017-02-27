@@ -28,9 +28,9 @@ namespace hgl
                 return(video_format?video_format:source_format->video_format);
             }
 
-            uint GetColorFormat()const
+            uint GetPixelFormat()const
             {
-                return(source_format?source_format->color_format:0);
+                return(source_format?source_format->pixel_format:0);
             }
         };//struct TextureData
 

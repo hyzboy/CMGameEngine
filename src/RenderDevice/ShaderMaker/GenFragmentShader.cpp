@@ -73,10 +73,10 @@ namespace hgl
             * 增加一张贴图
             * @param mtc_index 成份索引
             * @param tex_type 纹理类型
-            * @param color_format 颜色格式
+            * @param pixel_format 象素格式
             * @param source 数据源名称
             */
-            void fs::add_in_texture(int mtc_index,uint tex_type,uint color_format,const char *source)
+            void fs::add_in_texture(int mtc_index,uint tex_type,uint pixel_format,const char *source)
             {
                 MATERIAL_TEXTURE_CHANNEL_NAME mtc_name;
 
@@ -87,7 +87,7 @@ namespace hgl
                 tex_coord[mtc_index].Strcat(HGL_FS_TEXCOORD);
                 tex_coord[mtc_index].Strcat(source);
 
-                if(color_format!=GL_RGBA)
+                if(pixel_format!=GL_RGBA)
                     tex_sampler[mtc_index].Strcat("vec4(");
 
                 tex_sampler[mtc_index].Strcat("texture(");            //texture会处理过滤,如果不过滤使用texelFetch会更高效
@@ -97,12 +97,12 @@ namespace hgl
                 tex_sampler[mtc_index].Strcat(source);
                 tex_sampler[mtc_index].Strcat(")");
 
-                if(color_format!=GL_RGBA)
+                if(pixel_format!=GL_RGBA)
                 {
-                    if(color_format==GL_DEPTH    )tex_sampler[mtc_index].Strcat(".rrr,1)");else
-                    if(color_format==GL_RED        )tex_sampler[mtc_index].Strcat(".rrr,1)");else
-                    if(color_format==GL_RG        )tex_sampler[mtc_index].Strcat(".rrr,b)");else        //一般是luminance+a
-                    if(color_format==GL_RGB        )tex_sampler[mtc_index].Strcat(".rgb,1)");else
+                    if(pixel_format==GL_DEPTH   )tex_sampler[mtc_index].Strcat(".rrr,1)");else
+                    if(pixel_format==GL_RED     )tex_sampler[mtc_index].Strcat(".rrr,1)");else
+                    if(pixel_format==GL_RG      )tex_sampler[mtc_index].Strcat(".rrr,b)");else        //一般是luminance+a
+                    if(pixel_format==GL_RGB     )tex_sampler[mtc_index].Strcat(".rgb,1)");else
                     {
                         //还有srgb,srgba就暂时不知道了如果处理了
                     }
@@ -318,7 +318,7 @@ namespace hgl
                     if(state->height_map
                     &&(mtc>=mtcDiffuse&&mtc<mtcPalette))        //使用高度图时，这一部分贴图无需贴图坐标
                     {
-                        code.add_in_texture(mtc,state->tex_type[mtc],state->tex_color[mtc],mtc_name_height);                //加入贴图，从高度图顶点得来的纹理坐标
+                        code.add_in_texture(mtc,state->tex_type[mtc],state->tex_pf[mtc],mtc_name_height);                //加入贴图，从高度图顶点得来的纹理坐标
                     }
                     else
                     {
@@ -326,7 +326,7 @@ namespace hgl
 
                         GetMaterialTextureName(mtc_name,mtc);
 
-                        code.add_in_texture(mtc,state->tex_type[mtc],state->tex_color[mtc],mtc_name);                        //从对应通道得来的纹理
+                        code.add_in_texture(mtc,state->tex_type[mtc],state->tex_pf[mtc],mtc_name);                        //从对应通道得来的纹理
                         code.add_in_texcoord(state->vbc[mtc],mtc_name);                                                    //从对应通道得来的纹理坐标
                     }
 

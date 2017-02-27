@@ -29,12 +29,12 @@ namespace hgl
 
             bool				height_map;            	///<是否是高度图
 
-            ColorFormat			vertex_color_format;  	///<顶点色格式
+            ColorFormat         vertex_color_format;    ///<顶点象素成份
             uint8				vertex_coord;         	///<顶点坐标维数
 
             uint8				tex_number;				///<贴图数量
             uint32				tex_type[mtcMax];    	///<通道纹理类型
-            uint32				tex_color[mtcMax];		///<通道纹理颜色成份
+            uint32				tex_pf[mtcMax];		    ///<通道纹理象素格式
             uint8				vbc[mtcMax];    		///<通道顶点坐标维数
             VertexBufferType	vbt[mtcMax];			///<通道对应的顶点缓冲区类型
 

@@ -12,7 +12,7 @@ namespace hgl
 
             texture_id=c->texture_id;
 
-            color_format = video_format = 0;
+            pixel_format = video_format = 0;
         }
 
         Texture::~Texture() 

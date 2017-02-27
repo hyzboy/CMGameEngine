@@ -89,7 +89,7 @@ namespace hgl
                     return(false);
                 }
 
-                format=GetColorFormat(header->format);
+                format=GetTextureFormatEnum(header->format);
 
                 return(true);
             }

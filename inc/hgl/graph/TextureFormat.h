@@ -233,7 +233,7 @@ namespace hgl
 
             uint video_format;          //显存格式
 
-            uint color_format;          //色彩格式(指R/RG/RGB/RGBA/DEPTH这些)
+            uint pixel_format;          //象素格式(指R/RG/RGB/RGBA/DEPTH这些)
             uint data_type;             //数据类型(指BYTE，SHORT，FLOAT这些)
 
             uint source_bytes;          //原始格式字节数
@@ -243,7 +243,7 @@ namespace hgl
         //贴图数据源格式信息
         extern const TextureFormat TextureFormatInfoList[HGL_SF_END];
 
-        TSF GetColorFormat(const char *);       //根据简写名称取得对应的TextureSourceFormat
+        TSF GetTextureFormatEnum(const char *);       //根据简写名称取得对应的TextureSourceFormat
 
         inline const TextureFormat *GetTextureFormat(const TSF &tsf)
         {
@@ -261,9 +261,9 @@ namespace hgl
             return TextureFormatInfoList[tsf].video_format;
         }
 
-        inline const TextureFormat *GetTextureFormat(const char *color_format)
+        inline const TextureFormat *GetTextureFormat(const char *format)
         {
-            const TextureSourceFormat tsf=GetColorFormat(color_format);
+            const TextureSourceFormat tsf= GetTextureFormatEnum(format);
 
             if(tsf<=HGL_SF_NONE||tsf>=HGL_SF_END)
                 return(nullptr);
