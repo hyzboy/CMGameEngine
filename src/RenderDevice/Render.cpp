@@ -266,6 +266,14 @@ namespace hgl
 
                     if (!glsl->Shader::SetUniformMatrix3fv(HGL_VS_NORMAL_MATRIX,normal_matrix))
                         return(false);
+
+                    //调试使用
+                    if (state->sun_light)
+                    {
+                        static Vector3f sun_light_direction(rand(),rand(),rand());
+
+                        glsl->Shader::SetUniform3fv(HGL_VS_SUN_LIGHT_DIRECTION, sun_light_direction.Normalized());
+                    }       
                 }
             }
             else    //没modelview时将projection传为mvp
