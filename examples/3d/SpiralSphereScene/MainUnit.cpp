@@ -50,7 +50,7 @@ public:
     {
         SetClearColor(0.2f,0.2f,0.2f);
 
-//        grid=new PlaneGrid(120,50);
+        grid=new PlaneGrid(120,50);
 
         SetCamera();
 
@@ -62,14 +62,14 @@ public:
     ~TestObject()
     {
         delete ss;
-//        delete grid;
+        delete grid;
     }
 
     void Draw(const Matrix4f *)
     {
         ClearColorDepthBuffer();
 
-//        grid->Render(&proj,&mv);
+        grid->Render(&proj,&mv);
 
         rot=mv*rotate(GetDoubleTime()-start_time,Vector3f(1,0,0));
 
