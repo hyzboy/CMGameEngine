@@ -19,7 +19,9 @@ namespace hgl
             {
                 in_normal=sitNone;
                 in_color=sitNone;
-                in_light=false;
+
+                light_mode=HGL_NONE_LIGHT;
+                sun_light=false;
 
                 color_material=false;
 
@@ -62,13 +64,6 @@ namespace hgl
                 add_in_fv(HGL_FS_COLOR,4);
             }
 
-            void fs::add_in_light()
-            {
-                in_light=true;
-
-                add_in_fv(HGL_FS_LIGHT,4);
-            }
-
             /**
             * 增加一张贴图
             * @param mtc_index 成份索引
@@ -89,24 +84,38 @@ namespace hgl
                 tex_coord[mtc_index].Strcat(HGL_FS_TEXCOORD);
                 tex_coord[mtc_index].Strcat(source);
 
-                if(pixel_format!=GL_RGBA)
-                    tex_sampler[mtc_index].Strcat("vec4(");
+                tex_sampler_rgb[mtc_index].Strcat("texture(");            //texture会处理过滤,如果不过滤使用texelFetch会更高效
+                tex_sampler_rgb[mtc_index].Strcat(mtc_name);
+                tex_sampler_rgb[mtc_index].Strcat(",");
+                tex_sampler_rgb[mtc_index].Strcat(HGL_FS_TEXCOORD);
+                tex_sampler_rgb[mtc_index].Strcat(source);
+                tex_sampler_rgb[mtc_index].Strcat(")");
 
-                tex_sampler[mtc_index].Strcat("texture(");            //texture会处理过滤,如果不过滤使用texelFetch会更高效
-                tex_sampler[mtc_index].Strcat(mtc_name);
-                tex_sampler[mtc_index].Strcat(",");
-                tex_sampler[mtc_index].Strcat(HGL_FS_TEXCOORD);
-                tex_sampler[mtc_index].Strcat(source);
-                tex_sampler[mtc_index].Strcat(")");
+                tex_sampler_alpha[mtc_index].Strcat("texture(");            //texture会处理过滤,如果不过滤使用texelFetch会更高效
+                tex_sampler_alpha[mtc_index].Strcat(mtc_name);
+                tex_sampler_alpha[mtc_index].Strcat(",");
+                tex_sampler_alpha[mtc_index].Strcat(HGL_FS_TEXCOORD);
+                tex_sampler_alpha[mtc_index].Strcat(source);
+                tex_sampler_alpha[mtc_index].Strcat(")");
 
-                if(pixel_format!=GL_RGBA)
+                if(pixel_format == GL_RED
+                 ||pixel_format == GL_DEPTH)
                 {
-                    if(pixel_format==GL_DEPTH   )tex_sampler[mtc_index].Strcat(".rrr,1)");else
-                    if(pixel_format==GL_RED     )tex_sampler[mtc_index].Strcat(".rrr,1)");else
-                    if(pixel_format==GL_RG      )tex_sampler[mtc_index].Strcat(".rrr,b)");else        //一般是luminance+a
-                    if(pixel_format==GL_RGB     )tex_sampler[mtc_index].Strcat(".rgb,1)");else
+                    tex_sampler_rgb[mtc_index].Strcat(".rrr");
+                    tex_sampler_alpha[mtc_index].Strcat(".r");
+                }
+                else
+                {
+                    if (pixel_format == GL_RGBA)
                     {
-                        //还有srgb,srgba就暂时不知道了如果处理了
+                        tex_sampler_rgb[mtc_index].Strcat(".rgb");
+                        tex_sampler_alpha[mtc_index].Strcat(".a");
+                    }
+                    else
+                    if (pixel_format == GL_RG)
+                    {
+                        tex_sampler_rgb[mtc_index].Strcat(".rrr");
+                        tex_sampler_alpha[mtc_index].Strcat(".b");
                     }
                 }
 
@@ -142,36 +151,29 @@ namespace hgl
                                 "\t ||diff_tex_coord.y<0||diff_tex_coord.y>1)discard;\n\n");
                     }
 
-//                    if(tex_pf[mtcDiffuse]==HGL_PC_RGBA)
-                    {
-                        add(U8_TEXT("\tvec4 " HGL_FS_DIFFUSE_COLOR "=")+tex_sampler[mtcDiffuse]+U8_TEXT(";\n"));
-                    }
-                    //else if(tex_pf[mtcDiffuse]==HGL_PC_RGB)
-                    //{
-                    //    add(U8_TEXT("\tvec4 " HGL_FS_DIFFUSE_COLOR "=vec4(")+tex_sampler[mtcDiffuse]+U8_TEXT(";\n"));
-                    //}
+                    add(U8_TEXT("\tvec3 " HGL_FS_DIFFUSE_COLOR "=")+tex_sampler_rgb[mtcDiffuse]+U8_TEXT(";\n"));
 
                     if(in_color)    //还有顶点颜色传入
                     {
                         if(color_material)
-                            fin_color=HGL_FS_DIFFUSE_COLOR "*" HGL_FS_COLOR "*" HGL_MATERIAL_COLOR;
+                            fin_color="vec4(" HGL_FS_DIFFUSE_COLOR "*" HGL_FS_COLOR ".rgb*" HGL_MATERIAL_COLOR ".rgb," HGL_FS_COLOR ".a*" HGL_MATERIAL_COLOR ".a)";
                         else
-                            fin_color=HGL_FS_DIFFUSE_COLOR "*" HGL_FS_COLOR;
+                            fin_color="vec4(" HGL_FS_DIFFUSE_COLOR "*" HGL_FS_COLOR ".rgb," HGL_FS_COLOR ".a)";
                     }
                     else
                     {
                         if(color_material)
-                            fin_color=HGL_FS_DIFFUSE_COLOR "*" HGL_MATERIAL_COLOR;
+                            fin_color="vec4(" HGL_FS_DIFFUSE_COLOR "*" HGL_MATERIAL_COLOR ".rgb," HGL_MATERIAL_COLOR ".a)";
                         else
                             fin_color=HGL_FS_DIFFUSE_COLOR;
                     }
                 }
                 else    //无漫反射贴图
                 {
-                    if(!in_color)            //无顶点颜色
+                    if(!in_color)               //无顶点颜色
                     {
-                        if(!color_material)    //无材质颜色
-                            return(false);    //即使有其它贴图，也必须有颜色
+                        if(!color_material)     //无材质颜色
+                            return(false);      //即使有其它贴图，也必须有颜色
 
                         fin_color=HGL_MATERIAL_COLOR;
                     }
@@ -184,12 +186,9 @@ namespace hgl
                     }
                 }
 
-                if(in_light)
-                    fin_color+="+" HGL_FS_LIGHT;
-
                 if(mtc_tex_type[mtcAlpha])                //透明贴图
                 {
-                    add(U8_TEXT("\tfloat tex_alpha=")+tex_sampler[mtcAlpha]+U8_TEXT(";\n\n"));
+                    add(U8_TEXT("\tfloat tex_alpha=")+tex_sampler_alpha[mtcAlpha]+U8_TEXT(";\n\n"));
 
                     add(U8_TEXT("\tfloat " HGL_FS_ALPHA "=tex_alpha;\n"));
 
@@ -208,13 +207,31 @@ namespace hgl
 
                 if(in_normal)        //计算法线
                 {
-//                    add_format("\tfloat normal_instensity=max(dot(%s,vec3(0.0,0.0,1.0)),0.0);\n",HGL_FS_NORMAL);
-//                    add();
+                    //add_format("\tfloat normal_instensity=max(dot(%s,vec3(0.0,0.0,1.0)),0.0);\n",HGL_FS_NORMAL);
+                    //add();
+                }
 
-                    if(mtc_tex_type[mtcAlpha])
-                        add(U8_TEXT("\t" HGL_FS_FRAG_COLOR "=")+fin_color+U8_TEXT("*vec4(vec3(" HGL_FS_LIGHT_INTENSITY ")," HGL_FS_ALPHA ");\n"));
+                if (sun_light)
+                {
+                    add(U8_TEXT("\t" HGL_FS_FRAG_COLOR "=vec4(") + fin_color + U8_TEXT(".rgb*" HGL_FS_SUN_LIGHT_INTENSITY ","));
+
+                    if(tex_pf[mtcDiffuse] == HGL_PC_RGBA
+                     ||tex_pf[mtcDiffuse] == HGL_PC_LUMINANCE_ALPHA)
+                    {
+                        add(fin_color + U8_TEXT(".a"));
+
+                        if (mtc_tex_type[mtcAlpha])
+                            add("*" HGL_FS_ALPHA ");\n");
+                        else
+                            add(");\n");
+                    }
                     else
-                        add(U8_TEXT("\t" HGL_FS_FRAG_COLOR "=")+fin_color+U8_TEXT("*vec4(vec3(" HGL_FS_LIGHT_INTENSITY "),1.0);\n"));
+                    {
+                        if (mtc_tex_type[mtcAlpha])
+                            add(HGL_FS_ALPHA ");\n");
+                        else
+                            add("1);\n");
+                    }
                 }
                 else
                 {
@@ -277,9 +294,8 @@ namespace hgl
             }
 
             //灯光
-            if(state->lighting)
+            if(state->light_mode>HGL_NONE_LIGHT)
             {
-                code.add_in_float(HGL_FS_LIGHT_INTENSITY);
                 code.add();
 
                 //法线
@@ -289,6 +305,18 @@ namespace hgl
                 {
                     code.add_in_normal();
                     code.add();
+
+                    //光照
+                    code.set_light_mode(state->light_mode);
+
+                    if (state->light_mode == HGL_VERTEX_LIGHT
+                        &&state->sun_light)
+                    {
+                        code.add_in_float(HGL_FS_SUN_LIGHT_INTENSITY);
+
+                        code.add_sun_light();
+                        code.add();
+                    }
                 }
 
 //                if(state->normal_map)

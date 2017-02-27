@@ -129,23 +129,24 @@ namespace hgl
 
         bool BindShaderVertexAttrib(Renderable *obj,Shader *glsl,int vbt)
         {
-            VertexBufferBase *vb=obj->GetVertexBuffer((VertexBufferType)vbt);                //取得缓冲区
+            VertexBufferBase *vb=obj->GetVertexBuffer((VertexBufferType)vbt);                       //取得缓冲区
 
-            if(!vb)return(true);                                                            //没有这个缓冲区
+            if(!vb)return(true);                                                                    //没有这个缓冲区
 
             VERTEX_BUFFER_NAME vertex_buffer_name;
 
             if(!GetVertexBufferName(vertex_buffer_name,vbt))return(false);
 
-            int location=glsl->GetAttribLocation(vertex_buffer_name);                    //取得缓冲区对应shader属性地址
+            int location=glsl->GetAttribLocation(vertex_buffer_name);                               //取得缓冲区对应shader属性地址
 
-            if(location==-1)                                                                //如果取得地址失败
+            if(location==-1)                                                                        //如果取得地址失败
             {
                 LOG_HINT(u8"buffer \""+UTF8String(vertex_buffer_name)+u8"\" attrib location =-1");
                 return(false);
             }
 
-            obj->SetShaderLocation((VertexBufferType)vbt,location);                            //设定缓冲区对应glsl属性
+            obj->SetShaderLocation((VertexBufferType)vbt,location);                                 //设定缓冲区对应glsl属性
+//            obj->SetShaderLocation((VertexBufferType)vbt,vbt);                                 //设定缓冲区对应glsl属性(使用了layout方法，所以无需再获取)
 
             return(true);
         }
@@ -155,13 +156,13 @@ namespace hgl
             if (obj->GetBindShader() != glsl)
             {
                 //本来这段可以写到OpenGLCoreRenderable类中的，为了一些变数，写在这里
-                obj->ClearShaderLocation();                                                        //清除原有shader与顶点缓冲区的绑定
+                obj->ClearShaderLocation();                                                         //清除原有shader与顶点缓冲区的绑定
 
                 //非贴图坐标数据
                 for (int i = vbtVertex; i < vbtDiffuseTexCoord; i++)
                 {
                     if (i == vbtNormal
-                        &&!state->lighting)continue;                                                //有法线但确定不用光照，则不传递法线
+                        &&state->light_mode==HGL_NONE_LIGHT)continue;                               //有法线但确定不用光照，则不传递法线
 
                     if (!BindShaderVertexAttrib(obj, glsl, i))
                     {
@@ -204,9 +205,9 @@ namespace hgl
             }
 
             //灯光
-            if(state->lighting)
-            {
-            }
+            //if(state->light_mode>HGL_NONE_LIGHT)
+            //{
+            //}
 
             return(true);
         }
@@ -258,21 +259,19 @@ namespace hgl
 
                 if(!glsl->Shader::SetUniformMatrix4fv(HGL_VS_MVP_MATRIX,mvp))
                     return(false);
+
+                if ((state->vertex_normal || state->normal_map) && state->light_mode>HGL_NONE_LIGHT)    //需要法线
+                {
+                    Matrix3f normal_matrix = modelview->Float3x3Part();             //法线矩阵为3x3
+
+                    if (!glsl->Shader::SetUniformMatrix3fv(HGL_VS_NORMAL_MATRIX,normal_matrix))
+                        return(false);
+                }
             }
             else    //没modelview时将projection传为mvp
             {
                 if(!glsl->Shader::SetUniformMatrix4fv(HGL_VS_MVP_MATRIX,*projection))
                     return(false);
-            }
-
-            if((state->vertex_normal||state->normal_map)&&state->lighting)    //需要法线
-            {
-                //const Matrix3f normal_matrix=*modelview;        //法线矩阵为3x3
-
-
-
-                //if(!glsl->Shader::SetUniformMatrix3fv(HGL_VS_NORMAL_MATRIX,normal_matrix.data()))
-                    //return(false);
             }
 
             return(true);

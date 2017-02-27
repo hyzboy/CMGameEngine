@@ -18,6 +18,9 @@ namespace hgl
 
                 color_material=false;
 
+                light_mode=HGL_NONE_LIGHT;
+                sun_light=false;
+
                 mvp_matrix=false;
 
                 in_normal=sitNone;
@@ -29,10 +32,10 @@ namespace hgl
                 in_texcoord_count=0;
                 out_texcoord_count=0;
 
-                hgl_zero(in_tex                );
+                hgl_zero(in_tex             );
                 hgl_zero(in_texcoord_num    );
-                hgl_zero(in_vertex_buffer    );
-                hgl_zero(out_texcoord        );
+                hgl_zero(in_vertex_buffer   );
+                hgl_zero(out_texcoord       );
 
                 height_axis=HGL_AXIS_NONE;
             }
@@ -43,20 +46,13 @@ namespace hgl
                 add_uniform_mat4(HGL_VS_MVP_MATRIX);                //传proj*mv，mv两个而不是proj,mv两个，以省去在vs中计算proj*mv
 
                 if(normal)
-                    add_uniform_mat4(HGL_VS_NORMAL_MATRIX);
+                    add_uniform_mat3(HGL_VS_NORMAL_MATRIX);
 
                 mvp_matrix=true;
             }
 
             void vs::add_layout_in(int vb_index,const char *name,int num)
             {
-//                 UTF8String str="#define VB_"+UTF8String(VertexBufferName[vb_index])+UTF8String("\t")+UTF8String(vb_index)+UTF8String("\n");
-//
-//                 add(str);
-
-//                 add("layout(location=VB_");
-//                 add(VertexBufferName[vb_index]);
-
                 add("layout(location=");
                 add(UTF8String(vb_index));
                 add(") ");
@@ -75,6 +71,7 @@ namespace hgl
             void vs::add_in_normal()
             {
                 add_layout_in(vbtNormal,HGL_VS_NORMAL,3);
+
                 //add_out_vec3(HGL_FS_NORMAL);
 
                 in_normal=sitVertexAttrib;
@@ -181,6 +178,22 @@ namespace hgl
                 add_in_fv(vb_name,coord_num);                                                //用vb_name是为了让输入的顶点数据依旧使用TexCoord0,1,2,3这样的名字以便于调试
 
                 in_vertex_buffer[vbt]=true;
+            }
+
+            void vs::set_light_mode(const LightMode &lm)
+            {
+                light_mode=lm;
+            }
+
+            void vs::set_sun_light(bool sl)
+            {
+                sun_light=sl;
+
+                if(light_mode>HGL_NONE_LIGHT&&sun_light)
+                { 
+                    add_uniform_vec3(HGL_VS_SUN_LIGHT_DIRECTION);
+                    add_out_float(HGL_FS_SUN_LIGHT_INTENSITY);
+                }   
             }
 
             /**
@@ -307,30 +320,38 @@ namespace hgl
 
                     add();
                     add(pos_str);
-                    add();
-
-                    if(!mvp_matrix)
-                        add("\tgl_Position=Position;\n");
-                    else
-#ifdef HGL_MATRIX_LEFT
-                        add("\tgl_Position=" HGL_VS_MVP_MATRIX "*Position;\n");
-#else
-                        add("\tgl_Position=Position*" HGL_VS_MVP_MATRIX ";\n");
-#endif//HGL_MATRIX_LEFT
                 }
 
                 if(in_normal)
                 {
-// #ifdef HGL_MATRIX_LEFT
-//                     add("\n\tVP=normalize(" HGL_VS_LIGHT_POSITION "-" HGL_VS_NORMAL_MATRIX "*Position);\n");
-//                     add("\tMVNormal=normalize(" HGL_VS_NORMAL_MATRIX "*" HGL_VS_NORMAL ");\n\n");
-// #else
-//                     add("\n\tVP=normalize(" HGL_VS_LIGHT_POSITION "-Position*" HGL_VS_NORMAL_MATRIX ");\n");
-//                     add("\tMVNormal=normalize(" HGL_VS_NORMAL "*" HGL_VS_NORMAL_MATRIX ");\n\n");
-// #endif//HGL_MATRIX_LEFT
-//
-//                     add("\t" HGL_FS_LIGHT_INTENSITY "=" HGL_VS_GLOBAL_LIGHT_INTENSITY "+max(0.0,dot(MVNormal,VP));\n");
+ //#ifdef HGL_MATRIX_LEFT
+ //                    add("\n\tVP=normalize(" HGL_VS_LIGHT_POSITION "-" HGL_VS_NORMAL_MATRIX "*Position);\n");
+ //                    add("\tMVNormal=normalize(" HGL_VS_NORMAL_MATRIX "*" HGL_VS_NORMAL ");\n\n");
+ //#else
+ //                    add("\n\tVP=normalize(" HGL_VS_LIGHT_POSITION "-Position*" HGL_VS_NORMAL_MATRIX ");\n");
+ //                    add("\tMVNormal=normalize(" HGL_VS_NORMAL "*" HGL_VS_NORMAL_MATRIX ");\n\n");
+ //#endif//HGL_MATRIX_LEFT
+
+                    //灯光
+                    if(light_mode==HGL_VERTEX_LIGHT)
+                    {
+                        if(sun_light)
+                        {
+                            add("\n\t" HGL_FS_SUN_LIGHT_INTENSITY "=max(dot(normalize(" HGL_VS_NORMAL "*" HGL_VS_NORMAL_MATRIX ")," HGL_VS_SUN_LIGHT_DIRECTION "),0.0);");
+                        }
+                    }
                 }
+
+                add();
+
+                if (!mvp_matrix)
+                    add("\tgl_Position=Position;\n");
+                else
+#ifdef HGL_MATRIX_LEFT
+                    add("\tgl_Position=" HGL_VS_MVP_MATRIX "*Position;\n");
+#else
+                    add("\tgl_Position=Position*" HGL_VS_MVP_MATRIX ";\n");
+#endif//HGL_MATRIX_LEFT
 
                 return(true);
             }
@@ -356,7 +377,7 @@ namespace hgl
 
             if(state->mvp)
             {
-                code.add_mvp(((state->vertex_normal||state->normal_map)&&state->lighting)?true:false);        //需要法线,则必须传modelview
+                code.add_mvp(((state->vertex_normal||state->normal_map)&&state->light_mode>HGL_NONE_LIGHT)?true:false);        //需要法线,则必须传modelview
                 code.add();
             }
 
@@ -371,10 +392,14 @@ namespace hgl
             {
                 code.add_in_normal();
                 code.add();
+
+                //灯光
+                code.set_light_mode(state->light_mode);
+                code.set_sun_light(state->sun_light);
             }
 
             //颜色
-            if(state->vertex_color)                    //使用顶点颜色
+            if(state->vertex_color)                 //使用顶点颜色
             {
                 code.add_in_color(state->vertex_pixel_compoment);
                 code.add();
@@ -425,12 +450,12 @@ namespace hgl
                     if(!state->vbc[i])continue;
 
                     const VertexBufferType    vbt    =state->vbt[i];            //当前通道顶点缓冲区类型
-                    const uint8                vbc    =state->vbc[i];            //当前通道顶点缓冲区坐标维数
+                    const uint8               vbc    =state->vbc[i];            //当前通道顶点缓冲区坐标维数
 
                     GetVertexBufferName(vbn,vbt);
 
-                    code.add_in_texcoord(vbt,vbn,vbc,i);    //第一个参数用vbt而不用i是为了让shader中的texcoord?编号与程序中填写的缓冲区编号一致，便于调试查看
-                    code.add_out_texcoord(vbc,i,vbn);        //一般是输出到fragment shader用
+                    code.add_in_texcoord(vbt,vbn,vbc,i);        //第一个参数用vbt而不用i是为了让shader中的texcoord?编号与程序中填写的缓冲区编号一致，便于调试查看
+                    code.add_out_texcoord(vbc,i,vbn);           //一般是输出到fragment shader用
 
                     tex_count++;
                 }

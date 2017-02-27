@@ -8,9 +8,6 @@ namespace hgl
 		#define HGL_MAX_TEX_COORD		32
 		#define HGL_MAX_VERTEX_BUFFER	32
 
-		#define HGL_SKY_COLOR					"SkyColor"
-		#define HGL_SKY_COLOR_FUNC				"sky_light_compute"
-
 		//vertex shader 矩阵部分
 		#define HGL_VS_PROJECTION_MATRIX		"ProjectionMatrix"
 		#define HGL_VS_MODELVIEW_MATRIX			"ModelViewMatrix"
@@ -23,22 +20,25 @@ namespace hgl
 		#define HGL_VS_VERTEX					"Vertex"
 		#define HGL_VS_TEXCOORD_GBUFFER			"TexCoord_GBuffer"
 
-		//fragment shader 部分
+        //vertex shader 传入的太阳光数据
+        #define HGL_VS_SUN_LIGHT_DIRECTION      "SunLightDirection"    //太阳光方向
+        #define HGL_VS_SUN_LIGHT_COLOR          "SunLightColor"        //太阳光颜色
+
+        //fragment shader 部分
 		#define HGL_FS_NORMAL					"FragmentNormal"
 		#define HGL_FS_COLOR					"FragmentColor"
-		#define HGL_FS_LIGHT					"FragmentLight"
 		#define HGL_FS_POSITION					"FragmentPosition"
 		#define HGL_FS_TEXCOORD_GBUFFER			"FragmentTexCoord_GBuffer"
 
 		#define HGL_MATERIAL_COLOR				"MaterialColor"
-
-		#define HGL_FS_LIGHT_INTENSITY			"LightIntensity"		//灯光强度
 
 		#define HGL_FS_FRAG_COLOR				"FragColor"
 
 		#define HGL_FS_ALPHA_TEST				"AlphaTest"
 
 		#define HGL_FS_TEXCOORD					"FragmentTexCoord_"
+
+        #define HGL_FS_SUN_LIGHT_INTENSITY      "FragmentSunLightIdtensity"     //太阳光强度
 	}//namespace graph
 }//namespace hgl
 #endif//HGL_OPENGL_CORE_GLSL_INCLUDE
