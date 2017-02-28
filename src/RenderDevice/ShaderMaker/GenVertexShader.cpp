@@ -72,7 +72,7 @@ namespace hgl
             {
                 add_layout_in(vbtNormal,HGL_VS_NORMAL,3);
 
-                //add_out_vec3(HGL_FS_NORMAL);
+                add_out_vec3(HGL_FS_NORMAL);
 
                 in_normal=sitVertexAttrib;
 
@@ -189,10 +189,10 @@ namespace hgl
             {
                 sun_light=sl;
 
-                if(light_mode>HGL_NONE_LIGHT&&sun_light)
-                { 
-                    add_uniform_vec3(HGL_VS_SUN_LIGHT_DIRECTION);
-                    add_out_float(HGL_FS_SUN_LIGHT_INTENSITY);
+                if(light_mode==HGL_VERTEX_LIGHT&&sun_light)
+                {                    
+                    add_uniform_vec3(HGL_SUN_LIGHT_DIRECTION);
+                    add_out_float(HGL_SUN_LIGHT_INTENSITY);
                 }   
             }
 
@@ -332,12 +332,14 @@ namespace hgl
  //                    add("\tMVNormal=normalize(" HGL_VS_NORMAL "*" HGL_VS_NORMAL_MATRIX ");\n\n");
  //#endif//HGL_MATRIX_LEFT
 
+                    add("\t" HGL_FS_NORMAL "=normalize(" HGL_VS_NORMAL "*" HGL_VS_NORMAL_MATRIX ");\n\n");
+
                     //灯光
                     if(light_mode==HGL_VERTEX_LIGHT)
                     {
                         if(sun_light)
                         {
-                            add("\n\t" HGL_FS_SUN_LIGHT_INTENSITY "=max(dot(normalize(" HGL_VS_NORMAL "*" HGL_VS_NORMAL_MATRIX ")," HGL_VS_SUN_LIGHT_DIRECTION "),0.0);");
+                            add("\n\t" HGL_SUN_LIGHT_INTENSITY "=max(dot(normalize(" HGL_VS_NORMAL "*" HGL_VS_NORMAL_MATRIX ")," HGL_SUN_LIGHT_DIRECTION "),0.0);");
                         }
                     }
                 }

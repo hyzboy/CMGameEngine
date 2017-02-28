@@ -272,7 +272,7 @@ namespace hgl
                     {
                         static Vector3f sun_light_direction(rand(),rand(),rand());
 
-                        glsl->Shader::SetUniform3fv(HGL_VS_SUN_LIGHT_DIRECTION, sun_light_direction.Normalized());
+                        glsl->Shader::SetUniform3fv(HGL_SUN_LIGHT_DIRECTION, sun_light_direction.Normalized());
                     }       
                 }
             }

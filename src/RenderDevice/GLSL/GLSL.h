@@ -20,10 +20,6 @@ namespace hgl
 		#define HGL_VS_VERTEX					"Vertex"
 		#define HGL_VS_TEXCOORD_GBUFFER			"TexCoord_GBuffer"
 
-        //vertex shader 传入的太阳光数据
-        #define HGL_VS_SUN_LIGHT_DIRECTION      "SunLightDirection"    //太阳光方向
-        #define HGL_VS_SUN_LIGHT_COLOR          "SunLightColor"        //太阳光颜色
-
         //fragment shader 部分
 		#define HGL_FS_NORMAL					"FragmentNormal"
 		#define HGL_FS_COLOR					"FragmentColor"
@@ -38,7 +34,10 @@ namespace hgl
 
 		#define HGL_FS_TEXCOORD					"FragmentTexCoord_"
 
-        #define HGL_FS_SUN_LIGHT_INTENSITY      "FragmentSunLightIdtensity"     //太阳光强度
+        //太阳光数据,此数据即可能在VS,也可能在FS
+        #define HGL_SUN_LIGHT_DIRECTION         "SunLightDirection"    //太阳光方向
+        #define HGL_SUN_LIGHT_COLOR             "SunLightColor"        //太阳光颜色
+        #define HGL_SUN_LIGHT_INTENSITY         "SunLightIdtensity"     //太阳光强度
 	}//namespace graph
 }//namespace hgl
 #endif//HGL_OPENGL_CORE_GLSL_INCLUDE

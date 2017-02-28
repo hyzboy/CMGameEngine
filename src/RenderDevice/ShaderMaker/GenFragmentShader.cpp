@@ -219,7 +219,10 @@ namespace hgl
 
                 if (sun_light)
                 {
-                    add(U8_TEXT("\t" HGL_FS_FRAG_COLOR "=vec4(") + fin_color + U8_TEXT(".rgb*" HGL_FS_SUN_LIGHT_INTENSITY ","));
+                    if (light_mode == HGL_PIXEL_LIGHT)
+                        add("\tfloat " HGL_SUN_LIGHT_INTENSITY "=max(dot(" HGL_FS_NORMAL "," HGL_SUN_LIGHT_DIRECTION "),0.0);\n");
+
+                    add(U8_TEXT("\t" HGL_FS_FRAG_COLOR "=vec4(") + fin_color + U8_TEXT(".rgb*" HGL_SUN_LIGHT_INTENSITY ","));
 
                     if(tex_pf[mtcDiffuse] == HGL_PC_RGBA
                      ||tex_pf[mtcDiffuse] == HGL_PC_LUMINANCE_ALPHA)
@@ -315,10 +318,17 @@ namespace hgl
                     //光照
                     code.set_light_mode(state->light_mode);
 
-                    if (state->light_mode == HGL_VERTEX_LIGHT
-                        &&state->sun_light)
+                    if(state->sun_light)
                     {
-                        code.add_in_float(HGL_FS_SUN_LIGHT_INTENSITY);
+                        if (state->light_mode == HGL_VERTEX_LIGHT)
+                        {
+                            code.add_in_float(HGL_SUN_LIGHT_INTENSITY);
+                        }
+                        else
+                        if (state->light_mode == HGL_PIXEL_LIGHT)
+                        {
+                            code.add_uniform_vec3(HGL_SUN_LIGHT_DIRECTION);
+                        }
 
                         code.add_sun_light();
                         code.add();

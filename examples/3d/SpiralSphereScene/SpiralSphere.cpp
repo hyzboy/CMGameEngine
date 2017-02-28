@@ -4,7 +4,7 @@
 SpiralSphere::SpiralSphere(const Vector3f &up_vector)
 {
     for(int i=0;i<SPHERE_LOD_LEVEL;i++)
-        sphere_data[i]=CreateRenderableSphere(i+16);//false,vbtDiffuseTexCoord);                ///<创建一个球体的顶点数据，并指定纹理坐标写在那一个位置上
+        sphere_data[i]=CreateRenderableSphere(i+4);//false,vbtDiffuseTexCoord);                ///<创建一个球体的顶点数据，并指定纹理坐标写在那一个位置上
 
     for(int i=0;i<SPHERE_NUMBER;i++)
     {
@@ -17,7 +17,7 @@ SpiralSphere::SpiralSphere(const Vector3f &up_vector)
                                 1.0f);
         sphere_mtl[i]->SetDrawMode(GL_FRONT_AND_BACK,GL_FILL);
 
-        sphere_mtl[i]->SetLightMode(HGL_VERTEX_LIGHT);                          ///<使用顶点级别的光照
+        sphere_mtl[i]->SetLightMode(HGL_PIXEL_LIGHT);                          ///<使用顶点级别的光照
 
 //        sphere_mtl[i]->SetTexture(mtcDiffuse,GrayWhiteGrid);
 
