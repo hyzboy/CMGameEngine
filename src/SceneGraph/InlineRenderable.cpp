@@ -320,7 +320,7 @@ namespace hgl
         {
             VertexArray *obj=new VertexArray(HGL_PRIM_TRIANGLES);
 
-            uint numberParallels = numberSlices / 2;
+            uint numberParallels = (numberSlices / 2)+1;
             uint numberVertices = (numberParallels + 1) * (numberSlices + 1);
             uint numberIndices = numberParallels * numberSlices * 6;
 
