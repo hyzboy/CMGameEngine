@@ -10,21 +10,21 @@ namespace hgl
     namespace graph
     {
         Texture1D *WhiteLine        =nullptr;
-        Texture1D *BlackWhiteLine    =nullptr;
+        Texture1D *BlackWhiteLine   =nullptr;
 
-        Texture2D *BlackWhiteGrid    =nullptr;
+        Texture2D *BlackWhiteGrid   =nullptr;
         Texture2D *GrayWhiteGrid    =nullptr;
         Texture2D *BlueWhiteGrid    =nullptr;
 
-        VertexArray *SolidCube        =nullptr;
-        VertexArray *WireCube        =nullptr;
+        VertexArray *SolidCube      =nullptr;
+        VertexArray *WireCube       =nullptr;
 
-        VertexArray *SolidRect        =nullptr;
-        VertexArray *WireRect        =nullptr;
+        VertexArray *SolidRect      =nullptr;
+        VertexArray *WireRect       =nullptr;
         VertexArray *TextureRect    =nullptr;
 
         VertexArray *SolidCircle    =nullptr;
-        VertexArray *WireCircle        =nullptr;
+        VertexArray *WireCircle     =nullptr;
     }//namespace graph
 
     namespace graph
@@ -551,7 +551,7 @@ namespace hgl
             }
 
             {
-                const uint8 black_white_grid[16]={    0xFF,0xFF,0x00,0x00,
+                const uint8 black_white_grid[16]={  0xFF,0xFF,0x00,0x00,
                                                     0xFF,0xFF,0x00,0x00,
                                                     0x00,0x00,0xFF,0xFF,
                                                     0x00,0x00,0xFF,0xFF};
@@ -560,7 +560,7 @@ namespace hgl
             }
 
             {
-                const uint8 gray_white_grid[16]={    0xFF,0xFF,0x7F,0x7F,
+                const uint8 gray_white_grid[16]={   0xFF,0xFF,0x7F,0x7F,
                                                     0xFF,0xFF,0x7F,0x7F,
                                                     0x7F,0x7F,0xFF,0xFF,
                                                     0x7F,0x7F,0xFF,0xFF};
@@ -571,10 +571,10 @@ namespace hgl
             {
                 const uint8 blue_white_grid[16][3]=
                 {
-                    255,255,255,    255,255,255,    61,174,233,        61,174,233,
-                    255,255,255,    255,255,255,    61,174,233,        61,174,233,
-                    61,174,233,    61,174,233,        255,255,255,    255,255,255,
-                    61,174,233,    61,174,233,        255,255,255,    255,255,255
+                    255,255,255,    255,255,255,     61,174,233,     61,174,233,
+                    255,255,255,    255,255,255,     61,174,233,     61,174,233,
+                     61,174,233,     61,174,233,    255,255,255,    255,255,255,
+                     61,174,233,     61,174,233,    255,255,255,    255,255,255
                 };
 
                 BlueWhiteGrid=CreateTexture2D(4,4,(void *)blue_white_grid,48,HGL_SF_RGB8,HGL_RGB8);

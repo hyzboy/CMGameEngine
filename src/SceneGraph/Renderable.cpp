@@ -67,13 +67,13 @@ namespace hgl
             if(!va)return(false);
 
             if(mtc<mtcDiffuse||mtc>=mtcMax
-             ||mtc==mtcNormal                    //法线贴图不需要指定坐标
+             ||mtc==mtcNormal                   //法线贴图不需要指定坐标
              ||mtc==mtcTangent                  //切线贴图不需要指定坐标
-             ||mtc==mtcPalette                    //调色板不需要指定坐标
-             ||mtc==mtcShadow)                    //阴影贴图不需要指定坐标
+             ||mtc==mtcPalette                  //调色板不需要指定坐标
+             ||mtc==mtcShadow)                  //阴影贴图不需要指定坐标
              return(false);
 
-            if(vbt<vbtDiffuseTexCoord)    //超出最大贴图数量
+            if(vbt<vbtDiffuseTexCoord)          //超出最大贴图数量
              return(false);
 
             TextureChannels[mtc]=vbt;
