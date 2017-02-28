@@ -292,28 +292,23 @@ namespace hgl
                 if(state->vertex_color)                    //使用顶点颜色
                 {
                     code.add_in_color();
-                    code.add();
                 }
                 else
                 if(state->color_material)                //使用独立颜色传入
                 {
                     code.set_color_material();            //使用材质颜色
-                    code.add();
                 }
             }
 
             //灯光
             if(state->light_mode>HGL_NONE_LIGHT)
             {
-                code.add();
-
                 //法线
                 //法线无论那一种方式传入，都必须在vertex shader中乘上mv_matrix
 
                 if(state->vertex_normal)                //使用顶点法线
                 {
                     code.add_in_normal();
-                    code.add();
 
                     //光照
                     code.set_light_mode(state->light_mode);
@@ -331,7 +326,6 @@ namespace hgl
                         }
 
                         code.add_sun_light();
-                        code.add();
                     }
                 }
 

@@ -272,7 +272,7 @@ namespace hgl
                     {
                         pos_str.Strcat("vec4(");
 
-                        if(height_axis==HGL_AXIS_NONE)                            //非高度图
+                        if(height_axis==HGL_AXIS_NONE)                          //非高度图
                         {
                             pos_str.Strcat(HGL_VS_VERTEX ",0.0,1.0);\n");
                         }
@@ -332,14 +332,14 @@ namespace hgl
  //                    add("\tMVNormal=normalize(" HGL_VS_NORMAL "*" HGL_VS_NORMAL_MATRIX ");\n\n");
  //#endif//HGL_MATRIX_LEFT
 
-                    add("\t" HGL_FS_NORMAL "=normalize(" HGL_VS_NORMAL "*" HGL_VS_NORMAL_MATRIX ");\n\n");
+                    add("\t" HGL_FS_NORMAL "=normalize(" HGL_VS_NORMAL "*" HGL_VS_NORMAL_MATRIX ");\n");
 
                     //灯光
                     if(light_mode==HGL_VERTEX_LIGHT)
                     {
                         if(sun_light)
                         {
-                            add("\n\t" HGL_SUN_LIGHT_INTENSITY "=max(dot(normalize(" HGL_VS_NORMAL "*" HGL_VS_NORMAL_MATRIX ")," HGL_SUN_LIGHT_DIRECTION "),0.0);");
+                            add("\n\t" HGL_SUN_LIGHT_INTENSITY "=max(dot(" HGL_FS_NORMAL "," HGL_SUN_LIGHT_DIRECTION "),0.0);");
                         }
                     }
                 }
@@ -380,20 +380,17 @@ namespace hgl
             if(state->mvp)
             {
                 code.add_mvp(((state->vertex_normal||state->normal_map)&&state->light_mode>HGL_NONE_LIGHT)?true:false);        //需要法线,则必须传modelview
-                code.add();
             }
 
             //顶点
             {
                 code.add_in_vertex(state->vertex_coord);
-                code.add();
             }
 
             //法线
             if(state->vertex_normal)                //使用顶点法线
             {
                 code.add_in_normal();
-                code.add();
 
                 //灯光
                 code.set_light_mode(state->light_mode);
@@ -404,7 +401,6 @@ namespace hgl
             if(state->vertex_color)                 //使用顶点颜色
             {
                 code.add_in_color(state->vertex_pixel_compoment);
-                code.add();
 
                 if(state->color_material)            //使用颜色材质传入,但没顶点颜色,也无需使用材质颜色
                 {
