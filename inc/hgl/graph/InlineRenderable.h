@@ -25,6 +25,8 @@ namespace hgl
 										  const VertexBufferType &,
 										  const RectScope2f &);										///<创建一个带纹理的2D平面矩形的可渲染数据
 
+        VertexArray *CreateRenderablePlane(bool use_normal, const VertexBufferType tex_coord_vbt);  ///<创建一个2D平面
+
 		VertexArray *CreateRenderablePlaneGrid(	const Vector3f &,									///<创建一个平面网格的可渲染数据
 												const Vector3f &,
 												const Vector3f &,

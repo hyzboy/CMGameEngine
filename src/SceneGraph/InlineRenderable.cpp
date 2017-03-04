@@ -225,6 +225,32 @@ namespace hgl
             return(obj);
         }
 
+        VertexArray *CreateRenderablePlane(bool use_normal, const VertexBufferType tex_coord_vbt)
+        {
+            const float xy_vertices [] = { -0.5f,-0.5f,0.0f,  +0.5f,-0.5f,0.0f,    -0.5f,+0.5f,0.0f,   +0.5f,+0.5f,0.0f};
+            const float xy_normals  [] = {  0.0f, 0.0f,1.0f,   0.0f, 0.0f,1.0f,     0.0f, 0.0f,1.0f,    0.0f, 0.0f,1.0f };
+            const float xy_tangents [] = {  1.0f, 0.0f,0.0f,   1.0f, 0.0f,0.0f,     1.0f, 0.0f,0.0f,    1.0f, 0.0f,0.0f };
+            const float xy_texCoords[] = {  0.0f, 0.0f,        1.0f,0.0f,           0.0f,1.0f,          1.0f, 1.0f};
+            const uint16 xy_indices [] = {  0, 1, 2, 1, 3, 2 };
+
+            VertexArray *obj=new VertexArray(HGL_PRIM_TRIANGLES);
+
+            obj->SetVertex(new VB3f(12,xy_vertices));
+
+            if(use_normal)
+            {
+                obj->SetNormal(new VB3f(12,xy_normals));
+//                obj->SetTangent(new VB3f(12,xy_tangents));
+            }
+
+            if (tex_coord_vbt != vbtNone)
+                obj->SetVertexBuffer(tex_coord_vbt,new VB2f(8,xy_texCoords));
+
+            obj->SetIndex(new VB1u16(6,xy_indices));
+
+            return obj;
+        }
+
         /**
         * 创建一个立方体的可渲染数据
         * @param use_normal 是否使用法线和切线数据(默认不使用)
