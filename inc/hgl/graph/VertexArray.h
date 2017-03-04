@@ -87,7 +87,7 @@ namespace hgl
                 return(true);
             }
             bool                        SetNormal           (VertexBufferBase *vb){return SetVertexBuffer(vbtNormal,vb);}           ///<设置渲染顶点法线数据
-            bool                        SetTangents         (VertexBufferBase *vb){return SetVertexBuffer(vbtTangent,vb);}          ///<设置渲染顶点切线数据
+            bool                        SetTangent          (VertexBufferBase *vb){return SetVertexBuffer(vbtTangent,vb);}          ///<设置渲染顶点切线数据
             bool                        SetSecondColor      (VertexBufferBase *vb){return SetVertexBuffer(vbtSecondColor,vb);}      ///<设置顶点第二颜色数据
             bool                        SetFogCoord         (VertexBufferBase *vb){return SetVertexBuffer(vbtFogCoord,vb);}         ///<设置顶点雾数据
 

@@ -340,6 +340,12 @@ namespace hgl
                         if(sun_light)
                         {
                             add("\n\t" HGL_SUN_LIGHT_INTENSITY "=max(dot(" HGL_FS_NORMAL "," HGL_SUN_LIGHT_DIRECTION "),0.0);");
+
+                            //未完成,不可用
+                            //add("\n"
+                            //    "\tif(" HGL_SUN_LIGHT_INTENSITY ">0.0)\n"
+                            //    "\t\tfloat intSpec=max(dot(normalize(" HGL_SUN_LIGHT_DIRECTION "+normalize(-vec3(" HGL_VS_MODELVIEW_MATRIX "*" HGL_VS_VERTEX ")))," HGL_FS_NORMAL "),0.0);"
+                            //    );
                         }
                     }
                 }
