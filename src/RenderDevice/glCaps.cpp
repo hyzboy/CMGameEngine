@@ -113,9 +113,9 @@ namespace hgl
                     LOG_INFO(UTF8String(i?"                ":"    Extensions: ")+UTF8String((char *)glGetStringi(GL_EXTENSIONS,i)));
                 }
 
-                PutOpenGLFloatRange     (OS_TEXT("                        GL_POINT_SIZE_RANGE"),GL_POINT_SIZE_RANGE);
+                PutOpenGLFloatRange  (OS_TEXT("                        GL_POINT_SIZE_RANGE"),GL_POINT_SIZE_RANGE);
                 PutOpenGLFloatValue  (OS_TEXT("                  GL_POINT_SIZE_GRANULARITY"),GL_POINT_SIZE_GRANULARITY);
-                PutOpenGLFloatRange     (OS_TEXT("                        GL_LINE_WIDTH_RANGE"),GL_LINE_WIDTH_RANGE);
+                PutOpenGLFloatRange  (OS_TEXT("                        GL_LINE_WIDTH_RANGE"),GL_LINE_WIDTH_RANGE);
                 PutOpenGLFloatValue  (OS_TEXT("                  GL_LINE_WIDTH_GRANULARITY"),GL_LINE_WIDTH_GRANULARITY);
                 PutOpenGLIntegerValue(OS_TEXT("                        GL_MAX_TEXTURE_SIZE"),GL_MAX_TEXTURE_SIZE);
                 PutOpenGLIntegerValue(OS_TEXT("               GL_MAX_CUBE_MAP_TEXTURE_SIZE"),GL_MAX_CUBE_MAP_TEXTURE_SIZE);

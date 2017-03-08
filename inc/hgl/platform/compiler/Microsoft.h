@@ -7,7 +7,9 @@
 #if _MSC_VER < 1900                            //Visual C++ 2015(19)
     #error Please upgrade your compiler or development tools to Microsoft C/C++ 19.0 (Visual C++ 2015) or later.
 #else
-    #if _MSC_VER == 1900
+    #if _MSC_VER == 1910
+        #define HGL_LIB_COMPILER_VERSION    OS_TEXT("19.1")        //Visual C++ 2017
+    #elif _MSC_VER == 1900
         #define HGL_LIB_COMPILER_VERSION    OS_TEXT("19")        //Visual C++ 2015
     #endif//_MSC_VER
 #endif//_MSC_VER
