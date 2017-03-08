@@ -37,9 +37,9 @@
 #endif
 
 // If MATH_ENABLE_WINXP_SUPPORT is defined, we avoid using Windows symbols that require Vista or newer (e.g. GetTickCount64)
-#if !defined(WIN8) /* Win8 cannot build with XP support - GetTickCount() doesn't exist. */
-#define MATH_ENABLE_WINXP_SUPPORT
-#endif
+//#if !defined(WIN8) /* Win8 cannot build with XP support - GetTickCount() doesn't exist. */
+//#define MATH_ENABLE_WINXP_SUPPORT
+//#endif
 
 // If MATH_ASSERT_ON_ASSUME is defined, assume() resolves directly to assert().
 // When not defined, assume() prints out an error if the condition fails, but continues
@@ -76,7 +76,7 @@
 // If MATH_ENABLE_STL_SUPPORT is defined, MathGeoLib utilizes STL data structures. Otherwise,
 // features requiring STL are disabled (but the library can still be built).
 #ifndef MATH_ENABLE_STL_SUPPORT
-//#define MATH_ENABLE_STL_SUPPORT
+#define MATH_ENABLE_STL_SUPPORT
 #endif
 
 // If MATH_TINYXML_INTEROP is defined, MathGeoLib integrates with TinyXML to provide
