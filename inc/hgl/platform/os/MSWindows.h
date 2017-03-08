@@ -25,7 +25,7 @@
 #define HGL_PLUGIN_FUNC					extern "C" __declspec(dllexport)				//插件函数定义
 
 #define HGL_DIRECTORY_SEPARATOR 		OS_TEXT('\\')									//目录分隔符
-#define HGL_LINE_END					OS_TEXT("\n\r")									//换行符
+#define HGL_LINE_END					OS_TEXT("\r\n")									//换行符
 #define HGL_LINE_END_SIZE				2												//换行符长度
 
 #define HGL_MAX_PATH					MAX_PATH
