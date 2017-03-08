@@ -10,10 +10,6 @@ namespace hgl
 	{
     #define LOG_BUF_SIZE    4096
 
-#ifndef LOGINFO_THREAD_MUTEX
-		static HGL_THREAD char log_buf[HGL_MAX_PATH];		//HGL_THREAD关键字代表使用thread-local storage，即这个数据会每个线程有一份，所以无需加锁
-#endif//LOGINFO_THREAD_MUTEX
-
 		/**
 		* unix控制台日志插件接口
 		*/
