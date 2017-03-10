@@ -71,6 +71,23 @@ namespace hgl
                 add("#version "+UTF8String(ver)+" core\n\n");
             }
 
+			void shader_stringlist::add_texture_smooth()
+            {//高质量纹理采样,对应HGL_FILTER_SMOOTH(源代码参考自OpenGL SB7，注：原文代码有bug)
+                add("vec4 texture_smooth(sampler2D samp, vec2 tc)\n"
+                    "{\n"
+                    "\n"
+                    "\tvec2 texSize = textureSize(samp, 0);\n"
+                    "\tvec2 uvScaled = tc * texSize + 0.5;\n"
+                    "\tvec2 uvInt = floor(uvScaled);\n"
+                    "\tvec2 uvFrac = fract(uvScaled);\n"
+                    "\n"
+                    "\tuvFrac = smoothstep(0.0, 1.0, uvFrac);\n"
+                    "\tvec2 uv = (uvInt + uvFrac - 0.5) / texSize;\n"
+                    "\n"
+                    "\treturn texture(samp, uv);\n"
+                    "}\n\n");
+            }
+
             void shader_stringlist::add_normal_3to2()
             {
                 add("vec2 normal_3to2(vec3 normal)\n"
