@@ -50,6 +50,8 @@ namespace hgl
 
 				UTF8String shader_string;
 
+                int glsl_version;
+
 			public:
 
 				shader_stringlist(){}

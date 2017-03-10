@@ -43,7 +43,7 @@ namespace hgl
 		//贴图过滤模式
 		#define HGL_FILTER_NEAREST					GL_NEAREST
 		#define HGL_FILTER_LINEAR					GL_LINEAR
-        #define HGL_FILTER_SMOOTH                   (GL_LINEAR+1)               //OpenGL 4.0
+        #define HGL_FILTER_SMOOTH                   (GL_LINEAR+1)               //(1.此功能为自行实现，使用GL_LINEAR+1只是为了区分。2.OpenGL 4.0以下使用性能较差)
 
 		#define HGL_FILTER_NEAREST_MIPMAP_NEAREST	GL_NEAREST_MIPMAP_NEAREST
 		#define HGL_FILTER_LINEAR_MIPMAP_NEAREST	GL_LINEAR_MIPMAP_NEAREST

@@ -68,11 +68,20 @@ namespace hgl
 
             void shader_stringlist::add_version(int ver)
             {
+                glsl_version=ver;
+
                 add("#version "+UTF8String(ver)+" core\n\n");
             }
 
 			void shader_stringlist::add_texture_smooth()
-            {//高质量纹理采样,对应HGL_FILTER_SMOOTH(源代码参考自OpenGL SB7，注：原文代码有bug，同时smoothstep函数需要OpenGL 4.0)
+            {//高质量纹理采样,对应HGL_FILTER_SMOOTH
+                if(glsl_version<400)                                        //GLSL 4.0以下不支持smoothstep，所以使用自行实现
+                add("float smoothstep(float edge0,float edge1,float x)\n"
+                    "{\n"
+                    "\tx=clamp((x-edge0)/(edge1-edge0),0.0,1.0);\n"
+                    "\treturn x*x*(3.0-2.0*x);\n"
+                    "}\n\n");
+
                 add("vec4 texture_smooth(sampler2D samp, vec2 tc)\n"
                     "{\n"
                     "\n"
