@@ -72,7 +72,7 @@ namespace hgl
             }
 
 			void shader_stringlist::add_texture_smooth()
-            {//高质量纹理采样,对应HGL_FILTER_SMOOTH(源代码参考自OpenGL SB7，注：原文代码有bug)
+            {//高质量纹理采样,对应HGL_FILTER_SMOOTH(源代码参考自OpenGL SB7，注：原文代码有bug，同时smoothstep函数需要OpenGL 4.0)
                 add("vec4 texture_smooth(sampler2D samp, vec2 tc)\n"
                     "{\n"
                     "\n"
