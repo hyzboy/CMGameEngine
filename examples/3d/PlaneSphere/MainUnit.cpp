@@ -7,7 +7,7 @@
 using namespace hgl;
 using namespace hgl::graph;
 
-const LightMode light_mode=HGL_PIXEL_LIGHT;     //光照模型
+const LightMode light_mode=HGL_VERTEX_LIGHT;     //光照计算模式
 
 const Vector3f  eye(100,70,80),
                 center(0,0,0),
@@ -73,12 +73,12 @@ public:
         plane_obj = new Renderable(plane_va, plane_mtl);
 
 #ifdef _DEBUG    //debug模式下将shader保存成文件
-        plane_obj->AutoCreateShader(true, nullptr, OS_TEXT("Plane"));   //自动创建shader
+        plane_obj->AutoCreateShader(true, nullptr, OS_TEXT("Plane"));   ///<自动创建shader
 #else
-        plane_obj->AutoCreateShader();                                  //自动创建shader
+        plane_obj->AutoCreateShader();                                  ///<自动创建shader
 #endif//_DEBUG
 
-        plane_mat = scale(w,h, 1);                                      //平面尺寸1x1太小，放大到w*h
+        plane_mat = scale(w,h, 1);                                      ///<平面尺寸1x1太小，放大到w*h
     }
 
     void CreateCube(float size, float r, float g, float b)
@@ -94,9 +94,9 @@ public:
         cube_obj=new Renderable(cube_va, cube_mtl);                     ///<创建可渲染对象
 
 #ifdef _DEBUG    //debug模式下将shader保存成文件
-        cube_obj->AutoCreateShader(true, nullptr, OS_TEXT("Cube"));                    ///<自动生成Cube1渲染所需的shader
+        cube_obj->AutoCreateShader(true, nullptr, OS_TEXT("Cube"));     ///<自动生成Cube1渲染所需的shader
 #else
-        cube_obj->AutoCreateShader();        //默认参数是true,nullptr
+        cube_obj->AutoCreateShader();                                   ///<默认参数是true,nullptr
 #endif//_DEBUG
 
         cube_mat=scale(size,size,size);
@@ -104,15 +104,15 @@ public:
 
     void CreateSphere(const Vector3f &center, float radius, float r, float g, float b)
     {
-        sphere_va = CreateRenderableSphere(20);
+        sphere_va = CreateRenderableSphere(32);
 
         sphere_mtl = new Material;
 
         sphere_mtl->SetColorMaterial(true);
         sphere_mtl->SetColor(r,g,b,1.0f);
-        sphere_mtl->SetLightMode(light_mode);                          ///<使用顶点级别的光照
+        sphere_mtl->SetLightMode(light_mode);
 
-        sphere_obj = new Renderable(sphere_va,sphere_mtl);                  ///<多个可渲染对像使用同一个顶点数据
+        sphere_obj = new Renderable(sphere_va,sphere_mtl);
 
         sphere_obj->AutoCreateShader(true, nullptr, OS_TEXT("Sphere"));
 

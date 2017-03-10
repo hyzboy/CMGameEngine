@@ -17,7 +17,7 @@ SpiralSphere::SpiralSphere(const Vector3f &up_vector)
                                 1.0f);
         sphere_mtl[i]->SetDrawMode(GL_FRONT_AND_BACK,GL_FILL);
 
-        sphere_mtl[i]->SetLightMode(HGL_PIXEL_LIGHT);                          ///<使用顶点级别的光照
+        sphere_mtl[i]->SetLightMode(HGL_VERTEX_LIGHT);                          ///<使用顶点级别的光照
 
 //        sphere_mtl[i]->SetTexture(mtcDiffuse,GrayWhiteGrid);
 
