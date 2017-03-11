@@ -42,7 +42,7 @@ namespace hgl
                 LOG_ERROR(OS_TEXT("glTexture2D::GetImage,fmt error =") + OSString(fmt));
                 return(-1);
             }
-            
+
             return _GetImage(data_pointer,fmt,level,width,height);
         }
 

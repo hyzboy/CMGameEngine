@@ -123,21 +123,21 @@ namespace hgl
 			line_size=(width*3+3)>>2;
 			line_size<<=2;
 
-			fp.Write("BM",2);
-			fp.WriteUint32(54+line_size*height);
-			fp.WriteUint32(0);
-			fp.WriteUint32(54);
-			fp.WriteUint32(40);
-			fp.WriteUint32(width);
-			fp.WriteUint32(height);
-			fp.WriteUint16(1);
-			fp.WriteUint16(24);
-			fp.WriteUint32(0);
-			fp.WriteUint32(line_size*height);
-			fp.WriteUint32(10000);
-			fp.WriteUint32(10000);
-			fp.WriteUint32(0xFFFFFF+1);	//使用所有的颜色
-			fp.WriteUint32(0xFFFFFF+1);	//使用所有的颜色
+			fp.Write("BM",2);                            //0
+			fp.WriteUint32(54+line_size*height);         //2
+			fp.WriteUint32(0);                           //6
+			fp.WriteUint32(54);                          //10
+			fp.WriteUint32(40);                          //14
+			fp.WriteUint32(width);                       //18
+			fp.WriteUint32(height);                      //22
+			fp.WriteUint16(1);                           //26
+			fp.WriteUint16(24);                          //28
+			fp.WriteUint32(0);                           //30
+			fp.WriteUint32(line_size*height);            //34
+			fp.WriteUint32(10000);                       //38
+			fp.WriteUint32(10000);                       //42
+			fp.WriteUint32(0xFFFFFF+1);	                 //46 使用所有的颜色
+			fp.WriteUint32(0xFFFFFF+1);	                 //50 使用所有的颜色
 
 			row=height;
 			p=data;
