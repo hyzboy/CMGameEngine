@@ -172,6 +172,7 @@ namespace hgl
 
 			state.color_material		= material->GetColorMaterial();
 			state.alpha_test			= material->GetAlphaTest()>0;
+            state.hsv_clamp_color       = material->GetHSVClampColor().a>0;
 			state.outside_discard		= material->GetOutsideDiscard();
 
 			state.vertex_pixel_compoment= va->GetVertexPixelCompoment();

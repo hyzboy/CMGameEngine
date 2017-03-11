@@ -31,8 +31,13 @@ namespace hgl
 		#define HGL_FS_FRAG_COLOR				"FragColor"
 
 		#define HGL_FS_ALPHA_TEST				"AlphaTest"
+        #define HGL_FS_HSV_CLAMP_COLOR          "HSVClampColor"
 
 		#define HGL_FS_TEXCOORD					"FragmentTexCoord_"
+
+        //仅在fs中使用的
+        #define HGL_FS_DIFFUSE_COLOR            "DiffuseColor"
+        #define HGL_FS_ALPHA                    "Alpha"
 
         //太阳光数据,此数据即可能在VS,也可能在FS
         #define HGL_SUN_LIGHT_DIRECTION         "SunLightDirection"     //太阳光方向

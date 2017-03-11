@@ -12,9 +12,6 @@ namespace hgl
     {
         namespace shadergen
         {
-            #define HGL_FS_DIFFUSE_COLOR    "DiffuseColor"
-            #define HGL_FS_ALPHA            "Alpha"
-
             fs::fs()
             {
                 in_normal=sitNone;
@@ -28,6 +25,7 @@ namespace hgl
                 hgl_zero(mtc_tex_type);
 
                 alpha_test=false;
+                hsv_clamp_color=false;
                 outside_discard=false;
             }
 
@@ -41,6 +39,13 @@ namespace hgl
                 alpha_test=true;
 
                 add_uniform_float(HGL_FS_ALPHA_TEST);
+            }
+
+            void fs::add_hsv_clamp_color()
+            {
+                hsv_clamp_color=true;
+
+                add_uniform_vec4(HGL_FS_HSV_CLAMP_COLOR);
             }
 
             void fs::add_in_normal()
@@ -209,6 +214,11 @@ namespace hgl
                         add("\tif("+fin_color+U8_TEXT(".a<" HGL_FS_ALPHA_TEST ")discard;\n"));
 
                     add();
+                }
+
+                if(hsv_clamp_color)
+                {
+                    add(U8_TEXT("\tif(hsv_clamp(")+fin_color+U8_TEXT(".rgb))discard;\n"));
                 }
 
                 if(in_normal)        //计算法线
@@ -381,8 +391,23 @@ namespace hgl
                 code.add();
             }
 
+            //color test
+            if(state->hsv_clamp_color)
+            {
+                code.add_hsv_clamp_color();
+                code.add();
+            }
+
             code.add_frag_color();                    //指定颜色输出
             code.add();
+
+            if(state->hsv_clamp_color)
+            {
+                code.add_rgb2hsv();
+                code.add_rgb2lum();
+                code.add_hsv_clamp();
+                code.add();
+            }
 
             //if(state->render_mode)                    //是否是延迟渲染
             //    code.add_gbuffer_encode();

@@ -27,6 +27,7 @@ namespace hgl
 				UTF8String tex_coord[mtcMax];
 
 				bool alpha_test;
+                bool hsv_clamp_color;
 				bool outside_discard;
 
 			public:
@@ -36,6 +37,7 @@ namespace hgl
 				void add_frag_color();
 
 				void add_alpha_test();
+                void add_hsv_clamp_color();
 				void open_outside_discard(){outside_discard=true;}
 
 			public:		//法线

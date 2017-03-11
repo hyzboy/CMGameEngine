@@ -114,6 +114,8 @@ namespace hgl
 
 			float		alpha_test;																	///<alpha测试值,0:全部不显示,1:全部显示
 
+			Color4f     hsv_clamp_color;                                                            ///<HSV颜色测试
+
 			bool		outside_discard;															///<贴图出界放弃
 
 			bool		smooth;																		///<是否平滑(未用)
@@ -171,6 +173,7 @@ namespace hgl
 			void SetDepthMask		(bool dm)							{depth_mask=dm;}								///<设置深度遮罩
 
 			void SetAlphaTest		(float at)							{alpha_test=at;}								///<设置Alpha测试
+			void SetHSVClampColor   (const Color4f &f)                  {hsv_clamp_color=f;}                            ///<设置Color裁剪
 			void SetOutsideDiscard	(bool od)							{outside_discard=od;}							///<设置贴图出界放弃
 
 			void SetBlend			(bool enable)						{blend=enable;}									///<设定是否开启混合
@@ -216,6 +219,9 @@ namespace hgl
 			bool			GetDepthMask()const					{return depth_mask;}				///<取得是否做深度遮罩
 
 			float			GetAlphaTest()const					{return alpha_test;}				///<取得Alpha测试值
+
+			const Color4f & GetHSVClampColor()const             {return hsv_clamp_color;}
+
 			bool			GetOutsideDiscard()const			{return outside_discard;}			///<取得贴图是否出界放弃
 
 			bool			GetBlend(BlendMode &bm)const		{bm=blend_mode;return blend;}		///<取得混合数据

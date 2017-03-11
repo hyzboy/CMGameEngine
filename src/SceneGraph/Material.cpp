@@ -31,6 +31,7 @@ namespace hgl
             depth_mask=true;
 
             alpha_test=0.0f;
+            hsv_clamp_color.Zero();
 
             outside_discard=false;
 

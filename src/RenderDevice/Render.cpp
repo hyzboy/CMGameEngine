@@ -26,7 +26,7 @@ namespace hgl
         {
             void PutOpenGLInfo();    //输出OpenGL特性信息
             void InitScissor();        //初始化裁剪区
-            void InitTexture();        //初始化贴图            
+            void InitTexture();        //初始化贴图
             void CloseTexture();    //关闭贴图
             void InitBuffer();        //初始化缓冲区
             void InitFace();        //初始化面处理
@@ -61,7 +61,7 @@ namespace hgl
 
             InitTextureAPI();
             InitVertexBufferAPI();
-            
+
             InitScissor();
             InitTexture();
             InitBuffer();
@@ -204,6 +204,12 @@ namespace hgl
                 glsl->Shader::SetUniform1f(HGL_FS_ALPHA_TEST,mat->GetAlphaTest());
             }
 
+            //HSV Clamp Color
+            if(state->hsv_clamp_color)
+            {
+                glsl->Shader::SetUniform4fv(HGL_FS_HSV_CLAMP_COLOR,mat->GetHSVClampColor());
+            }
+
             //灯光
             //if(state->light_mode>HGL_NONE_LIGHT)
             //{
@@ -273,7 +279,7 @@ namespace hgl
                         static Vector3f sun_light_direction(rand(),rand(),rand());
 
                         glsl->Shader::SetUniform3fv(HGL_SUN_LIGHT_DIRECTION, sun_light_direction.Normalized());
-                    }       
+                    }
                 }
             }
             else    //没modelview时将projection传为mvp
