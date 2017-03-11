@@ -101,7 +101,7 @@ public:
     {
         Color4f clamp_color;
 
-        clamp_color.Set4i(88,140, 90,16);
+        clamp_color.Set4i(88,128,28,96);     //HS,HS
 
         SetClearColor(0,0,0);
 

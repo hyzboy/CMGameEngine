@@ -404,7 +404,7 @@ namespace hgl
             if(state->hsv_clamp_color)
             {
                 code.add_rgb2hsv();
-                code.add_rgb2lum();
+//                code.add_rgb2lum();
                 code.add_hsv_clamp();
                 code.add();
             }
