@@ -16,9 +16,9 @@ namespace hgl
 		class LogUnixConsole:public Logger
 		{
 			char endline;
-
-#ifdef LOGINFO_THREAD_MUTEX
 			char log_buf[HGL_MAX_PATH];
+            
+#ifdef LOGINFO_THREAD_MUTEX
 			ThreadMutex mutex;
 #endif//LOGINFO_THREAD_MUTEX
 
