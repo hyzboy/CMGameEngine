@@ -19,10 +19,10 @@ namespace hgl
             hashMD5,					///<最常用的HASH算法
 
             hashSHA1,					///<较MD5更为安全，但计算较慢
-            hashSHA224,
-            hashSHA256,
-            hashSHA384,
-            hashSHA512,
+//             hashSHA224,
+//             hashSHA256,
+//             hashSHA384,
+//             hashSHA512,
 
             hashEnd
         };//enum HASH_ALGORITHML
@@ -68,15 +68,15 @@ namespace hgl
             CompOperator(const HashCode<SIZE> &,CompFunc)
         };//template<int SIZE> struct HashCode
 
-        typedef HashCode<4> CRC32Code;
-        typedef HashCode<4> Adler32Code;
-        typedef HashCode<16> MD5Code;
-        typedef HashCode<16> MD4Code;
-        typedef HashCode<20> SHA1Code;
-        typedef HashCode<28> SHA224Code;
-        typedef HashCode<32> SHA256Code;
-        typedef HashCode<48> SHA384Code;
-        typedef HashCode<64> SHA512Code;
+        typedef HashCode<4>     HashCodeCRC32;
+        typedef HashCode<4>     HashCodeAdler32;
+        typedef HashCode<16>    HashCodeMD5;
+        typedef HashCode<16>    HashCodeMD4;
+        typedef HashCode<20>    HashCodeSHA1;
+//         typedef HashCode<28>    HashCodeSHA224;
+//         typedef HashCode<32>    HashCodeSHA256;
+//         typedef HashCode<48>    HashCodeSHA384;
+//         typedef HashCode<64>    HashCodeSHA512;
 
         const int hash_code_bytes[]={0,4,4,16,16,20,28,32,48,64};		//hash码长度
 
@@ -108,10 +108,10 @@ namespace hgl
         HGL_CREATE_HASH_FUNC(MD4)
         HGL_CREATE_HASH_FUNC(MD5)
         HGL_CREATE_HASH_FUNC(SHA1)
-        HGL_CREATE_HASH_FUNC(SHA224)
-        HGL_CREATE_HASH_FUNC(SHA256)
-        HGL_CREATE_HASH_FUNC(SHA384)
-        HGL_CREATE_HASH_FUNC(SHA512)
+//         HGL_CREATE_HASH_FUNC(SHA224)
+//         HGL_CREATE_HASH_FUNC(SHA256)
+//         HGL_CREATE_HASH_FUNC(SHA384)
+//         HGL_CREATE_HASH_FUNC(SHA512)
 
 #undef HGL_CREATE_HASH_FUNC
 
@@ -128,10 +128,10 @@ namespace hgl
                 CreateMD4Hash,
                 CreateMD5Hash,
                 CreateSHA1Hash,
-                CreateSHA224Hash,
-                CreateSHA256Hash,
-                CreateSHA384Hash,
-                CreateSHA512Hash
+//                 CreateSHA224Hash,
+//                 CreateSHA256Hash,
+//                 CreateSHA384Hash,
+//                 CreateSHA512Hash
             };
 
             return func[ha-1]();
@@ -182,10 +182,10 @@ namespace hgl
                 CountHash<hashMD4		>,
                 CountHash<hashMD5		>,
                 CountHash<hashSHA1		>,
-                CountHash<hashSHA224	>,
-                CountHash<hashSHA256	>,
-                CountHash<hashSHA384	>,
-                CountHash<hashSHA512	>
+//                 CountHash<hashSHA224	>,
+//                 CountHash<hashSHA256	>,
+//                 CountHash<hashSHA384	>,
+//                 CountHash<hashSHA512	>
             };
 
             return func[ha-1](data,size,hash_code);
@@ -243,21 +243,21 @@ namespace hgl
 
             const CountHashFunc func[hashEnd-1]=
             {
-                CountHashStr<hashAdler32	>,
-                CountHashStr<hashCRC32		>,
-                CountHashStr<hashMD4		>,
-                CountHashStr<hashMD5		>,
-                CountHashStr<hashSHA1		>,
-                CountHashStr<hashSHA224		>,
-                CountHashStr<hashSHA256		>,
-                CountHashStr<hashSHA384		>,
-                CountHashStr<hashSHA512		>
+                CountHashStr<hashAdler32>,
+                CountHashStr<hashCRC32	>,
+                CountHashStr<hashMD4	>,
+                CountHashStr<hashMD5	>,
+                CountHashStr<hashSHA1	>,
+//                 CountHashStr<hashSHA224	>,
+//                 CountHashStr<hashSHA256	>,
+//                 CountHashStr<hashSHA384	>,
+//                 CountHashStr<hashSHA512	>
             };
 
             return func[ha-1](data,size,hash_str,litter);
         }
 
-#define HGL_COUNT_HASH_FUNC(name)   inline bool Count##name(const void *data, int size, ##name##Code &hc) { return CountHash<hash##name>(data, size, &hc); }    \
+#define HGL_COUNT_HASH_FUNC(name)   inline bool Count##name(const void *data, int size, HashCode##name &hc) { return CountHash<hash##name>(data, size, &hc); }    \
                                     inline bool Count##name(const void *data, int size, UTF8String &hash_str, bool litter = true) { return CountHashStr<hash##name>(data, size, hash_str, litter); }  \
                                     inline bool Count##name(const UTF8String &str, UTF8String &hash_str, bool litter = true) { return CountHashStr<hash##name>(str.c_str(), str.Length(), hash_str, litter); }
 
@@ -266,10 +266,10 @@ namespace hgl
         HGL_COUNT_HASH_FUNC(MD4)
         HGL_COUNT_HASH_FUNC(MD5)
         HGL_COUNT_HASH_FUNC(SHA1)
-        HGL_COUNT_HASH_FUNC(SHA224)
-        HGL_COUNT_HASH_FUNC(SHA256)
-        HGL_COUNT_HASH_FUNC(SHA384)
-        HGL_COUNT_HASH_FUNC(SHA512)
+//         HGL_COUNT_HASH_FUNC(SHA224)
+//         HGL_COUNT_HASH_FUNC(SHA256)
+//         HGL_COUNT_HASH_FUNC(SHA384)
+//         HGL_COUNT_HASH_FUNC(SHA512)
 
 #undef HGL_COUNT_HASH_FUNC
 
@@ -280,7 +280,7 @@ namespace hgl
         * @param hash_code 计算后的hash存放处
         * @return 是否计算成功
         */
-        bool GetFileHash(const OSString &,HASH_ALGORITHML ha,void *hash_code);
+        bool GetFileHash(const OSString &filename,HASH_ALGORITHML ha,void *hash_code);
 
         /**
         * 取得一个文件的hash值
@@ -290,7 +290,7 @@ namespace hgl
         * @param litter 小写字母
         * @return 是否计算成功
         */
-        bool GetFileHash(const OSString &,HASH_ALGORITHML ha,UTF8String &hash_str,bool litter=true);
+        bool GetFileHash(const OSString &filename,HASH_ALGORITHML ha,UTF8String &hash_str,bool litter=true);
     }//namespace util
 }//namespace hgl
 #endif//HGL_UTIL_HASH_INCLUDE
