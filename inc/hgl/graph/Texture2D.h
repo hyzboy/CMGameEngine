@@ -6,8 +6,6 @@ namespace hgl
 {
 	namespace graph
 	{
-        struct Texture2DData;
-
 		/**
 		* 2D贴图
 		*/
