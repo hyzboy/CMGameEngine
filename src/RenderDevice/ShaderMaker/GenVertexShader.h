@@ -3,7 +3,7 @@
 
 #include"ShaderStringList.h"
 #include<hgl/graph/Material.h>
-#include<hgl/graph/ColorFormat.h>
+#include<hgl/graph/PixelCompoment.h>
 namespace hgl
 {
 	namespace graph
@@ -16,6 +16,9 @@ namespace hgl
 				shader_in_type in_vertex_color;
 
 				bool color_material;
+
+                LightMode light_mode;
+                bool sun_light;
 
 				UTF8String vertex_color_to_vec4;
 
@@ -45,7 +48,7 @@ namespace hgl
 
 			protected:
 
-				int SetVertexColorFormat(ColorFormat);
+				int SetVertexPixelCompoment(PixelCompoment);
 
 			public:
 
@@ -72,7 +75,12 @@ namespace hgl
 
 				void set_color_material();
 
-				void add_in_color(ColorFormat fmt);
+				void add_in_color(PixelCompoment fmt);
+
+            public:     //灯光
+
+                void set_light_mode(const LightMode &);
+                void set_sun_light(bool);
 
 			public:		//纹理
 

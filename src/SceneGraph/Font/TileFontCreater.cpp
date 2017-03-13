@@ -1,21 +1,21 @@
-#include<hgl/graph/TileFont.H>
-#include<hgl/graph/Font.H>
-#include<hgl/graph/Render.H>
-#include<hgl/type/IndexData.H>
-#include"FontSourceWin.H"
+ï»¿#include<hgl/graph/TileFont.h>
+#include<hgl/graph/FontInfo.h>
+#include<hgl/graph/Render.h>
+#include<hgl/type/IndexData.h>
+#include"FontSourceWin.h"
 
 namespace hgl
 {
 	namespace graph
 	{
-		class FontSourceStorage:public IndexObject<Font,FontSource>
+		class FontSourceStorage:public IndexObject<FontInfo,FontSource>
 		{
-			FontSource *CreateObject(const Font &fnt)
+			FontSource *CreateObject(const FontInfo &fnt)
 			{
 				return(new WinBitmapFont(fnt));
 			}
 
-			void DeleteObject(const Font &,FontSource *source)
+			void DeleteObject(const FontInfo &,FontSource *source)
 			{
 				if(source)
 					delete source;
@@ -35,13 +35,13 @@ namespace hgl
 			FontStorage.Clear();
 		}
 
-		FontSource *GetFontSource(const Font &fnt)
+		FontSource *GetFontSource(const FontInfo &fnt)
 		{
 			FontSource *source;
 
 			if(FontStorage.Get(fnt,source))
 				return(source);
-			
+
 			source=new WinBitmapFont(fnt);
 
 			FontStorage.Add(fnt,source);
@@ -49,12 +49,12 @@ namespace hgl
 		}
 
 		/**
-		* Í¨¹ıÏµÍ³×ÖÌå´´½¨Ò»¸öTile×ÖÌå,×ÖÌå´óĞ¡ÒÔ½Ï´óµÄÎª×¼
-		* @param chs_fnt Ó¢ÎÄ×ÖÌå
-		* @param eng_fnt ÖĞÎÄ×ÖÌå
-		* @param count »º³åÇøÄÚ±£´æµÄ×Ö·û¸öÊı,-1±íÊ¾×Ô¶¯È¡(»á¸ù¾İÆÁÄ»´óĞ¡È¡×î´óÖµ)
+		* é€šè¿‡ç³»ç»Ÿå­—ä½“åˆ›å»ºä¸€ä¸ªTileå­—ä½“,å­—ä½“å¤§å°ä»¥è¾ƒå¤§çš„ä¸ºå‡†
+		* @param chs_fnt è‹±æ–‡å­—ä½“
+		* @param eng_fnt ä¸­æ–‡å­—ä½“
+		* @param count ç¼“å†²åŒºå†…ä¿å­˜çš„å­—ç¬¦ä¸ªæ•°,-1è¡¨ç¤ºè‡ªåŠ¨å–(ä¼šæ ¹æ®å±å¹•å¤§å°å–æœ€å¤§å€¼)
 		*/
-		TileFont *CreateTileFont(const Font &chs_fnt,const Font &eng_fnt,int count)
+		TileFont *CreateTileFont(const FontInfo &chs_fnt,const FontInfo &eng_fnt,int count)
 		{
 			int font_height;
 			int height;
@@ -70,12 +70,12 @@ namespace hgl
 			 ||chs_fnt.italic	||eng_fnt.italic)height+=height/4;
 
 			height+=3;
-			height-=height&3;						//´óĞ¡±ØĞëÄÜ±»4Õû³ı
+			height-=height&3;						//å¤§å°å¿…é¡»èƒ½è¢«4æ•´é™¤
 
 //			if(height<16)
 //				height=16;
 
-			if(count==-1)							//×Ô¶¯,°´ÆÁÄ»ÌîÂú×Ö¼ÆËã
+			if(count==-1)							//è‡ªåŠ¨,æŒ‰å±å¹•å¡«æ»¡å­—è®¡ç®—
 			{
 				int sw,sh;
 
@@ -94,19 +94,19 @@ namespace hgl
 		}
 
 		/**
-		* Í¨¹ıÏµÍ³×ÖÌå´´½¨Ò»¸öTile×ÖÌå
-		* @param chs_fontname ÖĞÎÄ×ÖÌåÃû³Æ
-		* @param eng_fontname Ó¢ÎÄ×ÖÌåÃû³Æ
-		* @param width ¿í,¿ÉÒÔÎª0,±íÊ¾Ä¬ÈÏ¡£
-		* @param height ¸ß
-		* @param bold ¼Ó´Ö,Ä¬ÈÏfalse
-		* @param italic Ğ±Ìå,Ä¬ÈÏfalse
-		* @param count »º³åÇøÄÚ±£´æµÄ×Ö·û¸öÊı
+		* é€šè¿‡ç³»ç»Ÿå­—ä½“åˆ›å»ºä¸€ä¸ªTileå­—ä½“
+		* @param chs_fontname ä¸­æ–‡å­—ä½“åç§°
+		* @param eng_fontname è‹±æ–‡å­—ä½“åç§°
+		* @param width å®½,å¯ä»¥ä¸º0,è¡¨ç¤ºé»˜è®¤ã€‚
+		* @param height é«˜
+		* @param bold åŠ ç²—,é»˜è®¤false
+		* @param italic æ–œä½“,é»˜è®¤false
+		* @param count ç¼“å†²åŒºå†…ä¿å­˜çš„å­—ç¬¦ä¸ªæ•°
 		*/
 		TileFont *CreateTileFont(const wchar_t *chs_fontname,const wchar_t *eng_fontname,int width,int height,bool bold,bool italic,int count)
 		{
-			Font chs_fnt(chs_fontname,width,height,bold,italic);
-			Font eng_fnt(eng_fontname,width,height,bold,italic);
+			FontInfo chs_fnt(chs_fontname,width,height,bold,italic);
+			FontInfo eng_fnt(eng_fontname,width,height,bold,italic);
 
 			return CreateTileFont(chs_fnt,eng_fnt,count);
 		}

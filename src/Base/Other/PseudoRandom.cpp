@@ -3,98 +3,98 @@
 
 namespace hgl
 {
-	/**
-	* 本类构造函数
-	* @param num 初始化的数据数量
-	*/
-	PseudoRandom::PseudoRandom(uint32 num)
-	{
-		data=nullptr;
-		Init(num);
-	}
+    /**
+    * 本类构造函数
+    * @param num 初始化的数据数量
+    */
+    PseudoRandom::PseudoRandom(uint32 num)
+    {
+        data=nullptr;
+        Init(num);
+    }
 
-	PseudoRandom::~PseudoRandom()
-	{
-		Clear();
-	}
+    PseudoRandom::~PseudoRandom()
+    {
+        Clear();
+    }
 
-	/**
-	* 初始化假随机数
-	* @param num 初始化的数据数量
-	*/
-	void PseudoRandom::Init(uint32 num)
-	{
-		Clear();
+    /**
+    * 初始化假随机数
+    * @param num 初始化的数据数量
+    */
+    void PseudoRandom::Init(uint32 num)
+    {
+        Clear();
 
-		if(num<64)
-			count=64;
-		else
-			count=power_to_2(num);
+        if(num<64)
+            count=64;
+        else
+            count=power_to_2(num);
 
-		data=new uint8[count];
+        data=new uint8[count];
 
-		Restart();
-	}
+        Restart();
+    }
 
-	void PseudoRandom::Restart()
-	{
-		if(!data)
-			return;
+    void PseudoRandom::Restart()
+    {
+        if(!data)
+            return;
 
-		const int size=count>>1;
-		uint16 *p=(uint16 *)data;
+        const int size=count>>1;
+        uint16 *p=(uint16 *)data;
 
-		for(int i=0;i<size;i++)
-			*p++=rand();
-	}
+        for(int i=0;i<size;i++)
+            *p++=rand();
+    }
 
-	/**
-	* 清除已存数据
-	*/
-	void PseudoRandom::Clear()
-	{
-		SAFE_CLEAR_ARRAY(data);
+    /**
+    * 清除已存数据
+    */
+    void PseudoRandom::Clear()
+    {
+        SAFE_CLEAR_ARRAY(data);
 
-		count=0;
-		pos=0;
-	}
+        count=0;
+        pos=0;
+    }
 
-	void PseudoRandom::Push(const void *ptr,int size)
-	{
-		if(!data||!ptr||size<=0)return;
+    void PseudoRandom::Push(const void *ptr,int size)
+    {
+        if(!data||!ptr||size<=0)return;
 
-		if(pos+size<=count)
-		{
-			memcpy(data+pos,ptr,size);
+        if(pos+size<=count)
+        {
+            memcpy(data+pos,ptr,size);
 
-			pos+=size;
-		}
-		else
-		{
-			const int s=count-pos;
+            pos+=size;
+        }
+        else
+        {
+            const int s=count-pos;
 
-			memcpy(data+pos,ptr,s);
-			pos=size-s;
-			memcpy(data,((char *)ptr)+s,pos);
-		}
+            memcpy(data+pos,ptr,s);
+            pos=size-s;
+            memcpy(data,((char *)ptr)+s,pos);
+        }
 
-		if(pos>=count)pos=0;
-	}
+        if(pos>=count)pos=0;
+    }
 
-	bool PseudoRandom::Rand(uint8 *result,int size)
-	{
-		if(!data)
-			return(false);
+    bool PseudoRandom::Rand(uint8 *result,int size)
+    {
+        if(!data)
+            return(false);
 
-		for(int i=0;i<size;i++)
-		{
-			*result=data[pos];
+        for(int i=0;i<size;i++)
+        {
+            *result=data[pos];
 
-			++result;
-			++pos;
-			if(pos>=count)pos=0;
-		}
+            ++result;
+            ++pos;
+            if(pos>=count)pos=0;
+        }
 
-		return(true);
-	}
+        return(true);
+    }
 }//namespace hgl

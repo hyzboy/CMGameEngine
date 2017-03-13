@@ -55,11 +55,10 @@ namespace hgl
 
 		public:
 
-			TileData(int,int,int,unsigned int);
+			TileData(int,int,int, TextureSourceFormat);
 			virtual ~TileData();
 
 			TileData::Object *Add(void *,unsigned int,TextureSourceFormat,int=-1,int=-1);			///<增加一个Tile
-			TileData::Object *Add(Bitmap2D *,int=-1,int=-1);										///<增加一个Tile
 
 			bool Delete(TileData::Object *);														///<删除一个Tile
 			bool Change(TileData::Object *,void *,unsigned int,TextureSourceFormat,int=-1,int=-1);	///<更改一个Tile的数据内容

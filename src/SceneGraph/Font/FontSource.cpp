@@ -1,11 +1,11 @@
-#include<hgl/graph/FontSource.h>
+ï»¿#include<hgl/graph/FontSource.h>
 #include<string.h>
 
 namespace hgl
 {
 	namespace graph
 	{
-		FontSource::FontSource(const Font &f)
+		FontSource::FontSource(const FontInfo &f)
 		{
 			fnt=f;
 
@@ -15,20 +15,20 @@ namespace hgl
 		FontSource::~FontSource()
 		{
 			for(int i=0;i<0xffff;i++)
-				delete[] char_bitmap[i].data;		//delete[] NULL;²»ÊÇ´íÎó£¬ËùÒÔ²»ÓÃµ£ÐÄ
+				delete[] char_bitmap[i].data;		//delete[] NULL;ä¸æ˜¯é”™è¯¯ï¼Œæ‰€ä»¥ä¸ç”¨æ‹…å¿ƒ
 		}
-		
+
 		FontSource::Bitmap *FontSource::GetCharBitmap(wchar_t ch)
 		{
 			if(!this)
 				return(NULL);
 
 			if(ch==0
-			 ||ch==L' '		//°ë½Ç¿Õ¸ñ
-			 ||ch==L'¡¡'	//È«½Ç¿Õ¸ñ
+			 ||ch==L' '		//åŠè§’ç©ºæ ¼
+			 ||ch==L'ã€€'	//å…¨è§’ç©ºæ ¼
 			 ||ch==L'\n'
 			 ||ch==L'\r'
-			 ||ch==L'\t')return(NULL);	//²»ÄÜÏÔÊ¾µÄÊý¾Ý»òÊÇ¿Õ¸ñ
+			 ||ch==L'\t')return(NULL);	//ä¸èƒ½æ˜¾ç¤ºçš„æ•°æ®æˆ–æ˜¯ç©ºæ ¼
 
 			if(!char_bitmap[ch].data)
 			{
@@ -37,7 +37,7 @@ namespace hgl
 
 				if(!MakeCharBitmap(ch))
 				{
-					char_bitmap[ch].h=-1;		//±ê¼ÇÎª-1ÒÔ±£Ö¤Î´À´Ò²²»È¡ÁË
+					char_bitmap[ch].h=-1;		//æ ‡è®°ä¸º-1ä»¥ä¿è¯æœªæ¥ä¹Ÿä¸å–äº†
 					return(NULL);
 				}
 			}

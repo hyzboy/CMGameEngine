@@ -5,244 +5,244 @@
 
 namespace hgl
 {
-	typedef void (*PIMClearFunc)();
+    typedef void (*PIMClearFunc)();
 
-	static MapObject<OSString,PlugIn>	plugin_module;												///<插件模块列表
-	static PlugIn *						SpecialPlugIn[pitEnd-1];									///<特殊插件
-	static List<PIMClearFunc>			plugin_manager_list;										///<插件管理器清除函数列表
+    static MapObject<OSString,PlugIn>    plugin_module;                                                ///<插件模块列表
+    static PlugIn *                        SpecialPlugIn[pitEnd-1];                                    ///<特殊插件
+    static List<PIMClearFunc>            plugin_manager_list;                                        ///<插件管理器清除函数列表
 
-	/**
-	* 加载一个插件
-	* @param plugin_name 插件名称
-	* @param type 特殊插件类型
-	* @return 返回模块指针,返回NULL表示失败
-	*/
-	PlugIn *LoadPlugIn(const OSString &plugin_name,PlugInType type)
-	{
-		PlugIn *pi=plugin_module[plugin_name];
+    /**
+    * 加载一个插件
+    * @param plugin_name 插件名称
+    * @param type 特殊插件类型
+    * @return 返回模块指针,返回NULL表示失败
+    */
+    PlugIn *LoadPlugIn(const OSString &plugin_name,PlugInType type)
+    {
+        PlugIn *pi=plugin_module[plugin_name];
 
-		if(pi)
-		{
-			pi->AddRef();						//增加一个引用计数
-			return pi;
-		}
+        if(pi)
+        {
+            pi->AddRef();                        //增加一个引用计数
+            return pi;
+        }
 
-		pi=new ExternalPlugIn(HGL_PLUGIN_FRONTNAME+plugin_name,type);
+        pi=new ExternalPlugIn(HGL_PLUGIN_FRONTNAME+plugin_name,type);
 
-		if(pi->GetInterface==nullptr
-		 &&pi->GetVersion()==0
-		 &&pi->GetIntro()==nullptr)
-		{
-			delete pi;
-			return(nullptr);
-		}
+        if(pi->GetInterface==nullptr
+         &&pi->GetVersion()==0
+         &&pi->GetIntro()==nullptr)
+        {
+            delete pi;
+            return(nullptr);
+        }
 
-		plugin_module.Add(plugin_name,pi);
+        plugin_module.Add(plugin_name,pi);
 
-		if(type>pitNormal&&type<pitEnd)
-			SpecialPlugIn[type-1]=pi;
+        if(type>pitNormal&&type<pitEnd)
+            SpecialPlugIn[type-1]=pi;
 
-		return(pi);
-	}
+        return(pi);
+    }
 
-	/**
-	* 释放一个插件
-	* @param pi 插件指针
-	*/
-	void UnloadPlugIn(PlugIn *pi)
-	{
-		if(!pi)return;
+    /**
+    * 释放一个插件
+    * @param pi 插件指针
+    */
+    void UnloadPlugIn(PlugIn *pi)
+    {
+        if(!pi)return;
 
-		if(pi->Release()>0)			//还有人在使用
-        	return;
+        if(pi->Release()>0)            //还有人在使用
+            return;
 
-		if(pi->GetType()!=pitNormal)
-        	SpecialPlugIn[pi->GetType()-1]=nullptr;
+        if(pi->GetType()!=pitNormal)
+            SpecialPlugIn[pi->GetType()-1]=nullptr;
 
-		plugin_module.DeleteByData(pi);
-	}
+        plugin_module.DeleteByData(pi);
+    }
 
-	void RegistryPIMClear(void (*func)())
-	{
-		plugin_manager_list+=func;
-	}
+    void RegistryPIMClear(void (*func)())
+    {
+        plugin_manager_list+=func;
+    }
 
-	void InitPlugIn()
-	{
-		hgl_zero(SpecialPlugIn);
-	}
+    void InitPlugIn()
+    {
+        hgl_zero(SpecialPlugIn);
+    }
 
-	void ClearAllPlugIn()
-	{
-		int n=plugin_manager_list.GetCount();
+    void ClearAllPlugIn()
+    {
+        int n=plugin_manager_list.GetCount();
 
-		while(n--)
-			plugin_manager_list[n]();
+        while(n--)
+            plugin_manager_list[n]();
 
-		plugin_manager_list.Clear();
-		plugin_module.Clear();
-	}
+        plugin_manager_list.Clear();
+        plugin_module.Clear();
+    }
 }
 
 namespace hgl
 {
-	/**
-	* 设置插件
-	* @param pi 插件指针
-	* @param type 插件类型
-	*/
-	void SetPlugIn(PlugIn *pi,PlugInType type)
-	{
-		if(type>pitNormal&&type<pitEnd)
-			SpecialPlugIn[type-1]=pi;
+    /**
+    * 设置插件
+    * @param pi 插件指针
+    * @param type 插件类型
+    */
+    void SetPlugIn(PlugIn *pi,PlugInType type)
+    {
+        if(type>pitNormal&&type<pitEnd)
+            SpecialPlugIn[type-1]=pi;
 
-		if(plugin_module.FindByData(pi)==-1)
-        	plugin_module.Add(pi->GetName(),pi);
-	}
+        if(plugin_module.FindByData(pi)==-1)
+            plugin_module.Add(pi->GetName(),pi);
+    }
 
-	bool LoadInterfaceByName(const OSString &name,int ver,void *data)
-	{
-		PlugIn *pi=LoadPlugIn(name);
+    bool LoadInterfaceByName(const OSString &name,int ver,void *data)
+    {
+        PlugIn *pi=LoadPlugIn(name);
 
-		if(pi)
-			return(pi->GetInterface(ver,data));
-		else
-			return(false);
-	}
+        if(pi)
+            return(pi->GetInterface(ver,data));
+        else
+            return(false);
+    }
 
-	bool LoadInterfaceByIndex(int index,int ver,void *data)
-	{
-		if(index>pitNormal&&index<pitEnd)
-		{
-			PlugIn *pi=SpecialPlugIn[index-1];
+    bool LoadInterfaceByIndex(int index,int ver,void *data)
+    {
+        if(index>pitNormal&&index<pitEnd)
+        {
+            PlugIn *pi=SpecialPlugIn[index-1];
 
-			if(pi)
-				return pi->GetInterface(ver,data);
-		}
+            if(pi)
+                return pi->GetInterface(ver,data);
+        }
 
-		return(false);
-	}
+        return(false);
+    }
 
-	bool LoadInterface(const OSString &name,int ver,void *data)
-	{
-    	return LoadInterfaceByName(name,ver,data);
-	}
+    bool LoadInterface(const OSString &name,int ver,void *data)
+    {
+        return LoadInterfaceByName(name,ver,data);
+    }
 }
 
 namespace hgl
 {
-	PlugIn::PlugIn()
-	{
-    	ref_count=1;
+    PlugIn::PlugIn()
+    {
+        ref_count=1;
 
-		ver=0;
-		intro=nullptr;
+        ver=0;
+        intro=nullptr;
 
-		GetInterface=nullptr;
-	}
+        GetInterface=nullptr;
+    }
 
-	PlugIn::~PlugIn()
-	{
-		LOG_INFO(OS_TEXT("release Plug-in <")+name+OS_TEXT(">:<")+filename+OS_TEXT("> ok"));
-	}
+    PlugIn::~PlugIn()
+    {
+        LOG_INFO(OS_TEXT("release Plug-in <")+name+OS_TEXT(">:<")+filename+OS_TEXT("> ok"));
+    }
 }
 
 namespace hgl
 {
-	ExternalPlugIn::ExternalPlugIn(const OSString &plugin_name,const PlugInType &pit)
-	{
-		{
-			const OSString &pi_path=GetString(hfsPlugInPath);
+    ExternalPlugIn::ExternalPlugIn(const OSString &plugin_name,const PlugInType &pit)
+    {
+        {
+            const OSString &pi_path=GetString(hfsPlugInPath);
 
-			MergeFilename(filename,pi_path,plugin_name);
+            MergeFilename(filename,pi_path,plugin_name);
 
-			filename+=HGL_PLUGIN_EXTNAME;
-		}
+            filename+=HGL_PLUGIN_EXTNAME;
+        }
 
-		type=pit;
-		name=plugin_name;
+        type=pit;
+        name=plugin_name;
 
-		ver=0;
-		intro=nullptr;
-		GetInterface=nullptr;
+        ver=0;
+        intro=nullptr;
+        GetInterface=nullptr;
 
-		if(module.Load(filename.c_str()))
-			if(Load())
-			{
-				#ifdef _DEBUG
-					#if HGL_OS == HGL_OS_Windows
-						LOG_INFO(OS_TEXT("Load Plug-in <") + plugin_name + OS_TEXT(">:<") + filename + OS_TEXT("> ok,Plug-In intro:") + OSString(intro));
-					#else
-						LOG_INFO(OS_TEXT("Load Plug-in <") + plugin_name + OS_TEXT(">:<") + filename + OS_TEXT("> ok,Plug-In intro:") + to_oschar(intro));
-					#endif//windows
-				#else
-					LOG_INFO(OS_TEXT("Load Plug-in <")+plugin_name+OS_TEXT(">:<")+filename+OS_TEXT("> ok"));
-				#endif//_DEBUG
+        if(module.Load(filename.c_str()))
+            if(Load())
+            {
+                #ifdef _DEBUG
+                    #if HGL_OS == HGL_OS_Windows
+                        LOG_INFO(OS_TEXT("Load Plug-in <") + plugin_name + OS_TEXT(">:<") + filename + OS_TEXT("> ok,Plug-In intro:") + OSString(intro));
+                    #else
+                        LOG_INFO(OS_TEXT("Load Plug-in <") + plugin_name + OS_TEXT(">:<") + filename + OS_TEXT("> ok,Plug-In intro:") + to_oschar(intro));
+                    #endif//windows
+                #else
+                    LOG_INFO(OS_TEXT("Load Plug-in <")+plugin_name+OS_TEXT(">:<")+filename+OS_TEXT("> ok"));
+                #endif//_DEBUG
 
-				InitPlugInPROC InitPlugIn;
+                InitPlugInPROC InitPlugIn;
 
-				InitPlugIn=(InitPlugInPROC)module.FindFunc("InitPlugIn");
+                InitPlugIn=(InitPlugInPROC)module.FindFunc("InitPlugIn");
 
-				if(InitPlugIn)
-					InitPlugIn();
+                if(InitPlugIn)
+                    InitPlugIn();
 
-				return;
-			}
+                return;
+            }
 
-		LOG_INFO(OS_TEXT("Load Plug-in <")+plugin_name+OS_TEXT(">:<")+filename+OS_TEXT("> error!"));
-	}
+        LOG_INFO(OS_TEXT("Load Plug-in <")+plugin_name+OS_TEXT(">:<")+filename+OS_TEXT("> error!"));
+    }
 
-	ExternalPlugIn::~ExternalPlugIn()
-	{
-		ClosePlugInPROC ClosePlugIn;
+    ExternalPlugIn::~ExternalPlugIn()
+    {
+        ClosePlugInPROC ClosePlugIn;
 
-		ClosePlugIn=(ClosePlugInPROC)module.FindFunc("ClosePlugIn");
+        ClosePlugIn=(ClosePlugInPROC)module.FindFunc("ClosePlugIn");
 
-		if(ClosePlugIn)
-			ClosePlugIn();
-	}
+        if(ClosePlugIn)
+            ClosePlugIn();
+    }
 
-	bool ExternalPlugIn::Load()
-	{
-		{
-			GetPlugInVersionPROC getver;
+    bool ExternalPlugIn::Load()
+    {
+        {
+            GetPlugInVersionPROC getver;
 
-			getver=(GetPlugInVersionPROC)module.FindFunc("GetPlugInVersion");
+            getver=(GetPlugInVersionPROC)module.FindFunc("GetPlugInVersion");
 
-			if(!getver)
-			{
-				LOG_INFO(OS_TEXT("Don't in Plug-in <")+filename+OS_TEXT("> find \"GetPlugInVersion\" "));
-				return(false);
-			}
+            if(!getver)
+            {
+                LOG_INFO(OS_TEXT("Don't in Plug-in <")+filename+OS_TEXT("> find \"GetPlugInVersion\" "));
+                return(false);
+            }
 
-			ver=getver();
-		}
+            ver=getver();
+        }
 
-		{
-			GetPlugInIntroPROC getintro;
+        {
+            GetPlugInIntroPROC getintro;
 
-			getintro=(GetPlugInIntroPROC)module.FindFunc("GetPlugInIntro");
+            getintro=(GetPlugInIntroPROC)module.FindFunc("GetPlugInIntro");
 
-			if(!getintro)
-			{
-				LOG_INFO(OS_TEXT("Don't in Plug-in <")+filename+OS_TEXT("> find \"GetPlugInIntro\""));
-				return(false);
-			}
+            if(!getintro)
+            {
+                LOG_INFO(OS_TEXT("Don't in Plug-in <")+filename+OS_TEXT("> find \"GetPlugInIntro\""));
+                return(false);
+            }
 
-			intro=getintro();
-		}
+            intro=getintro();
+        }
 
-		{
-			GetInterface=(GetPlugInInterfacePROC)module.FindFunc("GetPlugInInterface");
+        {
+            GetInterface=(GetPlugInInterfacePROC)module.FindFunc("GetPlugInInterface");
 
-			{
-				SetPlugInInterfacePROC SetInterface=(SetPlugInInterfacePROC)module.FindFunc("SetPlugInInterface");
+            {
+                SetPlugInInterfacePROC SetInterface=(SetPlugInInterfacePROC)module.FindFunc("SetPlugInInterface");
 
-				if(SetInterface)
-					SetInterface((void *)LoadInterfaceByName,(void *)LoadInterfaceByIndex);
-			}
-		}
+                if(SetInterface)
+                    SetInterface((void *)LoadInterfaceByName,(void *)LoadInterfaceByIndex);
+            }
+        }
 
-		return(true);
-	}
+        return(true);
+    }
 }//namespace hgl

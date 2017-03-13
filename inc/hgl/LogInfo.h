@@ -66,6 +66,8 @@ namespace hgl
 
 		#define RETURN_BOOL(proc)	return(proc);
 #endif//NO_LOGINFO
+
+        #define IF_FALSE_RETURN(str)    if(!str)RETURN_FALSE;
 	}//namespace logger
 
 	using namespace logger;

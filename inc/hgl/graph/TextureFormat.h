@@ -21,6 +21,18 @@ namespace hgl
 
 		#define HGL_TEXTURE_BUFFER				GL_TEXTURE_BUFFER				//TBO(OpenGL 3.1)
 
+        #define HGL_TEX_BIND_1D                 GL_TEXTURE_BINDING_1D
+        #define HGL_TEX_BIND_2D                 GL_TEXTURE_BINDING_2D
+        #define HGL_TEX_BIND_3D                 GL_TEXTURE_BINDING_3D
+        #define HGL_TEX_BIND_RECTANGLE          GL_TEXTURE_BINDING_RECTANGLE
+        #define HGL_TEX_BIND_1D_ARRAY           GL_TEXTURE_BINDING_1D_ARRAY
+        #define HGL_TEX_BIND_2D_ARRAY           GL_TEXTURE_BINDING_2D_ARRAY
+        #define HGL_TEX_BIND_CUBE_MAP           GL_TEXTURE_BINDING_CUBE_MAP
+        #define HGL_TEX_BIND_CUBE_MAP_ARRAY     GL_TEXTURE_BINDING_CUBE_MAP_ARRAY
+        #define HGL_TEX_BIND_2D_MS              GL_TEXTURE_BINDING_2D_MULTISAMPLE
+        #define HGL_TEX_BIND_2D_MS_ARRAY        GL_TEXTURE_BINDING_2D_MULTISAMPLE_ARRAY
+        #define HGL_TEX_BIND_BUFFER             GL_TEXTURE_BINDING_BUFFER
+
 		//采样属性
 
 		//贴图寻址模式
@@ -31,6 +43,7 @@ namespace hgl
 		//贴图过滤模式
 		#define HGL_FILTER_NEAREST					GL_NEAREST
 		#define HGL_FILTER_LINEAR					GL_LINEAR
+        #define HGL_FILTER_SMOOTH                   (GL_LINEAR+1)               //(1.此功能为自行实现，使用GL_LINEAR+1只是为了区分。2.OpenGL 4.0以下使用性能较差)
 
 		#define HGL_FILTER_NEAREST_MIPMAP_NEAREST	GL_NEAREST_MIPMAP_NEAREST
 		#define HGL_FILTER_LINEAR_MIPMAP_NEAREST	GL_LINEAR_MIPMAP_NEAREST
@@ -221,7 +234,7 @@ namespace hgl
 
             uint video_format;          //显存格式
 
-            uint color_format;          //色彩格式(指R/RG/RGB/RGBA/DEPTH这些)
+            uint pixel_format;          //象素格式(指R/RG/RGB/RGBA/DEPTH这些)
             uint data_type;             //数据类型(指BYTE，SHORT，FLOAT这些)
 
             uint source_bytes;          //原始格式字节数
@@ -231,7 +244,7 @@ namespace hgl
         //贴图数据源格式信息
         extern const TextureFormat TextureFormatInfoList[HGL_SF_END];
 
-        TSF GetColorFormat(const char *);       //根据简写名称取得对应的TextureSourceFormat
+        TSF GetTextureFormatEnum(const char *);       //根据简写名称取得对应的TextureSourceFormat
 
         inline const TextureFormat *GetTextureFormat(const TSF &tsf)
         {
@@ -241,9 +254,17 @@ namespace hgl
             return TextureFormatInfoList+tsf;
         }
 
-        inline const TextureFormat *GetTextureFormat(const char *color_format)
+        inline const uint GetVideoFormat(const TSF &tsf)
         {
-            const TextureSourceFormat tsf=GetColorFormat(color_format);
+            if (tsf <= HGL_SF_NONE || tsf >= HGL_SF_END)
+                return(0);
+
+            return TextureFormatInfoList[tsf].video_format;
+        }
+
+        inline const TextureFormat *GetTextureFormat(const char *format)
+        {
+            const TextureSourceFormat tsf= GetTextureFormatEnum(format);
 
             if(tsf<=HGL_SF_NONE||tsf>=HGL_SF_END)
                 return(nullptr);

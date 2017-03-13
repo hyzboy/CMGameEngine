@@ -61,15 +61,15 @@ public:
         CloseOpenAL();
     }
 
-	void Update()
-	{
-		AudioBuffer buf;
-		AudioSource source;
+    void Update()
+    {
+        AudioBuffer buf;
+        AudioSource source;
 
         double start=GetDoubleTime();
         double end;
 
-		buf.Load(filename.c_str());
+        buf.Load(filename.c_str());
 
         end=GetDoubleTime();
 
@@ -81,8 +81,8 @@ public:
 
         WaitTime(buf.Time);
 
-		fos=hgl::fosExitApp;
-	}
+        fos=hgl::fosExitApp;
+    }
 };//class TestObject
 
 using namespace hgl;

@@ -31,8 +31,6 @@
 .code
 PUBLIC CallX64
 
-; asQWORD CallX64(const asQWORD *args, const asQWORD *floatArgs, int paramSize, asQWORD func)
-
 ;uint64 CallX64(void *func,int agrc,const void *argv,const void *argv_float)
 
 CallX64 PROC FRAME

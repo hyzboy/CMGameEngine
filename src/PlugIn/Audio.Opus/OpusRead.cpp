@@ -146,37 +146,37 @@ void CloseOpus(void *ptr)
 uint ReadOpus(void *ptr,char *data,uint buf_max)
 {
     OpusStream *os=(OpusStream *)ptr;
-	int result;
-	uint size=0;
+    int result;
+    uint size=0;
     uint buf_left=buf_max/2;        //16位,所以要除2
 
-	while(size<buf_max)
-	{
-		result=op_read(os->of,((opus_int16 *)data)+size,buf_left-size,nullptr);
+    while(size<buf_max)
+    {
+        result=op_read(os->of,((opus_int16 *)data)+size,buf_left-size,nullptr);
 
-		if(result>0)size+=result*os->head->channel_count;else
-		if(result<=0)break;
-	}
+        if(result>0)size+=result*os->head->channel_count;else
+        if(result<=0)break;
+    }
 
-	return(size*2);
+    return(size*2);
 }
 
 uint ReadOpusFloat32(void *ptr,float *data,uint buf_max)
 {
     OpusStream *os=(OpusStream *)ptr;
-	int result;
-	uint size=0;
+    int result;
+    uint size=0;
     uint buf_left=buf_max/sizeof(float);
 
-	while(size<buf_max)
-	{
-		result=op_read_float(os->of,data+size,buf_left-size,nullptr);
+    while(size<buf_max)
+    {
+        result=op_read_float(os->of,data+size,buf_left-size,nullptr);
 
-		if(result>0)size+=result*os->head->channel_count;else
-		if(result<=0)break;
-	}
+        if(result>0)size+=result*os->head->channel_count;else
+        if(result<=0)break;
+    }
 
-	return(size*sizeof(float));
+    return(size*sizeof(float));
 }
 
 void RestartOpus(void *ptr)
@@ -188,32 +188,32 @@ void RestartOpus(void *ptr)
 //--------------------------------------------------------------------------------------------------
 struct OutInterface2
 {
-	void (*Load)(ALbyte *,ALsizei,ALenum *,ALvoid **,ALsizei *,ALsizei *,ALboolean *);
-	void (*Clear)(ALenum,ALvoid *,ALsizei,ALsizei);
+    void (*Load)(ALbyte *,ALsizei,ALenum *,ALvoid **,ALsizei *,ALsizei *,ALboolean *);
+    void (*Clear)(ALenum,ALvoid *,ALsizei,ALsizei);
 
-	void *(*Open)(ALbyte *,ALsizei,ALenum *,ALsizei *,double *);
-	void  (*Close)(void *);
-	uint  (*Read)(void *,char *,uint);
-	void  (*Restart)(void *);
+    void *(*Open)(ALbyte *,ALsizei,ALenum *,ALsizei *,double *);
+    void  (*Close)(void *);
+    uint  (*Read)(void *,char *,uint);
+    void  (*Restart)(void *);
 };
 
 static OutInterface2 out_interface_2=
 {
-	LoadOpus,
-	ClearOpus,
+    LoadOpus,
+    ClearOpus,
 
-	OpenOpus,
-	CloseOpus,
-	ReadOpus,
-	RestartOpus
+    OpenOpus,
+    CloseOpus,
+    ReadOpus,
+    RestartOpus
 };
 
 struct OutInterface3
 {
-	void (*Load)(ALbyte *,ALsizei,ALenum *,float **,ALsizei *,ALsizei *,ALboolean *);
-	void (*Clear)(ALenum,float *,ALsizei,ALsizei);
+    void (*Load)(ALbyte *,ALsizei,ALenum *,float **,ALsizei *,ALsizei *,ALboolean *);
+    void (*Clear)(ALenum,float *,ALsizei,ALsizei);
 
-	uint (*Read)(void *,float *,uint);
+    uint (*Read)(void *,float *,uint);
 };
 
 static OutInterface3 out_interface_3
@@ -232,30 +232,30 @@ const u16char plugin_intro[]=U16_TEXT("Opus 音频文件解码(LibOpus 1.1.3,Lib
 
 HGL_PLUGIN_FUNC uint32 GetPlugInVersion()
 {
-	return(3);		//版本号
-					//根据版本号取得不同的API
+    return(3);        //版本号
+                    //根据版本号取得不同的API
 }
 
 HGL_PLUGIN_FUNC u16char * GetPlugInIntro()
 {
-	return((u16char *)plugin_intro);
+    return((u16char *)plugin_intro);
 }
 
 HGL_PLUGIN_FUNC bool GetPlugInInterface(uint32 ver,void *data)
 {
-	if(ver==2)
-	{
-		memcpy(data,&out_interface_2,sizeof(OutInterface2));
-	}
-	else
-	if(ver==3)
-	{
-		memcpy(data,&out_interface_3,sizeof(OutInterface3));
-	}
-	else
-		return(false);
+    if(ver==2)
+    {
+        memcpy(data,&out_interface_2,sizeof(OutInterface2));
+    }
+    else
+    if(ver==3)
+    {
+        memcpy(data,&out_interface_3,sizeof(OutInterface3));
+    }
+    else
+        return(false);
 
-	return(true);
+    return(true);
 }
 
 HGL_PLUGIN_FUNC void SetPlugInInterface(uint32,void *)

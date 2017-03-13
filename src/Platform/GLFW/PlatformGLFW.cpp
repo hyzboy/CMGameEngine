@@ -16,7 +16,7 @@ namespace hgl
             static ObjectList<Monitor> MonitorList;
         }//namespace
 
-        const bool InitPlatform()
+        const bool InitGraphicsPlatform()
         {
             glfw_init=true;
 
@@ -25,7 +25,7 @@ namespace hgl
             return glfw_init_result;
         }
 
-        void ClosePlatform()
+        void CloseGraphicsPlatform()
         {
             if(glfw_init_result)
             {
@@ -39,7 +39,7 @@ namespace hgl
         const bool CheckGLFWInit()
         {
             if(!glfw_init)
-                InitPlatform();
+                InitGraphicsPlatform();
 
             return glfw_init_result;
         }

@@ -10,153 +10,153 @@
 #include<iostream>
 namespace hgl
 {
-	namespace dfs
-	{
-		namespace
-		{
-			class dfsClientLoad
-			{
-				char *block;
-				int32 block_size;
+    namespace dfs
+    {
+        namespace
+        {
+            class dfsClientLoad
+            {
+                char *block;
+                int32 block_size;
 
-			public:
+            public:
 
-				dfsClientLoad()
-				{
-					block=nullptr;
-					block_size=0;
-				}
+                dfsClientLoad()
+                {
+                    block=nullptr;
+                    block_size=0;
+                }
 
-				~dfsClientLoad()
-				{
-					if(block)
-						hgl_free(block);
-				}
+                ~dfsClientLoad()
+                {
+                    if(block)
+                        hgl_free(block);
+                }
 
-				dfs::ErrorCode LoadFromRemote(DataInputStream *dis,DataOutputStream *dos,dfs::FileBlock *fb)
-				{
-					if(!dos->WriteInt32(tdsLoadFile))RETURN_ERROR(dfs::ecSocketSendError);
-					if(!dos->WriteInt64(fb->GetFilename()))RETURN_ERROR(dfs::ecSocketSendError);
-					if(!dos->WriteInt64(fb->GetVersion()))RETURN_ERROR(dfs::ecSocketSendError);
+                dfs::ErrorCode LoadFromRemote(DataInputStream *dis,DataOutputStream *dos,dfs::FileBlock *fb)
+                {
+                    if(!dos->WriteInt32(tdsLoadFile))RETURN_ERROR(dfs::ecSocketSendError);
+                    if(!dos->WriteInt64(fb->GetFilename()))RETURN_ERROR(dfs::ecSocketSendError);
+                    if(!dos->WriteInt64(fb->GetVersion()))RETURN_ERROR(dfs::ecSocketSendError);
 
-					int32 cmd;
-					int64 server_version;
+                    int32 cmd;
+                    int64 server_version;
 
-					if(!dis->ReadInt32(cmd))RETURN_ERROR(dfs::ecSocketRecvError);
+                    if(!dis->ReadInt32(cmd))RETURN_ERROR(dfs::ecSocketRecvError);
 
-					if(cmd!=dstLoadFile)RETURN_ERROR(dfs::ecLoginError);
+                    if(cmd!=dstLoadFile)RETURN_ERROR(dfs::ecLoginError);
 
-					if(!dis->ReadInt64(server_version))RETURN_ERROR(dfs::ecSocketRecvError);
+                    if(!dis->ReadInt64(server_version))RETURN_ERROR(dfs::ecSocketRecvError);
 
-					if(server_version<=fb->GetVersion())		//服务器的版本更旧
-						return(dfs::ecNone);
+                    if(server_version<=fb->GetVersion())        //服务器的版本更旧
+                        return(dfs::ecNone);
 
-					int32 file_length;
+                    int32 file_length;
 
-					if(!dis->ReadInt32(file_length))return(dfs::ecSocketRecvError);
+                    if(!dis->ReadInt32(file_length))return(dfs::ecSocketRecvError);
 
-					if(file_length<=0)return(dfs::ecNone);
+                    if(file_length<=0)return(dfs::ecNone);
 
-					if(block)
-					{
-						if(block_size<file_length)
-							block=(char *)hgl_realloc(block,file_length);
-					}
-					else
-					{
-						block=(char *)hgl_malloc(file_length);
-						block_size=file_length;
-					}
+                    if(block)
+                    {
+                        if(block_size<file_length)
+                            block=(char *)hgl_realloc(block,file_length);
+                    }
+                    else
+                    {
+                        block=(char *)hgl_malloc(file_length);
+                        block_size=file_length;
+                    }
 
-					if(fb->GetLength()>0
-					 &&fb->GetLength()<file_length/10)
-					{
-						std::cout<<"old fb length "<<fb->GetLength()<<",new length "<<file_length<<",problem"<<std::endl;
-					}
+                    if(fb->GetLength()>0
+                     &&fb->GetLength()<file_length/10)
+                    {
+                        std::cout<<"old fb length "<<fb->GetLength()<<",new length "<<file_length<<",problem"<<std::endl;
+                    }
 
-					if(dis->ReadFully(block,file_length)!=file_length)
-						RETURN_ERROR(dfs::ecSocketRecvError);
+                    if(dis->ReadFully(block,file_length)!=file_length)
+                        RETURN_ERROR(dfs::ecSocketRecvError);
 
-					fb->Update(block,file_length,server_version);
+                    fb->Update(block,file_length,server_version);
 
-					block=nullptr;						//将这个类的这块标记干掉，以再它放掉block
+                    block=nullptr;                        //将这个类的这块标记干掉，以再它放掉block
 
-					return(dfs::ecNone);
-				}
-			};//class dfsClientLoad
+                    return(dfs::ecNone);
+                }
+            };//class dfsClientLoad
 
-			class dfsInputStream:public MemoryInputStream
-			{
-				dfs::FileBlock *fb;
+            class dfsInputStream:public MemoryInputStream
+            {
+                dfs::FileBlock *fb;
 
-			public:
+            public:
 
-				dfsInputStream(dfs::FileBlock *f)
-				{
-					fb=f;
+                dfsInputStream(dfs::FileBlock *f)
+                {
+                    fb=f;
 
-					fb->ReadLock();
+                    fb->ReadLock();
 
-					LOG_INFO(OS_TEXT("dfsClient LoadFile<")+OSString(fb->GetFilename())+OS_TEXT("> : ReadLock"));
+                    LOG_INFO(OS_TEXT("dfsClient LoadFile<")+OSString(fb->GetFilename())+OS_TEXT("> : ReadLock"));
 
-					Link(fb->GetData(),fb->GetLength());
-				}
+                    Link(fb->GetData(),fb->GetLength());
+                }
 
-				~dfsInputStream()
-				{
-					LOG_INFO(OS_TEXT("dfsClient LoadFile<")+OSString(fb->GetFilename())+OS_TEXT("> : ReadUnlock"));
-					fb->ReadUnlock();
-				}
-			};//class dfsInputStream
-		}//namespace
+                ~dfsInputStream()
+                {
+                    LOG_INFO(OS_TEXT("dfsClient LoadFile<")+OSString(fb->GetFilename())+OS_TEXT("> : ReadUnlock"));
+                    fb->ReadUnlock();
+                }
+            };//class dfsInputStream
+        }//namespace
 
-		/**
-		 * 加载一个文件
-		 * @param file_id 文件索引
-		 * @return 文件输入流
-		 * @return NULL 加载失败
-		 */
-		InputStream *dfsClientFile::LoadFile(const int64 file_id)
-		{
-			FileTeam *ft=file_team+(file_id%team_number);
+        /**
+         * 加载一个文件
+         * @param file_id 文件索引
+         * @return 文件输入流
+         * @return NULL 加载失败
+         */
+        InputStream *dfsClientFile::LoadFile(const int64 file_id)
+        {
+            FileTeam *ft=file_team+(file_id%team_number);
 
-			ft->lock.Lock();
+            ft->lock.Lock();
 
-			FileBlock *fb=ft->file_list[file_id];
+            FileBlock *fb=ft->file_list[file_id];
 
-			if(!fb)
-			{
-				fb=new FileBlock(file_id);
+            if(!fb)
+            {
+                fb=new FileBlock(file_id);
 
-				ft->file_list.Add(file_id,fb);
-			}
+                ft->file_list.Add(file_id,fb);
+            }
 
-			fb->WriteLock();
+            fb->WriteLock();
 
-			dfsClientFileConnect *con=conn_pool->SafeAcquire();
-			if(!con->Use())
-			{
-				conn_pool->SafeRelease(con);
-				fb->WriteUnlock();
-				ft->lock.Unlock();
-				return(nullptr);
-			}
+            dfsClientFileConnect *con=conn_pool->SafeAcquire();
+            if(!con->Use())
+            {
+                conn_pool->SafeRelease(con);
+                fb->WriteUnlock();
+                ft->lock.Unlock();
+                return(nullptr);
+            }
 
-			dfsClientLoad cl;
+            dfsClientLoad cl;
 
-			dfs::ErrorCode ec=cl.LoadFromRemote(con->GetDIS(),con->GetDOS(),fb);
+            dfs::ErrorCode ec=cl.LoadFromRemote(con->GetDIS(),con->GetDOS(),fb);
 
-			if(ec!=ecNone)
-				con->Disconnect();
+            if(ec!=ecNone)
+                con->Disconnect();
 
-			conn_pool->SafeRelease(con);
-			fb->WriteUnlock();
-			ft->lock.Unlock();
+            conn_pool->SafeRelease(con);
+            fb->WriteUnlock();
+            ft->lock.Unlock();
 
-			if(ec==ecNone)
-				return(new dfsInputStream(fb));
-			else
-				return(nullptr);
-		}
-	}//namespace dfs
+            if(ec==ecNone)
+                return(new dfsInputStream(fb));
+            else
+                return(nullptr);
+        }
+    }//namespace dfs
 }//namespace hgl

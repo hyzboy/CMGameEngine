@@ -50,6 +50,8 @@ namespace hgl
 
 				UTF8String shader_string;
 
+                int glsl_version;
+
 			public:
 
 				shader_stringlist(){}
@@ -61,7 +63,7 @@ namespace hgl
 					return shader_string.Discard();
 				}
 
-				void add(const char *line="\n"){shader_string.Strcat(line,::strlen(line));}
+				void add(const char *line="\n"){shader_string.Strcat(line,hgl::strlen(line));}
 
 				void debug_out(const os_char *filename);
 
@@ -88,6 +90,12 @@ namespace hgl
 
 				void add_sampler		(const char *name,uint tex_type){add("uniform "	);add(get_sampler_by_tex_type(tex_type));add(" ");add(name);add(";\n");}
 				void add_sampler_shadow	(const char *name,uint tex_type){add("uniform "	);add(get_sampler_shadow_by_tex_type(tex_type));add(" ");add(name);add(";\n");}
+
+				void add_texture_smooth();
+
+                void add_rgb2lum();
+                void add_rgb2hsv();
+                void add_hsv_clamp();
 
 				void add_normal_3to2();
 				void add_normal_2to3();

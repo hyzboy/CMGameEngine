@@ -5,10 +5,10 @@
 #include<hgl/Other.h>
 namespace hgl
 {
-	/**
+    /**
      * 計算指定音源相對收聽者的音量
      */
-	const double GetGain(AudioListener *l,AudioSourceItem *s)
+    const double GetGain(AudioListener *l,AudioSourceItem *s)
     {
         if(!l||!s)return(0);
 
@@ -45,7 +45,7 @@ namespace hgl
             distance = hgl_min(distance,s->max_distance);
             return (1-s->rolloff_factor*(distance-s->ref_distance)/(s->max_distance-s->ref_distance));
         }
-		else
+        else
         if(s->distance_model==AL_EXPONENT_DISTANCE)
         {
             return pow(distance/s->ref_distance,-s->rolloff_factor);
@@ -91,7 +91,7 @@ namespace hgl
         asi->gain=gain;
 
         asi->distance_model=AL_INVERSE_DISTANCE_CLAMPED;
-		asi->rolloff_factor=1;
+        asi->rolloff_factor=1;
         asi->ref_distance=ref_distance;
         asi->max_distance=max_distance;
 
@@ -167,12 +167,12 @@ namespace hgl
             }
         }
 
-		if(!asi->source)
-		{
-			asi->source=source_pool.Acquire();
+        if(!asi->source)
+        {
+            asi->source=source_pool.Acquire();
 
-			if(!asi->source)return(false);
-		}
+            if(!asi->source)return(false);
+        }
 
         asi->source->Link(asi->buffer);
 
@@ -200,8 +200,8 @@ namespace hgl
         if(!asi)return(false);
         if(!asi->source)return(false);
 
-		if(asi->source->State==AL_STOPPED)	//停播状态
-		{
+        if(asi->source->State==AL_STOPPED)    //停播状态
+        {
             if(!asi->loop)                  //不是循环播放
             {
                 if(OnStopped(asi))
@@ -213,7 +213,7 @@ namespace hgl
             {
                 asi->source->Play();        //继续播放
             }
-		}
+        }
 
         if(asi->doppler_factor>0)                   //需要多普勒效果
         {

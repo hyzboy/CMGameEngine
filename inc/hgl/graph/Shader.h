@@ -172,6 +172,7 @@ namespace hgl
 			bool SetUniformMatrix3fv(const char *,const float *);
 			bool SetUniformMatrix4fv(const char *,const float *);
 
+            bool SetUniformMatrix3fv(const char *name,const Matrix3f &m){return SetUniformMatrix3fv(name,(const float *)&m);}
 			bool SetUniformMatrix4fv(const char *name,const Matrix4f &m){return SetUniformMatrix4fv(name,(const float *)&m);}
 
 			bool SetUniformMatrix2x3fv(const char *,const float *);

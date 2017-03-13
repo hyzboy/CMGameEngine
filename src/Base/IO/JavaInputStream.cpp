@@ -2,29 +2,29 @@
 #include<hgl/Other.h>
 namespace hgl
 {
-	namespace io
-	{
-		bool JavaInputStream::readUTF(UTF16String &ws)
-		{
-			if(!in)return(false);
+    namespace io
+    {
+        bool JavaInputStream::readUTF(UTF16String &ws)
+        {
+            if(!in)return(false);
 
-			uint16 utf8_length;
+            uint16 utf8_length;
 
-			if(!in->ReadUint16(utf8_length))
-				return(false);
+            if(!in->ReadUint16(utf8_length))
+                return(false);
 
-			SharedArray<char> utf8_str=new char[utf8_length];
+            SharedArray<char> utf8_str=new char[utf8_length];
 
-			int wide_len;
+            int wide_len;
 
-			if(in->Read(utf8_str,utf8_length)!=utf8_length)
-				return(false);
+            if(in->Read(utf8_str,utf8_length)!=utf8_length)
+                return(false);
 
-			u16char *wide_str=u8_to_u16(utf8_str,utf8_length,wide_len);
+            u16char *wide_str=u8_to_u16(utf8_str,utf8_length,wide_len);
 
-			ws.Set(wide_str,wide_len,true);
+            ws.Set(wide_str,wide_len,true);
 
-			return(true);
-		}
-	}//namespace io
+            return(true);
+        }
+    }//namespace io
 }//namespace hgl

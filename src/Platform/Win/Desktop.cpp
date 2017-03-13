@@ -81,24 +81,24 @@ namespace hgl
     }
 
 //#if (NTDDI_VERSION >= NTDDI_VISTA)
-//		/**
-//		* 取得文件图标
-//		* @param filename 文件名
-//		* @param width 图标宽度
-//		* @param height 图标高度
-//		* @param color 图标色彩数
-//		* @return 图标象素数据(请自行delete[],另返回NULL表示失败)
-//		*/
-//		void *GetFileIcon(const u16char *filename,int &width,int &height,int &color)
-//		{
-//			IShellItemImageFactory *pShellItemImageFactory = NULL;
-//    		IBindCtx *m_pBindContext;
+//        /**
+//        * 取得文件图标
+//        * @param filename 文件名
+//        * @param width 图标宽度
+//        * @param height 图标高度
+//        * @param color 图标色彩数
+//        * @return 图标象素数据(请自行delete[],另返回NULL表示失败)
+//        */
+//        void *GetFileIcon(const u16char *filename,int &width,int &height,int &color)
+//        {
+//            IShellItemImageFactory *pShellItemImageFactory = NULL;
+//            IBindCtx *m_pBindContext;
 //
-//			//该函数要求ie7.0，但无法确定
-//			if(SHCreateItemFromParsingName(filename
-//					m_pBindContext,
-//					IID_PPV_ARGS(&pShellItemImageFactory)
+//            //该函数要求ie7.0，但无法确定
+//            if(SHCreateItemFromParsingName(filename
+//                    m_pBindContext,
+//                    IID_PPV_ARGS(&pShellItemImageFactory)
 //                    )!=S_OK)return(false);
-//		}
+//        }
 //#endif//NTDDI_VERSION >= NTDDI_VISTA
 }//namespace hgl

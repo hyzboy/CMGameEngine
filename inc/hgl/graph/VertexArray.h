@@ -3,7 +3,7 @@
 
 #include<hgl/type/FixedArray.h>
 #include<hgl/graph/VertexBuffer.h>
-#include<hgl/graph/ColorFormat.h>
+#include<hgl/graph/PixelCompoment.h>
 #include<hgl/VectorMath.h>
 namespace hgl
 {
@@ -23,7 +23,7 @@ namespace hgl
 			AABB aabb;                                                                                                      		///<AABB绑定盒
 			OBB obb;																												///<OBB绑定盒
 
-            ColorFormat vb_color_format;                                                                                            ///<颜色顶点属性格式
+            PixelCompoment vb_pixel_compoment;                                                                                      ///<颜色顶点属性格式
 
         private:
 
@@ -52,8 +52,8 @@ namespace hgl
 
         public: //颜色格式相关
 
-            void                        SetVertexColorFormat(ColorFormat fmt)   {vb_color_format=fmt;}                              ///<设置顶点色属性格式
-            ColorFormat                 GetVertexColorFormat()const             {return vb_color_format;}                           ///<取得顶点色属性格式
+            void                        SetVertexPixelCompoment(PixelCompoment fmt){vb_pixel_compoment=fmt;}                        ///<设置顶点属性格式
+            PixelCompoment              GetVertexPixelCompoment()const             {return vb_pixel_compoment;}                     ///<取得顶点属性格式
 
         public: //专项顶点缓冲区设置
 
@@ -78,16 +78,16 @@ namespace hgl
             bool                        SetVertex           (VertexBuffer2<T> *vb){return SetVertexBuffer(vbtVertex,vb);}           ///<设定顶点数据
 
             bool                        SetIndex            (VertexBufferBase *vb){return SetVertexBuffer(vbtIndex,vb);}            ///<设置渲染数据索引
-            bool                        SetColor            (VertexBufferBase *vb,ColorFormat cf)                                   ///<设置顶点颜色数据
+            bool                        SetColor            (VertexBufferBase *vb,PixelCompoment cf)                                ///<设置顶点颜色数据
             {
                 if(!SetVertexBuffer(vbtColor,vb))
                     return(false);
 
-                SetVertexColorFormat(cf);
+                SetVertexPixelCompoment(cf);
                 return(true);
             }
             bool                        SetNormal           (VertexBufferBase *vb){return SetVertexBuffer(vbtNormal,vb);}           ///<设置渲染顶点法线数据
-            bool                        SetTangents         (VertexBufferBase *vb){return SetVertexBuffer(vbtTangent,vb);}          ///<设置渲染顶点切线数据
+            bool                        SetTangent          (VertexBufferBase *vb){return SetVertexBuffer(vbtTangent,vb);}          ///<设置渲染顶点切线数据
             bool                        SetSecondColor      (VertexBufferBase *vb){return SetVertexBuffer(vbtSecondColor,vb);}      ///<设置顶点第二颜色数据
             bool                        SetFogCoord         (VertexBufferBase *vb){return SetVertexBuffer(vbtFogCoord,vb);}         ///<设置顶点雾数据
 

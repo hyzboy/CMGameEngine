@@ -20,8 +20,6 @@ namespace hgl
 			void Init(int fd){pipe_fd=fd;}
 			void Close(){pipe_fd=-1;}
 
-			
-
 		};//class PipeInputStream
 	}//namespace io
 }//namespace hgl

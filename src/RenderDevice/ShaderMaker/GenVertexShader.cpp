@@ -8,448 +8,477 @@
 
 namespace hgl
 {
-	namespace graph
-	{
-		namespace shadergen
-		{
-			vs::vs()
-			{
-				vertex_format=0;
+    namespace graph
+    {
+        namespace shadergen
+        {
+            vs::vs()
+            {
+                vertex_format=0;
 
-				color_material=false;
+                color_material=false;
 
-				mvp_matrix=false;
+                light_mode=HGL_NONE_LIGHT;
+                sun_light=false;
 
-				in_normal=sitNone;
-				in_vertex_color=sitNone;
+                mvp_matrix=false;
 
-				vertex_type=0;
+                in_normal=sitNone;
+                in_vertex_color=sitNone;
 
-				in_tex_count=0;
-				in_texcoord_count=0;
-				out_texcoord_count=0;
+                vertex_type=0;
 
-				hgl_zero(in_tex				);
-				hgl_zero(in_texcoord_num	);
-				hgl_zero(in_vertex_buffer	);
-				hgl_zero(out_texcoord		);
+                in_tex_count=0;
+                in_texcoord_count=0;
+                out_texcoord_count=0;
 
-				height_axis=HGL_AXIS_NONE;
-			}
+                hgl_zero(in_tex             );
+                hgl_zero(in_texcoord_num    );
+                hgl_zero(in_vertex_buffer   );
+                hgl_zero(out_texcoord       );
 
-			void vs::add_mvp(bool normal)
-			{
-				//add_uniform_mat4(HGL_VS_PROJECTION_MATRIX);
-				add_uniform_mat4(HGL_VS_MVP_MATRIX);				//传proj*mv，mv两个而不是proj,mv两个，以省去在vs中计算proj*mv
+                height_axis=HGL_AXIS_NONE;
+            }
 
-				if(normal)
-					add_uniform_mat4(HGL_VS_NORMAL_MATRIX);
+            void vs::add_mvp(bool normal)
+            {
+                //add_uniform_mat4(HGL_VS_PROJECTION_MATRIX);
+                add_uniform_mat4(HGL_VS_MVP_MATRIX);                //传proj*mv，mv两个而不是proj,mv两个，以省去在vs中计算proj*mv
 
-				mvp_matrix=true;
-			}
+                if(normal)
+                    add_uniform_mat3(HGL_VS_NORMAL_MATRIX);
+
+                mvp_matrix=true;
+            }
 
             void vs::add_layout_in(int vb_index,const char *name,int num)
             {
-//                 UTF8String str="#define VB_"+UTF8String(VertexBufferName[vb_index])+UTF8String("\t")+UTF8String(vb_index)+UTF8String("\n");
-//
-//                 add(str);
-
-//                 add("layout(location=VB_");
-//                 add(VertexBufferName[vb_index]);
-
                 add("layout(location=");
                 add(UTF8String(vb_index));
                 add(") ");
                 add_in_fv(name,num);
             }
 
-			void vs::add_in_vertex(int num)
-			{
-				vertex_type=num;
+            void vs::add_in_vertex(int num)
+            {
+                vertex_type=num;
 
-				add_layout_in(vbtIndex,HGL_VS_VERTEX,num);
+                add_layout_in(vbtIndex,HGL_VS_VERTEX,num);
 
-				in_vertex_buffer[vbtVertex]=true;
-			}
+                in_vertex_buffer[vbtVertex]=true;
+            }
 
-			void vs::add_in_normal()
-			{
-				add_layout_in(vbtNormal,HGL_VS_NORMAL,3);
-				//add_out_vec3(HGL_FS_NORMAL);
+            void vs::add_in_normal()
+            {
+                add_layout_in(vbtNormal,HGL_VS_NORMAL,3);
 
-				in_normal=sitVertexAttrib;
+                add_out_vec3(HGL_FS_NORMAL);
 
-				in_vertex_buffer[vbtNormal]=true;
-			}
+                in_normal=sitVertexAttrib;
 
-			void vs::add_uniform_normal()
-			{
-				add_uniform_vec3(HGL_VS_NORMAL);
-				add_out_vec3(HGL_FS_NORMAL);
+                in_vertex_buffer[vbtNormal]=true;
+            }
 
-				in_normal=sitUniform;
-			}
+            void vs::add_uniform_normal()
+            {
+                add_uniform_vec3(HGL_VS_NORMAL);
+                add_out_vec3(HGL_FS_NORMAL);
 
-			int vs::SetVertexColorFormat(ColorFormat fmt)
-			{
-				if(fmt<=HGL_COLOR_NONE||fmt>=HGL_COLOR_END)return(0);
+                in_normal=sitUniform;
+            }
 
-				if(fmt==HGL_COLOR_ALPHA				){vertex_color_to_vec4="vec4(1.0,1.0,1.0," HGL_VS_COLOR ")";return(1);}
-				if(fmt==HGL_COLOR_LUMINANCE			){vertex_color_to_vec4="vec4(vec3(" HGL_VS_COLOR "),1.0)";return(1);}
-				if(fmt==HGL_COLOR_LUMINANCE_ALPHA	){vertex_color_to_vec4="vec4(vec3(" HGL_VS_COLOR ".x)," HGL_VS_COLOR ".y)";return(2);}
-				if(fmt==HGL_COLOR_RGB				){vertex_color_to_vec4="vec4(" HGL_VS_COLOR ",1.0)";return(3);}
-				if(fmt==HGL_COLOR_RGBA				){vertex_color_to_vec4=HGL_VS_COLOR;return(4);}
+            int vs::SetVertexPixelCompoment(PixelCompoment fmt)
+            {
+                if(fmt<=HGL_PC_NONE||fmt>=HGL_PC_END)return(0);
 
-				LOG_ERROR(OS_TEXT("输入的颜色格式无法处理：")+OSString(fmt));
-				return(0);
-			}
+                if(fmt==HGL_PC_ALPHA            ){vertex_color_to_vec4="vec4(1.0,1.0,1.0," HGL_VS_COLOR ")";return(1);}
+                if(fmt==HGL_PC_LUMINANCE        ){vertex_color_to_vec4="vec4(vec3(" HGL_VS_COLOR "),1.0)";return(1);}
+                if(fmt==HGL_PC_LUMINANCE_ALPHA  ){vertex_color_to_vec4="vec4(vec3(" HGL_VS_COLOR ".x)," HGL_VS_COLOR ".y)";return(2);}
+                if(fmt==HGL_PC_RGB              ){vertex_color_to_vec4="vec4(" HGL_VS_COLOR ",1.0)";return(3);}
+                if(fmt==HGL_PC_RGBA             ){vertex_color_to_vec4=HGL_VS_COLOR;return(4);}
 
-			void vs::set_color_material()
-			{
-				color_material=true;
+                LOG_ERROR(OS_TEXT("输入的颜色格式无法处理：")+OSString(fmt));
+                return(0);
+            }
 
-				add_uniform_vec4(HGL_MATERIAL_COLOR);
-			}
+            void vs::set_color_material()
+            {
+                color_material=true;
 
-			void vs::add_in_color(ColorFormat fmt)
-			{
-				const int num=SetVertexColorFormat(fmt);
+                add_uniform_vec4(HGL_MATERIAL_COLOR);
+            }
 
-				if(num<=0)
-				{
-					LOG_ERROR(OS_TEXT("顶点色输入无格式信息或格式信息错误"));
-					return;
-				}
+            void vs::add_in_color(PixelCompoment fmt)
+            {
+                const int num=SetVertexPixelCompoment(fmt);
 
-				in_vertex_color=sitVertexAttrib;
+                if(num<=0)
+                {
+                    LOG_ERROR(OS_TEXT("顶点色输入无格式信息或格式信息错误"));
+                    return;
+                }
 
-				add_layout_in(vbtColor,HGL_VS_COLOR,num);
-				add_out_fv(HGL_FS_COLOR,4);
+                in_vertex_color=sitVertexAttrib;
 
-				in_vertex_buffer[vbtColor]=true;
-			}
+                add_layout_in(vbtColor,HGL_VS_COLOR,num);
+                add_out_fv(HGL_FS_COLOR,4);
 
-			void vs::add_in_texture(const char *vb_name,uint tex_type,uint color_format,int mtc_index)
-			{
-				MATERIAL_TEXTURE_CHANNEL_NAME mtc_name;
+                in_vertex_buffer[vbtColor]=true;
+            }
 
-				GetMaterialTextureName(mtc_name,mtc_index);
+            void vs::add_in_texture(const char *vb_name,uint tex_type,uint pixel_format,int mtc_index)
+            {
+                MATERIAL_TEXTURE_CHANNEL_NAME mtc_name;
 
-				add_sampler(mtc_name,tex_type);
+                GetMaterialTextureName(mtc_name,mtc_index);
 
-				if(color_format!=GL_RGBA)
-					tex_sampler[mtc_index].Strcat("vec4(");
+                add_sampler(mtc_name,tex_type);
 
-				tex_sampler[mtc_index].Strcat("texture(");		//texture会处理过滤,如果不过滤使用texelFetch会更高效
-				tex_sampler[mtc_index].Strcat(mtc_name);
-				tex_sampler[mtc_index].Strcat(",");
-				tex_sampler[mtc_index].Strcat(vb_name);
-				tex_sampler[mtc_index].Strcat(")");
+                if(pixel_format!=GL_RGBA)
+                    tex_sampler[mtc_index].Strcat("vec4(");
 
-				if(color_format!=GL_RGBA)
-				{
-					if(color_format==GL_DEPTH	)tex_sampler[mtc_index].Strcat(".rrr,1)");else
-					if(color_format==GL_RED		)tex_sampler[mtc_index].Strcat(".rrr,1)");else
-					if(color_format==GL_RG		)tex_sampler[mtc_index].Strcat(".rrr,b)");else		//一般是luminance+a
-					if(color_format==GL_RGB		)tex_sampler[mtc_index].Strcat(".rgb,1)");else
-					{
-						//还有srgb,srgba就暂时不知道了如果处理了
-					}
-				}
+                tex_sampler[mtc_index].Strcat("texture(");        //texture会处理过滤,如果不过滤使用texelFetch会更高效
+                tex_sampler[mtc_index].Strcat(mtc_name);
+                tex_sampler[mtc_index].Strcat(",");
+                tex_sampler[mtc_index].Strcat(vb_name);
+                tex_sampler[mtc_index].Strcat(")");
 
-				in_tex[mtc_index]=true;
-				in_tex_count++;
-			}
+                if(pixel_format!=GL_RGBA)
+                {
+                    if(pixel_format==GL_DEPTH   )tex_sampler[mtc_index].Strcat(".rrr,1)");else
+                    if(pixel_format==GL_RED     )tex_sampler[mtc_index].Strcat(".rrr,1)");else
+                    if(pixel_format==GL_RG      )tex_sampler[mtc_index].Strcat(".rrr,b)");else        //一般是luminance+a
+                    if(pixel_format==GL_RGB     )tex_sampler[mtc_index].Strcat(".rgb,1)");else
+                    {
+                        //还有srgb,srgba就暂时不知道了如果处理了
+                    }
+                }
 
-			/**
-			* 添加一个纹理坐标输入
-			* @param vbt 输入纹理坐标缓冲区编号
-			* @param vb 输入纹理坐标缓冲区名称
-			* @param coord_num 坐标维数
-			* @param mtc_index 目标纹理通道编号
-			*/
-			void vs::add_in_texcoord(int vbt,const char *vb_name,int coord_num,int mtc_index)
-			{
-				if(mtc_index<0||mtc_index>=HGL_MAX_TEX_COORD)return;
+                in_tex[mtc_index]=true;
+                in_tex_count++;
+            }
 
-				in_texcoord_num[mtc_index]=coord_num;
+            /**
+            * 添加一个纹理坐标输入
+            * @param vbt 输入纹理坐标缓冲区编号
+            * @param vb 输入纹理坐标缓冲区名称
+            * @param coord_num 坐标维数
+            * @param mtc_index 目标纹理通道编号
+            */
+            void vs::add_in_texcoord(int vbt,const char *vb_name,int coord_num,int mtc_index)
+            {
+                if(mtc_index<0||mtc_index>=HGL_MAX_TEX_COORD)return;
 
-				in_texcoord_count++;
+                in_texcoord_num[mtc_index]=coord_num;
 
-				if(in_vertex_buffer[vbt])return;											//已经定义过了，多个数据共用一个贴图坐标时有可能产生这种情况
+                in_texcoord_count++;
 
-				add_in_fv(vb_name,coord_num);												//用vb_name是为了让输入的顶点数据依旧使用TexCoord0,1,2,3这样的名字以便于调试
+                if(in_vertex_buffer[vbt])return;                                            //已经定义过了，多个数据共用一个贴图坐标时有可能产生这种情况
 
-				in_vertex_buffer[vbt]=true;
-			}
+                add_in_fv(vb_name,coord_num);                                                //用vb_name是为了让输入的顶点数据依旧使用TexCoord0,1,2,3这样的名字以便于调试
 
-			/**
-			* 添加一个输出纹理坐标
-			* @param coord_num 坐标维数
-			* @param mtc_index 目标纹理通道编号
-			* @param source 输入数据源，必须额外指名，因为有可能来源并不是当前通道
-			*/
-			void vs::add_out_texcoord(int coord_num,int mtc_index,const char *source)
-			{
-				if(mtc_index<0||mtc_index>=HGL_MAX_TEX_COORD)return;
+                in_vertex_buffer[vbt]=true;
+            }
 
-				MATERIAL_TEXTURE_CHANNEL_NAME mtc_name;
+            void vs::set_light_mode(const LightMode &lm)
+            {
+                light_mode=lm;
+            }
 
-				GetMaterialTextureName(mtc_name,mtc_index);
+            void vs::set_sun_light(bool sl)
+            {
+                sun_light=sl;
 
-				out_texcoord_count++;
-				out_texcoord[mtc_index]=true;
+                if(light_mode==HGL_VERTEX_LIGHT&&sun_light)
+                {                    
+                    add_uniform_vec3(HGL_SUN_LIGHT_DIRECTION);
+                    add_out_float(HGL_SUN_LIGHT_INTENSITY);
+                }   
+            }
 
-				out_texcoord_name[mtc_index].Strcat(HGL_FS_TEXCOORD);
-				out_texcoord_name[mtc_index].Strcat(mtc_name);
+            /**
+            * 添加一个输出纹理坐标
+            * @param coord_num 坐标维数
+            * @param mtc_index 目标纹理通道编号
+            * @param source 输入数据源，必须额外指名，因为有可能来源并不是当前通道
+            */
+            void vs::add_out_texcoord(int coord_num,int mtc_index,const char *source)
+            {
+                if(mtc_index<0||mtc_index>=HGL_MAX_TEX_COORD)return;
 
-				out_texcoord_source[mtc_index].Strcat(source);
+                MATERIAL_TEXTURE_CHANNEL_NAME mtc_name;
 
-				add_out_fv(out_texcoord_name[mtc_index],coord_num);
-			}
+                GetMaterialTextureName(mtc_name,mtc_index);
 
-			bool vs::add_end()
-			{
-				add("\tvec4 Position;\n");
+                out_texcoord_count++;
+                out_texcoord[mtc_index]=true;
 
-				if(in_normal)			//有法线要算
-				{
-// 					add("\n\tvec3 VP;\n");
-// 					add("\tvec3 MVNormal;\n");
-				}
+                out_texcoord_name[mtc_index].Strcat(HGL_FS_TEXCOORD);
+                out_texcoord_name[mtc_index].Strcat(mtc_name);
 
-				if(in_vertex_color)		//有顶点颜色
-				{
-					if(!color_material)
-					{
-						add(U8_TEXT("\n\t" HGL_FS_COLOR "=")+vertex_color_to_vec4+U8_TEXT(";\n"));
-					}
-					else
-					{
-						add(U8_TEXT("\n\t" HGL_FS_COLOR "=")+vertex_color_to_vec4+U8_TEXT("*" HGL_MATERIAL_COLOR ";\n"));
-					}
-				}
+                out_texcoord_source[mtc_index].Strcat(source);
 
-				if(out_texcoord_count)	//有纹理坐标需要输出到fs
-				{
-					int count=0;
+                add_out_fv(out_texcoord_name[mtc_index],coord_num);
+            }
 
-					for(int i=0;i<HGL_MAX_TEX_COORD;i++)
-						if(out_texcoord[i])
-							count++;
+            bool vs::add_end()
+            {
+                add("\tvec4 Position;\n");
 
-					if(count)
-					{
-						add();
+                if(in_normal)            //有法线要算
+                {
+//                     add("\n\tvec3 VP;\n");
+//                     add("\tvec3 MVNormal;\n");
+                }
 
-						for(int i=0;i<HGL_MAX_TEX_COORD;i++)
-						{
-							if(!out_texcoord[i])continue;
+                if(in_vertex_color)        //有顶点颜色
+                {
+                    if(!color_material)
+                    {
+                        add(U8_TEXT("\n\t" HGL_FS_COLOR "=")+vertex_color_to_vec4+U8_TEXT(";\n"));
+                    }
+                    else
+                    {
+                        add(U8_TEXT("\n\t" HGL_FS_COLOR "=")+vertex_color_to_vec4+U8_TEXT("*" HGL_MATERIAL_COLOR ";\n"));
+                    }
+                }
 
-							add(U8_TEXT("\t")+out_texcoord_name[i]+U8_TEXT("=")+out_texcoord_source[i]+U8_TEXT(";\n"));
-						}
-					}
-				}
+                if(out_texcoord_count)    //有纹理坐标需要输出到fs
+                {
+                    int count=0;
 
-				//gl_Position计算
-				{
-					UTF8String pos_str="\tPosition=";
+                    for(int i=0;i<HGL_MAX_TEX_COORD;i++)
+                        if(out_texcoord[i])
+                            count++;
 
-					if(vertex_type==2)
-					{
-						pos_str.Strcat("vec4(");
+                    if(count)
+                    {
+                        add();
 
-						if(height_axis==HGL_AXIS_NONE)							//非高度图
-						{
-							pos_str.Strcat(HGL_VS_VERTEX ",0.0,1.0);\n");
-						}
-						else if(height_axis==HGL_AXIS_X)						//X轴向上
-						{
-							pos_str.Strcat(tex_sampler[mtcHeight]);
-							pos_str.Strcat(".r,");
+                        for(int i=0;i<HGL_MAX_TEX_COORD;i++)
+                        {
+                            if(!out_texcoord[i])continue;
 
-							pos_str.Strcat(HGL_VS_VERTEX ",1.0);\n");
-						}
-						else if(height_axis==HGL_AXIS_Y)						//Y轴向上
-						{
-							pos_str.Strcat(HGL_VS_VERTEX ".x,");
+                            add(U8_TEXT("\t")+out_texcoord_name[i]+U8_TEXT("=")+out_texcoord_source[i]+U8_TEXT(";\n"));
+                        }
+                    }
+                }
 
-							pos_str.Strcat(tex_sampler[mtcHeight]);
-							pos_str.Strcat(".r," HGL_VS_VERTEX ".y,1.0);\n");
-						}
-						else if(height_axis==HGL_AXIS_Z)						//Z轴向上
-						{
-							pos_str.Strcat(HGL_VS_VERTEX ",");
+                //gl_Position计算
+                {
+                    UTF8String pos_str="\tPosition=";
 
-							pos_str.Strcat(tex_sampler[mtcHeight]);
-							pos_str.Strcat(".r,1.0);\n");
-						}
-						else
-						{
-							LOG_ERROR(OS_TEXT("vs::add_end(),生成高度图高度坐标时，发现向上轴标识无法理解"));
-						}
-					}
-					else
-					if(vertex_type==3)
-					{
-						pos_str.Strcat("vec4(" HGL_VS_VERTEX ",1.0);\n");
-					}
-					else
-					if(vertex_type==4)
-					{
-						pos_str.Strcat(HGL_VS_VERTEX ";\n");
-					}
-					else
-					{
-						LOG_ERROR(OS_TEXT("错误的顶点格式!"));
-						return(false);
-					}
+                    if(vertex_type==2)
+                    {
+                        pos_str.Strcat("vec4(");
 
-					add();
-					add(pos_str);
-					add();
+                        if(height_axis==HGL_AXIS_NONE)                          //非高度图
+                        {
+                            pos_str.Strcat(HGL_VS_VERTEX ",0.0,1.0);\n");
+                        }
+                        else if(height_axis==HGL_AXIS_X)                        //X轴向上
+                        {
+                            pos_str.Strcat(tex_sampler[mtcHeight]);
+                            pos_str.Strcat(".r,");
 
-					if(!mvp_matrix)
-						add("\tgl_Position=Position;\n");
-					else
+                            pos_str.Strcat(HGL_VS_VERTEX ",1.0);\n");
+                        }
+                        else if(height_axis==HGL_AXIS_Y)                        //Y轴向上
+                        {
+                            pos_str.Strcat(HGL_VS_VERTEX ".x,");
+
+                            pos_str.Strcat(tex_sampler[mtcHeight]);
+                            pos_str.Strcat(".r," HGL_VS_VERTEX ".y,1.0);\n");
+                        }
+                        else if(height_axis==HGL_AXIS_Z)                        //Z轴向上
+                        {
+                            pos_str.Strcat(HGL_VS_VERTEX ",");
+
+                            pos_str.Strcat(tex_sampler[mtcHeight]);
+                            pos_str.Strcat(".r,1.0);\n");
+                        }
+                        else
+                        {
+                            LOG_ERROR(OS_TEXT("vs::add_end(),生成高度图高度坐标时，发现向上轴标识无法理解"));
+                        }
+                    }
+                    else
+                    if(vertex_type==3)
+                    {
+                        pos_str.Strcat("vec4(" HGL_VS_VERTEX ",1.0);\n");
+                    }
+                    else
+                    if(vertex_type==4)
+                    {
+                        pos_str.Strcat(HGL_VS_VERTEX ";\n");
+                    }
+                    else
+                    {
+                        LOG_ERROR(OS_TEXT("错误的顶点格式!"));
+                        return(false);
+                    }
+
+                    add();
+                    add(pos_str);
+                }
+
+                if(in_normal)
+                {
+ //#ifdef HGL_MATRIX_LEFT
+ //                    add("\n\tVP=normalize(" HGL_VS_LIGHT_POSITION "-" HGL_VS_NORMAL_MATRIX "*Position);\n");
+ //                    add("\tMVNormal=normalize(" HGL_VS_NORMAL_MATRIX "*" HGL_VS_NORMAL ");\n\n");
+ //#else
+ //                    add("\n\tVP=normalize(" HGL_VS_LIGHT_POSITION "-Position*" HGL_VS_NORMAL_MATRIX ");\n");
+ //                    add("\tMVNormal=normalize(" HGL_VS_NORMAL "*" HGL_VS_NORMAL_MATRIX ");\n\n");
+ //#endif//HGL_MATRIX_LEFT
+
+                    add("\t" HGL_FS_NORMAL "=normalize(" HGL_VS_NORMAL "*" HGL_VS_NORMAL_MATRIX ");\n");
+
+                    //灯光
+                    if(light_mode==HGL_VERTEX_LIGHT)
+                    {
+                        if(sun_light)
+                        {
+                            add("\n\t" HGL_SUN_LIGHT_INTENSITY "=max(dot(" HGL_FS_NORMAL "," HGL_SUN_LIGHT_DIRECTION "),0.0);");
+
+                            //未完成,不可用
+                            //add("\n"
+                            //    "\tif(" HGL_SUN_LIGHT_INTENSITY ">0.0)\n"
+                            //    "\t\tfloat intSpec=max(dot(normalize(" HGL_SUN_LIGHT_DIRECTION "+normalize(-vec3(" HGL_VS_MODELVIEW_MATRIX "*" HGL_VS_VERTEX ")))," HGL_FS_NORMAL "),0.0);"
+                            //    );
+                        }
+                    }
+                }
+
+                add();
+
+                if (!mvp_matrix)
+                    add("\tgl_Position=Position;\n");
+                else
 #ifdef HGL_MATRIX_LEFT
-						add("\tgl_Position=" HGL_VS_MVP_MATRIX "*Position;\n");
+                    add("\tgl_Position=" HGL_VS_MVP_MATRIX "*Position;\n");
 #else
-                        add("\tgl_Position=Position*" HGL_VS_MVP_MATRIX ";\n");
+                    add("\tgl_Position=Position*" HGL_VS_MVP_MATRIX ";\n");
 #endif//HGL_MATRIX_LEFT
-				}
 
-				if(in_normal)
-				{
-// #ifdef HGL_MATRIX_LEFT
-//                     add("\n\tVP=normalize(" HGL_VS_LIGHT_POSITION "-" HGL_VS_NORMAL_MATRIX "*Position);\n");
-// 					add("\tMVNormal=normalize(" HGL_VS_NORMAL_MATRIX "*" HGL_VS_NORMAL ");\n\n");
-// #else
-//                     add("\n\tVP=normalize(" HGL_VS_LIGHT_POSITION "-Position*" HGL_VS_NORMAL_MATRIX ");\n");
-//                     add("\tMVNormal=normalize(" HGL_VS_NORMAL "*" HGL_VS_NORMAL_MATRIX ");\n\n");
-// #endif//HGL_MATRIX_LEFT
-//
-// 					add("\t" HGL_FS_LIGHT_INTENSITY "=" HGL_VS_GLOBAL_LIGHT_INTENSITY "+max(0.0,dot(MVNormal,VP));\n");
-				}
+                return(true);
+            }
+        }//namespace shadergen
 
-				return(true);
-			}
-		}//namespace shadergen
-
-		/**
-		* 生成Vertex Shader代码
-		* @param state 渲染状态
-		* @return 生成的Vertex Shader代码
-		* @return NULL 生成失败
-		*/
+        /**
+        * 生成Vertex Shader代码
+        * @param state 渲染状态
+        * @return 生成的Vertex Shader代码
+        * @return NULL 生成失败
+        */
 #ifdef _DEBUG
-		char *MakeVertexShader(const RenderState *state,const os_char *filename)
+        char *MakeVertexShader(const RenderState *state,const os_char *filename)
 #else
-		char *MakeVertexShader(const RenderState *state)
+        char *MakeVertexShader(const RenderState *state)
 #endif//
-		{
-			if(!state)return(nullptr);
+        {
+            if(!state)return(nullptr);
 
-			shadergen::vs code;
+            shadergen::vs code;
 
-			code.add_version(330);		//OpenGL 3.3
+            code.add_version(330);        //OpenGL 3.3
 
-			if(state->mvp)
-			{
-				code.add_mvp(((state->vertex_normal||state->normal_map)&&state->lighting)?true:false);		//需要法线,则必须传modelview
-				code.add();
-			}
+            if(state->mvp)
+            {
+                code.add_mvp(((state->vertex_normal||state->normal_map)&&state->light_mode>HGL_NONE_LIGHT)?true:false);        //需要法线,则必须传modelview
+            }
 
-			//顶点
-			{
-				code.add_in_vertex(state->vertex_coord);
-				code.add();
-			}
+            //顶点
+            {
+                code.add_in_vertex(state->vertex_coord);
+            }
 
-			//法线
-			if(state->vertex_normal)				//使用顶点法线
-			{
-				code.add_in_normal();
-				code.add();
-			}
+            //法线
+            if(state->vertex_normal)                //使用顶点法线
+            {
+                code.add_in_normal();
 
-			//颜色
-			if(state->vertex_color)					//使用顶点颜色
-			{
-				code.add_in_color(state->vertex_color_format);
-				code.add();
+                //灯光
+                code.set_light_mode(state->light_mode);
+                code.set_sun_light(state->sun_light);
+            }
 
-				if(state->color_material)			//使用颜色材质传入,但没顶点颜色,也无需使用材质颜色
-				{
-					code.set_color_material();
-				}
-			}
+            //颜色
+            if(state->vertex_color)                 //使用顶点颜色
+            {
+                code.add_in_color(state->vertex_pixel_compoment);
 
-			//纹理
-			if(state->tex_number)					//如果有贴图
-			{
-				int tex_count=0;
-				VERTEX_BUFFER_NAME vbn;
+                if(state->color_material)            //使用颜色材质传入,但没顶点颜色,也无需使用材质颜色
+                {
+                    code.set_color_material();
+                }
+            }
 
-				//高度图
-				if(state->height_map)					//如果是高度图，则是拿vertex当高度图坐标、以及各种纹理坐标
-				{										//高度图网格永远画在(0,0)-(1,1)的范围内，所以这个坐标同时可以直接用于高图度的纹理坐标，以及漫反射、法线、光照、阴影等贴图上。
-					if(state->vertex_coord!=2)
-					{
-						LOG_ERROR(OS_TEXT("使用高度图，但传入的顶点坐标不是2维数据."));
-						return(nullptr);
-					}
+            //纹理
+            if(state->tex_number)                    //如果有贴图
+            {
+                int tex_count=0;
+                VERTEX_BUFFER_NAME vbn;
 
-					int hm_map_count=0;
+                //高度图
+                if(state->height_map)                    //如果是高度图，则是拿vertex当高度图坐标、以及各种纹理坐标
+                {                                        //高度图网格永远画在(0,0)-(1,1)的范围内，所以这个坐标同时可以直接用于高图度的纹理坐标，以及漫反射、法线、光照、阴影等贴图上。
+                    if(state->vertex_coord!=2)
+                    {
+                        LOG_ERROR(OS_TEXT("使用高度图，但传入的顶点坐标不是2维数据."));
+                        return(nullptr);
+                    }
 
-					GetVertexBufferName(vbn,vbtVertex);
+                    int hm_map_count=0;
 
-					code.add_in_texture(vbn,HGL_TEXTURE_2D,GL_RG,mtcHeight);
+                    GetVertexBufferName(vbn,vbtVertex);
 
-					if(state->tex_type[mtcDiffuse]!=HGL_TEXTURE_2D)					//漫反射，绘制坐标即贴图坐标
-					{
-						code.add_in_texcoord(vbtVertex,vbn,2,mtcDiffuse);
-						hm_map_count++;
-					}
+                    code.add_in_texture(vbn,HGL_TEXTURE_2D,GL_RG,mtcHeight);
 
-					if(hm_map_count)
-						code.add_out_texcoord(2,mtcHeight,vbn);		//将顶点坐标传给漫反射、镜片光、高光等纹理坐标
+                    if(state->tex_type[mtcDiffuse]!=HGL_TEXTURE_2D)                    //漫反射，绘制坐标即贴图坐标
+                    {
+                        code.add_in_texcoord(vbtVertex,vbn,2,mtcDiffuse);
+                        hm_map_count++;
+                    }
 
-					code.add();
+                    if(hm_map_count)
+                        code.add_out_texcoord(2,mtcHeight,vbn);        //将顶点坐标传给漫反射、镜片光、高光等纹理坐标
 
-					code.set_height_axis(state->axis);
-				}
+                    code.add();
 
-				for(int i=0;i<mtcMax;i++)							//增加贴图坐标
-				{
-					if(!state->vbc[i])continue;
+                    code.set_height_axis(state->axis);
+                }
 
-					const VertexBufferType	vbt	=state->vbt[i];			//当前通道顶点缓冲区类型
-					const uint8				vbc	=state->vbc[i];			//当前通道顶点缓冲区坐标维数
+                for(int i=0;i<mtcMax;i++)                            //增加贴图坐标
+                {
+                    if(!state->vbc[i])continue;
 
-					GetVertexBufferName(vbn,vbt);
+                    const VertexBufferType    vbt    =state->vbt[i];            //当前通道顶点缓冲区类型
+                    const uint8               vbc    =state->vbc[i];            //当前通道顶点缓冲区坐标维数
 
-					code.add_in_texcoord(vbt,vbn,vbc,i);	//第一个参数用vbt而不用i是为了让shader中的texcoord?编号与程序中填写的缓冲区编号一致，便于调试查看
-					code.add_out_texcoord(vbc,i,vbn);		//一般是输出到fragment shader用
+                    GetVertexBufferName(vbn,vbt);
 
-					tex_count++;
-				}
+                    code.add_in_texcoord(vbt,vbn,vbc,i);        //第一个参数用vbt而不用i是为了让shader中的texcoord?编号与程序中填写的缓冲区编号一致，便于调试查看
+                    code.add_out_texcoord(vbc,i,vbn);           //一般是输出到fragment shader用
 
-				if(tex_count)		//没有加贴图不加这个空行
-					code.add();
-			}
+                    tex_count++;
+                }
 
-			code.add_main_begin();
+                if(tex_count)        //没有加贴图不加这个空行
+                    code.add();
+            }
 
-			code.add_end();							//收尾各方面的处理
+            code.add_main_begin();
 
-			code.add_main_end();
+            code.add_end();                            //收尾各方面的处理
+
+            code.add_main_end();
 
 #ifdef _DEBUG
-			code.debug_out(filename);
+            code.debug_out(filename);
 #endif//_DEBUG
 
-			return code.end_get();
-		}//char *MakeVertexShader(Renderable *able)
-	}//namespace graph
+            return code.end_get();
+        }//char *MakeVertexShader(Renderable *able)
+    }//namespace graph
 }//namespace hgl

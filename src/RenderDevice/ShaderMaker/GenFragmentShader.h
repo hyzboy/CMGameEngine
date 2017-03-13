@@ -3,7 +3,7 @@
 
 #include"ShaderStringList.h"
 #include<hgl/graph/Material.h>
-#include<hgl/graph/ColorFormat.h>
+#include<hgl/graph/PixelCompoment.h>
 namespace hgl
 {
 	namespace graph
@@ -15,15 +15,19 @@ namespace hgl
 				shader_in_type in_normal;
 				shader_in_type in_color;
 
-				bool in_light;
+                LightMode light_mode;
+                bool sun_light;
 
 				bool color_material;
 
 				uint32 mtc_tex_type[mtcMax];
-				UTF8String tex_sampler[mtcMax];
+                uint32 tex_pf[mtcMax];              //纹理象素格式
+				UTF8String tex_sampler_rgb[mtcMax];
+                UTF8String tex_sampler_alpha[mtcMax];
 				UTF8String tex_coord[mtcMax];
 
 				bool alpha_test;
+                bool hsv_clamp_color;
 				bool outside_discard;
 
 			public:
@@ -33,6 +37,7 @@ namespace hgl
 				void add_frag_color();
 
 				void add_alpha_test();
+                void add_hsv_clamp_color();
 				void open_outside_discard(){outside_discard=true;}
 
 			public:		//法线
@@ -45,7 +50,8 @@ namespace hgl
 
 				void add_in_color();
 
-				void add_in_light();
+				void set_light_mode(const LightMode &lm){light_mode=lm;}
+                void add_sun_light(){sun_light=true;}
 
 			public:		//贴图
 
@@ -56,8 +62,8 @@ namespace hgl
 
 				bool add_end();				//普通深度计算
 
-				void add_gbuffer_encode();
-				bool add_ds_end();			//延迟渲染首次计算
+				//void add_gbuffer_encode();
+				//bool add_ds_end();			//延迟渲染首次计算
 			};//struct fs
 		}//namespace shadergen
 	}//namespace graph

@@ -3,61 +3,61 @@
 
 namespace hgl
 {
-	ProcMutex::ProcMutex()
-	{
-		lock = nullptr;
-	}
+    ProcMutex::ProcMutex()
+    {
+        lock = nullptr;
+    }
 
-	bool ProcMutex::Create(const os_char *name)
-	{
-		if (lock != nullptr)return(false);
+    bool ProcMutex::Create(const os_char *name)
+    {
+        if (lock != nullptr)return(false);
 
-		lock = CreateMutexW(NULL, FALSE, name);
+        lock = CreateMutexW(NULL, FALSE, name);
 
-		if(!lock)
-			return(true);
+        if(!lock)
+            return(true);
 
-		lock = nullptr;
-		return(false);
-	}
+        lock = nullptr;
+        return(false);
+    }
 
-	void ProcMutex::Clear()
-	{
-		if (lock == nullptr)return;
+    void ProcMutex::Clear()
+    {
+        if (lock == nullptr)return;
 
-		CloseHandle(lock);
+        CloseHandle(lock);
 
-		lock = nullptr;
-	}
+        lock = nullptr;
+    }
 
-	bool ProcMutex::Lock()
-	{
-		if (lock == nullptr)return(false);
+    bool ProcMutex::Lock()
+    {
+        if (lock == nullptr)return(false);
 
-		DWORD rv = WaitForSingleObject(lock, INFINITE);
+        DWORD rv = WaitForSingleObject(lock, INFINITE);
 
-		if (rv == WAIT_OBJECT_0 || rv == WAIT_ABANDONED)
-			return(true);
+        if (rv == WAIT_OBJECT_0 || rv == WAIT_ABANDONED)
+            return(true);
 
-		return(false);
-	}
+        return(false);
+    }
 
-	bool ProcMutex::TryLock()
-	{
-		if (lock == nullptr)return(false);
+    bool ProcMutex::TryLock()
+    {
+        if (lock == nullptr)return(false);
 
-		DWORD rv = WaitForSingleObject(lock, 0);
+        DWORD rv = WaitForSingleObject(lock, 0);
 
-		if (rv == WAIT_OBJECT_0 || rv == WAIT_ABANDONED)
-			return(true);
+        if (rv == WAIT_OBJECT_0 || rv == WAIT_ABANDONED)
+            return(true);
 
-		return(false);
-	}
+        return(false);
+    }
 
-	bool ProcMutex::Unlock()
-	{
-		if (lock == nullptr)return(false);
+    bool ProcMutex::Unlock()
+    {
+        if (lock == nullptr)return(false);
 
-		return(!ReleaseMutex(lock));
-	}
+        return(!ReleaseMutex(lock));
+    }
 }//namespace hgl

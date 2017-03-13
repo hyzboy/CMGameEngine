@@ -72,45 +72,6 @@ namespace hgl
 	//贴图函数
 	namespace graph
 	{
-		/**
-		* 创建2D贴图
-		* @param width 宽
-		* @param height 高
-		* @param video_format 显存格式
-		*/
-		inline Texture2D *CreateTexture2D(int width,int height,uint video_format)
-		{
-			Texture2D *tex=new Texture2D;
-
-			tex->SetImage(width,height,0,0,HGL_SF_NONE,video_format);
-
-			return tex;
-		}
-
-		class Texture2DList:public CusObjectList<Texture2D>
-		{
-			Texture2D *CreateObject()
-			{
-				return(new Texture2D);
-			}
-
-			void DeleteObject(Texture2D *tex)
-			{
-				delete tex;
-			}
-		};//class Texture2DList
-
-		//贴图采样器数据结构
-		struct TextureSampler
-		{
-			int id;									//采样器ID
-
-			uint texture_type;						//贴图类型
-
-			uint mag_filter[3];						//放大过滤
-			uint min_filter[3];						//缩小过滤
-		};//struct TextureSampler
-
 		//材质
 		Material *CreateMaterial();					///<创建材质
 
@@ -218,17 +179,17 @@ namespace hgl
 
 		inline	bool DirectRender(Renderable *obj)													///<直接渲染一个可渲染数据
 		{
-			return DirectRender(obj,0,0);
+			return DirectRender(obj,nullptr,nullptr);
 		}
 
 		inline	bool DirectRender(Renderable *obj,const Matrix4f *proj)								///<直接渲染一个可渲染数据
 		{
-			return DirectRender(obj,proj,0);
+			return DirectRender(obj,proj,nullptr);
 		}
 
 		inline	bool DirectRender(Renderable *obj,const Matrix4f &proj)								///<直接渲染一个可渲染数据
 		{
-			return DirectRender(obj,&proj,0);
+			return DirectRender(obj,&proj,nullptr);
 		}
 
 		inline	bool DirectRender(Renderable *obj,const Matrix4f *proj,const Matrix4f *mv,const Matrix4f *ltw)
@@ -252,7 +213,7 @@ namespace hgl
 
 		inline	bool DirectRender2D(Renderable *obj)
 		{
-			return DirectRender(obj,&Ortho2DMatrix,0);
+			return DirectRender(obj,&Ortho2DMatrix,nullptr);
 		}
 
 		inline	bool DirectRender2D(Renderable *obj,const Matrix4f *mv)

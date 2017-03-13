@@ -21,7 +21,7 @@ namespace hgl
 			uint fbo;
 			int viewport[4];
 
-			bool CheckFrameBufferStatus(uint);
+			bool CheckFrameBufferStatus(uint,const char *,const int);
 
 		protected:
 
@@ -108,40 +108,40 @@ namespace hgl
 			bool Use()override;
 		};//class RenderToTextureColorDepth
 
-		/**
-		 * 渲染到2D阵列纹理
-		 */
-		class RenderToTextureLayer:public RenderToTexture
-		{
-		protected:
+		///**
+		// * 渲染到2D阵列纹理
+		// */
+		//class RenderToTextureLayer:public RenderToTexture
+		//{
+		//protected:
 
-			Texture2DArray *tex_color;
-			Texture2D *tex_depth;
+		//	Texture2DArray *tex_color;
+		//	Texture2D *tex_depth;
 
-			GLenum *draw_buffers;
+		//	GLenum *draw_buffers;
 
-			Color3f back_color;
-			float init_depth;
+		//	Color3f back_color;
+		//	float init_depth;
 
-		public:
+		//public:
 
-			RenderToTextureLayer(uint width,uint height,uint depth,const TextureSourceFormat &color_tsf,const TextureSourceFormat &depth_tsf,const Color3f &bc=Color3f(0,0,0),const float id=1.0f);
-			virtual ~RenderToTextureLayer();
+		//	RenderToTextureLayer(uint width,uint height,uint depth,const TextureSourceFormat &color_tsf,const TextureSourceFormat &depth_tsf,const Color3f &bc=Color3f(0,0,0),const float id=1.0f);
+		//	virtual ~RenderToTextureLayer();
 
-			Texture2DArray *GetColorTexture(){return tex_color;}
-			Texture2D *		GetDepthTexture(){return tex_depth;}
+		//	Texture2DArray *GetColorTexture(){return tex_color;}
+		//	Texture2D *		GetDepthTexture(){return tex_depth;}
 
-			bool Use()override;
-		};//class RenderToTextureLayer
+		//	bool Use()override;
+		//};//class RenderToTextureLayer
 
-		class RenderToTextureCubeMap:public RenderToTexture
-		{
-		protected:
+		//class RenderToTextureCubeMap:public RenderToTexture
+		//{
+		//protected:
 
-			TextureCubeMap *tex;
+		//	TextureCubeMap *tex;
 
-			GLenum *draw_buffers;
-		};//class RenderToTextureCubeMap
+		//	GLenum *draw_buffers;
+		//};//class RenderToTextureCubeMap
 	}//namespace graph
 }//namespace hgl
 #endif//HGL_GRAPH_RENDER_TO_TEXTURE_INCLUDE

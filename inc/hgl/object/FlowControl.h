@@ -16,7 +16,7 @@ namespace hgl
 	*/
     class FlowControl:public _FlowControl<FlowObject>                                               ///流程对象控制类
 	{
-		RootEventBase *root_event_base;
+		RootEventBase *root_event_base=nullptr;
 
 		void InitPrivate(FlowObject *);
 

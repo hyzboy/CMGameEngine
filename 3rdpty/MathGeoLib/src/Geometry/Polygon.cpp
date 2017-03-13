@@ -377,7 +377,7 @@ bool Polygon::Contains(const vec &worldSpacePoint, float polygonThicknessSq) con
 //	float lenSq = normal.LengthSq(); ///\todo Could we treat basisU and basisV unnormalized here?
 	float dot = normal.Dot(vec(p[0]) - worldSpacePoint);
 	if (dot*dot > polygonThicknessSq)
-		return false;
+		return false; // The point is not even within the plane of the polygon - can't be contained.
 
 	int numIntersections = 0;
 
@@ -387,6 +387,7 @@ bool Polygon::Contains(const vec &worldSpacePoint, float polygonThicknessSq) con
 	// centered to lie in the origin.
 	// If the test ray (0,0) -> (+inf, 0) intersects exactly an odd number of polygon edge segments, then the query point must have been
 	// inside the polygon. The test ray is chosen like that to avoid all extra per-edge computations.
+	// This method works for both simple and non-simple (self-intersecting) polygons.
 	vec vt = vec(p.back()) - worldSpacePoint;
 	float2 p0 = float2(Dot(vt, basisU), Dot(vt, basisV));
 	if (Abs(p0.y) < epsilon)
@@ -462,15 +463,47 @@ bool Polygon::Contains2D(const LineSegment &localSpaceLineSegment) const
 	if (p.size() < 3)
 		return false;
 
-///\todo Reimplement this!
-//	if (!Contains2D(localSpaceLineSegment.a.xy()) || !Contains2D(localSpaceLineSegment.b.xy()))
-//		return false;
+	const vec basisU = BasisU();
+	const vec basisV = BasisV();
+	const vec origin = p[0];
 
-	for(int i = 0; i < (int)p.size(); ++i)
-		if (Edge2D(i).Intersects(localSpaceLineSegment))
+	LineSegment edge;
+	edge.a = POINT_VEC(Dot(p.back(), basisU), Dot(p.back(), basisV), 0); // map to 2D
+	for (int i = 0; i < (int)p.size(); ++i)
+	{
+		edge.b = POINT_VEC(Dot(p[i], basisU), Dot(p[i], basisV), 0); // map to 2D
+		if (edge.Intersects(localSpaceLineSegment))
 			return false;
+		edge.a = edge.b;
+	}
 
-	return true;
+	// The line segment did not intersect with any of the polygon edges, so either the whole line segment is inside
+	// the polygon, or it is fully outside the polygon. Test one point of the line segment to determine which.
+	return Contains(MapFrom2D(localSpaceLineSegment.a.xy()));
+}
+
+bool Polygon::Intersects2D(const LineSegment &localSpaceLineSegment) const
+{
+	if (p.size() < 3)
+		return false;
+
+	const vec basisU = BasisU();
+	const vec basisV = BasisV();
+	const vec origin = p[0];
+
+	LineSegment edge;
+	edge.a = POINT_VEC(Dot(p.back(), basisU), Dot(p.back(), basisV), 0); // map to 2D
+	for (int i = 0; i < (int)p.size(); ++i)
+	{
+		edge.b = POINT_VEC(Dot(p[i], basisU), Dot(p[i], basisV), 0); // map to 2D
+		if (edge.Intersects(localSpaceLineSegment))
+			return true;
+		edge.a = edge.b;
+	}
+
+	// The line segment did not intersect with any of the polygon edges, so either the whole line segment is inside
+	// the polygon, or it is fully outside the polygon. Test one point of the line segment to determine which.
+	return Contains(MapFrom2D(localSpaceLineSegment.a.xy()));
 }
 
 bool Polygon::Intersects(const Line &line) const
@@ -492,9 +525,18 @@ bool Polygon::Intersects(const Ray &ray) const
 bool Polygon::Intersects(const LineSegment &lineSegment) const
 {
 	Plane plane = PlaneCCW();
-	float t;
-	bool intersects = Plane::IntersectLinePlane(plane.normal, plane.d, lineSegment.a, lineSegment.b - lineSegment.a, t);
-	if (!intersects || t < 0.f || t > 1.f)
+
+	// Compute line-plane intersection (unroll Plane::IntersectLinePlane())
+	float denom = Dot(plane.normal, lineSegment.b - lineSegment.a);
+
+	if (Abs(denom) < 1e-4f) // The plane of the polygon and the line are planar? Do the test in 2D.
+		return Intersects2D(LineSegment(POINT_VEC(MapTo2D(lineSegment.a), 0), POINT_VEC(MapTo2D(lineSegment.b), 0)));
+
+	// The line segment properly intersects the plane of the polygon, so there is exactly one
+	// point of intersection between the plane of the polygon and the line segment. Test that intersection point against
+	// the line segment end points.
+	float t = (plane.d - Dot(plane.normal, lineSegment.a)) / denom;
+	if (t < 0.f || t > 1.f)
 		return false;
 
 	return Contains(lineSegment.GetPoint(t));

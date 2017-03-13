@@ -3,8 +3,8 @@
 #include<iostream>
 namespace hgl
 {
-	namespace graph
-	{
+    namespace graph
+    {
 //         void put(const char *name,const Vector3f &v)
 //         {
 //             std::cout<<name<<": "<<v.x<<","<<v.y<<","<<v.z<<std::endl;
@@ -85,8 +85,8 @@ namespace hgl
             return result*translate(-eye);
         }
 
-		void MakeCameraMatrix(Matrix4f *proj,Matrix4f *mv,const Camera *cam)
-		{
+        void MakeCameraMatrix(Matrix4f *proj,Matrix4f *mv,const Camera *cam)
+        {
 // #ifdef MATH_USE_MGL
 //             *proj=perspective_wh(cam->width,cam->height,cam->znear,cam->zfar);
 //
@@ -101,6 +101,6 @@ namespace hgl
 
             *proj=hgl::graph::Perspective(cam->fov,cam->width/cam->height,cam->znear,cam->zfar);
             *mv=hgl::graph::LookAt(cam->eye,cam->center,cam->world_up_vector);
-		}
-	}//namespace graph
+        }
+    }//namespace graph
 }//namespace hgl
