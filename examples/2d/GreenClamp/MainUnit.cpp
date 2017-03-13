@@ -101,7 +101,7 @@ public:
     {
         Color4f clamp_color;
 
-        clamp_color.Set4i(88,128,28,96);     //HS,HS
+        clamp_color.Set4i(88,128,28,96);     //H,S,H容差,S容差
 
         SetClearColor(0,0,0);
 
@@ -137,7 +137,7 @@ public:
             rectangle->SetTexCoord(mtcDiffuse,vbtDiffuseTexCoord);              ///<设定材质纹理与数据关联
 
 #ifdef _DEBUG
-            rectangle->AutoCreateShader(true,nullptr,OS_TEXT("girl"));     ///<自动创建shader，DEBUG模式下如果是新生成shader，输出成指定文件名的文件
+            rectangle->AutoCreateShader(true,nullptr,OS_TEXT("girl"));          ///<自动创建shader，DEBUG模式下如果是新生成shader，输出成指定文件名的文件
 #else
             rectangle->AutoCreateShader();                                      ///<自动创建shader,正常模式下无参数
 #endif//_DEBUG
