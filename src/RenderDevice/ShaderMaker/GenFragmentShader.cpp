@@ -218,7 +218,18 @@ namespace hgl
 
                 if(hsv_clamp_color)
                 {
-                    add(U8_TEXT("\tif(hsv_clamp(")+fin_color+U8_TEXT(".rgb))discard;\n"));
+                    //a*alpha+b*(1-alpha)=c;
+                    //c-a*alpha=b*(1-alpha);
+                    //(c-a*alpha)/(1-alpha)=b;
+
+                    //已知a,c，根据hsv色的H值误差，算出一个近似的alpha，以此alpha为结果，逆推出b
+                    //在HSV色彩空间上，一个颜色与其所有的近似色都在一起，所以可以使用H+V的值进行假设
+
+                    add(U8_TEXT("\tvec3 " HGL_FS_HSV_COLOR "=rgb2hsv(")+fin_color+U8_TEXT(");\n"));
+
+                    add(U8_TEXT("\tif(hsv_clamp(" HGL_FS_HSV_COLOR "))discard;\n"));
+
+                    //float hsv_alpha
                 }
 
                 if(in_normal)        //计算法线
@@ -257,7 +268,12 @@ namespace hgl
                     if(mtc_tex_type[mtcAlpha])
                         add(U8_TEXT("\t" HGL_FS_FRAG_COLOR "=vec4(")+fin_color+U8_TEXT(".rgb,")+fin_color+U8_TEXT(".a*" HGL_FS_ALPHA ");\n"));
                     else
-                        add(U8_TEXT("\t" HGL_FS_FRAG_COLOR "=vec4(")+fin_color+U8_TEXT(".rgb,1);\n"));
+                    {
+                        //if(hsv_clamp_color)
+                        //    add(U8_TEXT("\t" HGL_FS_FRAG_COLOR "=vec4(rgb2hsv(") + fin_color + U8_TEXT(".rgb).rgb,1);\n"));
+                        //else
+                            add(U8_TEXT("\t" HGL_FS_FRAG_COLOR "=vec4(")+fin_color+U8_TEXT(".rgb,1);\n"));
+                    }
                 }
 
                 return(true);
