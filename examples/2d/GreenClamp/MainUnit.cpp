@@ -62,7 +62,7 @@ public:
     {
         Color4f clamp_color;
 
-        clamp_color.Set4i(90,128,10,96);     //HS,HS
+        clamp_color.Set4i(88,128,28,96);     //H,S,H容差,S容差
 
         SetClearColor(0,0,0);
 

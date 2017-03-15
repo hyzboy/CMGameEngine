@@ -165,6 +165,10 @@ namespace hgl
 
             if(_sii->graphics.gl.debug)     //如果是OpenGL调试模式
                 graph::InitOpenGLDebug();
+                    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+
+                    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS_ARB);
+
 
             graph::InitRender();
             graph::InitSamplerObject(_sii->graphics.gl.texture_max_anistropy,_sii->graphics.gl.texture_lod_bias);
