@@ -23,16 +23,16 @@ namespace hgl
     */
     void PopupEmailClient(const OSString &email,const OSString &subject)
     {
-        u16char url[4096]=U16_TEXT("mailto:");
+        u16char url[MAX_PATH]=U16_TEXT("mailto:");
 
-        strcat(url, 4096, email);
+        strcat(url, MAX_PATH, email);
 
         const u16char subject_header[] = U16_TEXT("?Subject=\"");
         const size_t subject_header_size = sizeof(subject_header)/sizeof(u16char);
 
-        strcat(url, 4096, subject_header, subject_header_size);
-        strcat(url, 4096, subject);
-        strcat(url, 4096, U16_TEXT('\"'));
+        strcat(url, MAX_PATH, subject_header, subject_header_size);
+        strcat(url, MAX_PATH, subject);
+        strcat(url, MAX_PATH, U16_TEXT('\"'));
 
         ShellExecuteW(nullptr,nullptr,url,nullptr,nullptr,0);
     }
