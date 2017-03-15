@@ -17,11 +17,8 @@ namespace hgl
 		hsNone=0,		//未知
 
 		hsNotFind,		//没有找到
-
 		hsOpenError,	//打开错误
-
 		hsRead,			//正在读取
-
 		hsReadError,	//读取错误
 
 		hsEnd			//完成结束

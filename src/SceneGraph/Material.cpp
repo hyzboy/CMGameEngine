@@ -40,7 +40,7 @@ namespace hgl
             SetBlend(   HGL_BLEND_SRC_ALPHA,
                         HGL_BLEND_ONE_MINUS_SRC_ALPHA);
 
-            height_axis=HGL_AXIS_Z;
+            up_axis=HGL_AXIS_Z;
 
             color_material=false;
 

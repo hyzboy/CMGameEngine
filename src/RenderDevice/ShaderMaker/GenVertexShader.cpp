@@ -37,7 +37,7 @@ namespace hgl
                 hgl_zero(in_vertex_buffer   );
                 hgl_zero(out_texcoord       );
 
-                height_axis=HGL_AXIS_NONE;
+                up_axis=HGL_AXIS_NONE;
             }
 
             void vs::add_mvp(bool normal)
@@ -272,25 +272,25 @@ namespace hgl
                     {
                         pos_str.Strcat("vec4(");
 
-                        if(height_axis==HGL_AXIS_NONE)                          //非高度图
+                        if(up_axis==HGL_AXIS_NONE)                          //非高度图
                         {
                             pos_str.Strcat(HGL_VS_VERTEX ",0.0,1.0);\n");
                         }
-                        else if(height_axis==HGL_AXIS_X)                        //X轴向上
+                        else if(up_axis==HGL_AXIS_X)                        //X轴向上
                         {
                             pos_str.Strcat(tex_sampler[mtcHeight]);
                             pos_str.Strcat(".r,");
 
                             pos_str.Strcat(HGL_VS_VERTEX ",1.0);\n");
                         }
-                        else if(height_axis==HGL_AXIS_Y)                        //Y轴向上
+                        else if(up_axis==HGL_AXIS_Y)                        //Y轴向上
                         {
                             pos_str.Strcat(HGL_VS_VERTEX ".x,");
 
                             pos_str.Strcat(tex_sampler[mtcHeight]);
                             pos_str.Strcat(".r," HGL_VS_VERTEX ".y,1.0);\n");
                         }
-                        else if(height_axis==HGL_AXIS_Z)                        //Z轴向上
+                        else if(up_axis==HGL_AXIS_Z)                        //Z轴向上
                         {
                             pos_str.Strcat(HGL_VS_VERTEX ",");
 
@@ -446,7 +446,7 @@ namespace hgl
 
                     code.add();
 
-                    code.set_height_axis(state->axis);
+                    code.set_up_axis(state->up_axis);
                 }
 
                 for(int i=0;i<mtcMax;i++)                            //增加贴图坐标

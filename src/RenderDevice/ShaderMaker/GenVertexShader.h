@@ -40,7 +40,7 @@ namespace hgl
 				bool in_tex[mtcMax];
 				UTF8String tex_sampler[mtcMax];
 
-				Axis height_axis;				//高度图所用轴
+				Axis up_axis;				                        //向上轴
 
             protected:
 
@@ -90,7 +90,7 @@ namespace hgl
 
 			public:		//高度图
 
-				void set_height_axis(Axis a){height_axis=a;}
+				void set_up_axis(Axis a){up_axis=a;}
 
 			public:		//最终计算
 

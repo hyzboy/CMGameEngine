@@ -126,7 +126,7 @@ namespace hgl
 
             BlendMode	blend_mode;																	///<混合模式
 
-            Axis		height_axis;																///<高度图向上轴
+            Axis		up_axis;																    ///<高度图向上轴
 
         protected:	//材质本身数据
 
@@ -180,7 +180,7 @@ namespace hgl
             void SetBlend			(const BlendMode &bm)				{blend_mode=bm;}								///<设置混合模式
             void SetBlend			(uint,uint);																		///<设定混合方式(传统方式，类似于glBlendFunc)
 
-            void SetHeightAxis		(Axis axis)							{height_axis=axis;}								///<设置高度图向上轴
+            void SetUptAxis		    (const Axis &axis)					{up_axis=axis;}								    ///<设置高度图向上轴
 
             void SetColorMaterial	(bool cm)							{color_material=cm;}							///<设置是否使用颜色追踪材质
 
@@ -226,7 +226,7 @@ namespace hgl
 
             bool			GetBlend(BlendMode &bm)const		{bm=blend_mode;return blend;}		///<取得混合数据
 
-            const Axis		GetHeightAxis()const				{return height_axis;}				///<设置高度图向上轴
+            const Axis &	GetUpAxis()const				    {return up_axis;}				    ///<取得高度图向上轴
 
             bool			GetColorMaterial()const				{return color_material;}			///<读取是否使用颜色追踪材质
 

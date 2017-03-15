@@ -29,7 +29,7 @@ namespace hgl
         struct RenderState
         {
             bool				mvp;                   	///<是否包含MVP矩阵
-            Axis				axis;					///<高度轴方向
+            Axis				up_axis;				///<向上轴方向
 
             bool				vertex_color;          	///<是否包含顶点颜色
             bool				vertex_normal;         	///<是否包含顶点法线

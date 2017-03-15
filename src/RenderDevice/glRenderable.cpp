@@ -159,7 +159,7 @@ namespace hgl
 			hgl_zero(state);
 
 			state.mvp					=mvp;
-			state.axis					=material->GetHeightAxis();
+			state.up_axis				=material->GetUpAxis();
 
 			state.vertex_normal			= va->GetVertexBuffer(vbtNormal);
 			state.vertex_color			= va->GetVertexBuffer(vbtColor);
