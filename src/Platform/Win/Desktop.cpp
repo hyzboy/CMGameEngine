@@ -11,7 +11,7 @@ namespace hgl
     * 弹出一个网页浏览器,并自动打开指定的网址。示例: PopupWebBrowser(L"http://www.hyzgame.com.cn");
     * @param url 网址
     */
-    void PopupWebBrowser(const u16char *url)
+    void PopupWebBrowser(const wchar_t *url)
     {
         ShellExecuteW(nullptr,nullptr,url,nullptr,nullptr,0);
     }
@@ -21,18 +21,18 @@ namespace hgl
     * @param email 电子邮件地址
     * @param subject 邮件主题
     */
-    void PopupEmailClient(const OSString &email,const OSString &subject)
+    void PopupEmailClient(const WideString &email,const WideString &subject)
     {
-        u16char url[MAX_PATH]=U16_TEXT("mailto:");
+        wchar_t url[MAX_PATH]=L"mailto:";
 
         strcat(url, MAX_PATH, email);
 
-        const u16char subject_header[] = U16_TEXT("?Subject=\"");
-        const size_t subject_header_size = sizeof(subject_header)/sizeof(u16char);
+        const wchar_t subject_header[] = L"?Subject=\"";
+        const size_t subject_header_size = sizeof(subject_header)/sizeof(wchar_t);
 
         strcat(url, MAX_PATH, subject_header, subject_header_size);
         strcat(url, MAX_PATH, subject);
-        strcat(url, MAX_PATH, U16_TEXT('\"'));
+        strcat(url, MAX_PATH, L'\"');
 
         ShellExecuteW(nullptr,nullptr,url,nullptr,nullptr,0);
     }
@@ -46,16 +46,16 @@ namespace hgl
     * @param icon 图标文件
     * @return 是否成功
     */
-    bool CreateShortCut(const u16char *lnk_fname,const u16char *filename,const u16char *work_directory,const u16char *param,const u16char *icon)
+    bool CreateShortCut(const wchar_t *lnk_fname,const wchar_t *filename,const wchar_t *work_directory,const wchar_t *param,const wchar_t *icon)
     {
-        IShellLinkW   *psl   =   NULL;
-        IPersistFile  *pPf   =   NULL;
+        IShellLinkW   *psl=nullptr;
+        IPersistFile  *pPf=nullptr;
 
         bool result=false;
 
-        UTF16String lnk_filename=lnk_fname;
+        WideString lnk_filename=lnk_fname;
 
-        lnk_filename += U16_TEXT(".lnk");
+        lnk_filename += L".lnk";
 
         if(CoCreateInstance(CLSID_ShellLink,nullptr,CLSCTX_INPROC_SERVER,IID_IShellLinkW,(LPVOID*)&psl)==S_OK)
         if(psl->QueryInterface(IID_IPersistFile,(LPVOID*)&pPf)==S_OK)
@@ -89,9 +89,9 @@ namespace hgl
 //        * @param color 图标色彩数
 //        * @return 图标象素数据(请自行delete[],另返回NULL表示失败)
 //        */
-//        void *GetFileIcon(const u16char *filename,int &width,int &height,int &color)
+//        void *GetFileIcon(const wchar_t *filename,int &width,int &height,int &color)
 //        {
-//            IShellItemImageFactory *pShellItemImageFactory = NULL;
+//            IShellItemImageFactory *pShellItemImageFactory = nullptr;
 //            IBindCtx *m_pBindContext;
 //
 //            //该函数要求ie7.0，但无法确定
