@@ -45,45 +45,6 @@ Texture2D *LoadBMP(const OSString &filename)
     delete[] bmp;
     return tex;
 }
-//
-//void rgb2hsv(Color3f &hsv,const Color3f &rgb)
-//{
-//    // r,g,b values are from 0 to 1
-//    // h = [0,360], s = [0,1], v = [0,1]
-//    // if s == 0, then h = -1 (undefined)
-//    float min, max, delta, tmp;
-//    tmp = rgb.r>rgb.g ? rgb.g : rgb.r;
-//    min = tmp>rgb.b ? rgb.b : tmp;
-//    tmp = rgb.r>rgb.g ? rgb.r : rgb.g;
-//    max = tmp>rgb.b ? tmp : rgb.b;
-//    hsv.b = max; // v
-//    delta = max - min;
-//    if (max != 0)
-//        hsv.g = delta / max; // s
-//    else
-//    {
-//        // r = g = b = 0 // s = 0, v is undefined
-//        hsv.g = 0;
-//        hsv.r = 0;
-//        return;
-//    }
-//    if (delta == 0) {
-//        hsv.r = 0;
-//        return;
-//    }
-//    else if (rgb.r == max) {
-//        if (rgb.g >= rgb.b)
-//            hsv.r = (rgb.g - rgb.b) / delta; // between yellow & magenta
-//        else
-//            hsv.r = (rgb.g - rgb.b) / delta + 6.0;
-//    }
-//    else if (rgb.g == max)
-//        hsv.r = 2.0 + (rgb.b - rgb.r) / delta; // between cyan & yellow
-//    else if (rgb.b == max)
-//        hsv.r = 4.0 + (rgb.r - rgb.g) / delta; // between magenta & cyan
-//    
-//    hsv.r /= 6.0; // degrees
-//}
 
 class TestObject:public FlowObject
 {
@@ -148,7 +109,7 @@ public:
 #ifdef _DEBUG
             background->AutoCreateShader(true, nullptr, OS_TEXT("rectangle"));  ///<自动创建shader，DEBUG模式下如果是新生成shader，输出成指定文件名的文件
 #else
-            background->AutoCreateShader();                                      ///<自动创建shader,正常模式下无参数
+            background->AutoCreateShader();                                     ///<自动创建shader,正常模式下无参数
 #endif//_DEBUG
         }
     }

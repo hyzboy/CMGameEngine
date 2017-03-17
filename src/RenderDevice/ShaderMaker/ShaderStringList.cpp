@@ -155,10 +155,10 @@ namespace hgl
 
             void shader_stringlist::add_hsv_clamp()
             {
-                add("bool hsv_clamp(vec3 rgb_color)\n"
+                add("bool hsv_clamp(vec3 hsv)\n"
                     "{\n"
-                    "\tvec3 hsv=rgb2hsv(rgb_color);\n"
-                    "\n"
+                    //"\tvec3 hsv=rgb2hsv(rgb_color);\n"
+                    //"\n"
                     "\tif(abs(hsv.r-" HGL_FS_HSV_CLAMP_COLOR ".r)>" HGL_FS_HSV_CLAMP_COLOR ".b)return(false);\n"            //传进来的CLAMP_COLOR，只存了HV以及两个容差，放弃S值
                     "\tif(abs(hsv.b-" HGL_FS_HSV_CLAMP_COLOR ".g)>" HGL_FS_HSV_CLAMP_COLOR ".a)return(false);\n"            //所以上一行是(R-R)>B,下一行是(B-G)>A
                     "\n"
