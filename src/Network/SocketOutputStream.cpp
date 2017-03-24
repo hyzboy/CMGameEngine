@@ -33,6 +33,7 @@ namespace hgl
         int64 SocketOutputStream::Write(const void *buf,int64 size)
         {
             if(sock==-1)return(-1);
+			if(!buf||size<=0)return(-1);
 
             const int64 result=send(sock,(char *)buf,size,0);
 
@@ -60,6 +61,7 @@ namespace hgl
         int64 SocketOutputStream::WriteFully(const void *buf,int64 size)
         {
             if(sock==-1)return(-1);
+			if(!buf||size<=0)return(-1);
 
             int err;
             const os_char *err_str;
@@ -90,7 +92,8 @@ namespace hgl
                 {
                     err=GetLastSocketError();
 
-                    if(err==nseTimeOut
+                    if(err==0
+                     ||err==nseTimeOut
                      ||err==nseTryAgain
                      ||err==nseInt
                     )

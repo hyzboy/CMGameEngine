@@ -44,6 +44,7 @@ namespace hgl
         int64 SocketInputStream::Read(void *buf,int64 size)
         {
             if(sock==-1)return(-1);
+			if(!buf||size<=0)return(-1);
 
             const int64 result=recv(sock,(char *)buf,size,0);
 
@@ -71,6 +72,7 @@ namespace hgl
         int64 SocketInputStream::Peek(void *buf,int64 size)
         {
             if(sock==-1)return(-1);
+			if(!buf||size<=0)return(-1);
 
             return recv(sock,(char *)buf,size,MSG_PEEK);
         }
@@ -85,6 +87,7 @@ namespace hgl
         int64 SocketInputStream::ReadFully(void *buf,int64 size)
         {
             if(sock==-1)return(-1);
+			if(!buf||size<=0)return(-1);
 
             bool to_first=true;
             int err;
