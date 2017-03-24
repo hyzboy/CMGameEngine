@@ -35,13 +35,14 @@ namespace hgl
 
 			nseBrokenPipe	=32,		///<管道破裂，一般是因为发送到一半对方断开所引起
 
-			nseClientBreak	=10053,		///<客户端主动断开
-			nseServerBreak,				///<服务器端主动断开
-
 #if HGL_OS == HGL_OS_Windows
-			nseTimeOut		=10060,		///<超时
+			nseSoftwareBreak=WSAECONNABORTED,    ///<我方软件主动断开
+			nsePeerBreak    =WSAECONNRESET,      ///<对方主动断开
+			nseTimeOut		=WSAETIMEDOUT,       ///<超时
 #else
-			nseTimeOut		=ETIMEDOUT,	///<超时
+			nseSoftwareBreak=ECONNABORTED,       ///<我方软件主动断开
+			nsePeerBreak    =ECONNRESET,         ///<对方主动断开
+			nseTimeOut		=ETIMEDOUT,          ///<超时
 #endif//
 		};//enum SocketError
 
