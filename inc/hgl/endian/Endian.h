@@ -83,6 +83,32 @@ namespace hgl
 		template<> inline  int8 EndianSwap< int8>(const  int8 value){return value;}
 		template<> inline uint8 EndianSwap<uint8>(const uint8 value){return value;}
 
+        template<> inline uint16 EndianSwap(const uint16 value)
+        {
+            return ((value&0xFF)<<8)
+                |((value&0xFF00)>>8);
+        }
+
+        template<> inline uint32 EndianSwap(const uint32 value)
+        {
+            return ((value&0xFF)<<24)
+                |((value&0xFF00)<<8)
+                |((value&0xFF0000)>>8)
+                |((value&0xFF000000)>>24);
+        }
+
+        template<> inline uint64 EndianSwap(const uint64 value)
+        {
+            return ((value&0xFF)<<56)
+                |((value&0xFF00)<<40)
+                |((value&0xFF0000)<<24)
+                |((value&0xFF000000)<<8)
+                |((value&0xFF00000000)>>8)
+                |((value&0xFF0000000000)>>24)
+                |((value&0xFF000000000000)>>40)
+                |((value&0xFF00000000000000)>>56);
+        }
+
 		template<typename T>
 		inline void EndianSwap(T *value,const int64 count)
 		{
