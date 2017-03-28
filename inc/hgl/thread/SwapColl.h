@@ -119,7 +119,23 @@ namespace hgl
 		 */
 		bool WaitProc(const double time_out=HGL_TIME_ONE_MINUTE)
 		{
-			if(sem.Acquire(time_out))
+			if(!sem.Acquire(time_out))
+				return(false);
+
+			lock.Lock();
+				proc_list.Add(join_list);
+				join_list.ClearData();
+			lock.Unlock();
+
+			return(true);
+		}
+
+		/**
+		 * 等待信号
+		 */
+		bool TryProc()
+		{
+			if(!sem.TryAcquire())
 				return(false);
 
 			lock.Lock();
