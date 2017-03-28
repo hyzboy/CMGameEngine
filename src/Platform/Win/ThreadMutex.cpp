@@ -41,9 +41,9 @@ namespace hgl
     * @param time 等待的最大时间,时间为0表示尝试
     * @return 是否取得控制权
     */
-    bool ThreadMutex::WaitLock(double time)
+    bool ThreadMutex::WaitLock(double time_out)
     {
-        return(!WaitForSingleObject(&ptr,time*1000));
+        return(!WaitForSingleObject(&ptr,time_out*1000));
     }
 
     /**
