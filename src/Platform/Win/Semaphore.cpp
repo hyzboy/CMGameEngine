@@ -40,10 +40,7 @@ namespace hgl
     */
     bool Semaphore::TryAcquire()
     {
-        if(WaitForSingleObject(ptr,0)==WAIT_OBJECT_0)
-            return(true);
-        else
-            return(false);
+        return(WaitForSingleObject(ptr,0)==WAIT_OBJECT_0);
     }
 
     /**
@@ -51,11 +48,8 @@ namespace hgl
     * @param time 等待的最长时间,使用0表示无限等待.(单位秒)
     * @return 是否等待到了,如果超过最长时间,仍未等到即为超时,返回false
     */
-    bool Semaphore::Acquire(double time)
+    bool Semaphore::Acquire(double time_out)
     {
-        if(WaitForSingleObject(ptr,time>0?DWORD(time*1000):INFINITE)==WAIT_OBJECT_0)
-            return(true);
-        else
-            return(false);
+        return(WaitForSingleObject(ptr,time_out>0?DWORD(time_out*1000):INFINITE)==WAIT_OBJECT_0);
     }
 }//namespace hgl
