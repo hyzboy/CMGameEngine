@@ -72,62 +72,65 @@ namespace hgl
 
 	    int GetListFiles(List<FileInfo> &,const OSString &folder_name,bool proc_folder,bool proc_file,bool sub_folder);
 
-	    using EnumFileFunc=void (*)(void *,FileInfo &);
+        struct EnumFileConfig;
 
-    #if HGL_OS == HGL_OS_Windows
-        /**
-        * 枚举一个目录内的所有文件
-        * @param folder_name 目录名称
-        * @param find_name 查找用名称
-        * @param data 自定义回传数据
-        * @param proc_folder 处理目录
-        * @param proc_file 处理文件
-        * @param sub_folder 是否处理子目录
-        * @param func 回调函数
-        * @return 查找到文件数据,-1表示失败
-        */
-	    int EnumFile(const OSString &folder_name,const OSString &find_name,void *data,bool proc_folder,bool proc_file,bool sub_folder,EnumFileFunc func);
+        using EnumFileFunc=void(*)(struct EnumFileConfig *,FileInfo &fi);
+        using CREATE_SUB_CONFIG=EnumFileConfig *(*)(struct EnumFileConfig *up_efc,const OSString &sub_folder_name);
+        EnumFileConfig *DefaultCreateSubConfig(struct EnumFileConfig *efc,const OSString &sub_folder_name);
 
         /**
-        * 枚举一个目录内的所有文件
-        * @param folder_name 目录名称
-        * @param data 自定义回传数据
-        * @param proc_folder 处理目录
-        * @param proc_file 处理文件
-        * @param sub_folder 是否处理子目录
-        * @param func 回调函数
-        * @return 查找到文件数据,-1表示失败
+        * 枚举文件配置
         */
-	    inline int EnumFile(const OSString &folder_name,void *data,bool proc_folder,bool proc_file,bool sub_folder,EnumFileFunc func)
-	    {
-		    return EnumFile(folder_name,OS_TEXT("*.*"),data,proc_folder,proc_file,sub_folder,func);
-	    }
-
-        /**
-        * 枚举一个目录内的所有文件
-        * @param folder_name 目录名称
-        * @param find_name 查找用名称
-        * @param data 自定义回传数据
-        * @param func 回调函数
-        * @return 查找到文件数据,-1表示失败
-        */
-        inline int EnumFile(const OSString &folder_name,const OSString &find_name,void *data,EnumFileFunc func)
+        struct EnumFileConfig
         {
-            return EnumFile(folder_name,find_name,data,true,true,false,func);
-        }
-    #else
+            OSString folder_name;       ///<要枚举的目录名称
+            OSString find_name;         ///<要枚举的文件名称
+            bool proc_folder;           ///<是否处理目录
+            bool proc_file;             ///<是否处理文件
+            bool sub_folder;            ///<是否查找子目录
+
+            EnumFileFunc cb_folder;     ///<文件夹处理回呼函数
+            EnumFileFunc cb_file;       ///<文件处理回呼函数
+
+            CREATE_SUB_CONFIG CreateSubConfig;
+
+        public:
+
+            EnumFileConfig()
+            {
+                find_name=OS_TEXT("*.*");
+
+                proc_folder=true;
+                proc_file=true;
+                sub_folder=false;
+
+                cb_folder=nullptr;
+                cb_file=nullptr;
+
+                CreateSubConfig=DefaultCreateSubConfig;
+            }
+
+            EnumFileConfig(const EnumFileConfig *efc,const OSString &sub_folder_name)
+            {
+                folder_name =sub_folder_name;
+                
+                find_name   =efc->find_name;
+                proc_folder =efc->proc_folder;
+                proc_file   =efc->proc_file;
+                sub_folder  =efc->sub_folder;
+
+                cb_folder   =efc->cb_folder;
+                cb_file     =efc->cb_file;
+
+                CreateSubConfig=efc->CreateSubConfig;
+            }
+        };//struct EnumFileConfig
+
         /**
         * 枚举一个目录内的所有文件
-        * @param folder_name 目录名称
-        * @param data 自定义回传数据
-        * @param proc_folder 处理目录
-        * @param proc_file 处理文件
-        * @param sub_folder 是否处理子目录
-        * @param func 回调函数
-        * @return 查找到文件数据,-1表示失败
+        * @param config 枚举配置
         */
-	    int EnumFile(const OSString &folder_name,void *data,bool proc_folder,bool proc_file,bool sub_folder,EnumFileFunc func);
-    #endif
+        int EnumFile(EnumFileConfig *config);
 
 	    /**
 	    * 卷信息数据结构
