@@ -64,7 +64,7 @@ namespace hgl
         if(psl->SetPath(filename)==S_OK)
         {
             if(strlen(icon)>0)
-                if(FileConfirm(icon))
+                if(filesystem::FileConfirm(icon))
                     psl->SetIconLocation(icon,0);
 
             if(pPf->Save(lnk_filename,TRUE)==S_OK)

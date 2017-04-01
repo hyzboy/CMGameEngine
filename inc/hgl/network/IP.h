@@ -1,11 +1,6 @@
 ﻿#ifndef HGL_NETWORK_IP_INCLUDE
 #define HGL_NETWORK_IP_INCLUDE
 
-#include<hgl/type/DataType.h>
-#include<hgl/type/List.h>
-#include<hgl/type/BaseString.h>
-#include<hgl/Str.h>
-
 #if HGL_OS == HGL_OS_Windows
     #include<winsock2.h>
     #include<ws2tcpip.h>
@@ -64,6 +59,11 @@
         }
     #endif//HGL_OS == HGL_OS_FreeBSD
 #endif//HGL_OS == HGL_OS_Windows
+
+#include<hgl/type/DataType.h>
+#include<hgl/type/List.h>
+#include<hgl/type/BaseString.h>
+#include<hgl/Str.h>
 
 namespace hgl
 {

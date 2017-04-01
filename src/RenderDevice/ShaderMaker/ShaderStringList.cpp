@@ -63,7 +63,7 @@ namespace hgl
             {
                 if(!filename)return;
 
-                SaveMemoryToFile(filename,shader_string.c_str(),shader_string.Length());
+                filesystem::SaveMemoryToFile(filename,shader_string.c_str(),shader_string.Length());
             }
 
             void shader_stringlist::add_version(int ver)

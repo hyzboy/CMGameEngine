@@ -1,4 +1,4 @@
-#include<hgl/Console.h>        //HGL_CONSOLE_APPLICATION宏定义
+﻿#include<hgl/Console.h>        //HGL_CONSOLE_APPLICATION宏定义
 #include<hgl/network/IP.h>
 #include<hgl/type/Map.h>
 #include<iostream>

@@ -8,7 +8,7 @@ namespace hgl
     {
         mutex=new ProcMutex;
 
-        hgl::GetCurrentPath(ProjectPath);
+        hgl::filesystem::GetCurrentPath(ProjectPath);
 
         RunMode=armSync;
 

@@ -146,7 +146,7 @@ namespace hgl
     {
         if(!xml)return(false);
         if(filename.IsEmpty())return(false);
-        if(!FileCanRead(filename))return(false);
+        if(!filesystem::FileCanRead(filename))return(false);
 
         io::OpenFileInputStream fis(filename);
 

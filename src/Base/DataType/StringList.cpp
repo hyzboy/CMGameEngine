@@ -147,7 +147,7 @@ namespace hgl
     {
         uchar *data;
 
-        const int size=LoadFileToMemory(filename,(void **)&data);
+        const int size=filesystem::LoadFileToMemory(filename,(void **)&data);
 
         if(size<=0)
             return size;
@@ -162,7 +162,7 @@ namespace hgl
     {
         uchar *data;
 
-        const int size=LoadFileToMemory(filename,(void **)&data);
+        const int size=filesystem::LoadFileToMemory(filename,(void **)&data);
 
         if(size<=0)
             return size;

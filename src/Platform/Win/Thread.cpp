@@ -50,28 +50,28 @@ namespace hgl
 
     /**
     * (线程外部调用)等待当前线程
-    * @param time 等待的时间，如果为0表示等到线程运行结束为止。默认为0
+    * @param time_out 等待的时间，如果为0表示等到线程运行结束为止。默认为0
     */
-    void Thread::Wait(double time)
+    void Thread::Wait(double time_out)
     {
         if(threadptr)
-            WaitForSingleObject(threadptr,time>0?time*1000:INFINITE);
+            WaitForSingleObject(threadptr,time_out>0?time_out*1000:INFINITE);
     }
 
     /**
     * 等待多个线程中的一个完成
     * @param mt 线程
     * @param count 线程数量
-    * @param time 等待的时间，如果为0表示等到线程运行结束为止。默认为0
+    * @param time_out 等待的时间，如果为0表示等到线程运行结束为止。默认为0
     */
-    void WaitThread(Thread **mt,int count,double time)
+    void WaitThread(Thread **mt,int count,double time_out)
     {
         void **obj=new void *[count];
 
         for(int i=0;i<count;i++)
             obj[i]=mt[i]->threadptr;
 
-        WaitForMultipleObjects(count,obj,false,time>0?time*1000:INFINITE);
+        WaitForMultipleObjects(count,obj,false,time_out>0?time_out*1000:INFINITE);
 
         delete[] obj;
     }

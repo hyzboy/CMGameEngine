@@ -79,9 +79,9 @@ namespace openal
             hgl::strcat(pifn,HGL_MAX_PATH,HGL_DIRECTORY_SEPARATOR);
             hgl::strcat(pifn,HGL_MAX_PATH,filename,HGL_MAX_PATH);
 
-            if(FileConfirm(filename ))final_filename=(os_char *)filename;else
-            if(FileConfirm(dllfn    ))final_filename=dllfn;else
-            if(FileConfirm(pifn        ))final_filename=pifn;
+            if(filesystem::FileConfirm(filename ))final_filename=(os_char *)filename;else
+            if(filesystem::FileConfirm(dllfn    ))final_filename=dllfn;else
+            if(filesystem::FileConfirm(pifn        ))final_filename=pifn;
 
             AudioEM=LoadExternalModule(final_filename);
         }
@@ -95,8 +95,8 @@ namespace openal
                 hgl::strcpy(dllfn,HGL_MAX_PATH,hgl::info::GetString(hgl::info::hfsOSLibraryPath).c_str());
                 hgl::strcat(dllfn,HGL_MAX_PATH,oalfn[count],HGL_MAX_PATH);
 
-                if(FileConfirm(dllfn))final_filename=dllfn;else
-                if(FileConfirm(pifn ))final_filename=pifn;else
+                if(filesystem::FileConfirm(dllfn))final_filename=dllfn;else
+                if(filesystem::FileConfirm(pifn ))final_filename=pifn;else
                     continue;
 
                 AudioEM=LoadExternalModule(final_filename);
