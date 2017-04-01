@@ -74,40 +74,59 @@ namespace hgl
 
 	    using EnumFileFunc=void (*)(void *,FileInfo &);
 
-	    /**
-	    * 枚举一个目录内的所有文件
-	    * @param folder_name 目录名称
-	    * @param find_name 查找用名称
-	    * @param data 自定义回传数据
-	    * @param proc_folder 处理目录
-	    * @param proc_file 处理文件
-	    * @param sub_folder 是否处理子目录
-	    * @param func 回调函数
-	    * @return 查找到文件数据,-1表示失败
-	    */
     #if HGL_OS == HGL_OS_Windows
+        /**
+        * 枚举一个目录内的所有文件
+        * @param folder_name 目录名称
+        * @param find_name 查找用名称
+        * @param data 自定义回传数据
+        * @param proc_folder 处理目录
+        * @param proc_file 处理文件
+        * @param sub_folder 是否处理子目录
+        * @param func 回调函数
+        * @return 查找到文件数据,-1表示失败
+        */
 	    int EnumFile(const OSString &folder_name,const OSString &find_name,void *data,bool proc_folder,bool proc_file,bool sub_folder,EnumFileFunc func);
-    #endif //HGL_OS == HGL_OS_Windows
 
-    #if HGL_OS == HGL_OS_Windows
+        /**
+        * 枚举一个目录内的所有文件
+        * @param folder_name 目录名称
+        * @param data 自定义回传数据
+        * @param proc_folder 处理目录
+        * @param proc_file 处理文件
+        * @param sub_folder 是否处理子目录
+        * @param func 回调函数
+        * @return 查找到文件数据,-1表示失败
+        */
 	    inline int EnumFile(const OSString &folder_name,void *data,bool proc_folder,bool proc_file,bool sub_folder,EnumFileFunc func)
 	    {
 		    return EnumFile(folder_name,OS_TEXT("*.*"),data,proc_folder,proc_file,sub_folder,func);
 	    }
-    #else
-	    int EnumFile(const OSString &folder_name,void *data,bool proc_folder,bool proc_file,bool sub_folder,EnumFileFunc);
-    #endif
 
-	    /**
-	    * 枚举一个目录内的所有文件
-	    * @param folder_name 目录名称
-	    * @param find_name 查找用名称
-	    * @param data 自定义回传数据
-	    * @param func 回调函数
-	    * @return 查找到文件数据,-1表示失败
-	    */
-    #if HGL_OS == HGL_OS_Windows
-	    int EnumFile(const OSString &folder_name,const OSString &find_name,void *data,EnumFileFunc);
+        /**
+        * 枚举一个目录内的所有文件
+        * @param folder_name 目录名称
+        * @param find_name 查找用名称
+        * @param data 自定义回传数据
+        * @param func 回调函数
+        * @return 查找到文件数据,-1表示失败
+        */
+        inline int EnumFile(const OSString &folder_name,const OSString &find_name,void *data,EnumFileFunc func)
+        {
+            return EnumFile(folder_name,find_name,data,true,true,false,func);
+        }
+    #else
+        /**
+        * 枚举一个目录内的所有文件
+        * @param folder_name 目录名称
+        * @param data 自定义回传数据
+        * @param proc_folder 处理目录
+        * @param proc_file 处理文件
+        * @param sub_folder 是否处理子目录
+        * @param func 回调函数
+        * @return 查找到文件数据,-1表示失败
+        */
+	    int EnumFile(const OSString &folder_name,void *data,bool proc_folder,bool proc_file,bool sub_folder,EnumFileFunc func);
     #endif
 
 	    /**

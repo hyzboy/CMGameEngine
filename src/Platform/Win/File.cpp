@@ -355,19 +355,6 @@ namespace hgl
         }
 
         /**
-        * 枚举一个目录内的所有文件
-        * @param folder_name 目录名称
-        * @param find_name 查找用名称
-        * @param data 自定义回传数据
-        * @param func 回调函数
-        * @return 查找到文件数据,-1表示失败
-        */
-        int EnumFile(const u16char *folder_name,const u16char *find_name,void *data,EnumFileFunc func)
-        {
-            return EnumFile(folder_name,find_name,data,true,true,false,func);
-        }
-
-        /**
         * 枚举当前计算机所有卷
         * @param data 用户自定义回传信息
         * @param func 回调函数
