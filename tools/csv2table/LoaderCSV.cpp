@@ -28,7 +28,7 @@ public:
 
     bool    Load(const OSString &filename,const CharSet &default_cs)
     {
-        LoadStringListBOM(sl,filename,default_cs);
+        LoadStringListFromTextFile(sl,filename,default_cs);
 
         record_count=sl.GetCount()-2;
 

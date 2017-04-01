@@ -62,7 +62,7 @@ public:
 		{
 			if(data)						//还有数据没添加,放在这里是因为OpenOffice/LibreOffice不管有没有数据，都会存1024列或更多，所以这行的话，最后的空格就不添加了
 				for(int i=0;i<repeated;i++)
-					row->Add(u"");			//添加一个空数据
+					row->Add(UTF16String());			//添加一个空数据
 
 			cell=true;
 			repeated=1;
