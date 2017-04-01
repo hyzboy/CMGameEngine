@@ -6,7 +6,11 @@ using namespace std;
 using namespace hgl;
 using namespace hgl::util;
 
+#if HGL_OS == HGL_OS_Windows
+int wmain(int argc,wchar_t **argv)
+#else
 int main(int argc,char **argv)
+#endif//
 {
     if(argc<2)
     {
@@ -19,7 +23,7 @@ int main(int argc,char **argv)
     void *file_data;
     int64 file_length;
 
-    file_length=LoadFileToMemory(argv[1],&file_data);
+    file_length=filesystem::LoadFileToMemory(argv[1],&file_data);
 
     cout<<"file length: "<<file_length<<endl;
 

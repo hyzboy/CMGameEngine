@@ -8,23 +8,19 @@
 
 using namespace hgl;
 
-int main()
+int wmain(int argc,wchar_t **argv)
 {
 #ifdef _DEBUG
     try
     {
 #endif//_DEBUG
-        ConsoleSystemInitInfo sii;
-        ConsoleApplication app;
         StringList<WideString> sl;
-
-        wchar_t **argv;
-        int argc;
-
-        argv = CommandLineToArgvW(GetCommandLineW(), &argc);
 
         for(int i=0;i<argc;i++)
             sl.Add(argv[i]);
+
+        ConsoleSystemInitInfo sii;
+        ConsoleApplication app;
 
         return ConsoleAppMain(sii,app,sl);
 #ifdef _DEBUG
