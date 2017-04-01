@@ -230,7 +230,11 @@ namespace hgl
 
         EnumFileConfig *DefaultCreateSubConfig(struct EnumFileConfig *efc,const OSString &sub_folder_name)
         {
-            return(new EnumFileConfig(efc,sub_folder_name));
+            OSString full_sub_folder_name;
+
+            MergeFilename(full_sub_folder_name,efc->folder_name,sub_folder_name);
+
+            return(new EnumFileConfig(efc,full_sub_folder_name));
         }
 
         /**
@@ -242,7 +246,7 @@ namespace hgl
         {
             if(!config)RETURN_ERROR(-1);
 
-            if(config->proc_folder&&!config->cb_file)RETURN_ERROR(-2);
+//            if(config->proc_folder&&!config->cb_folder)RETURN_ERROR(-2);            //这一行是不需要的，确实存在proc_folder=true,但没有cb_folder的情况。但留在这里。以防删掉后，未来没注意自以为是的加上这样一行
             if(config->proc_file&&!config->cb_file)RETURN_ERROR(-3);
 
             if(config->folder_name.IsEmpty()
@@ -257,12 +261,7 @@ namespace hgl
             }
             else
             {
-                full_findname=config->folder_name;
-
-                if(full_findname.GetEndChar()!=HGL_DIRECTORY_SEPARATOR)
-                    full_findname+=HGL_DIRECTORY_SEPARATOR;
-
-                full_findname+=config->find_name;
+                MergeFilename(full_findname,config->folder_name,config->find_name);
             }
 
             WIN32_FIND_DATAW FindFileData;
@@ -271,6 +270,8 @@ namespace hgl
             hFind = FindFirstFileW(full_findname, &FindFileData);
             if (hFind == INVALID_HANDLE_VALUE)
                 return(-1);
+
+            EnumFileConfig *sub_efc=nullptr;
 
             do
             {
@@ -286,18 +287,12 @@ namespace hgl
                     {
                         if(config->sub_folder)
                         {
-                            OSString child_name=config->folder_name;
+                            sub_efc=config->CreateSubConfig(config,FindFileData.cFileName);
 
-                            if(config->folder_name.GetEndChar()!=HGL_DIRECTORY_SEPARATOR)
-                                child_name+=HGL_DIRECTORY_SEPARATOR;
+                            if(!sub_efc)
+                                continue;
 
-                            child_name+=FindFileData.cFileName;
-    
-                            EnumFileConfig *efc=config->CreateSubConfig(config,child_name);
-
-                            count+=EnumFile(efc);
-
-                            delete efc;
+                            count+=EnumFile(sub_efc);
                         }
                     }
                     else
@@ -346,14 +341,19 @@ namespace hgl
                     fi.is_file=false;
                     fi.is_directory=true;
 
-                    config->cb_folder(config,fi);
+                    if(config->cb_folder)
+                        config->cb_folder(config,sub_efc,fi);
+
+                    delete sub_efc;
+                    sub_efc=nullptr;
                 }
                 else
                 {
                     fi.is_file=true;
                     fi.is_directory=false;
 
-                    config->cb_file(config,fi);
+                    if(config->cb_file)
+                        config->cb_file(config,fi);
                 }
             }
             while(FindNextFileW(hFind, &FindFileData));

@@ -74,6 +74,7 @@ namespace hgl
 
         struct EnumFileConfig;
 
+        using EnumFolderFunc=void(*)(struct EnumFileConfig *,struct EnumFileConfig *,FileInfo &fi);
         using EnumFileFunc=void(*)(struct EnumFileConfig *,FileInfo &fi);
         using CREATE_SUB_CONFIG=EnumFileConfig *(*)(struct EnumFileConfig *up_efc,const OSString &sub_folder_name);
         EnumFileConfig *DefaultCreateSubConfig(struct EnumFileConfig *efc,const OSString &sub_folder_name);
@@ -83,16 +84,16 @@ namespace hgl
         */
         struct EnumFileConfig
         {
-            OSString folder_name;       ///<要枚举的目录名称
-            OSString find_name;         ///<要枚举的文件名称
-            bool proc_folder;           ///<是否处理目录
-            bool proc_file;             ///<是否处理文件
-            bool sub_folder;            ///<是否查找子目录
+            OSString            folder_name;                ///<要枚举的目录名称
+            OSString            find_name;                  ///<要枚举的文件名称
+            bool                proc_folder;                ///<是否处理目录
+            bool                proc_file;                  ///<是否处理文件
+            bool                sub_folder;                 ///<是否查找子目录
 
-            EnumFileFunc cb_folder;     ///<文件夹处理回呼函数
-            EnumFileFunc cb_file;       ///<文件处理回呼函数
+            EnumFolderFunc      cb_folder;                  ///<文件夹处理回呼函数
+            EnumFileFunc        cb_file;                    ///<文件处理回呼函数
 
-            CREATE_SUB_CONFIG CreateSubConfig;
+            CREATE_SUB_CONFIG   CreateSubConfig;            ///<创建子目录查找配置函数
 
         public:
 
