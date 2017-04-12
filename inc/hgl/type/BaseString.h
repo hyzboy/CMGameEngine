@@ -123,9 +123,7 @@ namespace hgl
         BaseString(const Vector3f &v,int n=3):BaseString((const float *)&v,n){}
         BaseString(const Vector4f &v,int n=4):BaseString((const float *)&v,n){}
 
-        virtual ~BaseString()
-        {
-        }
+        virtual ~BaseString()=default;
 
         const T GetEndChar()const																	///<取得当前字符串最后一个字符
         {

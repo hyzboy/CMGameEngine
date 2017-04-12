@@ -18,9 +18,7 @@ namespace hgl
 			weak=0;
 		}
 
-		virtual ~RefCount()
-		{
-		}
+		virtual ~RefCount()=default;
 
 		virtual void Delete()=0;
 
@@ -142,9 +140,7 @@ namespace hgl
 			set(st);
 		}
 
-		virtual ~_Smart()
-		{
-		}
+		virtual ~_Smart()=default;
 
 		T *set(T *ptr)
 		{
