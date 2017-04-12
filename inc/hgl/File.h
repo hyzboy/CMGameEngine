@@ -70,8 +70,6 @@ namespace hgl
 
 	    bool GetFileInfo(const OSString &filename,struct FileInfo &);	///<取得文件信息
 
-	    int GetListFiles(List<FileInfo> &,const OSString &folder_name,bool proc_folder,bool proc_file,bool sub_folder);
-
         struct EnumFileConfig;
 
         using EnumFolderFunc=void(*)(struct EnumFileConfig *,struct EnumFileConfig *,FileInfo &fi);
@@ -132,6 +130,8 @@ namespace hgl
         * @param config 枚举配置
         */
         int EnumFile(EnumFileConfig *config);
+
+        int GetListFiles(List<FileInfo> &, const OSString &folder_name, bool proc_folder, bool proc_file, bool sub_folder);
 
 	    /**
 	    * 卷信息数据结构

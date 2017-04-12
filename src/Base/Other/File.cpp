@@ -269,14 +269,35 @@ namespace hgl
             return(true);
         }
 
-        void AddToList(List<FileInfo> *lfi,hgl::filesystem::FileInfo &fi)
+        namespace
         {
-            lfi->Add(fi);
+            struct EnumFileInfo :public EnumFileConfig
+            {
+                List<FileInfo> *fi_list;
+            };
+        }
+
+        void AddToList(struct EnumFileConfig *efc,hgl::filesystem::FileInfo &fi)
+        {
+            EnumFileInfo *efi = (EnumFileInfo *)efc;
+
+            efi->fi_list->Add(fi);
         }
 
         int GetListFiles(List<FileInfo> &fi_list,const OSString &folder_name,bool proc_folder,bool proc_file,bool sub_folder)
         {
-            return EnumFile(folder_name,&fi_list,folder_name,proc_file,sub_folder,(void (*)(void *,hgl::filesystem::FileInfo &))AddToList);
+            EnumFileInfo efc;
+
+            efc.fi_list     = &fi_list;
+
+            efc.folder_name = folder_name;
+            efc.proc_folder = proc_folder;
+            efc.proc_file   = proc_file;
+            efc.sub_folder  = sub_folder;
+
+            efc.cb_file = AddToList;
+
+            return EnumFile(&efc);
         }
     }//namespace filesystem
 }//namespace hgl
