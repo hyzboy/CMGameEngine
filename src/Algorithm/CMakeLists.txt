@@ -1,5 +1,7 @@
-﻿OPTION(ALGORITHM_INCLUDE_HASH   "Include Hash Library"  OFF)
-OPTION(ALGORITHM_INCLUDE_CRYPT  "Include Crypt Library" OFF)
+﻿OPTION(ALGORITHM_INCLUDE_HASH       "Include Hash Library"  OFF)
+OPTION(ALGORITHM_INCLUDE_Crypt      "Include Crypt Library" OFF)
+OPTION(ALGORITHM_INCLUDE_FindPath   "Include FindPath Library" OFF)
+OPTION(ALGORITHM_INCLUDE_Affector   "Include Affector Library" OFF)
 
 IF(ALGORITHM_INCLUDE_HASH)
     SET(HASH_SOURCE 
@@ -15,7 +17,7 @@ IF(ALGORITHM_INCLUDE_HASH)
     SET(algorithm_files ${algorithm_files} ${HASH_SOURCE})
 ENDIF(ALGORITHM_INCLUDE_HASH)
 
-IF(ALGORITHM_INCLUDE_CRYPT)
+IF(ALGORITHM_INCLUDE_Crypt)
     SET(CRYPT_SOURCE_FILES  Crypt/aes.cpp
                             Crypt/Overflow.cpp
                             Crypt/rc4.cpp
@@ -24,7 +26,28 @@ IF(ALGORITHM_INCLUDE_CRYPT)
     SOURCE_GROUP("Crypt" FILES ${CRYPT_SOURCE_FILES})
     
     SET(algorithm_files ${algorithm_files} ${CRYPT_SOURCE_FILES})
-ENDIF(ALGORITHM_INCLUDE_CRYPT)
+ENDIF(ALGORITHM_INCLUDE_Crypt)
+
+IF(ALGORITHM_INCLUDE_FindPath)
+    SET(FIND_PATH_SOURCE 
+        FindPath/FindPath.cpp
+        FindPath/FindPath_AStar.cpp
+        FindPath/FindPath_Line.cpp)
+
+    SOURCE_GROUP("FindPath" FILES ${FIND_PATH_SOURCE})
+    
+    SET(algorithm_files ${algorithm_files} ${FIND_PATH_SOURCE})
+ENDIF(ALGORITHM_INCLUDE_FindPath)
+
+IF(ALGORITHM_INCLUDE_Affector)
+    SET(AFFECTOR_SOURCE_FILES   Affector/Affector.cpp
+                                Affector/AffectorTimer.cpp
+                                Affector/AffectorTrackTimer.cpp)
+
+    SOURCE_GROUP("Affector" FILES ${AFFECTOR_SOURCE_FILES})
+    
+    SET(algorithm_files ${algorithm_files} ${AFFECTOR_SOURCE_FILES})
+ENDIF(ALGORITHM_INCLUDE_Affector)
     
 IF(WIN32)
     ADD_LIBRARY(CM.Algorithm STATIC ${algorithm_files})

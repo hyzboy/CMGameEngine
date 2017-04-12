@@ -1,7 +1,6 @@
 ﻿#ifndef HGL_OTHER_INCLUDE
 #define HGL_OTHER_INCLUDE
 
-#include<hgl/File.h>
 #include<hgl/type/DataType.h>
 #include<hgl/Str.h>
 

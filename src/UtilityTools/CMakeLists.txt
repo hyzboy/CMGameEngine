@@ -1,9 +1,4 @@
-﻿SET(FIND_PATH_SOURCE 
-    FindPath/FindPath.cpp
-    FindPath/FindPath_AStar.cpp
-    FindPath/FindPath_Line.cpp)
-
-SOURCE_GROUP("FindPath" FILES ${FIND_PATH_SOURCE})
+﻿
 
 SET(XML_PARSE XML/XMLParse.cpp)
 
@@ -34,17 +29,10 @@ ENDIF(WIN32)
 #    )
 #ENDIF(WIN32 OR APPLE)
 
-SET(AFFECTOR_SOURCE_FILES   Affector/Affector.cpp
-                            Affector/AffectorTimer.cpp
-                            Affector/AffectorTrackTimer.cpp)
-
-SOURCE_GROUP("Affector" FILES ${AFFECTOR_SOURCE_FILES})
 
 SET(ut_files
     
-    ${FIND_PATH_SOURCE}
     ${XML_PARSE}
-    ${AFFECTOR_SOURCE_FILES}
     
     TaskManager/TaskManager.cpp
     Timer/Timer.cpp
