@@ -38,7 +38,3 @@ add_subdirectory(DFS)
 add_subdirectory(Platform)
 
 add_subdirectory(PlugIn)
-
-IF(UNIX)
-	add_subdirectory(RedisClient)
-ENDIF(UNIX)

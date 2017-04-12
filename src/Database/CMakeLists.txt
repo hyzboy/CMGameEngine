@@ -19,6 +19,34 @@ IF(DATABASE_INCLUDE_CDB)
     SET(db_files ${db_files} ${CDB_FILES})
 ENDIF(DATABASE_INCLUDE_CDB)
 
+IF(UNIX)
+
+    OPTION(DATABASE_INCLUDE_Redis   "Database support Redis"    OFF)
+
+    IF(DATABASE_INCLUDE_Redis)
+        INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/hiredis)
+
+        FILE(GLOB_RECURSE HIREDIS_SOURCES "RedisClient/hiredis/*.c")
+        FILE(GLOB_RECURSE HIREDIS_HEADERS "RedisClient/hiredis/*.h")
+
+        SET(REDIS_CLIENT_FILES 
+            RedisDB.cpp
+            RedisDBStrings.cpp
+            RedisDBStringBinary.cpp
+            RedisDBStringNumber.cpp
+            RedisDBSets.cpp
+            RedisDBSortedSets.cpp
+            RedisDBHashes.cpp)
+            
+        SOURCE_GROUP("Redis\\hiredis\\Include" FILES ${HIREDIS_HEADERS})
+        SOURCE_GROUP("Redis\\hiredis\\Source" FILES ${HIREDIS_SOURCES})
+        SOURCE_GROUP("Redis" FILES ${REDIS_CLIENT_FILES})
+        
+        SET(db_files ${db_files} ${HIREDIS_SOURCES} ${HIREDIS_HEADERS} ${REDIS_CLIENT_FILES})
+
+    ENDIF(DATABASE_INCLUDE_Redis)
+ENDIF(UNIX)
+
 IF(DATABASE_INCLUDE_MySQL)
     SET(MYSQL_FILES
         MySQL/MySQLField.cpp
