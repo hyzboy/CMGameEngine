@@ -1,8 +1,6 @@
 ﻿#ifndef HGL_VERTEX_2_CPP
 #define HGL_VERTEX_2_CPP
 
-#include<hgl/type/Vertex2.h>
-#include<hgl/Other.h>
 #include<string.h>
 #include<math.h>
 

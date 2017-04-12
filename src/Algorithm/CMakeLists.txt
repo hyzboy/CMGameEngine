@@ -3,6 +3,12 @@ OPTION(ALGORITHM_INCLUDE_Crypt      "Include Crypt Library" OFF)
 OPTION(ALGORITHM_INCLUDE_FindPath   "Include FindPath Library" OFF)
 OPTION(ALGORITHM_INCLUDE_Affector   "Include Affector Library" OFF)
 
+SET(algorithm_files
+	Compress.cpp
+	LSinCos.cpp
+	ProbSelect.cpp
+	PseudoRandom.cpp)
+
 IF(ALGORITHM_INCLUDE_HASH)
     SET(HASH_SOURCE 
         Hash/adler32.cpp

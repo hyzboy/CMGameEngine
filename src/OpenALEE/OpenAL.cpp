@@ -1,7 +1,6 @@
 ﻿#include <hgl/LogInfo.h>
 #include <hgl/Info.h>
-#include <hgl/File.h>
-#include <hgl/Other.h>
+#include <hgl/FileSystem.h>
 #include <hgl/audio/OpenAL.h>
 #include <hgl/type/Pair.h>
 #include <hgl/type/Stack.h>

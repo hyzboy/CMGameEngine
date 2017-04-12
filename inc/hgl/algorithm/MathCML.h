@@ -1,5 +1,5 @@
-﻿#ifndef HGL_VECTOR_MATH_CML_INCLUDE
-#define HGL_VECTOR_MATH_CML_INCLUDE
+﻿#ifndef HGL_ALGORITHM_VECTOR_MATH_CML_INCLUDE
+#define HGL_ALGORITHM_VECTOR_MATH_CML_INCLUDE
 
 /**
  * CML
@@ -217,4 +217,4 @@ namespace hgl
         return cml::dot(v1,v2);
     }
 }//namespace hgl
-#endif//HGL_VECTOR_MATH_CML_INCLUDE
+#endif//HGL_ALGORITHM_VECTOR_MATH_CML_INCLUDE

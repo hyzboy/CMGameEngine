@@ -1,7 +1,7 @@
 ﻿#ifndef HGL_GRAPH_INLINE_RENDERABLE_INCLUDE
 #define HGL_GRAPH_INLINE_RENDERABLE_INCLUDE
 
-#include<hgl/VectorMath.h>
+#include<hgl/algorithm/VectorMath.h>
 #include<hgl/type/Color4f.h>
 #include<hgl/type/RectScope.h>
 #include<hgl/graph/Render.h>

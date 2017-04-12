@@ -1,9 +1,11 @@
 ﻿#ifndef HGL_GRAPH_CAMERA_INCLUDE
 #define HGL_GRAPH_CAMERA_INCLUDE
 
-#include<hgl/VectorMath.h>
+#include<hgl/algorithm/VectorMath.h>
 namespace hgl
 {
+    using namespace algorithm;
+
 	namespace graph
 	{
 		/**

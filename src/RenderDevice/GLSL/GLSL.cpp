@@ -1,7 +1,6 @@
 ﻿#include"GLSL.h"
 #include<hgl/graph/Shader.h>
 #include<hgl/LogInfo.h>
-#include<hgl/Other.h>
 #include<hgl/type/Smart.h>
 #include<glew/include/GL/glew.h>
 #include<malloc.h>

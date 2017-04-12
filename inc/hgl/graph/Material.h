@@ -1,7 +1,7 @@
 ﻿#ifndef HGL_GRAPH_MATERIAL_INCLUDE
 #define HGL_GRAPH_MATERIAL_INCLUDE
 
-#include<hgl/VectorMath.h>
+#include<hgl/algorithm/VectorMath.h>
 #include<hgl/type/DataType.h>
 #include<hgl/type/FixedArray.h>
 #include<hgl/type/Color4f.h>

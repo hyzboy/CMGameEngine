@@ -1,4 +1,4 @@
-﻿#include<hgl/Other.h>
+﻿#include<hgl/Time.h>
 
 namespace hgl
 {

@@ -1,10 +1,10 @@
-﻿#ifndef HGL_UTIL_HASH_INCLUDE
-#define HGL_UTIL_HASH_INCLUDE
+﻿#ifndef HGL_ALGORITHM_HASH_INCLUDE
+#define HGL_ALGORITHM_HASH_INCLUDE
 
 #include<hgl/type/BaseString.h>
 namespace hgl
 {
-    namespace util
+    namespace algorithm
     {
         /**
          * Hash算法枚举
@@ -291,6 +291,6 @@ namespace hgl
         * @return 是否计算成功
         */
         bool GetFileHash(const OSString &filename,HASH_ALGORITHML ha,UTF8String &hash_str,bool litter=true);
-    }//namespace util
+    }//namespace algorithm
 }//namespace hgl
-#endif//HGL_UTIL_HASH_INCLUDE
+#endif//HGL_ALGORITHM_HASH_INCLUDE

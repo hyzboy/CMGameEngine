@@ -1,9 +1,8 @@
-#ifndef HGL_TIME_INCLUDE
-#define HGL_TIME_INCLUDE
+#ifndef HGL_DATETIME_INCLUDE
+#define HGL_DATETIME_INCLUDE
 
 #include<hgl/type/DataType.h>
 #include<hgl/TypeFunc.h>
-#include<hgl/Other.h>
 
 namespace hgl
 {
@@ -176,4 +175,4 @@ namespace hgl
 	 */
 	double FromDateTime(const Date &,const Time &);
 }//namespace hgl
-#endif//HGL_TIME_INCLUDE
+#endif//HGL_DATETIME_INCLUDE

@@ -1,5 +1,5 @@
-#ifndef HGL_SORT_INCLUDE
-#define HGL_SORT_INCLUDE
+#ifndef HGL_ALGORITHM_SORT_INCLUDE
+#define HGL_ALGORITHM_SORT_INCLUDE
 
 #include<hgl/TypeFunc.h>
 #include<string.h>
@@ -169,4 +169,4 @@ namespace hgl
 	}
  */
 }//namespace hgl
-#endif//HGL_SORT_INCLUDE
+#endif//HGL_ALGORITHM_SORT_INCLUDE

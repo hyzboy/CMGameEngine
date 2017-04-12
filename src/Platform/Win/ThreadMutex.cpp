@@ -1,7 +1,6 @@
 ﻿#include<hgl/thread/ThreadMutex.h>
 
 #include<wchar.h>
-#include<windows.h>
 
 #pragma warning(disable:4800)            // BOOL -> bool 性能损失警告
 namespace hgl

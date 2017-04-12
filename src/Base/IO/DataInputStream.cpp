@@ -1,5 +1,5 @@
 #include<hgl/io/DataInputStream.h>
-#include<hgl/Other.h>
+#include<hgl/CodePage.h>
 
 namespace hgl
 {

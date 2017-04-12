@@ -1,7 +1,7 @@
 ﻿#ifndef HGL_GRAPH_TRANSFORM_INCLUDE
 #define HGL_GRAPH_TRANSFORM_INCLUDE
 
-#include<hgl/VectorMath.h>
+#include<hgl/algorithm/VectorMath.h>
 namespace hgl
 {
 	namespace graph

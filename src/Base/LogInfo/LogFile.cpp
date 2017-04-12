@@ -1,6 +1,5 @@
 ﻿#include<hgl/Logger.h>
-#include<hgl/File.h>
-#include<hgl/Other.h>
+#include<hgl/FileSystem.h>
 #include<hgl/thread/ThreadMutex.h>
 #include<hgl/io/FileOutputStream.h>
 #include<hgl/io/DataOutputStream.h>

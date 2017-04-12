@@ -1,7 +1,7 @@
 ﻿#ifndef HGL_EXAMPLE_3D_SPIRAL_CUBE_INCLUDE
 #define HGL_EXAMPLE_3D_SPIRAL_CUBE_INCLUDE
 
-#include<hgl/VectorMath.h>
+#include<hgl/algorithm/VectorMath.h>
 
 #define CUBE_NUMBER	360
 

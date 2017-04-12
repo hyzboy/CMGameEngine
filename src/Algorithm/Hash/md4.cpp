@@ -1,9 +1,9 @@
-#include<hgl/ut/Hash.h>
+#include<hgl/algorithm/Hash.h>
 #include<hgl/type/DataType.h>
 
 namespace hgl
 {
-    namespace util
+    namespace algorithm
     {
         /* Constants for MD4Transform routine. */
         #define S11 3
@@ -224,5 +224,5 @@ namespace hgl
         };//class MD4
 
         Hash *CreateMD4Hash(){return(new MD4);}
-    }//namespace util
+    }//namespace algorithm
 }//namespace hgl

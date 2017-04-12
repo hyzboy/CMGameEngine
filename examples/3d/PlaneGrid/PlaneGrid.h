@@ -1,7 +1,7 @@
 ﻿#ifndef PLANE_GRID_INCLUDE
 #define PLANE_GRID_INCLUDE
 
-#include<hgl/VectorMath.h>
+#include<hgl/algorithm/VectorMath.h>
 namespace hgl
 {
 	namespace graph

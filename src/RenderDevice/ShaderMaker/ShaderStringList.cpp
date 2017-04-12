@@ -4,8 +4,8 @@
 #include<string.h>
 #include<stdarg.h>
 #include<stdio.h>
-#include<hgl/Other.h>
 #include<hgl/graph/TextureFormat.h>
+#include<hgl/FileSystem.h>
 
 namespace hgl
 {

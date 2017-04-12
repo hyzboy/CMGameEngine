@@ -1,8 +1,7 @@
 #include<hgl/platform/SystemInfo.h>
 #include<hgl/LogInfo.h>
 #include<hgl/PlugIn.h>
-#include<hgl/Other.h>
-#include<hgl/File.h>
+#include<hgl/FileSystem.h>
 #include<wchar.h>
 #include<shlobj.h>
 

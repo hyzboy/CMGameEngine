@@ -2,7 +2,6 @@
 #include<hgl/io/DataOutputStream.h>
 #include<hgl/network/TCPSocket.h>
 #include<hgl/LogInfo.h>
-#include<hgl/Other.h>
 namespace hgl
 {
     namespace network

@@ -1,9 +1,9 @@
-﻿#include<hgl/ut/Hash.h>
+﻿#include<hgl/algorithm/Hash.h>
 #include<hgl/io/FileInputStream.h>
 
 namespace hgl
 {
-    namespace util
+    namespace algorithm
     {
         bool GetFileHash(const OSString &filename,HASH_ALGORITHML ha,void *hash_code)
         {
@@ -39,5 +39,5 @@ namespace hgl
 
             return(true);
         }
-    }//namespace util
+    }//namespace algorithm
 }//namespace hgl

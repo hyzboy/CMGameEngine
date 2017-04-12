@@ -1,7 +1,7 @@
 ﻿#ifndef HGL_GRAPH_TILE_FONT_INCLUDE
 #define HGL_GRAPH_TILE_FONT_INCLUDE
 
-#include<hgl/VectorMath.h>
+#include<hgl/algorithm/VectorMath.h>
 #include<hgl/type/Color4f.h>
 #include<hgl/type/ActiveChain.h>
 #include<hgl/graph/TileData.h>

@@ -1,6 +1,5 @@
-﻿#include <hgl/File.h>
+﻿#include <hgl/FileSystem.h>
 #include <hgl/LogInfo.h>
-#include <hgl/Other.h>
 #include <hgl/io/FileInputStream.h>
 #include <hgl/io/FileOutputStream.h>
 

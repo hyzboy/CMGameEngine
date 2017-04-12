@@ -518,31 +518,34 @@ namespace
 
 namespace hgl
 {
-    /**
-    * AES算法加密函数
-    * @param data 要加密的数据
-    * @param key 密码
-    * @param keysize 密码位数(仅为128,192,256)
-    */
-    void AesEncrypt(uint8 data[16],uint8 *key,int keysize)
+    namespace algorithm
     {
-        aes_context ac;
-        aes_set_key(&ac,key,keysize);
-        aes_encrypt(&ac,data);
-    }
-    /**
-    * AES算法解密函数
-    * @param data 要加密的数据
-    * @param key 密码
-    * @param keysize 密码位数(仅为128,192,256)
-    */
-    void AesDecrypt(uint8 data[16],uint8 *key,int keysize)
-    {
-        aes_context ac;
-        aes_set_key(&ac,key,keysize);
-        aes_decrypt(&ac,data);
-    }
-}
+        /**
+        * AES算法加密函数
+        * @param data 要加密的数据
+        * @param key 密码
+        * @param keysize 密码位数(仅为128,192,256)
+        */
+        void AesEncrypt(uint8 data[16], uint8 *key, int keysize)
+        {
+            aes_context ac;
+            aes_set_key(&ac, key, keysize);
+            aes_encrypt(&ac, data);
+        }
+        /**
+        * AES算法解密函数
+        * @param data 要加密的数据
+        * @param key 密码
+        * @param keysize 密码位数(仅为128,192,256)
+        */
+        void AesDecrypt(uint8 data[16], uint8 *key, int keysize)
+        {
+            aes_context ac;
+            aes_set_key(&ac, key, keysize);
+            aes_decrypt(&ac, data);
+        }
+    }//namespace algorithm
+}//namespace hgl
 //--------------------------------------------------------------------------------------------------
 /*
 #ifdef TEST

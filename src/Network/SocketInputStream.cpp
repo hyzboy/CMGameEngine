@@ -3,7 +3,6 @@
 #include<hgl/network/TCPSocket.h>
 #include<hgl/MemBlock.h>
 #include<hgl/LogInfo.h>
-#include<hgl/Other.h>
 namespace hgl
 {
     namespace network

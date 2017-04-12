@@ -1,4 +1,4 @@
-﻿#include<hgl/ut/Hash.h>
+﻿#include<hgl/algorithm/Hash.h>
 
 namespace hgl
 {
@@ -46,7 +46,7 @@ namespace hgl
     #  define MOD4(a) a %= BASE
     #endif
 
-    namespace util
+    namespace algorithm
     {
         /**
         * Adler32校检码计算
@@ -143,5 +143,5 @@ namespace hgl
         };//class Adler32
 
         Hash *CreateAdler32Hash(){return(new Adler32);}
-    }//namespace util
+    }//namespace algorithm
 }//namespace hgl

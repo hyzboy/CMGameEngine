@@ -4,7 +4,10 @@
 #include<hgl/type/StringInstance.h>
 #include<hgl/CompOperator.h>
 #include<hgl/Str.h>
-#include<hgl/VectorMath.h>
+#include<hgl/algorithm/VectorMath.h>
+
+using namespace hgl::algorithm;
+
 namespace hgl
 {
     /**

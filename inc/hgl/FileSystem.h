@@ -1,5 +1,5 @@
-﻿#ifndef HGL_FILE_INCLUDE
-#define HGL_FILE_INCLUDE
+﻿#ifndef HGL_FILE_SYSTEM_INCLUDE
+#define HGL_FILE_SYSTEM_INCLUDE
 
 #include<hgl/type/BaseString.h>
 #include<hgl/type/List.h>
@@ -184,4 +184,4 @@ namespace hgl
     // 	int EnumVolume(void *data,void (*func)(void *,hgl::VolumeInfo &),bool check_removable=false,bool check_remote=false,bool check_cd=false);
     }//namespace filesystem
 }//namespace hgl
-#endif//HGL_FILE_INCLUDE
+#endif//HGL_FILE_SYSTEM_INCLUDE

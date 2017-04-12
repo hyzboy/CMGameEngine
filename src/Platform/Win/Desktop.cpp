@@ -1,8 +1,6 @@
-﻿#include<hgl/Other.h>
-#include<hgl/type/DataType.h>
+﻿#include<hgl/type/DataType.h>
 #include<hgl/type/BaseString.h>
-
-#include<windows.h>
+#include<hgl/FileSystem.h>
 #include<shobjidl.h>
 
 namespace hgl

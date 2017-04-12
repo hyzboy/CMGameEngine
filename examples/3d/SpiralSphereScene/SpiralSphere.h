@@ -1,7 +1,7 @@
 ﻿#ifndef HGL_EXAMPLE_3D_SPIRAL_SPHERE_INCLUDE
 #define HGL_EXAMPLE_3D_SPIRAL_SPHERE_INCLUDE
 
-#include<hgl/VectorMath.h>
+#include<hgl/algorithm/VectorMath.h>
 #include<hgl/graph/SceneNode.h>
 
 #define SPHERE_NUMBER		360

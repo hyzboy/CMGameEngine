@@ -1,10 +1,11 @@
 ﻿#include<hgl/platform/GraphicsApplication.h>
 #include<hgl/platform/Window.h>
 #include<hgl/object/FlowControl.h>
+#include<hgl/Time.h>
 #include<hgl/graph/Render.h>
 #include<hgl/graph/TileFont.h>
 #include<glew/include/GL/glew.h>
-#include <hgl/platform/compiler/EventFunc.h>
+#include<hgl/platform/compiler/EventFunc.h>
 
 extern "C"
 {

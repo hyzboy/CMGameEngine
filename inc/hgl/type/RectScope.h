@@ -1,7 +1,7 @@
 ﻿#ifndef HGL_RECTSCOPE_INCLUDE
 #define HGL_RECTSCOPE_INCLUDE
 
-#include<hgl/VectorMath.h>
+#include<hgl/algorithm/VectorMath.h>
 namespace hgl
 {
 	/**

@@ -1,4 +1,4 @@
-#include<hgl/ut/Hash.h>
+#include<hgl/algorithm/Hash.h>
 
 namespace hgl
 {
@@ -51,7 +51,7 @@ namespace hgl
         };
     }//namespace
 
-    namespace util
+    namespace algorithm
     {
         uint32 CountCRC32(uint32 crc, const uint8 *buf, uint32 size)
         {
@@ -94,5 +94,5 @@ namespace hgl
         };//class CRC32
 
         Hash *CreateCRC32Hash(){return(new CRC32);}
-    }//namespace util
+    }//namespace algorithm
 }//namepace hgl

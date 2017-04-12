@@ -2,7 +2,7 @@
 #include<hgl/platform/ConsoleSystemInitInfo.h>
 #include<hgl/PlugIn.h>
 #include<hgl/Info.h>
-#include<hgl/Other.h>
+#include<hgl/Time.h>
 
 #if HGL_OS == HGL_OS_Windows
 #include<wchar.h>

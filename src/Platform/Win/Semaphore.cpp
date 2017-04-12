@@ -2,7 +2,6 @@
 #include<hgl/LogInfo.h>
 
 #include<wchar.h>
-#include<windows.h>
 #pragma warning(disable:4800)            // int -> bool 性能损失警告
 
 namespace hgl

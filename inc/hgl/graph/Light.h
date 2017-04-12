@@ -3,7 +3,7 @@
 
 #include<hgl/type/Color3f.h>
 #include<hgl/type/Color4f.h>
-#include<hgl/VectorMath.h>
+#include<hgl/algorithm/VectorMath.h>
 namespace hgl
 {
 	namespace graph

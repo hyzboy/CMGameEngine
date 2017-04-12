@@ -1,5 +1,5 @@
 ﻿#include<hgl/graph/Camera.h>
-#include<hgl/VectorMath.h>
+#include<hgl/algorithm/VectorMath.h>
 #include<iostream>
 namespace hgl
 {

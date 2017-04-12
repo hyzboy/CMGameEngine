@@ -1,5 +1,5 @@
-﻿#ifndef HGL_COMPRESS_INCLUDE
-#define HGL_COMPRESS_INCLUDE
+﻿#ifndef HGL_ALGORITHM_COMPRESS_INCLUDE
+#define HGL_ALGORITHM_COMPRESS_INCLUDE
 
 #include<hgl/type/BaseString.h>
 namespace hgl
@@ -135,4 +135,4 @@ namespace hgl
 		uint Decompress(void *,uint &,void *,uint &);
 	};
 }//namespace hgl
-#endif//HGL_COMPRESS_INCLUDE
+#endif//HGL_ALGORITHM_COMPRESS_INCLUDE

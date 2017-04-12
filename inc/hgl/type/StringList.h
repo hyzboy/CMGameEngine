@@ -2,7 +2,7 @@
 #define HGL_STRINGLIST_INCLUDE
 
 #include<hgl/type/List.h>
-#include<hgl/File.h>
+#include<hgl/FileSystem.h>
 #include<hgl/type/BaseString.h>
 #include<hgl/io/DataInputStream.h>
 #include<hgl/io/DataOutputStream.h>

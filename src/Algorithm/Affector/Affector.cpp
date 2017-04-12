@@ -1,4 +1,4 @@
-﻿#include<hgl/affect/Affector.h>
+﻿#include<hgl/algorithm/affect/Affector.h>
 
     ///////////////////
 /*    影响器是一种关键设计，其本质就是通过一个树形的列表，管理一堆可刷新的处理。
@@ -18,224 +18,230 @@
 
 namespace hgl
 {
-    /**
-    * 控制器构造函数
-    */
-    AffectorControl::AffectorControl()
+    namespace algorithm
     {
-        pause=true;
-        stop=true;
-
-        hglSetPropertyRead(IsPause,    this,AffectorControl::GetPause);
-        hglSetPropertyRead(IsStop,    this,AffectorControl::GetStop);
-        hglSetPropertyRead(IsRun,    this,AffectorControl::GetRun);
-    }
-
-    /**
-    * 添加一个影响器到控制器中
-    * @param name 影响器名称(不可重复)
-    * @param ao 影响器指针
-    * @return 是否添加成功
-    */
-    bool AffectorControl::Add(const UTF16String &name,AffectorObject *ao)
-    {
-        if(!ao)
+        namespace affect
         {
-            LOG_ERROR(U16_TEXT("AffectorControl 添加的新对象指针为空,name:")+name);
-            return(false);
-        }
+            /**
+            * 控制器构造函数
+            */
+            AffectorControl::AffectorControl()
+            {
+                pause = true;
+                stop = true;
 
-        if(name.IsEmpty())
-        {
-            LOG_ERROR(U16_TEXT("AffectorControl 添加的新对象没有名称,addr:") + PointerToHexUTF16String(ao));
-            return(false);
-        }
+                hglSetPropertyRead(IsPause, this, AffectorControl::GetPause);
+                hglSetPropertyRead(IsStop, this, AffectorControl::GetStop);
+                hglSetPropertyRead(IsRun, this, AffectorControl::GetRun);
+            }
 
-        if(affector_list.Find(name)!=-1)
-        {
-            LOG_ERROR(U16_TEXT("AffectorControl重复添加的对象,name:\"") + name + U16_TEXT("\",addr:") + PointerToHexUTF16String(ao));
-            return(false);
-        }
+            /**
+            * 添加一个影响器到控制器中
+            * @param name 影响器名称(不可重复)
+            * @param ao 影响器指针
+            * @return 是否添加成功
+            */
+            bool AffectorControl::Add(const UTF16String &name, AffectorObject *ao)
+            {
+                if (!ao)
+                {
+                    LOG_ERROR(U16_TEXT("AffectorControl 添加的新对象指针为空,name:") + name);
+                    return(false);
+                }
 
-        ao->SetControl(this);                //关联控制器
+                if (name.IsEmpty())
+                {
+                    LOG_ERROR(U16_TEXT("AffectorControl 添加的新对象没有名称,addr:") + PointerToHexUTF16String(ao));
+                    return(false);
+                }
 
-        return affector_list.Add(name,ao);    //添加到列表
-    }
+                if (affector_list.Find(name) != -1)
+                {
+                    LOG_ERROR(U16_TEXT("AffectorControl重复添加的对象,name:\"") + name + U16_TEXT("\",addr:") + PointerToHexUTF16String(ao));
+                    return(false);
+                }
 
-    /**
-    * 从控制器中移除一个影响器
-    * @param name 要移除的影响器名称
-    * @return 是否移除成功
-    */
-    bool AffectorControl::Unlink(const UTF16String &name)
-    {
-        if(name.IsEmpty())
-        {
-            LOG_ERROR(OS_TEXT("要解除关联的影响器名称为空"));
-            return(false);
-        }
+                ao->SetControl(this);                //关联控制器
 
-        return affector_list.UnlinkByIndex(name);
-    }
+                return affector_list.Add(name, ao);    //添加到列表
+            }
 
-    /**
-    * 从控制器中移除一个影响器
-    * @param ao 要移除的影响器指针
-    * @return 是否移除成功
-    */
-    bool AffectorControl::Unlink(AffectorObject *ao)
-    {
-        if(!ao)
-        {
-            LOG_ERROR(OS_TEXT("要移除的影响器指针为空"));
-            return(false);
-        }
+            /**
+            * 从控制器中移除一个影响器
+            * @param name 要移除的影响器名称
+            * @return 是否移除成功
+            */
+            bool AffectorControl::Unlink(const UTF16String &name)
+            {
+                if (name.IsEmpty())
+                {
+                    LOG_ERROR(OS_TEXT("要解除关联的影响器名称为空"));
+                    return(false);
+                }
 
-        return affector_list.UnlinkByData(ao);
-    }
+                return affector_list.UnlinkByIndex(name);
+            }
 
-    /**
-    * 从控制器中山删除一个影响器
-    * @param name 要删除的影响器名称
-    * @return 是否删除成功
-    */
-    bool AffectorControl::Delete(const UTF16String &name)
-    {
-        if(name.IsEmpty())
-        {
-            LOG_ERROR(OS_TEXT("要删除的影响器名称为空"));
-            return(false);
-        }
+            /**
+            * 从控制器中移除一个影响器
+            * @param ao 要移除的影响器指针
+            * @return 是否移除成功
+            */
+            bool AffectorControl::Unlink(AffectorObject *ao)
+            {
+                if (!ao)
+                {
+                    LOG_ERROR(OS_TEXT("要移除的影响器指针为空"));
+                    return(false);
+                }
 
-        return affector_list.DeleteByIndex(name);
-    }
+                return affector_list.UnlinkByData(ao);
+            }
 
-    /**
-    * 从控制器中移删除一个影响器
-    * @param ao 要删除的影响器指针
-    * @return 是否删除成功
-    */
-    bool AffectorControl::Delete(AffectorObject *ao)
-    {
-        if(!ao)
-        {
-            LOG_ERROR(OS_TEXT("要删除的影响器指针为空"));
-            return(false);
-        }
+            /**
+            * 从控制器中山删除一个影响器
+            * @param name 要删除的影响器名称
+            * @return 是否删除成功
+            */
+            bool AffectorControl::Delete(const UTF16String &name)
+            {
+                if (name.IsEmpty())
+                {
+                    LOG_ERROR(OS_TEXT("要删除的影响器名称为空"));
+                    return(false);
+                }
 
-        return affector_list.UnlinkByData(ao);
-    }
+                return affector_list.DeleteByIndex(name);
+            }
 
-    /**
-    * 解除所有影响器关联
-    */
-    void AffectorControl::UnlinkAll()
-    {
-        affector_list.UnlinkAll();
-    }
+            /**
+            * 从控制器中移删除一个影响器
+            * @param ao 要删除的影响器指针
+            * @return 是否删除成功
+            */
+            bool AffectorControl::Delete(AffectorObject *ao)
+            {
+                if (!ao)
+                {
+                    LOG_ERROR(OS_TEXT("要删除的影响器指针为空"));
+                    return(false);
+                }
 
-    /**
-    * 删除所有影响器
-    */
-    void AffectorControl::DeleteAll()
-    {
-        affector_list.DeleteAll();
-        delete_list.DeleteAll();
-    }
+                return affector_list.UnlinkByData(ao);
+            }
 
-    /**
-    * 销毁一个影响器,添加到待删除列表
-    * @param ao 要销毁的影响器对象
-    */
-    void AffectorControl::Destroy(AffectorObject *ao)
-    {
-        if(!ao)return;
+            /**
+            * 解除所有影响器关联
+            */
+            void AffectorControl::UnlinkAll()
+            {
+                affector_list.UnlinkAll();
+            }
 
-        if(affector_list.UnlinkByData(ao))
-            delete_list.Add(ao);
-    }
+            /**
+            * 删除所有影响器
+            */
+            void AffectorControl::DeleteAll()
+            {
+                affector_list.DeleteAll();
+                delete_list.DeleteAll();
+            }
 
-    /**
-    * 根据名称取得一个控制器
-    * @param name 要取得的影响器名称
-    * @return 影响器指针
-    * @return NULL 失败
-    */
-    AffectorObject *AffectorControl::Get(const UTF16String &name)
-    {
-        AffectorObject *ao;
+            /**
+            * 销毁一个影响器,添加到待删除列表
+            * @param ao 要销毁的影响器对象
+            */
+            void AffectorControl::Destroy(AffectorObject *ao)
+            {
+                if (!ao)return;
 
-        if(affector_list.Get(name,ao))
-            return ao;
-        else
-            return(nullptr);
-    }
+                if (affector_list.UnlinkByData(ao))
+                    delete_list.Add(ao);
+            }
+
+            /**
+            * 根据名称取得一个控制器
+            * @param name 要取得的影响器名称
+            * @return 影响器指针
+            * @return NULL 失败
+            */
+            AffectorObject *AffectorControl::Get(const UTF16String &name)
+            {
+                AffectorObject *ao;
+
+                if (affector_list.Get(name, ao))
+                    return ao;
+                else
+                    return(nullptr);
+            }
 
 #undef AFFECTOR_ENUM_FUNC
 #define AFFECTOR_ENUM_FUNC(func_name)    \
-    bool AffectorControl::_ ##func_name()    \
-    {    \
-        int n=affector_list.GetCount();    \
-    \
-        if(n<=0)return(false);    \
-    \
-        AffectorObject *ao;    \
-    \
-        for(int i=0;i<n;i++)    \
-        {    \
-            if(affector_list.GetData(i,ao))    \
-                ao->func_name();    \
-        }    \
-        \
-        return(true);    \
-    }
+            bool AffectorControl::_ ##func_name()    \
+            {    \
+                int n=affector_list.GetCount();    \
+            \
+                if(n<=0)return(false);    \
+            \
+                AffectorObject *ao;    \
+            \
+                for(int i=0;i<n;i++)    \
+                {    \
+                    if(affector_list.GetData(i,ao))    \
+                        ao->func_name();    \
+                }    \
+                \
+                return(true);    \
+            }
 
-    AFFECTOR_ENUM_FUNC(Start);
-    AFFECTOR_ENUM_FUNC(Pause);
-    AFFECTOR_ENUM_FUNC(Resume);
-    AFFECTOR_ENUM_FUNC(Stop);
-    AFFECTOR_ENUM_FUNC(Update);
+            AFFECTOR_ENUM_FUNC(Start);
+            AFFECTOR_ENUM_FUNC(Pause);
+            AFFECTOR_ENUM_FUNC(Resume);
+            AFFECTOR_ENUM_FUNC(Stop);
+            AFFECTOR_ENUM_FUNC(Update);
 #undef AFFECTOR_ENUM_FUNC
 
-    bool AffectorControl::Start()
-    {
-        pause=false;
-        stop=false;
+            bool AffectorControl::Start()
+            {
+                pause = false;
+                stop = false;
 
-        return _Start();
-    }
+                return _Start();
+            }
 
-    bool AffectorControl::Pause()
-    {
-        pause=true;
+            bool AffectorControl::Pause()
+            {
+                pause = true;
 
-        return _Pause();
-    }
+                return _Pause();
+            }
 
-    bool AffectorControl::Resume()
-    {
-        pause=false;
+            bool AffectorControl::Resume()
+            {
+                pause = false;
 
-        return _Resume();
-    }
+                return _Resume();
+            }
 
-    bool AffectorControl::Stop()
-    {
-        pause=true;
-        stop=true;
+            bool AffectorControl::Stop()
+            {
+                pause = true;
+                stop = true;
 
-        return _Stop();
-    }
+                return _Stop();
+            }
 
-    /**
-    * 刷新处理，按顺序调用所有的影响器
-    */
-    void AffectorControl::Update()
-    {
-        if(pause||stop)return;
+            /**
+            * 刷新处理，按顺序调用所有的影响器
+            */
+            void AffectorControl::Update()
+            {
+                if (pause || stop)return;
 
-        _Update();
+                _Update();
 
-        delete_list.DeleteAll();
-    }
+                delete_list.DeleteAll();
+            }
+        }//namespace affect
+    }//namespace algorithm
 }//namespace hgl

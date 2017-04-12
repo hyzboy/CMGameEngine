@@ -1,5 +1,5 @@
-﻿#ifndef HGL_VECTOR_MATH_MGL_INCLUDE
-#define HGL_VECTOR_MATH_MGL_INCLUDE
+﻿#ifndef HGL_ALGORITHM_VECTOR_MATH_MGL_INCLUDE
+#define HGL_ALGORITHM_VECTOR_MATH_MGL_INCLUDE
 
 #ifdef _MSC_VER
 #pragma warning(disable:4244)           // double -> int 精度丢失警告
@@ -216,4 +216,4 @@ namespace hgl
         return ray.dir.Dot((pos-ray.pos).Normalized());
     }
 }//namespace hgl
-#endif//HGL_VECTOR_MATH_MGL_INCLUDE
+#endif//HGL_ALGORITHM_VECTOR_MATH_MGL_INCLUDE

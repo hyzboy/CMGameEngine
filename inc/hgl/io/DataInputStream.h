@@ -3,7 +3,7 @@
 
 #include<hgl/io/InputStream.h>
 #include<hgl/type/BaseString.h>
-#include<hgl/VectorMath.h>
+#include<hgl/algorithm/VectorMath.h>
 namespace hgl
 {
 	namespace io

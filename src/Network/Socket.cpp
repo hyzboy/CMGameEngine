@@ -1,6 +1,5 @@
 ﻿#include<hgl/network/Socket.h>
 #include<hgl/LogInfo.h>
-#include<hgl/Other.h>
 #include<time.h>
 #include<iostream>
 

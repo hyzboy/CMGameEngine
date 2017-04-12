@@ -1,7 +1,7 @@
 ﻿#include<hgl/LogInfo.h>
-#include<hgl/Compress.h>
+#include<hgl/Time.h>
+#include<hgl/algorithm/Compress.h>
 #include<hgl/PlugIn.h>
-#include<hgl/Other.h>
 #include<hgl/type/Map.h>
 namespace hgl
 {

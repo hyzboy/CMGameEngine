@@ -2,7 +2,7 @@
 #define HGL_NETWORK_SOCKET_THREAD_SERVER_INCLUDE
 
 #include<hgl/thread/Thread.h>
-#include<hgl/Other.h>
+#include<hgl/Time.h>
 #include<hgl/network/Socket.h>
 namespace hgl
 {

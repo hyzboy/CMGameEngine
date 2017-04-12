@@ -1,6 +1,6 @@
 ﻿#include<hgl/ut/XMLParse.h>
 #include<hgl/io/FileInputStream.h>
-#include<hgl/File.h>
+#include<hgl/FileSystem.h>
 #include<expat.h>
 
 namespace hgl

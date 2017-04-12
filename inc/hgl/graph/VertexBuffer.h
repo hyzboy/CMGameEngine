@@ -4,8 +4,7 @@
 #include<hgl/type/DataType.h>
 #include<hgl/type/Color3f.h>
 #include<hgl/type/Color4f.h>
-#include<hgl/Other.h>
-#include<hgl/VectorMath.h>
+#include<hgl/algorithm/VectorMath.h>
 #include<hgl/graph/VertexBufferType.h>
 namespace hgl
 {

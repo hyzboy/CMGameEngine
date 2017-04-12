@@ -1,6 +1,5 @@
 ﻿#include<hgl/network/ServerSocket.h>
 #include<hgl/LogInfo.h>
-#include<hgl/Other.h>
 
 namespace hgl
 {

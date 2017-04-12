@@ -5,7 +5,7 @@
 #include<hgl/graph/Render.h>
 //#include<hgl/graph/Frustum.h>
 
-#include<hgl/VectorMath.h>
+#include<hgl/algorithm/VectorMath.h>
 
 namespace hgl
 {

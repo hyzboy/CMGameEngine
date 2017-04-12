@@ -52,21 +52,24 @@ void rc4_crypt( struct rc4_state *s, unsigned char *data, int length )
 //--------------------------------------------------------------------------------------------------
 namespace hgl
 {
-    /**
-    * RC4算法加密函数
-    * @param data 数据
-    * @param datasize 数据长度
-    * @param key 密码
-    * @param keysize 密码长度(字节)
-    */
-    void RC4Encrypt(uint8 *data,int datasize,uint8 *key,int keysize)
+    namespace algorithm
     {
-        rc4_state rs;
+        /**
+        * RC4算法加密函数
+        * @param data 数据
+        * @param datasize 数据长度
+        * @param key 密码
+        * @param keysize 密码长度(字节)
+        */
+        void RC4Encrypt(uint8 *data, int datasize, uint8 *key, int keysize)
+        {
+            rc4_state rs;
 
-        rc4_setup(&rs,key,keysize);
-        rc4_crypt(&rs,data,datasize);
-    }
-}
+            rc4_setup(&rs, key, keysize);
+            rc4_crypt(&rs, data, datasize);
+        }
+    }//namespace algorithm
+}//namespace hgl
 //--------------------------------------------------------------------------------------------------
 /*
 #ifdef TEST

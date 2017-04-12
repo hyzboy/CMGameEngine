@@ -57,8 +57,16 @@ HGL_CONSOLE_MAIN(sii,app,args)
         return 0;
     }
 
-    if(args[1]=='4')parse<network::IPv4Address,in_addr,INET_ADDRSTRLEN>(args[2],args[3]);else
-    if(args[1]=='6')parse<network::IPv6Address,in6_addr,INET6_ADDRSTRLEN>(args[2],args[3]);
+    #if HGL_OS == HGL_OS_Windows
+        UTF8String type=to_u8(args[2]);
+        UTF8String domain=to_u8(args[3]);
+
+        if(args[1]=='4')parse<network::IPv4Address,in_addr,INET_ADDRSTRLEN>(type,domain);else
+        if(args[1]=='6')parse<network::IPv6Address,in6_addr,INET6_ADDRSTRLEN>(type,domain);
+    #else
+        if(args[1]=='4')parse<network::IPv4Address,in_addr,INET_ADDRSTRLEN>(args[2],args[3]);else
+        if(args[1]=='6')parse<network::IPv6Address,in6_addr,INET6_ADDRSTRLEN>(args[2],args[3]);
+    #endif//HGL_OS == HGL_OS_Windows
 
     return 0;
 }

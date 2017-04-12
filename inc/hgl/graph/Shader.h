@@ -3,7 +3,7 @@
 
 #include<hgl/type/BaseString.h>
 #include<hgl/type/Map.h>
-#include<hgl/VectorMath.h>
+#include<hgl/algorithm/VectorMath.h>
 #include<hgl/graph/UBO.h>
 #include<hgl/graph/VertexBufferType.h>
 namespace hgl

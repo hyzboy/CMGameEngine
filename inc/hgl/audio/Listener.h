@@ -1,7 +1,7 @@
 ﻿#ifndef HGL_LISTENER_INCLUDE
 #define HGL_LISTENER_INCLUDE
 
-#include<hgl/VectorMath.h>
+#include<hgl/algorithm/VectorMath.h>
 namespace hgl
 {
 	using ListenerOrientation = Vector3f[2];

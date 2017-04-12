@@ -4,7 +4,7 @@
 #include<hgl/type/FixedArray.h>
 #include<hgl/graph/VertexBuffer.h>
 #include<hgl/graph/PixelCompoment.h>
-#include<hgl/VectorMath.h>
+#include<hgl/algorithm/VectorMath.h>
 namespace hgl
 {
     namespace graph

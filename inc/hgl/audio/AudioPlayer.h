@@ -6,7 +6,7 @@
 #include<hgl/thread/ThreadMutex.h>
 #include<hgl/audio/OpenAL.h>
 #include<hgl/audio/AudioSource.h>
-#include<hgl/VectorMath.h>
+#include<hgl/algorithm/VectorMath.h>
 using namespace openal;
 namespace hgl
 {

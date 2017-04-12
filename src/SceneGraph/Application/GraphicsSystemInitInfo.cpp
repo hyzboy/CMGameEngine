@@ -1,7 +1,6 @@
 ﻿#include<hgl/platform/GraphicsSystemInitInfo.h>
 #include<hgl/proc/ProcMutex.h>
-#include<hgl/Other.h>
-#include<hgl/File.h>
+#include<hgl/FileSystem.h>
 #include<hgl/LogInfo.h>
 #include<GLFW/glfw3.h>
 

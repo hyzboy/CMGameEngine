@@ -1,5 +1,4 @@
 ﻿#include<hgl/CodePage.h>
-#include<hgl/Other.h>
 
 namespace hgl
 {

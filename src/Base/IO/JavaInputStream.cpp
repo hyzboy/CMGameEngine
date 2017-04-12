@@ -1,5 +1,5 @@
 #include<hgl/io/JavaInputStream.h>
-#include<hgl/Other.h>
+#include<hgl/CodePage.h>
 namespace hgl
 {
     namespace io

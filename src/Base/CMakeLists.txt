@@ -9,15 +9,11 @@ SET(BASE_OBJECT_SOURCE)
 SOURCE_GROUP("Object"    FILES ${BASE_OBJECT_SOURCE})
 
 SET(BASE_OTHER_SOURCE
-    Other/ProbSelect.cpp
     Other/ExpendString.cpp
-    Other/Compress.cpp
     Other/File.cpp
     Other/TimeCount.cpp
     Other/DateTime.cpp
-    Other/PseudoRandom.cpp
-    Other/CodePage.cpp
-    Other/LSinCos.cpp)
+    Other/CodePage.cpp)
 
 SOURCE_GROUP("Other"                FILES ${BASE_OTHER_SOURCE})
 

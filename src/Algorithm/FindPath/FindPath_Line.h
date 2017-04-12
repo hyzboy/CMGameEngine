@@ -1,27 +1,30 @@
-#ifndef HGL_LINE_FINDPATH_INCLUDE
-#define HGL_LINE_FINDPATH_INCLUDE
+#ifndef HGL_ALGORITHM_LINE_FINDPATH_INCLUDE
+#define HGL_ALGORITHM_LINE_FINDPATH_INCLUDE
 
-#include<hgl/ut/FindPath.h>
+#include<hgl/algorithm/FindPath.h>
 #include<hgl/type/Stack.h>
 namespace hgl
 {
-	namespace findpath
-	{
-		class LineFindPath:public FindPath
-		{
-			int px,py;
+    namespace algorithm
+    {
+        namespace findpath
+        {
+            class LineFindPath :public FindPath
+            {
+                int px, py;
 
-		private:
+            private:
 
-			bool PutPixel(int,int);
-			bool Line(int,int,int,int);
+                bool PutPixel(int, int);
+                bool Line(int, int, int, int);
 
-			bool find_path();
+                bool find_path();
 
-		public:
+            public:
 
-			LineFindPath(int,int);
-		};
-	}//namespace findpath
+                LineFindPath(int, int);
+            };
+        }//namespace findpath
+    }//namespace algorithm
 }//namespace hgl
-#endif//HGL_LINE_FINDPATH_INCLUDE
+#endif//HGL_ALGORITHM_LINE_FINDPATH_INCLUDE

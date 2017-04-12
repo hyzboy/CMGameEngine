@@ -1,7 +1,7 @@
 ﻿#ifndef HGL_AUDIO_SCENE_INCLUDE
 #define HGL_AUDIO_SCENE_INCLUDE
 
-#include<hgl/VectorMath.h>
+#include<hgl/algorithm/VectorMath.h>
 #include<hgl/type/Pool.h>
 #include<hgl/type/Map.h>
 #include<hgl/audio/ConeAngle.h>

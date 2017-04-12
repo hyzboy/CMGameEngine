@@ -1,10 +1,10 @@
-﻿#include<hgl/ut/Hash.h>
-#include<hgl/File.h>
+﻿#include<hgl/algorithm/Hash.h>
+#include<hgl/FileSystem.h>
 #include<iostream>
 
 using namespace std;
 using namespace hgl;
-using namespace hgl::util;
+using namespace hgl::algorithm;
 
 #if HGL_OS == HGL_OS_Windows
 int wmain(int argc,wchar_t **argv)

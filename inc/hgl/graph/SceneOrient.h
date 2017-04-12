@@ -2,7 +2,7 @@
 #define HGL_GRAPH_SCENE_ORIENT_INCLUDE
 
 //#include<hgl/type/List.h>
-#include<hgl/VectorMath.h>
+#include<hgl/algorithm/VectorMath.h>
 #include<hgl/graph/Axis.h>
 //#include<hgl/graph/Transform.h>
 namespace hgl

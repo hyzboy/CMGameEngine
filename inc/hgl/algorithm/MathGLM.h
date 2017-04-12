@@ -1,5 +1,5 @@
-﻿#ifndef HGL_VECTOR_MATH_GLM_INCLUDE
-#define HGL_VECTOR_MATH_GLM_INCLUDE
+﻿#ifndef HGL_ALGORITHM_VECTOR_MATH_GLM_INCLUDE
+#define HGL_ALGORITHM_VECTOR_MATH_GLM_INCLUDE
 
 #ifdef _MSC_VER
 #pragma warning(disable:4244)           // double -> int 精度丢失警告
@@ -247,4 +247,4 @@ namespace hgl
         return glm::dot(v1,v2);
     }
 }//namespace hgl
-#endif//HGL_VECTOR_MATH_GLM_INCLUDE
+#endif//HGL_ALGORITHM_VECTOR_MATH_GLM_INCLUDE

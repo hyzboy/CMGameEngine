@@ -4,7 +4,6 @@
 #include<hgl/audio/AudioBuffer.h>
 #include<hgl/io/FileInputStream.h>
 #include<hgl/io/MemoryInputStream.h>
-#include<hgl/Other.h>
 #include<hgl/PlugIn.h>
 #include"AudioDecode.h"
 

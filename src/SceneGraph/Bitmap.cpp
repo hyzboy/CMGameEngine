@@ -1,5 +1,4 @@
 ﻿#include<hgl/graph/Bitmap.h>
-#include<hgl/Other.h>
 #include<hgl/PlugIn.h>
 #include<string.h>
 

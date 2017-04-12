@@ -2,7 +2,7 @@
 #include<hgl/audio/OpenAL.h>
 #include<hgl/audio/AudioBuffer.h>
 #include<hgl/audio/AudioSource.h>
-#include<hgl/Other.h>
+#include<hgl/Time.h>
 
 using namespace hgl;
 using namespace openal;

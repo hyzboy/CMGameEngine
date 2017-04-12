@@ -1,4 +1,3 @@
-#include<windows.h>
 #include<hgl/thread/RWLock.h>
 
 #pragma warning(disable:4800)            // BOOL -> bool 性能损失警告

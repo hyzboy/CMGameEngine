@@ -1,8 +1,8 @@
-#include<hgl/ut/Hash.h>
+#include<hgl/algorithm/Hash.h>
 
 namespace hgl
 {
-    namespace util
+    namespace algorithm
     {
         /* Constants for MD5Transform routine. */
         #define S11 7
@@ -251,5 +251,5 @@ namespace hgl
         };//class MD5
 
         Hash *CreateMD5Hash(){return(new MD5);}
-    }//namespace util
+    }//namespace algorithm
 }//namespace hgl

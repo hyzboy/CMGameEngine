@@ -1,9 +1,9 @@
-#include<hgl/ut/Hash.h>
+#include<hgl/algorithm/Hash.h>
 #include<hgl/endian/Endian.h>
 
 namespace hgl
 {
-    namespace util
+    namespace algorithm
     {
         /* The SHA f()-functions */
         #define f1(x,y,z)   ( ( x & y ) | ( ~x & z ) )              /* Rounds  0-19 */
@@ -232,5 +232,5 @@ namespace hgl
         };//class SHA1
 
         Hash *CreateSHA1Hash(){return(new SHA1);}
-    }//namespace util
+    }//namespace algorithm
 }//namespace hgl

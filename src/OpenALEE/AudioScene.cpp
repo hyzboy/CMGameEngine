@@ -2,7 +2,7 @@
 #include<hgl/audio/AudioSource.h>
 #include<hgl/audio/Listener.h>
 #include<hgl/al/al.h>
-#include<hgl/Other.h>
+#include<hgl/Time.h>
 namespace hgl
 {
     /**
