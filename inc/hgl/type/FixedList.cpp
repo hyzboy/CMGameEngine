@@ -2,7 +2,6 @@
 #define HGL_FIXEDLIST_CPP
 
 #include<hgl/type/FixedList.h>
-#include<hgl/Other.h>
 #include<string.h>
 
 #ifdef _DEBUG
