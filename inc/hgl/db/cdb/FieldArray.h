@@ -1,5 +1,5 @@
-﻿#ifndef HGL_CDB5_FIELD_ARRAY_BOOL_ARRAY_INCLUDE
-#define HGL_CDB5_FIELD_ARRAY_BOOL_ARRAY_INCLUDE
+﻿#ifndef HGL_CDB5_FIELD_ARRAY_INCLUDE
+#define HGL_CDB5_FIELD_ARRAY_INCLUDE
 
 #include<hgl/db/cdb/Field.h>
 #include<hgl/LogInfo.h>
@@ -61,4 +61,4 @@ namespace hgl
         }
     }//namespace cdb
 }//namespace hgl
-#endif//HGL_CDB5_FIELD_ARRAY_BOOL_ARRAY_INCLUDE
+#endif//HGL_CDB5_FIELD_ARRAY_INCLUDE
