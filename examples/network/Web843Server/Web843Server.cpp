@@ -1,11 +1,11 @@
-#include<hgl/ConsoleServer.h>
+﻿#include<hgl/ConsoleServer.h>
 #include<hgl/File.h>
 
 using namespace hgl;
 using namespace hgl::network;
 
 static char *file_data=nullptr;
-static size_t file_size=0;
+static int file_size=0;
 
 class WorkThread:public Thread
 {
@@ -45,7 +45,7 @@ public:
 
 bool Init843Server(const hgl::OSStringList &)
 {
-    file_size=LoadFileToMemory(OS_TEXT("crossdomain.xml"),(void **)&file_data);
+    file_size=filesystem::LoadFileToMemory(OS_TEXT("crossdomain.xml"),(void **)&file_data);
 
     if(file_size<=0)
         return(false);
@@ -53,8 +53,9 @@ bool Init843Server(const hgl::OSStringList &)
     return(true);
 }
 
-HGL_CONSOLE_TCP_SERVER_APPLICATION("Unity3DWebPlayer专用843端口服务器",
-                                   "Unity3D843Server",
+HGL_CONSOLE_TCP_SERVER_APPLICATION("网页843端口服务器",
+                                   "Web843Server",
                                    Init843Server,            //全局初始化函数
                                    WorkThread,                //工作线程
                                    CreateIPv4TCP(843))        //监听端口
+

@@ -17,7 +17,7 @@ namespace hgl
 																										if(!app.Init(&sii))	\
 																											return(-1);	\
 																										\
-																										typedef SocketThreadServer<ConsoleFlowObject,server_class,thread_class> ConsoleStartServer;	\
+																										using ConsoleStartServer=network::SocketThreadServer<ConsoleFlowObject,server_class,thread_class>;	\
 																										\
 																										if(!init_func(args))	\
 																											return(-2);	\

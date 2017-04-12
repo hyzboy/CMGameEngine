@@ -15,7 +15,7 @@ using WORK_THREAD_NAME##BASE=LETCPPBSocketThread<USER_ID,USER_INFO,TEAM_NUMBER>;
 template<> UserManage *WORK_THREAD_NAME##BASE::user_manage=nullptr;	\
 class WORK_THREAD_NAME:public WORK_THREAD_NAME##BASE
 
-#define HGL_CONSOLE_PB_SERVER_APPLICATION(app_name,app_code,USER_THREAD_NAME,IP_ADDRESS)	\
+#define HGL_CONSOLE_PB_SERVER_APPLICATION(app_name,app_code,USER_THREAD_NAME,IP_ADDRESS)	
 HGL_CONSOLE_MAIN_FUNC()	\
 {	\
 	sii.info.ProjectName=U8_TEXT(app_name);	\
@@ -24,7 +24,7 @@ HGL_CONSOLE_MAIN_FUNC()	\
 	if(!app.Init(&sii))	\
 		return(-1);	\
 	\
-	typedef SocketThreadServer<ConsoleFlowObject,TCPServer,USER_THREAD_NAME> ConsoleStartServer;	\
+	using ConsoleStartServer=SocketThreadServer<ConsoleFlowObject,TCPServer,USER_THREAD_NAME>;	\
 	\
 	UserManage user_manage;	\
 	\
