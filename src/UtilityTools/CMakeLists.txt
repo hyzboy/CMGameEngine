@@ -24,20 +24,6 @@ IF(WIN32)
     SOURCE_GROUP("XML\\Expat" FILES ${EXPAT_SOURCE})
 ENDIF(WIN32)
 
-SET(CDB_FILES
-    DB/CDBField.cpp
-    DB/CDBTable.cpp
-    DB/FieldType.cpp
-    DB/TableDesc.cpp
-    DB/FieldData.cpp
-    DB/FieldStream.cpp
-    DB/FieldSQL.cpp
-    DB/FieldJson.cpp
-    DB/TableDescXML.cpp
-)
-
-SOURCE_GROUP("DB\\CDB" FILES ${CDB_FILES})
-
 #IF(WIN32 OR APPLE)
 #    SET(ut_files ${ut_files}
 #    Ctrl/CtrlPoint2D.cpp
@@ -58,7 +44,6 @@ SET(ut_files
     
     ${FIND_PATH_SOURCE}
     ${XML_PARSE}
-    ${CDB_FILES}
     ${AFFECTOR_SOURCE_FILES}
     
     TaskManager/TaskManager.cpp

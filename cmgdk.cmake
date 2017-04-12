@@ -3,6 +3,8 @@
 OPTION(BUILD_BASE_LIB 			"Build Base Library"						TRUE	)
 OPTION(BUILD_ALGORITHM          "Build Algorithm (Hash/Crypt)"              FALSE   )
 
+OPTION(BUILD_DATABASE           "Build Database support"                    FALSE   )
+
 OPTION(BUILD_NETWORK_LIB		"Build Network Library"						TRUE	)
 
 OPTION(BUILD_SCRIPT_ANGEL       "Build Script AngelScript"                  FALSE   )
@@ -102,6 +104,10 @@ SET(HGL_BASE_LIB CM.Base CM.UT CM.SceneGraph)
 IF(BUILD_ALGORITHM)
     SET(HGL_BASE_LIB ${HGL_BASE_LIB} CM.Algorithm)
 ENDIF(BUILD_ALGORITHM)
+
+IF(BUILD_DATABASE)
+    SET(HGL_BASE_LIB ${HGL_BASE_LIB} CM.Database)
+ENDIF(BUILD_DATABASE)
 
 IF(USE_MATH_LIBRARY STREQUAL MGL)
     SET(HGL_BASE_LIB ${HGL_BASE_LIB} MathGeoLib)
