@@ -1,5 +1,6 @@
 #include<iostream>
 #include<stdlib.h>
+#include<time.h>
 #include<hgl/type/Set.h>
 #include<hgl/type/Map.h>
 

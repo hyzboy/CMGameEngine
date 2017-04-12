@@ -10,7 +10,7 @@ using namespace hgl::algorithm;
 int wmain(int argc,wchar_t **argv)
 #else
 int main(int argc,char **argv)
-#endif//
+#endif//HGL_OS == HGL_OS_Windows
 {
     if(argc<2)
     {
@@ -18,7 +18,11 @@ int main(int argc,char **argv)
         return(0);
     }
 
-    cout<<"CountHash "<<argv[1]<<endl;
+#if HGL_OS == HGL_OS_Windows
+    wcout<<L"CountHash \""<<argv[1]<<L'"'<<endl;
+#else
+    cout<<"CountHash \""<<argv[1]<<<<'"'<<endl;
+#endif//HGL_OS == HGL_OS_Windows
 
     void *file_data;
     int64 file_length;
