@@ -2,6 +2,7 @@
 #define HGL_OS_WIN_INCLUDE
 
 #include<malloc.h>
+#include<winsock2.h>        //winsock2必须在Windows.h前面，不然会报错
 #include<windows.h>
 //--------------------------------------------------------------------------------------------------
 #define u32char         char32_t
