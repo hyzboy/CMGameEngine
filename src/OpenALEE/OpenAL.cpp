@@ -15,16 +15,16 @@ namespace openal
 {
     static ALCchar AudioDeviceName[AL_DEVICE_NAME_MAX_LEN]={0};
 
-    static ExternalModule *AudioEM    =nullptr;        //OpenAL动态链接库指针
-    static ALCdevice *AudioDevice    =nullptr;        //OpenAL设备
-    static ALCcontext *AudioContext    =nullptr;        //OpenAL上下文
+    static ExternalModule *AudioEM		=nullptr;        //OpenAL动态链接库指针
+    static ALCdevice *AudioDevice		=nullptr;        //OpenAL设备
+    static ALCcontext *AudioContext		=nullptr;        //OpenAL上下文
 
     static UTF8StringList OpenALExt_List;
     static UTF8StringList OpenALContextExt_List;
 
-    static bool AudioFloat32       =false;         //是否支持float 32数据
-    static bool AudioEFX            =false;            //EFX是否可用
-    static bool AudioXRAM            =false;            //X-RAM是否可用
+    static bool AudioFloat32			=false;         //是否支持float 32数据
+    static bool AudioEFX				=false;         //EFX是否可用
+    static bool AudioXRAM				=false;         //X-RAM是否可用
 
     bool LoadALCFunc(ExternalModule *);
     bool LoadALFunc(ExternalModule *);

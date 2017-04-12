@@ -3,6 +3,10 @@
 	add_subdirectory(UtilityTools)
 ENDIF(BUILD_BASE_LIB)
 
+IF(BUILD_ALGORITHM)
+	add_subdirectory(Algorithm)
+ENDIF(BUILD_ALGORITHM)
+
 IF(BUILD_SCRIPT_ANGEL)
     add_subdirectory(Script/AngelVM)
 ENDIF()

@@ -5,16 +5,6 @@
 
 SOURCE_GROUP("FindPath" FILES ${FIND_PATH_SOURCE})
 
-SET(HASH_SOURCE 
-    Hash/adler32.cpp
-    Hash/crc32.cpp
-    Hash/md4.cpp
-    Hash/md5.cpp
-    Hash/sha1.cpp
-    Hash/Hash.cpp)
-
-SOURCE_GROUP("Hash" FILES ${HASH_SOURCE})
-
 SET(XML_PARSE XML/XMLParse.cpp)
 
 SOURCE_GROUP("XML" FILES XML/XMLParse.cpp)
@@ -58,13 +48,6 @@ SOURCE_GROUP("DB\\CDB" FILES ${CDB_FILES})
 #    )
 #ENDIF(WIN32 OR APPLE)
 
-SET(CRYPT_SOURCE_FILES  Crypt/aes.cpp
-                        Crypt/Overflow.cpp
-                        Crypt/rc4.cpp
-                        Crypt/uECC.c)
-
-SOURCE_GROUP("Crypt" FILES ${CRYPT_SOURCE_FILES})
-
 SET(AFFECTOR_SOURCE_FILES   Affector/Affector.cpp
                             Affector/AffectorTimer.cpp
                             Affector/AffectorTrackTimer.cpp)
@@ -74,11 +57,9 @@ SOURCE_GROUP("Affector" FILES ${AFFECTOR_SOURCE_FILES})
 SET(ut_files
     
     ${FIND_PATH_SOURCE}
-    ${HASH_SOURCE}
     ${XML_PARSE}
     ${CDB_FILES}
     ${AFFECTOR_SOURCE_FILES}
-    ${CRYPT_SOURCE_FILES}
     
     TaskManager/TaskManager.cpp
     Timer/Timer.cpp
