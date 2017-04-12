@@ -284,7 +284,7 @@ namespace hgl
             efi->fi_list->Add(fi);
         }
 
-        int GetListFiles(List<FileInfo> &fi_list,const OSString &folder_name,bool proc_folder,bool proc_file,bool sub_folder)
+        int GetFileInfoList(List<FileInfo> &fi_list,const OSString &folder_name,bool proc_folder,bool proc_file,bool sub_folder)
         {
             EnumFileInfo efc;
 

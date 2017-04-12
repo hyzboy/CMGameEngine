@@ -131,7 +131,7 @@ namespace hgl
         */
         int EnumFile(EnumFileConfig *config);
 
-        int GetListFiles(List<FileInfo> &, const OSString &folder_name, bool proc_folder, bool proc_file, bool sub_folder);
+        int GetFileInfoList(List<FileInfo> &, const OSString &folder_name, bool proc_folder, bool proc_file, bool sub_folder);
 
 	    /**
 	    * 卷信息数据结构
