@@ -43,7 +43,7 @@ public:
     }
 };//struct TextExchangeOption
 
-void TextExtract(TextExchangeOption *teo,hgl::FileInfo &fi)
+void TextExtract(TextExchangeOption *teo,hgl::filesystem::FileInfo &fi)
 {
     if(fi.is_directory)
     {
@@ -72,7 +72,7 @@ void TextExtract(TextExchangeOption *teo,hgl::FileInfo &fi)
     u16char *orgin_text;
     int orgin_size;
 
-    orgin_size=LoadTxtToMemory(fi.fullname,&orgin_text,teo->char_set);
+    orgin_size=filesystem::LoadTxtToMemory(fi.fullname,&orgin_text,teo->char_set);
 
     os_char new_name[HGL_MAX_PATH];
 
@@ -224,7 +224,7 @@ HGL_CONSOLE_MAIN_FUNC()
     bool sub_folder=false;
     int off=1;
 
-    if(args.CaseFind("-test")!=-1)
+    if(args.CaseFind(OS_TEXT("-test"))!=-1)
     {
         teo.test=true;
         ++off;
@@ -232,7 +232,7 @@ HGL_CONSOLE_MAIN_FUNC()
         std::cout<<"option: test"<<std::endl;
     }
 
-    if(args.CaseFind("-cc")!=-1)
+    if(args.CaseFind(OS_TEXT("-cc"))!=-1)
     {
         teo.clear_comment=true;
         ++off;
@@ -240,7 +240,7 @@ HGL_CONSOLE_MAIN_FUNC()
         std::cout<<"option: Clear C/C++ comment"<<std::endl;
     }
 
-    if(args.CaseFind("-ce")!=-1)
+    if(args.CaseFind(OS_TEXT("-ce"))!=-1)
     {
         teo.clear_english=true;
         ++off;
@@ -248,7 +248,7 @@ HGL_CONSOLE_MAIN_FUNC()
         std::cout<<"option: Clear pure english string"<<std::endl;
     }
 
-    if(args.CaseFind("-cs")!=-1)
+    if(args.CaseFind(OS_TEXT("-cs"))!=-1)
     {
         teo.clear_symbol=true;
         ++off;
@@ -256,7 +256,7 @@ HGL_CONSOLE_MAIN_FUNC()
         std::cout<<"option: Clear pure symbol char"<<std::endl;
     }
 
-    if(args.CaseFind("-cb")!=-1)
+    if(args.CaseFind(OS_TEXT("-cb"))!=-1)
     {
         teo.clear_edge=true;
         ++off;
@@ -264,7 +264,7 @@ HGL_CONSOLE_MAIN_FUNC()
         std::cout<<"option: Clip broder english&symbol"<<std::endl;
     }
 
-    if(args.CaseFind("-sf")!=-1)
+    if(args.CaseFind(OS_TEXT("-sf"))!=-1)
     {
         sub_folder=true;
         ++off;
@@ -272,7 +272,11 @@ HGL_CONSOLE_MAIN_FUNC()
         std::cout<<"option: proc sub folder"<<std::endl;
     }
 
+#if HGL_OS == HGL_OS_Windows
+    std::wcout<<L"CharSet: "<<args[off]<<std::endl;
+#else
     std::cout<<"CharSet: "<<args[off]<<std::endl;
+#endif//HGL_OS == HGL_OS_Windows
 
     teo.char_set=CharSet(args[off++]);
 

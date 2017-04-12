@@ -3,6 +3,7 @@
 #include<hgl/graph/Camera.h>            //WalkerCamera
 #include<hgl/object/FlowObject.h>       //FlowObject
 #include<hgl/graph/InlineRenderable.h>
+#include<hgl/Time.h>
 
 using namespace hgl;
 using namespace hgl::graph;
@@ -104,7 +105,7 @@ public:
 
     void CreateSphere(const Vector3f &center, float radius, float r, float g, float b)
     {
-        sphere_va = CreateRenderableSphere(32);
+        sphere_va = CreateRenderableSphere(16);
 
         sphere_mtl = new Material;
 

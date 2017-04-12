@@ -2,7 +2,7 @@
 #include<hgl/graph/Render.h>            //SetClearColor,ClearColorDepthBuffer
 #include<hgl/graph/Camera.h>            //WalkerCamera
 #include<hgl/object/FlowObject.h>        //FlowObject
-
+#include<hgl/Time.h>
 #include"PlaneGrid.h"
 
 using namespace hgl;

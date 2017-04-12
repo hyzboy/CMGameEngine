@@ -1,4 +1,5 @@
 ﻿#include<hgl/Console.h>
+#include<hgl/Time.h>
 #include<hgl/type/DateTime.h>
 #include<hgl/type/BaseString.h>
 #include<iostream>

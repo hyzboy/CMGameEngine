@@ -4,7 +4,7 @@
 #include<hgl/object/FlowObject.h>        //FlowObject
 #include<hgl/graph/RenderToTexture.h>    //RenderToTextureColorDepth
 #include<hgl/graph/InlineRenderable.h>    //CreateRenderableRect
-
+#include<hgl/Time.h>
 #include"SpiralCubeScene.h"
 
 using namespace hgl;

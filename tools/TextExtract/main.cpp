@@ -36,7 +36,7 @@ public:
     }
 };//struct TextExtractOption
 
-void TextExtract(TextExtractOption *teo,hgl::FileInfo &fi)
+void TextExtract(TextExtractOption *teo,hgl::filesystem::FileInfo &fi)
 {
     if(fi.is_directory)
     {
