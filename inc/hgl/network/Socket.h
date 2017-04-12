@@ -79,6 +79,10 @@ namespace hgl
 
 		class Socket;
 		class IOSocket;
+
+#if HGL_OS == HGL_OS_Windows
+    bool InitWinSocket();
+#endif//HGL_OS == HGL_OS_Windows
 	}//namespace network
 
 	namespace network

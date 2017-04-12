@@ -2,8 +2,8 @@
 
 add_subdirectory(csv2table)
 
-add_subdirectory(TextExtract)
-add_subdirectory(TextExchange)
+# add_subdirectory(TextExtract)
+# add_subdirectory(TextExchange)
 
 IF(BUILD_GUI_TOOLS)
 	add_subdirectory(CDBTableViewer)

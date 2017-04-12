@@ -1,4 +1,5 @@
-﻿#include<hgl/network/IP.h>
+﻿#include<hgl/network/Socket.h>
+#include<hgl/network/IP.h>
 #include<hgl/type/List.h>
 #include<iostream>
 
@@ -12,11 +13,13 @@ int main(int,char **)
 
     List<IPSupport> ipsl;
 
-#if HGL_OS == HGL_OS_Windows
-    WSADATA wsa;
-
-    WSAStartup(MAKEWORD(2, 2), &wsa);
-#endif//
+#if HGL_OS == HGL_OS_Windows    
+    if(!network::InitWinSocket())
+    {
+        std::cout<<"Init WinSocket error!"<<std::endl;
+        return(1);
+    }
+#endif//HGL_OS == HGL_OS_Windows    
 
     const int count=GetIPSupport(ipsl);
 

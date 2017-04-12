@@ -6,31 +6,9 @@
 #if HGL_OS != HGL_OS_Windows
 #include<netinet/tcp.h>
 
-    #if HGL_OS == HGL_OS_Solaris
-        #include<sys/filio.h>
-    #endif//HGL_OS == HGL_OS_Solaris
-#else//HGL_OS != HGL_OS_Windows
-namespace
-{
-    class WindowsSocketInit
-    {
-    public:
-
-        static bool ws_init;
-
-    public:
-
-        WindowsSocketInit()
-        {
-            WSADATA wsa;
-
-            ws_init=(WSAStartup(MAKEWORD(2,2),&wsa)==NO_ERROR);
-        }
-    };//class WindowsSocketInit
-
-    bool WindowsSocketInit::ws_init=false;
-    static WindowsSocketInit wsi;
-}//HGL_OS != HGL_OS_Windows
+#if HGL_OS == HGL_OS_Solaris
+    #include<sys/filio.h>
+#endif//HGL_OS == HGL_OS_Solaris
 #endif//HGL_OS != HGL_OS_Windows
 
 //setsockopt函数的Windows下使用参数格式请参见http://msdn.microsoft.com/en-us/library/windows/desktop/ms740476(v=vs.85).aspx
@@ -41,6 +19,24 @@ namespace hgl
 
     namespace network
     {
+#if HGL_OS == HGL_OS_Windows
+    namespace
+    {
+        static bool winsocket_init=false;
+    }//namespace
+
+    bool InitWinSocket()
+    {
+        if(winsocket_init)return(true);
+
+        WSADATA wsa;
+
+        winsocket_init=(WSAStartup(MAKEWORD(2,2),&wsa)==NO_ERROR);
+
+        return(winsocket_init);
+    }
+#endif//HGL_OS == HGL_OS_Windows
+
 //        static atom_int socket_count=0;
 
         Socket::Socket()
@@ -64,7 +60,7 @@ namespace hgl
         bool Socket::CreateSocket(int d,int t,int p)
         {
             #if HGL_OS == HGL_OS_Windows
-            if(!WindowsSocketInit::ws_init)
+            if(!InitWinSocket())
                 RETURN_FALSE;
             #endif//HGL_OS == HGL_OS_Windows
 

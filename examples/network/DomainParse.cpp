@@ -1,4 +1,5 @@
 ﻿#include<hgl/Console.h>        //HGL_CONSOLE_APPLICATION宏定义
+#include<hgl/network/Socket.h>
 #include<hgl/network/IP.h>
 #include<hgl/type/Map.h>
 #include<iostream>
@@ -61,8 +62,14 @@ HGL_CONSOLE_MAIN(sii,app,args)
         UTF8String type=to_u8(args[2]);
         UTF8String domain=to_u8(args[3]);
 
-        if(args[1]=='4')parse<network::IPv4Address,in_addr,INET_ADDRSTRLEN>(type,domain);else
-        if(args[1]=='6')parse<network::IPv6Address,in6_addr,INET6_ADDRSTRLEN>(type,domain);
+        if(!network::InitWinSocket())
+        {
+            std::cout<<"Init WinSocket error!"<<std::endl;
+            return(1);
+        }
+
+        if(args[1]==L'4')parse<network::IPv4Address,in_addr,INET_ADDRSTRLEN>(type,domain);else
+        if(args[1]==L'6')parse<network::IPv6Address,in6_addr,INET6_ADDRSTRLEN>(type,domain);
     #else
         if(args[1]=='4')parse<network::IPv4Address,in_addr,INET_ADDRSTRLEN>(args[2],args[3]);else
         if(args[1]=='6')parse<network::IPv6Address,in6_addr,INET6_ADDRSTRLEN>(args[2],args[3]);

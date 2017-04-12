@@ -13,7 +13,7 @@ Texture2D *LoadBMP(const OSString &filename)
 {
     uint8 *bmp;
 
-    int64 filesize=LoadFileToMemory(filename,(void **)&bmp);
+    int64 filesize=filesystem::LoadFileToMemory(filename,(void **)&bmp);
 
     if(filesize<=54)return(nullptr);        //BMP文件头就不可能小于54
 
