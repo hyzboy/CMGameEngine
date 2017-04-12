@@ -26,7 +26,11 @@ HGL_CONSOLE_MAIN(sii,app,args)
     if(args[1]=='6')ip=new network::IPv6Address;else
         return(-1);
 
+#if HGL_OS == HGL_OS_Windows
+    ip->Set(to_u8(args[2]),0,0,0);
+#else
     ip->Set(args[2],0,0,0);
+#endif//HGL_OS == HGL_OS_Windows
 
     if(ip->GetHostname(hostname))
         std::cout<<"hostname: "<<hostname.c_str()<<std::endl;
