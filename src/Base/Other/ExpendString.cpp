@@ -28,23 +28,23 @@ namespace hgl
     {
         struct
         {
-            os_char flag[32];
+            os_char flag[8];
             HGLFlagString index;
         }
         FlagStringIndex[]=
         {
-            {OS_TEXT("CMGDK"),        hfsCMGDKPath},
-            {OS_TEXT("PlugIn"),        hfsPlugInPath},
-            {OS_TEXT("GUI"),        hfsGUIPath},
-            {OS_TEXT("Start"),        hfsStartPath},
+            {OS_TEXT("CMGDK"    ),  hfsCMGDKPath        },
+            {OS_TEXT("PlugIn"   ),  hfsPlugInPath       },
+            {OS_TEXT("GUI"      ),  hfsGUIPath          },
+            {OS_TEXT("Start"    ),  hfsStartPath        },
 
-            {OS_TEXT("OS"),            hfsOSPath},
-            {OS_TEXT("Desktop"),    hfsDesktopPath},
-            {OS_TEXT("Temp"),        hfsTempPath},
-            {OS_TEXT("Data"),        hfsUserDataPath},
-            {OS_TEXT("Program"),    hfsUserProgramPath},
+            {OS_TEXT("OS"       ),  hfsOSPath           },
+            {OS_TEXT("Desktop"  ),  hfsDesktopPath      },
+            {OS_TEXT("Temp"     ),  hfsTempPath         },
+            {OS_TEXT("Data"     ),  hfsUserDataPath     },
+            {OS_TEXT("Program"  ),  hfsUserProgramPath  },
 
-            {OS_TEXT("\x0"),        hfsEnd},
+            {OS_TEXT("\x0"      ),  hfsEnd              },
         };
 
         HGLFlagString index=hfsNone;
