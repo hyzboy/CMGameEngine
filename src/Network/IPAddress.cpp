@@ -15,7 +15,7 @@ namespace hgl
                 hints.ai_socktype=socktype;
                 hints.ai_protocol=protocol;
 
-                if (getaddrinfo(name, nullptr, &hints, &answer))         //此函数最低Windows 2003/Vista
+                if (getaddrinfo(name, nullptr, &hints, &answer))         //此函数最低WindowsXP SP2
                     RETURN_FALSE;
 
                 memcpy(&addr,answer->ai_addr,sizeof(sockaddr_in));
@@ -42,7 +42,7 @@ namespace hgl
                 hints.ai_socktype=socktype;
                 hints.ai_protocol=protocol;
 
-                if (getaddrinfo(name, nullptr, &hints, &answer))         //此函数最低Windows 2003/Vista
+                if (getaddrinfo(name, nullptr, &hints, &answer))         //此函数最低WindowsXP SP2
                     RETURN_FALSE;
 
                 memcpy(&addr,answer->ai_addr,sizeof(sockaddr_in6));
