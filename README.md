@@ -9,6 +9,7 @@
 
 * e-mail: hyzboy (@) gmail.com
 * Source repository: https://bitbucket.org/cm_dev/gameengine
+* Backup repository: https://github.com/hyzboy/CMGameEngine
 * Offical Web (sorry,only chinese): http://www.hyzgame.com
 
 * Minimum supported OS: Microsoft Windows 7/2008 R2 , Linux kernel 3.0
@@ -21,6 +22,7 @@
 * 如果向本仓库提交代码，请优先创建自有分支，仅在自有分支进行提交。直接提交到主分支的情况，将会封杀提交权限。
 * 电子邮箱：hyzboy (@) gmail.com
 * 源代码仓库: https://bitbucket.org/cm_dev/gameengine
+* 备份仓库: https://github.com/hyzboy/CMGameEngine
 * 官方网站: http://www.hyzgame.com.cn
 
 * 最低支持操作系统：Microsoft Windows 7/2008 R2 , Linux kernel 3.0
