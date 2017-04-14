@@ -3,6 +3,8 @@
 #include<hgl/File.h>
 #include<pwd.h>
 #include<unistd.h>
+#include<signal.h>
+#include<sys/resource.h>
 
 namespace hgl
 {
@@ -78,4 +80,38 @@ namespace hgl
 		cp.myprogram	=cp.mydata+OS_TEXT("/bin");
 		cp.mydesktop	=cp.mydata+OS_TEXT("/Desktop");
 	}
+
+	bool SetLimit(int resource,int count)
+    {
+        struct rlimit64 rl;
+
+        getrlimit64(resource,&rl);
+
+        if(count<=rl.rlim_cur)
+            return(true);
+
+        if(count>rl.rlim_max)
+            rl.rlim_cur=rl.rlim_max;
+        else
+            rl.rlim_cur=count;
+
+        if(setrlimit64(resource,&rl))
+        {
+            LOG_ERROR(OS_TEXT("Set resource ")+OSString(resource)+OS_TEXT(" maximum value to ")+OSString((uint64)(rl.rlim_cur))+OS_TEXT(" failed."));
+            return(false);
+        }
+    }
+
+    bool InitOSupport(ConsoleSystemInitInfo *sii)
+    {
+        if(sii->sig.pipe==false)
+        {
+            signal(SIGPIPE,SIG_IGN);            //屏蔽管道信号,一般send/recv一个断开的Socket会触发此信号，导致进程退出
+        }
+
+        if(!SetLimit(RLIMIT_NOFILE,sii->max_open_files))
+            return(false);
+
+        return(true);
+    }
 }//namespace hgl

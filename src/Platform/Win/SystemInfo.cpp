@@ -1,4 +1,5 @@
-#include<hgl/platform/SystemInfo.h>
+﻿#include<hgl/platform/SystemInfo.h>
+#include<hgl/platform/ConsoleSystemInitInfo.h>
 #include<hgl/LogInfo.h>
 #include<hgl/PlugIn.h>
 #include<hgl/FileSystem.h>
@@ -64,19 +65,30 @@ namespace hgl
         #define GET_FOLDER(str,attrib)    SHGetFolderPathW(nullptr,attrib,nullptr,0,path);    \
                                         cp.str=path;
 
-        GET_FOLDER(    os            ,CSIDL_WINDOWS    );
-        GET_FOLDER(    library        ,CSIDL_SYSTEM    );
-        GET_FOLDER(    osfont        ,CSIDL_FONTS    );
+        GET_FOLDER(os           ,CSIDL_WINDOWS          );
+        GET_FOLDER(library      ,CSIDL_SYSTEM           );
+        GET_FOLDER(osfont       ,CSIDL_FONTS            );
 
         hgl::GetTempPath(cp.temp,HGL_MAX_PATH);
 
-        GET_FOLDER( common_data    ,CSIDL_COMMON_APPDATA);
-        GET_FOLDER( local_data    ,CSIDL_LOCAL_APPDATA);
+        GET_FOLDER(common_data  ,CSIDL_COMMON_APPDATA   );
+        GET_FOLDER(local_data   ,CSIDL_LOCAL_APPDATA    );
 
-        GET_FOLDER(    mydata        ,CSIDL_APPDATA);
-        GET_FOLDER(    myprogram    ,CSIDL_STARTMENU);
-        GET_FOLDER(    mydesktop    ,CSIDL_DESKTOP);
+        GET_FOLDER(mydata       ,CSIDL_APPDATA          );
+        GET_FOLDER(myprogram    ,CSIDL_STARTMENU        );
+        GET_FOLDER(mydesktop    ,CSIDL_DESKTOP          );
 
         #undef GET_FOLDER
+    }
+
+    bool InitOSupport(ConsoleSystemInitInfo *sii)
+    {
+        if(sii->CheckDebugger&&IsDebuggerPresent())
+        {
+            LOG_ERROR(OS_TEXT("本程序不能运行在调试模式下!"));
+            return(false);
+        }
+
+        return(true);
     }
 }//namespace hgl
