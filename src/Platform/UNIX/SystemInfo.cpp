@@ -1,6 +1,6 @@
 ﻿#include<hgl/platform/SystemInfo.h>
-#include<hgl/Other.h>
-#include<hgl/File.h>
+#include<hgl/platform/ConsoleSystemInitInfo.h>
+#include<hgl/FileSystem.h>
 #include<pwd.h>
 #include<unistd.h>
 #include<signal.h>
@@ -8,9 +8,11 @@
 
 namespace hgl
 {
+    using namespace filesystem;
+    
 	bool GetCMGDKPath(OSString &cmgdk_path)
 	{
-		const char path_list[][18]=
+		constexpr char path_list[][18]=
 		{
 			"/usr/share/cmgdk",
 			"/usr/local/cmgdk"

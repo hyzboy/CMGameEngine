@@ -1,5 +1,5 @@
 #include<hgl/Logger.h>
-#include<hgl/Other.h>
+#include<hgl/CodePage.h>
 #include<hgl/thread/ThreadMutex.h>
 #include<unistd.h>
 #include<pthread.h>
@@ -8,7 +8,7 @@ namespace hgl
 {
 	namespace logger
 	{
-    #define LOG_BUF_SIZE    4096
+        constexpr uint LOG_BUF_SIZE=4096;
 
 		/**
 		* unix控制台日志插件接口

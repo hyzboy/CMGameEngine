@@ -1,11 +1,13 @@
 ﻿#include<hgl/proc/Proc.h>
-#include<hgl/File.h>
+#include<hgl/FileSystem.h>
 #include<unistd.h>
 #include<sys/wait.h>
 #include<errno.h>
 
 namespace hgl
 {
+    using namespace filesystem;
+    
 	bool Process::SetWorkPath(const OSString &wp)
 	{
 		if(!IsDirectory(wp))

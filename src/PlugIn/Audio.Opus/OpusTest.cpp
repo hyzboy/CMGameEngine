@@ -75,6 +75,7 @@ void opus_dec(const unsigned char *data,int size)
 //        printf("output size %d total output size %d\n",out_size,total_out_size);
     }
 
+    delete[] buf;
     printf("total output size %d\n",total_out_size);
 }
 

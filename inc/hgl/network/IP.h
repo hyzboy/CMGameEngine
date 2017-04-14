@@ -1,8 +1,9 @@
 ﻿#ifndef HGL_NETWORK_IP_INCLUDE
 #define HGL_NETWORK_IP_INCLUDE
 
+#include<hgl/platform/Platform.h>
+
 #if HGL_OS == HGL_OS_Windows
-    #include<winsock2.h>
     #include<ws2tcpip.h>
 
     #if SOMAXCONN == 5
