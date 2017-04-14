@@ -272,6 +272,7 @@ namespace hgl
 
             FileInfo fi;
             EnumFileConfig *sub_efc=nullptr;
+            int sub_count;
 
             do
             {
