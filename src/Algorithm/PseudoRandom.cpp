@@ -1,4 +1,5 @@
 ﻿#include<hgl/algorithm/PseudoRandom.h>
+#include<stdlib.h>
 
 namespace hgl
 {
