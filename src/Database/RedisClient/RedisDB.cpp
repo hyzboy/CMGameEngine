@@ -1,5 +1,4 @@
 ﻿#include<hgl/db/RedisDB.h>
-#include"hiredis.h"
 #include"RedisDBReply.h"
 #include<string.h>
 #include<stdlib.h>
