@@ -270,6 +270,7 @@ namespace hgl
             if (hFind == INVALID_HANDLE_VALUE)
                 return(-1);
 
+            FileInfo fi;
             EnumFileConfig *sub_efc=nullptr;
 
             do
@@ -291,7 +292,8 @@ namespace hgl
                             if(!sub_efc)
                                 continue;
 
-                            count+=EnumFile(sub_efc);
+                            sub_count=EnumFile(sub_efc);
+                            if(sub_count>0)count+=sub_count;
                         }
                     }
                     else
@@ -300,11 +302,10 @@ namespace hgl
                 else
                 {
                     if(!config->proc_file)continue;
+                    
+                    ++count;
                 }
 
-                count++;
-
-                FileInfo fi;
                 memset(&fi,0,sizeof(FileInfo));
 
                 strcpy(fi.name,HGL_MAX_PATH,FindFileData.cFileName);
