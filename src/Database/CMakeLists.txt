@@ -29,19 +29,19 @@ IF(UNIX)
         FILE(GLOB_RECURSE HIREDIS_SOURCES "RedisClient/hiredis/*.c")
         FILE(GLOB_RECURSE HIREDIS_HEADERS "RedisClient/hiredis/*.h")
 
-        SET(REDIS_CLIENT_FILES 
-            RedisDB.cpp
-            RedisDBStrings.cpp
-            RedisDBStringBinary.cpp
-            RedisDBStringNumber.cpp
-            RedisDBSets.cpp
-            RedisDBSortedSets.cpp
-            RedisDBHashes.cpp)
-            
+        SET(REDIS_CLIENT_FILES
+            RedisClient/RedisDB.cpp
+            RedisClient/RedisDBStrings.cpp
+            RedisClient/RedisDBStringBinary.cpp
+            RedisClient/RedisDBStringNumber.cpp
+            RedisClient/RedisDBSets.cpp
+            RedisClient/RedisDBSortedSets.cpp
+            RedisClient/RedisDBHashes.cpp)
+
         SOURCE_GROUP("Redis\\hiredis\\Include" FILES ${HIREDIS_HEADERS})
         SOURCE_GROUP("Redis\\hiredis\\Source" FILES ${HIREDIS_SOURCES})
         SOURCE_GROUP("Redis" FILES ${REDIS_CLIENT_FILES})
-        
+
         SET(db_files ${db_files} ${HIREDIS_SOURCES} ${HIREDIS_HEADERS} ${REDIS_CLIENT_FILES})
 
     ENDIF(DATABASE_INCLUDE_Redis)
@@ -65,7 +65,7 @@ IF(DATABASE_INCLUDE_MySQL)
         MySQL/SQLStoreResultFromStream.cpp
         MySQL/SQLStoreResultToStream.cpp
         )
-        
+
     SOURCE_GROUP("MySQL" FILES ${MYSQL_FILES})
 
     SET(db_files ${db_files} ${MYSQL_FILES})
