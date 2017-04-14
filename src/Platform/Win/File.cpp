@@ -284,21 +284,18 @@ namespace hgl
 
                 if(FindFileData.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY)
                 {
-                    if(config->proc_folder)
+                    if(!config->proc_folder)continue;
+                    
+                    if(config->sub_folder)
                     {
-                        if(config->sub_folder)
-                        {
-                            sub_efc=config->CreateSubConfig(config,FindFileData.cFileName);
+                        sub_efc=config->CreateSubConfig(config,FindFileData.cFileName);
 
-                            if(!sub_efc)
-                                continue;
+                        if(!sub_efc)
+                            continue;
 
-                            sub_count=EnumFile(sub_efc);
-                            if(sub_count>0)count+=sub_count;
-                        }
+                        sub_count=EnumFile(sub_efc);
+                        if(sub_count>0)count+=sub_count;
                     }
-                    else
-                        continue;
                 }
                 else
                 {

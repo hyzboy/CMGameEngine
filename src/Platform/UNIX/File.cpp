@@ -294,21 +294,18 @@ namespace hgl
                 
                 if(S_ISDIR(statbuf.st_mode))
                 {
-                    if(config->proc_folder)
+                    if(!config->proc_folder)continue;
+                    
+                    if(config->sub_folder)
                     {
-                        if(config->sub_folder)
-                        {
-                            sub_efc=config->CreateSubConfig(config,entry->d_name);
+                        sub_efc=config->CreateSubConfig(config,entry->d_name);
                             
-                            if(!sub_efc)
-                                continue;
+                        if(!sub_efc)
+                            continue;
 
-                            sub_count=EnumFile(sub_efc);
-                            if(sub_count>0)count+=sub_count;
-                        }
+                        sub_count=EnumFile(sub_efc);
+                        if(sub_count>0)count+=sub_count;
                     }
-                    else
-                        continue;
                 }
                 else
                 {
