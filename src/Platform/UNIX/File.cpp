@@ -1,4 +1,4 @@
-﻿#include <hgl/FileSsytem.h>
+﻿#include <hgl/FileSystem.h>
 #include <hgl/LogInfo.h>
 #include <hgl/io/FileInputStream.h>
 #include <hgl/io/FileOutputStream.h>
@@ -12,7 +12,7 @@
 #include <string.h>
 
 namespace hgl
-
+{
     namespace filesystem
     {
         constexpr int FILE_PROC_BUF_SIZE=HGL_SIZE_1MB;
@@ -222,28 +222,28 @@ namespace hgl
 
         /**
         * 枚举一个目录内的所有文件
-        * @param folder_name 目录名称
-        * @param data 自定义回传数据
-        * @param proc_folder 处理目录
-        * @param proc_file 处理文件
-        * @param sub_folder 是否处理子目录
-        * @param func 回调函数
-        * @return 查找到文件数据,-1表示失败
+        * @param config 枚举配置
+        * @return 查找到文件数据,<0表示失败
         */
-        int EnumFile(const OSString &folder_name,void *data,bool proc_folder,bool proc_file,bool sub_folder,EnumFileFunc func)
+        int EnumFile(EnumFileConfig *config)
         {
+            if(!config)RETURN_ERROR(-1);
+
+//            if(config->proc_folder&&!config->cb_folder)RETURN_ERROR(-2);            //这一行是不需要的，确实存在proc_folder=true,但没有cb_folder的情况。但留在这里。以防删掉后，未来没注意自以为是的加上这样一行
+            if(config->proc_file&&!config->cb_file)RETURN_ERROR(-3);
+
+            if(config->folder_name.IsEmpty())RETURN_ERROR(-4);
+            
             OSString fullname;
             int count=0;
 
-            if(!func)return(-1);
-
-            if(folder_name.IsEmpty())
+            if(config->folder_name.IsEmpty())
             {
                 fullname='.';
             }
             else
             {
-                fullname=folder_name;
+                fullname=config->folder_name;
             }
 
             DIR *dir;
@@ -258,6 +258,9 @@ namespace hgl
                 return(-1);
             if((entry = readdir64(dir)) == NULL)
                 return(-1);
+            
+            EnumFileConfig *sub_efc=nullptr;
+            int sub_count;
 
             do
             {
@@ -288,24 +291,20 @@ namespace hgl
 
                 fi.can_read	=statbuf.st_mode&S_IROTH;
                 fi.can_write=statbuf.st_mode&S_IWOTH;
+                
                 if(S_ISDIR(statbuf.st_mode))
                 {
-                    if(proc_folder)
+                    if(config->proc_folder)
                     {
-                        if(sub_folder)
+                        if(config->sub_folder)
                         {
-                            char child_name[HGL_MAX_PATH];
+                            sub_efc=config->CreateSubConfig(config,entry->d_name);
+                            
+                            if(!sub_efc)
+                                continue;
 
-                            strcpy(child_name,HGL_MAX_PATH,folder_name);
-
-                            if(folder_name.GetEndChar()!=HGL_DIRECTORY_SEPARATOR)
-                                strcat(child_name,HGL_MAX_PATH,HGL_DIRECTORY_SEPARATOR);
-
-                            const int child_len=strlen(child_name);
-
-                            strcpy(child_name+child_len,HGL_MAX_PATH-child_len,entry->d_name);
-
-                            count+=EnumFile(child_name,data,proc_folder,proc_file,true,func);
+                            sub_count=EnumFile(sub_efc);
+                            if(sub_count>0)count+=sub_count;
                         }
                     }
                     else
@@ -313,28 +312,42 @@ namespace hgl
                 }
                 else
                 {
-                    if(!proc_file)continue;
+                    if(!config->proc_file)continue;
+                    
+                    ++count;
                 }
 
-                count++;
+                memset(&fi,0,sizeof(FileInfo));
 
                 strcpy(fi.name,HGL_MAX_PATH,entry->d_name);
 
-                if(!folder_name||!(*folder_name))
+                if(config->folder_name.IsEmpty())
                 {
                     strcpy(fi.fullname,HGL_MAX_PATH,fi.name);
                 }
                 else
                 {
-                    strcpy(fi.fullname,HGL_MAX_PATH,folder_name);
+                    strcpy(fi.fullname,HGL_MAX_PATH,config->folder_name);
 
-                    if(folder_name.GetEndChar()!=HGL_DIRECTORY_SEPARATOR)
+                    if(config->folder_name.GetEndChar()!=HGL_DIRECTORY_SEPARATOR)
                         strcat(fi.fullname,HGL_MAX_PATH,HGL_DIRECTORY_SEPARATOR);
-
+                    
                     strcat(fi.fullname,HGL_MAX_PATH,fi.name,HGL_MAX_PATH);
                 }
 
-                func(data,fi);
+                if(fi.is_directory)
+                {
+                    if(config->cb_folder)
+                        config->cb_folder(config,sub_efc,fi);
+                    
+                    delete sub_efc;
+                    sub_efc=nullptr;
+                }
+                else
+                {
+                    if(config->cb_file)
+                        config->cb_file(config,fi);
+                }
             }
             while((entry=readdir64(dir)));
 
