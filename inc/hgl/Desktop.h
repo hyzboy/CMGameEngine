@@ -12,10 +12,21 @@ namespace hgl
 #if HGL_OS == HGL_OS_Windows
         void PopupWebBrowser(const u16char *);															///<弹出网页浏览器
         void PopupEmailClient(const u16char *, const u16char *sub = nullptr);							///<弹出电子邮件客户端
+        
+        /**
+        * 快捷方式数据结构
+        */
+        struct ShortCut
+        {
+            OSString lnk_filename;          ///<注意不要带扩展名
+            OSString filename;              ///<执行的程序文件全名
+            OSString work_directory;        ///<工作目录
+            OSString param;                 ///<参数
+            OSString icon_filename;         ///<图标文件
+            OSString descript;              ///<备注
+        };//struct ShortCut
 
-        bool CreateShortCut(const u16char *lnk_fname, const u16char *filename,
-                            const u16char *work_directory, const u16char *param,
-                            const u16char *icon = nullptr);												///<创建快捷方式
+        bool CreateShortCut(const ShortCut &);												        ///<创建快捷方式
 
 //        void *GetFileIcon(const u16char *,int &,int &,int &);										///<取得文件的系统图标(仅Vista以上可用)
 #endif//HGL_OS == HGL_OS_Windows
