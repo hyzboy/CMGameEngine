@@ -49,25 +49,52 @@ namespace hgl
         IShellLinkW   *psl=nullptr;
         IPersistFile  *pPf=nullptr;
 
-        bool result=false;
-
         WideString lnk_filename=lnk_fname;
 
         lnk_filename += L".lnk";
+        
+        hresult=CoCreateInstance(CLSID_ShellLink,nullptr,CLSCTX_INPROC_SERVER,IID_IShellLinkW,(LPVOID*)&psl);
 
-        if(CoCreateInstance(CLSID_ShellLink,nullptr,CLSCTX_INPROC_SERVER,IID_IShellLinkW,(LPVOID*)&psl)==S_OK)
-        if(psl->QueryInterface(IID_IPersistFile,(LPVOID*)&pPf)==S_OK)
-        if(!work_directory||psl->SetWorkingDirectory(work_directory)==S_OK)
-        if(!param||strlen(param)<=0||psl->SetArguments(param)==S_OK)
-        if(psl->SetPath(filename)==S_OK)
+        if(hresult!=S_OK)
+            return(false);
+
+        hresult=psl->QueryInterface(IID_IPersistFile,(LPVOID*)&pPf);
+        
+        if(hresult!=S_OK)
+            return(false);
+
+        if(!work_directory)
         {
-            if(strlen(icon)>0)
-                if(filesystem::FileConfirm(icon))
-                    psl->SetIconLocation(icon,0);
-
-            if(pPf->Save(lnk_filename,TRUE)==S_OK)
-                result=true;
+            hresult=psl->SetWorkingDirectory(work_directory);
+            if(hresult!=S_OK)
+                return(false);
         }
+
+        if(param&&wcslen(param)>0)
+        {
+            hresult=psl->SetArguments(param);
+            if(hresult!=S_OK)
+                return(false);
+        }
+
+        hresult=psl->SetPath(filename);
+
+        if(hresult!=S_OK)
+            return(false);
+
+        if(wcslen(icon)>0)
+            if(filesystem::FileConfirm(icon))
+            {
+                hresult=psl->SetIconLocation(icon,0);
+
+                if(hresult!=S_OK)
+                    return(false);
+            }
+
+        hresult=pPf->Save(lnk_filename.c_str(),TRUE);
+
+        if(hresult!=S_OK)
+            return(false);
 
         if(pPf)
             pPf->Release();
@@ -75,7 +102,7 @@ namespace hgl
         if(psl)
             psl->Release();
 
-        return result;
+        return true;
     }
 
 //#if (NTDDI_VERSION >= NTDDI_VISTA)
