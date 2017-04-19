@@ -33,9 +33,9 @@ namespace hgl
 
 	public:
 
-		virtual void StartElement(const char *,const char **)=0;
-		virtual void CharData(const char *,int){};
-		virtual void EndElement(const char *){};
+        virtual void StartElement(const char *element_name,const char **atts)=0;
+		virtual void CharData(const char *str,int str_length){};
+		virtual void EndElement(const char *element_name){};
 
 	public:
 
