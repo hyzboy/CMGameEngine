@@ -1,4 +1,4 @@
-#include"DevilContext.h"
+﻿#include"DevilContext.h"
 #include"DevilModule.h"
 
 namespace hgl

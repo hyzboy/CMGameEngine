@@ -1,7 +1,6 @@
-#include"DevilParse.h"
+﻿#include"DevilParse.h"
 #include"DevilModule.h"
 #include<hgl/LogInfo.h>
-#include<hgl/Other.h>
 
 namespace hgl
 {

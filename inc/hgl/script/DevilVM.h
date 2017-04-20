@@ -1,4 +1,4 @@
-#ifndef HGL_DevilVM_INCLUDE
+﻿#ifndef HGL_DevilVM_INCLUDE
 #define HGL_DevilVM_INCLUDE
 
 #include<hgl/type/BaseString.h>

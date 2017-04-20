@@ -1,4 +1,4 @@
-#ifndef DevilParseH
+﻿#ifndef DevilParseH
 #define DevilParseH
 
 #include"as_tokenizer.h"

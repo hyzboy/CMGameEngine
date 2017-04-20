@@ -1,4 +1,4 @@
-#ifndef DevilCommandH
+﻿#ifndef DevilCommandH
 #define DevilCommandH
 
 #include<hgl/type/List.h>
@@ -11,6 +11,7 @@ namespace hgl
 	class DevilScriptModule;
 	class DevilScriptContext;
 	class DevilFunc;
+    class DevilValueInterface;
 	template<typename T> class DevilValueProperty;
 	template<typename T> class DevilScriptValue;
 
@@ -313,7 +314,7 @@ namespace hgl
 		}
 	};
 
-	class DevilSystemFuncCallDynamic:public DevilFuncCall											//可变参数的真实函数呼叫
+	template<typename T> class DevilSystemFuncCallDynamic:public DevilFuncCall<T>					//可变参数的真实函数呼叫
 	{
 		DevilFuncMap *func;				//真实函数映射
 

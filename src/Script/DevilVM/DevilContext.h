@@ -1,4 +1,4 @@
-#ifndef DevilContextH
+﻿#ifndef DevilContextH
 #define DevilContextH
 
 #include<hgl/script/DevilVM.h>

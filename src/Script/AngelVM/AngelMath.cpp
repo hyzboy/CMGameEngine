@@ -1,10 +1,11 @@
 ﻿#include"angelscript.h"
-#include<hgl/VectorMath.h>
+#include<hgl/algorithm/VectorMath.h>
 #include<assert.h>
 #include<new>
 
 namespace hgl
 {
+    using namespace algorithm;
 	using namespace AngelScript;
 
 	void vector3_Constructor(void *ptr)
