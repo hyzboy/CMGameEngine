@@ -86,6 +86,7 @@ namespace hgl
 #define xml_parse_uint(name)		if(hgl::strcmp(flag,#name)==0)hgl::stou(info,name);else
 #define xml_parse_float(name)		if(hgl::strcmp(flag,#name)==0)hgl::stof(info,name);else
 #define xml_parse_bool(name)		if(hgl::strcmp(flag,#name)==0)hgl::stob(info,name);else
+#define xml_parse_hexstr(name)      if(hgl::strcmp(flag,#name)==0)hgl::ParseHexStr(name,info);else
 
 #define xml_parse_to_string_u8(name,value)   if(hgl::strcmp(flag,name)==0)value=info;else
 #define xml_parse_to_int(name,value)         if(hgl::strcmp(flag,name)==0)hgl::stoi(info,value);else
