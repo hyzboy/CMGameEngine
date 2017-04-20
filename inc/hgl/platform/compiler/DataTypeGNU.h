@@ -2,16 +2,19 @@
 #define HGL_DATATYPE_GNU_INCLUDE
 namespace hgl
 {
-	typedef   signed char        int8;  	///<有符号 8位整型
-	typedef unsigned char       uint8;  	///<无符号 8位整型
-	typedef   signed short       int16; 	///<有符号16位整型
-	typedef unsigned short      uint16; 	///<无符号16位整型
-	typedef   signed int         int32; 	///<有符号32位整型
-	typedef unsigned int        uint32; 	///<无符号32位整型
+	using  int8     =  signed char;  	    ///<有符号 8位整型
+	using uint8     =unsigned char;  	    ///<无符号 8位整型
+	using  int16    =  signed short; 	    ///<有符号16位整型
+	using uint16    =unsigned short; 	    ///<无符号16位整型
+	using  int32    =  signed int; 	        ///<有符号32位整型
+	using uint32    =unsigned int; 	        ///<无符号32位整型
 
 	//64位系统下long/long long都是64位，32位系列下只有long long是64位
 
-	typedef   signed long long 	 int64; 	///<有符号64位整型
-	typedef unsigned long long 	uint64; 	///<无符号64位整型
+	using  int64    =  signed long long; 	///<有符号64位整型
+	using uint64    =unsigned long long; 	///<无符号64位整型
+
+    
+    using float128  =__float128;
 }//namespace hgl
 #endif//HGL_DATATYPE_GNU_INCLUDE

@@ -50,7 +50,7 @@ namespace hgl
 		CharSetName charset;
 	};
 
-	const struct CodePageAndCharSet CodePage2CharSet[]=
+	constexpr struct CodePageAndCharSet CodePage2CharSet[]=
 	{
 		{ccpNone,			"us-ascii"	},
 
@@ -77,7 +77,7 @@ namespace hgl
 		{ccpUTF32BE,		"utf-32be"	},
 	};//const struct
 
-	const int CharSetCount=sizeof(CodePage2CharSet)/sizeof(CodePageAndCharSet);
+	constexpr int CharSetCount=sizeof(CodePage2CharSet)/sizeof(CodePageAndCharSet);
 
 	inline const char *FindCharSet(CharCodePage ccp)
 	{
@@ -88,7 +88,7 @@ namespace hgl
 		return 0;
 	}
 
-	const struct CodePageAndCharSet CodeSet2CharPage[]=
+	constexpr struct CodePageAndCharSet CodeSet2CharPage[]=
 	{
 		{ccpNone,			"us-ascii"	},
 
@@ -122,7 +122,7 @@ namespace hgl
 		{ccpUTF32BE,		"ucs4be"	}
 	};//const struct CharSet Characters
 
-	const int CharPageCount=sizeof(CodeSet2CharPage)/sizeof(CodePageAndCharSet);
+	constexpr int CharPageCount=sizeof(CodeSet2CharPage)/sizeof(CodePageAndCharSet);
 
 	inline CharCodePage FindCodePage(const char *char_set)
 	{
