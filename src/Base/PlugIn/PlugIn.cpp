@@ -5,10 +5,10 @@
 
 namespace hgl
 {
-    typedef void (*PIMClearFunc)();
+    using PIMClearFunc=void (*)();
 
-    static MapObject<OSString,PlugIn>    plugin_module;                                                ///<插件模块列表
-    static PlugIn *                        SpecialPlugIn[pitEnd-1];                                    ///<特殊插件
+    static MapObject<OSString,PlugIn>    plugin_module;                                              ///<插件模块列表
+    static PlugIn *                      SpecialPlugIn[pitEnd-1];                                    ///<特殊插件
     static List<PIMClearFunc>            plugin_manager_list;                                        ///<插件管理器清除函数列表
 
     /**
