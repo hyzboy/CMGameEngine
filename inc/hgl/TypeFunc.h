@@ -90,34 +90,34 @@ namespace hgl
 	#define DEF_RGB_U8_TO_F(r,g,b)		{float(r)/255.0f,float(g)/255.0f,float(b)/255.0f}
 	#define DEF_RGBA_U8_TO_F(r,g,b,a)	{float(r)/255.0f,float(g)/255.0f,float(b)/255.0f,float(a)/255.0f}
 
-	#define HGL_SIZE_1KB	1024
-	#define HGL_SIZE_1MB	(HGL_SIZE_1KB*1024)
-	#define HGL_SIZE_1GB	(HGL_SIZE_1MB*1024)
-	#define HGL_SIZE_1TB	(HGL_SIZE_1GB*1024LL)
-	#define HGL_SIZE_1PB	(HGL_SIZE_1TB*1024LL)
-	#define HGL_SIZE_1EB	(HGL_SIZE_1PB*1024LL)
-	#define HGL_SIZE_1ZB	(HGL_SIZE_1EB*1024LL)
-	#define HGL_SIZE_1YB	(HGL_SIZE_1ZB*1024LL)
+	constexpr uint      HGL_SIZE_1KB	=1024;
+	constexpr uint      HGL_SIZE_1MB	=HGL_SIZE_1KB*1024;
+	constexpr uint      HGL_SIZE_1GB	=HGL_SIZE_1MB*1024;
+	constexpr uint64    HGL_SIZE_1TB	=HGL_SIZE_1GB*1024LL;
+	constexpr uint64    HGL_SIZE_1PB	=HGL_SIZE_1TB*1024LL;
+	constexpr uint64    HGL_SIZE_1EB	=HGL_SIZE_1PB*1024LL;
+//	constexpr uint128    HGL_SIZE_1ZB	=HGL_SIZE_1EB*1024LL;
+//	constexpr uint128    HGL_SIZE_1YB	=HGL_SIZE_1ZB*1024LL;
 
-	const uint8		HGL_U8_MAX		=0xFF;
-	const uint16	HGL_U16_MAX		=0xFFFF;
-	const uint32	HGL_U32_MAX		=0xFFFFFFFF;
-	const uint64	HGL_U64_MAX		=0xFFFFFFFFFFFFFFFFUL;
+	constexpr uint8		HGL_U8_MAX		=0xFF;
+	constexpr uint16	HGL_U16_MAX		=0xFFFF;
+	constexpr uint32	HGL_U32_MAX		=0xFFFFFFFF;
+	constexpr uint64	HGL_U64_MAX		=0xFFFFFFFFFFFFFFFFUL;
 
-	const int8		HGL_S8_MAX		=0x7F;
-	const int16		HGL_S16_MAX		=0x7FFF;
-	const int32		HGL_S32_MAX		=0x7FFFFFFF;
-	const int64		HGL_S64_MAX		=0x7FFFFFFFFFFFFFFFLL;
+	constexpr int8		HGL_S8_MAX		=0x7F;
+	constexpr int16		HGL_S16_MAX		=0x7FFF;
+	constexpr int32		HGL_S32_MAX		=0x7FFFFFFF;
+	constexpr int64		HGL_S64_MAX		=0x7FFFFFFFFFFFFFFFLL;
 
-	const int8		HGL_S8_MIN		=(-0x80);
-	const int16		HGL_S16_MIN		=(-0x8000);
+	constexpr int8		HGL_S8_MIN		=(-0x80);
+	constexpr int16		HGL_S16_MIN		=(-0x8000);
 
 #ifdef _MSC_VER
-	const int32		HGL_S32_MIN		=(-0x80000000i32);
-    const int64     HGL_S64_MIN     =(-0x8000000000000000i64);
+	constexpr int32		HGL_S32_MIN		=(-0x80000000i32);
+    constexpr int64     HGL_S64_MIN     =(-0x8000000000000000i64);
 #else
-    const int32     HGL_S32_MIN     =(-0x80000000L);
-    const int64     HGL_S64_MIN     =(-0x8000000000000000LL);
+    constexpr int32     HGL_S32_MIN     =(-0x80000000L);
+    constexpr int64     HGL_S64_MIN     =(-0x8000000000000000LL);
 #endif//_MSC_VER
 
 	template<typename T> T HGL_INTEGER_MAX();
@@ -179,64 +179,64 @@ namespace hgl
         monthEnd
     };
 
-	#define	HGL_TIME_ONE_SECOND		1
-	#define	HGL_TIME_HALF_MINUTE	30
-	#define	HGL_TIME_ONE_MINUTE		60
-	#define	HGL_TIME_HALF_HOUR		(30*HGL_TIME_ONE_MINUTE)
-	#define	HGL_TIME_ONE_HOUR		(60*HGL_TIME_ONE_MINUTE)
-	#define	HGL_TIME_HALF_DAY		(12*HGL_TIME_ONE_HOUR)
-	#define	HGL_TIME_ONE_DAY		(24*HGL_TIME_ONE_HOUR)
-	#define HGL_TIME_ONE_WEEK		(7*HGL_TIME_ONE_DAY)
-	#define HGL_TIME_ONE_YEAR		(365*HGL_TIME_ONE_DAY)
+    constexpr uint  HGL_TIME_ONE_SECOND		=1;
+    constexpr uint  HGL_TIME_HALF_MINUTE	=30;
+    constexpr uint  HGL_TIME_ONE_MINUTE		=60;
+    constexpr uint  HGL_TIME_HALF_HOUR		=30*HGL_TIME_ONE_MINUTE;
+    constexpr uint  HGL_TIME_ONE_HOUR		=60*HGL_TIME_ONE_MINUTE;
+    constexpr uint  HGL_TIME_HALF_DAY		=12*HGL_TIME_ONE_HOUR;
+    constexpr uint  HGL_TIME_ONE_DAY		=24*HGL_TIME_ONE_HOUR;
+    constexpr uint  HGL_TIME_ONE_WEEK		=7*HGL_TIME_ONE_DAY;
+    constexpr uint  HGL_TIME_ONE_YEAR		=365*HGL_TIME_ONE_DAY;
 
-	#define HGL_HOUR_HALF_DAY		12
-	#define HGL_HOUR_ONE_DAY		24
+    constexpr uint  HGL_HOUR_HALF_DAY		=12;
+    constexpr uint  HGL_HOUR_ONE_DAY		=24;
 
-	#define HGL_DAY_ONE_WEEK		7
-	#define HGL_DAY_ONE_YEAR		365
+    constexpr uint  HGL_DAY_ONE_WEEK		=7;
+    constexpr uint  HGL_DAY_ONE_YEAR		=365;
 
-	#define HGL_MONTH_ONE_YEAR		12
+    constexpr uint  HGL_MONTH_ONE_YEAR		=12;
 
-	#define	HGL_MILLI_SEC_PRE_SEC	1000				//毫秒
-	#define	HGL_MICRO_SEC_PER_SEC	(1000*1000)			//微秒
-	#define	HGL_NANO_SEC_PER_SEC	(1000*1000*1000)	//纳秒
+    constexpr uint  HGL_MILLI_SEC_PRE_SEC	=1000;				//毫秒
+    constexpr uint  HGL_MICRO_SEC_PER_SEC	=1000*1000;			//微秒
+    constexpr uint  HGL_NANO_SEC_PER_SEC	=1000*1000*1000;	//纳秒
 
-	const char LowerHexChar[16]={'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};	///<小写16进制字符
-	const char UpperHexChar[16]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};	///<大写16进制字符
+	constexpr char LowerHexChar[16]={'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};	///<小写16进制字符
+	constexpr char UpperHexChar[16]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};	///<大写16进制字符
 
-	#define HGL_E			2.7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274		//欧拉数
-	#define HGL_LOG2E		1.44269504088896340736
-	#define HGL_LOG10E		0.434294481903251827651
-	#define HGL_LN2			0.693147180559945309417
-	#define HGL_LN10		2.30258509299404568402
-	#define HGL_PI			3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117068
-	#define HGL_PI_2		1.57079632679489661923
-	#define HGL_PI_4		0.785398163397448309616
-	#define HGL_SIZE_1_PI	0.318309886183790671538
-	#define HGL_2_PI		0.636619772367581343076
-	#define HGL_2_SQRTPI	1.12837916709551257390
-	#define HGL_SQRT2		1.41421356237309504880
-	#define HGL_SQRT1_2		0.707106781186547524401
+	constexpr long double HGL_E			    =2.7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274;		//欧拉数
+	constexpr long double HGL_LOG2E		    =1.44269504088896340736;
+	constexpr long double HGL_LOG10E		=0.434294481903251827651;
+	constexpr long double HGL_LN2			=0.693147180559945309417;
+	constexpr long double HGL_LN10		    =2.30258509299404568402;
+	constexpr long double HGL_PI			=3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117068;
+	constexpr long double HGL_PI_2		    =1.57079632679489661923;
+	constexpr long double HGL_PI_4		    =0.785398163397448309616;
+	constexpr long double HGL_SIZE_1_PI	    =0.318309886183790671538;
+	constexpr long double HGL_2_PI		    =0.636619772367581343076;
+	constexpr long double HGL_2_SQRTPI	    =1.12837916709551257390;
+	constexpr long double HGL_SQRT2		    =1.41421356237309504880;
+	constexpr long double HGL_SQRT1_2		=0.707106781186547524401;
 
-	#define HGL_COS_ANG_0	1
-	#define HGL_COS_ANG_45	0.707106781187
-	#define HGL_COS_ANG_90	0
-	#define HGL_COS_ANG_135	-0.707106781187
-	#define HGL_COS_ANG_180	-1
-	#define HGL_COS_ANG_225	-0.707106781187
-	#define HGL_COS_ANG_270	0
-	#define HGL_COS_ANG_315	0.707106781187
+	constexpr long double HGL_COS_ANG_0	    =1;
+	constexpr long double HGL_COS_ANG_45	=0.707106781187;
+	constexpr long double HGL_COS_ANG_90	=0;
+	constexpr long double HGL_COS_ANG_135	=-0.707106781187;
+	constexpr long double HGL_COS_ANG_180	=-1;
+	constexpr long double HGL_COS_ANG_225	=-0.707106781187;
+	constexpr long double HGL_COS_ANG_270	=0;
+	constexpr long double HGL_COS_ANG_315	=0.707106781187;
 
-	#define HGL_GOLDEN_RATIO				1.6180339887498948482	//黄金比例
-	#define HGL_SILVER_RATIO				2.4142135623730950488	//白银比例
+	constexpr long double HGL_GOLDEN_RATIO				    =1.6180339887498948482;	//黄金比例
+	constexpr long double HGL_SILVER_RATIO				    =2.4142135623730950488;	//白银比例
 
-    #define HGL_SPEED_OF_SOUND              331.3f          //音速(米/秒)
-	#define HGL_SPEED_OF_LIGHT				299792458		//光速(米/秒)
+    constexpr long double HGL_SPEED_OF_SOUND                =331.3f;                //音速(米/秒)
+	constexpr long double HGL_SPEED_OF_LIGHT				=299792458;		        //光速(米/秒)
 
-    #define HGL_ABSOLUTE_ZERO               -273.15f        //绝对零度
+    constexpr long double HGL_ABSOLUTE_ZERO                 =-273.15f;              //绝对零度
 
-	#define HGL_UNIVERSAL_GRAVITATION		(6.6742e-11)	//万有引力常数
-	#define HGL_GRAVITATIONAL_ACCELERATION	9.80665			//重力加速度
+	constexpr long double HGL_UNIVERSAL_GRAVITATION		    =6.6742e-11;	        //万有引力常数
+	constexpr long double HGL_GRAVITATIONAL_ACCELERATION	=9.80665;			    //重力加速度
 
 #if HGL_OS == HGL_OS_Windows
 	inline uint64 pow10(const int p)

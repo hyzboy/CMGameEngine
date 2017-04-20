@@ -32,7 +32,7 @@ namespace hgl
 		/**
 		 * 字节序文件头定义
 		 */
-		const BOMFileHeader BOMData[bomEnd]=
+		constexpr BOMFileHeader BOMData[bomEnd]=
 		{
 			{0,{}},
 			{3,{0xEF,0xBB,0xBF}},
@@ -42,16 +42,16 @@ namespace hgl
 			{4,{0x00,0x00,0xFE,0xFF}}
 		};
 
-        #define CharSetNameLength   32
+        constexpr uint CharSetNameLength=32;
         using CharSetName=char[CharSetNameLength];
 
 		template<int,char> const CharSetName &GetCurCharSet();											///<取得当前程序编码字符集
 
-        const CharSetName utf8_charset="utf8";
-        const CharSetName utf16le_charset="utf-16le";
-        const CharSetName utf16be_charset="utf-16be";
-        const CharSetName utf32le_charset="utf-32le";
-        const CharSetName utf32be_charset="utf-32be";
+        constexpr CharSetName utf8_charset="utf8";
+        constexpr CharSetName utf16le_charset="utf-16le";
+        constexpr CharSetName utf16be_charset="utf-16be";
+        constexpr CharSetName utf32le_charset="utf-32le";
+        constexpr CharSetName utf32be_charset="utf-32be";
 
 		template<> inline const CharSetName &GetCurCharSet<2,HGL_LITTLE_ENDIAN    >(){return utf16le_charset;}
 		template<> inline const CharSetName &GetCurCharSet<2,HGL_BIG_ENDIAN	      >(){return utf16be_charset;}
@@ -143,10 +143,10 @@ namespace hgl
 
 		#if HGL_ENDIAN == HGL_BIG_ENDIAN
 
-			#define HGL_BOM_UTF16LE	0xfffe
-			#define HGL_BOM_UTF16BE	0xfeff
-			#define HGL_BOM_UTF32LE	0xfffe0000
-			#define HGL_BOM_UTF32BE	0x0000feff
+			constexpr uint HGL_BOM_UTF16LE	=0xfffe;
+			constexpr uint HGL_BOM_UTF16BE	=0xfeff;
+			constexpr uint HGL_BOM_UTF32LE	=0xfffe0000;
+			constexpr uint HGL_BOM_UTF32BE	=0x0000feff;
 
 			#define LittleToCurrentEndian	EndianSwap
 			#define BigToCurrentEndian		ToBigEndian
@@ -163,10 +163,10 @@ namespace hgl
 
 		#else
 
-			#define HGL_BOM_UTF16LE	0xfeff
-			#define HGL_BOM_UTF16BE	0xfffe
-			#define HGL_BOM_UTF32LE	0x0000feff
-			#define HGL_BOM_UTF32BE	0xfffe0000
+			constexpr uint HGL_BOM_UTF16LE	=0xfeff;
+			constexpr uint HGL_BOM_UTF16BE	=0xfffe;
+			constexpr uint HGL_BOM_UTF32LE	=0x0000feff;
+			constexpr uint HGL_BOM_UTF32BE	=0xfffe0000;
 
 			#define LittleToCurrentEndian	ToLittleEndian
 			#define BigToCurrentEndian		EndianSwap

@@ -8,7 +8,9 @@
 namespace hgl
 {
     namespace
-    {
+    {        
+        constexpr uint HGL_XML_PARSE_MAX_SIZE=HGL_SIZE_1KB*128;         //最大一次解晰长度
+
         void XMLStartElement(XMLParse *xml,const XML_Char *name,const XML_Char **atts)
         {
             xml->StartElement(name,atts);
@@ -79,9 +81,7 @@ namespace hgl
     bool hgl::XMLParse::Parse(io::InputStream *is, bool isFin)
     {
         if(!is)return(false);
-
-        #define HGL_XML_PARSE_MAX_SIZE    (HGL_SIZE_1KB*128)                //最大一次解晰长度
-
+        
         if(is->CanSize()&&is->GetSize()<=HGL_XML_PARSE_MAX_SIZE)        //可以取长度的，并且<=指定长度的一次读完
         {
             int full_size=is->Available();
