@@ -2038,18 +2038,18 @@ namespace hgl
     /**
     * 解析一个多进制字符到数值
     * @param ch 字符
-    * @param num 进制
     * @return 解析出来的值
     */
-    inline int parse_number_char(const int ch,int num)
+    template<uint NUM>
+    inline int parse_number_char(const int ch)
     {
         if(ch>='0'&&ch<='9')
             return ch-'0';
 
-        if(ch>='a'&&ch<=('z'+num-11))
+        if(ch>='a'&&ch<=('z'+NUM-11))
             return 10+ch-'a';
 
-        if(ch>='A'&&ch<=('Z'+num-11))
+        if(ch>='A'&&ch<=('Z'+NUM-11))
             return 10+ch-'A';
 
         return(0);
@@ -2065,9 +2065,9 @@ namespace hgl
     {
         for(int i=0;i<size;i++)
         {
-            *dst =parse_number_char(*src,16)<<4;
+            *dst =parse_number_char<16>(*src)<<4;
             ++src;
-            *dst+=parse_number_char(*src,16);
+            *dst|=parse_number_char<16>(*src);
             ++src;
             ++dst;
         }
