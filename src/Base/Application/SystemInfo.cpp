@@ -85,18 +85,19 @@ namespace hgl
 
         GetOSPath(cp);
 
-        hgl::info::SetString(hfsCMGDKPath,      cp.cm);
-        hgl::info::SetString(hfsPlugInPath,     cp.plug_ins);
-        hgl::info::SetString(hfsGUIPath,        cp.gui);
-        hgl::info::SetString(hfsStartPath,      cp.start);
-        hgl::info::SetString(hfsOSPath,         cp.os);
-        hgl::info::SetString(hfsOSLibraryPath,  cp.library);
-        hgl::info::SetString(hfsDesktopPath,    cp.mydesktop);
-        hgl::info::SetString(hfsTempPath,       cp.temp);
-        hgl::info::SetString(hfsUserDataPath,   cp.mydata);
-        hgl::info::SetString(hfsUserProgramPath,cp.myprogram);
+        hgl::info::SetString(hfsCMGDKPath,          cp.cm       );
+        hgl::info::SetString(hfsPlugInPath,         cp.plug_ins );
+        hgl::info::SetString(hfsGUIPath,            cp.gui      );
+        hgl::info::SetString(hfsStartPath,          cp.start    );
+        hgl::info::SetString(hfsOSPath,             cp.os       );
+        hgl::info::SetString(hfsOSLibraryPath,      cp.library  );
+        hgl::info::SetString(hfsUserDesktopPath,    cp.mydesktop);
+        hgl::info::SetString(hfsCommonDesktopPath,  cp.desktop  );
+        hgl::info::SetString(hfsTempPath,           cp.temp     );
+        hgl::info::SetString(hfsUserDataPath,       cp.mydata   );
+        hgl::info::SetString(hfsUserProgramPath,    cp.myprogram);
 
-        hgl::info::SetString(hfsAppFileName,    cur_prog);
+        hgl::info::SetString(hfsAppFileName,        cur_prog    );
 
         LOG_INFO(   OS_TEXT("       current program: ")+cur_prog        +OS_TEXT("\n\n")
                     OS_TEXT("  program start folder: ")+cp.start        +OS_TEXT("\n\n")
@@ -111,7 +112,8 @@ namespace hgl
 
                     OS_TEXT("      temp file folder: ")+cp.temp         +OS_TEXT("\n")
                     OS_TEXT("      user menu folder: ")+cp.myprogram    +OS_TEXT("\n")
-                    OS_TEXT("   user desktop folder: ")+cp.mydesktop    +OS_TEXT("\n\n")
+                    OS_TEXT("   user desktop folder: ")+cp.mydesktop    +OS_TEXT("\n")
+                    OS_TEXT(" common desktop folder: ")+cp.desktop      +OS_TEXT("\n\n")
 
                     OS_TEXT("          CMGDK folder: ")+cp.cm           +OS_TEXT("\n")
                     OS_TEXT("      CMGDK GUI folder: ")+cp.gui          +OS_TEXT("\n")

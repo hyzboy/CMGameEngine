@@ -30,7 +30,8 @@ namespace hgl                           				///古月游戏开发库所使用的
 
 			hfsOSPath,				///<操作系统路径
 			hfsOSLibraryPath,		///<操作系统公用动态库路径
-			hfsDesktopPath,			///<用户桌面路径
+			hfsUserDesktopPath,		///<用户桌面路径
+            hfsCommonDesktopPath,   ///<所有用户公用桌面路径
 			hfsTempPath,			///<用户临时文件路径
 			hfsUserDataPath,		///<用户文件路径(我的数据),(Win2000/XP/2003:Application Data,WinVista/2008/7:AppData\Roaming,unix:~)
 			hfsUserProgramPath,		///<用户程序路径(开始菜单)
