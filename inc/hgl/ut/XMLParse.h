@@ -93,5 +93,31 @@ namespace hgl
 #define xml_parse_to_uint(name,value)        if(hgl::strcmp(flag,name)==0)hgl::stou(info,value);else
 #define xml_parse_to_float(name,value)       if(hgl::strcmp(flag,name)==0)hgl::stof(info,value);else
 #define xml_parse_to_bool(name,value)        if(hgl::strcmp(flag,name)==0)hgl::stob(info,value);else
+
+/** 使用范例:
+
+    <root>
+        <role name="Bill" sex="true" age="18"/>
+        <role name="Lucy" sex="false" age="17"/>
+    </root>
+
+	void StartElement(const char *element_name,const char **atts) override
+    {
+        if(strcmp(element_name,"role")==0)
+        {
+            std::string name;
+            bool sex;
+            int age;
+
+            XML_START_PARSE(atts)
+
+                xml_parse_string_u8(name)
+                xml_parse_bool(sex)
+                xml_parse_int(age)
+
+            XML_END_PARSE
+        }
+    }
+*/
 }//namespace hgl
 #endif//HGL_XML_PARSE_INCLUDE
