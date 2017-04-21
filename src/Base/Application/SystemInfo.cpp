@@ -8,11 +8,6 @@ namespace hgl
 {
     using namespace filesystem;
 
-    CpuInfo::CpuInfo()
-    {
-        memset(this,0,sizeof(CpuInfo));
-    }
-
     MemInfo::MemInfo()
     {
         memset(this,0,sizeof(MemInfo));
