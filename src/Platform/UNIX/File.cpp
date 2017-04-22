@@ -23,7 +23,7 @@ namespace hgl
         * @param targetname 目标文件名
         * @return 文件是否复制成功
         */
-        bool FileCopy(const OSString &sourcename,const OSString &targetname)
+        bool FileCopy(const OSString &targetname,const OSString &sourcename)
         {
             io::FileInputStream fis;
             io::FileOutputStream fos;
@@ -77,7 +77,7 @@ namespace hgl
         * @param targetname 目标文件名
         * @return 文件是否移动成功
         */
-        bool FileMove(const OSString &sourcename,const OSString &targetname)
+        bool FileMove(const OSString &targetname,const OSString &sourcename)
         {
             if(FileCopy(sourcename,targetname))
                 return FileDelete(sourcename);
@@ -91,7 +91,7 @@ namespace hgl
         * @param newname 新的文件名
         * @return 文件名是否修改成功
         */
-        bool FileRename(const OSString &oldname,const OSString &newname)
+        bool FileRename(const OSString &newname,const OSString &oldname)
         {
             return(rename(oldname.c_str(),
                         newname.c_str())==0);
