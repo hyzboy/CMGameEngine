@@ -89,7 +89,7 @@ public:
     }
 };//struct ConfigXMLParse:public XMLParse
 
-const std::string base_path="App/";             //当前程序路径
+const std::string base_path="http://localhost/App/";             //当前程序路径
 const std::string compress_extname=".bz2";      //压缩文件后缀
 
 class UpdateCheck
@@ -167,10 +167,10 @@ private:
 
         filename=fc.filename;
 
-        fullname=root_path+"\\"+filename;
+        fullname=root_path+"/"+filename;
         file_url=base_path+filename+compress_extname;
         
-        replace(fullname,'\\','/');
+        replace(fullname,'/','\\');
         replace(file_url,'/','\\');
 
         if(!filesystem::FileConfirm(fullname))                          //文件不存在，下载
@@ -217,7 +217,7 @@ public:
         root_path=work_path;
 
         long filesize;
-        std::string url="http://localhost"+base_path+"update.xml";
+        std::string url=base_path+"update.xml";
         
         if(!QueryFileLength(url,filesize))      //查询XML文件长度
             return(false);
@@ -273,6 +273,7 @@ public:
  * 带下划线版本更新完发现如果本身不带下划的文件有更新，则重动启动原本不带下划线的版本。否则执行正常流程
  */
 
+#define DEBUG_UPDATE
 
 bool AutoUpdate()
 {
@@ -287,6 +288,7 @@ bool AutoUpdate()
     self_workpath=self_fullname.substr(0,off);
     self_filename=self_fullname.substr(off+1);
 
+#ifndef DEBUG_UPDATE
     if(*(self_filename.cbegin())!='_')                                             //自身文件名是否下划线开头
     {
        std::string backup_self=self_workpath+"/_"+self_filename;                   //创建一个下划线开头的版本
@@ -308,6 +310,7 @@ bool AutoUpdate()
        exit(0);
     }
     else
+#endif//DEBUG_UPDATE
     {
         std::cout<<"Hello"<<std::endl;
 
@@ -329,4 +332,9 @@ bool AutoUpdate()
     }
 
     return(true);
+}
+
+int main(int,char **)
+{
+    return AutoUpdate();
 }
