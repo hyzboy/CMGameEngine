@@ -435,6 +435,9 @@
 
 namespace hgl
 {
+    #define HGL_WINDOW_DIRECTORY_SEPARATOR  OS_TEXT('\\')
+    #define HGL_UNIX_DIRECTORY_SPEARATOR    OS_TEXT('/')
+
     #define enum_int(name)	enum name:int
     #define enum_uint(name)	enum name:uint
     
