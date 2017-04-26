@@ -45,7 +45,12 @@ bool QueryFileLength(const std::string &url,long &downloadFileLenth)
     if (curl_easy_perform(handle) == CURLE_OK)  
     {  
         result=true;
-        curl_easy_getinfo(handle, CURLINFO_CONTENT_LENGTH_DOWNLOAD, &downloadFileLenth);  
+        
+        double length;
+        
+        curl_easy_getinfo(handle, CURLINFO_CONTENT_LENGTH_DOWNLOAD, &length);  
+        
+        downloadFileLenth=length;
     }  
     else 
     {  
