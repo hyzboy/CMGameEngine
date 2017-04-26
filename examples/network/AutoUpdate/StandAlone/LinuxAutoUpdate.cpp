@@ -89,8 +89,8 @@ public:
     }
 };//struct ConfigXMLParse:public XMLParse
 
-const std::string base_path="http://localhost/App/";             //当前程序路径
-const std::string compress_extname=".bz2";      //压缩文件后缀
+const std::string url_path="http://localhost/App/";             //更新服务器网址
+const std::string compress_extname=".bz2";                      //压缩文件后缀
 
 class UpdateCheck
 {
@@ -168,7 +168,7 @@ private:
         filename=fc.filename;
 
         fullname=root_path+"/"+filename;
-        file_url=base_path+filename+compress_extname;
+        file_url=url_path+filename+compress_extname;
         
         replace(fullname,'/','\\');
         replace(file_url,'/','\\');
@@ -217,7 +217,7 @@ public:
         root_path=work_path;
 
         long filesize;
-        std::string url=base_path+"update.xml";
+        std::string url=url_path+"update.xml";
         
         if(!QueryFileLength(url,filesize))      //查询XML文件长度
             return(false);
