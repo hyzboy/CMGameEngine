@@ -879,7 +879,7 @@ namespace hgl
     * @param new_extname 新扩展名(不带.)
     */
     template<typename T>
-    void replace_extname(const T *old_filename,T *new_filename,int max_len,const T *new_extname)
+    void replace_extname(T *new_filename,const T *old_filename,int max_len,const T *new_extname)
     {
         const T *p=strrchr(old_filename,'.');
 
