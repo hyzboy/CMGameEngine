@@ -4,11 +4,6 @@
 #include<hgl/type/List.h>
 namespace hgl
 {
-	template<typename T>
-	CusObjectList<T>::CusObjectList()
-	{
-	}
-
 	/**
 	* 对象列表析构函数，会调用DeleteAll函数
 	*/

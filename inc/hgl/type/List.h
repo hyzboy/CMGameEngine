@@ -105,7 +105,7 @@ namespace hgl
 
 	public: //方法
 
-		CusObjectList();
+        CusObjectList(){}
 		virtual ~CusObjectList();
 
 	public:

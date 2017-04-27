@@ -46,9 +46,13 @@ namespace hgl
             Clear();
 
             const int n=sl.GetCount();
+            T *str;
 
             for(int i=0;i<n;i++)
-                Add(new T(sl[i]));
+            {
+                str=sl.Items[i];
+                this->Add(*str);
+            }
 
             return(*this);
         }
@@ -56,8 +60,7 @@ namespace hgl
     public: //方法
 
         StringList()=default;															            ///<本类构造函数
-        StringList(const T &list){operator=(&list);}												///<本类构造函数
-        StringList(const T *list){operator=(list);}													///<本类构造函数
+        //注：这里不要实现StringList(T &)或StringList(T *)之类
         virtual ~StringList(){Clear();}																///<本类析构函数
 
         /**
