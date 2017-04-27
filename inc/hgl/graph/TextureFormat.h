@@ -149,6 +149,7 @@ namespace hgl
 			HGL_SF_UNCOMPRESSED,	//无用，做为非压缩色分隔
 
 			HGL_SF_R3_G3_B2,
+            HGL_SF_RGB565,
 			HGL_SF_RGB5,
 
 			HGL_SF_RGBA4,
@@ -218,7 +219,7 @@ namespace hgl
 			HGL_SF_END				//无用，做为枚举结束
 		};//enum TextureSourceFormat
 
-		typedef TextureSourceFormat TSF;
+		using TSF=TextureSourceFormat;
 
 		bool TextureSourceFormatCheck(const TextureSourceFormat &);
 		bool TextureSourceFormatDepthCheck(const TextureSourceFormat &);
