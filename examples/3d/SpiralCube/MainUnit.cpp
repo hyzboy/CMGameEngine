@@ -1,7 +1,7 @@
 ﻿#include<hgl/Graphics.h>                //GraphicsApplication,SystemInitInfo
 #include<hgl/graph/Render.h>            //SetClearColor,ClearColorDepthBuffer
 #include<hgl/graph/Camera.h>            //WalkerCamera
-#include<hgl/object/FlowObject.h>        //FlowObject
+#include<hgl/object/FlowObject.h>       //FlowObject
 
 #include"PlaneGrid.h"
 #include"SpiralCube.h"

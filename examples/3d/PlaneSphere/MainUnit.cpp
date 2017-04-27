@@ -155,4 +155,4 @@ public:
     }
 };//class TestObject
 
-HGL_GRAPHICS_APPLICATION("平面球体","PlaneSphere",new TestObject());
+HGL_GRAPHICS_APPLICATION("平面与球体","PlaneAndSphere",new TestObject());
