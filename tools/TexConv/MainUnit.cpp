@@ -1,16 +1,16 @@
 ﻿#include<hgl/Graphics.h>
 
-#include<hgl/graph/Render.h>			//SetClearColor,ClearScreen
+#include<hgl/graph/Render.h>			//SetClearColor
 #include<hgl/graph/Shader.h>			//GLSL
 #include<hgl/graph/Texture.h>			//Texture
 #include<hgl/graph/Material.h>			//Material
 #include<hgl/graph/VertexBuffer.h>		//VB3f/VB4f
 #include<hgl/graph/Renderable.h>		//Renderable
+#include<hgl/Time.h>                    //GetMicroTime
 
 #include<hgl/io/FileOutputStream.h>
 #include<hgl/ut/CmdParse.h>
-#include<hgl/graph/Image.h>
-#include<hgl/Other.h>
+#include<hgl/graph/Bitmap.h>
 #include<hgl/Str.h>
 #include<hgl/Info.h>                    //GetString
 
@@ -23,6 +23,7 @@ using namespace hgl;
 using namespace hgl::io;
 using namespace hgl::util;
 using namespace hgl::graph;
+using namespace hgl::filesystem;
 
 const TextureFormat *default_r8     =&TextureFormatInfoList[HGL_SF_R8];
 const TextureFormat *default_rg8    =&TextureFormatInfoList[HGL_SF_RG8];
@@ -39,6 +40,7 @@ const	TextureFormat *             glfmt[4]	={NULL,NULL,NULL,NULL};				//选中�
 
 const	float						texcoord[]	={0.0f,0.0f,	1.0f,0.0f,	1.0f,1.0f,	0.0f,0.0f,	1.0f,1.0f,	0.0f,1.0f};
 
+        VertexArray *               va          =NULL;
 		Renderable *				render_obj	=NULL;
 		Material *					mtl			=NULL;
 		Texture2D *					tex			=NULL;
@@ -71,7 +73,13 @@ const TextureFormat *CheckOpenGLCoreFormat(const CmdParse &cmd,const os_char *fl
 
 	if(!cmd.GetString(flag,fmtstr))return(nullptr);
 
+#if HGL_OS==HGL_OS_Windows
+    UTF8String str=to_u8(fmtstr);
+
+    const TextureFormat *result=GetTextureFormat(str.c_str());
+#else
 	const TextureFormat *result=GetTextureFormat(fmtstr.c_str());
+#endif//HGL_OS==HGL_OS_Windows
 
     if(result)return(result);
 
@@ -249,7 +257,7 @@ void SaveTexture2DToFile(const os_char *filename,void *texture_data,uint width,u
 	os_char tex_fn[HGL_MAX_PATH];
 	char fmt_str[17];
 
-	replace_extname(filename,tex_fn,HGL_MAX_PATH,OS_TEXT("tex2d"));
+	replace_extname(tex_fn,filename,HGL_MAX_PATH,OS_TEXT("tex2d"));
 
 	FileOutputStream fs;
     DataOutputStream *dos;
@@ -265,31 +273,15 @@ void SaveTexture2DToFile(const os_char *filename,void *texture_data,uint width,u
 	memset(fmt_str,0,16);
 	strcpy(fmt_str,format);
 
-	dos->Write("Tex2D\x1A",6);
-	dos->WriteFloat(1.0);						//版本号
+	dos->Write("Tex\x1A",6);
+	dos->WriteUint8(1);						    //版本号
+    dos->WriteBool(false);                      //是否有mipmaps
+    dos->Write(fmt_str,16);                     //格式
+    dos->WriteUint32(bytes);                    //字节数
+	dos->WriteUint32(width);					//宽
+	dos->WriteUint32(height);					//高
 
-	if(gen_mipmaps)								//产生mipmaps
-	{
-		dos->WriteUint32(4*sizeof(uint32)+16);	//文件头长度
-
-		dos->WriteUint32(width);					//宽
-		dos->WriteUint32(height);					//高
-		dos->Write(fmt_str,16);					//格式
-		dos->WriteUint32(bytes);					//字节数
-	}
-	else										//不产生mipmaps
-	{
-		dos->WriteUint32(4*sizeof(uint32)+16);	//文件头长度
-
-		dos->WriteUint32(width);					//宽
-		dos->WriteUint32(height);					//高
-		dos->Write(fmt_str,16);					//格式
-		dos->WriteUint32(bytes);					//字节数
-
-		dos->Write(texture_data,bytes);
-	}
-
-	delete dos;
+    delete dos;
 
 	LOG_INFO(OS_TEXT("\tSave to ")+OSString(tex_fn));
 }
@@ -419,11 +411,15 @@ int ConvertImage(const os_char *filename)
 				}
 			}//LUMINANCE
 
-			tex->SetImage(il_width,il_height,image_data,pixels*curfmt->source_bytes,curfmt->tsf,tarfmt->internalFormat);
+			tex->SetImage(il_width,il_height,image_data,pixels*curfmt->source_bytes,curfmt->tsf,tarfmt->video_format);
 
+        #if HGL_OS == HGL_OS_Windows            
+			LOG_INFO(OS_TEXT("\tcolor format = ")+to_u16(curfmt->name)+OS_TEXT(" bytes = ")+OSString(curfmt->source_bytes*il_width*il_height));
+			LOG_INFO(OS_TEXT("\ttarget format = ")+to_u16(tarfmt->name));
+        #else
 			LOG_INFO(OS_TEXT("\tcolor format = ")+OSString(curfmt->name)+OS_TEXT(" bytes = ")+OSString(curfmt->source_bytes*il_width*il_height));
-
 			LOG_INFO(OS_TEXT("\ttarget format = ")+OSString(tarfmt->name));
+        #endif//HGL_OS == HGL_OS_Windows
 
 			int bytes=tex->GetImage(NULL,tarfmt->tsf);
 
@@ -486,16 +482,29 @@ int ConvertImage(const os_char *filename)
 	return(0);
 }
 
-void EnumConvertImage(void *app,FileInfo &fi)
+class EnumFileConfigApp:public EnumFileConfig
 {
-	GraphicsApplication *gapp=(GraphicsApplication *)app;
+public:
+
+    GraphicsApplication *app;
+
+    using EnumFileConfig::EnumFileConfig;
+};
+
+void EnumConvertImage(EnumFileConfig *efc,FileInfo &fi)
+{
+    EnumFileConfigApp *efca=(EnumFileConfigApp *)efc;
+
+	GraphicsApplication *gapp=efca->app;
 
 	ConvertImage(fi.fullname);
+    
+	render_obj->AutoCreateShader();
+    
+    ClearColorDepthBuffer();
 
-	ClearScreen();
-
-	const int l=(640-il_width)/2;
-	const int t=(480-il_height)/2;
+	const int l=(GetScreenWidth()-il_width)/2;
+	const int t=(GetScreenHeight()-il_height)/2;
 
 	vertex->Begin();
 		vertex->WriteRect(l,t,il_width,il_height);
@@ -513,63 +522,109 @@ HGL_GRAPHICS_MAIN(sii,app,args)
 
 	bool sub=false;
 
-	sii.info.ProjectName=OS_TEXT("贴图转换");
+	sii.info.ProjectName=U8_TEXT("贴图转换");
 	sii.info.ProjectCode=OS_TEXT("Texture Converter");
-	sii.info.ProjectVersion=OS_TEXT("1.0");
+	sii.info.ProjectVersion=U8_TEXT("1.0");
+    
+	if(!app.Init(&sii))return(-1);
 
-	if(args.GetCount()<2)
+    LOG_INFO("argc="+UTF8String(args.GetCount()));
+    for(int i=0;i<args.GetCount();i++)
+        LOG_INFO(OS_TEXT("argv[")+OSString(i)+OS_TEXT("] ")+args[i]);
+
+	if(args.GetCount()<=1)
 	{
-		char *hint=new char[32*HGL_SF_END];
+        char space[33];
+        constexpr uint STR_HINT_MAX=128+(32*HGL_SF_END);
+		char *hint=new char[STR_HINT_MAX];
 
-		::strcpy(hint,"support format:\n\n");
+        hgl::strcpy(hint,STR_HINT_MAX,
+                        "Command format:\n"
+                        "\tTexConv <filename or pathname> [/s] [/view] [/R:?] [/RG:?] [/RGB:?] [/RGBA:?]\n"
+                        "\n"
+                        "Params:\n"
+                        "\t/s : proc sub-directory\n"
+                        "\n"
+		                "support format:\n\n");
+
+        int count=0;
+        int len;
+        memset(space,' ',32);
+        space[32]=0;
 
 		for(int i=HGL_SF_NONE+1;i<HGL_SF_END;i++)
 		{
-			::strcat(hint,TextureFormatInfoList[i].name);
-			::strcat(hint,"\n");
+            if(TextureFormatInfoList[i].name[0]==0)
+            {
+                if(count==0)
+                    hgl::strcat(hint,STR_HINT_MAX,'\n');
+                else
+                    hgl::strcat(hint,STR_HINT_MAX,"\n\n",2);
+                count=0;
+                continue;
+            }
+
+            len=strlen(TextureFormatInfoList[i].name);
+			hgl::strcat(hint,STR_HINT_MAX,TextureFormatInfoList[i].name,len);
+            hgl::strcat(hint,STR_HINT_MAX,space,16-len);
+
+            ++count;
+            if(count==4)
+            {
+                hgl::strcat(hint,STR_HINT_MAX,'\n');
+                count=0;
+            }
+            else
+			    hgl::strcat(hint,STR_HINT_MAX,'\t');
 		}
 
-		LOG_INFO(hint);
+		LOG_ERROR(hint);
 
 		delete[] hint;
 		return(0);
 	}
-
-	if(!app.Init(&sii))return(-1);
 
 	if(cmd.Find(OS_TEXT("/s"))!=-1)sub=true;						//检测是否处理子目录
 
 	if(cmd.Find(OS_TEXT("/view"))!=-1)only_view=true;				//检测是否仅显示
 	if(cmd.Find(OS_TEXT("/mip"))!=-1)gen_mipmaps=true;				//检测是否生成mipmaps
 
-	CheckOpenGLCoreFormat(cmd);								//检测推荐格式
+	CheckOpenGLCoreFormat(cmd);								        //检测推荐格式
 
 	ilInit();
 
 	OSString cur_path=info::GetString(info::hfsStartPath);
 
-	render_obj=CreateRenderable();
-	render_obj->SetPrimitive(HGL_PRIM_TRIANGLES);
+    va=new VertexArray(HGL_PRIM_TRIANGLES);
+	va->SetVertexBuffer(vbtVertex,vertex=new VB2f(6,0,HGL_DYNAMIC_DRAW));
+	va->SetVertexBuffer(vbtDiffuseTexCoord,new VB2f(6,texcoord));
 
-	render_obj->SetVertexBuffer(vbtVertex,vertex=new VB2f(6,0,HGL_DYNAMIC_DRAW));
-	render_obj->SetVertexBuffer(vbtDiffuseTexCoord,new VB2f(6,texcoord));
+	tex=CreateTexture2D();
 
-	tex=new Texture2D;
-
-	mtl=CreateMaterial();
+	mtl=new Material;
 
 	mtl->SetColorMaterial(false);
 	mtl->SetTexture(mtcDiffuse,tex);
 
-	render_obj->SetMaterial(mtl,true);
+	render_obj=new Renderable(va,mtl);
+
+	render_obj->SetMaterial(mtl);
 	render_obj->SetTexCoord(mtcDiffuse,vbtDiffuseTexCoord);
 
-	render_obj->AutoCreateShader();
-
-	double start_time=GetTime();
+	double start_time=GetMicroTime();
 	double end_time;
 
-	//EnumFile(cur_path,args[1],&app,false,true,sub,EnumConvertImage);
+    EnumFileConfigApp efc;
+
+    efc.app         =&app;
+
+    efc.folder_name =cur_path;
+    efc.find_name   =args[0];
+    efc.proc_file   =true;
+    efc.proc_folder =sub;
+    efc.cb_file     =EnumConvertImage;
+    
+    EnumFile(&efc);
 
 	end_time=GetTime();
 
