@@ -275,6 +275,15 @@ namespace hgl
                 List<FileInfo> *fi_list;
             };
         }
+        
+        EnumFileConfig *DefaultCreateSubConfig(struct EnumFileConfig *efc,const OSString &sub_folder_name)
+        {
+            OSString full_sub_folder_name;
+
+            MergeFilename(full_sub_folder_name,efc->folder_name,sub_folder_name);
+
+            return(new EnumFileConfig(efc,full_sub_folder_name));
+        }
 
         void AddToList(struct EnumFileConfig *efc,hgl::filesystem::FileInfo &fi)
         {
