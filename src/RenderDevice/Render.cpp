@@ -372,7 +372,7 @@ namespace hgl
                     return(false);
                 }
 
-                if(!BindShaderTexture(obj,glsl))                                                //绑定shader与贴图
+                if(!BindShaderTexture(obj,glsl))                                                //绑定shader贴图
                 {
                     LOG_PROBLEM(OS_TEXT("BindShaderTexture error"));
                     return(false);
