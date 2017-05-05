@@ -227,15 +227,6 @@ namespace hgl
             return(true);
         }
 
-        EnumFileConfig *DefaultCreateSubConfig(struct EnumFileConfig *efc,const OSString &sub_folder_name)
-        {
-            OSString full_sub_folder_name;
-
-            MergeFilename(full_sub_folder_name,efc->folder_name,sub_folder_name);
-
-            return(new EnumFileConfig(efc,full_sub_folder_name));
-        }
-
         /**
         * 枚举一个目录内的所有文件
         * @param config 枚举配置
