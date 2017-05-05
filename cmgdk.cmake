@@ -227,6 +227,12 @@ MESSAGE("Sytem: " ${CMAKE_SYSTEM})
 MESSAGE("System Name: " ${CMAKE_SYSTEM_NAME})
 MESSAGE("System Version: " ${CMAKE_SYSTEM_VERSION})
 MESSAGE("System Processor: " ${CMAKE_SYSTEM_PROCESSOR})
+
+MESSAGE("Host System : " ${CMAKE_HOST_SYSTEM})
+MESSAGE("Host System Name: " ${CMAKE_HOST_SYSTEM_NAME})
+MESSAGE("Host System Version: " ${CMAKE_HOST_SYSTEM_VERSION})
+MESSAGE("Host System Processor: " ${CMAKE_HOST_SYSTEM_PROCESSOR})
+
 MESSAGE("Generator: " ${CMAKE_GENERATOR})
 message("")
 MESSAGE("C Compiler: " ${CMAKE_C_COMPILER})

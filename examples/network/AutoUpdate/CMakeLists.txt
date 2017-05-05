@@ -6,6 +6,6 @@ add_executable(LinuxAutoUpdate  StandAlone/LinuxAutoUpdate.cpp
 
 target_link_libraries(LinuxAutoUpdate bz2 expat curl)
 
-add_executable(MakeUpdate MakeUpdate/MainUnit.cpp)
+add_executable(LinuxMakeUpdate StandAlone/LinuxMakeUpdate.cpp)
 
-target_link_libraries(MakeUpdate bz2)
+target_link_libraries(LinuxMakeUpdate bz2)
