@@ -24,6 +24,21 @@ namespace hgl
         virtual void JoinControl(FlowControl *fc){control=fc;}
         virtual void UnjoinControl(FlowControl *){control=nullptr;}
 
+    public: //输入事件
+
+        virtual bool OnMouseMove        (int,int){}
+        virtual bool OnMouseLeftDown    (int,int){}
+        virtual bool OnMouseLeftUp      (int,int){}
+        virtual bool OnMouseMidDown     (int,int){}
+        virtual bool OnMouseMidUp       (int,int){}
+        virtual bool OnMouseRightDown   (int,int){}
+        virtual bool OnMouseRightUp     (int,int){}
+        virtual bool OnMouseWheel       (int){}
+        virtual bool OnKeyDown          (int){}
+        virtual bool OnKeyUp            (int){}
+        virtual bool OnKeyRepeat        (int){}          //自动重发
+        virtual bool OnChar             (os_char){}
+
 	public: //方法
 
         using _FlowObject<FlowObject>::_FlowObject;                                                 ///<本类构造函数

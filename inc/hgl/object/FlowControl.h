@@ -16,8 +16,6 @@ namespace hgl
 	*/
     class FlowControl:public _FlowControl<FlowObject>                                               ///流程对象控制类
 	{
-		RootEventBase *root_event_base=nullptr;
-
 		void InitPrivate(FlowObject *);
 
     protected:
@@ -33,8 +31,6 @@ namespace hgl
 
         using _FlowControl<FlowObject>::_FlowControl;
         virtual ~FlowControl(){Clear();}															///<本类析构函数
-
-        RootEventBase *GetEventBase(){return root_event_base;}                                      ///<取得事件收发器
 
 		virtual void Draw(const Matrix4f *);
     };//class FlowControl

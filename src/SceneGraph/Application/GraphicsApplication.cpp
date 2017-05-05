@@ -197,7 +197,6 @@ namespace hgl
                 PutInfo(u"不使用GUI系统！");
     */
             win->InitProcEvent(app_event_base);        //设置GLFW事件函数回调
-            app_event_base->Join(flow->GetEventBase()); //绑定应用事件收发
 
             return(true);
         }
