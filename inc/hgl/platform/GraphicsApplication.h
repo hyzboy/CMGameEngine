@@ -41,10 +41,6 @@ namespace hgl
 
 		protected:
 
-			virtual void ProcActiveObject(FlowObject *);
-
-		protected:
-
 			uint		GetFPS()		{return cur_fps;}
 			void		SetFPS(uint);
 
@@ -62,6 +58,8 @@ namespace hgl
 
 			DefEvent(void,OnResize,(int,int));															///<窗口大小被调整了
 			DefEvent(bool,OnClose,());																	///<窗口被关闭了
+
+            virtual void ProcChangeActiveObject(FlowObject *){};
 
 		public:	//方法
 

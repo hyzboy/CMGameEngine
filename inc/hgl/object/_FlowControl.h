@@ -129,7 +129,7 @@ namespace hgl
             if(state==fosExitApp        ){OnExitApp();return;}
         }
 
-        void ChangeActiveObject(T *obj)
+        virtual void ChangeActiveObject(T *obj)
         {
             active_obj=obj;
 
@@ -166,9 +166,7 @@ namespace hgl
         {
             Clear();
 
-            active_obj=obj;
-
-            OnChange(active_obj);
+            ChangeActiveObject(obj);
         }
 
         /**
@@ -178,10 +176,11 @@ namespace hgl
         {
             if(active_obj)
             {
-                delete active_obj;
-                active_obj=nullptr;
+                T *fo=active_obj;
 
-                OnChange(nullptr);
+                ChangeActiveObject(nullptr);
+
+                delete fo;
             }
 
             T *obj;

@@ -20,6 +20,10 @@ namespace hgl
 
 		void InitPrivate(FlowObject *);
 
+    protected:
+
+        virtual void ChangeActiveObject(FlowObject *obj)override;
+
     public: //事件
 
         virtual void OnResize(int,int){}                                                            ///<画布尺寸调整事件

@@ -2,6 +2,17 @@
 
 namespace hgl
 {
+    void FlowControl::ChangeActiveObject(FlowObject *obj)
+    {
+        if(active_obj)
+            active_obj->UnjoinControl(this);
+            
+        _FlowControl<FlowObject>::ChangeActiveObject(obj);
+
+        if(active_obj)
+            active_obj->JoinControl(this);
+    }
+
     /**
     * 调用当前控制器中的对象绘制画面
     */

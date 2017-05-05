@@ -4,6 +4,8 @@
 #include<hgl/object/_FlowObject.h>
 namespace hgl
 {
+    class FlowControl;
+
 	/**
 	* 作业流程对象，负责提供刷新功能和绘制功能。供流程控制器进行调用，以完成整个作业。<br>
 	* 需要注意的是：画面绘制和刷新是分离的，刷新是在不停的运行的，而画面绘制只在时间到达时才会被调用。
@@ -12,6 +14,15 @@ namespace hgl
 	{
         bool is_back=false;
         bool is_draw=true;
+                
+        FlowControl *control=nullptr;
+
+    protected:
+
+        friend class FlowControl;
+
+        virtual void JoinControl(FlowControl *fc){control=fc;}
+        virtual void UnjoinControl(FlowControl *){control=nullptr;}
 
 	public: //方法
 
