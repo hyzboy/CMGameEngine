@@ -96,43 +96,33 @@ namespace hgl
 //             return(obj);
 //         }
 //
-//         /**
-//         /* 创建一个画坐标轴的可渲染数据(尺寸为1)
-//          * @param size 坐标轴尺寸
-//         /* @return 可渲染数据
-//         /*/
-//         VertexArray *CreateRenderableAxis(const float size)
-//         {
-//             VertexArray *obj=CreateRenderable();
-//             Material *mtl=CreateMaterial();
-//
-//             //设置材质
-//             mtl->SetColorMaterial(false);            //不使用材质中的颜色
-//             obj->SetMaterial(mtl,true);                //设置材质
-//
-//             //设置图元类型
-//             obj->SetPrimitive(HGL_PRIM_LINES);        //设置为画线
-//
-//             //创建顶点缓冲区
-//             VB3f *vertex=new VB3f(6);                //创建一个3D坐标点、浮点数据的缓冲区
-//             VB3f *color=new VB3f(6);                //创建一个4元颜色、浮点数据的缓冲区
-//
-//             color->Begin();
-//             vertex->Begin();
-//                 color->Write(1,0,0);vertex->Write(0,0,0);color->Write(1,0,0);vertex->Write(size,0,0);
-//                 color->Write(0,1,0);vertex->Write(0,0,0);color->Write(0,1,0);vertex->Write(0,size,0);
-//                 color->Write(0,0,1);vertex->Write(0,0,0);color->Write(0,0,1);vertex->Write(0,0,size);
-//             vertex->End();
-//             color->End();
-//
-//             obj->SetVertex(vertex);
-//             obj->SetColor(color,HGL_PC_RGB);
-//
-//             obj->AutoCreateShader();
-//
-//             return(obj);
-//         }
-//
+         /**
+         /* 创建一个画坐标轴的可渲染数据(默认尺寸为1)
+          * @param size 坐标轴尺寸
+         /* @return 可渲染数据
+         /*/
+         VertexArray *CreateRenderableAxis(const float size)
+         {
+             VertexArray *obj=new VertexArray(HGL_PRIM_LINES);
+
+             //创建顶点缓冲区
+             VB3f *vertex=new VB3f(6);               //创建一个3D坐标点、浮点数据的缓冲区
+             VB3f *color=new VB3f(6);                //创建一个4元颜色、浮点数据的缓冲区
+
+             color->Begin();
+             vertex->Begin();
+                 color->Write(1,0,0);vertex->Write(0,0,0);color->Write(1,0,0);vertex->Write(size,0,0);
+                 color->Write(0,1,0);vertex->Write(0,0,0);color->Write(0,1,0);vertex->Write(0,size,0);
+                 color->Write(0,0,1);vertex->Write(0,0,0);color->Write(0,0,1);vertex->Write(0,0,size);
+             vertex->End();
+             color->End();
+
+             obj->SetVertex(vertex);
+             obj->SetColor(color,HGL_PC_RGB);
+
+             return(obj);
+         }
+
         /**
          * 画一个2D平面矩形
          */
@@ -272,9 +262,10 @@ namespace hgl
             /*  |/          2|/   */    // The associated indices.
             /* 3*------------*    */    const uint16 indices[]={    0,    2,    1,    0,    3,    2,    4,    5,    6,    4,    6,    7,    8,    9,    10,    8,    10,    11, 12,    15,    14,    12,    14,    13, 16,    17,    18,    16,    18,    19, 20,    23,    22,    20,    22,    21    };
 
-            const float tangents[] = {  +1.0f, 0.0f, 0.0f, +1.0f, 0.0f, 0.0f, +1.0f, 0.0f, 0.0f, +1.0f, 0.0f, 0.0f, +1.0f, 0.0f, 0.0f, +1.0f, 0.0f, 0.0f, +1.0f, 0.0f, 0.0f, +1.0f, 0.0f, 0.0f,
-                                        -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, +1.0f, 0.0f, 0.0f, +1.0f, 0.0f, 0.0f, +1.0f, 0.0f, 0.0f, +1.0f, 0.0f, 0.0f,
-                                         0.0f, 0.0f,+1.0f,  0.0f, 0.0f,+1.0f,  0.0f, 0.0f,+1.0f,  0.0f, 0.0f,+1.0f,  0.0f, 0.0f,-1.0f,  0.0f, 0.0f,-1.0f,  0.0f, 0.0f,-1.0f,  0.0f, 0.0f,-1.0f };
+            const float tangents[] = {  +1.0f, 0.0f, 0.0f,      +1.0f, 0.0f, 0.0f,      +1.0f, 0.0f, 0.0f,      +1.0f, 0.0f, 0.0f,      +1.0f, 0.0f, 0.0f,      +1.0f, 0.0f, 0.0f, 
+                                        +1.0f, 0.0f, 0.0f,      +1.0f, 0.0f, 0.0f,      -1.0f, 0.0f, 0.0f,      -1.0f, 0.0f, 0.0f,      -1.0f, 0.0f, 0.0f,      -1.0f, 0.0f, 0.0f, 
+                                        +1.0f, 0.0f, 0.0f,      +1.0f, 0.0f, 0.0f,      +1.0f, 0.0f, 0.0f,      +1.0f, 0.0f, 0.0f,       0.0f, 0.0f,+1.0f,       0.0f, 0.0f,+1.0f,
+                                         0.0f, 0.0f,+1.0f,       0.0f, 0.0f,+1.0f,       0.0f, 0.0f,-1.0f,       0.0f, 0.0f,-1.0f,       0.0f, 0.0f,-1.0f,       0.0f, 0.0f,-1.0f };
 
             const float tex_coords[] ={ 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
                                         1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,

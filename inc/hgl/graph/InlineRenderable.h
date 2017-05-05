@@ -17,7 +17,7 @@ namespace hgl
 
 // 		VertexArray *CreateRenderableLine(const Vector3f &,const Vector3f &,const Color4f &);		///<创建一条线的可渲染数据
 
-// 		VertexArray *CreateRenderableAxis(const float size=1);										///<创建一个坐标轴的可渲染数据
+ 		VertexArray *CreateRenderableAxis(const float size=1);										///<创建一个坐标轴的可渲染数据(默认尺寸为1)
 
 		VertexArray *CreateRenderableRect(const RectScope2f &);										///<创建一个2D平面矩形的可渲染数据
 
