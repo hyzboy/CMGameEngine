@@ -47,6 +47,11 @@ namespace hgl
             return (v.x*v.x) + (v.y*v.y) + (v.z*v.z);
         }
 
+        inline float length_squared(const Vector4f &v)
+        {
+            return (v.x*v.x) + (v.y*v.y) + (v.z*v.z);
+        }
+
         template<typename T>
         inline float length(const T &v)
         {
