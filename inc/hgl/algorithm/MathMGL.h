@@ -199,8 +199,8 @@ namespace hgl
         v.Normalize();
     }
 
-    template<typename T1,typename T2>
-    inline Vector3f cross(const T1 &v1,const T2 &v2)
+    template<typename T>
+    inline T cross(const T &v1,const T &v2)
     {
         return v1.Cross(v2);
     }
