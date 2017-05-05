@@ -491,6 +491,21 @@ namespace hgl
                 return(true);
             }
 
+            bool Write(const Vector4f &v)
+            {
+                if(!this->access||this->access+3>this->mem_end)
+                {
+                    LOG_HINT(OS_TEXT("VertexBuffer3::Write(vec4 &) out"));
+                    return(false);
+                }
+
+                *this->access++=v.x;
+                *this->access++=v.y;
+                *this->access++=v.z;
+
+                return(true);
+            }
+
             /**
              * 将一个值重复多次写入缓冲区
              * @param v 值
