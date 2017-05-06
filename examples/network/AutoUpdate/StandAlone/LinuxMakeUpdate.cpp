@@ -1,11 +1,16 @@
 #include<string>
 #include<cstring>
 #include<iostream>
+#include<fstream>
 #include<unistd.h>
 #include<dirent.h>
 #include<sys/stat.h>
 #include<sys/dir.h>
 #include<sys/fcntl.h>
+
+#include"FileSystem.h"
+#include"md5.h"
+#include<bzlib.h>
 
 /**
 * 文件信息数据结构
@@ -45,7 +50,7 @@ EnumFileConfig *DefaultCreateSubConfig(struct EnumFileConfig *efc,const std::str
 struct EnumFileConfig
 {
     std::string         folder_name;                ///<要枚举的目录名称
-    
+
     bool                proc_folder;                ///<是否处理目录
     bool                proc_file;                  ///<是否处理文件
     bool                sub_folder;                 ///<是否查找子目录
@@ -72,7 +77,7 @@ public:
     EnumFileConfig(const EnumFileConfig *efc,const std::string &sub_folder_name)
     {
         folder_name =sub_folder_name;
-        
+
         proc_folder =efc->proc_folder;
         proc_file   =efc->proc_file;
         sub_folder  =efc->sub_folder;
@@ -85,17 +90,17 @@ public:
 };//struct EnumFileConfig
 
 /**
-    * 组合路径名与文件名
-    * @param fullname 完整路径文件名
-    * @param pathname 路径名
-    * @param filename 文件名
-    */
+* 组合路径名与文件名
+* @param fullname 完整路径文件名
+* @param pathname 路径名
+* @param filename 文件名
+*/
 void MergeFilename(std::string &fullname,const std::string &pathname,const std::string &filename)
 {
     std::string::const_iterator it=pathname.cend();
-    
+
     --it;
-    
+
     fullname=(  *it=='/'?
                 pathname+filename:
                 pathname+'/'+filename);
@@ -123,7 +128,7 @@ int EnumFile(EnumFileConfig *config)
     if(config->proc_file&&!config->cb_file)return(-3);
 
     if(config->folder_name.empty())return(-4);
-    
+
     std::string fullname;
     int count=0;
 
@@ -148,23 +153,24 @@ int EnumFile(EnumFileConfig *config)
         return(-1);
     if((entry = readdir64(dir)) == nullptr)
         return(-1);
-    
+
     EnumFileConfig *sub_efc=nullptr;
     int sub_count;
 
     do
     {
-        memset(&statbuf,0,sizeof(struct stat64));
-        memset(&fi,0,sizeof(FileInfo));
-
         if(strcmp(entry->d_name,".")==0
         ||strcmp(entry->d_name,"..")==0)
         {
             continue;
         }
 
+        memset(&statbuf,0,sizeof(struct stat64));
+
         if(lstat64(entry->d_name,&statbuf)==-1)
             continue;
+
+        memset(&fi,0,sizeof(FileInfo));
 
         fi.size=statbuf.st_size;
 
@@ -181,15 +187,15 @@ int EnumFile(EnumFileConfig *config)
 
         fi.can_read	=statbuf.st_mode&S_IROTH;
         fi.can_write=statbuf.st_mode&S_IWOTH;
-        
+
         if(S_ISDIR(statbuf.st_mode))
         {
             if(!config->proc_folder)continue;
-            
+
             if(config->sub_folder)
             {
                 sub_efc=config->CreateSubConfig(config,entry->d_name);
-                    
+
                 if(!sub_efc)
                     continue;
 
@@ -200,7 +206,7 @@ int EnumFile(EnumFileConfig *config)
         else
         {
             if(!config->proc_file)continue;
-            
+
             ++count;
         }
 
@@ -217,11 +223,11 @@ int EnumFile(EnumFileConfig *config)
             strcpy(fi.fullname,config->folder_name.c_str());
 
             std::string::const_iterator it=config->folder_name.cend();
-            
+
             --it;
             if(*it!='/')
                 strcat(fi.fullname,"/");
-            
+
             strcat(fi.fullname,fi.name);
         }
 
@@ -229,7 +235,7 @@ int EnumFile(EnumFileConfig *config)
         {
             if(config->cb_folder)
                 config->cb_folder(config,sub_efc,fi);
-            
+
             delete sub_efc;
             sub_efc=nullptr;
         }
@@ -247,9 +253,64 @@ int EnumFile(EnumFileConfig *config)
     return(count);
 }
 
+std::string cur_path;
+std::ofstream xml;
+
 void AppendFileToXML(struct EnumFileConfig *,FileInfo &fi)
 {
-    
+    std::string short_filename=fi.fullname+(cur_path.length()+1);
+
+    std::cout<<"file: "<<short_filename<<std::endl;
+
+    unsigned int filelength;
+    unsigned int compress_filelength;
+
+    char *filedata=(char *)filesystem::LoadFileToMemory(fi.fullname,&filelength);
+
+    if(!filedata)
+    {
+        std::cout<<"load file to memory failed"<<std::endl;
+        return;
+    }
+
+    MD5Code md5;
+    MD5Code compress_md5;
+
+    GetMD5(md5,filedata,filelength);
+
+    char *compress_data=new char[filelength];
+    compress_filelength=filelength;
+
+    if(BZ2_bzBuffToBuffCompress(compress_data,&compress_filelength,filedata,filelength,9,0,30)!=BZ_OK)
+    {
+        delete[] compress_data;
+        delete[] filedata;
+        std::cout<<"compress data failed!"<<std::endl;
+        return;
+    }
+
+    std::string compress_filename=fi.fullname;
+
+    compress_filename+=".bz2";
+
+    if(filesystem::SaveMemoryToFile(compress_filename,compress_data,compress_filelength)!=compress_filelength)
+    {
+        delete[] compress_data;
+        delete[] filedata;
+
+        std::cout<<"save compress file to <"<<compress_filename.c_str()<<"> failed!"<<std::endl;
+        return;
+    }
+
+    GetMD5(compress_md5,compress_data,compress_filelength);
+
+    char md5str[33];
+    char cmd5str[33];
+
+    DataToHexStr(md5str,(uint8 *)&md5,sizeof(MD5Code));
+    DataToHexStr(cmd5str,(uint8 *)&compress_md5,sizeof(MD5Code));
+
+    xml<<"\t<file compress_size=\""<<compress_filelength<<"\" compress_md5=\""<<cmd5str<<"\" size=\""<<filelength<<"\" md5=\""<<md5str<<"\" name=\""<<short_filename.c_str()<<"\"/>\n";
 }
 
 int main(int argc,char **argv)
@@ -259,10 +320,45 @@ int main(int argc,char **argv)
         std::cout<<"example: LinuxMakeUpdate <dirname>"<<std::endl;
         return 0;
     }
-    
+
     std::cout<<"dirname: "<<argv[1]<<std::endl;
-    
     std::cout<<"outfile: "<<argv[1]<<".xml"<<std::endl;
-    
+
+    std::string xml_filename;
+
+    char path_buf[_POSIX_PATH_MAX]={0};
+    getcwd(path_buf,_POSIX_PATH_MAX);
+
+    cur_path=path_buf;
+
+    EnumFileConfig efc;
+
+    xml_filename=cur_path+'/';
+    xml_filename+=argv[1];
+
+    efc.folder_name=xml_filename;
+    efc.sub_folder=true;
+    efc.cb_file=AppendFileToXML;
+
+    xml_filename+=".xml";
+
+    xml.open(xml_filename,std::ios::binary|std::ios::out|std::ios::trunc);
+
+    if(xml.is_open())
+    {
+        std::cout<<"create <"<<xml_filename.c_str()<<"> ok!\n"<<std::endl;
+    }
+    else
+    {
+        std::cout<<"create <"<<xml_filename.c_str()<<"> failed!\n"<<std::endl;
+        return(1);
+    }
+
+    xml<<"<update>\n";
+
+    EnumFile(&efc);
+
+    xml<<"</update>\n";
+
     return 0;
 }

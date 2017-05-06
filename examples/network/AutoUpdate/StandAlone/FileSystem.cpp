@@ -17,7 +17,7 @@ namespace filesystem
     * @param size 文件长度
     * @return 用来保存数据的内存指针的指针，请自行delete[]
     */
-    void *LoadFileToMemory(const std::string &filename,int *size)
+    void *LoadFileToMemory(const std::string &filename,unsigned int *size)
     {
         if(filename.empty())return(nullptr);
         if(!size)return(nullptr);
@@ -34,9 +34,9 @@ namespace filesystem
         }
 
         struct stat file_stat;
-        
+
         fstat(fp,&file_stat);
-    
+
         *size=file_stat.st_size;
 
 //            std::wcout<<L"OpenFile "<<*size<<L", "<<filename.c_str()<<std::endl;
@@ -65,7 +65,7 @@ namespace filesystem
     * @return 成功写入的字节数
     * @return -1 失败
     */
-    int SaveMemoryToFile(const std::string &filename,const void *buf,int size)
+    unsigned int SaveMemoryToFile(const std::string &filename,const void *buf,unsigned int size)
     {
         if(filename.empty())return(-1);
         if(!buf)return(-2);
@@ -87,7 +87,7 @@ namespace filesystem
 
         return result;
     }
-    
+
     /**
     * 复制一个文件
     * @param sourcename 源文件名
@@ -98,14 +98,14 @@ namespace filesystem
     {
         int src;
         int dst;
-        
+
         src=open64(sourcename.c_str(),O_RDONLY);
-        
+
         if(src==-1)
             return(false);
-        
+
         dst=open64(targetname.c_str(),O_WRONLY|O_CREAT,S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
-        
+
         if(dst==-1)
         {
             close(src);
@@ -115,9 +115,9 @@ namespace filesystem
         size_t buf_size=1024*1024*8;
         size_t length;
         struct stat file_stat;
-        
+
         fstat(src,&file_stat);
-        
+
         length=file_stat.st_size;
 
         size_t cur;
@@ -126,7 +126,7 @@ namespace filesystem
             buf_size=length;
 
         char *buf=new char[buf_size];
-        
+
         bool result=false;
 
         while(length)
@@ -149,10 +149,10 @@ namespace filesystem
         delete[] buf;
         close(src);
         close(dst);
-        
+
         return(length==0);
     }
-    
+
     /**
     * 确认文件是否存在
     * @param filename 要查找的文件名称
@@ -162,7 +162,7 @@ namespace filesystem
     {
         return access(filename.c_str(),F_OK)>=0;
     }
-    
+
     /**
     * 删除一个文件
     * @param filename 文件名
@@ -172,7 +172,7 @@ namespace filesystem
     {
         return(unlink(filename.c_str())==0);
     }
-    
+
     /**
     * 检测文件是否可执行
     * @param filename 文件名
@@ -212,7 +212,7 @@ namespace filesystem
         else
             return str;
     }
-    
+
     /**
     * 创建一个子目录,该函数可自动创建多级目录。
     * @param dirname 目录名称
