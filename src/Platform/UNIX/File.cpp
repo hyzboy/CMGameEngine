@@ -233,7 +233,7 @@ namespace hgl
             if(config->proc_file&&!config->cb_file)RETURN_ERROR(-3);
 
             if(config->folder_name.IsEmpty())RETURN_ERROR(-4);
-            
+
             OSString fullname;
             int count=0;
 
@@ -258,24 +258,24 @@ namespace hgl
                 return(-1);
             if((entry = readdir64(dir)) == NULL)
                 return(-1);
-            
+
             EnumFileConfig *sub_efc=nullptr;
             int sub_count;
 
             do
             {
-                memset(&statbuf,0,sizeof(struct_stat64));
-                memset(&fi,0,sizeof(FileInfo));
-
                 if(strcmp(entry->d_name,".")==0
                 ||strcmp(entry->d_name,"..")==0)
                 {
                     continue;
                 }
 
+                memset(&statbuf,0,sizeof(struct_stat64));
+
                 if(lstat64(entry->d_name,&statbuf)==-1)
                     continue;
 
+                memset(&fi,0,sizeof(FileInfo));
                 fi.size=statbuf.st_size;
 
                 if(S_ISDIR(statbuf.st_mode))
@@ -291,15 +291,15 @@ namespace hgl
 
                 fi.can_read	=statbuf.st_mode&S_IROTH;
                 fi.can_write=statbuf.st_mode&S_IWOTH;
-                
+
                 if(S_ISDIR(statbuf.st_mode))
                 {
                     if(!config->proc_folder)continue;
-                    
+
                     if(config->sub_folder)
                     {
                         sub_efc=config->CreateSubConfig(config,entry->d_name);
-                            
+
                         if(!sub_efc)
                             continue;
 
@@ -310,7 +310,7 @@ namespace hgl
                 else
                 {
                     if(!config->proc_file)continue;
-                    
+
                     ++count;
                 }
 
@@ -328,7 +328,7 @@ namespace hgl
 
                     if(config->folder_name.GetEndChar()!=HGL_DIRECTORY_SEPARATOR)
                         strcat(fi.fullname,HGL_MAX_PATH,HGL_DIRECTORY_SEPARATOR);
-                    
+
                     strcat(fi.fullname,HGL_MAX_PATH,fi.name,HGL_MAX_PATH);
                 }
 
@@ -336,7 +336,7 @@ namespace hgl
                 {
                     if(config->cb_folder)
                         config->cb_folder(config,sub_efc,fi);
-                    
+
                     delete sub_efc;
                     sub_efc=nullptr;
                 }
