@@ -1,7 +1,6 @@
 ﻿#ifndef HGL_FLOW_CONTROL_INCLUDE
 #define HGL_FLOW_CONTROL_INCLUDE
 
-#include<hgl/platform/EventBase.h>
 #include<hgl/object/FlowObject.h>
 #include<hgl/object/_FlowControl.h>
 namespace hgl
