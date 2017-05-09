@@ -6,6 +6,8 @@
 
 namespace hgl
 {
+    KeyboardButton ConvertOSKey(uint key);
+
     namespace platform
     {
         namespace
@@ -16,7 +18,7 @@ namespace hgl
 
                 if(!rfc)return;
                     
-                rfc->WindowResize(width,height);
+                rfc->OnResize(width,height);
             }
 
             void ProcGLFWwindowClose(GLFWwindow *win)
@@ -25,7 +27,7 @@ namespace hgl
 
                 if(!rfc)return;
 
-                rfc->WindowClose();
+                rfc->OnClose();
             }
 
             void ProcGLFWwindowCursorPos(GLFWwindow *win,double x,double y)
@@ -34,7 +36,7 @@ namespace hgl
 
                 if(!rfc)return;
                     
-                rfc->MouseMove(Vertex2i(x,y));
+                rfc->OnMouseMove(x,y);
             }
 
             void ProcGLFWwindowScroll(GLFWwindow *win,double x,double y)
@@ -43,7 +45,7 @@ namespace hgl
 
                 if(!rfc)return;
                     
-                rfc->MouseWheel(x,y);
+                rfc->OnMouseWheel(x,y);
             }
 
             void ProcGLFWwindowMouseButton(GLFWwindow *win,int button,int action,int mods)
@@ -52,9 +54,9 @@ namespace hgl
 
                 if(!rfc)return;
                 
-                if(action==GLFW_PRESS)rfc->OnMouseDown(button);else
-                if(action==GLFW_REPEAT)rfc->OnMouseRepeat(button);else
-                if(action==GLFW_RELEASE)rfc->OnMouseUp(button);
+                if(action==GLFW_PRESS   )rfc->OnMouseDown   ((MouseButton)button);else
+                if(action==GLFW_REPEAT  )rfc->OnMouseRepeat ((MouseButton)button);else
+                if(action==GLFW_RELEASE )rfc->OnMouseUp     ((MouseButton)button);
             }
 
             void ProcGLFWwindowKey(GLFWwindow *win,int key,int scancode,int action,int mods)
@@ -62,10 +64,12 @@ namespace hgl
                 RootFlowControl *rfc=(RootFlowControl *)glfwGetWindowUserPointer(win);
 
                 if(!rfc)return;
+
+                KeyboardButton kb=ConvertOSKey(key);
                     
-                if(action==GLFW_PRESS)rfc->OnKeyDown(key);else
-                if(action==GLFW_REPEAT)rfc->OnKeyRepeat(key);else
-                if(action==GLFW_RELEASE)rfc->OnKeyUp(key);
+                if(action==GLFW_PRESS   )rfc->OnKeyDown     (kb);else
+                if(action==GLFW_REPEAT  )rfc->OnKeyRepeat   (kb);else
+                if(action==GLFW_RELEASE )rfc->OnKeyUp       (kb);
             }
 
             void ProcGLFWwindowChar(GLFWwindow *win,unsigned int character)
@@ -76,20 +80,20 @@ namespace hgl
                     
                 rfc->OnChar((os_char)character);
             }
-        }
+        }//namespace
 
-        void WindowGLFW::InitProcrfcent(RootFlowControl *rfc)
+        void WindowGLFW::InitProcEvent(RootFlowControl *rfc)
         {
-            glfwSetWindowUserPointer(glfw_win,rfc);
+            glfwSetWindowUserPointer    (glfw_win,rfc                       );
 
-            glfwSetWindowSizeCallback(glfw_win,ProcGLFWwindowSize);
-            glfwSetWindowCloseCallback(glfw_win,ProcGLFWwindowClose);
+            glfwSetWindowSizeCallback   (glfw_win,ProcGLFWwindowSize        );
+            glfwSetWindowCloseCallback  (glfw_win,ProcGLFWwindowClose       );
 
-            glfwSetCursorPosCallback(glfw_win,ProcGLFWwindowCursorPos);
-            glfwSetScrollCallback(glfw_win,ProcGLFWwindowScroll);
-            glfwSetMouseButtonCallback(glfw_win,ProcGLFWwindowMouseButton);
-            glfwSetKeyCallback(glfw_win,ProcGLFWwindowKey);
-            glfwSetCharCallback(glfw_win,ProcGLFWwindowChar);
+            glfwSetCursorPosCallback    (glfw_win,ProcGLFWwindowCursorPos   );
+            glfwSetScrollCallback       (glfw_win,ProcGLFWwindowScroll      );
+            glfwSetMouseButtonCallback  (glfw_win,ProcGLFWwindowMouseButton );
+            glfwSetKeyCallback          (glfw_win,ProcGLFWwindowKey         );
+            glfwSetCharCallback         (glfw_win,ProcGLFWwindowChar        );
         }
     }//namespace platform
 }//namespace hgl

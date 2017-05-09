@@ -128,7 +128,7 @@ namespace hgl
 		KeyConvert[VK_OEM_7		]=kbApostrophe;
 	}
 
-	uint ConvertOSKey(uint key)
+	KeyboardButton ConvertOSKey(uint key)
 	{
 		if(key<0||key>=256)return(kb_NONE);
 

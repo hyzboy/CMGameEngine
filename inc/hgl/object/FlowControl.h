@@ -5,11 +5,6 @@
 #include<hgl/object/_FlowControl.h>
 namespace hgl
 {
-	namespace graph
-	{
-		class GraphicsApplication;
-	}//namespace graph
-
 	/**
 	* FlowControl是指流程控制器，它的作用是对一串FlowObject对象的流程进行控制。
 	*/
