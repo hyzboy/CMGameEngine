@@ -2,6 +2,7 @@
 #define HGL_FLOW_OBJECT_INCLUDE
 
 #include<hgl/object/_FlowObject.h>
+#include<hgl/platform/InputDevice.h>
 #include<hgl/algorithm/VectorMath.h>
 namespace hgl
 {
@@ -28,7 +29,7 @@ namespace hgl
     public: //输入事件
         
         virtual void OnClose        (){}                                                            ///<窗口关闭事件
-        virtual void OnResize       (){}                                                            ///<窗口尺寸调整事件
+        virtual void OnResize       (int,int){}                                                     ///<窗口尺寸调整事件
         virtual void OnRotate       (int){}                                                         ///<屏幕旋转事件
 
         virtual bool OnMouseMove    (int,int){return(false);}                                       ///<鼠标移动事件
