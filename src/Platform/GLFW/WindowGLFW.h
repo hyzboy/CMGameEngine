@@ -30,7 +30,7 @@ namespace hgl
             void WaitEvent(const double &time_out)override;
             void PollEvent()override;
             bool IsOpen()override;
-            void InitProcEvent(AppEventBase *)override;
+            void InitProcEvent(RootFlowControl *)override;
         };//class WindowGLFW
     }//namespace platform
 }//namespace hgl

@@ -1,7 +1,7 @@
 ﻿#ifndef HGL__FLOW_OBJECT_INCLUDE
 #define HGL__FLOW_OBJECT_INCLUDE
 
-#include<hgl/platform/Platform.h>
+#include<hgl/type/DataType.h>
 #include<hgl/object/FlowObjectState.h>
 namespace hgl
 {
