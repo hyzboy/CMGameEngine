@@ -44,12 +44,12 @@ namespace hgl
         * 图形应用程序基类构造函数
         * @param fc 自定义流程控制器
         */
-        GraphicsApplication::GraphicsApplication(FlowControl *fc):BaseApplication()
+        GraphicsApplication::GraphicsApplication(RootFlowControl *fc):BaseApplication()
         {
             if(fc)
                 flow=fc;
             else
-                flow=new FlowControl;
+                flow=new RootFlowControl;
 
     //         SetPointer(hfpRootFlowControl,flow);
 
@@ -61,11 +61,6 @@ namespace hgl
             visible = true;
 
             default_font=nullptr;
-
-            app_event_base=new AppEventBase;
-
-            SetEventCall(app_event_base->Resize.OnProc,this,GraphicsApplication,ProcResize);
-            SetEventCall(app_event_base->Close.OnProc,this,GraphicsApplication,ProcClose);
 
             OnResize=nullptr;
             OnClose=nullptr;
@@ -87,8 +82,6 @@ namespace hgl
             SAFE_CLEAR(flow);
 
     /*        gui::CloseGUI();*/
-
-            delete app_event_base;
         }
 
         void GraphicsApplication::SetFPS(uint fps)
@@ -196,7 +189,7 @@ namespace hgl
             else
                 PutInfo(u"不使用GUI系统！");
     */
-            win->InitProcEvent(app_event_base);        //设置GLFW事件函数回调
+            win->InitProcEvent(flow);        //设置GLFW事件函数回调
 
             return(true);
         }
