@@ -1,5 +1,6 @@
 ﻿#ifndef HGL_INPUT_DEVICE_INCLUDE
 #define HGL_INPUT_DEVICE_INCLUDE
+
 namespace hgl
 {
 	/**
@@ -193,21 +194,5 @@ namespace hgl
 		//XBOX/XBOX360
 //		jbXBOX,						//西瓜键
 	};
-
-	/**
-	* 取得键盘按键状态
-	* @param key 按键
-	* @return true 按下状态
-	* @return false 弹起状态
-	*/
-	bool GetKeyState(KeyboardButton key);
-
-	/**
-	* 取得游戏杆按键状态
-	* @param key 按键
-	* @return true 按下状态
-	* @return false 弹起状态
-	*/
-//	bool GetJotState(JoystickButton);
 }//namespace hgl
 #endif//HGL_INPUT_DEVICE_INCLUDE
