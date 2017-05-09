@@ -55,7 +55,7 @@ namespace hgl
 
             normalize(axis);
 
-            Vector4f new_off=Vector4f(off,1.0f)*rotate(-ang,axis);
+            Vector4f new_off=Vector4f(off,1.0f)*rotate(-ang*HGL_PI/180.0,axis);
 
             center=eye+Vector3f(new_off[0],new_off[1],new_off[2]);
         }
@@ -64,20 +64,20 @@ namespace hgl
         {
             Vector4f off(center-eye,1.0f);                            //算出偏移向量
 
-            Vector4f new_off=off*rotate(ang,world_up_vector);                //以上向轴为旋转轴
+            Vector4f new_off=off*rotate(ang*HGL_PI/180.0,world_up_vector);                //以上向轴为旋转轴
 
             center=eye+Vector3f(new_off[0],new_off[1],new_off[2]);
         }
 
         void WalkerCamera::CenterUpRotate(float ang)
         {
-            Vector3f off(eye-center);                                //算出偏移向量
+            Vector3f off(eye-center);                                   //算出偏移向量
 
-            Vector3f axis=cross(off,world_up_vector);                        //使用叉积求出垂直向量做为旋转轴
+            Vector3f axis=cross(off,world_up_vector);                   //使用叉积求出垂直向量做为旋转轴
 
-            normalize(axis);                                        //CML必须做这一步，不解
+            normalize(axis);                                            //CML必须做这一步，不解
 
-            Vector4f new_off=Vector4f(off,1.0f)*rotate(-ang,axis);
+            Vector4f new_off=Vector4f(off,1.0f)*rotate(-ang*HGL_PI/180.0,axis);
 
             eye=center+Vector3f(new_off[0],new_off[1],new_off[2]);
         }
@@ -86,7 +86,7 @@ namespace hgl
         {
             Vector4f off(eye-center,1.0f);                            //算出偏移向量
 
-            Vector4f new_off=off*rotate(ang,world_up_vector);
+            Vector4f new_off=off*rotate(ang*HGL_PI/180.0,world_up_vector);
 
             eye=center+Vector3f(new_off[0],new_off[1],new_off[2]);
         }
