@@ -22,9 +22,10 @@ namespace hgl
         virtual void ChangeActiveObject(FlowObject *obj)override;
 
     public: //事件
-
-        virtual void OnResize(int,int){}                                                            ///<画布尺寸调整事件
-        virtual void OnRotate(int){}                                                                ///<屏幕旋转事件
+        
+        virtual void OnClose        (){}                                                            ///<窗口关闭事件
+        virtual void OnResize       (){}                                                            ///<窗口尺寸调整事件
+        virtual void OnRotate       (int){}                                                         ///<屏幕旋转事件
 
 	public: //方法
 

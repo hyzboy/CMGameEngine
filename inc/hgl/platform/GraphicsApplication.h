@@ -48,14 +48,6 @@ namespace hgl
 			Property<uint32>		FPS;																///<当前刷新频率
 			Property<TileFont *>	DefaultFont;														///<缺省字体(GUI模块使用)
 
-		public:	//事件
-
-            virtual bool ProcClose();
-            virtual bool ProcResize(int,int);
-
-			DefEvent(void,OnResize,(int,int));															///<窗口大小被调整了
-			DefEvent(bool,OnClose,());																	///<窗口被关闭了
-
             virtual void ProcChangeActiveObject(FlowObject *){};
 
 		public:	//方法

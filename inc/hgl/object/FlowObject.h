@@ -27,9 +27,9 @@ namespace hgl
 
     public: //输入事件
         
-        virtual bool OnWindowClose  (){return(false);}                                              ///<窗口关闭事件
-        virtual bool OnWindowResize (){return(false);}                                              ///<窗口尺寸调整事件
-        virtual bool OnWindowRotate (int){return(false);}                                           ///<屏幕旋转事件
+        virtual void OnClose        (){}                                                            ///<窗口关闭事件
+        virtual void OnResize       (){}                                                            ///<窗口尺寸调整事件
+        virtual void OnRotate       (int){}                                                         ///<屏幕旋转事件
 
         virtual bool OnMouseMove    (int,int){return(false);}                                       ///<鼠标移动事件
         virtual bool OnMouseWheel   (int,int){return(false);}                                       ///<鼠标滚轮事件

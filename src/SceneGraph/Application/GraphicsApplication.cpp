@@ -255,44 +255,4 @@ namespace hgl
             return(0);
         }
     }//namespace graph
-
-    namespace graph
-    {
-        bool GraphicsApplication::ProcResize(int w,int h)
-        {
-            graph::SetViewport(0,0,w,h);
-
-            if (w > 0 && h > 0)
-            {
-                visible = true;
-                graph::Ortho2DMatrix = ortho2d(w, h);
-            }
-            else
-            {
-                visible = false;
-                return(false);
-            }
-
-            SafeCallEvent(OnResize,(w,h));
-
-            flow->OnResize(w,h);
-
-            return(true);
-        }
-
-        bool GraphicsApplication::ProcClose()
-        {
-            if(OnClose!=nullptr)
-            {
-                bool result=OnClose();
-
-                if(!result)
-                    return(false);
-            }
-
-            flow->ExitApp();
-
-            return(true);
-        }
-    }//namespace graph
 }//namespace hgl
