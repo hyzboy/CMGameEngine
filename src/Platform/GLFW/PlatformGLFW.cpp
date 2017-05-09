@@ -3,6 +3,8 @@
 
 namespace hgl
 {
+	void InitKeyConvert();
+
     namespace platform
     {
         namespace
@@ -18,6 +20,8 @@ namespace hgl
 
         const bool InitGraphicsPlatform()
         {
+            InitKeyConvert();
+
             glfw_init=true;
 
             glfw_init_result=glfwInit();

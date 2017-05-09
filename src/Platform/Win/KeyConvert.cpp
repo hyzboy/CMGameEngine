@@ -1,7 +1,6 @@
 ﻿#include<hgl/type/DataType.h>
 #include<hgl/platform/InputDevice.h>
 #include<Windows.h>
-#include<GLFW/glfw3.h>
 
 #ifdef _DEBUG
 #include<hgl/LogInfo.h>
