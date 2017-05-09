@@ -61,9 +61,6 @@ namespace hgl
             visible = true;
 
             default_font=nullptr;
-
-            OnResize=nullptr;
-            OnClose=nullptr;
         }
 
         GraphicsApplication::~GraphicsApplication()
