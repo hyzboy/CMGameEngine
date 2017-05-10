@@ -1,6 +1,7 @@
 #ifndef HGL_ALGORITHM_RAND_INCLUDE
 #define HGL_ALGORITHM_RAND_INCLUDE
 
+#include<cstdlib>
 namespace hgl
 {
     namespace algorithm
@@ -12,6 +13,13 @@ namespace hgl
 
             rngseed = (rngseed * 96314165) + 907633515;
             return rngseed;
+        }
+
+        template<typename T> inline T rand(T min_value,T max_value,T gap)
+        {
+            int count=(max_value-min_value)/gap;
+
+            return min_value+T(::rand()%count)*gap;
         }
     }//namespace algorithm
 }//namespace hgl
