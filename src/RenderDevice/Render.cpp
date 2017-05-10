@@ -45,7 +45,17 @@ namespace hgl
         void ClearDefaultMaterial();
         void InitGlobalShaderStorage();
         void ClearGlobalShaderStorage();
-        bool InitUBO();
+
+        namespace ubo
+        {
+            bool Init();
+        }//namespace ubo
+
+        namespace ssbo
+        {
+            bool Init();
+        }//namespace ssbo
+
 //         void InitFontStorage();
 //         void ClearFontStorage();
 
@@ -69,7 +79,9 @@ namespace hgl
 
             InitVertexBuffer();
 
-            InitUBO();
+            ubo::Init();
+            ssbo::Init();
+
             InitDefaultMaterial();
             InitGlobalShaderStorage();
             InitPrimaryRenderBuffer();

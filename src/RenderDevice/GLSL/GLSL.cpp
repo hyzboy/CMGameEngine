@@ -357,7 +357,7 @@ namespace hgl
         {
             if(!program)
             {
-                LOG_ERROR(u8"Shader::BindUniformBlock("+UTF8String(uniform_block_name)+") program=0");
+                LOG_ERROR(u8"Shader::_GetUniformBlockIndex("+UTF8String(uniform_block_name)+") program=0");
                 return(-1);
             }
 
@@ -365,7 +365,26 @@ namespace hgl
 
             if(index<0)
             {
-                LOG_ERROR(u8"Shader::BindUniformBlock("+UTF8String(uniform_block_name)+") block_index error");
+                LOG_ERROR(u8"Shader::_GetUniformBlockIndex("+UTF8String(uniform_block_name)+") block_index error");
+                return(-1);
+            }
+
+            return index;
+        }
+
+        int Shader::_GetShaderStorageIndex(const char *ssbo_name)
+        {
+            if(!program)
+            {
+                LOG_ERROR(u8"Shader::_GetShaderStorageIndex("+UTF8String(ssbo_name)+") program=0");
+                return(-1);
+            }
+
+            const int index=glGetProgramResourceIndex(program,GL_SHADER_STORAGE_BLOCK,ssbo_name);
+
+            if(index<0)
+            {
+                LOG_ERROR(u8"Shader::_GetShaderStorageIndex("+UTF8String(ssbo_name)+") block_index error");
                 return(-1);
             }
 

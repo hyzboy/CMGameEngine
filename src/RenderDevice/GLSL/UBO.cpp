@@ -4,58 +4,69 @@
 #include<hgl/LogInfo.h>
 #include<hgl/graph/VertexBuffer.h>
 
-//注：较大数据请使用SSBO
+// UBO/SSBO 区别
+// 1.UBO位于显卡常量区，所以速度稍快，但容量小。一般为几十几百K。
+//   SSBO位于通用显存区，容量不受限制
+//
+// 2.UBO 在shader中为只读,SSBO可读可写
+// 3.任何BUFFER都可以绑到SSBO上操作
 
 namespace hgl
 {
     namespace graph
     {
-        //绑定点是全局不可重用的，所以使用一个全局计数
-        static Stack<int> uniform_block_binding_stack;                                               ///<绑定点计数
-
-        static int max_uniform_block_binding=0;
-        static int max_uniform_block_size=0;
-
-        bool InitUBO()
+        namespace
         {
-            glGetIntegerv(GL_MAX_UNIFORM_BUFFER_BINDINGS,&max_uniform_block_binding);
-            glGetIntegerv(GL_MAX_UNIFORM_BLOCK_SIZE,&max_uniform_block_size);
+            //绑定点是全局不可重用的，所以使用一个全局计数
+            static Stack<int> ubo_binding_stack;                                               ///<绑定点计数
 
-            if(max_uniform_block_binding<=0)
-                return(false);
+            static int max_ubo_binding=0;
+            static int max_ubo_size=0;
+        }//namespace
 
-            for(int i=0;i<max_uniform_block_binding;i++)
-                uniform_block_binding_stack.Push(i);
-
-            return(true);
-        }
-
-        int GetMaxShaderBlockBinding()
+        namespace ubo
         {
-            return max_uniform_block_binding;
-        }
+            bool Init()
+            {
+                glGetIntegerv(GL_MAX_UNIFORM_BUFFER_BINDINGS,&max_ubo_binding);
+                glGetIntegerv(GL_MAX_UNIFORM_BLOCK_SIZE,&max_ubo_size);
 
-        int GetMaxShaderBlockSize()
-        {
-            return max_uniform_block_size;
-        }
+                if(max_ubo_binding<=0)
+                    return(false);
 
-        int AcquireShaderBlockBinding()
-        {
-            int result;
+                for(int i=0;i<max_ubo_binding;i++)
+                    ubo_binding_stack.Push(i);
 
-            if(uniform_block_binding_stack.Pop(result))
-                return result;
+                return(true);
+            }
 
-            return -1;
-        }
+            int GetMaxBinding()
+            {
+                return max_ubo_binding;
+            }
 
-        void ReleaseShaderBlockBinding(int bb)
-        {
-            if(bb==-1)return;
+            int GetMaxSize()
+            {
+                return max_ubo_size;
+            }
 
-            uniform_block_binding_stack.Push(bb);
-        }
+            int AcquireBindingPoint()
+            {
+                int result;
+
+                if(ubo_binding_stack.Pop(result))
+                    return result;
+
+                return -1;
+            }
+
+            void ReleaseBindingPoint(int bb)
+            {
+                if(bb==-1)return;
+
+                ubo_binding_stack.Push(bb);
+            }
+        }//namespace ubo
 
     #define UBO_VALUE(name,type,C)    class UBO##name:public UBOValue    \
                                     {    \
@@ -176,35 +187,35 @@ namespace hgl
             {
 #define CREATE_UBOVALUE(type,uvb)    case GL_##type:return(new UBO##uvb(buffer));
 
-                CREATE_UBOVALUE(FLOAT,                Float)
-                CREATE_UBOVALUE(FLOAT_VEC2,            Float2)
-                CREATE_UBOVALUE(FLOAT_VEC3,            Float3)
-                CREATE_UBOVALUE(FLOAT_VEC4,            Float4)
+                CREATE_UBOVALUE(FLOAT,              Float)
+                CREATE_UBOVALUE(FLOAT_VEC2,         Float2)
+                CREATE_UBOVALUE(FLOAT_VEC3,         Float3)
+                CREATE_UBOVALUE(FLOAT_VEC4,         Float4)
 
                 CREATE_UBOVALUE(INT,                Integer)
-                CREATE_UBOVALUE(INT_VEC2,            Integer2)
-                CREATE_UBOVALUE(INT_VEC3,            Integer3)
-                CREATE_UBOVALUE(INT_VEC4,            Integer4)
+                CREATE_UBOVALUE(INT_VEC2,           Integer2)
+                CREATE_UBOVALUE(INT_VEC3,           Integer3)
+                CREATE_UBOVALUE(INT_VEC4,           Integer4)
 
-                CREATE_UBOVALUE(UNSIGNED_INT,        UInteger)
-                CREATE_UBOVALUE(UNSIGNED_INT_VEC2,    UInteger2)
-                CREATE_UBOVALUE(UNSIGNED_INT_VEC3,    UInteger3)
-                CREATE_UBOVALUE(UNSIGNED_INT_VEC4,    UInteger4)
+                CREATE_UBOVALUE(UNSIGNED_INT,       UInteger)
+                CREATE_UBOVALUE(UNSIGNED_INT_VEC2,  UInteger2)
+                CREATE_UBOVALUE(UNSIGNED_INT_VEC3,  UInteger3)
+                CREATE_UBOVALUE(UNSIGNED_INT_VEC4,  UInteger4)
 
-                CREATE_UBOVALUE(BOOL,                Bool)
-                CREATE_UBOVALUE(BOOL_VEC2,            Bool2)
-                CREATE_UBOVALUE(BOOL_VEC3,            Bool3)
-                CREATE_UBOVALUE(BOOL_VEC4,            Bool4)
+                CREATE_UBOVALUE(BOOL,               Bool)
+                CREATE_UBOVALUE(BOOL_VEC2,          Bool2)
+                CREATE_UBOVALUE(BOOL_VEC3,          Bool3)
+                CREATE_UBOVALUE(BOOL_VEC4,          Bool4)
 
                 CREATE_UBOVALUE(FLOAT_MAT2,         Mat2)
-                CREATE_UBOVALUE(FLOAT_MAT3,            Mat3)
-                CREATE_UBOVALUE(FLOAT_MAT4,            Mat4)
-                CREATE_UBOVALUE(FLOAT_MAT2x3,        Mat2x3)
-                CREATE_UBOVALUE(FLOAT_MAT2x4,        Mat2x4)
-                CREATE_UBOVALUE(FLOAT_MAT3x2,        Mat3x2)
-                CREATE_UBOVALUE(FLOAT_MAT3x4,        Mat3x4)
-                CREATE_UBOVALUE(FLOAT_MAT4x2,        Mat4x2)
-                CREATE_UBOVALUE(FLOAT_MAT4x3,        Mat4x3)
+                CREATE_UBOVALUE(FLOAT_MAT3,         Mat3)
+                CREATE_UBOVALUE(FLOAT_MAT4,         Mat4)
+                CREATE_UBOVALUE(FLOAT_MAT2x3,       Mat2x3)
+                CREATE_UBOVALUE(FLOAT_MAT2x4,       Mat2x4)
+                CREATE_UBOVALUE(FLOAT_MAT3x2,       Mat3x2)
+                CREATE_UBOVALUE(FLOAT_MAT3x4,       Mat3x4)
+                CREATE_UBOVALUE(FLOAT_MAT4x2,       Mat4x2)
+                CREATE_UBOVALUE(FLOAT_MAT4x3,       Mat4x3)
 
 #undef CREATE_UBOVALUE
                 default : return nullptr;
@@ -216,7 +227,7 @@ namespace hgl
             block_name=n;
             program=p;
             block_index=i;
-            binding_point=AcquireShaderBlockBinding();
+            binding_point=ubo::AcquireBindingPoint();
             level=l;
 
             use_map=0;
@@ -226,14 +237,14 @@ namespace hgl
 
             glGetActiveUniformBlockiv(program,block_index,GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS,&uniform_count);
 
-            uniform_indices        =new int[uniform_count];
-            uniform_name_size    =new int[uniform_count];
-            uniform_name        =new char *[uniform_count];
-            uniform_size        =new int[uniform_count];
-            uniform_offset        =new int[uniform_count];
-            uniform_type        =new int[uniform_count];
-            uniform_array_stride=new int[uniform_count];
-            uniform_matrix_stride=new int[uniform_count];
+            uniform_indices         =new int[uniform_count];
+            uniform_name_size       =new int[uniform_count];
+            uniform_name            =new char *[uniform_count];
+            uniform_size            =new int[uniform_count];
+            uniform_offset          =new int[uniform_count];
+            uniform_type            =new int[uniform_count];
+            uniform_array_stride    =new int[uniform_count];
+            uniform_matrix_stride   =new int[uniform_count];
 
             glGetActiveUniformBlockiv(program,block_index,GL_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES,uniform_indices);
             glGetActiveUniformsiv(program,uniform_count,(GLuint *)uniform_indices,GL_UNIFORM_NAME_LENGTH,uniform_name_size);
@@ -247,11 +258,11 @@ namespace hgl
                 uniform_name[i][uniform_name_size[i]]=0;
             }
 
-            glGetActiveUniformsiv(program,uniform_count,(GLuint *)uniform_indices,GL_UNIFORM_SIZE,            uniform_size            );
-            glGetActiveUniformsiv(program,uniform_count,(GLuint *)uniform_indices,GL_UNIFORM_OFFSET,        uniform_offset            );
-            glGetActiveUniformsiv(program,uniform_count,(GLuint *)uniform_indices,GL_UNIFORM_TYPE,            uniform_type            );
-            glGetActiveUniformsiv(program,uniform_count,(GLuint *)uniform_indices,GL_UNIFORM_ARRAY_STRIDE,    uniform_array_stride    );
-            glGetActiveUniformsiv(program,uniform_count,(GLuint *)uniform_indices,GL_UNIFORM_MATRIX_STRIDE,    uniform_matrix_stride    );
+            glGetActiveUniformsiv(program,uniform_count,(GLuint *)uniform_indices,GL_UNIFORM_SIZE,          uniform_size            );
+            glGetActiveUniformsiv(program,uniform_count,(GLuint *)uniform_indices,GL_UNIFORM_OFFSET,        uniform_offset          );
+            glGetActiveUniformsiv(program,uniform_count,(GLuint *)uniform_indices,GL_UNIFORM_TYPE,          uniform_type            );
+            glGetActiveUniformsiv(program,uniform_count,(GLuint *)uniform_indices,GL_UNIFORM_ARRAY_STRIDE,  uniform_array_stride    );
+            glGetActiveUniformsiv(program,uniform_count,(GLuint *)uniform_indices,GL_UNIFORM_MATRIX_STRIDE, uniform_matrix_stride   );
 
 #ifdef _DEBUG
             LOG_INFO("uniform block:"+n);
@@ -292,7 +303,7 @@ namespace hgl
             delete[] uniform_name_size;
             delete[] uniform_indices;
             delete[] buffer;
-            ReleaseShaderBlockBinding(binding_point);
+            ubo::ReleaseBindingPoint(binding_point);
             glDeleteBuffers(1,&ubo);
         }
 

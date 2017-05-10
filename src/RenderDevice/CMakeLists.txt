@@ -43,7 +43,8 @@ set(CM_GLSL_SHADER_MAKER_SOURCE     ShaderMaker/ShaderStringList.cpp
 set(CM_GLSL_SOURCE                  GLSL/Shader.cpp
                                     GLSL/GLSL.cpp
                                     GLSL/ShaderStorage.cpp
-                                    GLSL/UBO.cpp)
+                                    GLSL/UBO.cpp
+                                    GLSL/SSBO.cpp)
 
 set(CM_RENDER_SOURCE    #             Debugger_ATI_GPU_Perf.cpp
                                     Render.cpp

@@ -22,6 +22,8 @@ using namespace hgl::graph;
 
 class SpiralSphere
 {
+protected:
+
 	VertexArray *sphere_data[SPHERE_LOD_LEVEL];
 	Material *sphere_mtl[SPHERE_NUMBER];
 
@@ -35,9 +37,9 @@ protected:
 
 public:
 
-	SpiralSphere(const Vector3f &);
-	~SpiralSphere();
+	virtual SpiralSphere(const Vector3f &);
+	virtual ~SpiralSphere();
 
-	void Render(const Matrix4f *,const Matrix4f *);
+	virtual void Render(const Matrix4f *,const Matrix4f *);
 };//class SpiralSphere
 #endif//HGL_EXAMPLE_3D_SPIRAL_SPHERE_INCLUDE
