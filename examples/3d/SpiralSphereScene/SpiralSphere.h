@@ -5,7 +5,7 @@
 #include<hgl/graph/SceneNode.h>
 
 #define SPHERE_NUMBER		360
-#define SPHERE_LOD_LEVEL	8		//分成8级
+#define SPHERE_LOD_LEVEL	12		//分成12级
 
 namespace hgl
 {

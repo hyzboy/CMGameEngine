@@ -221,10 +221,10 @@ namespace hgl
 
             do
             {
-                UpdateTime();                //更新时间
+                UpdateTime();                                   //更新时间
 
-                flow->Update();             //流程刷新
-                flow->ProcCurState();       //处理流程状态
+                flow->Update();                                 //流程刷新
+                flow->ProcCurState();                           //处理流程状态
 
                 if(visible                                      //显示画面
                  &&cur_time-prev_time>=interval_time)           //刷新时间到了
