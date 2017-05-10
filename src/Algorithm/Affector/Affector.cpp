@@ -41,23 +41,23 @@ namespace hgl
             * @param ao 影响器指针
             * @return 是否添加成功
             */
-            bool AffectorControl::Add(const UTF16String &name, AffectorObject *ao)
+            bool AffectorControl::Add(const UTF8String &name, AffectorObject *ao)
             {
                 if (!ao)
                 {
-                    LOG_ERROR(U16_TEXT("AffectorControl 添加的新对象指针为空,name:") + name);
+                    LOG_ERROR(U8_TEXT("AffectorControl 添加的新对象指针为空,name:") + name);
                     return(false);
                 }
 
                 if (name.IsEmpty())
                 {
-                    LOG_ERROR(U16_TEXT("AffectorControl 添加的新对象没有名称,addr:") + PointerToHexUTF16String(ao));
+                    LOG_ERROR(U8_TEXT("AffectorControl 添加的新对象没有名称,addr:") + PointerToHexUTF8String(ao));
                     return(false);
                 }
 
                 if (affector_list.Find(name) != -1)
                 {
-                    LOG_ERROR(U16_TEXT("AffectorControl重复添加的对象,name:\"") + name + U16_TEXT("\",addr:") + PointerToHexUTF16String(ao));
+                    LOG_ERROR(U8_TEXT("AffectorControl重复添加的对象,name:\"") + name + U8_TEXT("\",addr:") + PointerToHexUTF8String(ao));
                     return(false);
                 }
 
@@ -71,7 +71,7 @@ namespace hgl
             * @param name 要移除的影响器名称
             * @return 是否移除成功
             */
-            bool AffectorControl::Unlink(const UTF16String &name)
+            bool AffectorControl::Unlink(const UTF8String &name)
             {
                 if (name.IsEmpty())
                 {
@@ -103,7 +103,7 @@ namespace hgl
             * @param name 要删除的影响器名称
             * @return 是否删除成功
             */
-            bool AffectorControl::Delete(const UTF16String &name)
+            bool AffectorControl::Delete(const UTF8String &name)
             {
                 if (name.IsEmpty())
                 {
@@ -165,7 +165,7 @@ namespace hgl
             * @return 影响器指针
             * @return NULL 失败
             */
-            AffectorObject *AffectorControl::Get(const UTF16String &name)
+            AffectorObject *AffectorControl::Get(const UTF8String &name)
             {
                 AffectorObject *ao;
 

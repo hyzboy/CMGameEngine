@@ -64,16 +64,16 @@ namespace hgl
 
 				    dir=v;
 
-				    hglSetProperty(Power,		this,Thrust2D::GetPower,	Thrust2D::SetPower);
-				    hglSetProperty(DecPower,	this,Thrust2D::GetDecPower,	Thrust2D::SetDecPower);
-				    hglSetProperty(Direction,	this,Thrust2D::GetDir,		Thrust2D::SetDir);
+				    hglSetProperty(Power,		this,Thrust::GetPower,	    Thrust::SetPower    );
+				    hglSetProperty(DecPower,	this,Thrust::GetDecPower,	Thrust::SetDecPower );
+				    hglSetProperty(Direction,	this,Thrust::GetDir,		Thrust::SetDir      );
 
 				    hglSetPropertyRead(DirectionPower,this,Thrust2D::GetDirPower);
 			    }
 
 			    virtual ~Thrust()=default;
 
-			    virtual const u16char *GetClassName(){return u"Thrust";}								///<取得类名
+			    virtual const char *GetClassName(){return U8_TEXT("Thrust");}							///<取得类名
 
 			    virtual void Update()
 			    {

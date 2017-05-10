@@ -63,7 +63,7 @@ namespace hgl
 
 			    virtual ~Gravitation()=default;
 
-			    virtual const u16char *GetClassName(){return u"Gravitation";}							///<取得类名
+			    virtual const char *GetClassName(){return U8_TEXT("Gravitation");}						///<取得类名
 
 			    virtual void Update()
 			    {

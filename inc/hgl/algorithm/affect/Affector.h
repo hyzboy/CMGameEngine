@@ -29,7 +29,7 @@ namespace hgl
 
             protected:	//属性
 
-                MapObject<UTF16String, AffectorObject> affector_list;										///<影响器列表
+                MapObject<UTF8String, AffectorObject> affector_list;										///<影响器列表
                 ObjectList<AffectorObject> delete_list;														///<待删除列表
 
             public:		//公开属性
@@ -43,10 +43,10 @@ namespace hgl
                 AffectorControl();																			///<本类构造函数
                 virtual ~AffectorControl() { DeleteAll(); }													///<本类析构函数
 
-                virtual const u16char *GetClassName() { return U16_TEXT("AffectorControl"); }					///<取得类名
+                virtual const char *GetClassName() { return U8_TEXT("AffectorControl"); }				    ///<取得类名
 
-                virtual bool Add(const UTF16String &, AffectorObject *);										///<添加一个影响器到控制器中
-                bool Add(AffectorObject *ao)														///<使用缺省名称添加一个影响器到控制器中
+                virtual bool Add(const UTF8String &, AffectorObject *);										///<添加一个影响器到控制器中
+                bool Add(AffectorObject *ao)														        ///<使用缺省名称添加一个影响器到控制器中
                 {
                     if (!ao)return(false);
 
@@ -55,16 +55,16 @@ namespace hgl
                     return(true);
                 }
 
-                virtual bool Unlink(const UTF16String &);													///<从控制器中移除一个影响器
+                virtual bool Unlink(const UTF8String &);													///<从控制器中移除一个影响器
                 virtual bool Unlink(AffectorObject *);														///<从控制器中移除一个影响器
-                virtual bool Delete(const UTF16String &);													///<从控制器中山删除一个影响器
+                virtual bool Delete(const UTF8String &);													///<从控制器中山删除一个影响器
                 virtual bool Delete(AffectorObject *);														///<从控制器中移删除一个影响器
                 virtual void UnlinkAll();																	///<解除所有影响器关联
                 virtual void DeleteAll();																	///<删除所有影响器
 
-                void Destroy(AffectorObject *);														///<销毁一个影响器,添加到待删除列表
+                void Destroy(AffectorObject *);														        ///<销毁一个影响器,添加到待删除列表
 
-                virtual AffectorObject *Get(const UTF16String &);											///<根据名称取得一个控制器
+                virtual AffectorObject *Get(const UTF8String &);											///<根据名称取得一个控制器
 
             public:		//方法
 

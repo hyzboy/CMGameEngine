@@ -15,7 +15,7 @@ namespace hgl
 	        /**
 	        * 影响器对像
 	        */
-            class AffectorObject:public Object                                                      ///<影响器对像
+            class AffectorObject                                                                    ///<影响器对像
 	        {
 	        protected:
 
@@ -28,7 +28,7 @@ namespace hgl
 
 		        virtual void SetControl(AffectorControl *ac){control=ac;}							///<设置控制器
 
-		        virtual const u16char *GetClassName(){return nullptr;}								///<取得类名
+		        virtual const char *GetClassName(){return nullptr;}								    ///<取得类名
 
 		        virtual bool Start(){return(true);}													///<开始
 		        virtual bool Pause(){return(true);}													///<暂停

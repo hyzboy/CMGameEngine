@@ -16,7 +16,7 @@ namespace hgl
 		    */
 		    template<typename T> class Fade:public AffectorObject										///淡入淡出影响器
 		    {
-			    UTF16String name;
+			    UTF8String name;
 
 			    TrackTimer *track;
 
@@ -54,7 +54,7 @@ namespace hgl
 
 		    public:
 
-			    Fade(const UTF16String &n,TrackTimer *tt)
+			    Fade(const UTF8String &n,TrackTimer *tt)
 			    {
 				    name=n;
 				    track=tt;/*
@@ -71,7 +71,7 @@ namespace hgl
 
 			    virtual ~Fade()=default;
 
-			    const u16char *GetClassName(){return name.wc_str();}									///<返回类名
+			    const char *GetClassName(){return name.c_str();}									    ///<返回类名
 
 			    void Update()
 			    {
