@@ -87,7 +87,8 @@ namespace hgl
 				    power-=power*(dec_power*gap);		//力量衰减
 			    }
 		    };//class Thrust
-
+            
+		    using Thrust1f=Thrust<Vector1f>;
 		    using Thrust2f=Thrust<Vector2f>;
 		    using Thrust3f=Thrust<Vector3f>;
 	    }//namespace affect

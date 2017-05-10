@@ -1,4 +1,5 @@
 ﻿#include<hgl/algorithm/affect/Timer.h>
+#include<hgl/algorithm/Rand.h>
 
 namespace hgl
 {
@@ -12,7 +13,7 @@ namespace hgl
 		    * @param s 速度/秒
 		    */
 		    template<typename T>
-		    VectorTrace<T>::VectorTrace(Timer *t,const Vertex2f &c,const Vertex2f &s)
+		    VectorTrace<T>::VectorTrace(Timer *t,const T &c,const T &s)
 		    {
 			    time=t;
 
@@ -28,6 +29,29 @@ namespace hgl
 
 			    OnToEnd		=nullptr;
 		    }
+
+            namespace 
+            {
+                template<typename T> void SpeedAddRand(T &speed);
+
+                template<Vector1f> inline void SpeedAddRand(Vector1f &speed)
+                {
+                    speed.x=rand(-1.0,1.0,0.01);
+                }
+
+                template<Vector2f> inline void SpeedAddRand(Vector2f &speed)
+                {
+                    speed.x=rand(-1.0,1.0,0.01);
+                    speed.y=rand(-1.0,1.0,0.01);
+                }
+
+                template<Vector3f> inline void SpeedAddRand(Vector3f &speed)
+                {
+                    speed.x=rand(-1.0,1.0,0.01);
+                    speed.y=rand(-1.0,1.0,0.01);
+                    speed.z=rand(-1.0,1.0,0.01);
+                }
+            }//namespace
 
 		    template<typename T>
 		    void VectorTrace<T>::Update()
@@ -71,10 +95,7 @@ namespace hgl
 
 				    //增加一点干扰，更具真实性
 				    if((FastRand()&0x77777777)==0)
-				    {
-					    Speed.x+=FastRand(-1.0,1.0,0.01);
-					    Speed.y+=FastRand(-1.0,1.0,0.01);
-				    }
+                        SpeedAddRand<T>(Speed);
 
 				    distance = Speed.Length(0,0);
 

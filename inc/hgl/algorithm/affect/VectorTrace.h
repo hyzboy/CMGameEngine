@@ -46,7 +46,8 @@ namespace hgl
 
 			    virtual void Update();                                                                  ///<更新坐标点
 		    };//class VectorTrace
-
+            
+		    using VectorTrace1f=VectorTrace<Vector1f>;
 		    using VectorTrace2f=VectorTrace<Vector2f>;
 		    using VectorTrace3f=VectorTrace<Vector3f>;
 	    }//namespace affect
