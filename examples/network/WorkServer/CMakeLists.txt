@@ -1,3 +1,3 @@
-﻿add_executable(WorkServer WorkServer.cpp ${HGL_CONSOLE_MAIN_SOURCE})
+﻿add_executable(Example.Network.WorkServer WorkServer.cpp ${HGL_CONSOLE_MAIN_SOURCE})
 
-target_link_libraries(WorkServer ${HGL_CONSOLE_LIB})
+target_link_libraries(Example.Network.WorkServer ${HGL_CONSOLE_LIB})

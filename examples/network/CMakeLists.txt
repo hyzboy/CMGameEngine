@@ -11,11 +11,11 @@ add_subdirectory(Web843Server)
 
 #add_subdirectory(WorkServer)
 
-add_executable(DomainParse DomainParse.cpp ${HGL_CONSOLE_MAIN_SOURCE})
-target_link_libraries(DomainParse ${HGL_CONSOLE_LIB})
+add_executable(Example.Network.DomainParse DomainParse.cpp ${HGL_CONSOLE_MAIN_SOURCE})
+target_link_libraries(Example.Network.DomainParse ${HGL_CONSOLE_LIB})
 
-add_executable(IPSupport IPSupport.cpp)
-target_link_libraries(IPSupport ${HGL_CONSOLE_LIB})
+add_executable(Example.Network.IPSupport IPSupport.cpp)
+target_link_libraries(Example.Network.IPSupport ${HGL_CONSOLE_LIB})
 
-add_executable(IP2Hostname IP2Hostname.cpp ${HGL_CONSOLE_MAIN_SOURCE})
-target_link_libraries(IP2Hostname ${HGL_CONSOLE_LIB})
+add_executable(Example.Network.IP2Hostname IP2Hostname.cpp ${HGL_CONSOLE_MAIN_SOURCE})
+target_link_libraries(Example.Network.IP2Hostname ${HGL_CONSOLE_LIB})

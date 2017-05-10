@@ -1,3 +1,3 @@
-﻿add_executable(TimeCount count.cpp)
+﻿add_executable(Example.Time.TimeCount count.cpp)
 
-target_link_libraries(TimeCount ${HGL_CONSOLE_LIB})
+target_link_libraries(Example.Time.TimeCount ${HGL_CONSOLE_LIB})

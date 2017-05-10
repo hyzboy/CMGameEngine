@@ -1,3 +1,3 @@
-﻿add_executable(TCPPBServer main.cpp msg.pb.cc ${HGL_CONSOLE_MAIN_SOURCE})
+﻿add_executable(Example.Network.TCPPBServer main.cpp msg.pb.cc ${HGL_CONSOLE_MAIN_SOURCE})
 
-target_link_libraries(TCPPBServer ${HGL_CONSOLE_LIB} protobuf)
+target_link_libraries(Example.Network.TCPPBServer ${HGL_CONSOLE_LIB} protobuf)

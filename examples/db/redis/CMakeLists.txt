@@ -1,3 +1,3 @@
-add_executable(SADD SADD.cpp)
+add_executable(Examples.DB.Redis.SADD SADD.cpp)
 
-target_link_libraries(SADD ${HGL_CONSOLE_LIB} RedisClient)
+target_link_libraries(Examples.DB.Redis.SADD ${HGL_CONSOLE_LIB} RedisClient)
