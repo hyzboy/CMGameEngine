@@ -1,3 +1,3 @@
-add_executable(IndexTest indextest.cpp)
+add_executable(Example.DataType.MapTest MapTest.cpp)
 
-TARGET_LINK_LIBRARIES(IndexTest ${HGL_CONSOLE_LIB})
+TARGET_LINK_LIBRARIES(Example.DataType.MapTest ${HGL_CONSOLE_LIB})
