@@ -37,7 +37,7 @@ protected:
 
 public:
 
-	virtual SpiralSphere(const Vector3f &);
+	SpiralSphere(const Vector3f &);
 	virtual ~SpiralSphere();
 
 	virtual void Render(const Matrix4f *,const Matrix4f *);
