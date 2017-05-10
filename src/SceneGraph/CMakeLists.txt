@@ -1,4 +1,5 @@
-﻿SET(BASE_GRAPH_OBJECT_SOURCE     Object/FlowControl.cpp)
+﻿SET(BASE_GRAPH_OBJECT_SOURCE    Object/FlowControl.cpp
+                                Object/RootFlowControl.cpp)
 #                                 Object/MultiFlowControl.cpp
 #                                 Object/RadioObject.cpp
 #                                 Object/VisualObject.cpp

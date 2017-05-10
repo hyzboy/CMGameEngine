@@ -1,71 +1,70 @@
-#include<hgl/object/EventObject.h>
-#include<gl/glfw.h>
-#include<windows.h>
+﻿#include<hgl/type/DataType.h>
+#include<hgl/platform/InputDevice.h>
+#include<Windows.h>
+
+#ifdef _DEBUG
+#include<hgl/LogInfo.h>
+#endif//_DEBUG
 
 namespace hgl
 {
-	bool GetKeyState(KeyboardButton key)
-	{
-		return glfwGetKey(key);
-	}
-	
 	static KeyboardButton KeyConvert[256];
 
 	void InitKeyConvert()
 	{
-		uint i;
+		int i;
 
 		memset(KeyConvert,0,sizeof(KeyConvert));
 
 		KeyConvert[VK_ESCAPE    ]=kbEsc;
 		for(i=VK_F1;i<=VK_F12;i++)KeyConvert[i]=(KeyboardButton)(kbF1+i-VK_F1);
 
-		KeyConvert['`']=kbGrave;
+		KeyConvert['`'          ]=kbGrave;
 		for(i='0';i<='9';i++)KeyConvert[i]=(KeyboardButton)(kb0+i-'0');
-		KeyConvert['-']=kbMinus;
-		KeyConvert['=']=kbEquals;
-		KeyConvert['\\']=kbBackSlash;
+		KeyConvert['-'          ]=kbMinus;
+		KeyConvert['='          ]=kbEquals;
+		KeyConvert['\\'         ]=kbBackSlash;
 		KeyConvert[VK_BACK      ]=kbBackSpace;
 
 		KeyConvert[VK_TAB       ]=kbTab;
-		KeyConvert['Q']=kbQ;
-		KeyConvert['W']=kbW;
-		KeyConvert['E']=kbE;
-		KeyConvert['R']=kbR;
-		KeyConvert['T']=kbT;
-		KeyConvert['Y']=kbY;
-		KeyConvert['U']=kbU;
-		KeyConvert['I']=kbI;
-		KeyConvert['O']=kbO;
-		KeyConvert['P']=kbP;
-		KeyConvert['[']=kbLeftBracket;
-		KeyConvert[']']=kbRightBracket;
+		KeyConvert['Q'          ]=kbQ;
+		KeyConvert['W'          ]=kbW;
+		KeyConvert['E'          ]=kbE;
+		KeyConvert['R'          ]=kbR;
+		KeyConvert['T'          ]=kbT;
+		KeyConvert['Y'          ]=kbY;
+		KeyConvert['U'          ]=kbU;
+		KeyConvert['I'          ]=kbI;
+		KeyConvert['O'          ]=kbO;
+		KeyConvert['P'          ]=kbP;
+		KeyConvert['['          ]=kbLeftBracket;
+		KeyConvert[']'          ]=kbRightBracket;
 
 		KeyConvert[VK_CAPITAL   ]=kbCapsLock;
-		KeyConvert['A']=kbA;
-		KeyConvert['S']=kbS;
-		KeyConvert['D']=kbD;
-		KeyConvert['F']=kbF;
-		KeyConvert['G']=kbG;
-		KeyConvert['H']=kbH;
-		KeyConvert['J']=kbJ;
-		KeyConvert['K']=kbK;
-		KeyConvert['L']=kbL;
-		KeyConvert[';']=kbSemicolon;
-		KeyConvert['\'']=kbApostrophe;
+		KeyConvert['A'          ]=kbA;
+		KeyConvert['S'          ]=kbS;
+		KeyConvert['D'          ]=kbD;
+		KeyConvert['F'          ]=kbF;
+		KeyConvert['G'          ]=kbG;
+		KeyConvert['H'          ]=kbH;
+		KeyConvert['J'          ]=kbJ;
+		KeyConvert['K'          ]=kbK;
+		KeyConvert['L'          ]=kbL;
+		KeyConvert[';'          ]=kbSemicolon;
+		KeyConvert['\''         ]=kbApostrophe;
 		KeyConvert[VK_RETURN    ]=kbEnter;
 
 		KeyConvert[VK_LSHIFT    ]=kbLeftShift;
-		KeyConvert['Z']=kbZ;
-		KeyConvert['X']=kbX;
-		KeyConvert['C']=kbC;
-		KeyConvert['V']=kbV;
-		KeyConvert['B']=kbB;
-		KeyConvert['N']=kbN;
-		KeyConvert['M']=kbM;
-		KeyConvert[',']=kbComma;
-		KeyConvert['.']=kbPeriod;
-		KeyConvert['/']=kbSlash;
+		KeyConvert['Z'          ]=kbZ;
+		KeyConvert['X'          ]=kbX;
+		KeyConvert['C'          ]=kbC;
+		KeyConvert['V'          ]=kbV;
+		KeyConvert['B'          ]=kbB;
+		KeyConvert['N'          ]=kbN;
+		KeyConvert['M'          ]=kbM;
+		KeyConvert[','          ]=kbComma;
+		KeyConvert['.'          ]=kbPeriod;
+		KeyConvert['/'          ]=kbSlash;
 		KeyConvert[VK_RSHIFT    ]=kbRightShift;
 
 		KeyConvert[VK_LCONTROL  ]=kbLeftCtrl;
@@ -128,7 +127,7 @@ namespace hgl
 		KeyConvert[VK_OEM_7		]=kbApostrophe;
 	}
 
-	uint ConvertOSKey(uint key)
+	KeyboardButton ConvertOSKey(uint key)
 	{
 		if(key<0||key>=256)return(kb_NONE);
 
@@ -158,10 +157,12 @@ namespace hgl
 #ifdef _DEBUG
 		if(KeyConvert[key]==0)
 		{
-			u16char name[64];
+			wchar_t name[64];
 
-			GetKeyNameText(key,name,64);
-			PutInfo(u"δ֪�İ���: %02X ,name: %s",key,name);
+			::GetKeyNameTextW(key,name,64);
+
+			LOG_INFO(WideString(L"Unknow Key: " )+WideString(key)
+                    +WideString(L" ,name: "     )+WideString(name));
 		}
 #endif _DEBUG
 

@@ -1,5 +1,6 @@
 ﻿#ifndef HGL_INPUT_DEVICE_INCLUDE
 #define HGL_INPUT_DEVICE_INCLUDE
+
 namespace hgl
 {
 	/**
@@ -61,43 +62,44 @@ namespace hgl
 		kbBackSpace,        ///< 退格键
 
 		kbTab,              ///<Tab键
-		kbQ,                ///<Q
-		kbW,                ///<W
+
+		kbA,                ///<A
+		kbB,                ///<B
+		kbC,                ///<C
+		kbD,                ///<D
 		kbE,                ///<E
-		kbR,                ///<R
-		kbT,                ///<T
-		kbY,                ///<Y
-		kbU,                ///<U
+		kbF,                ///<F
+		kbG,                ///<G
+		kbH,                ///<H
 		kbI,                ///<I
+		kbJ,                ///<J
+		kbK,                ///<K
+		kbL,                ///<L
+		kbM,                ///<M
+		kbN,                ///<N
 		kbO,                ///<O
 		kbP,                ///<P
+		kbQ,                ///<Q
+		kbR,                ///<R
+		kbS,                ///<S
+		kbT,                ///<T
+		kbU,                ///<U
+		kbV,                ///<V
+		kbW,                ///<W
+		kbX,                ///<X
+		kbY,                ///<Y
+		kbZ,                ///<Z
 
 		kbLeftBracket,      ///<[
 		kbRightBracket,     ///<]
 
 		kbCapsLock,         ///<大写锁定键
-		kbA,                ///<A
-		kbS,                ///<S
-		kbD,                ///<D
-		kbF,                ///<F
-		kbG,                ///<G
-		kbH,                ///<H
-		kbJ,                ///<J
-		kbK,                ///<K
-		kbL,                ///<L
 
 		kbSemicolon,        ///<; (分号)
 		kbApostrophe,       ///<' (单引号)
 		kbEnter,            ///<回车键
 
 		kbLeftShift,        ///<左边的Shift键
-		kbZ,                ///<Z
-		kbX,                ///<X
-		kbC,                ///<C
-		kbV,                ///<V
-		kbB,                ///<B
-		kbN,                ///<N
-		kbM,                ///<M
 
 		kbComma,            ///<, (逗号)
 		kbPeriod,           ///<. (句号)
@@ -110,6 +112,7 @@ namespace hgl
 		kbSpace,            ///<空格键
 		kbRightAlt,         ///<右边的Alt键
 		kbRightOS,			///<右边的OS键(Win/Apple键)
+        kbRightMenu,        ///<右边的Menu键
 		kbRightCtrl,        ///<右边的Ctrl键
 
 		//中键盘区
@@ -131,23 +134,23 @@ namespace hgl
 
 		//小键盘区
 		kbNumLock,          ///<小键盘 数字锁定键
-		kbNumDivide,        ///<小键盘 /
-		kbNumMultiply,      ///<小键盘 *
-		kbNumSubtract,      ///<小键盘 -
-
-		kbNum7,             ///<小键盘 7
-		kbNum8,             ///<小键盘 8
-		kbNum9,             ///<小键盘 9
-		kbNum4,             ///<小键盘 4
-		kbNum5,             ///<小键盘 5
-		kbNum6,             ///<小键盘 6
 
 		kbNumAdd,           ///<小键盘 +
-
+		kbNumSubtract,      ///<小键盘 -
+		kbNumMultiply,      ///<小键盘 *
+		kbNumDivide,        ///<小键盘 /
+            
+		kbNum0,             ///<小键盘 0
 		kbNum1,             ///<小键盘 1
 		kbNum2,             ///<小键盘 2
 		kbNum3,             ///<小键盘 3
-		kbNum0,             ///<小键盘 0
+		kbNum4,             ///<小键盘 4
+		kbNum5,             ///<小键盘 5
+		kbNum6,             ///<小键盘 6
+		kbNum7,             ///<小键盘 7
+		kbNum8,             ///<小键盘 8
+		kbNum9,             ///<小键盘 9
+
 		kbNumDecimal,       ///<小键盘 . (小数点/删除键)
 		kbNumEnter,         ///<小键盘 回车键
 
@@ -193,21 +196,5 @@ namespace hgl
 		//XBOX/XBOX360
 //		jbXBOX,						//西瓜键
 	};
-
-	/**
-	* 取得键盘按键状态
-	* @param key 按键
-	* @return true 按下状态
-	* @return false 弹起状态
-	*/
-	bool GetKeyState(KeyboardButton key);
-
-	/**
-	* 取得游戏杆按键状态
-	* @param key 按键
-	* @return true 按下状态
-	* @return false 弹起状态
-	*/
-//	bool GetJotState(JoystickButton);
 }//namespace hgl
 #endif//HGL_INPUT_DEVICE_INCLUDE

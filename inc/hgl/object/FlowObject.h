@@ -2,6 +2,8 @@
 #define HGL_FLOW_OBJECT_INCLUDE
 
 #include<hgl/object/_FlowObject.h>
+#include<hgl/platform/InputDevice.h>
+#include<hgl/algorithm/VectorMath.h>
 namespace hgl
 {
     class FlowControl;
@@ -24,13 +26,29 @@ namespace hgl
         virtual void JoinControl(FlowControl *fc){control=fc;}
         virtual void UnjoinControl(FlowControl *){control=nullptr;}
 
+    public: //输入事件
+        
+        virtual void OnClose        (){}                                                            ///<窗口关闭事件
+        virtual void OnResize       (int,int){}                                                     ///<窗口尺寸调整事件
+        virtual void OnRotate       (int){}                                                         ///<屏幕旋转事件
+
+        virtual bool OnMouseMove    (int,int){return(false);}                                       ///<鼠标移动事件
+        virtual bool OnMouseWheel   (int,int){return(false);}                                       ///<鼠标滚轮事件
+
+        virtual bool OnMouseDown    (MouseButton){return(false);}                                   ///<鼠标按键按下事件
+        virtual bool OnMouseUp      (MouseButton){return(false);}                                   ///<鼠标按键弹起事件
+        virtual bool OnMouseRepeat  (MouseButton){return(false);}                                   ///<鼠标按键自动击发事件(持续按住不放产生的事件)
+
+        virtual bool OnKeyDown      (KeyboardButton){return(false);}                                ///<按键按下事件
+        virtual bool OnKeyUp        (KeyboardButton){return(false);}                                ///<按键弹起事件
+        virtual bool OnKeyRepeat    (KeyboardButton){return(false);}                                ///<按键自动击发事件(持续按住不放产生的事件)
+
+        virtual bool OnChar         (os_char){return(false);}                                       ///<字符输入
+
 	public: //方法
 
         using _FlowObject<FlowObject>::_FlowObject;                                                 ///<本类构造函数
 		virtual ~FlowObject(){}                                                                    	///<本类析构函数
-
-        virtual void OnResize(int,int){}                                                            ///<画布尺寸调整事件
-        virtual void OnRotate(int){}                                                                ///<屏幕旋转事件
 
         virtual void OnToBack()override{is_back=true;}
         virtual void OnResume()override{is_back=false;is_draw=true;}

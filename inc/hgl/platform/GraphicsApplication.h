@@ -3,8 +3,7 @@
 
 #include<hgl/platform/BaseApplication.h>
 #include<hgl/platform/GraphicsSystemInitInfo.h>
-#include<hgl/platform/EventBase.h>
-#include<hgl/object/FlowControl.h>
+#include<hgl/object/RootFlowControl.h>
 
 namespace hgl
 {
@@ -27,11 +26,9 @@ namespace hgl
 			Window *win;
 			bool wait_active;
 
-            AppEventBase *app_event_base;                                                               ///<根事件
-
 		protected:
 
-			FlowControl *flow;                                                       					///<流程控制器
+			RootFlowControl *flow;                                                       				///<流程控制器
 
 			TileFont *default_font;
 
@@ -51,22 +48,12 @@ namespace hgl
 			Property<uint32>		FPS;																///<当前刷新频率
 			Property<TileFont *>	DefaultFont;														///<缺省字体(GUI模块使用)
 
-		public:	//事件
-
-            virtual bool ProcClose();
-            virtual bool ProcResize(int,int);
-
-			DefEvent(void,OnResize,(int,int));															///<窗口大小被调整了
-			DefEvent(bool,OnClose,());																	///<窗口被关闭了
-
             virtual void ProcChangeActiveObject(FlowObject *){};
 
 		public:	//方法
 
-			GraphicsApplication(FlowControl *fc=nullptr);
+			GraphicsApplication(RootFlowControl *fc=nullptr);
 			virtual ~GraphicsApplication();
-
-            AppEventBase *GetEventBase(){return app_event_base;}                                        ///<取得根事件收发器
 
 			virtual bool Init(GraphicsSystemInitInfo *);												///<初始化当前应用程序
 

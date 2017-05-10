@@ -276,7 +276,7 @@ namespace hgl
                 if(FindFileData.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY)
                 {
                     if(!config->proc_folder)continue;
-                    
+
                     if(config->sub_folder)
                     {
                         sub_efc=config->CreateSubConfig(config,FindFileData.cFileName);
@@ -291,7 +291,7 @@ namespace hgl
                 else
                 {
                     if(!config->proc_file)continue;
-                    
+
                     ++count;
                 }
 

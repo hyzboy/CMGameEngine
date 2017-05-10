@@ -42,11 +42,12 @@ namespace hgl
 			    VectorTrace2D(Timer *,const T &coord,const T &speed);
 			    virtual ~VectorTrace()=default;
 
-			    virtual const u16char *GetClassName()const{return u"VectorTrace";}						///<取得类名
+			    virtual const char *GetClassName()const{return U8_TEXT("VectorTrace");}					///<取得类名
 
 			    virtual void Update();                                                                  ///<更新坐标点
 		    };//class VectorTrace
-
+            
+		    using VectorTrace1f=VectorTrace<Vector1f>;
 		    using VectorTrace2f=VectorTrace<Vector2f>;
 		    using VectorTrace3f=VectorTrace<Vector3f>;
 	    }//namespace affect

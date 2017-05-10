@@ -38,7 +38,7 @@ namespace hgl
                 Timer();
                 virtual ~Timer() = default;
 
-                virtual const u16char *GetClassName()const { return U16_TEXT("Timer"); }					///<取得类名
+                virtual const char *GetClassName()const { return U8_TEXT("Timer"); }					///<取得类名
 
                 virtual bool Start();
                 virtual bool Pause();
@@ -73,14 +73,14 @@ namespace hgl
 
             public:	//事件
 
-                DefEvent(void, OnEnd, (AffectorControl *, AffectorObject *));								///<结束事件
+                DefEvent(void, OnEnd, (AffectorControl *, AffectorObject *));							///<结束事件
 
             public:	//方法
 
                 TrackTimer(double = 1.0);
                 virtual ~TrackTimer() = default;
 
-                virtual const u16char *GetClassName()const { return U16_TEXT("TrackTimer"); }			///<取得类名
+                virtual const char *GetClassName()const { return U8_TEXT("TrackTimer"); }			    ///<取得类名
 
                 virtual bool Start();
 

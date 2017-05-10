@@ -44,12 +44,12 @@ namespace hgl
         * 图形应用程序基类构造函数
         * @param fc 自定义流程控制器
         */
-        GraphicsApplication::GraphicsApplication(FlowControl *fc):BaseApplication()
+        GraphicsApplication::GraphicsApplication(RootFlowControl *fc):BaseApplication()
         {
             if(fc)
                 flow=fc;
             else
-                flow=new FlowControl;
+                flow=new RootFlowControl;
 
     //         SetPointer(hfpRootFlowControl,flow);
 
@@ -61,14 +61,6 @@ namespace hgl
             visible = true;
 
             default_font=nullptr;
-
-            app_event_base=new AppEventBase;
-
-            SetEventCall(app_event_base->Resize.OnProc,this,GraphicsApplication,ProcResize);
-            SetEventCall(app_event_base->Close.OnProc,this,GraphicsApplication,ProcClose);
-
-            OnResize=nullptr;
-            OnClose=nullptr;
         }
 
         GraphicsApplication::~GraphicsApplication()
@@ -87,8 +79,6 @@ namespace hgl
             SAFE_CLEAR(flow);
 
     /*        gui::CloseGUI();*/
-
-            delete app_event_base;
         }
 
         void GraphicsApplication::SetFPS(uint fps)
@@ -196,8 +186,7 @@ namespace hgl
             else
                 PutInfo(u"不使用GUI系统！");
     */
-            win->InitProcEvent(app_event_base);        //设置GLFW事件函数回调
-            app_event_base->Join(flow->GetEventBase()); //绑定应用事件收发
+            win->InitProcEvent(flow);        //设置GLFW事件函数回调
 
             return(true);
         }
@@ -261,46 +250,6 @@ namespace hgl
             while(flow->GetState()!=fosExitApp);
 
             return(0);
-        }
-    }//namespace graph
-
-    namespace graph
-    {
-        bool GraphicsApplication::ProcResize(int w,int h)
-        {
-            graph::SetViewport(0,0,w,h);
-
-            if (w > 0 && h > 0)
-            {
-                visible = true;
-                graph::Ortho2DMatrix = ortho2d(w, h);
-            }
-            else
-            {
-                visible = false;
-                return(false);
-            }
-
-            SafeCallEvent(OnResize,(w,h));
-
-            flow->OnResize(w,h);
-
-            return(true);
-        }
-
-        bool GraphicsApplication::ProcClose()
-        {
-            if(OnClose!=nullptr)
-            {
-                bool result=OnClose();
-
-                if(!result)
-                    return(false);
-            }
-
-            flow->ExitApp();
-
-            return(true);
         }
     }//namespace graph
 }//namespace hgl
