@@ -194,7 +194,7 @@ namespace hgl
 		jbSelect	=jb8,		jbStart		=jb9,
 
 		//XBOX/XBOX360
-//		jbXBOX,						//西瓜键
+		jbXBOX,						//西瓜键
 	};
 }//namespace hgl
 #endif//HGL_INPUT_DEVICE_INCLUDE
