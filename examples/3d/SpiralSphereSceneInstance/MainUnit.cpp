@@ -21,11 +21,12 @@ public:
     {
     }
 
-	~SpiralSphereInstance();
+	~SpiralSphereInstance()
+    {
+    }
 
 	void SpiralSphereInstance::Render(const Matrix4f *proj,const Matrix4f *mv)
     {
-
     }
 };//class SpiralSphereInstance:public SpiralSphere
 
