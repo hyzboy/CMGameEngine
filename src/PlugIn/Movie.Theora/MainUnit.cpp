@@ -4,11 +4,11 @@
 
 using namespace hgl;
 
-const wchar_t plugin_intro[]=L"Theora”∞∆¨Ω‚¬Î∆˜(LibTheora 1.1.1,LibOGG 1.3.2,2015-06-18)";
+const wchar_t plugin_intro[]=L"TheoraÂΩ±ÁâáËß£Á†ÅÂô®(LibTheora 1.1.1,LibOGG 1.3.2,2015-06-18)";
 
 typedef TheoraPlayer MOVIE;
 //--------------------------------------------------------------------------------------------------
-MOVIE * __cdecl OpenMovie(Stream *file,SeekFunc sf,EofFunc ef,ReadFunc rf)
+MOVIE * OpenMovie(Stream *file,SeekFunc sf,EofFunc ef,ReadFunc rf)
 {
 	TheoraPlayer *tp=new TheoraPlayer;
 
@@ -19,7 +19,7 @@ MOVIE * __cdecl OpenMovie(Stream *file,SeekFunc sf,EofFunc ef,ReadFunc rf)
 	return(NULL);
 }
 
-bool __cdecl GetMovieInfo(MOVIE *tp,int &width,int &height,int &fps)
+bool GetMovieInfo(MOVIE *tp,int &width,int &height,int &fps)
 {
 	if(tp)
 	{
@@ -33,13 +33,13 @@ bool __cdecl GetMovieInfo(MOVIE *tp,int &width,int &height,int &fps)
 		return(false);
 }
 
-void __cdecl SetBufferSize(MOVIE *tp,uint size)
+void SetBufferSize(MOVIE *tp,uint size)
 {
 	if(tp)
 		tp->BufferSize=size;
 }
 
-double __cdecl CheckUpdate(MOVIE *tp)
+double CheckUpdate(MOVIE *tp)
 {
 	if(tp)
 		return tp->CheckUpdate();
@@ -47,12 +47,12 @@ double __cdecl CheckUpdate(MOVIE *tp)
 		return(-1);
 }
 
-void __cdecl DecodeToRGB	(MOVIE *tp,uchar *buf){	if(tp)		tp->DecodeToRGB(buf);}
-void __cdecl DecodeToBGR	(MOVIE *tp,uchar *buf){	if(tp)		tp->DecodeToBGR(buf);}
-void __cdecl DecodeToRGBA	(MOVIE *tp,uchar *buf){	if(tp)		tp->DecodeToRGBA(buf);}
-void __cdecl DecodeToBGRA	(MOVIE *tp,uchar *buf){	if(tp)		tp->DecodeToBGRA(buf);}
+void DecodeToRGB	(MOVIE *tp,uchar *buf){	if(tp)		tp->DecodeToRGB(buf);}
+void DecodeToBGR	(MOVIE *tp,uchar *buf){	if(tp)		tp->DecodeToBGR(buf);}
+void DecodeToRGBA	(MOVIE *tp,uchar *buf){	if(tp)		tp->DecodeToRGBA(buf);}
+void DecodeToBGRA	(MOVIE *tp,uchar *buf){	if(tp)		tp->DecodeToBGRA(buf);}
 
-th_img_plane *__cdecl DecodeToYUV(MOVIE *tp,int &ox,int &oy)
+th_img_plane *DecodeToYUV(MOVIE *tp,int &ox,int &oy)
 {
 	if(tp)
 		return tp->DecodeToYUV(ox,oy);
@@ -60,7 +60,7 @@ th_img_plane *__cdecl DecodeToYUV(MOVIE *tp,int &ox,int &oy)
 		return NULL;
 }
 
-bool __cdecl CheckMovieEnd(MOVIE *tp)
+bool CheckMovieEnd(MOVIE *tp)
 {
 	if(!tp)
 		return(true);
@@ -68,7 +68,7 @@ bool __cdecl CheckMovieEnd(MOVIE *tp)
 	return !(tp->isPlaying);
 }
 
-void __cdecl CloseMovie(MOVIE *tp)
+void CloseMovie(MOVIE *tp)
 {
 	if(tp)
 		delete tp;
@@ -76,17 +76,17 @@ void __cdecl CloseMovie(MOVIE *tp)
 //--------------------------------------------------------------------------------------------------
 struct OutInterface
 {
-	MOVIE *			(__cdecl *Open			)(Stream *,SeekFunc,EofFunc,ReadFunc);
-	bool			(__cdecl *GetInfo		)(MOVIE *,int &,int &,int &);
-	void			(__cdecl *SetBuffer		)(MOVIE *,uint);
-	double			(__cdecl *CheckUpdate	)(MOVIE *);
-	void			(__cdecl *DecodeToRGB	)(MOVIE *,uchar *);
-	void			(__cdecl *DecodeToBGR	)(MOVIE *,uchar *);
-	void			(__cdecl *DecodeToRGBA	)(MOVIE *,uchar *);
-	void			(__cdecl *DecodeToBGRA	)(MOVIE *,uchar *);
-	th_img_plane *	(__cdecl *DecodeToYUV	)(MOVIE *,int &,int &);
-	bool			(__cdecl *CheckEnd		)(MOVIE *);
-	void			(__cdecl *Close			)(MOVIE *);
+	MOVIE *			(*Open			)(Stream *,SeekFunc,EofFunc,ReadFunc);
+	bool			(*GetInfo		)(MOVIE *,int &,int &,int &);
+	void			(*SetBuffer		)(MOVIE *,uint);
+	double			(*CheckUpdate	)(MOVIE *);
+	void			(*DecodeToRGB	)(MOVIE *,uchar *);
+	void			(*DecodeToBGR	)(MOVIE *,uchar *);
+	void			(*DecodeToRGBA	)(MOVIE *,uchar *);
+	void			(*DecodeToBGRA	)(MOVIE *,uchar *);
+	th_img_plane *	(*DecodeToYUV	)(MOVIE *,int &,int &);
+	bool			(*CheckEnd		)(MOVIE *);
+	void			(*Close			)(MOVIE *);
 };
 
 static OutInterface out_interface=
@@ -104,23 +104,23 @@ static OutInterface out_interface=
 	CloseMovie
 };
 //--------------------------------------------------------------------------------------------------
-HGL_PLUGIN_FUNC void __cdecl InitPlugIn()
+HGL_PLUGIN_FUNC void InitPlugIn()
 {
 	InitTheoraDecode();
 }
 
-HGL_PLUGIN_FUNC uint32 __cdecl GetPlugInVersion()
+HGL_PLUGIN_FUNC uint32 GetPlugInVersion()
 {
-	return(2);		//∞Ê±æ∫≈
-					//∏˘æ›∞Ê±æ∫≈»°µ√≤ªÕ¨µƒAPI
+	return(2);		//ÁâàÊú¨Âè∑
+					//Ê†πÊçÆÁâàÊú¨Âè∑ÂèñÂæó‰∏çÂêåÁöÑAPI
 }
 
-HGL_PLUGIN_FUNC wchar_t * __cdecl GetPlugInIntro()
+HGL_PLUGIN_FUNC wchar_t * GetPlugInIntro()
 {
 	return((wchar_t *)plugin_intro);
 }
 
-HGL_PLUGIN_FUNC bool __cdecl GetPlugInInterface(uint32 ver,void *data)
+HGL_PLUGIN_FUNC bool GetPlugInInterface(uint32 ver,void *data)
 {
 	if(ver==2)
 	{

@@ -3,15 +3,15 @@ IF(WIN32)
     INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/opus/include)
     INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/opus/src)
     INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/opus/win32)
-    
+
     INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/opus/celt)
     INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/opus/silk)
     INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/opus/silk/float)
     INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/opus/silk/fixed)
-    
+
     add_definitions(-DHAVE_CONFIG_H)
     add_definitions(-D_LIB)
-    
+
     SET(SILK_COMMON_SOURCE  opus/silk/A2NLSF.c
                             opus/silk/ana_filt_bank_1.c
                             opus/silk/biquad_alt.c
@@ -93,7 +93,7 @@ IF(WIN32)
                             opus/silk/x86/VAD_sse.c
                             opus/silk/x86/VQ_WMat_EC_sse.c
                             opus/silk/x86/x86_silk_map.c)
-                            
+
     SET(SILK_FIXED_SOURCE   opus/silk/fixed/apply_sine_window_FIX.c
                             opus/silk/fixed/autocorr_FIX.c
                             opus/silk/fixed/burg_modified_FIX.c
@@ -122,7 +122,7 @@ IF(WIN32)
                             opus/silk/fixed/x86/burg_modified_FIX_sse.c
                             opus/silk/fixed/x86/prefilter_FIX_sse.c
                             opus/silk/fixed/x86/vector_ops_FIX_sse.c)
-    
+
     SET(SILK_FLOAT_SOURCE   opus/silk/float/apply_sine_window_FLP.c
                             opus/silk/float/autocorrelation_FLP.c
                             opus/silk/float/burg_modified_FLP.c
@@ -154,7 +154,7 @@ IF(WIN32)
                             opus/silk/float/sort_FLP.c
                             opus/silk/float/warped_autocorrelation_FLP.c
                             opus/silk/float/wrappers_FLP.c)
-    
+
     SET(CELT_SOURCE opus/celt/bands.c
                     opus/celt/celt.c
                     opus/celt/celt_decoder.c
@@ -179,7 +179,7 @@ IF(WIN32)
                     opus/celt/vq.c
                     opus/celt/x86/x86_celt_map.c
                     opus/celt/x86/x86cpu.c)
-    
+
     SET(OPUS_SOURCE    opus/src/analysis.c
                     opus/src/mlp.c
                     opus/src/mlp_data.c

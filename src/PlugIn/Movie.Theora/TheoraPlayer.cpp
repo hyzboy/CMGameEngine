@@ -1,5 +1,8 @@
+#include<hgl/type/DataType.h>
 #include"TheoraPlayer.h"
 #include<string.h>
+
+using namespace hgl;
 //--------------------------------------------------------------------------------------------------
 static int sAdjCrr[256];
 static int sAdjCrg[256];
@@ -132,7 +135,7 @@ void TheoraPlayer::Rewind()
 			ogg_stream_pagein(&test,&og);
 			ogg_stream_packetout(&test,&op);
 
-			if(!theora_p && th_decode_headerin(&ti,&tc,&tsi,&op)>=0)			//theora ÊÓÆµÁ÷
+			if(!theora_p && th_decode_headerin(&ti,&tc,&tsi,&op)>=0)			//theora è§†é¢‘æµ
 
 			{
 				memcpy(&to,&test,sizeof(test));
@@ -172,7 +175,7 @@ void TheoraPlayer::Rewind()
 		half_frame_time=one_frame_time/2.0f;
 
 		th_decode_ctl(tdc,TH_DECCTL_GET_PPLEVEL_MAX,&pp_level_max,sizeof(pp_level_max));
-		pp_level=0;//pp_level_max;		//¿ÉÒÔÉèÎª0£¬ÄÜÉÔ½µCPUÕ¼ÓÃ
+		pp_level=0;//pp_level_max;		//å¯ä»¥è®¾ä¸º0ï¼Œèƒ½ç¨é™CPUå ç”¨
 		th_decode_ctl(tdc,TH_DECCTL_SET_PPLEVEL,&pp_level,sizeof(pp_level));
 	}
 	else
@@ -226,14 +229,14 @@ bool TheoraPlayer::Open(Stream *file,SeekFunc sf,EofFunc ef,ReadFunc rf)
 
 void TheoraPlayer::DecodeToRGB(th_ycbcr_buffer& yuv,unsigned char* buf)
 {
-	unsigned __int8 *dst0 = buf;
-	unsigned __int8 *dst1 = dst0+ti.frame_width*3;
+	uint8 *dst0 = buf;
+	uint8 *dst1 = dst0+ti.frame_width*3;
 
 	const int pictOffset  = yuv[0].stride*ti.pic_y+ti.pic_x;
 
-	const unsigned __int8 *pY0, *pY1, *pU, *pV;
+	const uint8 *pY0, *pY1, *pU, *pV;
 
-	//yuv.y_height,yuv.y_widthÊÇÒÔ16µã¶ÔÆëµÄ£¬ËùÒÔ¿ÉÄÜ»á³¬¹ıframe_width,frame_height
+	//yuv.y_height,yuv.y_widthæ˜¯ä»¥16ç‚¹å¯¹é½çš„ï¼Œæ‰€ä»¥å¯èƒ½ä¼šè¶…è¿‡frame_width,frame_height
 
 	for(int y = 0; y < ti.frame_height; y += 2)
 	{
@@ -246,8 +249,8 @@ void TheoraPlayer::DecodeToRGB(th_ycbcr_buffer& yuv,unsigned char* buf)
 		{
 			const int G = sAdjCrg[*pV] + sAdjCbg[*pU];
 
-			const unsigned __int8 *r =YV_R[*pV++];
-			const unsigned __int8 *b =YU_B[*pU++];
+			const uint8 *r =YV_R[*pV++];
+			const uint8 *b =YU_B[*pU++];
 
 			// pixel 0x0
 			*dst0++ = r[*pY0];
@@ -277,14 +280,14 @@ void TheoraPlayer::DecodeToRGB(th_ycbcr_buffer& yuv,unsigned char* buf)
 
 void TheoraPlayer::DecodeToRGBA(th_ycbcr_buffer& yuv,unsigned char* buf)
 {
-	unsigned __int8 *dst0 = buf;
-	unsigned __int8 *dst1 = dst0+(ti.frame_width<<2);
+	uint8 *dst0 = buf;
+	uint8 *dst1 = dst0+(ti.frame_width<<2);
 
 	const int pictOffset  = yuv[0].stride*ti.pic_y+ti.pic_x;
 
-	const unsigned __int8 *pY0, *pY1, *pU, *pV;
+	const uint8 *pY0, *pY1, *pU, *pV;
 
-	//yuv.y_height,yuv.y_widthÊÇÒÔ16µã¶ÔÆëµÄ£¬ËùÒÔ¿ÉÄÜ»á³¬¹ıframe_width,frame_height
+	//yuv.y_height,yuv.y_widthæ˜¯ä»¥16ç‚¹å¯¹é½çš„ï¼Œæ‰€ä»¥å¯èƒ½ä¼šè¶…è¿‡frame_width,frame_height
 
 	for(int y = 0; y < ti.frame_height; y += 2)
 	{
@@ -297,8 +300,8 @@ void TheoraPlayer::DecodeToRGBA(th_ycbcr_buffer& yuv,unsigned char* buf)
 		{
 			const int G = sAdjCrg[*pV] + sAdjCbg[*pU];
 
-			const unsigned __int8 *r =YV_R[*pV++];
-			const unsigned __int8 *b =YU_B[*pU++];
+			const uint8 *r =YV_R[*pV++];
+			const uint8 *b =YU_B[*pU++];
 
 			// pixel 0x0
 			*dst0++ = r[*pY0];
@@ -332,14 +335,14 @@ void TheoraPlayer::DecodeToRGBA(th_ycbcr_buffer& yuv,unsigned char* buf)
 
 void TheoraPlayer::DecodeToBGR(th_ycbcr_buffer& yuv,unsigned char* buf)
 {
-	unsigned __int8 *dst0 = buf;
-	unsigned __int8 *dst1 = dst0+ti.frame_width*3;
+	uint8 *dst0 = buf;
+	uint8 *dst1 = dst0+ti.frame_width*3;
 
 	const int pictOffset  = yuv[0].stride*ti.pic_y+ti.pic_x;
 
-	const unsigned __int8 *pY0, *pY1, *pU, *pV;
+	const uint8 *pY0, *pY1, *pU, *pV;
 
-	//yuv.y_height,yuv.y_widthÊÇÒÔ16µã¶ÔÆëµÄ£¬ËùÒÔ¿ÉÄÜ»á³¬¹ıframe_width,frame_height
+	//yuv.y_height,yuv.y_widthæ˜¯ä»¥16ç‚¹å¯¹é½çš„ï¼Œæ‰€ä»¥å¯èƒ½ä¼šè¶…è¿‡frame_width,frame_height
 
 	for(int y = 0; y < ti.frame_height; y += 2)
 	{
@@ -352,8 +355,8 @@ void TheoraPlayer::DecodeToBGR(th_ycbcr_buffer& yuv,unsigned char* buf)
 		{
 			const int G = sAdjCrg[*pV] + sAdjCbg[*pU];
 
-			const unsigned __int8 *r =YV_R[*pV++];
-			const unsigned __int8 *b =YU_B[*pU++];
+			const uint8 *r =YV_R[*pV++];
+			const uint8 *b =YU_B[*pU++];
 
 			// pixel 0x0
 			*dst0++ = b[*pY0];
@@ -383,14 +386,14 @@ void TheoraPlayer::DecodeToBGR(th_ycbcr_buffer& yuv,unsigned char* buf)
 
 void TheoraPlayer::DecodeToBGRA(th_ycbcr_buffer& yuv,unsigned char* buf)
 {
-	unsigned __int8 *dst0 = buf;
-	unsigned __int8 *dst1 = dst0+(ti.frame_width<<2);
+	uint8 *dst0 = buf;
+	uint8 *dst1 = dst0+(ti.frame_width<<2);
 
 	const int pictOffset  = yuv[0].stride*ti.pic_y+ti.pic_x;
 
-	const unsigned __int8 *pY0, *pY1, *pU, *pV;
+	const uint8 *pY0, *pY1, *pU, *pV;
 
-	//yuv.y_height,yuv.y_widthÊÇÒÔ16µã¶ÔÆëµÄ£¬ËùÒÔ¿ÉÄÜ»á³¬¹ıframe_width,frame_height
+	//yuv.y_height,yuv.y_widthæ˜¯ä»¥16ç‚¹å¯¹é½çš„ï¼Œæ‰€ä»¥å¯èƒ½ä¼šè¶…è¿‡frame_width,frame_height
 
 	for(int y = 0; y < ti.frame_height; y += 2)
 	{
@@ -403,8 +406,8 @@ void TheoraPlayer::DecodeToBGRA(th_ycbcr_buffer& yuv,unsigned char* buf)
 		{
 			const int G = sAdjCrg[*pV] + sAdjCbg[*pU];
 
-			const unsigned __int8 *r =YV_R[*pV++];
-			const unsigned __int8 *b =YU_B[*pU++];
+			const uint8 *r =YV_R[*pV++];
+			const uint8 *b =YU_B[*pU++];
 
 			// pixel 0x0
 			*dst0++ = b[*pY0];
@@ -451,14 +454,14 @@ double TheoraPlayer::CheckUpdate()
 			{
 				if (op.granulepos == 0)
 				{
-					startTime = 0;		//µÚÒ»Ö¡
+					startTime = 0;		//ç¬¬ä¸€å¸§
 					GetDoubleTime();
 				}
 
 				videobuf_time=th_granule_time(tdc,op.granulepos);
 
-				if(videobuf_time<currentTime)		//ÕâÒ»Ö¡µÄÊ±¼äÒÑ¾­¹ıÁË£¬´Ë°ü¶ªÆú¡£
-					continue;						//×¢Òâ´Ë¾Ù½«Ê¹»­ÃæËğ»µ£¬µ«Îª±£Ö¤»­ÃæÁ÷³©ËùÒÔ×öÈç´Ë´¦Àí¡£
+				if(videobuf_time<currentTime)		//è¿™ä¸€å¸§çš„æ—¶é—´å·²ç»è¿‡äº†ï¼Œæ­¤åŒ…ä¸¢å¼ƒã€‚
+					continue;						//æ³¨æ„æ­¤ä¸¾å°†ä½¿ç”»é¢æŸåï¼Œä½†ä¸ºä¿è¯ç”»é¢æµç•…æ‰€ä»¥åšå¦‚æ­¤å¤„ç†ã€‚
 
 				th_decode_ctl(tdc,TH_DECCTL_SET_GRANPOS,&op.granulepos,sizeof(op.granulepos));
 			}

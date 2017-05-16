@@ -3,14 +3,14 @@
 
 #include<theora/theoradec.h>
 
-typedef void Stream;
-typedef void (__cdecl *SeekFunc	)(Stream *,int);
-typedef bool (__cdecl *EofFunc	)(Stream *);
-typedef int	 (__cdecl *ReadFunc	)(Stream *,void *,int);
+using Stream    =void;
+using SeekFunc  =void   (*)(Stream *,int);
+using EofFunc	=bool   (*)(Stream *);
+using ReadFunc	=int    (*)(Stream *,void *,int);
 //--------------------------------------------------------------------------------------------------
 class TheoraPlayer
 {
-	double GetDoubleTime();																		///<È¡µÃµ±Ç°Ê±¼ä(Ë«¾«¶È£¬µ¥Î»Ãë)
+	double GetDoubleTime();																		///<å–å¾—å½“å‰æ—¶é—´(åŒç²¾åº¦ï¼Œå•ä½ç§’)
 
 private:
 
@@ -72,7 +72,7 @@ protected:
     void StopTheora();
 
 public:
-                          
+
 	bool        	isOpen;
 	bool			isLoop;
 	bool           	isPlaying;
