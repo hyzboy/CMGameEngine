@@ -1,4 +1,4 @@
-#ifndef HGL_THEORA_PLAYER_INCLUDE
+﻿#ifndef HGL_THEORA_PLAYER_INCLUDE
 #define HGL_THEORA_PLAYER_INCLUDE
 
 #include<theora/theoradec.h>

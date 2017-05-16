@@ -1,4 +1,4 @@
-#include<hgl/PlugIn.h>
+﻿#include<hgl/PlugIn.h>
 #include<string.h>
 #include"TheoraPlayer.h"
 
