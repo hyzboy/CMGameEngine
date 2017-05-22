@@ -43,7 +43,7 @@ public:
     }
 };//class WorkThread
 
-bool Init843Server(const hgl::OSStringList &)
+bool InitFlashPolicyServer(const hgl::OSStringList &)
 {
     file_size=filesystem::LoadFileToMemory(OS_TEXT("crossdomain.xml"),(void **)&file_data);
 
@@ -53,9 +53,9 @@ bool Init843Server(const hgl::OSStringList &)
     return(true);
 }
 
-HGL_CONSOLE_TCP_SERVER_APPLICATION("网页843端口服务器",
-                                   "Web843Server",
-                                   Init843Server,            //全局初始化函数
+HGL_CONSOLE_TCP_SERVER_APPLICATION("Flash跨域策略文件服务器",
+                                   "FlashPolicyServer",
+                                   InitFlashPolicyServer,     //全局初始化函数
                                    WorkThread,                //工作线程
                                    CreateIPv4TCP(843))        //监听端口
 

@@ -1,4 +1,4 @@
-#include<windows.h>
+﻿#include<windows.h>
 #include"TheoraPlayer.h"
 
 double TheoraPlayer::GetDoubleTime()																		///<取得当前时间(双精度，单位秒)
