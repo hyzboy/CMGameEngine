@@ -39,9 +39,13 @@ namespace hgl
 	*/
 	uint64 GetTime()
 	{
-		struct timeval tv;
-		gettimeofday(&tv, nullptr);
-		return ((tv.tv_sec) * 1000) + (tv.tv_usec/1000);
+// 		struct timeval tv;
+// 		gettimeofday(&tv, nullptr);
+// 		return ((tv.tv_sec) * HGL_MILLI_SEC_PRE_SEC) + (tv.tv_usec/1000);
+
+        struct timespec ts;
+        clock_gettime(CLOCK_REALTIME,&ts);
+        return (ts.tv_sec*HGL_MILLI_SEC_PRE_SEC)+(ts.tv_nsec/1000000);
 	}
 
 	/**
@@ -50,9 +54,13 @@ namespace hgl
 	*/
 	uint64 GetMicroTime()
 	{
-		struct timeval tv;
-		gettimeofday(&tv, nullptr);
-		return (tv.tv_sec) * HGL_MICRO_SEC_PER_SEC + tv.tv_usec;
+//		struct timeval tv;
+//		gettimeofday(&tv, nullptr);
+//		return (tv.tv_sec) * HGL_MICRO_SEC_PER_SEC + tv.tv_usec;
+
+        struct timespec ts;
+        clock_gettime(CLOCK_REALTIME,&ts);
+        return (ts.tv_sec*HGL_MICRO_SEC_PER_SEC)+(ts.tv_nsec/1000);
 	}
 
 	/**
@@ -61,9 +69,13 @@ namespace hgl
 	*/
 	double GetDoubleTime()																		///<取得当前时间(双精度，单位秒)
 	{
-		struct timeval tv;
-		gettimeofday(&tv, nullptr);
-		return double(tv.tv_sec) + (double(tv.tv_usec)/HGL_MICRO_SEC_PER_SEC);
+// 		struct timeval tv;
+// 		gettimeofday(&tv, nullptr);
+// 		return double(tv.tv_sec) + (double(tv.tv_usec)/HGL_MICRO_SEC_PER_SEC);
+
+        struct timespec ts;
+        clock_gettime(CLOCK_REALTIME,&ts);
+        return double(ts.tv_sec)+double(ts.tv_nsec)/HGL_NANO_SEC_PER_SEC;
 	}
 
 	/**
@@ -77,6 +89,8 @@ namespace hgl
 		struct timeval tv;
 		tv.tv_sec = t;
 		tv.tv_usec = (t-tv.tv_sec)*HGL_MICRO_SEC_PER_SEC;
-		select(0, NULL, NULL, NULL, &tv);
+		select(0, nullptr, nullptr, nullptr, &tv);
+
+        //注：不要使用sleep/nanosleep/clock_nanosleep来代替select，因为它们是真正的暂停执行线程。而sleep是挂起等待，可以被信号打断
 	}
 }//namespace hgl

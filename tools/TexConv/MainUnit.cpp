@@ -38,6 +38,9 @@ const	TextureFormat *             glfmt[4]	={NULL,NULL,NULL,NULL};				//选中�
 
 		bool						only_view	=false;								//仅显示
 
+		bool						use_color_key=false;							//是否使用ColorKey
+		uint8						color_key[3];									//ColorKey颜色
+
 const	float						texcoord[]	={0.0f,0.0f,	1.0f,0.0f,	1.0f,1.0f,	0.0f,0.0f,	1.0f,1.0f,	0.0f,1.0f};
 
         VertexArray *               va          =NULL;
@@ -93,6 +96,23 @@ void CheckOpenGLCoreFormat(const CmdParse &cmd)
 	glfmt[1]=CheckOpenGLCoreFormat(cmd,OS_TEXT("/RG:"),     &TextureFormatInfoList[HGL_SF_RG8]);
 	glfmt[2]=CheckOpenGLCoreFormat(cmd,OS_TEXT("/RGB:"),    &TextureFormatInfoList[HGL_SF_RGB8]);
 	glfmt[3]=CheckOpenGLCoreFormat(cmd,OS_TEXT("/RGBA:"),   &TextureFormatInfoList[HGL_SF_RGBA8]);
+}
+
+void CheckColorKey(const CmdParse &cmd)
+{
+	OSString ckstr;
+
+	if(!cmd.GetString(OS_TEXT("/ColorKey:"),ckstr))return;
+
+	os_char rgbstr[6];
+	
+	hgl_cpy(rgbstr,ckstr.c_str(),6);		//注意：hgl_cpy是跨类型复制的，不要替换成strcpy或memcpy
+
+	ParseHexStr(color_key[0],rgbstr+0);
+	ParseHexStr(color_key[1],rgbstr+2);
+	ParseHexStr(color_key[2],rgbstr+4);
+
+	use_color_key=true;
 }
 
 bool CheckSameAlpha(uint8 *data,uint count)
@@ -252,17 +272,17 @@ void CheckPalette()
 	}
 }
 
-void SaveTexture2DToFile(const os_char *filename,void *texture_data,uint width,uint height,const char *format,uint bytes)
+void SaveTexture2DToFile(const os_char *filename,void *texture_data,uint width,uint height,const char *format,uint bytes,bool include_color_key)
 {
 	os_char tex_fn[HGL_MAX_PATH];
 	char fmt_str[17];
 
-	replace_extname(tex_fn,filename,HGL_MAX_PATH,OS_TEXT("tex2d"));
+	replace_extname(tex_fn,filename,HGL_MAX_PATH,OS_TEXT("Tex2D"));
 
 	FileOutputStream fs;
     DataOutputStream *dos;
 
-	if(!fs.Create(tex_fn))
+	if(!fs.CreateTrunc(tex_fn))
 	{
 		LOG_INFO(OS_TEXT("\tCreateFile(")+OSString(tex_fn)+OS_TEXT(") error!"));
 		return;
@@ -270,17 +290,31 @@ void SaveTexture2DToFile(const os_char *filename,void *texture_data,uint width,u
 
 	dos=new LEDataOutputStream(&fs);
 
-	memset(fmt_str,0,16);
-	strcpy(fmt_str,format);
+	memset(fmt_str,0,17);
+	hgl::strcpy(fmt_str,16,format);
 
-	dos->Write("Tex\x1A",6);
+	dos->Write("Tex\x1A",4);
 	dos->WriteUint8(1);						    //版本号
     dos->WriteBool(false);                      //是否有mipmaps
     dos->Write(fmt_str,16);                     //格式
     dos->WriteUint32(bytes);                    //字节数
+
+	if(include_color_key)
+	{
+		dos->WriteBool(true);
+		dos->WriteUint8(color_key,3);
+
+		LOG_INFO(OS_TEXT("\tColor Key: true"));
+	}
+	else
+	{
+		dos->Write("\0\0\0\0",4);
+	}
+
 	dos->WriteUint32(width);					//宽
 	dos->WriteUint32(height);					//高
 
+	dos->Write(texture_data,bytes);
     delete dos;
 
 	LOG_INFO(OS_TEXT("\tSave to ")+OSString(tex_fn));
@@ -288,6 +322,8 @@ void SaveTexture2DToFile(const os_char *filename,void *texture_data,uint width,u
 
 int ConvertImage(const os_char *filename)
 {
+	bool confirm_color_key=false;
+
 	uint pixels=0;
 	const TextureFormat *curfmt=nullptr;
 	const TextureFormat *tarfmt=nullptr;
@@ -384,6 +420,24 @@ int ConvertImage(const os_char *filename)
 					tarfmt=(glfmt[2]?glfmt[2]:curfmt);
 
 					memcpy(image_data,ilGetData(),pixels*3);
+
+					if(use_color_key)		//检测ColorKey是否存在
+					{
+						unsigned char *p=image_data;
+
+						for(int i=0;i<pixels;i++)
+						{
+							if((image_data[0]==color_key[0])
+							 &&(image_data[1]==color_key[1])
+							 &&(image_data[2]==color_key[2]))
+							{
+								confirm_color_key=true;
+								break;
+							}
+
+							p+=3;
+						}
+					}
 				}
 				else
 				if(il_format==IL_RGBA			)
@@ -438,7 +492,7 @@ int ConvertImage(const os_char *filename)
 
 				tex->GetImage(texture_data,tarfmt->tsf);
 
-				SaveTexture2DToFile(filename,texture_data,il_width,il_height,tarfmt->name,bytes);
+				SaveTexture2DToFile(filename,texture_data,il_width,il_height,tarfmt->name,bytes,confirm_color_key);
 
 				convert_count++;
 				bytes_count+=il_width*il_height*curfmt->source_bytes;
@@ -524,7 +578,7 @@ HGL_GRAPHICS_MAIN(sii,app,args)
 
 	sii.info.ProjectName=U8_TEXT("贴图转换");
 	sii.info.ProjectCode=OS_TEXT("Texture Converter");
-	sii.info.ProjectVersion=U8_TEXT("1.0");
+	sii.info.ProjectVersion=U8_TEXT("1.01");
     
 	if(!app.Init(&sii))return(-1);
 
@@ -532,7 +586,7 @@ HGL_GRAPHICS_MAIN(sii,app,args)
     for(int i=0;i<args.GetCount();i++)
         LOG_INFO(OS_TEXT("argv[")+OSString(i)+OS_TEXT("] ")+args[i]);
 
-	if(args.GetCount()<=1)
+	if(args.GetCount()<1)
 	{
         char space[33];
         constexpr uint STR_HINT_MAX=128+(32*HGL_SF_END);
@@ -564,7 +618,7 @@ HGL_GRAPHICS_MAIN(sii,app,args)
                 continue;
             }
 
-            len=strlen(TextureFormatInfoList[i].name);
+            len=hgl::strlen(TextureFormatInfoList[i].name);
 			hgl::strcat(hint,STR_HINT_MAX,TextureFormatInfoList[i].name,len);
             hgl::strcat(hint,STR_HINT_MAX,space,16-len);
 
@@ -578,7 +632,8 @@ HGL_GRAPHICS_MAIN(sii,app,args)
 			    hgl::strcat(hint,STR_HINT_MAX,'\t');
 		}
 
-		LOG_ERROR(hint);
+		MessageBoxA(nullptr,hint,"TexConv",MB_OK|MB_ICONINFORMATION);
+//		LOG_ERROR(hint);
 
 		delete[] hint;
 		return(0);
@@ -589,6 +644,7 @@ HGL_GRAPHICS_MAIN(sii,app,args)
 	if(cmd.Find(OS_TEXT("/view"))!=-1)only_view=true;				//检测是否仅显示
 	if(cmd.Find(OS_TEXT("/mip"))!=-1)gen_mipmaps=true;				//检测是否生成mipmaps
 
+	CheckColorKey(cmd);
 	CheckOpenGLCoreFormat(cmd);								        //检测推荐格式
 
 	ilInit();
@@ -623,7 +679,7 @@ HGL_GRAPHICS_MAIN(sii,app,args)
     efc.proc_file   =true;
     efc.proc_folder =sub;
     efc.cb_file     =EnumConvertImage;
-    
+	    
     EnumFile(&efc);
 
 	end_time=GetTime();

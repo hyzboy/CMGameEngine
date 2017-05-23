@@ -18,6 +18,8 @@ namespace hgl
 			bool	mipmaps;			///<是否有mipmaps
 			char	format[16];			///<显存格式
 			uint32	image_bytes;		///<数据字节数
+			bool	use_color_key;		///<是否有透明色
+			uint8   color_key[3];		///<透明色RGB
 		};//struct TexFileHeader
 
 		struct Tex1DFileHeader			:public TexFileHeader{uint32 length;				    };

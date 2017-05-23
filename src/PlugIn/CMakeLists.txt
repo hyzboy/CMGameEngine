@@ -17,5 +17,7 @@ IF(BUILD_OPENAL_LIB)
     ELSE()
         add_subdirectory(Audio.Vorbis)
 	ENDIF()
+	
+	add_subdirectory(Movie.Theora)
 
 ENDIF(BUILD_OPENAL_LIB)

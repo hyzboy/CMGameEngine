@@ -2040,8 +2040,8 @@ namespace hgl
     * @param ch 字符
     * @return 解析出来的值
     */
-    template<uint NUM>
-    inline int parse_number_char(const int ch)
+    template<uint NUM,typename T>
+    inline int parse_number_char(const T ch)
     {
         if(ch>='0'&&ch<='9')
             return ch-'0';
@@ -2061,13 +2061,14 @@ namespace hgl
     * @param src 用来解晰的16进制数值字符串
     * @param size 原始数据字节数/2
     */
-    inline void ParseHexStr(uint8 *dst,const uint8 *src,const int size)
+	template<typename T>
+    inline void ParseHexStr(uint8 *dst,const T *src,const int size)
     {
         for(int i=0;i<size;i++)
         {
-            *dst =parse_number_char<16>(*src)<<4;
+            *dst =parse_number_char<16,T>(*src)<<4;
             ++src;
-            *dst|=parse_number_char<16>(*src);
+            *dst|=parse_number_char<16,T>(*src);
             ++src;
             ++dst;
         }
