@@ -1,7 +1,7 @@
 ﻿#include<hgl/Graphics.h>                //GraphicsApplication,SystemInitInfo
 #include<hgl/graph/Render.h>            //SetClearColor,ClearColorDepthBuffer
 #include<hgl/graph/Camera.h>            //WalkerCamera
-#include<hgl/object/FlowObject.h>        //FlowObject
+#include<hgl/object/FlowObject.h>       //FlowObject
 #include<hgl/Time.h>
 #include"PlaneGrid.h"
 #include"SpiralSphere.h"
@@ -21,11 +21,12 @@ public:
     {
     }
 
-	~SpiralSphereInstance();
-
-	void SpiralSphereInstance::Render(const Matrix4f *proj,const Matrix4f *mv)
+	~SpiralSphereInstance()
     {
+    }
 
+	void Render(const Matrix4f *proj,const Matrix4f *mv)
+    {
     }
 };//class SpiralSphereInstance:public SpiralSphere
 
