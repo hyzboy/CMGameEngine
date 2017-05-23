@@ -257,7 +257,7 @@ void SaveTexture2DToFile(const os_char *filename,void *texture_data,uint width,u
 	os_char tex_fn[HGL_MAX_PATH];
 	char fmt_str[17];
 
-	replace_extname(tex_fn,filename,HGL_MAX_PATH,OS_TEXT("tex2d"));
+	replace_extname(tex_fn,filename,HGL_MAX_PATH,OS_TEXT("tex2D"));
 
 	FileOutputStream fs;
     DataOutputStream *dos;
@@ -273,7 +273,7 @@ void SaveTexture2DToFile(const os_char *filename,void *texture_data,uint width,u
 	memset(fmt_str,0,16);
 	strcpy(fmt_str,format);
 
-	dos->Write("Tex\x1A",6);
+	dos->Write("Tex\x1A",4);
 	dos->WriteUint8(1);						    //版本号
     dos->WriteBool(false);                      //是否有mipmaps
     dos->Write(fmt_str,16);                     //格式
