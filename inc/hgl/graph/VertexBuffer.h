@@ -362,11 +362,11 @@ namespace hgl
 
                 *this->access++=v->x;
                 *this->access++=v->y;
-                v++;
+                ++v;
 
                 *this->access++=v->x;
                 *this->access++=v->y;
-                v++;
+                ++v;
 
                 *this->access++=v->x;
                 *this->access++=v->y;
@@ -434,15 +434,15 @@ namespace hgl
                 {
                     if(*p<min_vertex.x)min_vertex.x=*p;
                     if(*p>max_vertex.x)max_vertex.x=*p;
-                    p++;
+                    ++p;
 
                     if(*p<min_vertex.y)min_vertex.y=*p;
                     if(*p>max_vertex.y)max_vertex.y=*p;
-                    p++;
+                    ++p;
 
                     if(*p<min_vertex.z)min_vertex.z=*p;
                     if(*p>max_vertex.z)max_vertex.z=*p;
-                    p++;
+                    ++p;
                 }
             }
 
@@ -620,12 +620,12 @@ namespace hgl
                 *this->access++=v->x;
                 *this->access++=v->y;
                 *this->access++=v->z;
-                v++;
+                ++v;
 
                 *this->access++=v->x;
                 *this->access++=v->y;
                 *this->access++=v->z;
-                v++;
+                ++v;
 
                 *this->access++=v->x;
                 *this->access++=v->y;
@@ -659,6 +659,39 @@ namespace hgl
             virtual ~VertexBuffer4()=default;
 
             uint	GetDataType()const;
+
+			/**
+            * 计算绑定盒
+            * @param min_vertex 最小值坐标
+            * @param max_vertex 最大值坐标
+            */
+            template<typename V>
+            void GetBoundingBox(V &min_vertex,V &max_vertex)
+            {
+                T *p=this->mem_type;
+
+                //先以corner为最小值,length为最大值，求取最小最大值
+                min_vertex.x=*p++;
+                min_vertex.y=*p++;
+                min_vertex.z=*p++;
+
+                max_vertex=min_vertex;
+
+                for(int i=1;i<this->count;i++)
+                {
+                    if(*p<min_vertex.x)min_vertex.x=*p;
+                    if(*p>max_vertex.x)max_vertex.x=*p;
+                    ++p;
+
+                    if(*p<min_vertex.y)min_vertex.y=*p;
+                    if(*p>max_vertex.y)max_vertex.y=*p;
+                    ++p;
+
+                    if(*p<min_vertex.z)min_vertex.z=*p;
+                    if(*p>max_vertex.z)max_vertex.z=*p;
+                    ++p;
+                }
+            }
 
             bool Write(const T v1,const T v2,const T v3,const T v4)
             {
@@ -832,13 +865,13 @@ namespace hgl
                 *this->access++=v->y;
                 *this->access++=v->z;
                 *this->access++=1.0f;
-                v++;
+                ++v;
 
                 *this->access++=v->x;
                 *this->access++=v->y;
                 *this->access++=v->z;
                 *this->access++=1.0f;
-                v++;
+                ++v;
 
                 *this->access++=v->x;
                 *this->access++=v->y;
@@ -847,6 +880,51 @@ namespace hgl
 
                 return(true);
             }
+
+			/**
+			* 写入2D矩形,注:这个函数会依次写入Left,Top,Width,Height四个值
+			*/
+			template<typename V>
+			bool WriteRectangle2D(const RectScope2<V> &rect)
+			{
+                if(!this->access||this->access+4>this->mem_end)
+                {
+                    LOG_HINT(OS_TEXT("VertexBuffer4::WriteRectangle2D(RectScope2 ) out"));
+                    return(false);
+                }
+
+                *this->access++=rect.Left;
+                *this->access++=rect.Top;
+                *this->access++=rect.Width;
+                *this->access++=rect.Height;
+
+				return(true);
+			}
+
+			/**
+			* 写入2D矩形,注:这个函数会依次写入Left,Top,Width,Height四个值
+			*/
+			template<typename V>
+			bool WriteRectangle2D(const RectScope2<V> *rect,const int count)
+			{
+                if(!this->access||this->access+(4*count)>this->mem_end)
+                {
+                    LOG_HINT(OS_TEXT("VertexBuffer4::WriteRectangle2D(RectScope2 *,count) out"));
+                    return(false);
+                }
+
+				for(int i=0;i<count;i++)
+				{
+					*this->access++=rect->Left;
+					*this->access++=rect->Top;
+					*this->access++=rect->Width;
+					*this->access++=rect->Height;
+
+					++rect;
+				}
+
+				return(true);
+			}
         };//class VertexBuffer4
 
         //缓冲区具体数据类型定义
