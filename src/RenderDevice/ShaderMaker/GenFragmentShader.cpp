@@ -302,7 +302,7 @@ namespace hgl
         * @return NULL 生成失败
         */
 #ifdef _DEBUG
-        char *MakeFragmentShader(const RenderState *state,const os_char *filename)
+        char *MakeFragmentShader(const RenderState *state,const OSString &filename)
 #else
         char *MakeFragmentShader(const RenderState *state)
 #endif//_DEBUG
@@ -438,7 +438,7 @@ namespace hgl
             code.add_main_end();
 
 #ifdef _DEBUG
-            code.debug_out(filename);
+            code.debug_out(filename+OS_TEXT(".fs.glsl"));
 #endif//_DEBUG
 
             return code.end_get();

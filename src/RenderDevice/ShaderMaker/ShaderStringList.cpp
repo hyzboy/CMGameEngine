@@ -59,7 +59,7 @@ namespace hgl
                 }
             }
 
-            void shader_stringlist::debug_out(const os_char *filename)
+            void shader_stringlist::debug_out(const OSString &filename)
             {
                 if(!filename)return;
 

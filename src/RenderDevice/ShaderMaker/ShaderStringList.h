@@ -65,7 +65,7 @@ namespace hgl
 
 				void add(const char *line="\n"){shader_string.Strcat(line,hgl::strlen(line));}
 
-				void debug_out(const os_char *filename);
+				void debug_out(const OSString &filename);
 
 #define ADD_IOU(type)	void add_in_##type		(const char *name){add("in "		#type);add(" ");add(name);add(";\n");}	\
 						void add_out_##type		(const char *name){add("out "		#type);add(" ");add(name);add(";\n");}	\

@@ -372,7 +372,7 @@ namespace hgl
         * @return NULL 生成失败
         */
 #ifdef _DEBUG
-        char *MakeVertexShader(const RenderState *state,const os_char *filename)
+        char *MakeVertexShader(const RenderState *state,const OSString &filename)
 #else
         char *MakeVertexShader(const RenderState *state)
 #endif//
@@ -475,7 +475,7 @@ namespace hgl
             code.add_main_end();
 
 #ifdef _DEBUG
-            code.debug_out(filename);
+            code.debug_out(filename+OS_TEXT(".vs.glsl"));
 #endif//_DEBUG
 
             return code.end_get();

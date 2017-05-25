@@ -5,11 +5,13 @@ namespace hgl
     namespace graph
     {
 #ifdef _DEBUG
-        char *MakeVertexShader(const RenderState *,const os_char *save_filename=nullptr);
-        char *MakeFragmentShader(const RenderState *,const os_char *save_filename=nullptr);
+        char *MakeVertexShader(const RenderState *,const OSString &save_filename=nullptr);
+        char *MakeFragmentShader(const RenderState *,const OSString &save_filename=nullptr);
+		char *MakeGeometryShader(const RenderState *,const OSString &save_filename=nullptr);
 #else
         char *MakeVertexShader(bool,const RenderState *);
         char *MakeFragmentShader(const RenderState *);
+		char *MakeGeometryShader(const RenderState *);
 #endif//_DEBUG
 
         Shader *CreateShader(    const char *vertex_shader,
@@ -36,32 +38,27 @@ namespace hgl
         }
 
 #ifdef _DEBUG
-        Shader *CreateShader(const RenderState *state,const os_char *save_filename)
-        {
-            char *vs,*fs;
-
-            if(save_filename)
-            {
-                os_char vs_filename[HGL_MAX_PATH];
-                os_char fs_filename[HGL_MAX_PATH];
-
-                strcpy(vs_filename,HGL_MAX_PATH,save_filename);strcat(vs_filename,HGL_MAX_PATH,OS_TEXT(".vs.glsl"),8);
-                strcpy(fs_filename,HGL_MAX_PATH,save_filename);strcat(fs_filename,HGL_MAX_PATH,OS_TEXT(".fs.glsl"),8);
-
-                vs=MakeVertexShader(state,vs_filename);
-                fs=MakeFragmentShader(state,fs_filename);
-            }
-            else
-            {
-                vs=MakeVertexShader(state);
-                fs=MakeFragmentShader(state);
-            }
+        Shader *CreateShader(const RenderState *state,const OSString &save_filename)
 #else
         Shader *CreateShader(const RenderState *state)
-        {
-            char *vs=MakeVertexShader(state);
-            char *fs=MakeFragmentShader(state);
 #endif//_DEBUG
+        {
+            char *vs,*fs,*gs;
+
+#ifdef _DEBUG
+            if(save_filename)
+            {
+                vs=MakeVertexShader(state,save_filename);
+                fs=MakeFragmentShader(state,save_filename);
+//				gs=MakeGeometryShader(state,save_filename);
+            }
+            else
+#endif//_DEBUG
+			{
+                vs=MakeVertexShader(state);
+                fs=MakeFragmentShader(state);
+//				gs=MakeGeometryShader(state);
+            }
 
             Shader *shader=nullptr;
 

@@ -6,8 +6,18 @@
 using namespace hgl;
 using namespace hgl::graph;
 
+//#define USE_PRIM_RECTANGLE
+
+#ifndef USE_PRIM_RECTANGLE
+const uint16	vertex[]={	100,100,	//left-top
+							356,100,	//right-top
+							356,356,	//right-bottom
+							100,356};	//left-bottom
+#else
 const uint16	vertex[]={	100,100,	//left,top
-							356,356};	//width,height
+							256,256};	//width,height
+
+#endif//USE_PRIM_RECTANGLE
 
 class TestObject:public FlowObject
 {
@@ -22,9 +32,15 @@ public:
 
         //创建矩形顶点数据
         {
-            vertex_data=new VertexArray(HGL_PRIM_RECTANGLE);            ///<创建新的顶点数据对象，图元类型为矩形
+		#ifndef USE_PRIM_RECTANGLE			
+			vertex_data=new VertexArray(HGL_PRIM_TRIANGLE_FAN);         ///<创建新的顶点数据对象，图元类型为扇形
+
+            vertex_data->SetVertex(new VB2u16(4,vertex));               ///<设定矩形的坐标数据
+		#else
+			vertex_data=new VertexArray(HGL_PRIM_RECTANGLE);            ///<创建新的顶点数据对象，图元类型为矩形
 
             vertex_data->SetVertex(new VB4u16(1,vertex));               ///<设定矩形的坐标数据
+		#endif//USE_PRIM_RECTANGLE
         }
 
         {
@@ -52,4 +68,4 @@ public:
     }
 };//class TestObject
 
-HGL_GRAPHICS_APPLICATION("矩形图元","Rectangle",new TestObject());
+HGL_GRAPHICS_APPLICATION("矩形","Rectangle",new TestObject());

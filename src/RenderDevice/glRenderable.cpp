@@ -220,9 +220,9 @@ namespace hgl
 		}
 
 #ifdef _DEBUG
-		Shader *CreateShader(const RenderState *state,const os_char *save_filename);
+		Shader *CreateShader(const RenderState *state,const OSString &save_filename);
 
-		Shader *Renderable::AutoCreateShader(bool mvp,ShaderStorage *storage,const os_char *debug_outname)
+		Shader *Renderable::AutoCreateShader(bool mvp,ShaderStorage *storage,const OSString &debug_outname)
 #else
 		Shader *Renderable::AutoCreateShader(bool mvp,ShaderStorage *storage)
 #endif//_DEBUG
