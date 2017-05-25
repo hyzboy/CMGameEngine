@@ -22,10 +22,12 @@ namespace hgl
 			GL_LINE_STRIP_ADJACENCY,
 			GL_TRIANGLES_ADJACENCY,
 			GL_TRIANGLE_STRIP_ADJACENCY,
-			GL_PATCHES
+			GL_PATCHES,
+
+			HGL_PRIM_RECTANGLE
 		};//const uint OpenGLCorePrim[]
 
-		const int OpenGLCorePrimCount=sizeof(OpenGLCorePrim)/sizeof(uint);
+		constexpr int OpenGLCorePrimCount=sizeof(OpenGLCorePrim)/sizeof(uint);
 
 		bool CheckPrim(uint prim)
 		{
