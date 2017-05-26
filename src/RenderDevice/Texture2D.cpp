@@ -1,5 +1,6 @@
 #include<hgl/graph/Texture2D.h>
 #include<hgl/LogInfo.h>
+#include<hgl/graph/Bitmap.h>
 #include"TextureBaseControl.h"
 
 namespace hgl
@@ -104,6 +105,27 @@ namespace hgl
             tex->SetImage(width,height, bitmap, bitmap_bytes, source_format, video_format);
             return(tex);
         }
+
+		Texture2D *CreateTexture2D(const OSString &filename,uint video_format)
+		{
+            Texture2D *tex = CreateTexture2D();
+
+            if (!tex)RETURN_ERROR_NULL;
+
+			Bitmap2D bmp;
+
+			if(!LoadBitmapFromFile(&bmp,filename))
+				RETURN_ERROR_NULL;
+			
+            tex->SetImage(bmp.GetWidth(),
+						  bmp.GetHeight(),
+						  bmp.GetData(),
+						  bmp.GetDataLength(),
+						  bmp.GetFormat(),
+						  video_format);
+
+            return(tex);
+		}
 
         void InitTexture2DDSA()
         {
