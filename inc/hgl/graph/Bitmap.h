@@ -3,6 +3,7 @@
 
 #include<hgl/graph/TextureFormat.h>
 #include<hgl/type/BaseString.h>
+#include<hgl/FileSystem.h>
 #include<hgl/LogInfo.h>
 namespace hgl
 {
@@ -56,14 +57,14 @@ namespace hgl
             {
                 data=nullptr;
                 header=nullptr;
-                format=0;
+                format=HGL_SF_NONE;
             }
 
             BitmapBase(uint8 *ptr,uint size)
             {
                 data=nullptr;
                 header=nullptr;
-                format=0;
+                format=HGL_SF_NONE;
 
                 Load(ptr,size);
             }
@@ -78,6 +79,8 @@ namespace hgl
                 delete[] data;
 
                 if(!ptr||size<sizeof(HEADER))RETURN_FALSE;
+
+				data=ptr;
 
                 header=(HEADER *)data;
 
@@ -170,6 +173,17 @@ namespace hgl
             const uint32 GetFaces   ()const{return header?header->faces :0;}
             const uint32 GetCount   ()const{return header?header->count :0;}
         };//class BitmapCubeMapArray
+
+		template<typename T> inline bool LoadBitmapFromFile(T *bmp,const OSString &filename)
+		{
+			if(!bmp||filename.IsEmpty())
+				return(false);
+			
+			uint8 *filedata;
+			int64 filesize=filesystem::LoadFileToMemory(filename,(void **)&filedata);
+
+			return bmp->Load(filedata,filesize);
+		}
 	}//namespace graph
 
 	namespace graph
