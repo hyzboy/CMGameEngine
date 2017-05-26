@@ -119,7 +119,7 @@ namespace hgl
 		/**
 		* 贴图数据源格式
 		*/
-		enum TextureSourceFormat
+		enum TextureSourceFormat:uint
 		{
 			HGL_SF_NONE=0,			//无用，做为枚举起始
 
@@ -150,7 +150,6 @@ namespace hgl
 
 			HGL_SF_R3_G3_B2,
             HGL_SF_RGB565,
-			HGL_SF_RGB5,
 
 			HGL_SF_RGBA4,
 			HGL_SF_RGB5_A1,

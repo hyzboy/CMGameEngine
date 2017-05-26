@@ -35,7 +35,6 @@ namespace hgl
 
             {HGL_SF_R3_G3_B2,       "R3_G3_B2",     false,  0,  GL_R3_G3_B2,                                    GL_RGB,         GL_UNSIGNED_BYTE_3_3_2      ,1,1},
             {HGL_SF_RGB565,         "RGB565",       false,  0,  GL_RGB565,                                      GL_RGB,         GL_UNSIGNED_SHORT_5_6_5     ,2,2},
-            {HGL_SF_RGB5,           "RGB5",         false,  0,  GL_RGB5,                                        GL_RGB,         GL_UNSIGNED_SHORT_5_5_5_1   ,2,2},
 
             {HGL_SF_RGBA4,          "RGBA4",        false,  0,  GL_RGBA4,                                       GL_RGBA,        GL_UNSIGNED_SHORT_4_4_4_4   ,2,2},
             {HGL_SF_RGB5_A1,        "RGB5_A1",      false,  0,  GL_RGB5_A1,                                     GL_RGBA,        GL_UNSIGNED_SHORT_5_5_5_1   ,2,2},
