@@ -677,7 +677,7 @@ HGL_GRAPHICS_MAIN(sii,app,args)
     efc.folder_name =cur_path;
     efc.find_name   =args[0];
     efc.proc_file   =true;
-    efc.proc_folder =sub;
+    efc.sub_folder	=sub;
     efc.cb_file     =EnumConvertImage;
 	    
     EnumFile(&efc);

@@ -8,7 +8,7 @@
 using namespace hgl;
 using namespace hgl::graph;
 
-//#define USE_PRIM_RECTANGLE
+//#define USE_PRIM_RECTANGLE			//不支持
 
 #ifndef USE_PRIM_RECTANGLE
 const uint16	vertex[]={	100,100,	//left-top
@@ -23,6 +23,9 @@ const float		texcoord[]={0,0,
 #else
 const uint16	vertex[]={	100,100,	//left,top
 							256,256};	//width,height
+
+const float		texcoord[]={0,0,		//left,top
+							1,1};		//width,height
 #endif//USE_PRIM_RECTANGLE
 
 class TestObject:public FlowObject
@@ -37,20 +40,22 @@ public:
 
     TestObject()
     {
-        SetClearColor(ceMoziilaNightBlue);		//背景色使用暗夜蓝
+        SetClearColor(ceMozillaCharcoal);		//背景色使用木炭黑
 
         //创建矩形顶点数据
         {
 		#ifndef USE_PRIM_RECTANGLE			
-			vertex_data=new VertexArray(HGL_PRIM_TRIANGLE_FAN);         ///<创建新的顶点数据对象，图元类型为扇形
+			vertex_data=new VertexArray(HGL_PRIM_TRIANGLE_FAN);						///<创建新的顶点数据对象，图元类型为扇形
 
-            vertex_data->SetVertex(new VB2u16(4,vertex));               ///<设定矩形的坐标数据
+            vertex_data->SetVertex(new VB2u16(4,vertex));							///<设定矩形的坐标数据
 
-			vertex_data->SetVertexBuffer(vbtDiffuseTexCoord,new VB2f(4,texcoord));
+			vertex_data->SetVertexBuffer(vbtDiffuseTexCoord,new VB2f(4,texcoord));	///<设定矩形的贴图坐标数据
 		#else
-			vertex_data=new VertexArray(HGL_PRIM_RECTANGLE);            ///<创建新的顶点数据对象，图元类型为矩形
+			vertex_data=new VertexArray(HGL_PRIM_RECTANGLE);						///<创建新的顶点数据对象，图元类型为矩形
 
-            vertex_data->SetVertex(new VB4u16(1,vertex));               ///<设定矩形的坐标数据
+            vertex_data->SetVertex(new VB4u16(1,vertex));							///<设定矩形的坐标数据
+
+			vertex_data->SetVertexBuffer(vbtDiffuseTexCoord,new VB4f(1,texcoord));	///<设定矩形的贴图坐标数据
 		#endif//USE_PRIM_RECTANGLE
         }
 
