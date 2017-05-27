@@ -46,10 +46,8 @@
 #define HGL_COMPILER_GNU			HGL_MERGE32('G','N','U',' ')
 #define HGL_COMPILER_MINGW32		HGL_MERGE32('M','G','3','2')
 #define HGL_COMPILER_Intel			HGL_MERGE32('I','n','t','e')
-#define HGL_COMPILER_Oracle			HGL_MERGE32('O','R','A','C')
 #define HGL_COMPILER_IBM			HGL_MERGE32('I','B','M',' ')
 #define HGL_COMPILER_DigitalMars	HGL_MERGE32('D','i','M','a')
-#define HGL_COMPILER_Vector			HGL_MERGE32('V','e','c','t')
 #define HGL_COMPILER_LLVM			HGL_MERGE32('L','L','V','M')
 #define HGL_COMPILER_PGI			HGL_MERGE32('P','G','I',' ')
 
