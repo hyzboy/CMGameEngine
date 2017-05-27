@@ -12,7 +12,6 @@
 #define HGL_OS_Windows				HGL_MERGE32('W','i','n',' ')
 #define HGL_OS_XBOX360				HGL_MERGE32('X','3','6','0')
 #define HGL_OS_XBOX1				HGL_MERGE32('X','B','1',' ')
-#define HGL_OS_OS2					HGL_MERGE32('O','S','/','2')
 #define HGL_OS_NetWare				HGL_MERGE32('N','e','t','W')
 #define HGL_OS_MacOSX				HGL_MERGE32('M','a','c','X')
 #define HGL_OS_iOS					HGL_MERGE32('i','O','S',' ')
@@ -21,23 +20,15 @@
 #define HGL_OS_OpenBSD				HGL_MERGE32('O','B','S','D')
 #define HGL_OS_Linux				HGL_MERGE32('L','i','n','u')
 #define HGL_OS_Cygwin				HGL_MERGE32('C','y','g','w')
-#define HGL_OS_Solaris				HGL_MERGE32('S','o','l','a')
-#define HGL_OS_PS2					HGL_MERGE32('P','S','2',' ')
 #define HGL_OS_PSP					HGL_MERGE32('P','S','P',' ')
 #define HGL_OS_PS3					HGL_MERGE32('P','S','3',' ')
 #define HGL_OS_PS4					HGL_MERGE32('P','S','4',' ')
 #define HGL_OS_PSP2					HGL_MERGE32('P','S','P','2')
 #define HGL_OS_PS4					HGL_MERGE32('P','S','4',' ')
 #define HGL_OS_AIX					HGL_MERGE32('A','I','X',' ')
-#define HGL_OS_HPUX					HGL_MERGE32('H','P','U','X')
-#define HGL_OS_IRIX					HGL_MERGE32('I','R','I','X')
-#define HGL_OS_BeOS					HGL_MERGE32('B','e','O','S')
-#define HGL_OS_Haiku				HGL_MERGE32('H','a','i','k')		//BeOS的分支
-#define HGL_OS_QNX					HGL_MERGE32('Q','N','X',' ')
 
 #define HGL_CPU_X86_32				HGL_MERGE32('8','6','3','2')
 #define HGL_CPU_X86_64				HGL_MERGE32('8','6','6','4')
-#define HGL_CPU_Itanium				HGL_MERGE32('I','A','6','4')
 #define HGL_CPU_MIPS				HGL_MERGE32('M','I','P','S')
 #define HGL_CPU_MIPSel				HGL_MERGE32('M','I','e','l')
 #define HGL_CPU_MIPS64              HGL_MERGE32('M','I','6','4')
@@ -48,26 +39,19 @@
 #define HGL_CPU_ARM6                HGL_MERGE32('A','R','M','6')
 #define HGL_CPU_ARM7				HGL_MERGE32('A','R','M','7')
 #define HGL_CPU_ARM9				HGL_MERGE32('A','R','M','9')
-#define HGL_CPU_SH					HGL_MERGE32('S','H',' ',' ')
 #define HGL_CPU_Sparc				HGL_MERGE32('S','P','A','R')
 #define HGL_CPU_Sparc64             HGL_MERGE32('S','P','6','4')
 
-#define HGL_COMPILER_CBuilder		HGL_MERGE32('C','P','P','B')
 #define HGL_COMPILER_Microsoft		HGL_MERGE32('M','S','C',' ')
-#define HGL_COMPILER_Watcom			HGL_MERGE32('W','A','T','C')
 #define HGL_COMPILER_GNU			HGL_MERGE32('G','N','U',' ')
+#define HGL_COMPILER_MINGW32		HGL_MERGE32('M','G','3','2')
 #define HGL_COMPILER_Intel			HGL_MERGE32('I','n','t','e')
 #define HGL_COMPILER_Oracle			HGL_MERGE32('O','R','A','C')
-#define HGL_COMPILER_HP				HGL_MERGE32('H','P',' ',' ')
 #define HGL_COMPILER_IBM			HGL_MERGE32('I','B','M',' ')
-#define HGL_COMPILER_SGI			HGL_MERGE32('S','G','I',' ')
-#define HGL_COMPILER_Pathscale		HGL_MERGE32('P','a','S','c')
-#define HGL_COMPILER_Pelles			HGL_MERGE32('P','e','l','l')
 #define HGL_COMPILER_DigitalMars	HGL_MERGE32('D','i','M','a')
 #define HGL_COMPILER_Vector			HGL_MERGE32('V','e','c','t')
 #define HGL_COMPILER_LLVM			HGL_MERGE32('L','L','V','M')
 #define HGL_COMPILER_PGI			HGL_MERGE32('P','G','I',' ')
-#define HGL_COMPILER_TI				HGL_MERGE32('T','I',' ',' ')	//德州仪器，并不明确cpu类型
 
 #define HGL_BIG_ENDIAN		'B'
 #define HGL_LITTLE_ENDIAN	'L'
@@ -139,12 +123,6 @@
 	#define HGL_LIB_CPU_NAME			OS_TEXT("ARM")
 	#define HGL_MIN_MEMORY_ALLOC_BYTES	4
 	#define HGL_ENDIAN					HGL_BIG_ENDIAN
-#elif defined(__sh__) || defined(_M_SH)
-	#define	HGL_CPU						HGL_CPU_SH
-	#define HGL_CPU_NAME				OS_TEXT("SuperH")
-	#define HGL_LIB_CPU_NAME			OS_TEXT("SuperH")
-	#define HGL_MIN_MEMORY_ALLOC_BYTES	4
-	#define HGL_ENDIAN					HGL_LITTLE_ENDIAN
 #elif defined(__sparc64__)||defined(sparc64)
     #define HGL_CPU                     HGL_CPU_SPARC64
     #define HGL_CPU_NAME                OS_TEXT("Sparc64")
@@ -171,8 +149,6 @@
 	#define HGL_OS 			HGL_OS_Windows
 #elif defined(_X360)
 	#define HGL_OS			HGL_OS_XBOX360
-#elif defined(OS2)
-	#define HGL_OS			HGL_OS_OS2
 #elif defined(NETWARE)
 	#define HGL_OS			HGL_OS_NetWare
 #elif defined(__APPLE__)||defined(__MAC__)||defined(macintosh)||defined(__APPLE_CC__)
@@ -187,10 +163,6 @@
 	#define HGL_OS			HGL_OS_Linux
 #elif defined(__CYGWIN__)
 	#define HGL_OS			HGL_OS_Cygwin
-#elif defined(sun)||defined(__sun)||defined(__sun__)||defined(__solaris__)
-	#define HGL_OS			HGL_OS_Solaris
-#elif defined(_PS2)||defined(__MIPS_PSX2__)
-	#define HGL_OS			HGL_OS_PS2
 #elif defined(__PSP__)||defined(__psp__)||defined(_PSP)
 	#define HGL_OS			HGL_OS_PSP
 #elif defined(SN_TARGET_PS3)||defined(SN_TARGET_PS3_SPU)||defined(__PS3__)||defined(__ps3__)||defined(_PS3)
@@ -224,34 +196,20 @@
 	#define HGL_OS			HGL_OS_QNX
 #endif//
 
-#if defined(__CODEGEARC__)||defined(__BORLANDC__)||defined(__TURBOC__)
-	#define HGL_COMPILER 	HGL_COMPILER_CBuilder
-#elif defined(__WATCOMC__)||defined(__OPENWATCOMC__)
-	#define HGL_COMPILER	HGL_COMPILER_Watcom
-#elif defined(__clang__)
+#if defined(__clang__)
 	#define HGL_COMPILER	HGL_COMPILER_LLVM
-#elif defined(__INTEL_COMPILER)||defined(__ECL)||defined(__ICL)
+#elif defined(__INTEL_COMPILER)||defined(__ECL)||defined(__ICL)||defined(__ICC)
 	#define HGL_COMPILER	HGL_COMPILER_Intel
-#elif defined(_FORTEC_)||defined(__SUNPRO_CC)
-	#define HGL_COMPILER	HGL_COMPILER_SUN
-#elif defined(__HP_aCC)||defined(__HP_aCC)
-	#define HGL_COMPILER	HGL_COMPILER_HP
 #elif defined(__IBMC__)||defined(__IBMCPP__)
 	#define HGL_COMPILER	HGL_COMPILER_IBM
-#elif defined(_SGI_COMPILER_VERSION)
-	#define HGL_COMPILER	HGL_COMPILER_SGI
-#elif defined(__PATHSCALE__)
-	#define HGL_COMPILER	HGL_COMPILER_Pathscale
-#elif defined(__POCC__)
-	#define HGL_COMPILER	HGL_COMPILER_Pelles
-#elif defined(__DMC__)||defined(__SC__)
+#elif defined(__DMC__)||defined(__SC__)||defined(__ZTC__)
 	#define HGL_COMPILER	HGL_COMPILER_DigitalMars
 #elif defined(_MSC_VER)
 	#define HGL_COMPILER	HGL_COMPILER_Microsoft
 #elif defined(__PGI)
 	#define HGL_COMPILER	HGL_COMPILER_PGI
-#elif defined(__TI_COMPILER_VERSION__)
-	#define HGL_COMPILER	HGL_COMPILER_TI
+#elif defined(__MINGW32__)
+	#define HGL_COMPILER	HGL_COMPILER_MINGW32
 #elif defined(__GNUC__)
 	#define HGL_COMPILER	HGL_COMPILER_GNU
 #else
@@ -274,16 +232,14 @@
 
 	#include<hgl/platform/os/MSWindows.h>
 
-	#if HGL_COMPILER == HGL_COMPILER_CBuilder
-		#include<hgl/platform/compiler/CBuilder.h>
-	#elif HGL_COMPILER == HGL_COMPILER_Microsoft
+	#if HGL_COMPILER == HGL_COMPILER_Microsoft
 		#include<hgl/platform/compiler/Microsoft.h>
 	#elif HGL_COMPILER == HGL_COMPILER_Intel
 		#include<hgl/platform/compiler/Intel.h>
 	#elif HGL_COMPILER == HGL_COMPILER_IBM
 		#include<hgl/platform/compiler/IBM.h>
-	#elif HGL_COMPILER == HGL_COMPILER_Watcom
-		#include<hgl/platform/compiler/Watcom.h>
+	#elif HGL_COMPILER == HGL_COMPILER_MINGW32
+		#include<hgl/platform/compiler/GNU.h>
 	#elif HGL_COMPILER == HGL_COMPILER_GNU
 		#include<hgl/platform/compiler/GNU.h>
 	#else
@@ -369,16 +325,6 @@
 	#if HGL_COMPILER == HGL_COMPILER_SUN
 		#include<hgl/platform/compiler/SUN.h>
 	#elif HGL_COMPILER == HGL_COMPILER_GNU
-		#include<hgl/platform/compiler/GNU.h>
-	#else
-		#error Unrecognized compiler
-	#endif
-
-#elif HGL_OS == HGL_OS_PS2
-
-	#include<hgl/platform/os/ps2.h>
-
-	#if HGL_COMPILER == HGL_COMPILER_GNU
 		#include<hgl/platform/compiler/GNU.h>
 	#else
 		#error Unrecognized compiler
