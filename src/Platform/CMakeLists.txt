@@ -150,6 +150,13 @@ SET(PLATFORM_SOURCE ${PLATFORM_SOURCE}
                     ${PLATFORM_EXTERNAL_MODULE_SOURCE}
                     ${PLATFORM_DESKTOP_SOURCE}
                     ${PLATFORM_INPUT_DEVICE_SOURCE})
-                    
-add_library(CM.Platform STATIC ${PLATFORM_SOURCE})
 
+IF(WIN32)
+    add_library(CM.Platform STATIC ${PLATFORM_SOURCE})
+
+    add_library(CM.Platform.Static STATIC ${PLATFORM_SOURCE})
+    
+    target_compile_options(CM.Platform.Static PRIVATE "/MT")
+ELSEIF(WIN32)
+    add_library(CM.Platform SHARED ${PLATFORM_SOURCE})
+ENDIF(WIN32)
