@@ -234,6 +234,8 @@ MESSAGE("Host System Version: " ${CMAKE_HOST_SYSTEM_VERSION})
 MESSAGE("Host System Processor: " ${CMAKE_HOST_SYSTEM_PROCESSOR})
 
 MESSAGE("Generator: " ${CMAKE_GENERATOR})
+MESSAGE("Generator Platform: " ${CMAKE_GENERATOR_PLATFORM})
+MESSAGE("Generator Toolset: " ${CMAKE_GENERATOR_TOOLSET})
 message("")
 MESSAGE("C Compiler: " ${CMAKE_C_COMPILER})
 MESSAGE("C++ Compiler: " ${CMAKE_CXX_COMPILER})
