@@ -184,5 +184,15 @@ namespace hgl
 
             return ReadFully(mb->data(),n);
         }
+
+		int64 SocketInputStream::Available()const
+		{
+			int recv_buf_size=0;
+			int len=sizeof(int);
+
+			getsockopt(sock,SOL_SOCKET,SO_RCVBUF,(char *)&recv_buf_size,&len);		//这个函数会出错，但我们不理会
+
+			return recv_buf_size;
+		}
     }//namespace network
 }//namespace hgl
