@@ -71,11 +71,10 @@ namespace hgl
         InitPlugIn();                //初始化插件
         InitString();
 
-        LOG_INFO(OS_TEXT("Powered by ")+GetString(hfsName));
-        LOG_INFO(OS_TEXT("Version: ")+GetString(hfsVersion));
-        LOG_INFO("SDK Build Time: " __DATE__ " " __TIME__);
-        LOG_INFO(OS_TEXT("SDK Build Platform: ") HGL_COMPILE_PLATFORM);
-		LOG_INFO(OS_TEXT("SDK Build Toolset: ") HGL_COMPILE_TOOLSET);
+        LOG_INFO(OS_TEXT("Powered by ")+GetString(hfsName)+OS_TEXT(" ")+GetString(hfsVersion));
+        LOG_INFO("Build Time: " __DATE__ "," __TIME__);
+        LOG_INFO(OS_TEXT("Build Platform: ") HGL_COMPILE_PLATFORM);
+		LOG_INFO(OS_TEXT("Build Toolsets: ") HGL_COMPILE_TOOLSET);
 
         GetCMGDKPath(si.path);        //取得CMGDK路径
 
