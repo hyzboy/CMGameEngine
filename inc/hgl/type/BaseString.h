@@ -765,7 +765,7 @@ namespace hgl
          * @param n 字符数量
          * @return 成否成功
          */
-        bool SubString(SelfClass &sc,int start,int n)												///<取字符串指定段的字符
+        bool SubString(SelfClass &sc,int start,int n) const											///<取字符串指定段的字符
         {
             if(Length()<start+n)
                 return(false);
