@@ -83,6 +83,7 @@ namespace hgl
 
             SAFE_CLEAR(vbc);
         }
+
         void VertexBufferBase::CloseVertexBuffer()
         {
             SAFE_CLEAR(vbc);

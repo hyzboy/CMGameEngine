@@ -25,10 +25,12 @@ SET(CM_SCENE_GRAPH_SOURCE    Camera.cpp
 #                                 Ray.cpp
                                 )
 
+SET(CM_SCENE_GRAPH_NORENDER_SOURCE VertexBufferNoRender.cpp ${CM_SCENE_GRAPH_SOURCE})
+
 IF(WIN32)
-    add_library(CM.SceneGraph STATIC ${CM_SCENE_GRAPH_SOURCE})
+    add_library(CM.SceneGraph STATIC ${CM_SCENE_GRAPH_NORENDER_SOURCE})
 ELSE()
-    add_library(CM.SceneGraph SHARED ${CM_SCENE_GRAPH_SOURCE})
+    add_library(CM.SceneGraph SHARED ${CM_SCENE_GRAPH_NORENDER_SOURCE})
 ENDIF()
 
 IF(BUILD_OPENGL_LIB)
