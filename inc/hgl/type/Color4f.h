@@ -41,6 +41,7 @@ namespace hgl
 
 		void MergeAlpha(const Color4f &v,float va){r=v.r;g=v.g;b=v.b;a=v.a*va;Clamp();}				///<混合Alpha
 
+		void Set(const float *rgba){r=rgba[0];g=rgba[1];b=rgba[2];a=rgba[3];Clamp();}
 		void Set(const Color3f &v,float va=1){r=v.r;g=v.g;b=v.b;a=va;Clamp();}						///<设置颜色
 		void Set(float vr,float vg,float vb){r=vr,g=vg,b=vb;Clamp();}			                    ///<设置颜色
 		void Set(float vr,float vg,float vb,float va){r=vr,g=vg,b=vb;a=va;Clamp();}			        ///<设置颜色
