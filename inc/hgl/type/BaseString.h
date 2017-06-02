@@ -57,11 +57,6 @@ namespace hgl
             Set(bs);
         }
 
-        BaseString(const T ch)
-        {
-            Set(&ch,1,false);
-        }
-
 #define BASE_STRING_NUMBER_CONSTRUCT(type,func)	BaseString(const type num)	\
         {	\
             Set(func(new T[8*sizeof(type)],8*sizeof(type),num),-1,true);	\
