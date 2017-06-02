@@ -17,8 +17,13 @@ SET(GRAPHICS_APPLICATION_SOURCE
 
 SOURCE_GROUP("Application" FILES ${GRAPHICS_APPLICATION_SOURCE})
 
-SET(CM_SCENE_GRAPH_SOURCE    Camera.cpp
-                                WalkerCamera.cpp
+SET(CM_SCENE_GRAPH_SOURCE   Camera.cpp
+                            WalkerCamera.cpp
+							RenderList.cpp
+							SceneGlobalState.cpp
+							SceneNode.cpp
+							SceneOrient.cpp
+							Bitmap.cpp
 #                                 AABox.cpp
 #                                 Frustum.cpp
 #                                 Plane.cpp
@@ -40,14 +45,9 @@ IF(BUILD_OPENGL_LIB)
     #     HeightMapTerrain.cpp
         VertexBufferType.cpp
         VertexArray.cpp
-        Bitmap.cpp
         InlineRenderable.cpp
         Material.cpp
         Renderable.cpp
-        RenderList.cpp
-        SceneGlobalState.cpp
-        SceneNode.cpp
-        SceneOrient.cpp
         SkyLight.cpp
         TileData.cpp
         Transform.cpp
