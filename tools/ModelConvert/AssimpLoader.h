@@ -5,6 +5,7 @@
 #include<hgl/type/List.h>
 #include<hgl/type/Map.h>
 #include<hgl/graph/VertexBuffer.h>
+#include<hgl/graph/SceneNode.h>
 #include<assimp/Importer.hpp>
 #include<assimp/scene.h>
 
@@ -38,14 +39,16 @@ private:
 	void get_bounding_box_for_node(const aiNode *,aiVector3D *,aiVector3D *,aiMatrix4x4 *);
 	void get_bounding_box(aiVector3D *,aiVector3D *);
 
-//	void LoadMaterial();
+	void LoadMaterial();
 	void LoadMesh();
-//	void LoadScene(SceneNode *,const aiScene *,const aiNode *);
+	void LoadScene(const OSString &,SceneNode *,const aiScene *,const aiNode *);
 
 	void SaveFile(void *,uint,const OSString &);
 
 	template<typename T>
 	void SaveFaces(const aiFace *,const T,const OSString &extname);
+
+	void SaveTexCoord(const aiVector3D *,const uint,const uint,const OSString &extname);
 
 public:
 
