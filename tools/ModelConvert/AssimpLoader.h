@@ -4,6 +4,7 @@
 #include<hgl/algorithm/VectorMath.h>
 #include<hgl/type/List.h>
 #include<hgl/type/Map.h>
+#include<hgl/type/StringList.h>
 #include<hgl/graph/VertexBuffer.h>
 #include<hgl/graph/SceneNode.h>
 #include<assimp/Importer.hpp>
@@ -26,13 +27,7 @@ public:
 
 private:
 
-//	SceneNode root;
-
-//	Map<WideString,Texture2D> tex_list;
-//	MaterialList mat_list;
-//	RenderableList mesh_list;
-
-//	RenderList render_list;
+	UTF8StringList tex_list;
 
 private:
 	
@@ -44,6 +39,8 @@ private:
 	void LoadScene(const OSString &,SceneNode *,const aiScene *,const aiNode *);
 
 	void SaveFile(void *,uint,const OSString &);
+
+	void SaveTextures();
 
 	template<typename T>
 	void SaveFaces(const aiFace *,const T,const OSString &extname);

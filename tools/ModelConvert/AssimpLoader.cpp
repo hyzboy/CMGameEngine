@@ -2,6 +2,8 @@
 #include<assimp/postprocess.h>
 #include<assimp/cimport.h>
 #include<hgl/FileSystem.h>
+#include<hgl/type/List.h>
+#include<hgl/io/MemoryOutputStream.h>
 
 #define LOG_BR	LOG_INFO(OS_TEXT("------------------------------------------------------------"));
 
@@ -107,15 +109,25 @@ void AssimpLoader::SaveFile(void *data,uint size,const OSString &ext_name)
 }
 
 #pragma pack(push,1)
-struct MaterialStruct
+
+struct MaterialTextureStruct
 {
-	UTF8String filename;
+	uint8 type=0;
+
+	int32 tex_id=-1;
 
 	uint8 tm=0;
 	uint32 uvindex=0;
 	float blend=0;
 	uint32 op=0;
 	uint32 wrap_mode[2]={0,0};
+};//
+
+struct MaterialStruct
+{
+	uint32 tex_count;
+
+	MaterialTextureStruct *tex_list;
 
 	Color4f diffuse;
 	Color4f specular;
@@ -126,6 +138,20 @@ struct MaterialStruct
 
 	bool wireframe=false;
 	bool two_sided=false;
+
+public:
+
+	MaterialStruct(const uint32 tc)
+	{
+		tex_count=tc;
+
+		tex_list=new MaterialTextureStruct[tc];
+	}
+
+	MaterialStruct()
+	{
+		delete[] tex_list;
+	}
 };
 #pragma pack(pop)
 
@@ -136,15 +162,24 @@ void OutFloat3(const OSString &front,const Color4f &c)
 					+OS_TEXT(",")+OSString(c.b));
 }
 
+void OutMaterialTexture(const MaterialTextureStruct &mt)
+{
+	LOG_INFO(OS_TEXT("\tTexture Type: ")+OSString(mt.type));
+	LOG_INFO(OS_TEXT("\tTexture ID: ")+OSString(mt.tex_id));
+
+	LOG_INFO(OS_TEXT("\tMapping: ")+OSString(mt.tm));
+	LOG_INFO(OS_TEXT("\tuvindex: ")+OSString(mt.uvindex));
+	LOG_INFO(OS_TEXT("\tblend: ")+OSString(mt.blend));
+	LOG_INFO(OS_TEXT("\top: ")+OSString(mt.op));
+	LOG_INFO(OS_TEXT("\twrap_mode: ")+OSString(mt.wrap_mode[0])+OS_TEXT(",")+OSString(mt.wrap_mode[1]));
+}
+
 void OutMaterial(const MaterialStruct &ms)
 {
-	LOG_INFO(U8_TEXT("Filename: ")+ms.filename);
+	LOG_INFO(OS_TEXT("Material Texture Count ")+OSString(ms.tex_count));
 
-	LOG_INFO(OS_TEXT("Mapping: ")+OSString(ms.tm));
-	LOG_INFO(OS_TEXT("uvindex: ")+OSString(ms.uvindex));
-	LOG_INFO(OS_TEXT("blend: ")+OSString(ms.blend));
-	LOG_INFO(OS_TEXT("op: ")+OSString(ms.op));
-	LOG_INFO(OS_TEXT("wrap_mode: ")+OSString(ms.wrap_mode[0])+OS_TEXT(",")+OSString(ms.wrap_mode[1]));
+	for(int i=0;i<ms.tex_count;i++)
+		OutMaterialTexture(ms.tex_list[i]);
 
 	OutFloat3(OSString(OS_TEXT("diffuse")),ms.diffuse);
 	OutFloat3(OSString(OS_TEXT("specular")),ms.specular);
@@ -187,37 +222,64 @@ void AssimpLoader::LoadMaterial()
 	for(unsigned int m=0;m<scene->mNumMaterials;m++)
 	{
 		int tex_index=0;
+		int tex_count=0;
+		int tt_count=0;
+		int32 tex_id;
 		aiReturn found=AI_SUCCESS;
 
 		aiMaterial *mtl=scene->mMaterials[m];
 
-		found=mtl->GetTexture(aiTextureType_DIFFUSE,tex_index,&filename,&tm,&uvindex,&blend,&op,wrap_mode);
-		
-		MaterialStruct ms;
+		for(uint tt=aiTextureType_DIFFUSE;tt<aiTextureType_UNKNOWN;tt++)
+			tex_count+=mtl->GetTextureCount((aiTextureType)tt);
 
+		MaterialStruct ms(tex_count);
+
+		for(uint tt=aiTextureType_DIFFUSE;tt<aiTextureType_UNKNOWN;tt++)
 		{
-			char *fn=strrchr(filename.data,'\\');
+			tt_count=mtl->GetTextureCount((aiTextureType)tt);
 
-			if(!fn)
-				fn=strrchr(filename.data,'/');
-			else
-				++fn;
+			for(int t=0;t<tt_count;t++)
+			{
+				mtl->GetTexture((aiTextureType)tt,t,&filename,&tm,&uvindex,&blend,&op,wrap_mode);
 
-			if(fn)
-				++fn;
-			else
-				fn=filename.data;
+				ms.tex_list[tex_index].type=tt;
+		
+				{
+					char *fn=strrchr(filename.data,'\\');
 
-			ms.filename=fn;
+					if(!fn)
+						fn=strrchr(filename.data,'/');
+					else
+						++fn;
+
+					if(fn)
+						++fn;
+					else
+						fn=filename.data;
+
+				#if HGL_OS == HGL_OS_Window
+					tex_id=tex_list.CaseFind(fn);
+				#else
+					tex_id=tex_list.Find(fn);
+				#endif//
+
+					if(tex_id)
+						tex_id=tex_list.Add(fn);
+
+					ms.tex_list[tex_index].tex_id=tex_id;
+				}
+
+				ms.tex_list[tex_index].tm=tm;
+				ms.tex_list[tex_index].uvindex=uvindex;
+				ms.tex_list[tex_index].blend=blend;
+				ms.tex_list[tex_index].op=op;
+
+				ms.tex_list[tex_index].wrap_mode[0]=wrap_mode[0];
+				ms.tex_list[tex_index].wrap_mode[1]=wrap_mode[1];
+
+				++tex_index;
+			}
 		}
-
-		ms.tm=tm;
-		ms.uvindex=uvindex;
-		ms.blend=blend;
-		ms.op=op;
-
-		ms.wrap_mode[0]=wrap_mode[0];
-		ms.wrap_mode[1]=wrap_mode[1];
 
 		set_float4(c, 0.8f, 0.8f, 0.8f, 1.0f);
 		if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_DIFFUSE, &diffuse))
@@ -280,6 +342,25 @@ void AssimpLoader::LoadMaterial()
 		OutMaterial(ms);
 		LOG_BR;
 	}
+}
+
+void AssimpLoader::SaveTextures()
+{	
+	const int tex_count=tex_list.GetCount();
+
+	LOG_INFO(OS_TEXT("TOTAL Texture Count: ")+OSString(tex_count));
+
+	for(int i=0;i<tex_count;i++)
+		LOG_INFO(U8_TEXT("\t")+UTF8String(i)+U8_TEXT("\t")+tex_list[i]);
+		
+	LOG_BR;
+
+	io::MemoryOutputStream mos;
+	io::LEDataOutputStream dos(&mos);
+
+	SaveUTF8StringList(&dos,tex_list);
+
+	SaveFile(mos.GetData(),mos.Tell(),OS_TEXT("tex_list"));
 }
 
 template<typename T>
@@ -537,6 +618,8 @@ bool AssimpLoader::LoadFile(const OSString &filename)
 	LoadMaterial();								//载入所有材质
 	LoadMesh();									//载入所有mesh
 	LoadScene(OSString(OS_TEXT("")),&root,scene,scene->mRootNode);	//载入场景节点
+
+	SaveTextures();
 
 	//root.RefreshMatrix();						//刷新矩阵
 
