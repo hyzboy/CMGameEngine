@@ -7,14 +7,16 @@ else()
 	set(CMGDK_BUILD_TYPE "Release")
 endif()
 
-IF(WIN32)
+IF(MSVC)
 
     SET(X86_USE_CPU_COMMAND SSE2 CACHE STRING "Use Max CPU Ext command")
     
     SET_PROPERTY(CACHE X86_USE_CPU_COMMAND PROPERTY STRINGS SSE2 AVX AVX2)
     
 	#visual c++ 2015没有sse3/4/41/42这几个选项
-ELSE(WIN32)
+ENDIF(MSVC)
+
+IF(CMAKE_COMPILER_IS_GNUCC OR MINGW)
 	OPTION(USE_CPP14				"Use C++ 14"							FALSE	)
 	OPTION(USE_ICE_CREAM			"Use IceCream(only openSUSE/SUSE)"		FALSE	)
 
@@ -35,7 +37,7 @@ ELSE(WIN32)
     SET(X86_USE_CPU_COMMAND SSE2 CACHE STRING "Use Max CPU Ext command")
     
     SET_PROPERTY(CACHE X86_USE_CPU_COMMAND PROPERTY STRINGS SSE3 SSE4 SSE41 SSE42 AVX)
-ENDIF(WIN32)
+ENDIF(CMAKE_COMPILER_IS_GNUCC OR MINGW)
 
 IF(USE_LLVM_CLANG)
     OPTION(USE_LLVM_CLANG_STATIC_ANALYZER	"the static analyzer"				OFF		)
@@ -128,7 +130,9 @@ IF(UNIX)
 			SET(CMAKE_CXX_COMPILER clang++)
 		ENDIF(USE_LLVM_CLANG)
 	ENDIF(USE_ICE_CREAM)
+ENDIF(UNIX)
 
+IF(CMAKE_COMPILER_IS_GNUCC OR MINGW)
 	if(USE_ALL_STATIC)
 		add_definitions("-static")
 	endif(USE_ALL_STATIC)
@@ -170,9 +174,9 @@ IF(UNIX)
         add_definitions("-DMATH_SSE3")
         add_definitions(-msse3)
     endif()
-ENDIF(UNIX)
+ENDIF()
 
-IF(WIN32)
+IF(MSVC)
 	if(X86_USE_CPU_COMMAND STREQUAL AVX2)
 		add_definitions("-DMATH_AVX2")
         add_compile_options(/arch:AVX2)
@@ -183,4 +187,4 @@ IF(WIN32)
         add_definitions("-DMATH_SSE2")
        	add_compile_options(/arch:SSE2)
     endif()
-ENDIF(WIN32)
+ENDIF(MSVC)
