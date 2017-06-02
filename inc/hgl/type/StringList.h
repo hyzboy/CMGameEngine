@@ -573,12 +573,12 @@ namespace hgl
             return SplitToMultiStringList<T>(sl,slc,str.c_str(),str.Length());
     }
 
-    typedef StringList<UTF8String	> UTF8StringList;
-    typedef StringList<UTF16String	> UTF16StringList;
-//	typedef StringList<UTF32String	> UTF32StringList;
-    typedef StringList<AnsiString	> AnsiStringList;
-    typedef StringList<WideString	> WideStringList;
-    typedef StringList<OSString		> OSStringList;
+    using UTF8StringList	=StringList<UTF8String	>;
+    using UTF16StringList	=StringList<UTF16String	>;
+	using UTF32StringList	=StringList<UTF32String	>;
+    using AnsiStringList	=StringList<AnsiString	>;
+    using WideStringList	=StringList<WideString	>;
+	using OSStringList		=StringList<OSString	>;
 
     template<typename T,ByteOrderMask bom> struct ReadStringFromDIS
     {
@@ -684,7 +684,7 @@ namespace hgl
     {
         WriteStringToDOS<T,bom> wtd;
 
-        const int32 count=sl.Count;
+        const int32 count=sl.GetCount();
         int result=0;
 
         if(!dos->WriteInt32(count))
