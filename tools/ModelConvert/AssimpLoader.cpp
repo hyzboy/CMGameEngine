@@ -94,7 +94,7 @@ AssimpLoader::~AssimpLoader()
 		aiReleaseImport(scene);
 }
 
-void AssimpLoader::SaveFile(void *data,uint size,const OSString &ext_name)
+void AssimpLoader::SaveFile(const void *data,const uint &size,const OSString &ext_name)
 {
 	if(!data||size<=0)return;
 
@@ -105,6 +105,22 @@ void AssimpLoader::SaveFile(void *data,uint size,const OSString &ext_name)
 		LOG_INFO(OS_TEXT("SaveFile: ")+filename+OS_TEXT(" , size: ")+OSString(size));
 
 		total_file_bytes+=size;
+	}
+}
+
+void AssimpLoader::SaveFile(void **data,const int64 *size,const int &count,const OSString &ext_name)
+{
+	if(!data||size<=0)return;
+
+	OSString filename=main_filename+OS_TEXT(".")+ext_name;
+
+	int64 result=filesystem::SaveMemoryToFile(filename,data,size,count);
+
+	if(result>0)
+	{
+		LOG_INFO(OS_TEXT("SaveFile: ")+filename+OS_TEXT(" , size: ")+OSString(result));
+
+		total_file_bytes+=result;
 	}
 }
 
@@ -385,18 +401,14 @@ void AssimpLoader::SaveFaces(const aiFace *face,const T count,const OSString &ex
 	delete[] data;
 }
 
-void AssimpLoader::SaveTexCoord(const aiVector3D *texcoord,const uint comp,const uint count,const OSString &extname)
+void AssimpLoader::SaveTexCoord(float *tp,const aiVector3D *texcoord,const uint comp,const uint count)
 {
 	if(comp<=0||comp>3)
 		return;
 
 	const uint size=1+sizeof(float)*comp*count;
-	uchar *data=new uchar[size];
 
 	const aiVector3D *sp=texcoord;
-	float *tp=(float *)(data+1);
-
-	*data=comp;
 
 	if(comp==1)
 	{
@@ -427,9 +439,6 @@ void AssimpLoader::SaveTexCoord(const aiVector3D *texcoord,const uint comp,const
 			++sp;
 		}
 	}
-
-	SaveFile(data,size,extname);
-	delete[] data;
 }
 
 #pragma pack(push,1)
@@ -442,6 +451,8 @@ struct MeshStruct
 
 	uint32 color_channels;				///<顶点色数量
 	uint32 texcoord_channels;			///<纹理坐标数量
+
+	uint32 material_index;				///<材质索引
 
 	bool have_normal;					///<是否有法线
 	bool have_tb;						///<是否有切线和副切线
@@ -509,6 +520,7 @@ void AssimpLoader::LoadMesh()
 			ms.faces_number		=mesh->mNumFaces;
 			ms.color_channels	=mesh->GetNumColorChannels();
 			ms.texcoord_channels=mesh->GetNumUVChannels();
+			ms.material_index	=mesh->mMaterialIndex;
 			ms.have_normal		=mesh->HasNormals();
 			ms.have_tb			=mesh->HasTangentsAndBitangents();
 			ms.bones_number		=mesh->mNumBones;
@@ -523,19 +535,59 @@ void AssimpLoader::LoadMesh()
 			SaveFile(mesh->mVertices,v3fdata_size,OSString(i)+OS_TEXT(".vertex"));
 
 		if(mesh->HasNormals())
-			SaveFile(mesh->mNormals,v3fdata_size,OSString(i)+OS_TEXT(".normal"));
-
-		if(mesh->HasTangentsAndBitangents())
 		{
-			SaveFile(mesh->mTangents,v3fdata_size,OSString(i)+OS_TEXT(".tangent"));
-			SaveFile(mesh->mBitangents,v3fdata_size,OSString(i)+OS_TEXT(".bitangent"));
+			if(mesh->HasTangentsAndBitangents())
+			{
+				void *tbn_data[]={mesh->mNormals,mesh->mTangents,mesh->mBitangents};
+				int64 tbn_size[3]={v3fdata_size,v3fdata_size,v3fdata_size};
+
+				SaveFile(tbn_data,tbn_size,3,OSString(i)+OS_TEXT(".tbn"));
+
+				//SaveFile(mesh->mTangents,v3fdata_size,OSString(i)+OS_TEXT(".tangent"));
+				//SaveFile(mesh->mBitangents,v3fdata_size,OSString(i)+OS_TEXT(".bitangent"));
+			}
+			else
+				SaveFile(mesh->mNormals,v3fdata_size,OSString(i)+OS_TEXT(".normal"));
 		}
 
-		for(int c=0;c<mesh->GetNumColorChannels();c++)
-			SaveFile(mesh->mColors[c],v4fdata_size,OSString(i)+OS_TEXT(".")+OSString(c)+OS_TEXT(".color"));
+		if(mesh->GetNumColorChannels()>0)
+		{
+			void **color_data=new void *[mesh->GetNumColorChannels()];
+			int64 *color_size=new int64[mesh->GetNumColorChannels()];
+			
+			for(int c=0;c<mesh->GetNumColorChannels();c++)
+			{
+				color_data[c]=mesh->mColors[c];
+				color_size[c]=v4fdata_size;
+			}
 
-		for(int c=0;c<mesh->GetNumUVChannels();c++)
-			SaveTexCoord(mesh->mTextureCoords[c],mesh->mNumUVComponents[c],mesh->mNumVertices,OSString(i)+OS_TEXT(".")+OSString(c)+OS_TEXT(".texcoord"));
+			SaveFile(color_data,color_size,mesh->GetNumColorChannels(),OSString(i)+OS_TEXT(".color"));
+
+			delete[] color_data;
+			delete[] color_size;
+		}
+
+		{
+			int comp_total=0;
+
+			for(int c=0;c<mesh->GetNumUVChannels();c++)
+				comp_total+=mesh->mNumUVComponents[c]*mesh->mNumVertices;
+
+			uint64 tc_size=mesh->GetNumUVChannels()+comp_total*sizeof(float);
+
+			uint8 *tc_data=new uint8[tc_size];
+			float *tp=(float *)(tc_data+mesh->GetNumUVChannels());
+			for(int c=0;c<mesh->GetNumUVChannels();c++)
+			{
+				tc_data[c]=mesh->mNumUVComponents[c];
+
+				SaveTexCoord(tp,mesh->mTextureCoords[c],mesh->mNumUVComponents[c],mesh->mNumVertices);
+
+				tp+=mesh->mNumUVComponents[c]*mesh->mNumVertices;
+			}
+			
+			SaveFile(tc_data,tc_size,OSString(i)+OS_TEXT(".texcoord"));
+		}
 
 		if(mesh->HasFaces())
 		{
@@ -629,4 +681,3 @@ bool AssimpLoader::LoadFile(const OSString &filename)
 	
 	return(true);
 }
-

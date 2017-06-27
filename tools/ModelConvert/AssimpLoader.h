@@ -38,14 +38,15 @@ private:
 	void LoadMesh();
 	void LoadScene(const OSString &,SceneNode *,const aiScene *,const aiNode *);
 
-	void SaveFile(void *,uint,const OSString &);
+	void SaveFile(const void *,const uint &,const OSString &);
+	void SaveFile(void **,const int64 *,const int &,const OSString &);
 
 	void SaveTextures();
 
 	template<typename T>
 	void SaveFaces(const aiFace *,const T,const OSString &extname);
 
-	void SaveTexCoord(const aiVector3D *,const uint,const uint,const OSString &extname);
+	void SaveTexCoord(float *,const aiVector3D *,const uint,const uint);
 
 public:
 
