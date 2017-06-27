@@ -441,6 +441,17 @@ void AssimpLoader::SaveTexCoord(float *tp,const aiVector3D *texcoord,const uint 
 	}
 }
 
+void c4f_to_4b(uint8 *tp,const aiColor4D *c4,const int count)
+{
+	for(int i=0;i<count;i++)
+	{
+		*tp=c4->r*255;++tp;
+		*tp=c4->g*255;++tp;
+		*tp=c4->b*255;++tp;
+		*tp=c4->a*255;++tp;
+	}
+}
+
 #pragma pack(push,1)
 struct MeshStruct
 {
@@ -536,35 +547,36 @@ void AssimpLoader::LoadMesh()
 
 		if(mesh->HasNormals())
 		{
-			if(mesh->HasTangentsAndBitangents())
-			{
-				void *tbn_data[]={mesh->mNormals,mesh->mTangents,mesh->mBitangents};
-				int64 tbn_size[3]={v3fdata_size,v3fdata_size,v3fdata_size};
+			//if(mesh->HasTangentsAndBitangents())
+			//{
+			//	void *tbn_data[]={mesh->mNormals,mesh->mTangents,mesh->mBitangents};
+			//	int64 tbn_size[3]={v3fdata_size,v3fdata_size,v3fdata_size};
 
-				SaveFile(tbn_data,tbn_size,3,OSString(i)+OS_TEXT(".tbn"));
+			//	SaveFile(tbn_data,tbn_size,3,OSString(i)+OS_TEXT(".tbn"));
 
-				//SaveFile(mesh->mTangents,v3fdata_size,OSString(i)+OS_TEXT(".tangent"));
-				//SaveFile(mesh->mBitangents,v3fdata_size,OSString(i)+OS_TEXT(".bitangent"));
-			}
-			else
+			//	//SaveFile(mesh->mTangents,v3fdata_size,OSString(i)+OS_TEXT(".tangent"));
+			//	//SaveFile(mesh->mBitangents,v3fdata_size,OSString(i)+OS_TEXT(".bitangent"));
+			//}
+			//else
 				SaveFile(mesh->mNormals,v3fdata_size,OSString(i)+OS_TEXT(".normal"));
 		}
 
 		if(mesh->GetNumColorChannels()>0)
 		{
-			void **color_data=new void *[mesh->GetNumColorChannels()];
-			int64 *color_size=new int64[mesh->GetNumColorChannels()];
+			const int64 vertex_color_size=mesh->mNumVertices*4*mesh->GetNumColorChannels();
+
+			uint8 *vertex_color=new uint8[vertex_color_size];
+			uint8 *tp=vertex_color;
 			
 			for(int c=0;c<mesh->GetNumColorChannels();c++)
 			{
-				color_data[c]=mesh->mColors[c];
-				color_size[c]=v4fdata_size;
+				c4f_to_4b(tp,mesh->mColors[c],mesh->mNumVertices);
+				tp+=mesh->mNumVertices*4;
 			}
 
-			SaveFile(color_data,color_size,mesh->GetNumColorChannels(),OSString(i)+OS_TEXT(".color"));
+			SaveFile(vertex_color,vertex_color_size,OSString(i)+OS_TEXT(".color"));
 
-			delete[] color_data;
-			delete[] color_size;
+			delete[] vertex_color;
 		}
 
 		{
