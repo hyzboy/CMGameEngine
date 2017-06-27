@@ -11,6 +11,8 @@
 	#define HGL_LIB_COMPILER_VERSION __clang_version__
 
 #endif//__clang__
+
+#define HGL_ALIGNED(var) var __declspec(align(32))
 //--------------------------------------------------------------------------------------------------
 #define HGL_LIB_FRONT	HGL_LIB_OS "_" HGL_LIB_COMPILER_NAME "_" HGL_LIB_DEBUG_NAME "_"
 
