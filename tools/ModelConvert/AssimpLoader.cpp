@@ -26,14 +26,6 @@ void color4_to_float4(const aiColor4D *c, float f[4])
 	f[3] = c->a;
 }
 
-inline Matrix4f matrix_convert(const aiMatrix4x4 &m)
-{
-	return Matrix4f(m.a1,m.a2,m.a3,m.a4,
-					m.b1,m.b2,m.b3,m.b4,
-					m.c1,m.c2,m.c3,m.c4,
-					m.d1,m.d2,m.d3,m.d4);
-}
-
 void AssimpLoader::get_bounding_box_for_node (const aiNode* nd, 
 												aiVector3D* min, 
 												aiVector3D* max, 
@@ -70,7 +62,7 @@ void AssimpLoader::get_bounding_box_for_node (const aiNode* nd,
 	*trafo = prev;
 }
 
-void AssimpLoader::get_bounding_box (aiVector3D* min, aiVector3D* max)
+void AssimpLoader::get_bounding_box (const aiNode *node,aiVector3D* min, aiVector3D* max)
 {
 	aiMatrix4x4 trafo;
 
@@ -79,7 +71,7 @@ void AssimpLoader::get_bounding_box (aiVector3D* min, aiVector3D* max)
 	min->x = min->y = min->z =  1e10f;
 	max->x = max->y = max->z = -1e10f;
 
-	get_bounding_box_for_node(scene->mRootNode,min,max,&trafo);
+	get_bounding_box_for_node(node,min,max,&trafo);
 }
 
 AssimpLoader::AssimpLoader()
@@ -345,7 +337,7 @@ void AssimpLoader::SaveTextures()
 }
 
 template<typename T>
-void AssimpLoader::SaveFaces(const aiFace *face,const T count,const OSString &extname)
+void AssimpLoader::SaveFaces(io::FileOutputStream *fos,const aiFace *face,const T count)
 {
 	T *data=new T[count*3];
 
@@ -361,7 +353,7 @@ void AssimpLoader::SaveFaces(const aiFace *face,const T count,const OSString &ex
 		++sp;
 	}
 
-	SaveFile(data,sizeof(T)*3*count,extname);
+	fos->WriteFully(data,sizeof(T)*3*count);
 
 	delete[] data;
 }
@@ -416,26 +408,6 @@ void c4f_to_4b(uint8 *tp,const aiColor4D *c4,const int count)
 		*tp=c4->a*255;++tp;
 	}
 }
-
-#pragma pack(push,1)
-struct MeshStruct
-{
-	uint32 primitive_type;				///<图元类型
-
-	uint32 vertices_number;				///<顶点数量
-	uint32 faces_number;				///<面数量
-
-	uint32 color_channels;				///<顶点色数量
-	uint32 texcoord_channels;			///<纹理坐标数量
-
-	uint32 material_index;				///<材质索引
-
-	bool have_normal;					///<是否有法线
-	bool have_tb;						///<是否有切线和副切线
-
-	uint32 bones_number;				///<骨骼数量
-};
-#pragma pack(pop)
 
 void AssimpLoader::LoadMesh()
 {
@@ -497,6 +469,16 @@ void AssimpLoader::LoadMesh()
 
 		LOG_INFO(mesh_name+U8_TEXT(" use UV Channels is ")+UTF8String(uv_channels));
 
+		io::FileOutputStream fos;
+
+		OSString mesh_filename=main_filename+OS_TEXT(".")+OSString(i)+OS_TEXT(".mesh");
+
+		if(!fos.CreateTrunc(mesh_filename))
+		{
+			LOG_INFO(OS_TEXT("Create Mesh file Failed,filename: ")+mesh_filename);
+			continue;
+		}
+
 		{
 			MeshStruct ms;
 
@@ -506,30 +488,34 @@ void AssimpLoader::LoadMesh()
 			ms.color_channels	=mesh->GetNumColorChannels();
 			ms.texcoord_channels=uv_channels;
 			ms.material_index	=mesh->mMaterialIndex;
-			ms.have_normal		=mesh->HasNormals();
-			ms.have_tb			=mesh->HasTangentsAndBitangents();
+
+			if(mesh->HasNormals())
+			{
+				if(mesh->HasTangentsAndBitangents())
+					ms.ntb=NTB_FULL;
+				else
+					ms.ntb=NTB_NORMAL;
+			}
+			else
+				ms.ntb=NTB_NONE;
+
 			ms.bones_number		=mesh->mNumBones;
 
-			SaveFile(&ms,sizeof(MeshStruct),OSString(i)+OS_TEXT(".mesh"));
+			fos.WriteFully(&ms,sizeof(MeshStruct));
 		}
 
 		if(mesh->HasPositions())
-			SaveFile(mesh->mVertices,v3fdata_size,OSString(i)+OS_TEXT(".vertex"));
+			fos.WriteFully(mesh->mVertices,v3fdata_size);
 
 		if(mesh->HasNormals())
 		{
-			//if(mesh->HasTangentsAndBitangents())
-			//{
-			//	void *tbn_data[]={mesh->mNormals,mesh->mTangents,mesh->mBitangents};
-			//	int64 tbn_size[3]={v3fdata_size,v3fdata_size,v3fdata_size};
+			fos.WriteFully(mesh->mNormals,v3fdata_size);
 
-			//	SaveFile(tbn_data,tbn_size,3,OSString(i)+OS_TEXT(".ntb"));
-
-			//	//SaveFile(mesh->mTangents,v3fdata_size,OSString(i)+OS_TEXT(".tangent"));
-			//	//SaveFile(mesh->mBitangents,v3fdata_size,OSString(i)+OS_TEXT(".bitangent"));
-			//}
-			//else
-				SaveFile(mesh->mNormals,v3fdata_size,OSString(i)+OS_TEXT(".normal"));
+			if(mesh->HasTangentsAndBitangents())
+			{
+				fos.WriteFully(mesh->mTangents,v3fdata_size);
+				fos.WriteFully(mesh->mBitangents,v3fdata_size);
+			}
 		}
 
 		if(mesh->GetNumColorChannels()>0)
@@ -545,7 +531,7 @@ void AssimpLoader::LoadMesh()
 				tp+=mesh->mNumVertices*4;
 			}
 
-			SaveFile(vertex_color,vertex_color_size,OSString(i)+OS_TEXT(".color"));
+			fos.WriteFully(vertex_color,vertex_color_size);
 
 			delete[] vertex_color;
 		}
@@ -572,16 +558,20 @@ void AssimpLoader::LoadMesh()
 				tp+=mesh->mNumUVComponents[c]*mesh->mNumVertices;
 			}
 			
-			SaveFile(tc_data,tc_size,OSString(i)+OS_TEXT(".texcoord"));
+			fos.WriteFully(tc_data,tc_size);
+
+			delete[] tc_data;
 		}
 
 		if(mesh->HasFaces())
 		{
 			if(mesh->mNumVertices>0xFFFF)
-				SaveFaces<uint32>(mesh->mFaces,mesh->mNumFaces,OSString(i)+OS_TEXT(".face"));
+				SaveFaces<uint32>(&fos,mesh->mFaces,mesh->mNumFaces);
 			else
-				SaveFaces<uint16>(mesh->mFaces,mesh->mNumFaces,OSString(i)+OS_TEXT(".face"));
+				SaveFaces<uint16>(&fos,mesh->mFaces,mesh->mNumFaces);
 		}
+
+		fos.Close();
 	}
 
 	LOG_BR;
@@ -593,35 +583,35 @@ void AssimpLoader::LoadMesh()
 	LOG_BR;
 }
 
-void AssimpLoader::LoadScene(const UTF8String &front,SceneNode *node,const aiScene *sc,const aiNode *nd)
+void AssimpLoader::LoadScene(const UTF8String &front,io::DataOutputStream *dos,const aiNode *nd)
 {
 	aiMatrix4x4 m=nd->mTransformation;
 
 	aiTransposeMatrix4(&m);
 
-	node->SetLocalMatrix(matrix_convert(m));
+	aiVector3D bb_min,bb_max;
+	float box[6];
+	get_bounding_box(nd,&bb_min,&bb_max);
+
+	box[0]=bb_min.x;box[1]=bb_min.y;box[2]=bb_min.z;
+	box[3]=bb_max.x;box[4]=bb_max.y;box[5]=bb_max.z;
+	
+	dos->WriteUTF8String(nd->mName.C_Str());	
+	dos->WriteFloat(box,6);
+	dos->WriteFully(&m,sizeof(aiMatrix4x4));
+	dos->WriteUint32(nd->mNumMeshes);
 
 	LOG_INFO(front+U8_TEXT("[")+UTF8String(nd->mName.C_Str())+U8_TEXT("][Mesh:")+UTF8String(nd->mNumMeshes)+U8_TEXT("][SubNode:")+UTF8String(nd->mNumChildren)+U8_TEXT("]"))
 
-	for(unsigned int n=0;n<nd->mNumMeshes;++n)
-	{
-//		node->SubData.Add(mesh_list[nd->mMeshes[n]]);
-
-		const aiMesh *mesh=scene->mMeshes[nd->mMeshes[n]];
-
-		LOG_INFO(front+U8_TEXT("  Mesh[")+UTF8String(nd->mMeshes[n])+U8_TEXT("] MaterialID[")+UTF8String(mesh->mMaterialIndex)+U8_TEXT("]"));
-	}
+	if(nd->mNumMeshes>0)
+		dos->WriteUint32(nd->mMeshes,nd->mNumMeshes);
 
 	const UTF8String new_front=U8_TEXT("  ")+front;
 
+	dos->WriteUint32(nd->mNumChildren);
+
 	for(unsigned int n=0;n<nd->mNumChildren;++n)
-	{
-		SceneNode* sub_node=new SceneNode;
-
-		LoadScene(new_front,sub_node,sc,nd->mChildren[n]);
-
-		node->AddSubNode(sub_node);
-	}
+		LoadScene(new_front,dos,nd->mChildren[n]);
 }
 
 bool AssimpLoader::LoadFile(const OSString &filename)
@@ -643,7 +633,7 @@ bool AssimpLoader::LoadFile(const OSString &filename)
 
 	filename.SubString(main_filename,0,filename.FindRightChar(OS_TEXT('.')));
 
-	get_bounding_box(&scene_min,&scene_max);
+	get_bounding_box(scene->mRootNode,&scene_min,&scene_max);
 
 	scene_center.x = (scene_min.x + scene_max.x) / 2.0f;
 	scene_center.y = (scene_min.y + scene_max.y) / 2.0f;
@@ -653,19 +643,26 @@ bool AssimpLoader::LoadFile(const OSString &filename)
 	//aiProcessPreset_TargetRealtime_Quality已经指定了会删除多余材质，所以这里不用处理。
 	//但多余模型并不确定是否存在
 
-	SceneNode root;
+	io::FileOutputStream fos;
+	io::LEDataOutputStream dos(&fos);
 
-	LoadMaterial();								//载入所有材质
-	LoadMesh();									//载入所有mesh
-	LoadScene(UTF8String(""),&root,scene,scene->mRootNode);	//载入场景节点
+	OSString scene_filename=main_filename+OS_TEXT(".scene");
+
+	if(!fos.CreateTrunc(scene_filename))
+	{
+		LOG_INFO(OS_TEXT("Create Scene file Failed,filename: ")+scene_filename);
+		return(false);
+	}
+
+	dos.WriteFully("SCENE\x1a\x01",7);
+
+	LoadMaterial();										//载入所有材质
+	LoadMesh();											//载入所有mesh
+	LoadScene(UTF8String(""),&dos,scene->mRootNode);	//载入场景节点
+
+	fos.Close();
 
 	SaveTextures();
-
-	//root.RefreshMatrix();						//刷新矩阵
-
-	//root.ExpendToList(&render_list);			//展开到渲染列表
-
-//	root.SaveToStream(&FileStream(L"Root.scene"));
 	
 	return(true);
 }
