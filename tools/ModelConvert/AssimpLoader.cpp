@@ -86,10 +86,13 @@ void AssimpLoader::get_bounding_box (aiVector3D* min, aiVector3D* max)
 AssimpLoader::AssimpLoader()
 {
 	scene=0;
+	material_list=nullptr;
 }
 
 AssimpLoader::~AssimpLoader()
 {
+	delete[] material_list;
+
 	if(scene)
 		aiReleaseImport(scene);
 }
@@ -124,53 +127,6 @@ void AssimpLoader::SaveFile(void **data,const int64 *size,const int &count,const
 	}
 }
 
-#pragma pack(push,1)
-
-struct MaterialTextureStruct
-{
-	uint8 type=0;
-
-	int32 tex_id=-1;
-
-	uint8 tm=0;
-	uint32 uvindex=0;
-	float blend=0;
-	uint32 op=0;
-	uint32 wrap_mode[2]={0,0};
-};//
-
-struct MaterialStruct
-{
-	uint32 tex_count;
-
-	MaterialTextureStruct *tex_list;
-
-	Color4f diffuse;
-	Color4f specular;
-	Color4f ambient;
-	Color4f emission;
-
-	float shininess=0;
-
-	bool wireframe=false;
-	bool two_sided=false;
-
-public:
-
-	MaterialStruct(const uint32 tc)
-	{
-		tex_count=tc;
-
-		tex_list=new MaterialTextureStruct[tc];
-	}
-
-	MaterialStruct()
-	{
-		delete[] tex_list;
-	}
-};
-#pragma pack(pop)
-
 void OutFloat3(const OSString &front,const Color4f &c)
 {
 	LOG_INFO(front+OS_TEXT(": ")+OSString(c.r)
@@ -184,28 +140,28 @@ void OutMaterialTexture(const MaterialTextureStruct &mt)
 	LOG_INFO(OS_TEXT("\tTexture ID: ")+OSString(mt.tex_id));
 
 	LOG_INFO(OS_TEXT("\tMapping: ")+OSString(mt.tm));
-	LOG_INFO(OS_TEXT("\tuvindex: ")+OSString(mt.uvindex));
+	LOG_INFO(OS_TEXT("\tuvindex: ")+OSString(mt.old_uvindex));
 	LOG_INFO(OS_TEXT("\tblend: ")+OSString(mt.blend));
 	LOG_INFO(OS_TEXT("\top: ")+OSString(mt.op));
 	LOG_INFO(OS_TEXT("\twrap_mode: ")+OSString(mt.wrap_mode[0])+OS_TEXT(",")+OSString(mt.wrap_mode[1]));
 }
 
-void OutMaterial(const MaterialStruct &ms)
+void OutMaterial(const MaterialStruct *ms)
 {
-	LOG_INFO(OS_TEXT("Material Texture Count ")+OSString(ms.tex_count));
+	LOG_INFO(OS_TEXT("Material Texture Count ")+OSString(ms->tex_count));
 
-	for(int i=0;i<ms.tex_count;i++)
-		OutMaterialTexture(ms.tex_list[i]);
+	for(int i=0;i<ms->tex_count;i++)
+		OutMaterialTexture(ms->tex_list[i]);
 
-	OutFloat3(OSString(OS_TEXT("diffuse")),ms.diffuse);
-	OutFloat3(OSString(OS_TEXT("specular")),ms.specular);
-	OutFloat3(OSString(OS_TEXT("ambient")),ms.ambient);
-	OutFloat3(OSString(OS_TEXT("emission")),ms.emission);
+	OutFloat3(OSString(OS_TEXT("diffuse")),ms->diffuse);
+	OutFloat3(OSString(OS_TEXT("specular")),ms->specular);
+	OutFloat3(OSString(OS_TEXT("ambient")),ms->ambient);
+	OutFloat3(OSString(OS_TEXT("emission")),ms->emission);
 	
-	LOG_INFO(OS_TEXT("shininess: ")+OSString(ms.shininess));
+	LOG_INFO(OS_TEXT("shininess: ")+OSString(ms->shininess));
 
-	LOG_INFO(OS_TEXT("wireframe: ")+OSString(ms.wireframe?OS_TEXT("true"):OS_TEXT("false")));
-	LOG_INFO(OS_TEXT("two_sided: ")+OSString(ms.two_sided?OS_TEXT("true"):OS_TEXT("false")));
+	LOG_INFO(OS_TEXT("wireframe: ")+OSString(ms->wireframe?OS_TEXT("true"):OS_TEXT("false")));
+	LOG_INFO(OS_TEXT("two_sided: ")+OSString(ms->two_sided?OS_TEXT("true"):OS_TEXT("false")));
 }
 
 void AssimpLoader::LoadMaterial()
@@ -235,6 +191,10 @@ void AssimpLoader::LoadMaterial()
 	aiTextureOp op;
 	aiTextureMapMode wrap_mode[2];
 
+	material_count=scene->mNumMaterials;
+
+	material_list=new MaterialStruct[material_count];
+
 	for(unsigned int m=0;m<scene->mNumMaterials;m++)
 	{
 		int tex_index=0;
@@ -248,7 +208,9 @@ void AssimpLoader::LoadMaterial()
 		for(uint tt=aiTextureType_DIFFUSE;tt<aiTextureType_UNKNOWN;tt++)
 			tex_count+=mtl->GetTextureCount((aiTextureType)tt);
 
-		MaterialStruct ms(tex_count);
+		MaterialStruct *ms=&(material_list[m]);
+		
+		ms->Init(tex_count);
 
 		for(uint tt=aiTextureType_DIFFUSE;tt<aiTextureType_UNKNOWN;tt++)
 		{
@@ -258,7 +220,9 @@ void AssimpLoader::LoadMaterial()
 			{
 				mtl->GetTexture((aiTextureType)tt,t,&filename,&tm,&uvindex,&blend,&op,wrap_mode);
 
-				ms.tex_list[tex_index].type=tt;
+				ms->tex_list[tex_index].type=tt;
+
+				ms->uv_use.Add(uvindex);
 		
 				{
 					char *fn=strrchr(filename.data,'\\');
@@ -282,44 +246,46 @@ void AssimpLoader::LoadMaterial()
 					if(tex_id)
 						tex_id=tex_list.Add(fn);
 
-					ms.tex_list[tex_index].tex_id=tex_id;
+					ms->tex_list[tex_index].tex_id=tex_id;
 				}
 
-				ms.tex_list[tex_index].tm=tm;
-				ms.tex_list[tex_index].uvindex=uvindex;
-				ms.tex_list[tex_index].blend=blend;
-				ms.tex_list[tex_index].op=op;
+				ms->tex_list[tex_index].tm=tm;
+				ms->tex_list[tex_index].old_uvindex=uvindex;
+				ms->tex_list[tex_index].blend=blend;
+				ms->tex_list[tex_index].op=op;
 
-				ms.tex_list[tex_index].wrap_mode[0]=wrap_mode[0];
-				ms.tex_list[tex_index].wrap_mode[1]=wrap_mode[1];
+				ms->tex_list[tex_index].wrap_mode[0]=wrap_mode[0];
+				ms->tex_list[tex_index].wrap_mode[1]=wrap_mode[1];
 
 				++tex_index;
 			}
 		}
 
+		ms->ProcUVIndex();
+
 		set_float4(c, 0.8f, 0.8f, 0.8f, 1.0f);
 		if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_DIFFUSE, &diffuse))
 			color4_to_float4(&diffuse, c);
 		//glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, c);
-		ms.diffuse.Set(c);
+		ms->diffuse.Set(c);
 
 		set_float4(c, 0.0f, 0.0f, 0.0f, 1.0f);
 		if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_SPECULAR, &specular))
 			color4_to_float4(&specular, c);
 		//glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, c);
-		ms.specular.Set(c);
+		ms->specular.Set(c);
 
 		set_float4(c, 0.2f, 0.2f, 0.2f, 1.0f);
 		if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_AMBIENT, &ambient))
 			color4_to_float4(&ambient, c);
 		//glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, c);
-		ms.ambient.Set(c);
+		ms->ambient.Set(c);
 
 		set_float4(c, 0.0f, 0.0f, 0.0f, 1.0f);
 		if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_EMISSIVE, &emission))
 			color4_to_float4(&emission, c);
 		//glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, c);
-		ms.emission.Set(c);
+		ms->emission.Set(c);
 
 		max = 1;
 		ret1 = aiGetMaterialFloatArray(mtl, AI_MATKEY_SHININESS, &shininess, &max);
@@ -330,30 +296,30 @@ void AssimpLoader::LoadMaterial()
 		{
 			//glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess * strength);
 
-			ms.shininess=shininess*strength;
+			ms->shininess=shininess*strength;
 		}
 		else 
 		{
 			//glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 0.0f);
-			ms.shininess=0;
+			ms->shininess=0;
 
 			set_float4(c, 0.0f, 0.0f, 0.0f, 0.0f);
 			//glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, c);
 			
-			ms.specular.Zero();
+			ms->specular.Zero();
 		}
 
 		max = 1;
 		if(aiGetMaterialIntegerArray(mtl, AI_MATKEY_ENABLE_WIREFRAME, &wireframe, &max)==AI_SUCCESS)
-			ms.wireframe=wireframe;
+			ms->wireframe=wireframe;
 		else
-			ms.wireframe=false;
+			ms->wireframe=false;
 
 		max = 1;
 		if(aiGetMaterialIntegerArray(mtl, AI_MATKEY_TWOSIDED, &two_sided, &max)==AI_SUCCESS)
-			ms.two_sided=two_sided;
+			ms->two_sided=two_sided;
 		else
-			ms.two_sided=true;
+			ms->two_sided=true;
 
 		OutMaterial(ms);
 		LOG_BR;
@@ -491,6 +457,9 @@ void AssimpLoader::LoadMesh()
 	{
 		const aiMesh *mesh=scene->mMeshes[i];
 
+		const uint v3fdata_size=mesh->mNumVertices*3*sizeof(float);
+		const uint v4fdata_size=mesh->mNumVertices*4*sizeof(float);
+
 		if(mesh->mName.length)
 			mesh_name=U8_TEXT("Mesh [")+UTF8String(i)+U8_TEXT(":")+UTF8String(mesh->mName.C_Str())+U8_TEXT("]");
 		else
@@ -522,6 +491,12 @@ void AssimpLoader::LoadMesh()
 
 		if(pn!=3)
 			continue;
+		
+		MaterialStruct *mtl=&(material_list[mesh->mMaterialIndex]);
+
+		const uint uv_channels=mtl->uv_use.GetCount();
+
+		LOG_INFO(mesh_name+U8_TEXT(" use UV Channels is ")+UTF8String(uv_channels));
 
 		{
 			MeshStruct ms;
@@ -530,7 +505,7 @@ void AssimpLoader::LoadMesh()
 			ms.vertices_number	=mesh->mNumVertices;
 			ms.faces_number		=mesh->mNumFaces;
 			ms.color_channels	=mesh->GetNumColorChannels();
-			ms.texcoord_channels=mesh->GetNumUVChannels();
+			ms.texcoord_channels=uv_channels;
 			ms.material_index	=mesh->mMaterialIndex;
 			ms.have_normal		=mesh->HasNormals();
 			ms.have_tb			=mesh->HasTangentsAndBitangents();
@@ -538,9 +513,6 @@ void AssimpLoader::LoadMesh()
 
 			SaveFile(&ms,sizeof(MeshStruct),OSString(i)+OS_TEXT(".mesh"));
 		}
-
-		const uint v3fdata_size=mesh->mNumVertices*3*sizeof(float);
-		const uint v4fdata_size=mesh->mNumVertices*4*sizeof(float);
 
 		if(mesh->HasPositions())
 			SaveFile(mesh->mVertices,v3fdata_size,OSString(i)+OS_TEXT(".vertex"));
@@ -552,7 +524,7 @@ void AssimpLoader::LoadMesh()
 			//	void *tbn_data[]={mesh->mNormals,mesh->mTangents,mesh->mBitangents};
 			//	int64 tbn_size[3]={v3fdata_size,v3fdata_size,v3fdata_size};
 
-			//	SaveFile(tbn_data,tbn_size,3,OSString(i)+OS_TEXT(".tbn"));
+			//	SaveFile(tbn_data,tbn_size,3,OSString(i)+OS_TEXT(".ntb"));
 
 			//	//SaveFile(mesh->mTangents,v3fdata_size,OSString(i)+OS_TEXT(".tangent"));
 			//	//SaveFile(mesh->mBitangents,v3fdata_size,OSString(i)+OS_TEXT(".bitangent"));
@@ -581,17 +553,20 @@ void AssimpLoader::LoadMesh()
 
 		{
 			int comp_total=0;
+			const int *uv_use=mtl->uv_use.GetData();
 
-			for(int c=0;c<mesh->GetNumUVChannels();c++)
-				comp_total+=mesh->mNumUVComponents[c]*mesh->mNumVertices;
+			for(int c=0;c<uv_channels;c++)
+				comp_total+=mesh->mNumUVComponents[uv_use[c]];
 
-			uint64 tc_size=mesh->GetNumUVChannels()+comp_total*sizeof(float);
+			comp_total*=mesh->mNumVertices;
+
+			uint64 tc_size=uv_channels+comp_total*sizeof(float);
 
 			uint8 *tc_data=new uint8[tc_size];
-			float *tp=(float *)(tc_data+mesh->GetNumUVChannels());
-			for(int c=0;c<mesh->GetNumUVChannels();c++)
+			float *tp=(float *)(tc_data+uv_channels);
+			for(int c=0;c<uv_channels;c++)
 			{
-				tc_data[c]=mesh->mNumUVComponents[c];
+				tc_data[c]=mesh->mNumUVComponents[uv_use[c]];
 
 				SaveTexCoord(tp,mesh->mTextureCoords[c],mesh->mNumUVComponents[c],mesh->mNumVertices);
 
@@ -636,7 +611,7 @@ void AssimpLoader::LoadScene(const OSString &front,SceneNode *node,const aiScene
 		LOG_INFO(front+OS_TEXT("Mesh[")+OSString(nd->mMeshes[n])+OS_TEXT("] MaterialID[")+OSString(mesh->mMaterialIndex)+OS_TEXT("]"));
 	}
 
-	const OSString new_front=OS_TEXT("   +")+front;
+	const OSString new_front=OS_TEXT(" +")+front;
 
 	for(unsigned int n=0;n<nd->mNumChildren;++n)
 	{

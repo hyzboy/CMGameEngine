@@ -13,6 +13,68 @@
 using namespace hgl;
 using namespace hgl::graph;
 
+#pragma pack(push,1)
+
+struct MaterialTextureStruct
+{
+	uint8 type=0;
+
+	int32 tex_id=-1;
+
+	uint8 tm=0;
+	uint32 old_uvindex=0;
+	uint32 new_uvindex=0;
+	float blend=0;
+	uint32 op=0;
+	uint32 wrap_mode[2]={0,0};
+};//
+
+struct MaterialStruct
+{
+	uint32 tex_count;
+
+	MaterialTextureStruct *tex_list;
+
+	Set<int> uv_use;
+
+	Color4f diffuse;
+	Color4f specular;
+	Color4f ambient;
+	Color4f emission;
+
+	float shininess=0;
+
+	bool wireframe=false;
+	bool two_sided=false;
+
+public:
+
+	MaterialStruct()
+	{
+		tex_count=0;
+		tex_list=nullptr;
+	}
+	
+	void Init(const uint32 tc)
+	{
+		tex_count=tc;
+
+		tex_list=new MaterialTextureStruct[tc];
+	}
+
+	~MaterialStruct()
+	{
+		delete[] tex_list;
+	}
+
+	void ProcUVIndex()
+	{
+		for(int i=0;i<tex_count;i++)
+			tex_list[i].new_uvindex=i;
+	}
+};
+#pragma pack(pop)
+
 class AssimpLoader
 {
 	OSString main_filename;
@@ -28,6 +90,9 @@ public:
 private:
 
 	UTF8StringList tex_list;
+
+	int material_count;
+	MaterialStruct *material_list;
 
 private:
 	
