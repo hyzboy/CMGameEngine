@@ -28,11 +28,10 @@ void color4_to_float4(const aiColor4D *c, float f[4])
 
 inline Matrix4f matrix_convert(const aiMatrix4x4 &m)
 {
-	Matrix4f result;
-
-	memcpy(&result,&m,16*sizeof(float));
-
-	return result;
+	return Matrix4f(m.a1,m.a2,m.a3,m.a4,
+					m.b1,m.b2,m.b3,m.b4,
+					m.c1,m.c2,m.c3,m.c4,
+					m.d1,m.d2,m.d3,m.d4);
 }
 
 void AssimpLoader::get_bounding_box_for_node (const aiNode* nd, 
@@ -594,13 +593,15 @@ void AssimpLoader::LoadMesh()
 	LOG_BR;
 }
 
-void AssimpLoader::LoadScene(const OSString &front,SceneNode *node,const aiScene *sc,const aiNode *nd)
+void AssimpLoader::LoadScene(const UTF8String &front,SceneNode *node,const aiScene *sc,const aiNode *nd)
 {
 	aiMatrix4x4 m=nd->mTransformation;
 
 	aiTransposeMatrix4(&m);
 
-	node->SetLocalMatrix(matrix_convert(m));		//强制COPY，可能有问题
+	node->SetLocalMatrix(matrix_convert(m));
+
+	LOG_INFO(front+U8_TEXT("[")+UTF8String(nd->mName.C_Str())+U8_TEXT("][Mesh:")+UTF8String(nd->mNumMeshes)+U8_TEXT("][SubNode:")+UTF8String(nd->mNumChildren)+U8_TEXT("]"))
 
 	for(unsigned int n=0;n<nd->mNumMeshes;++n)
 	{
@@ -608,10 +609,10 @@ void AssimpLoader::LoadScene(const OSString &front,SceneNode *node,const aiScene
 
 		const aiMesh *mesh=scene->mMeshes[nd->mMeshes[n]];
 
-		LOG_INFO(front+OS_TEXT("Mesh[")+OSString(nd->mMeshes[n])+OS_TEXT("] MaterialID[")+OSString(mesh->mMaterialIndex)+OS_TEXT("]"));
+		LOG_INFO(front+U8_TEXT("  Mesh[")+UTF8String(nd->mMeshes[n])+U8_TEXT("] MaterialID[")+UTF8String(mesh->mMaterialIndex)+U8_TEXT("]"));
 	}
 
-	const OSString new_front=OS_TEXT(" +")+front;
+	const UTF8String new_front=U8_TEXT("  ")+front;
 
 	for(unsigned int n=0;n<nd->mNumChildren;++n)
 	{
@@ -656,7 +657,7 @@ bool AssimpLoader::LoadFile(const OSString &filename)
 
 	LoadMaterial();								//载入所有材质
 	LoadMesh();									//载入所有mesh
-	LoadScene(OSString(OS_TEXT("")),&root,scene,scene->mRootNode);	//载入场景节点
+	LoadScene(UTF8String(""),&root,scene,scene->mRootNode);	//载入场景节点
 
 	SaveTextures();
 

@@ -101,7 +101,7 @@ private:
 
 	void LoadMaterial();
 	void LoadMesh();
-	void LoadScene(const OSString &,SceneNode *,const aiScene *,const aiNode *);
+	void LoadScene(const UTF8String &,SceneNode *,const aiScene *,const aiNode *);
 
 	void SaveFile(const void *,const uint &,const OSString &);
 	void SaveFile(void **,const int64 *,const int &,const OSString &);
