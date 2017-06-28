@@ -238,6 +238,18 @@ namespace hgl
 	constexpr long double HGL_UNIVERSAL_GRAVITATION		    =6.6742e-11;	        //万有引力常数
 	constexpr long double HGL_GRAVITATIONAL_ACCELERATION	=9.80665;			    //重力加速度
 
+	inline float half_to_float(const uint16 &h)
+	{
+		return ((h&0x8000)<<16) | (((h&0x7c00)+0x1C000)<<13) | ((h&0x03FF)<<13);
+	}
+
+	inline uint16 float_to_half(const float &f)
+	{
+		const uint32 x = *((uint32 *)&f);
+
+		return ((x>>16)&0x8000)|((((x&0x7f800000)-0x38000000)>>13)&0x7c00)|((x>>13)&0x03ff);
+	}
+
 #if HGL_OS == HGL_OS_Windows
 	inline uint64 pow10(const int p)
 	{
