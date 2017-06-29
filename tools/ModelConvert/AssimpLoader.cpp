@@ -585,10 +585,6 @@ void AssimpLoader::LoadMesh()
 
 void AssimpLoader::LoadScene(const UTF8String &front,io::DataOutputStream *dos,const aiNode *nd)
 {
-	aiMatrix4x4 m=nd->mTransformation;
-
-	aiTransposeMatrix4(&m);
-
 	aiVector3D bb_min,bb_max;
 	float box[6];
 	get_bounding_box(nd,&bb_min,&bb_max);
@@ -598,7 +594,9 @@ void AssimpLoader::LoadScene(const UTF8String &front,io::DataOutputStream *dos,c
 	
 	dos->WriteUTF8String(nd->mName.C_Str());	
 	dos->WriteFloat(box,6);
-	dos->WriteFully(&m,sizeof(aiMatrix4x4));
+
+	dos->WriteFloat((float *)&(nd->mTransformation),16);
+
 	dos->WriteUint32(nd->mNumMeshes);
 
 	LOG_INFO(front+U8_TEXT("[")+UTF8String(nd->mName.C_Str())+U8_TEXT("][Mesh:")+UTF8String(nd->mNumMeshes)+U8_TEXT("][SubNode:")+UTF8String(nd->mNumChildren)+U8_TEXT("]"))
@@ -655,6 +653,8 @@ bool AssimpLoader::LoadFile(const OSString &filename)
 	}
 
 	dos.WriteFully("SCENE\x1a\x01",7);
+
+	dos.WriteUint32(scene->mNumMeshes);
 
 	LoadMaterial();										//载入所有材质
 	LoadMesh();											//载入所有mesh

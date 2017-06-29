@@ -47,6 +47,15 @@ namespace hgl
             center+=dist;
         }
 
+		void WalkerCamera::BackwardRotate(float ang)
+        {
+            Vector3f off(center-eye);                                //算出以眼为中心的向量
+			
+            Vector4f new_off=Vector4f(off,1.0f)*rotate(-ang*HGL_PI/180.0,local_forward_vector);
+
+            center=eye+Vector3f(new_off[0],new_off[1],new_off[2]);
+        }
+
         void WalkerCamera::UpRotate(float ang)
         {
             Vector3f off(center-eye);                                //算出以眼为中心的向量

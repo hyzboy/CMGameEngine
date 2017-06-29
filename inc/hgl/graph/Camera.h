@@ -46,6 +46,9 @@ namespace hgl
 
 		public:	//以自身为中心旋转
 
+			virtual void BackwardRotate(float=5);													///<以自身为中心向后旋转
+			virtual void ForwardRotate(float ang=5){BackwardRotate(-ang);}							///<以自身为中心向前旋转
+
 			virtual void UpRotate(float=5);															///<以自身为中心向上旋转
 			virtual void DownRotate(float ang=5){UpRotate(-ang);}									///<以自身为中心向下旋转
 

@@ -28,7 +28,7 @@ protected:
 	Matrix4f mv;
 
 public:
-    
+   
 	virtual void OnResize       (int,int);
     
 	virtual bool OnMouseMove    (int,int);

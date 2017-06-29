@@ -90,7 +90,9 @@ bool CameraControlFlowObject::OnKeyDown(KeyboardButton key)
 {
 	if(key==kbPageUp	)cam.Distance(0.9f);	else	//拉近
 	if(key==kbPageDown	)cam.Distance(1.1f);	else	//拉远
-
+	
+	if(key==kbInsert	)cam.BackwardRotate();	else	//以自身为中心向后旋转
+	if(key==kbDelete	)cam.ForwardRotate();	else	//以自身为中心向前旋转
 	if(key==kbUp		)cam.UpRotate();		else	//以自身为中心向上旋转
 	if(key==kbDown		)cam.DownRotate();		else	//以自身为中心向下旋转
 	if(key==kbLeft		)cam.LeftRotate();		else	//以自身为中心向左旋转

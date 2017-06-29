@@ -77,6 +77,8 @@ namespace hgl
 
 		public:	//坐标相关方法
 
+			virtual			void		SetBoundingBox		(const AABB &bb){BoundingBox=bb;}							///<设置绑定盒
+
 			virtual			void		RefreshMatrix		(const Matrix4f *mat=nullptr);								///<刷新世界变换矩阵
 			virtual			void		RefreshBoundingBox	();															///<刷新绑定盒
 
