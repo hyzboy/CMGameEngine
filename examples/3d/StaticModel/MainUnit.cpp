@@ -367,7 +367,7 @@ public:
 	{
         SetClearColor(ceMozillaCharcoal);		//设置清屏颜色
 
-		sl.Load(OS_TEXT("D:\\cm\\bin\\Windows_x64\\Debug\\T4112"));
+		sl.Load(OS_TEXT("T4112"));
 
 		rl=sl.GetRenderList();
 
@@ -380,10 +380,6 @@ public:
 
 		this->cam.znear=bb.MaxZ()*2;
 		this->cam.zfar=bb.MinZ()*2;
-
-		this->cam.world_up_vector.Set(0,1,0);
-		this->cam.local_up_vector.Set(0,1,0);
-		this->cam.local_forward_vector.Set(0,0,-1);
 	}
 
 	~TestObject()

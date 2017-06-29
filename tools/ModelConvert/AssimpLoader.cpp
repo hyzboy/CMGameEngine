@@ -409,6 +409,20 @@ void c4f_to_4b(uint8 *tp,const aiColor4D *c4,const int count)
 	}
 }
 
+void AxisY2Z(aiVector3D *v,const uint32 count)
+{
+	ai_real t;
+
+	for(uint32 i=0;i<count;i++)
+	{
+		t=v->y;
+		v->y=v->z;
+		v->z=t;
+
+		++v;
+	}
+}
+
 void AssimpLoader::LoadMesh()
 {
 	if(!scene->HasMeshes())return;
@@ -505,14 +519,21 @@ void AssimpLoader::LoadMesh()
 		}
 
 		if(mesh->HasPositions())
+		{
+			AxisY2Z(mesh->mVertices,mesh->mNumVertices);
 			fos.WriteFully(mesh->mVertices,v3fdata_size);
+		}
 
 		if(mesh->HasNormals())
 		{
+			AxisY2Z(mesh->mNormals,mesh->mNumVertices);
 			fos.WriteFully(mesh->mNormals,v3fdata_size);
 
 			if(mesh->HasTangentsAndBitangents())
 			{
+				AxisY2Z(mesh->mTangents,mesh->mNumVertices);
+				AxisY2Z(mesh->mBitangents,mesh->mNumVertices);
+
 				fos.WriteFully(mesh->mTangents,v3fdata_size);
 				fos.WriteFully(mesh->mBitangents,v3fdata_size);
 			}
