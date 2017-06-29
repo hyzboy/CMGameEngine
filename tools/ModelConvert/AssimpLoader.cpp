@@ -416,7 +416,7 @@ void AxisY2Z(aiVector3D *v,const uint32 count)
 	for(uint32 i=0;i<count;i++)
 	{
 		t=v->y;
-		v->y=v->z;
+		v->y=-(v->z);
 		v->z=t;
 
 		++v;
