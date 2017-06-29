@@ -24,7 +24,7 @@ namespace hgl
 			GL_TRIANGLE_STRIP_ADJACENCY,
 			GL_PATCHES,
 
-			HGL_PRIM_RECTANGLE
+//			HGL_PRIM_RECTANGLE
 		};//const uint OpenGLCorePrim[]
 
 		constexpr int OpenGLCorePrimCount=sizeof(OpenGLCorePrim)/sizeof(uint);
