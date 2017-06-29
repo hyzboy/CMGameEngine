@@ -1,4 +1,4 @@
-#include<hgl/Console.h>				//GraphicsApplication,SystemInitInfo
+Ôªø#include<hgl/Console.h>				//GraphicsApplication,SystemInitInfo
 #include<hgl/object/FlowObject.h>	//FlowObject
 #include<hgl/ut/CmdParse.h>			//CmadParse
 
@@ -12,7 +12,7 @@ HGL_CONSOLE_MAIN(sii,app,args)
 {	
 	CmdParse cmd(args);
 	
-	sii.info.ProjectName=U8_TEXT("ƒ£–Õ◊™ªª");
+	sii.info.ProjectName=U8_TEXT("Ê®°ÂûãËΩ¨Êç¢");
 	sii.info.ProjectCode=OS_TEXT("Model Converter");
 	sii.info.ProjectVersion=U8_TEXT("1.00");
     

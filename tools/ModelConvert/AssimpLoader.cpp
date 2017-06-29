@@ -1,4 +1,4 @@
-#include"AssimpLoader.h"
+ï»¿#include"AssimpLoader.h"
 #include<assimp/postprocess.h>
 #include<assimp/cimport.h>
 #include<hgl/FileSystem.h>
@@ -639,9 +639,9 @@ bool AssimpLoader::LoadFile(const OSString &filename)
 	scene_center.y = (scene_min.y + scene_max.y) / 2.0f;
 	scene_center.z = (scene_min.z + scene_max.z) / 2.0f;
 
-	//Õâ¸öË³ÐòÊÇ¼ÙÉèÁËËùÓÐµÄ²ÄÖÊºÍÄ£ÐÍ¶¼ÓÐ±»Ê¹ÓÃ
-	//aiProcessPreset_TargetRealtime_QualityÒÑ¾­Ö¸¶¨ÁË»áÉ¾³ý¶àÓà²ÄÖÊ£¬ËùÒÔÕâÀï²»ÓÃ´¦Àí¡£
-	//µ«¶àÓàÄ£ÐÍ²¢²»È·¶¨ÊÇ·ñ´æÔÚ
+	//è¿™ä¸ªé¡ºåºæ˜¯å‡è®¾äº†æ‰€æœ‰çš„æè´¨å’Œæ¨¡åž‹éƒ½æœ‰è¢«ä½¿ç”¨
+	//aiProcessPreset_TargetRealtime_Qualityå·²ç»æŒ‡å®šäº†ä¼šåˆ é™¤å¤šä½™æè´¨ï¼Œæ‰€ä»¥è¿™é‡Œä¸ç”¨å¤„ç†ã€‚
+	//ä½†å¤šä½™æ¨¡åž‹å¹¶ä¸ç¡®å®šæ˜¯å¦å­˜åœ¨
 
 	io::FileOutputStream fos;
 	io::LEDataOutputStream dos(&fos);
@@ -656,9 +656,9 @@ bool AssimpLoader::LoadFile(const OSString &filename)
 
 	dos.WriteFully("SCENE\x1a\x01",7);
 
-	LoadMaterial();										//ÔØÈëËùÓÐ²ÄÖÊ
-	LoadMesh();											//ÔØÈëËùÓÐmesh
-	LoadScene(UTF8String(""),&dos,scene->mRootNode);	//ÔØÈë³¡¾°½Úµã
+	LoadMaterial();										//è½½å…¥æ‰€æœ‰æè´¨
+	LoadMesh();											//è½½å…¥æ‰€æœ‰mesh
+	LoadScene(UTF8String(""),&dos,scene->mRootNode);	//è½½å…¥åœºæ™¯èŠ‚ç‚¹
 
 	fos.Close();
 

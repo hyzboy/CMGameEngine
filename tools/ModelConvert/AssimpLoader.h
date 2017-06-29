@@ -1,4 +1,4 @@
-#ifndef HGL_TOOL_MODEL_CONVERT_ASSIMP_LOADER_INCLUDE
+ï»¿#ifndef HGL_TOOL_MODEL_CONVERT_ASSIMP_LOADER_INCLUDE
 #define HGL_TOOL_MODEL_CONVERT_ASSIMP_LOADER_INCLUDE
 
 #include<hgl/algorithm/VectorMath.h>
@@ -85,19 +85,19 @@ struct MeshStruct
 	uint8 sperator;						///<0x1a
 	uint8 version;						///<1
 
-	uint8 primitive_type;				///<Í¼ÔªÀàÐÍ
+	uint8 primitive_type;				///<å›¾å…ƒç±»åž‹
 
-	uint32 vertices_number;				///<¶¥µãÊýÁ¿
-	uint32 faces_number;				///<ÃæÊýÁ¿
+	uint32 vertices_number;				///<é¡¶ç‚¹æ•°é‡
+	uint32 faces_number;				///<é¢æ•°é‡
 
-	uint8 color_channels;				///<¶¥µãÉ«ÊýÁ¿
-	uint8 texcoord_channels;			///<ÎÆÀí×ø±êÊýÁ¿
+	uint8 color_channels;				///<é¡¶ç‚¹è‰²æ•°é‡
+	uint8 texcoord_channels;			///<çº¹ç†åæ ‡æ•°é‡
 
-	uint32 material_index;				///<²ÄÖÊË÷Òý
+	uint32 material_index;				///<æè´¨ç´¢å¼•
 
-	uint8 ntb;							///<0:ÎÞ 1:Ö»ÓÐnormal 2:ÓÐÍêÕûNTB 3:ÓÐÑ¹ËõNT
+	uint8 ntb;							///<0:æ—  1:åªæœ‰normal 2:æœ‰å®Œæ•´NTB 3:æœ‰åŽ‹ç¼©NT
 
-	uint32 bones_number;				///<¹Ç÷ÀÊýÁ¿
+	uint32 bones_number;				///<éª¨éª¼æ•°é‡
 
 public:
 
