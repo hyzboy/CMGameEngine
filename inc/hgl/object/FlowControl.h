@@ -23,7 +23,7 @@ namespace hgl
         virtual void OnRotate       (int            );                                              ///<屏幕旋转事件
 
         virtual bool OnMouseMove    (int,int        );                                              ///<鼠标移动事件
-        virtual bool OnMouseWheel   (int,int        );                                              ///<鼠标滚轮事件
+        virtual bool OnMouseWheel   (double,double	);                                              ///<鼠标滚轮事件
 
         virtual bool OnMouseDown    (MouseButton    );                                              ///<鼠标按键按下事件
         virtual bool OnMouseUp      (MouseButton    );                                              ///<鼠标按键弹起事件

@@ -61,9 +61,9 @@ bool CameraControlFlowObject::OnMouseMove(int x,int y)
 	return(true);
 }
 
-bool CameraControlFlowObject::OnMouseWheel(int,int wheel)
+bool CameraControlFlowObject::OnMouseWheel(double x_wheel,double y_wheel)
 {
-	cam.Distance(wheel>0?0.9f:1.1f);
+	cam.Distance(y_wheel>0?0.9f:1.1f);
 
 	return(true);
 }

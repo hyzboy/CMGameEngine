@@ -32,7 +32,7 @@ public:
 	virtual void OnResize       (int,int);
     
 	virtual bool OnMouseMove    (int,int);
-	virtual bool OnMouseWheel   (int,int);
+	virtual bool OnMouseWheel   (double,double);
 
 	virtual bool OnMouseDown    (MouseButton);
     virtual bool OnMouseUp      (MouseButton);
