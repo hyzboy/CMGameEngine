@@ -9,10 +9,110 @@
 using namespace hgl;
 using namespace hgl::graph;
 
-const Vector3f  eye(100,100,80),
-                center(0,0,0),
-                up_vector(0,0,1),
-                forward_vector(0,1,0);
+struct MaterialTextureData
+{
+	uint8 type=0;
+
+	int32 tex_id=-1;
+
+	uint8 uvindex=0;
+	float blend=0;
+	uint8 op=0;
+	uint16 wrap_mode[2]={0,0};
+};//
+
+struct MaterialData
+{
+	uint8 tex_count;
+
+	MaterialTextureData *tex_list;
+
+	Set<int> uv_use;
+
+	Color4f diffuse;
+	Color4f specular;
+	Color4f ambient;
+	Color4f emission;
+
+	float shininess=0;
+
+	bool wireframe=false;
+	bool two_sided=false;
+
+public:
+
+	MaterialData()
+	{
+		tex_count=0;
+		tex_list=nullptr;
+	}
+	
+	void Init(const uint32 tc)
+	{
+		tex_count=tc;
+
+		tex_list=new MaterialTextureData[tc];
+	}
+
+	~MaterialData()
+	{
+		delete[] tex_list;
+	}
+};
+
+void LoadMaterialFile(Material &mtl,MaterialData &md,const OSString &filename,Texture **tex_list)
+{
+	io::FileInputStream fis;
+	io::LEDataInputStream dis(&fis);
+
+	if(!fis.Open(filename))
+		return;
+
+	uint8 flag[9];
+
+	if(dis.ReadFully(flag,9)!=9)
+		return;
+
+	if(memcmp(flag,"Material\x1A",9))
+		return;
+
+	uint8 ver;
+
+	if(!dis.ReadUint8(ver))return;
+
+	if(ver!=1)return;
+
+	if(dis.ReadFloat(md.diffuse,3)!=3)return;
+	if(dis.ReadFloat(md.specular,3)!=3)return;
+	if(dis.ReadFloat(md.ambient,3)!=3)return;
+	if(dis.ReadFloat(md.emission,3)!=3)return;
+
+	if(!dis.ReadFloat(md.shininess))return;
+	if(!dis.ReadBool(md.wireframe))return;
+	if(!dis.ReadBool(md.two_sided))return;
+
+	mtl.SetTwoSide(md.two_sided);
+
+    mtl.SetLightMode(HGL_VERTEX_LIGHT);                          ///<使用顶点级别的光照
+
+	if(!dis.ReadUint8(md.tex_count))return;
+
+	md.Init(md.tex_count);
+
+	for(uint8 i=0;i<md.tex_count;i++)
+	{
+		MaterialTextureData *mtd=&(md.tex_list[i]);
+
+		if(!dis.ReadUint8(mtd->type))return;
+		if(!dis.ReadInt32(mtd->tex_id))return;
+		if(!dis.ReadUint8(mtd->uvindex))return;
+		if(!dis.ReadFloat(mtd->blend))return;
+		if(!dis.ReadUint8(mtd->op))return;
+		if(!dis.ReadUint16(mtd->wrap_mode,2))return;
+
+		mtl.SetTexture(mtd->type,tex_list[mtd->tex_id]);
+	}	
+}
 
 #define NTB_NONE		0
 #define NTB_NORMAL		1
@@ -47,11 +147,11 @@ public:
 		memset(this,0,sizeof(MeshFileHeader));
 	}
 };//struct MeshFileHeader
+
 #pragma pack(pop)
 struct MeshData
 {
 	VertexArray *va;
-	Material *mtl;
 	Renderable *r;
 
 public:
@@ -59,19 +159,17 @@ public:
 	MeshData()
 	{
 		va=nullptr;
-		mtl=nullptr;
 		r=nullptr;
 	}
 
 	~MeshData()
 	{
 		SAFE_CLEAR(r);
-		SAFE_CLEAR(mtl);
 		SAFE_CLEAR(va);
 	}
 };
 
-bool LoadMeshFile(MeshData &md,const OSString &filename)
+bool LoadMeshFile(MeshData &md,const OSString &filename,Material *mtl_list,MaterialData *md_list)
 {	
 	MeshFileHeader mfh;
 
@@ -83,6 +181,13 @@ bool LoadMeshFile(MeshData &md,const OSString &filename)
 
 	if(dis.ReadFully(&mfh,sizeof(mfh))!=sizeof(mfh))
 		RETURN_FALSE;
+
+	Material *mtl=&(mtl_list[mfh.material_index]);
+	MaterialData *mtd=&(md_list[mfh.material_index]);
+
+	uint8 *uv_comp;
+	float **uv_data;
+	VertexBufferBase **uv_vb;
 
 	md.va=new VertexArray(mfh.primitive_type);
 
@@ -101,22 +206,38 @@ bool LoadMeshFile(MeshData &md,const OSString &filename)
 		md.va->SetNormal(normal);
 
 		if(mfh.ntb==NTB_FULL)
-			dis.Seek(normal->GetBytes()*2,io::soCurrent);		//跳过tangent和bitangent
+			dis.Seek(normal->GetBytes()*2,io::soCurrent);					//跳过tangent和bitangent
 	}
 
 	dis.Seek(mfh.vertices_number*4*mfh.color_channels,io::soCurrent);		//跳过vertex color
 
 	if(mfh.texcoord_channels)
 	{
-		uint8 *uv_comp=new uint8[mfh.texcoord_channels];
+		uv_comp=new uint8[mfh.texcoord_channels];
+		uv_data=new float *[mfh.texcoord_channels];
+		uv_vb=new VertexBufferBase *[mfh.texcoord_channels];
 
 		dis.ReadUint8(uv_comp,mfh.texcoord_channels);
 
 		uint32 uv_total=0;
 		for(int i=0;i<mfh.texcoord_channels;i++)
+		{
 			uv_total+=uv_comp[i];
+			uv_data[i]=new float[uv_comp[i]*mfh.vertices_number*sizeof(float)];
+		}
 
-		dis.Seek(uv_total*mfh.vertices_number*sizeof(float),io::soCurrent);						//跳过texcoord
+		for(int i=0;i<mfh.texcoord_channels;i++)
+		{
+			dis.ReadFloat(uv_data[i],uv_comp[i]*mfh.vertices_number);
+
+			if(uv_comp[i]==1)
+				uv_vb[i]=new VB1f(mfh.vertices_number,uv_data[i]);
+			else
+			if(uv_comp[i]==2)
+				uv_vb[i]=new VB2f(mfh.vertices_number,uv_data[i]);
+			else
+				uv_vb[i]=nullptr;
+		}
 	}
 
 	if(mfh.vertices_number>0xFFFF)
@@ -138,14 +259,26 @@ bool LoadMeshFile(MeshData &md,const OSString &filename)
 
 	fis.Close();
 
-	md.mtl=new Material;
-	md.mtl->SetColorMaterial(true);
-	md.mtl->SetColor(1,1,1,1);	
-    md.mtl->SetLightMode(HGL_VERTEX_LIGHT);                          ///<使用顶点级别的光照
+	for(int i=0;i<mtd->tex_count;i++)
+	{
+		MaterialTextureData *mt=&(mtd->tex_list[i]);
 
-	md.mtl->SetUptAxis(HGL_AXIS_Y);
+		md.va->SetVertexBuffer(VertexBufferType(mt->type-mtcDiffuse+vbtDiffuseTexCoord),uv_vb[mt->uvindex]);
+	}
 
-	md.r=new Renderable(md.va,md.mtl);
+	md.r=new Renderable(md.va,mtl);
+
+	for(int i=0;i<mtd->tex_count;i++)
+	{
+		MaterialTextureData *mt=&(mtd->tex_list[i]);
+
+		md.r->SetTexCoord(mt->type,VertexBufferType(mt->type-mtcDiffuse+vbtDiffuseTexCoord));
+	}
+
+	SAFE_CLEAR_OBJECT_ARRAY(uv_data,mfh.texcoord_channels);
+	//SAFE_CLEAR_OBJECT_ARRAY(uv_vb,mfh.texcoord_channels);
+	SAFE_CLEAR_ARRAY(uv_comp);
+
 	md.r->AutoCreateShader(true,nullptr,filename);
 
 	return(true);
@@ -155,14 +288,16 @@ class SceneLoader
 {
 	OSString main_filename;
 
-	VertexArray *box_va;
-	Material *box_mtl;
-	Renderable *box_r;
-
 	SceneNode *root;
 
-	uint32 mesh_count;
+	uint32 tex_count;
+	Texture **tex_list;
 
+	uint32 mtl_count;
+	MaterialData *md_list;
+	Material *mtl_list;
+
+	uint32 mesh_count;
 	MeshData *mesh_list;
 
 	RenderList rl;
@@ -180,53 +315,81 @@ public:
 
 	SceneLoader()
 	{
+		tex_count=0;
+		tex_list=nullptr;
+
+		mtl_count=0;
+		md_list=nullptr;
+		mtl_list=nullptr;
+
 		mesh_count=0;
 		mesh_list=nullptr;
 
 		root=new SceneNode;
-
-		box_va=CreateRenderableWireCube();
-
-		box_mtl=new Material;
-		box_mtl->SetColorMaterial(true);
-		box_mtl->SetColor(1,1,1,1);
-
-		box_r=new Renderable(box_va,box_mtl);
-		box_r->AutoCreateShader();
 	}
 
 	~SceneLoader()
 	{
+		delete root;
 		delete[] mesh_list;
 
-		delete box_r;
-		delete box_mtl;
-		delete box_va;
+		SAFE_CLEAR_ARRAY(md_list);
+		SAFE_CLEAR_ARRAY(mtl_list);
+		SAFE_CLEAR_OBJECT_ARRAY(tex_list,tex_count);
 	}
 
 private:
+
+	void LoadTexture()
+	{
+		UTF8StringList fn_list;
+
+		{
+			io::FileInputStream fis;
+
+			if(!fis.Open(main_filename+OS_TEXT(".tex_list")))
+				return;
+
+			io::LEDataInputStream dis(&fis);
+
+			LoadUTF8StringList(fn_list,&dis);
+
+			fis.Close();
+		}
+
+		tex_count=fn_list.GetCount();
+
+		tex_list=new Texture *[tex_count];
+
+		OSString fn;
+
+		for(int i=0;i<tex_count;i++)
+		{
+		#if HGL_OS == HGL_OS_Windows
+			fn=to_u16(fn_list.GetString(i));
+		#else
+			fn=fn_list.GetString(i);
+		#endif//
+
+			tex_list[i]=CreateTexture2D(fn+OS_TEXT(".tex2d"));
+		}
+	}
+
+	void LoadMaterial()
+	{
+		mtl_list=new Material[mtl_count];
+		md_list=new MaterialData[mtl_count];
+
+		for(int i=0;i<mtl_count;i++)
+			LoadMaterialFile(mtl_list[i],md_list[i],main_filename+OS_TEXT(".")+OSString(i)+OS_TEXT(".material"),tex_list);
+	}
 	
 	void LoadMesh()
 	{
 		mesh_list=new MeshData[mesh_count];
 
 		for(int i=0;i<mesh_count;i++)
-			LoadMeshFile(mesh_list[i],main_filename+OS_TEXT(".")+OSString(i)+OS_TEXT(".mesh"));
-	}
-
-	void CreateBoundingBoxRenderable(SceneNode *node)
-	{
-		const AABB &bb=node->GetBoundingBox();
-
-		Vector3f center((bb.MaxX()+bb.MinX())/2.0f,
-						(bb.MaxY()+bb.MinY())/2.0f,
-						(bb.MaxZ()+bb.MinZ())/2.0f);
-
-		Vector3f size(	(bb.MaxX()-bb.MinX())/2.0f,
-						(bb.MaxY()-bb.MinY())/2.0f,
-						(bb.MaxZ()-bb.MinZ())/2.0f);
-
-		node->AddSubNode(box_r,translate(center)*scale(size));
+			LoadMeshFile(mesh_list[i],main_filename+OS_TEXT(".")+OSString(i)+OS_TEXT(".mesh"),mtl_list,md_list);
 	}
 
 	void AddMesh(SceneNode *node,const uint32 *mesh_index,const uint32 count)
@@ -266,8 +429,6 @@ private:
 
 			node->SetLocalMatrix(mat);
 		}
-
-		//CreateBoundingBoxRenderable(node);
 
 		//mesh
 		{
@@ -321,6 +482,8 @@ public:
 
 		main_filename=filename;
 
+		LoadTexture();
+
 		if(!fis.Open(filename+OS_TEXT(".scene")))
 			RETURN_FALSE;
 
@@ -340,6 +503,11 @@ public:
 		if(ver!=1)
 			RETURN_FALSE;
 
+		if(!dis->ReadUint32(mtl_count))
+			RETURN_FALSE;
+
+		LoadMaterial();
+
 		if(!dis->ReadUint32(mesh_count))
 			RETURN_FALSE;
 
@@ -350,7 +518,7 @@ public:
 		delete dis;
 		dis=nullptr;
 		
-		root->RefreshMatrix();                                                    ///<刷新当前节点下所有子节点的矩阵
+		root->RefreshMatrix();                                              ///<刷新当前节点下所有子节点的矩阵
 		root->ExpendToList(&rl);                                            ///<展开当前节点成一个渲染列表
 		return(result);
 	}
@@ -367,7 +535,7 @@ public:
 	{
         SetClearColor(ceMozillaCharcoal);		//设置清屏颜色
 
-		sl.Load(OS_TEXT("T4112"));
+		sl.Load(OS_TEXT("boxuv"));
 
 		rl=sl.GetRenderList();
 
@@ -378,8 +546,8 @@ public:
 							 (bb.MinY()+bb.MaxY())/2.0f,
 							 (bb.MinZ()+bb.MaxZ())/2.0f);
 
-		this->cam.znear=bb.MaxZ()*2;
-		this->cam.zfar=bb.MinZ()*2;
+		this->cam.znear=1;
+		this->cam.zfar=-1;
 	}
 
 	~TestObject()

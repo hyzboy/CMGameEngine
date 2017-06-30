@@ -131,7 +131,7 @@ constexpr uint16 gl_wrap[4]={HGL_WRAP_REPEAT,HGL_WRAP_CLAMP,HGL_WRAP_MIRRORED_RE
 void OutMaterialTexture(const MaterialTextureStruct &mt,io::DataOutputStream *dos)
 {
 	dos->WriteUint8(hgl_mtc[mt.type]);
-	dos->WriteUint32(mt.tex_id);
+	dos->WriteInt32(mt.tex_id);
 	dos->WriteUint8(mt.new_uvindex);
 	dos->WriteFloat(mt.blend);
 	dos->WriteUint8(mt.op);
@@ -705,6 +705,7 @@ bool AssimpLoader::LoadFile(const OSString &filename)
 
 	dos.WriteFully("SCENE\x1a\x01",7);
 
+	dos.WriteUint32(scene->mNumMaterials);
 	dos.WriteUint32(scene->mNumMeshes);
 
 	LoadMaterial();										//载入所有材质

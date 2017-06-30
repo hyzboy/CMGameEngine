@@ -24,7 +24,7 @@ struct MaterialTextureStruct
 	uint32 old_uvindex=0;
 	uint32 new_uvindex=0;
 	float blend=0;
-	uint16 op=0;
+	uint8 op=0;
 	uint16 wrap_mode[2]={0,0};
 };//
 
