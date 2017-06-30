@@ -535,7 +535,7 @@ public:
 	{
         SetClearColor(ceMozillaCharcoal);		//设置清屏颜色
 
-		sl.Load(OS_TEXT("boxuv"));
+		sl.Load(OS_TEXT("jill_mesh"));
 
 		rl=sl.GetRenderList();
 

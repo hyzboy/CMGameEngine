@@ -673,7 +673,7 @@ bool AssimpLoader::LoadFile(const OSString &filename)
 	if(!filedata)
 		return(false);
 
-	scene=aiImportFileFromMemory(filedata,filesize,aiProcessPreset_TargetRealtime_MaxQuality,nullptr);
+	scene=aiImportFileFromMemory(filedata,filesize,aiProcessPreset_TargetRealtime_MaxQuality|aiProcess_FlipUVs,nullptr);
 	
 	delete[] filedata;
 
