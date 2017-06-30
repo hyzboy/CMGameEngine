@@ -125,9 +125,12 @@ void OutFloat3(const OSString &front,const Color4f &c)
 					+OS_TEXT(",")+OSString(c.b));
 }
 
+constexpr uint8 hgl_mtc[]={mtcNone,mtcDiffuse,mtcSpecular,mtcAmbient,mtcEmissive,mtcHeight,mtcNormal,mtcShininess,mtcAlpha,mtcDisplacement,mtcLight,mtcReflection};
+constexpr uint16 gl_wrap[4]={HGL_WRAP_REPEAT,HGL_WRAP_CLAMP,HGL_WRAP_MIRRORED_REPEAT,0};
+
 void OutMaterialTexture(const MaterialTextureStruct &mt,io::DataOutputStream *dos)
 {
-	dos->WriteUint8(mt.type);
+	dos->WriteUint8(hgl_mtc[mt.type]);
 	dos->WriteUint32(mt.tex_id);
 	dos->WriteUint8(mt.new_uvindex);
 	dos->WriteFloat(mt.blend);
@@ -271,9 +274,7 @@ void AssimpLoader::LoadMaterial()
 				ms->tex_list[tex_index].old_uvindex=uvindex;
 				ms->tex_list[tex_index].blend=blend;
 				ms->tex_list[tex_index].op=op;
-
-				constexpr uint16 gl_wrap[4]={HGL_WRAP_REPEAT,HGL_WRAP_CLAMP,HGL_WRAP_MIRRORED_REPEAT,0};
-
+				
 				ms->tex_list[tex_index].wrap_mode[0]=gl_wrap[wrap_mode[0]];
 				ms->tex_list[tex_index].wrap_mode[1]=gl_wrap[wrap_mode[1]];
 

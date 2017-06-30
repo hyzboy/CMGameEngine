@@ -20,14 +20,24 @@ namespace hgl
 
                 "Ambient",
                 "Specular",
+				"Emmissive",
+				"Shininess",
+				"Reflection",
 
                 "TexCoord_Diffuse",
-                "TexCoord_Alpha",
+                "TexCoord_Ambient",
+                "TexCoord_Specular",
+				"TexCoord_Emissive",
+				"TexCoord_Shininess",
+				"TexCoord_Reflection",
                 "TexCoord_Normal",
                 "TexCoord_Tangent",
                 "TexCoord_BiNormal",
-                "TexCoord_Ambient",
-                "TexCoord_Specular",
+				"TexCoord_Light",
+                "TexCoord_Alpha",
+				"TexCoord_Depth",
+				"TexCoord_Shadow",
+				"TexCoord_Displacement",
 
                 "TexCoord_GBuffer",
             };//const VERTEX_BUFFER_NAME VertexBufferName

@@ -15,6 +15,9 @@ namespace hgl
             mtcDiffuse=0,               ///<漫反射
             mtcAmbient,                 ///<环境光
             mtcSpecular,                ///<镜面光
+			mtcEmissive,				///<
+			mtcShininess,				///<
+			mtcReflection,				///<
             mtcNormal,                  ///<法线
             mtcTangent,                 ///<切线
             mtcBiNormal,                ///<副法线
@@ -23,6 +26,8 @@ namespace hgl
             mtcAlpha,                   ///<透明度贴图
 			mtcDepth,
             mtcShadow,                  ///<阴影
+
+			mtcDisplacement,			///<置换贴图
 
             mtcPalette,                 ///<调色板
 

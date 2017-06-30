@@ -11,12 +11,16 @@ namespace hgl
                 "Diffuse",
                 "Ambient",
                 "Specular",
+				"Emissive",
+				"Shininess",
+				"Reflection",
                 "Normal",
                 "Tangent",
                 "Light",
                 "Alpha",
                 "Depth",
                 "Shadow",
+				"Displacement",
 
                 "Palette",
 
