@@ -188,7 +188,7 @@ void FlipData(uint8 *data,int line_bytes,int row_number)
     delete[] temp;
 }
 
-void CheckFormat()
+void ConvertPixelFormat()
 {
 	uint fmt=il_format;
 
@@ -390,7 +390,7 @@ int ConvertImage(const os_char *filename)
 					il_type=IL_UNSIGNED_BYTE;
 				}
 
-				CheckFormat();
+				ConvertPixelFormat();
 
 				if(il_format==IL_LUMINANCE		)
 				{
