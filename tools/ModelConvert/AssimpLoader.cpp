@@ -125,24 +125,40 @@ void OutFloat3(const OSString &front,const Color4f &c)
 					+OS_TEXT(",")+OSString(c.b));
 }
 
-void OutMaterialTexture(const MaterialTextureStruct &mt)
+void OutMaterialTexture(const MaterialTextureStruct &mt,io::DataOutputStream *dos)
 {
+	dos->WriteUint8(mt.type);
+	dos->WriteUint32(mt.tex_id);
+	dos->WriteUint8(mt.new_uvindex);
+	dos->WriteFloat(mt.blend);
+	dos->WriteUint8(mt.op);
+	dos->WriteUint16(mt.wrap_mode,2);
+
 	LOG_INFO(OS_TEXT("\tTexture Type: ")+OSString(mt.type));
 	LOG_INFO(OS_TEXT("\tTexture ID: ")+OSString(mt.tex_id));
 
-	LOG_INFO(OS_TEXT("\tMapping: ")+OSString(mt.tm));
 	LOG_INFO(OS_TEXT("\tuvindex: ")+OSString(mt.old_uvindex));
 	LOG_INFO(OS_TEXT("\tblend: ")+OSString(mt.blend));
 	LOG_INFO(OS_TEXT("\top: ")+OSString(mt.op));
 	LOG_INFO(OS_TEXT("\twrap_mode: ")+OSString(mt.wrap_mode[0])+OS_TEXT(",")+OSString(mt.wrap_mode[1]));
 }
 
-void OutMaterial(const MaterialStruct *ms)
+void OutMaterial(const MaterialStruct *ms,const OSString &filename)
 {
-	LOG_INFO(OS_TEXT("Material Texture Count ")+OSString(ms->tex_count));
+	io::FileOutputStream fos;
+	io::LEDataOutputStream dos(&fos);
 
-	for(int i=0;i<ms->tex_count;i++)
-		OutMaterialTexture(ms->tex_list[i]);
+	fos.CreateTrunc(filename);
+
+	dos.WriteFully("Material\x1A\x1",10);
+	dos.WriteFloat(ms->diffuse,3);
+	dos.WriteFloat(ms->specular,3);
+	dos.WriteFloat(ms->ambient,3);
+	dos.WriteFloat(ms->emission,3);
+	dos.WriteFloat(ms->shininess);
+	dos.WriteBool(ms->wireframe);
+	dos.WriteBool(ms->two_sided);
+	dos.WriteUint8(ms->tex_count);
 
 	OutFloat3(OSString(OS_TEXT("diffuse")),ms->diffuse);
 	OutFloat3(OSString(OS_TEXT("specular")),ms->specular);
@@ -153,6 +169,13 @@ void OutMaterial(const MaterialStruct *ms)
 
 	LOG_INFO(OS_TEXT("wireframe: ")+OSString(ms->wireframe?OS_TEXT("true"):OS_TEXT("false")));
 	LOG_INFO(OS_TEXT("two_sided: ")+OSString(ms->two_sided?OS_TEXT("true"):OS_TEXT("false")));
+
+	LOG_INFO(OS_TEXT("Material Texture Count ")+OSString(ms->tex_count));
+
+	for(int i=0;i<ms->tex_count;i++)
+		OutMaterialTexture(ms->tex_list[i],&dos);
+
+	fos.Close();
 }
 
 void AssimpLoader::LoadMaterial()
@@ -245,13 +268,14 @@ void AssimpLoader::LoadMaterial()
 					ms->tex_list[tex_index].tex_id=tex_id;
 				}
 
-				ms->tex_list[tex_index].tm=tm;
 				ms->tex_list[tex_index].old_uvindex=uvindex;
 				ms->tex_list[tex_index].blend=blend;
 				ms->tex_list[tex_index].op=op;
 
-				ms->tex_list[tex_index].wrap_mode[0]=wrap_mode[0];
-				ms->tex_list[tex_index].wrap_mode[1]=wrap_mode[1];
+				constexpr uint16 gl_wrap[4]={HGL_WRAP_REPEAT,HGL_WRAP_CLAMP,HGL_WRAP_MIRRORED_REPEAT,0};
+
+				ms->tex_list[tex_index].wrap_mode[0]=gl_wrap[wrap_mode[0]];
+				ms->tex_list[tex_index].wrap_mode[1]=gl_wrap[wrap_mode[1]];
 
 				++tex_index;
 			}
@@ -317,7 +341,7 @@ void AssimpLoader::LoadMaterial()
 		else
 			ms->two_sided=true;
 
-		OutMaterial(ms);
+		OutMaterial(ms,main_filename+OS_TEXT(".")+OSString(m)+OS_TEXT(".material"));
 		LOG_BR;
 	}
 }

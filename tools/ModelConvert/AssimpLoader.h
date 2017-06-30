@@ -21,12 +21,11 @@ struct MaterialTextureStruct
 
 	int32 tex_id=-1;
 
-	uint8 tm=0;
 	uint32 old_uvindex=0;
 	uint32 new_uvindex=0;
 	float blend=0;
-	uint32 op=0;
-	uint32 wrap_mode[2]={0,0};
+	uint16 op=0;
+	uint16 wrap_mode[2]={0,0};
 };//
 
 struct MaterialStruct
