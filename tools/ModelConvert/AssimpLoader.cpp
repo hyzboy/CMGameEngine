@@ -217,6 +217,7 @@ void AssimpLoader::LoadMaterial()
 		
 				{
 					char *fn=strrchr(filename.data,'\\');
+					char *ext;
 
 					if(!fn)
 						fn=strrchr(filename.data,'/');
@@ -228,13 +229,17 @@ void AssimpLoader::LoadMaterial()
 					else
 						fn=filename.data;
 
+					ext=strrchr(fn,'.');
+
+					if(ext)*ext=0;
+
 				#if HGL_OS == HGL_OS_Window
 					tex_id=tex_list.CaseFind(fn);
 				#else
 					tex_id=tex_list.Find(fn);
 				#endif//
 
-					if(tex_id)
+					if(tex_id==-1)
 						tex_id=tex_list.Add(fn);
 
 					ms->tex_list[tex_index].tex_id=tex_id;
