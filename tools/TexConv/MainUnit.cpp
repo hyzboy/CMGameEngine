@@ -392,6 +392,14 @@ int ConvertImage(const os_char *filename)
 
 				CheckFormat();
 
+				if(il_format==IL_LUMINANCE		)
+				{
+					curfmt=default_r8;
+					tarfmt=(glfmt[0]?glfmt[0]:curfmt);
+
+					memcpy(image_data,ilGetData(),pixels);
+				}
+				else
 				if(il_format==IL_ALPHA			)
 				{
 					curfmt=default_r8;
@@ -632,8 +640,8 @@ HGL_GRAPHICS_MAIN(sii,app,args)
 			    hgl::strcat(hint,STR_HINT_MAX,'\t');
 		}
 
-		MessageBoxA(nullptr,hint,"TexConv",MB_OK|MB_ICONINFORMATION);
-//		LOG_ERROR(hint);
+		//MessageBoxA(nullptr,hint,"TexConv",MB_OK|MB_ICONINFORMATION);
+		LOG_ERROR(hint);
 
 		delete[] hint;
 		return(0);
