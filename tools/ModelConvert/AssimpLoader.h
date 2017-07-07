@@ -73,10 +73,19 @@ public:
 	}
 };
 
-#define NTB_NONE		0
-#define NTB_NORMAL		1
-#define NTB_FULL		2
-#define NTB_NT_COMPRESS	3
+#define NTB_BIT_NORMAL					(1<<0)
+#define NTB_BIT_TANGENT					(1<<1)
+#define NTB_BIT_BINORMAL				(1<<2)
+
+#define NTB_BIT_ALL						(NTB_BIT_NORMAL|NTB_BIT_TANGENT|NTB_BIT_BINORMAL)
+
+#define NTB_BIT_COMPRESS_NORMAL			(1<<3)
+#define NTB_BIT_COMPRESS_TANGENT		(1<<4)
+#define NTB_BIT_COMPRESS_BINORMAL		(1<<5)
+
+#define NTB_BIT_COMPRESS_ALL			(NTB_BIT_COMPRESS_NORMAL|NTB_BIT_COMPRESS_TANGENT|NTB_BIT_COMPRESS_BINORMAL)
+
+#define NTB_BIT_COMPRESS_NORMAL_TANGENT	(1<<6)
 
 struct MeshStruct
 {
@@ -94,7 +103,7 @@ struct MeshStruct
 
 	uint32 material_index;				///<材质索引
 
-	uint8 ntb;							///<0:无 1:只有normal 2:有完整NTB 3:有压缩NT
+	uint8 ntb;							///<ntb信息位合集
 
 	uint32 bones_number;				///<骨骼数量
 

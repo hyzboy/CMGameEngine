@@ -93,7 +93,7 @@ void LoadMaterialFile(Material &mtl,MaterialData &md,const OSString &filename,Te
 
 	mtl.SetTwoSide(md.two_sided);
 
-    mtl.SetLightMode(HGL_VERTEX_LIGHT);                          ///<使用顶点级别的光照
+    mtl.SetLightMode(HGL_PIXEL_LIGHT);
 
 	if(!dis.ReadUint8(md.tex_count))return;
 
@@ -114,10 +114,19 @@ void LoadMaterialFile(Material &mtl,MaterialData &md,const OSString &filename,Te
 	}	
 }
 
-#define NTB_NONE		0
-#define NTB_NORMAL		1
-#define NTB_FULL		2
-#define NTB_NT_COMPRESS	3
+#define NTB_BIT_NORMAL					(1<<0)
+#define NTB_BIT_TANGENT					(1<<1)
+#define NTB_BIT_BINORMAL				(1<<2)
+
+#define NTB_BIT_ALL						(NTB_BIT_NORMAL|NTB_BIT_TANGENT|NTB_BIT_BINORMAL)
+
+#define NTB_BIT_COMPRESS_NORMAL			(1<<3)
+#define NTB_BIT_COMPRESS_TANGENT		(1<<4)
+#define NTB_BIT_COMPRESS_BINORMAL		(1<<5)
+
+#define NTB_BIT_COMPRESS_ALL			(NTB_BIT_COMPRESS_NORMAL|NTB_BIT_COMPRESS_TANGENT|NTB_BIT_COMPRESS_BINORMAL)
+
+#define NTB_BIT_COMPRESS_NORMAL_TANGENT	(1<<6)
 
 #pragma pack(push,1)
 struct MeshFileHeader
@@ -136,7 +145,7 @@ struct MeshFileHeader
 
 	uint32 material_index;				///<材质索引
 
-	uint8 ntb;							///<0:无 1:只有normal 2:有完整NTB 3:有压缩NT
+	uint8 ntb;							///<NTB信息位合集
 
 	uint32 bones_number;				///<骨骼数量
 
@@ -197,7 +206,7 @@ bool LoadMeshFile(MeshData &md,const OSString &filename,Material *mtl_list,Mater
 		md.va->SetVertex(vertex);
 	}
 
-	if(mfh.ntb!=NTB_NONE)
+	if(mfh.ntb!=NTB_BIT_NORMAL)
 	{
 		VB3f *normal=new VB3f(mfh.vertices_number);
 
@@ -205,7 +214,7 @@ bool LoadMeshFile(MeshData &md,const OSString &filename,Material *mtl_list,Mater
 
 		md.va->SetNormal(normal);
 
-		if(mfh.ntb==NTB_FULL)
+		if(mfh.ntb==NTB_BIT_ALL)
 			dis.Seek(normal->GetBytes()*2,io::soCurrent);					//跳过tangent和bitangent
 	}
 

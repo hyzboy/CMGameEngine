@@ -536,12 +536,10 @@ void AssimpLoader::LoadMesh()
 			if(mesh->HasNormals())
 			{
 				if(mesh->HasTangentsAndBitangents())
-					ms.ntb=NTB_FULL;
+					ms.ntb=NTB_BIT_ALL;
 				else
-					ms.ntb=NTB_NORMAL;
+					ms.ntb=NTB_BIT_NORMAL;
 			}
-			else
-				ms.ntb=NTB_NONE;
 
 			ms.bones_number		=mesh->mNumBones;
 
@@ -673,7 +671,7 @@ bool AssimpLoader::LoadFile(const OSString &filename)
 	if(!filedata)
 		return(false);
 
-	scene=aiImportFileFromMemory(filedata,filesize,aiProcessPreset_TargetRealtime_MaxQuality|aiProcess_FlipUVs,nullptr);
+	scene=aiImportFileFromMemory(filedata,filesize,aiProcessPreset_TargetRealtime_Quality|aiProcess_FlipUVs,nullptr);
 	
 	delete[] filedata;
 
