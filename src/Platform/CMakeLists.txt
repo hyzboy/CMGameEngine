@@ -157,6 +157,6 @@ IF(WIN32)
     add_library(CM.Platform.Static STATIC ${PLATFORM_SOURCE})
     
     target_compile_options(CM.Platform.Static PRIVATE "/MT")
-ELSEIF(WIN32)
+ELSE(WIN32)
     add_library(CM.Platform SHARED ${PLATFORM_SOURCE})
 ENDIF(WIN32)
