@@ -17,7 +17,8 @@ SET(GRAPHICS_APPLICATION_SOURCE
 
 SOURCE_GROUP("Application" FILES ${GRAPHICS_APPLICATION_SOURCE})
 
-SET(CM_SCENE_GRAPH_SOURCE   Camera.cpp
+SET(CM_SCENE_GRAPH_SOURCE   ColorType.cpp
+                            Camera.cpp
                             WalkerCamera.cpp
 							RenderList.cpp
 							SceneGlobalState.cpp
