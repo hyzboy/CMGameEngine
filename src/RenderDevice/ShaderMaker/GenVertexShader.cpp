@@ -324,14 +324,9 @@ namespace hgl
 
                 if(in_normal)
                 {
- //#ifdef HGL_MATRIX_LEFT
- //                    add("\n\tVP=normalize(" HGL_VS_LIGHT_POSITION "-" HGL_VS_NORMAL_MATRIX "*Position);\n");
- //                    add("\tMVNormal=normalize(" HGL_VS_NORMAL_MATRIX "*" HGL_VS_NORMAL ");\n\n");
- //#else
  //                    add("\n\tVP=normalize(" HGL_VS_LIGHT_POSITION "-Position*" HGL_VS_NORMAL_MATRIX ");\n");
  //                    add("\tMVNormal=normalize(" HGL_VS_NORMAL "*" HGL_VS_NORMAL_MATRIX ");\n\n");
- //#endif//HGL_MATRIX_LEFT
-
+ 
                     add("\t" HGL_FS_NORMAL "=normalize(" HGL_VS_NORMAL "*" HGL_VS_NORMAL_MATRIX ");\n");
 
                     //灯光
@@ -355,11 +350,7 @@ namespace hgl
                 if (!mvp_matrix)
                     add("\tgl_Position=Position;\n");
                 else
-#ifdef HGL_MATRIX_LEFT
-                    add("\tgl_Position=" HGL_VS_MVP_MATRIX "*Position;\n");
-#else
                     add("\tgl_Position=Position*" HGL_VS_MVP_MATRIX ";\n");
-#endif//HGL_MATRIX_LEFT
 
                 return(true);
             }
