@@ -21,7 +21,7 @@ int main(int argc,char **argv)
 #if HGL_OS == HGL_OS_Windows
     wcout<<L"CountHash \""<<argv[1]<<L'"'<<endl;
 #else
-    cout<<"CountHash \""<<argv[1]<<<<'"'<<endl;
+    cout<<"CountHash \""<<argv[1]<<'"'<<endl;
 #endif//HGL_OS == HGL_OS_Windows
 
     void *file_data;
