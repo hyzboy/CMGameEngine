@@ -49,21 +49,12 @@ ENDIF(UNIX)
 
 IF(DATABASE_INCLUDE_MySQL)
     SET(MYSQL_FILES
-        MySQL/MySQLField.cpp
-		MySQL/MySQLStoreResult.cpp
-		MySQL/SQLField.cpp
-        MySQL/SQLFieldFromStream.cpp
-        MySQL/SQLFieldToStream.cpp
-        MySQL/SQLFieldData.cpp
-        MySQL/SQLRecordRow.cpp
-        MySQL/SQLTable.cpp
-        MySQL/SQLTableFromMySQL.cpp
-        MySQL/SQLTableFromStream.cpp
-        MySQL/SQLTableToStream.cpp
-        MySQL/SQLStoreResult.cpp
-        MySQL/SQLStoreResultFromMySQL.cpp
-        MySQL/SQLStoreResultFromStream.cpp
-        MySQL/SQLStoreResultToStream.cpp
+        SQL/MySQLConnection.cpp
+        SQL/MySQLDriver.cpp
+        SQL/MySQLField.cpp
+        SQL/MySQLRow.cpp
+        SQL/MySQLStoreResult.cpp
+        SQL/SQLDriver.cpp
         )
 
     SOURCE_GROUP("MySQL" FILES ${MYSQL_FILES})
