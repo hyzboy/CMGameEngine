@@ -67,3 +67,7 @@ IF(WIN32)
 ELSE()
     ADD_LIBRARY(CM.Database SHARED ${db_files})
 ENDIF()
+
+IF(DATABASE_INCLUDE_MySQL)
+    target_link_libraries(CM.Database mysqlclient)
+ENDIF()
