@@ -275,42 +275,45 @@ void AppendFileToXML(struct EnumFileConfig *,FileInfo &fi)
 
     MD5Code md5;
     MD5Code compress_md5;
+    char md5str[33];
+    char cmd5str[33];
 
     GetMD5(md5,filedata,filelength);
+    DataToHexStr(md5str,(uint8 *)&md5,sizeof(MD5Code));
 
     char *compress_data=new char[filelength];
     compress_filelength=filelength;
 
-    if(BZ2_bzBuffToBuffCompress(compress_data,&compress_filelength,filedata,filelength,9,0,30)!=BZ_OK)
+    if(BZ2_bzBuffToBuffCompress(compress_data,&compress_filelength,filedata,filelength,9,0,30)==BZ_OK)
     {
-        delete[] compress_data;
-        delete[] filedata;
-        std::cout<<"compress data failed!"<<std::endl;
-        return;
+        std::string compress_filename=fi.fullname;
+
+        compress_filename+=".bz2";
+
+        if(filesystem::SaveMemoryToFile(compress_filename,compress_data,compress_filelength)==compress_filelength)
+        {
+            GetMD5(compress_md5,compress_data,compress_filelength);
+            
+            DataToHexStr(cmd5str,(uint8 *)&compress_md5,sizeof(MD5Code));
+
+            xml<<"\t<file compress_size=\""<<compress_filelength<<"\" compress_md5=\""<<cmd5str<<"\" size=\""<<filelength<<"\" md5=\""<<md5str<<"\" name=\""<<short_filename.c_str()<<"\"/>\n";
+        }
+        else
+        {
+            std::cout<<"save compress file to <"<<compress_filename.c_str()<<"> failed!"<<std::endl;
+        }
     }
-
-    std::string compress_filename=fi.fullname;
-
-    compress_filename+=".bz2";
-
-    if(filesystem::SaveMemoryToFile(compress_filename,compress_data,compress_filelength)!=compress_filelength)
+    else
     {
-        delete[] compress_data;
-        delete[] filedata;
-
-        std::cout<<"save compress file to <"<<compress_filename.c_str()<<"> failed!"<<std::endl;
-        return;
+        std::cout<<"compress data failed,use uncompress data!"<<std::endl;
+        
+        //压缩失败，使用未压缩数据
+        
+        xml<<"\t<file compress_size=\""<<filelength<<"\" compress_md5=\""<<md5str<<"\" size=\""<<filelength<<"\" md5=\""<<md5str<<"\" name=\""<<short_filename.c_str()<<"\"/>\n";
     }
-
-    GetMD5(compress_md5,compress_data,compress_filelength);
-
-    char md5str[33];
-    char cmd5str[33];
-
-    DataToHexStr(md5str,(uint8 *)&md5,sizeof(MD5Code));
-    DataToHexStr(cmd5str,(uint8 *)&compress_md5,sizeof(MD5Code));
-
-    xml<<"\t<file compress_size=\""<<compress_filelength<<"\" compress_md5=\""<<cmd5str<<"\" size=\""<<filelength<<"\" md5=\""<<md5str<<"\" name=\""<<short_filename.c_str()<<"\"/>\n";
+    
+    delete[] compress_data;
+    delete[] filedata;
 }
 
 int main(int argc,char **argv)

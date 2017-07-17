@@ -17,7 +17,7 @@ namespace filesystem
     * @param size 文件长度
     * @return 用来保存数据的内存指针的指针，请自行delete[]
     */
-    void *LoadFileToMemory(const std::string &filename,unsigned int *size)
+    char *LoadFileToMemory(const std::string &filename,unsigned int *size)
     {
         if(filename.empty())return(nullptr);
         if(!size)return(nullptr);
