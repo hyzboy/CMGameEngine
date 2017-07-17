@@ -66,19 +66,10 @@ IF(WIN32)
     SET(PLATFORM_DESKTOP_SOURCE         Win/Desktop.cpp)
 ENDIF(WIN32)
 
-SOURCE_GROUP("CodePage"     FILES ${PLATFORM_CODEPAGE_SOURCE})
-SOURCE_GROUP("File"         FILES ${PLATFORM_FILE_SOURCE})
-SOURCE_GROUP("SystemInfo"   FILES ${PLATFORM_APPLICATION_SOURCE})
-SOURCE_GROUP("LogInfo"      FILES ${PLATFORM_LOG_SOURCE})
-SOURCE_GROUP("MultiThread"  FILES ${PLATFORM_MULTI_THREAD_SOURCE})
-SOURCE_GROUP("MultiProcess" FILES ${PLATFORM_MULTI_PROCESS_SOURCE})
-SOURCE_GROUP("Time"         FILES ${PLATFORM_TIME_SOURCE})
-SOURCE_GROUP("Desktop"      FILES ${PLATFORM_DESKTOP_SOURCE})
-
 IF(BUILD_OPENGL_LIB)
 
-    SET(PLATFORM_SOURCE ${PLATFORM_SOURCE}
-                        Window.cpp)
+    SET(PLATFORM_DESKTOP_SOURCE ${PLATFORM_DESKTOP_SOURCE}
+                                Window.cpp)
 
     SOURCE_GROUP("Graphics" FILES Window.cpp)
 
@@ -88,8 +79,8 @@ IF(BUILD_OPENGL_LIB)
                                             GLFW/WindowEventGLFW.cpp
                                             GLFW/KeyConvert.cpp)
 
-        SET(PLATFORM_SOURCE ${PLATFORM_SOURCE}
-                            ${PLATFORM_GLFW_SUPPORT_SOURCE})
+        SET(PLATFORM_DESKTOP_SOURCE ${PLATFORM_DESKTOP_SOURCE}
+                                    ${PLATFORM_GLFW_SUPPORT_SOURCE})
 
         SOURCE_GROUP("Graphics\\Platform" FILES ${PLATFORM_GLFW_SUPPORT_SOURCE})
 
@@ -114,8 +105,8 @@ IF(BUILD_OPENGL_LIB)
 
             SOURCE_GROUP("Graphics\\GLFW3"   FILES ${GLFW_SOURCE})
 
-            SET(PLATFORM_SOURCE ${PLATFORM_SOURCE}
-                                ${GLFW_SOURCE})
+            SET(PLATFORM_DESKTOP_SOURCE ${PLATFORM_DESKTOP_SOURCE}
+                                        ${GLFW_SOURCE})
         ENDIF(WIN32)
     ELSE(OPENGL_USE_GLFW)
     
@@ -128,8 +119,8 @@ IF(BUILD_OPENGL_LIB)
 
             SOURCE_GROUP("Graphics\\X11" FILES ${X11_PLATFORM_SOURCE})
 
-            SET(PLATFORM_SOURCE ${PLATFORM_SOURCE}
-                                ${X11_PLATFORM_SOURCE})
+            SET(PLATFORM_DESKTOP_SOURCE ${PLATFORM_DESKTOP_SOURCE}
+                                        ${X11_PLATFORM_SOURCE})
         ENDIF(UNIX)
         
         IF(APPLE)
@@ -138,6 +129,15 @@ IF(BUILD_OPENGL_LIB)
     
     SOURCE_GROUP("InputDevice"  FILES ${PLATFORM_INPUT_DEVICE_SOURCE})
 ENDIF(BUILD_OPENGL_LIB)
+
+SOURCE_GROUP("CodePage"     FILES ${PLATFORM_CODEPAGE_SOURCE})
+SOURCE_GROUP("File"         FILES ${PLATFORM_FILE_SOURCE})
+SOURCE_GROUP("SystemInfo"   FILES ${PLATFORM_APPLICATION_SOURCE})
+SOURCE_GROUP("LogInfo"      FILES ${PLATFORM_LOG_SOURCE})
+SOURCE_GROUP("MultiThread"  FILES ${PLATFORM_MULTI_THREAD_SOURCE})
+SOURCE_GROUP("MultiProcess" FILES ${PLATFORM_MULTI_PROCESS_SOURCE})
+SOURCE_GROUP("Time"         FILES ${PLATFORM_TIME_SOURCE})
+SOURCE_GROUP("Desktop"      FILES ${PLATFORM_DESKTOP_SOURCE})
 
 SET(PLATFORM_SOURCE ${PLATFORM_SOURCE}
                     ${PLATFORM_FILE_SOURCE}
@@ -148,15 +148,20 @@ SET(PLATFORM_SOURCE ${PLATFORM_SOURCE}
                     ${PLATFORM_MULTI_PROCESS_SOURCE}
                     ${PLATFORM_TIME_SOURCE}
                     ${PLATFORM_EXTERNAL_MODULE_SOURCE}
-                    ${PLATFORM_DESKTOP_SOURCE}
-                    ${PLATFORM_INPUT_DEVICE_SOURCE})
+)
+                    
+SET(PLATFORM_RENDER_SOURCE  ${PLATFORM_DESKTOP_SOURCE}
+                            ${PLATFORM_INPUT_DEVICE_SOURCE})
 
 IF(WIN32)
     add_library(CM.Platform STATIC ${PLATFORM_SOURCE})
-
-    add_library(CM.Platform.Static STATIC ${PLATFORM_SOURCE})
-    
+    add_library(CM.Platform.Static STATIC ${PLATFORM_SOURCE} ${PLATFORM_RENDER_SOURCE})
     target_compile_options(CM.Platform.Static PRIVATE "/MT")
+    
+    add_library(CM.PlatformRender STATIC ${PLATFORM_SOURCE} ${PLATFORM_RENDER_SOURCE})
+    add_library(CM.PlatformRender.Static STATIC ${PLATFORM_SOURCE} ${PLATFORM_RENDER_SOURCE})    
+    target_compile_options(CM.PlatformRender.Static PRIVATE "/MT")
 ELSE(WIN32)
     add_library(CM.Platform SHARED ${PLATFORM_SOURCE})
+    add_library(CM.PlatformRender SHARED ${PLATFORM_SOURCE} ${PLATFORM_RENDER_SOURCE})
 ENDIF(WIN32)
