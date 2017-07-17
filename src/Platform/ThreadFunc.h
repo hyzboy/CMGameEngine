@@ -2,12 +2,12 @@
 {
 	hgl::Thread *tc=(Thread *)ptr;
 
-	os_char str[(sizeof(void *)+1)<<1];
-    OSString thread_addr;
-
-	htos(str,(sizeof(void *)+1)<<1,(uint64)ptr);
-
-	thread_addr=str;
+// 	os_char str[(sizeof(void *)+1)<<1];
+//     OSString thread_addr;
+// 
+// 	htos(str,(sizeof(void *)+1)<<1,(uint64)ptr);
+// 
+// 	thread_addr=str;
 
 //	LOG_INFO(OS_TEXT("Thread[")+thread_addr+OS_TEXT("] Init"));
 
