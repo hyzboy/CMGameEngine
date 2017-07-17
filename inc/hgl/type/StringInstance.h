@@ -164,6 +164,11 @@ namespace hgl
 
             return(true);
         }
+        
+        const T GetBeginChar()const
+        {
+            return buffer?*buffer:0;
+        }
 
         const T GetEndChar()const
         {
