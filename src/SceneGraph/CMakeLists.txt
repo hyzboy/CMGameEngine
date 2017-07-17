@@ -18,9 +18,9 @@ SET(GRAPHICS_APPLICATION_SOURCE
 SOURCE_GROUP("Application" FILES ${GRAPHICS_APPLICATION_SOURCE})
 
 SET(CM_SCENE_GRAPH_SOURCE   ColorType.cpp
+                            SkyLight.cpp
                             Camera.cpp
                             WalkerCamera.cpp
-							RenderList.cpp
 							SceneGlobalState.cpp
 							SceneNode.cpp
 							SceneOrient.cpp
@@ -47,9 +47,9 @@ IF(BUILD_OPENGL_LIB)
         VertexBufferType.cpp
         VertexArray.cpp
         InlineRenderable.cpp
+        RenderList.cpp
         Material.cpp
         Renderable.cpp
-        SkyLight.cpp
         TileData.cpp
         Transform.cpp
     )

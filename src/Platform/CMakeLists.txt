@@ -82,7 +82,7 @@ IF(BUILD_OPENGL_LIB)
 
     SOURCE_GROUP("Graphics" FILES Window.cpp)
 
-    IF(USE_GLFW)
+    IF(OPENGL_USE_GLFW)
         SET(PLATFORM_GLFW_SUPPORT_SOURCE    GLFW/PlatformGLFW.cpp
                                             GLFW/WindowGLFW.cpp
                                             GLFW/WindowEventGLFW.cpp
@@ -117,7 +117,7 @@ IF(BUILD_OPENGL_LIB)
             SET(PLATFORM_SOURCE ${PLATFORM_SOURCE}
                                 ${GLFW_SOURCE})
         ENDIF(WIN32)
-    ELSE(USE_GLFW)
+    ELSE(OPENGL_USE_GLFW)
     
         IF(WIN32)
             SET(PLATFORM_INPUT_DEVICE_SOURCE    Win/KeyConvert.cpp)
@@ -134,7 +134,7 @@ IF(BUILD_OPENGL_LIB)
         
         IF(APPLE)
         ENDIF(APPLE)
-    ENDIF(USE_GLFW)
+    ENDIF(OPENGL_USE_GLFW)
     
     SOURCE_GROUP("InputDevice"  FILES ${PLATFORM_INPUT_DEVICE_SOURCE})
 ENDIF(BUILD_OPENGL_LIB)
