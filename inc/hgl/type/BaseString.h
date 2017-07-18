@@ -119,6 +119,11 @@ namespace hgl
         BaseString(const Vector4f &v,int n=4):BaseString((const float *)&v,n){}
 
         virtual ~BaseString()=default;
+        
+        const T GetBeginChar()const                                                                 ///<取得当前字符串第一个字符
+        {
+            return(data.valid()?data->GetBeginChar():0);
+        }
 
         const T GetEndChar()const																	///<取得当前字符串最后一个字符
         {

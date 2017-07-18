@@ -1,4 +1,4 @@
-/* Copyright 2011 Jukka Jylï¿½nki
+/* Copyright 2011 Jukka Jylänki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,8 +13,8 @@
    limitations under the License. */
 
 /** @file MathBuildConfig.h
-    @author Jukka Jylï¿½nki
-    @brief Specifies all build flags for the library. */
+	@author Jukka Jylänki
+	@brief Specifies all build flags for the library. */
 #pragma once
 
 // If MATH_ENABLE_NAMESPACE is defined, all math symbols are put inside a namespace.
@@ -37,9 +37,9 @@
 #endif
 
 // If MATH_ENABLE_WINXP_SUPPORT is defined, we avoid using Windows symbols that require Vista or newer (e.g. GetTickCount64)
-//#if !defined(WIN8) /* Win8 cannot build with XP support - GetTickCount() doesn't exist. */
-//#define MATH_ENABLE_WINXP_SUPPORT
-//#endif
+#if !defined(WIN8) /* Win8 cannot build with XP support - GetTickCount() doesn't exist. */
+#define MATH_ENABLE_WINXP_SUPPORT
+#endif
 
 // If MATH_ASSERT_ON_ASSUME is defined, assume() resolves directly to assert().
 // When not defined, assume() prints out an error if the condition fails, but continues
@@ -136,11 +136,8 @@
 // Uncomment to specify the SIMD instruction set level in use.
 //#define MATH_AVX
 //#define MATH_SSE41
-#ifndef MATH_SSE3
-#define MATH_SSE3
-#endif//MATH_SSE3
-
-//#define MATH_SSE2
+//#define MATH_SSE3
+#define MATH_SSE2
 //#define MATH_SSE // SSE1.
 
 ///\todo Test iOS support.

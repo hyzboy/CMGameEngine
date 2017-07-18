@@ -91,7 +91,7 @@ namespace hgl
 		{
 			LOG_INFO(OSString(L"Unknow Key: " )+OSString(key));
 		}
-#endif _DEBUG
+#endif//_DEBUG
 
 		return KeyConvert[key];
 	}

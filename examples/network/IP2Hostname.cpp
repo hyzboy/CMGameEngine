@@ -23,8 +23,10 @@ HGL_CONSOLE_MAIN(sii,app,args)
     IPAddress *ip;
     UTF8String hostname;
 
-    if(args[1]==OS_TEXT('4'))ip=new network::IPv4Address;else
-    if(args[1]==OS_TEXT('6'))ip=new network::IPv6Address;else
+    os_char ip_ver=args[1].GetBeginChar();
+    
+    if(ip_ver=='4')ip=new network::IPv4Address;else
+    if(ip_ver=='6')ip=new network::IPv6Address;else
         return(-1);
 
 #if HGL_OS == HGL_OS_Windows

@@ -10,6 +10,7 @@ configure_file(
 )
 
 include(common.cmake REQUIRED)
+include(math.cmake REQUIRED)
 include(openal.cmake REQUIRED)
 include(opengl.cmake REQUIRED)
 include(loginfo.cmake REQUIRED)

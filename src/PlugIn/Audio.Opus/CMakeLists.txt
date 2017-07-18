@@ -210,18 +210,18 @@ IF(WIN32)
     SOURCE_GROUP("LibOpus\\SILK\\Float"     FILES ${SILK_FLOAT_SOURCE})
     SOURCE_GROUP("LibOpusFile"                FILES ${OPUSFILE_SOURCE})
 ELSE()
-    FIND_PATH(OPUS_INCLUDE_DIR
+    FIND_PATH(AUDIO_OPUS_INCLUDE_DIR
         NAMES opus.h
         HINTS
         /usr/include/opus
         /usr/local/include/opus)
-    INCLUDE_DIRECTORIES(${OPUS_INCLUDE_DIR})
+    INCLUDE_DIRECTORIES(${AUDIO_OPUS_INCLUDE_DIR})
 
-    FIND_PATH(OPUS_LIBRARY_DIR
+    FIND_PATH(AUDIO_OPUS_LIBRARY_DIR
         NAMES libopus.so
         HINTS
         ${LIB_3RD_FIND_HINT})
-    LINK_DIRECTORIES(${OPUS_LIBRARY_DIR})
+    LINK_DIRECTORIES(${AUDIO_OPUS_LIBRARY_DIR})
 
     add_library(CMP.Audio.Opus SHARED OpusRead.cpp)
     target_link_libraries(CMP.Audio.Opus opus opusfile)

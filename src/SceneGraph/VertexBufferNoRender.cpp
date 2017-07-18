@@ -10,7 +10,7 @@ namespace hgl
 
             bytes = size;
 
-            mem_data = hgl_malloc(size);            //ÔÚºÜ¶àÇé¿öÏÂ£¬hgl_malloc·ÖÅäµÄÄÚ´æÊÇ¶ÔÆëµÄ£¬ÕâÑùÓĞĞ§ÂÊÉÏµÄÌáÉı
+            mem_data = hgl_malloc(size);            //åœ¨å¾ˆå¤šæƒ…å†µä¸‹ï¼Œhgl_mallocåˆ†é…çš„å†…å­˜æ˜¯å¯¹é½çš„ï¼Œè¿™æ ·æœ‰æ•ˆç‡ä¸Šçš„æå‡
             mem_end = ((char *)mem_data) + size;
 
             data_level = level;
@@ -29,6 +29,5 @@ namespace hgl
         {
 			return(true);
         }
-
     }//namespace graph
 }//namespace hgl
