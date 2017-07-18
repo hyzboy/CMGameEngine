@@ -163,8 +163,8 @@ IF(WIN32)
 
 	SET(HGL_CONSOLE_MAIN_SOURCE ${CMGDK_PATH}/src/Platform/Win/WinMainConsole.cpp)
 	SET(HGL_GRAPHICS_MAIN_SOURCE ${CMGDK_PATH}/src/Platform/Win/WinMainOpenGL.cpp)
-	SET(HGL_CONSOLE_LIB ${HGL_BASE_LIB} ${HGL_NETWORK_LIB} CM.SceneGraph CM.Platform ws2_32.lib)
-	SET(HGL_GRAPHICS_LIB ${HGL_BASE_LIB} ${HGL_NETWORK_LIB} CM.SceneGraphRender CM.RenderDevice CM.PlatformRender ${HGL_OpenGL_LIB} OpenGL32.lib ws2_32.lib)
+	SET(HGL_CONSOLE_LIB ${HGL_BASE_LIB} ${HGL_NETWORK_LIB} CM.SceneGraph CM.Platform MathGeoLib ws2_32.lib)
+	SET(HGL_GRAPHICS_LIB ${HGL_BASE_LIB} ${HGL_NETWORK_LIB} CM.SceneGraphRender CM.RenderDevice CM.PlatformRender ${HGL_OpenGL_LIB} MathGeoLib OpenGL32.lib ws2_32.lib)
 
 	SET(CMAKE_EXE_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} /NODEFAULTLIB:msvcrt.lib ")
 	SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:libcmtd.lib;libcmt.lib")
