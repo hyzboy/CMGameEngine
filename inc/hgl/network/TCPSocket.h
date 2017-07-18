@@ -29,7 +29,7 @@ namespace hgl
 
 		public: //被动事件函数
 
-			virtual void ProcDisconnect()override{}												///<断线事件处理函数
+			virtual void ProcDisconnect()override{}											       ///<断线事件处理函数
 			virtual int ProcRecv(int recv_buf_size=-1,const double cur_time=0)override			///<接收数据事件处理函数
 						{return IOSocket::ProcRecv(recv_buf_size,cur_time);}
 			virtual int ProcSend(int,int &left_bytes)override{return -1;}						///<发送数据事件处理函数
@@ -129,13 +129,13 @@ namespace hgl
 
 		public:
 
-			TCPSocketRB();																			///<本类构造函数
-			TCPSocketRB(int s,IPAddress *addr);												        ///<本类构造函数
+			TCPSocketRB();																		///<本类构造函数
+			TCPSocketRB(int s,IPAddress *addr);												    ///<本类构造函数
 			virtual ~TCPSocketRB();
 
 			virtual void UseSocket(int,IPAddress *addr)override;						        ///<使用指定socket
-			virtual io::InputStream *GetInputStream(){return ris;}									///<取得输入流
-			virtual io::OutputStream *GetOutputStream(){return ros;}								///<取得输出流
+			virtual io::InputStream *GetInputStream(){return ris;}								///<取得输入流
+			virtual io::OutputStream *GetOutputStream(){return ros;}							///<取得输出流
 
 			const	int	GetLeftSendBytes()const override{return left_send_bytes;}				///<取得剩余可发送数据
 		};//class TCPSocketRB

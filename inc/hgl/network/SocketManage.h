@@ -97,7 +97,7 @@ namespace hgl
 			SocketManage(int/*max_connect*/);
 			virtual ~SocketManage();
 
-			SocketManageBase *			GetRecvManage	(){return manage;}						///<返回接收处理
+                    SocketManageBase *	GetRecvManage	(){return manage;}					        ///<返回接收处理
 
 							double		GetTimeOut		()const{return time_out;}					///<取得当前超时设置
 			virtual 		void		SetTimeOut		(double);									///<设置新的超时时间
