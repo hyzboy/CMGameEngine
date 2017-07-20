@@ -233,5 +233,70 @@ namespace hgl
                 }
             }
         }
+        
+//         bool SaveToTGA(const char *filename,void *data,const uint16 width,const uint16 height,const uint8 bit,const bool v_flip)
+//         {
+//         #pragma pack(push,1)
+//             
+//             struct TGAHeader
+//             {
+//                 uint8 id;
+//                 uint8 color_map_type;
+//                 uint8 image_type;               // 1 colormap image ,2 true-color,3 grayscale
+//                 
+//                 uint16 color_map_first;
+//                 uint16 color_map_length;
+//                 uint8 color_map_size;
+//                 
+//                 uint16 x_origin;
+//                 uint16 y_origin;
+//                 
+//                 uint16 width;
+//                 uint16 height;
+//                 uint8 bit;
+//                 
+//                 union
+//                 {
+//                     uint8 image_desc;
+//                     struct
+//                     {
+//                         uint alpha_depth:4;
+//                         uint reserved:1;
+//                         uint direction:1;       //0 lower-left,1 upper left
+//                     };
+//                 };
+//             };
+//         #pragma pack(pop)
+// 
+//             int size;
+// 
+//             int fp=open(filename,O_WRONLY|O_CREAT|O_TRUNC,0640);
+// 
+//             if(fp==-1)return(false);
+//             
+//             TGAHeader header;
+//             
+//             memset(&header,0,sizeof(TGAHeader));
+//             
+//             if(bit==8)
+//                 header.image_type=3;
+//             else
+//                 header.image_type=2;
+//             
+//             header.width=width;
+//             header.height=height;
+//             header.bit=bit;
+//             header.alpha_depth=8;
+//             header.direction=v_flip?1:0;
+// 
+//             write(fp,&header,sizeof(TGAHeader));
+//             write(fp,data,width*height*(bit>>3));
+// 
+//             close(fp);
+//             
+//             printf("Save Screen to %s\n",filename);
+// 
+//             return(true);
+//         }
     }//namespace graph
 }//namespace hgl
