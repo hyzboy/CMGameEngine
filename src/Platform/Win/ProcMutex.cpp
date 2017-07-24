@@ -14,11 +14,7 @@ namespace hgl
 
         lock = CreateMutexW(NULL, FALSE, name);
 
-        if(!lock)
-            return(true);
-
-        lock = nullptr;
-        return(false);
+        return lock;
     }
 
     void ProcMutex::Clear()
