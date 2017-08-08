@@ -2,7 +2,7 @@
 #define HGL_GRAPH_VERTEX_BUFFER_OBJECT_CONTROL_INCLUDE
 
 #include<hgl/type/DataType.h>
-#include<glew/include/GL/glew.h>
+#include<hgl/graph/GL/glew.h>
 namespace hgl
 {
     namespace graph

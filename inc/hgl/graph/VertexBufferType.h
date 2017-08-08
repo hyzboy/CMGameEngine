@@ -1,7 +1,7 @@
 ﻿#ifndef HGL_GRAPH_VERTEX_BUFFER_TYPE_INCLUDE
 #define HGL_GRAPH_VERTEX_BUFFER_TYPE_INCLUDE
 
-#include<glew/include/GL/glew.h>
+#include<hgl/graph/GL/glew.h>
 namespace hgl
 {
     namespace graph

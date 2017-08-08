@@ -2,7 +2,7 @@
 #define HGL_GRAPH_SAMPLER_OBJECT_INCLUDE
 
 #include<hgl/graph/TextureFormat.h>
-#include<glew/include/GL/glew.h>
+#include<hgl/graph/GL/glew.h>
 namespace hgl
 {
     namespace graph

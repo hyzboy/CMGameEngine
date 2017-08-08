@@ -1,4 +1,4 @@
-﻿#include<glew/include/GL/glew.h>
+﻿#include<hgl/graph/GL/glew.h>
 #include<malloc.h>
 #include<string.h>
 #include<hgl/FuncLoad.h>
@@ -10,10 +10,10 @@
  * Define glewGetProcAddress.
  */
 #if defined(_WIN32)
-#include<GL/wglew.h>
+#include<hgl/graph/GL/wglew.h>
 #  define glewGetProcAddress(name) wglGetProcAddress((LPCSTR)name)
 #else
-#  include <glew/include/GL/glxew.h>
+#  include <hgl/graph/GL/glxew.h>
 #  if defined(__APPLE__)
 #    define glewGetProcAddress(name) NSGLGetProcAddress(name)
 #  else

@@ -2,7 +2,7 @@
 #include<hgl/graph/Shader.h>
 #include<hgl/LogInfo.h>
 #include<hgl/type/Smart.h>
-#include<glew/include/GL/glew.h>
+#include<hgl/graph/GL/glew.h>
 #include<malloc.h>
 
 namespace hgl

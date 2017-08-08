@@ -9,7 +9,7 @@
 #include<hgl/graph/TextureChannels.h>
 #include<hgl/graph/SceneOrient.h>
 #include<hgl/graph/LightMode.h>
-#include<glew/include/GL/glew.h>
+#include<hgl/graph/GL/glew.h>
 namespace hgl
 {
     namespace graph

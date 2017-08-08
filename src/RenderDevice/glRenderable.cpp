@@ -3,7 +3,7 @@
 #include"GLSL/GLSL.h"
 #include<hgl/type/Smart.h>
 #include<hgl/type/Map.h>
-#include<glew/include/GL/glew.h>
+#include<hgl/graph/GL/glew.h>
 
 namespace hgl
 {

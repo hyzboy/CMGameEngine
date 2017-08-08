@@ -4,7 +4,7 @@
 #include<hgl/Time.h>
 #include<hgl/graph/Render.h>
 #include<hgl/graph/TileFont.h>
-#include<glew/include/GL/glew.h>
+#include<hgl/graph/GL/glew.h>
 #include<hgl/platform/compiler/EventFunc.h>
 
 extern "C"
