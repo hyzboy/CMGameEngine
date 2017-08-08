@@ -6,11 +6,6 @@ IF(BUILD_OPENGL_LIB)
 
 	add_definitions("-DGLEW_STATIC")
 
-	IF(WIN32)
-		INCLUDE_DIRECTORIES(${CMGDK_PATH}/3rdpty/opengl)
-		#包含GLCoreARB.h wglext.h等文件
-	ENDIF()
-
     OPTION(OPENGL_USE_GLFW "Use GLFW" FALSE)
 
 	IF(UNIX)
