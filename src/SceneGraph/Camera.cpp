@@ -37,18 +37,18 @@ namespace hgl
             const float left=top*aspect;
             const float right=bottom*aspect;
 
-#ifdef MATH_USE_MGL
+//#ifdef MATH_USE_MGL
             return Matrix4f(2.0f*znear/(right-left),    0.0f,                       (right+left)/(right-left),          0.0f,
                             0.0f,                       2.0f*znear/(bottom-top),    (bottom+top)/(bottom-top),          0.0f,
                             0.0f,                       0.0f,                       -(zfar+znear)/(zfar-znear),         -(2.0f*zfar*znear)/(zfar-znear),
                             0.0f,                       0.0f,                       -1.0f,                              0.0f);
 
-#else
-            return Matrix4f(2.0f*znear/(right-left),    0.0f,                       0.0f,                               0.0f,
-                            0.0f,                       2.0f*znear/(bottom-top),    0.0f,                               0.0f,
-                            (right+left)/(right-left),  (bottom+top)/(bottom-top),  -(zfar+znear)/(zfar-znear),         -1.0f,
-                            0.0f,                       0.0f,                       -(2.0f*zfar*znear)/(zfar-znear),    0.0f);
-#endif//MATH_USE_MGL
+//#else
+//            return Matrix4f(2.0f*znear/(right-left),    0.0f,                       0.0f,                               0.0f,
+//                            0.0f,                       2.0f*znear/(bottom-top),    0.0f,                               0.0f,
+//                            (right+left)/(right-left),  (bottom+top)/(bottom-top),  -(zfar+znear)/(zfar-znear),         -1.0f,
+//                            0.0f,                       0.0f,                       -(2.0f*zfar*znear)/(zfar-znear),    0.0f);
+//#endif//MATH_USE_MGL
         }
 
         inline Matrix4f LookAt(const Vector3f &eye,const Vector3f &target,const Vector3f &up)
@@ -69,18 +69,18 @@ namespace hgl
 
 //             put("nup",nup);
 
-#ifdef MATH_USE_MGL
+//#ifdef MATH_USE_MGL
             Matrix4f result(side.x,     side.y,     side.z,     0.0f,
                             nup.x,      nup.y,      nup.z,      0.0f,
                             -forward.x, -forward.y, -forward.z, 0.0f,
                             0.0f,       0.0f,       0.0f,       1.0f);
-#else
-            Matrix4f result(side.x, nup.x, -forward.x, 0.0f,
-                            side.y, nup.y,  -forward.y, 0.0f,
-                            side.z, nup.z,  -forward.z, 0.0f,
-                            0.0f,   0.0f,   0.0f,       1.0f);
-
-#endif//MATH_USE_MGL
+//#else
+//            Matrix4f result(side.x, nup.x, -forward.x, 0.0f,
+//                            side.y, nup.y,  -forward.y, 0.0f,
+//                            side.z, nup.z,  -forward.z, 0.0f,
+//                            0.0f,   0.0f,   0.0f,       1.0f);
+//
+//#endif//MATH_USE_MGL
 
             return result*translate(-eye);
         }
