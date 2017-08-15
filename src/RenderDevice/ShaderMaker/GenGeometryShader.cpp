@@ -29,7 +29,7 @@ namespace hgl
         //* GL_LINES_STRIP
         //* GL_TRIANGLE_STRIP
 
-		constexpr char *prim_name[32]=
+		constexpr char prim_name[][32]=
 		{
 			"points",						// 0
 			"lines",						// 1
