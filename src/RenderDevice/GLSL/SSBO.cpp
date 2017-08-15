@@ -1,7 +1,7 @@
 #include<hgl/graph/SSBO.h>
 
 #include<hgl/type/Stack.h>
-#include<glew/include/GL/glew.h>
+#include<hgl/graph/GL/glew.h>
 #include<hgl/LogInfo.h>
 #include<hgl/graph/VertexBuffer.h>
 
