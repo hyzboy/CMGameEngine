@@ -4,6 +4,10 @@
 #include<unistd.h>
 #include<pthread.h>
 
+#ifdef LOG_INFO_TIME
+#include<hgl/Time.h>
+#endif//LOG_INFO_TIME
+
 namespace hgl
 {
 	namespace logger
@@ -17,7 +21,7 @@ namespace hgl
 		{
 			char endline;
 			char log_buf[HGL_MAX_PATH];
-            
+
 #ifdef LOGINFO_THREAD_MUTEX
 			ThreadMutex mutex;
 #endif//LOGINFO_THREAD_MUTEX
