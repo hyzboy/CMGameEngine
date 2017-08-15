@@ -92,7 +92,7 @@ namespace hgl
 		{
 			if(!vao)return(false);
 
-            int stream=0;
+            int binding_index=0;			//这个值必须紧密递增，不能跳着用
 
 			for(int i=vbtVertex;i<HGL_MAX_VERTEX_ATTRIBS;i++)
 			{
@@ -108,7 +108,7 @@ namespace hgl
 
                 glVertexArrayAttribBinding(vao,                                             //vao obj
                                            location[i],                                     //attrib index
-                                           stream);                                         //binding index
+                                           binding_index);                                  //binding index
 
                 if(vb->GetDataType()==HGL_INT   )   glVertexArrayAttribIFormat( vao,location[i],vb->GetComponent(),vb->GetDataType(),0);else
                 if(vb->GetDataType()==HGL_DOUBLE)   glVertexArrayAttribLFormat( vao,location[i],vb->GetComponent(),vb->GetDataType(),0);else
@@ -123,12 +123,12 @@ namespace hgl
                                           location[i]);                   //attrib index
 
                 glVertexArrayVertexBuffer(vao,                            //vao obj
-                                          stream,                         //binding index
+                                          binding_index,                  //binding index
                                           vb->GetBufferIndex(),           //buffer
                                           0,                              //offset
                                           vb->GetStride());               //stride
 
-                ++stream;
+                ++binding_index;
             }
 
             VertexBufferBase *vb_index=va->GetVertexBuffer(vbtIndex);
@@ -156,7 +156,7 @@ namespace hgl
 		{
 			VertexBufferBase *vb_vertex	=va->GetVertexBuffer(vbtVertex);
 
-			if(!vb_vertex)return(false);						//没顶点，画不了
+			if(!vb_vertex)return(false);									//没顶点，画不了，某些情况没顶点也能画，但我们暂时不支持
 
 			hgl_zero(state);
 
