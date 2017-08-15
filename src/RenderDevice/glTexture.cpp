@@ -1,13 +1,13 @@
 ﻿#include<hgl/graph/Render.h>
 #include<hgl/graph/Texture.h>
-#include<glew/include/GL/glew.h>
+#include<hgl/graph/GL/glew.h>
 
 namespace hgl
 {
     namespace graph
     {
         //贴图数量
-        int HGL_MAX_TEXTURE_UNITS    =0;        //最大贴图数量
+        int HGL_MAX_TEXTURE_UNITS    =0;     ///<最大贴图数量
 
         int HGL_MAX_VS_TEXTURE_UNITS =0;     ///<Vertex Shader中的最大纹理单元
         int HGL_MAX_FS_TEXTURE_UNITS =0;     ///<Fragment Shader中的最大纹理单元
@@ -51,7 +51,7 @@ namespace hgl
 
             void InitStateTexture(int max_num)
             {
-                glGetIntegerv(GL_ACTIVE_TEXTURE,&current_active_texture);        //取得活动贴图
+                glGetIntegerv(GL_ACTIVE_TEXTURE,&current_active_texture);			//取得活动贴图
 
                 memset(texture_state_format,0,sizeof(uint)*max_num);
                 memset(texture_index,0,sizeof(uint)*max_num);
@@ -67,7 +67,7 @@ namespace hgl
                         if(!value)
                             continue;
 
-                        texture_state_format[i]=tex_format_list[j];                //如果是绑定了这种贴图
+                        texture_state_format[i]=tex_format_list[j];					//如果是绑定了这种贴图
                         texture_index[i]=value;
                         break;
                     }
@@ -86,21 +86,21 @@ namespace hgl
         {
             if(active<0||active>=HGL_MAX_TEXTURE_UNITS)return(false);
 
-            if(type    ==texture_state_format[active]                    //本身就是这个格式
-             &&index==texture_index[active])                        //也绑定的是这个贴图
+            if(type	==texture_state_format[active]						//本身就是这个格式
+             &&index==texture_index[active])							//也绑定的是这个贴图
                     return(true);
 
 #ifdef HGL_OPENGL_USE_DSA
                 glBindTextureUnit(active,index);                        //注：使用数字的纹理号active，而不是GL_TEXTURE0+active
 #else
-                if(current_active_texture!=active)                        //如果活动贴图编号不一致
+                if(current_active_texture!=active)                      //如果活动贴图编号不一致
                 {
                     glActiveTexture(GL_TEXTURE0+active);                //切换活动贴图
 
                     current_active_texture=active;
                 }
 
-                if(texture_state_format[active]!=type)                    //如果格式和之前不一样
+                if(texture_state_format[active]!=type)                  //如果格式和之前不一样
                     texture_state_format[active]=type;
 
                 glBindTexture(type,index);

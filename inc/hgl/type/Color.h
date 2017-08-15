@@ -148,9 +148,15 @@ namespace hgl
 		ceMistyRose,			///<浅玫瑰
 		ceMoccasin,				///<鹿皮色
 
+		ceMozillaBlue,			///<Mozilla Firefox Blue			
+		ceMozillaCharcoal,		///<Mozilla charcoal			
+		ceMozillaLightBlue,		///<Mozilla Firefox Light Blue
+		ceMozillaLightOrange,	///<Mozilla Firefox Light orange
+		ceMoziilaNightBlue,		///<Mozilla Nightly Blue
+		ceMozillaOrange,		///<Mozilla Firefox Orange
 		ceMozillaRed,			///<Mozilla red
 		ceMozillaSand,			///<Mozilla sand
-		ceMozillaCharcoal,		///<Mozilla charcoal
+		ceMozillaYellow,		///<Mozilla Firefox Yellow
 
 		ceNavajoWhite,			///<纳瓦白
 		ceNavy,					///<海军色

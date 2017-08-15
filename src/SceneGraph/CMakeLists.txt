@@ -17,18 +17,26 @@ SET(GRAPHICS_APPLICATION_SOURCE
 
 SOURCE_GROUP("Application" FILES ${GRAPHICS_APPLICATION_SOURCE})
 
-SET(CM_SCENE_GRAPH_SOURCE    Camera.cpp
-                                WalkerCamera.cpp
+SET(CM_SCENE_GRAPH_SOURCE   ColorType.cpp
+                            SkyLight.cpp
+                            Camera.cpp
+                            WalkerCamera.cpp
+							SceneGlobalState.cpp
+							SceneNode.cpp
+							SceneOrient.cpp
+							Bitmap.cpp
 #                                 AABox.cpp
 #                                 Frustum.cpp
 #                                 Plane.cpp
 #                                 Ray.cpp
                                 )
 
+SET(CM_SCENE_GRAPH_NORENDER_SOURCE VertexBufferNoRender.cpp ${CM_SCENE_GRAPH_SOURCE})
+
 IF(WIN32)
-    add_library(CM.SceneGraph STATIC ${CM_SCENE_GRAPH_SOURCE})
+    add_library(CM.SceneGraph STATIC ${CM_SCENE_GRAPH_NORENDER_SOURCE})
 ELSE()
-    add_library(CM.SceneGraph SHARED ${CM_SCENE_GRAPH_SOURCE})
+    add_library(CM.SceneGraph SHARED ${CM_SCENE_GRAPH_NORENDER_SOURCE})
 ENDIF()
 
 IF(BUILD_OPENGL_LIB)
@@ -38,15 +46,10 @@ IF(BUILD_OPENGL_LIB)
     #     HeightMapTerrain.cpp
         VertexBufferType.cpp
         VertexArray.cpp
-        Bitmap.cpp
         InlineRenderable.cpp
+        RenderList.cpp
         Material.cpp
         Renderable.cpp
-        RenderList.cpp
-        SceneGlobalState.cpp
-        SceneNode.cpp
-        SceneOrient.cpp
-        SkyLight.cpp
         TileData.cpp
         Transform.cpp
     )

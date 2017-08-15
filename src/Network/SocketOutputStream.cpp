@@ -129,5 +129,15 @@ namespace hgl
 
             return(p-(char *)buf);
         }
+		
+		int64 SocketOutputStream::Available()const
+		{
+			int send_buf_size=0;
+			socklen_t len=sizeof(int);
+
+			getsockopt(sock,SOL_SOCKET,SO_SNDBUF,(char *)&send_buf_size,&len);		//这个函数会出错，但我们不理会
+
+			return send_buf_size;
+		}
     }//namespace network
 }//namespace hgl

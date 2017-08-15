@@ -47,7 +47,6 @@ namespace hgl
 
             bool				color_material;        	///<是否包含颜色材质
             bool				alpha_test;            	///<是否使用Alpha测试
-            bool                hsv_clamp_color;        ///<是否使用HSVColor剔除
             bool				outside_discard;       	///<是否使用出界放弃
 
             bool				height_map;            	///<是否是高度图

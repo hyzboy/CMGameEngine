@@ -57,11 +57,6 @@ namespace hgl
             Set(bs);
         }
 
-        BaseString(const T ch)
-        {
-            Set(&ch,1,false);
-        }
-
 #define BASE_STRING_NUMBER_CONSTRUCT(type,func)	BaseString(const type num)	\
         {	\
             Set(func(new T[8*sizeof(type)],8*sizeof(type),num),-1,true);	\
@@ -124,6 +119,11 @@ namespace hgl
         BaseString(const Vector4f &v,int n=4):BaseString((const float *)&v,n){}
 
         virtual ~BaseString()=default;
+        
+        const T GetBeginChar()const                                                                 ///<取得当前字符串第一个字符
+        {
+            return(data.valid()?data->GetBeginChar():0);
+        }
 
         const T GetEndChar()const																	///<取得当前字符串最后一个字符
         {
@@ -765,7 +765,7 @@ namespace hgl
          * @param n 字符数量
          * @return 成否成功
          */
-        bool SubString(SelfClass &sc,int start,int n)												///<取字符串指定段的字符
+        bool SubString(SelfClass &sc,int start,int n) const											///<取字符串指定段的字符
         {
             if(Length()<start+n)
                 return(false);

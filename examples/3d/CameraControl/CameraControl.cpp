@@ -61,9 +61,9 @@ bool CameraControlFlowObject::OnMouseMove(int x,int y)
 	return(true);
 }
 
-bool CameraControlFlowObject::OnMouseWheel(int,int wheel)
+bool CameraControlFlowObject::OnMouseWheel(double x_wheel,double y_wheel)
 {
-	cam.Distance(wheel>0?0.9f:1.1f);
+	cam.Distance(y_wheel>0?0.9f:1.1f);
 
 	return(true);
 }
@@ -88,20 +88,22 @@ bool CameraControlFlowObject::OnMouseUp(MouseButton index)
 
 bool CameraControlFlowObject::OnKeyDown(KeyboardButton key)
 {
-	if(key==kbPageUp	)cam.Distance(0.9f);	else	//æ‹‰è¿‘
-	if(key==kbPageDown	)cam.Distance(1.1f);	else	//æ‹‰è¿œ
+	if(key==kbPageUp	)cam.Distance(0.9f);	else	//À­½ü
+	if(key==kbPageDown	)cam.Distance(1.1f);	else	//À­Ô¶
+	
+	if(key==kbInsert	)cam.BackwardRotate();	else	//ÒÔ×ÔÉíÎªÖĞĞÄÏòºóĞı×ª
+	if(key==kbDelete	)cam.ForwardRotate();	else	//ÒÔ×ÔÉíÎªÖĞĞÄÏòÇ°Ğı×ª
+	if(key==kbUp		)cam.UpRotate();		else	//ÒÔ×ÔÉíÎªÖĞĞÄÏòÉÏĞı×ª
+	if(key==kbDown		)cam.DownRotate();		else	//ÒÔ×ÔÉíÎªÖĞĞÄÏòÏÂĞı×ª
+	if(key==kbLeft		)cam.LeftRotate();		else	//ÒÔ×ÔÉíÎªÖĞĞÄÏò×óĞı×ª
+	if(key==kbRight		)cam.RightRotate();		else	//ÒÔ×ÔÉíÎªÖĞĞÄÏòÓÒĞı×ª
 
-	if(key==kbUp		)cam.UpRotate();		else	//ä»¥è‡ªèº«ä¸ºä¸­å¿ƒå‘ä¸Šæ—‹è½¬
-	if(key==kbDown		)cam.DownRotate();		else	//ä»¥è‡ªèº«ä¸ºä¸­å¿ƒå‘ä¸‹æ—‹è½¬
-	if(key==kbLeft		)cam.LeftRotate();		else	//ä»¥è‡ªèº«ä¸ºä¸­å¿ƒå‘å·¦æ—‹è½¬
-	if(key==kbRight		)cam.RightRotate();		else	//ä»¥è‡ªèº«ä¸ºä¸­å¿ƒå‘å³æ—‹è½¬
+	if(key==kbNum8		)cam.CenterUpRotate();		else	//ÒÔÄ¿±êµãÎªÖĞĞÄÏòÉÏĞı×ª
+	if(key==kbNum2		)cam.CenterDownRotate();	else	//ÒÔÄ¿±êµãÎªÖĞĞÄÏòÏÂĞı×ª
+	if(key==kbNum4		)cam.CenterLeftRotate();	else	//ÒÔÄ¿±êµãÎªÖĞĞÄÏò×óĞı×ª
+	if(key==kbNum6		)cam.CenterRightRotate();	else	//ÒÔÄ¿±êµãÎªÖĞĞÄÏòÓÒĞı×ª
 
-	if(key==kbNum8		)cam.CenterUpRotate();		else	//ä»¥ç›®æ ‡ç‚¹ä¸ºä¸­å¿ƒå‘ä¸Šæ—‹è½¬
-	if(key==kbNum2		)cam.CenterDownRotate();	else	//ä»¥ç›®æ ‡ç‚¹ä¸ºä¸­å¿ƒå‘ä¸‹æ—‹è½¬
-	if(key==kbNum4		)cam.CenterLeftRotate();	else	//ä»¥ç›®æ ‡ç‚¹ä¸ºä¸­å¿ƒå‘å·¦æ—‹è½¬
-	if(key==kbNum6		)cam.CenterRightRotate();	else	//ä»¥ç›®æ ‡ç‚¹ä¸ºä¸­å¿ƒå‘å³æ—‹è½¬
-
-	if(key==kbEnter		)								//å¤ä½
+	if(key==kbEnter		)								//¸´Î»
 	{
 		cam.eye=eye;
 		cam.center=center;
@@ -110,8 +112,8 @@ bool CameraControlFlowObject::OnKeyDown(KeyboardButton key)
         cam.local_forward_vector=forward_vector;
 	}
 	else
-	if(key==kbMinus		)step*=0.9f;else				//-å·ï¼Œå‡é€Ÿ
-	if(key==kbEquals	)step*=1.1f;else				//=å·ï¼ŒåŠ é€Ÿ
+	if(key==kbMinus		)step*=0.9f;else				//-ºÅ£¬¼õËÙ
+	if(key==kbEquals	)step*=1.1f;else				//=ºÅ£¬¼ÓËÙ
 
 	if(key==kbW         )cam.Forward(step);else
 	if(key==kbS         )cam.Backward(step);else
@@ -124,5 +126,5 @@ bool CameraControlFlowObject::OnKeyDown(KeyboardButton key)
 
 void CameraControlFlowObject::Update()
 {
-	MakeCameraMatrix(&proj,&mv,&cam);					//æ ¹æ®è±¡æœºè®¾ç½®ç”Ÿæˆproj/lookçŸ©é˜µ
+	MakeCameraMatrix(&proj,&mv,&cam);					//¸ù¾İÏó»úÉèÖÃÉú³Éproj/look¾ØÕó
 }

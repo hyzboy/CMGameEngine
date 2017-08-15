@@ -238,6 +238,57 @@ namespace hgl
 	constexpr long double HGL_UNIVERSAL_GRAVITATION		    =6.6742e-11;	        //万有引力常数
 	constexpr long double HGL_GRAVITATIONAL_ACCELERATION	=9.80665;			    //重力加速度
 
+	inline float half_to_float(const uint16 &h)
+	{
+		return ((h&0x8000)<<16) | (((h&0x7c00)+0x1C000)<<13) | ((h&0x03FF)<<13);
+	}
+
+	inline uint16 float_to_half(const float &f)
+	{
+		const uint32 x = *((uint32 *)&f);
+
+		return ((x>>16)&0x8000)|((((x&0x7f800000)-0x38000000)>>13)&0x7c00)|((x>>13)&0x03ff);
+	}
+
+	/**
+	 * 正圆面积计算
+	 * @param radius 半径
+	 */
+	inline double CircleArea(const double radius)
+	{
+		return(radius*radius*HGL_PI);
+	}
+
+	/**
+	 * 椭圆面积计算
+	 * @param l_radius 长半径
+	 * @param s_radius 短半径
+	 */
+	inline double ElipseArea(const double l_radius,const double s_radius)
+	{
+		return(l_radius*s_radius*HGL_PI);
+	}
+
+	/**
+	 * 球体积计算
+	 * @param radius 球半径
+	 */
+	inline double SphereVolume(const double radius)
+	{
+		return(radius*radius*radius*(HGL_PI*4.0f))/3.0f;
+	}
+
+	/**
+	 * 椭球体积计算
+	 * @param x_radius x半径
+	 * @param y_radius y半径
+	 * @param z_radius z半径
+	 */
+	inline double EllipsoidVolume(const double x_radius,const double y_radius,const double z_radius)
+	{
+		return(x_radius*y_radius*z_radius*(HGL_PI*4.0f))/3.0f;
+	}
+
 #if HGL_OS == HGL_OS_Windows
 	inline uint64 pow10(const int p)
 	{

@@ -108,6 +108,9 @@ namespace hgl
 		{
 			SAFE_CLEAR_ARRAY(data);
 		}
+
+		const T &operator *() const	{return data;}
+		const bool operator!() const{return !data;}
 	};//struct template<typename T> struct SmartArrayData
 
 	template<typename SD,typename T> class _Smart
@@ -208,7 +211,7 @@ namespace hgl
 	public:
 
 		const T &operator *() const	{return *(sd->data);}
-		bool operator!() const	{return sd?!(sd->data):true;}
+		const bool operator!() const{return sd?!(sd->data):true;}
 
 		operator T *()const{return(sd?sd->data:0);}
 		T *operator ->()const{return(sd?sd->data:0);}

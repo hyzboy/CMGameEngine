@@ -51,6 +51,8 @@ namespace hgl
 		Texture2D *CreateTexture2D(Texture2DData *);
 		Texture2D *CreateTexture2D(uint width,uint height,TSF format);
 		Texture2D *CreateTexture2D(uint width,uint height,void *bitmap,uint bitmap_bytes,TSF source_format,uint video_format);
+
+		Texture2D *CreateTexture2D(const OSString &,uint video_format=0);
 	}//namespace graph
 }//namespace hgl
 #endif//HGL_GRAPH_TEXTURE_2D_INCLUDE

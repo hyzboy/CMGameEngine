@@ -13,19 +13,16 @@ namespace hgl
             
             bool _SetImage(Texture2DData *tex)
             {
-                if (tex->source_format->compress)      //原本就是压缩格式
-                {
-                    if (tex->bitmap)
+                glTextureStorage2D(texture_id, 1, tex->video_format, tex->width, tex->height);
+				
+				if(!tex->bitmap)
+					return(true);
+				
+				if(tex->source_format->compress)      //原本就是压缩格式
                         glCompressedTextureSubImage2D(texture_id, 0, 0, 0, tex->width, tex->height, tex->video_format, tex->bitmap_bytes, tex->bitmap);
-                }
                 else                    //正常非压缩格式
-                {
-                    glTextureStorage2D(texture_id, 1, tex->video_format, tex->width, tex->height);
-
-                    if (tex->bitmap)
                         glTextureSubImage2D(texture_id, 0, 0, 0, tex->width, tex->height, tex->source_format->pixel_format, tex->source_format->data_type, tex->bitmap);
-                }
-
+				
                 if (tex->gen_mipmaps)
                 {
                     if (tex->bitmap)

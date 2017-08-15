@@ -1,6 +1,6 @@
 ﻿#include<hgl/graph/VertexBuffer.h>
 #include<hgl/graph/VertexArray.h>
-#include<glew/include/GL/glew.h>
+#include<hgl/graph/GL/glew.h>
 #include"VertexBufferControl.h"
 
 namespace hgl
@@ -83,6 +83,7 @@ namespace hgl
 
             SAFE_CLEAR(vbc);
         }
+
         void VertexBufferBase::CloseVertexBuffer()
         {
             SAFE_CLEAR(vbc);

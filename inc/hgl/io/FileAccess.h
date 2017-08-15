@@ -14,6 +14,7 @@ namespace hgl
 
 			fomCreate,         				///<创建文件，如存在则失败
 			fomCreateTrunc,					///<强制创建，如存在则抹掉
+			fomCreateTemp,					///<创建文件，临时文件
 			fomOnlyRead,         			///<只读方式
 			fomOnlyWrite,         			///<只写方式
 			fomReadWrite,					///<可读可写

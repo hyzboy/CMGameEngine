@@ -39,7 +39,7 @@ namespace hgl
 
 		VertexArray *CreateRenderableSphere(const uint slices);										///<创建一个球的可渲染数据,半径为1,球心为0,0,0
 
-// 		VertexArray *CreateRenderableWireCube();													///<创建一个线框立方体的可渲染数据,尺寸为1,中心为0,0,0
+ 		VertexArray *CreateRenderableWireCube();													///<创建一个线框立方体的可渲染数据,尺寸为1,中心为0,0,0
 //
 // 		VertexArray *CreateRenderableWireRect();													///<创建一个2D线框的可渲染数据
 // 		VertexArray *CreateRenderableRect();														///<创建一个2D矩形的可渲染数据

@@ -324,14 +324,9 @@ namespace hgl
 
                 if(in_normal)
                 {
- //#ifdef HGL_MATRIX_LEFT
- //                    add("\n\tVP=normalize(" HGL_VS_LIGHT_POSITION "-" HGL_VS_NORMAL_MATRIX "*Position);\n");
- //                    add("\tMVNormal=normalize(" HGL_VS_NORMAL_MATRIX "*" HGL_VS_NORMAL ");\n\n");
- //#else
  //                    add("\n\tVP=normalize(" HGL_VS_LIGHT_POSITION "-Position*" HGL_VS_NORMAL_MATRIX ");\n");
  //                    add("\tMVNormal=normalize(" HGL_VS_NORMAL "*" HGL_VS_NORMAL_MATRIX ");\n\n");
- //#endif//HGL_MATRIX_LEFT
-
+ 
                     add("\t" HGL_FS_NORMAL "=normalize(" HGL_VS_NORMAL "*" HGL_VS_NORMAL_MATRIX ");\n");
 
                     //灯光
@@ -355,11 +350,7 @@ namespace hgl
                 if (!mvp_matrix)
                     add("\tgl_Position=Position;\n");
                 else
-#ifdef HGL_MATRIX_LEFT
-                    add("\tgl_Position=" HGL_VS_MVP_MATRIX "*Position;\n");
-#else
                     add("\tgl_Position=Position*" HGL_VS_MVP_MATRIX ";\n");
-#endif//HGL_MATRIX_LEFT
 
                 return(true);
             }
@@ -372,7 +363,7 @@ namespace hgl
         * @return NULL 生成失败
         */
 #ifdef _DEBUG
-        char *MakeVertexShader(const RenderState *state,const os_char *filename)
+        char *MakeVertexShader(const RenderState *state,const OSString &filename)
 #else
         char *MakeVertexShader(const RenderState *state)
 #endif//
@@ -475,7 +466,7 @@ namespace hgl
             code.add_main_end();
 
 #ifdef _DEBUG
-            code.debug_out(filename);
+            code.debug_out(filename+OS_TEXT(".vs.glsl"));
 #endif//_DEBUG
 
             return code.end_get();

@@ -89,8 +89,8 @@ public:
     }
 };//struct ConfigXMLParse:public XMLParse
 
-const std::string url_path="http://localhost/App/";             //更新服务器网址
-const std::string compress_extname=".bz2";                      //压缩文件后缀
+const std::string UPDATE_SERVER_URL_PATH="http://localhost/App/";           //更新服务器网址
+const std::string COMPRESS_EXTNAME=".bz2";                                  //压缩文件后缀
 
 class UpdateCheck
 {
@@ -100,48 +100,56 @@ class UpdateCheck
 
 private:
 
-    bool DownloadFile(FileCheck &fc,const std::string &filename,std::string &file_url)
+    bool DownloadFile(FileCheck &fc,const std::string &filename,std::string &compress_file_url)
     {
-        long filesize;
+        long compress_filesize;
             
-        if(!QueryFileLength(file_url,filesize)) 
+        if(!QueryFileLength(compress_file_url,compress_filesize)) 
             return(false);
             
-        if(filesize!=fc.compress_size)
+        if(compress_filesize!=fc.compress_size)
             return(false);
                 
-        MemoryBlock<char> mb(filesize);
+        MemoryBlock<char> compress_data(compress_filesize);
 
-        int download_size=Download(file_url,mb,filesize);
+        int download_size=Download(compress_file_url,compress_data,compress_filesize);
 
-        if(download_size!=filesize)
+        if(download_size!=compress_filesize)
             return(false);
 
         MD5Code compress_md5;
 
-        GetMD5(compress_md5,mb.data(),filesize);
+        GetMD5(compress_md5,compress_data.data(),compress_filesize);
 
         if(memcmp(compress_md5,fc.compress_md5,sizeof(MD5Code)))
             return(false);
 
-        MemoryBlock<char> orign_data(fc.size);
+        if(fc.size==fc.compress_size)       //如果文件是不压缩的
+        {            
+            if(filesystem::SaveMemoryToFile(filename,compress_data.data(),fc.size)!=fc.size)
+                return(false);
+        }
+        else
+        {
+            MemoryBlock<char> decompress_data(fc.size);
 
-        uint decompress_size=fc.size;
-        if(BZ2_bzBuffToBuffDecompress(orign_data,&decompress_size,mb,filesize,0,0)!=BZ_OK)
-            return(false);
+            uint decompress_size=fc.size;
+            if(BZ2_bzBuffToBuffDecompress(decompress_data,&decompress_size,compress_data.data(),compress_filesize,0,0)!=BZ_OK)
+                return(false);
 
-        if(decompress_size!=fc.size)
-            return(false);
+            if(decompress_size!=fc.size)
+                return(false);
 
-        MD5Code md5;
+            MD5Code md5;
 
-        GetMD5(md5,orign_data.data(),decompress_size);
+            GetMD5(md5,decompress_data.data(),decompress_size);
 
-        if(memcmp(md5,fc.md5,sizeof(MD5Code)))
-            return(false);
+            if(memcmp(md5,fc.md5,sizeof(MD5Code)))
+                return(false);
 
-        if(filesystem::SaveMemoryToFile(filename,orign_data.data(),fc.size)!=fc.size)
-            return(false);
+            if(filesystem::SaveMemoryToFile(filename,decompress_data.data(),fc.size)!=fc.size)
+                return(false);
+        }
 
         fc.update=true;
 
@@ -162,35 +170,37 @@ private:
     {
         std::string filename;
         std::string fullname;
-        std::string file_url;
-        int size;
+        std::string compress_file_url;
+        unsigned int size;
 
         filename=fc.filename;
 
         fullname=root_path+"/"+filename;
-        file_url=url_path+filename+compress_extname;
+        compress_file_url=UPDATE_SERVER_URL_PATH+filename+COMPRESS_EXTNAME;
         
         replace(fullname,'/','\\');
-        replace(file_url,'/','\\');
+        replace(compress_file_url,'/','\\');
 
         if(!filesystem::FileConfirm(fullname))                          //文件不存在，下载
         {
             if(!CheckPath(fullname))                                    //检测目录，如果不存在则创建
                 return(false);
 
-            return DownloadFile(fc,fullname,file_url);
+            return DownloadFile(fc,fullname,compress_file_url);
         }
 
-        void *data=filesystem::LoadFileToMemory(fullname,&size);
+        char *data=filesystem::LoadFileToMemory(fullname,&size);
 
         if(!data)return(false);
 
         MD5Code md5;
 
         GetMD5(md5,data,size);
+        
+        delete[] data;
 
         if(memcmp(md5,fc.md5,sizeof(MD5Code)))                          //MD5不一致，下载
-            return DownloadFile(fc,fullname,file_url);
+            return DownloadFile(fc,fullname,compress_file_url);
 
         return(true);
     }
@@ -217,7 +227,7 @@ public:
         root_path=work_path;
 
         long filesize;
-        std::string url=url_path+"update.xml";
+        std::string url=UPDATE_SERVER_URL_PATH+"update.xml";
         
         if(!QueryFileLength(url,filesize))      //查询XML文件长度
             return(false);

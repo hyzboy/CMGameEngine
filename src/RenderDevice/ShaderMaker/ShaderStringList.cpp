@@ -59,7 +59,7 @@ namespace hgl
                 }
             }
 
-            void shader_stringlist::debug_out(const os_char *filename)
+            void shader_stringlist::debug_out(const OSString &filename)
             {
                 if(!filename)return;
 
@@ -102,67 +102,6 @@ namespace hgl
                 add("float rgb2lum(vec3 color)\n"
                     "{\n"
                     "\treturn (color.r*0.299)+(color.g*0.587)+(color.b*0.114);\n"
-                    "}\n\n");
-            }
-
-            void shader_stringlist::add_rgb2hsv()
-            {
-                add("vec3 rgb2hsv(vec3 c)\n"
-                    "{\n"
-                    "\tvec3 hsv;\n"
-                    "\n"
-                    "\tfloat min,max,delta,tmp;\n"
-                    "\n"
-                    "\ttmp=c.r>c.g?c.g:c.r;\n"
-                    "\tmin=tmp>c.b?c.b:tmp;\n"
-                    "\ttmp=c.r>c.g?c.r:c.g;\n"
-                    "\tmax=tmp>c.b?tmp:c.b;\n"
-                    "\n"
-                    "\thsv.b=max;\n"
-                    "\tdelta=max-min;\n"
-                    "\n"
-                    "\tif(max!=0)hsv.g=delta/max;\n"
-                    "\telse\n"
-                    "\t{\n"
-                    "\t\thsv.r=0;\n"
-                    "\t\thsv.g=0;\n"
-                    "\t\treturn hsv;\n"
-                    "\t}\n"
-                    "\n"
-                    "\tif(delta==0)\n"
-                    "\t{\n"
-                    "\t\thsv.r=0;\n"
-                    "\t\treturn hsv;\n"
-                    "\t}\n"
-                    "\telse if(c.r==max)\n"
-                    "\t{\n"
-                    "\t\tif(c.g>=c.b)\n"
-                    "\t\t\thsv.r=(c.g-c.b)/delta;\n"
-                    "\t\telse\n"
-                    "\t\t\thsv.r=(c.g-c.b)/delta+6.0;\n"
-                    "\t}\n"
-                    "\telse if(c.g==max)\n"
-                    "\t\thsv.r=2.0+(c.b-c.r)/delta;\n"
-                    "\telse if(c.b==max)\n"
-                    "\t\thsv.r=4.0+(c.r-c.g)/delta;\n"
-                    "\n"
-//                    "\thsv.r *= 60.0;\n"
-                    "\thsv.r/=6.0;\n"            //标准HSV中H的值是0-360，所以上面的*60我们不要了，直接/6
-                    "\n"
-                    "\treturn hsv;\n"
-                    "}\n\n");
-            }
-
-            void shader_stringlist::add_hsv_clamp()
-            {
-                add("bool hsv_clamp(vec3 hsv)\n"
-                    "{\n"
-                    //"\tvec3 hsv=rgb2hsv(rgb_color);\n"
-                    //"\n"
-                    "\tif(abs(hsv.r-" HGL_FS_HSV_CLAMP_COLOR ".r)>" HGL_FS_HSV_CLAMP_COLOR ".b)return(false);\n"            //传进来的CLAMP_COLOR，只存了HV以及两个容差，放弃S值
-                    "\tif(abs(hsv.b-" HGL_FS_HSV_CLAMP_COLOR ".g)>" HGL_FS_HSV_CLAMP_COLOR ".a)return(false);\n"            //所以上一行是(R-R)>B,下一行是(B-G)>A
-                    "\n"
-                    "\treturn(true);\n"
                     "}\n\n");
             }
 

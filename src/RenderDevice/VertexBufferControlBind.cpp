@@ -1,5 +1,5 @@
 #include"VertexBufferControl.h"
-#include<glew/include/GL/glew.h>
+#include<hgl/graph/GL/glew.h>
 
 namespace hgl
 {

@@ -47,7 +47,7 @@ namespace hgl
 			int64	Seek(int64,io::SeekOrigin=io::soBegin){return -1;}						///<移动访问指针
 			int64	Tell()const{return -1;}													///<返回当前访问位置
 			int64	GetSize()const{return -1;}												///<取得流长度
-			int64	Available()const{return -1;}											///<剩下的可以不受阻塞写入的字节数
+			int64	Available()const;														///<剩下的可以不受阻塞写入的字节数
 		};//class SocketOutputStream
 	}//namespace network
 }//namespace hgl

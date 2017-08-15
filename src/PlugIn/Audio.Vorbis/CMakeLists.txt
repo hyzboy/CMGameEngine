@@ -1,4 +1,4 @@
-﻿IF(WIN32)
+IF(WIN32)
     INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libvorbis/include)
     INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libvorbis/lib)
     INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libvorbis/lib/modes)
@@ -34,18 +34,18 @@
     SOURCE_GROUP("LibOGG"        FILES ${OGG_SOURCE})
     SOURCE_GROUP("LibVorbis"    FILES ${VORBIS_SOURCE})
 ELSE()
-    FIND_PATH(VORBIS_INCLUDE_DIR
+    FIND_PATH(AUDIO_VORBIS_INCLUDE_DIR
         NAMES vorbis/vorbisfile.h
         HINTS
         /usr/include
         /usr/local/include)
-    INCLUDE_DIRECTORIES(${VORBIS_INCLUDE_DIR})
+    INCLUDE_DIRECTORIES(${AUDIO_VORBIS_INCLUDE_DIR})
 
-    FIND_PATH(VORBIS_LIBRARY_DIR
+    FIND_PATH(AUDIO_VORBIS_LIBRARY_DIR
         NAMES libvorbis.so
         HINTS
         ${LIB_3RD_FIND_HINT})
-    LINK_DIRECTORIES(${VORBIS_LIBRARY_DIR})
+    LINK_DIRECTORIES(${AUDIO_VORBIS_LIBRARY_DIR})
 
     add_library(CMP.Audio.Vorbis SHARED OggRead.cpp)
     target_link_libraries(CMP.Audio.Vorbis vorbisfile ogg)

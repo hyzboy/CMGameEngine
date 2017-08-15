@@ -40,7 +40,7 @@ namespace hgl
         return(false);
     }
 
-    bool FlowControl::OnMouseWheel  (int x,int y)
+    bool FlowControl::OnMouseWheel  (double x,double y)
     {
         if(active_obj)
             active_obj->OnMouseWheel(x,y);

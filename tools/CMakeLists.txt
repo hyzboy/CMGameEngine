@@ -11,6 +11,7 @@ ENDIF()
 
 IF(BUILD_OPENGL_LIB)
     add_subdirectory(TexConv)
+    add_subdirectory(ModelConvert)
 ENDIF()
 
 IF(BUILD_OpenCart)

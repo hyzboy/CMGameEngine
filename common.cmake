@@ -7,14 +7,16 @@ else()
 	set(CMGDK_BUILD_TYPE "Release")
 endif()
 
-IF(WIN32)
+IF(MSVC)
 
     SET(X86_USE_CPU_COMMAND SSE2 CACHE STRING "Use Max CPU Ext command")
     
     SET_PROPERTY(CACHE X86_USE_CPU_COMMAND PROPERTY STRINGS SSE2 AVX AVX2)
     
 	#visual c++ 2015没有sse3/4/41/42这几个选项
-ELSE(WIN32)
+ENDIF(MSVC)
+
+IF(CMAKE_COMPILER_IS_GNUCC OR MINGW)
 	OPTION(USE_CPP14				"Use C++ 14"							FALSE	)
 	OPTION(USE_ICE_CREAM			"Use IceCream(only openSUSE/SUSE)"		FALSE	)
 
@@ -35,18 +37,18 @@ ELSE(WIN32)
     SET(X86_USE_CPU_COMMAND SSE2 CACHE STRING "Use Max CPU Ext command")
     
     SET_PROPERTY(CACHE X86_USE_CPU_COMMAND PROPERTY STRINGS SSE3 SSE4 SSE41 SSE42 AVX)
-ENDIF(WIN32)
+ENDIF(CMAKE_COMPILER_IS_GNUCC OR MINGW)
 
 IF(USE_LLVM_CLANG)
     OPTION(USE_LLVM_CLANG_STATIC_ANALYZER	"the static analyzer"				OFF		)
     OPTION(USE_LLVM_SAFECode                "use LLVM SAFECode"                 OFF     )
 
     IF(USE_LLVM_CLANG_STATIC_ANALYZER)
-        add_definitions("--analyze")
+        add_compile_options("--analyze")
     ENDIF(USE_LLVM_CLANG_STATIC_ANALYZER)
 
     IF(USE_LLVM_SAFECode)
-        add_definitions("-fmemsafety")
+        add_compile_options("-fmemsafety")
     ENDIF(USE_LLVM_SAFECode)
 ENDIF(USE_LLVM_CLANG)
 
@@ -71,6 +73,7 @@ IF(WIN32)
 
     ADD_DEFINITIONS(-DHGL_PLATFORM_STRING=L"${HGL_PLATFORM_STRING}_${CMGDK_BUILD_TYPE}")
     ADD_DEFINITIONS(-DHGL_COMPILE_PLATFORM=L"${CMAKE_HOST_SYSTEM}-${CMAKE_HOST_SYSTEM_PROCESSOR}")
+    ADD_DEFINITIONS(-DHGL_COMPILE_TOOLSET=L"${CMAKE_GENERATOR}")
 
     SET(HGL_OUT_DIRECTORY   ${HGL_PLATFORM_STRING})                 #Win下，输出目录CMAKE会自动添加"\${CMGDK_BUILD_TYPE}"
 ELSE()
@@ -78,12 +81,14 @@ ELSE()
 
     ADD_DEFINITIONS(-DHGL_PLATFORM_STRING="${HGL_PLATFORM_STRING}_${CMGDK_BUILD_TYPE}")
     ADD_DEFINITIONS(-DHGL_COMPILE_PLATFORM="${CMAKE_HOST_SYSTEM}-${CMAKE_HOST_SYSTEM_PROCESSOR}")
+    ADD_DEFINITIONS(-DHGL_COMPILE_TOOLSET="${CMAKE_GENERATOR}")
     
     SET(HGL_OUT_DIRECTORY   ${HGL_PLATFORM_STRING}_${CMGDK_BUILD_TYPE})
 ENDIF(WIN32)
 
 message("HGL_PLATFORM_STRING:" ${HGL_PLATFORM_STRING})
 message("HGL_COMPILE_PLATFORM:" ${CMAKE_HOST_SYSTEM}-${CMAKE_HOST_SYSTEM_PROCESSOR})
+message("HGL_COMPILE_TOOLSET:"  ${HGL_COMPILE_TOOLSET})
 
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMGDK_PATH}/bin/${HGL_OUT_DIRECTORY})
 SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMGDK_PATH}/lib/${HGL_OUT_DIRECTORY})
@@ -125,22 +130,24 @@ IF(UNIX)
 			SET(CMAKE_CXX_COMPILER clang++)
 		ENDIF(USE_LLVM_CLANG)
 	ENDIF(USE_ICE_CREAM)
+ENDIF(UNIX)
 
+IF(CMAKE_COMPILER_IS_GNUCC OR MINGW)
 	if(USE_ALL_STATIC)
-		add_definitions("-static")
+		add_compile_options("-static")
 	endif(USE_ALL_STATIC)
 
 	if(USE_STATIC_GLIBC)
-		add_definitions("-static-libgcc")
+		add_compile_options("-static-libgcc")
 	endif(USE_STATIC_GLIBC)
 
 	if(USE_STATIC_STDCXX)
-		add_definitions("-static-libstdc++")
+		add_compile_options("-static-libstdc++")
 	endif(USE_STATIC_STDCXX)
 
 	IF(USE_CPP14)
 		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
-		add_definitions("-DHGL_CPP14")
+		add_compile_options("-DHGL_CPP14")
 	ELSE(USE_CPP14)
 		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 	ENDIF(USE_CPP14)
@@ -148,28 +155,28 @@ IF(UNIX)
 	SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
 
 	IF(CMGDK_DEBUG)
-		add_definitions(-ggdb3)
+		add_compile_options(-ggdb3)
 	ELSE()
-		add_definitions(-Ofast)
+		add_compile_options(-Ofast)
 	ENDIF()
 
 	if(DISABLE_RTTI)
-		add_definitions(-fno-rtti)
+		add_compile_options(-fno-rtti)
 	endif()
 
     if(X86_USE_CPU_COMMAND STREQUAL AVX)
         add_definitions("-DMATH_AVX")
-        add_definitions(-mavx)
+        add_compile_options(-mavx)
     elseif(X86_USE_CPU_COMMAND STREQUAL SSE41)
         add_definitions("-DMATH_SSE41")
-        add_definitions(-msse4.1)
+        add_compile_options(-msse4.1)
     ELSE()
         add_definitions("-DMATH_SSE3")
-        add_definitions(-msse3)
+        add_compile_options(-msse3)
     endif()
-ENDIF(UNIX)
+ENDIF()
 
-IF(WIN32)
+IF(MSVC)
 	if(X86_USE_CPU_COMMAND STREQUAL AVX2)
 		add_definitions("-DMATH_AVX2")
         add_compile_options(/arch:AVX2)
@@ -180,4 +187,4 @@ IF(WIN32)
         add_definitions("-DMATH_SSE2")
        	add_compile_options(/arch:SSE2)
     endif()
-ENDIF(WIN32)
+ENDIF(MSVC)

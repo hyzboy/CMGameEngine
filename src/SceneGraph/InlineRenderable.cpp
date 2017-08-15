@@ -394,40 +394,32 @@ namespace hgl
 
             return obj;
         }
-//
-//         /**
-//         * 创建一个线框立方体的可渲染数据
-//         * @return 可渲染数据
-//         */
-//         VertexArray *CreateRenderableWireCube()
-//         {                                // Points of a cube.
-//             /*     4            5 */    const float points[]={    -0.5f, +0.5f, -0.5f,    //    0
-//             /*        *------------* */                            +0.5f, +0.5f, -0.5f,    //    1
-//             /*    /|           /| */                            +0.5f, -0.5f, -0.5f,    //    2
-//             /*  0/ |         1/ | */                            -0.5f, -0.5f, -0.5f,    //    3
-//             /*  *--+---------*  | */                            -0.5f, +0.5f, +0.5f,    //    4
-//             /*  |  |         |  | */                            +0.5f, +0.5f, +0.5f,    //    5
-//             /*  | 7|         | 6| */                            +0.5f, -0.5f, +0.5f,    //    6
-//             /*  |  *---------+--* */                            -0.5f, -0.5f, +0.5f};    //    7
-//             /*  | /          | /  */
-//             /*  |/          2|/      */    // The associated indices.
-//             /* 3*------------*      */    const uint indices[]={    0,1,1,2,2,3,3,0,    0,4,1,5,2,6,3,7,    4,5,5,6,6,7,7,4};
-//
-//             VertexArray *obj=CreateRenderable();
-//             Material *mtl=CreateMaterial();
-//
-//             obj->SetMaterial(mtl,true);                //设置材质
-//
-//             //设置图元类型
-//             obj->SetPrimitive(HGL_PRIM_LINES);        //设置为画线条
-//
-//             obj->SetVertex(new VB3f(8,points));
-//             obj->SetIndex(new VB1ui(12*2,indices));
-//
-//             obj->AutoCreateShader(true);
-//
-//             return(obj);
-//         }
+
+         /**
+         * 创建一个线框立方体的可渲染数据
+         * @return 可渲染数据
+         */
+         VertexArray *CreateRenderableWireCube()
+         {                                // Points of a cube.
+            /*     4            5 */	const float points[]={  -0.5f, +0.5f, -0.5f,    //    0
+            /*     *------------* */                            +0.5f, +0.5f, -0.5f,    //    1
+            /*    /|           /| */                            +0.5f, -0.5f, -0.5f,    //    2
+            /*  0/ |         1/ | */                            -0.5f, -0.5f, -0.5f,    //    3
+            /*  *--+---------*  | */                            -0.5f, +0.5f, +0.5f,    //    4
+            /*  |  |         |  | */                            +0.5f, +0.5f, +0.5f,    //    5
+            /*  | 7|         | 6| */                            +0.5f, -0.5f, +0.5f,    //    6
+            /*  |  *---------+--* */                            -0.5f, -0.5f, +0.5f};   //    7
+            /*  | /          | /  */
+            /*  |/          2|/   */	// The associated indices.
+            /* 3*------------*    */    const uint16 indices[]={    0,1,1,2,2,3,3,0,    0,4,1,5,2,6,3,7,    4,5,5,6,6,7,7,4};
+			 
+			VertexArray *obj=new VertexArray(HGL_PRIM_LINES);
+
+            obj->SetVertex(new VB3f(8,points));
+            obj->SetIndex(new VB1u16(12*2,indices));
+
+            return(obj);
+		}
 //
 //         const float RectVertex[8]={0,0, 1,0, 1,1, 0,1};
 //

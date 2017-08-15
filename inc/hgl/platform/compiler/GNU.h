@@ -71,6 +71,8 @@
 	#define HGL_LIB_COMPILER_VERSION HGL_LIB_COMPILER_MAIOR_VER OS_TEXT(".") HGL_LIB_COMPILER_MINOR_VER OS_TEXT(".") HGL_LIB_COMPILER_PATCH_LEVEL
 
 #endif//__GNUC__
+
+#define HGL_ALIGNED(var) var __declspec(align(32))
 //--------------------------------------------------------------------------------------------------
 #define HGL_LIB_FRONT	HGL_LIB_OS "_" HGL_LIB_COMPILER_NAME "_" HGL_LIB_DEBUG_NAME "_"
 

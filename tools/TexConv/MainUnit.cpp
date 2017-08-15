@@ -188,7 +188,7 @@ void FlipData(uint8 *data,int line_bytes,int row_number)
     delete[] temp;
 }
 
-void CheckFormat()
+void ConvertPixelFormat()
 {
 	uint fmt=il_format;
 
@@ -390,8 +390,16 @@ int ConvertImage(const os_char *filename)
 					il_type=IL_UNSIGNED_BYTE;
 				}
 
-				CheckFormat();
+				ConvertPixelFormat();
 
+				if(il_format==IL_LUMINANCE		)
+				{
+					curfmt=default_r8;
+					tarfmt=(glfmt[0]?glfmt[0]:curfmt);
+
+					memcpy(image_data,ilGetData(),pixels);
+				}
+				else
 				if(il_format==IL_ALPHA			)
 				{
 					curfmt=default_r8;
@@ -632,8 +640,8 @@ HGL_GRAPHICS_MAIN(sii,app,args)
 			    hgl::strcat(hint,STR_HINT_MAX,'\t');
 		}
 
-		MessageBoxA(nullptr,hint,"TexConv",MB_OK|MB_ICONINFORMATION);
-//		LOG_ERROR(hint);
+		//MessageBoxA(nullptr,hint,"TexConv",MB_OK|MB_ICONINFORMATION);
+		LOG_ERROR(hint);
 
 		delete[] hint;
 		return(0);
@@ -677,7 +685,7 @@ HGL_GRAPHICS_MAIN(sii,app,args)
     efc.folder_name =cur_path;
     efc.find_name   =args[0];
     efc.proc_file   =true;
-    efc.proc_folder =sub;
+    efc.sub_folder	=sub;
     efc.cb_file     =EnumConvertImage;
 	    
     EnumFile(&efc);

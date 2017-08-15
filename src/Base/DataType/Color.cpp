@@ -143,10 +143,16 @@ namespace hgl
         DEF_COLOR(ceMintGreen,              152,255,152,"薄荷绿")
         DEF_COLOR(ceMistyRose,              255,228,225,"浅玫瑰")
         DEF_COLOR(ceMoccasin,               255,228,181,"鹿皮色")
-
+			
+		DEF_COLOR(ceMozillaBlue,			  0, 83,159,"火狐蓝")
+        DEF_COLOR(ceMozillaCharcoal,         77, 78, 83,"谋智炭")
+		DEF_COLOR(ceMozillaLightBlue,		  0,150,221,"火狐亮蓝")
+		DEF_COLOR(ceMozillaLightOrange,		255,149,  0,"火狐亮橙")
+		DEF_COLOR(ceMoziilaNightBlue,		  0, 33, 71,"谋智暗夜蓝")
+		DEF_COLOR(ceMozillaOrange,			230, 96,  0,"火狐橙")
         DEF_COLOR(ceMozillaRed,             193, 56, 50,"谋智红")
         DEF_COLOR(ceMozillaSand,            215,211,200,"谋智沙")
-        DEF_COLOR(ceMozillaCharcoal,         77, 78, 83,"谋智炭")
+		DEF_COLOR(ceMozillaYellow,			255,203,  0,"火狐黄")
 
         DEF_COLOR(ceNavajoWhite,            255,222,173,"纳瓦白")
         DEF_COLOR(ceNavy,                     0,  0,128,"海军色")

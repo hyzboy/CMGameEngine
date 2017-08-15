@@ -1,7 +1,7 @@
 ﻿#ifndef HGL_GRAPH_PRIMIVATE_INCLUDE
 #define HGL_GRAPH_PRIMIVATE_INCLUDE
 
-#include<glew/include/GL/glew.h>
+#include<hgl/graph/GL/glew.h>
 namespace hgl
 {
     namespace graph
@@ -19,6 +19,8 @@ namespace hgl
         #define HGL_PRIM_TRIANGLES_ADJACENCY        GL_TRIANGLES_ADJACENCY      ///<代表一個有六個頂點的Primitive,其中第1,3,5個點代表一個Triangle,而地2,4,6個點提供鄰近資訊.(由1起算)
         #define HGL_PRIM_TRIANGLE_STRIP_ADJACENCY   GL_TRIANGLE_STRIP_ADJACENCY ///<4+2N個Vertices代表N個Primitive,其中1,3,5,7,9...代表原本的Triangle strip形成Triangle,而2,4,6,8,10...代表鄰近提供資訊的點.(由1起算)
         #define HGL_PRIM_PATCHES                    GL_PATCHES
+
+//		#define HGL_PRIM_RECTANGLE					0x100						///<矩形(并非OpenGL原生支持，模拟PlayStation的实现。只传递Left,Top,Width,Height在Geometry Shader中将转换为2个三角形。用于2D UI)
     }//namespace graph
 }//namespace hgl
 #endif//HGL_GRAPH_PRIMIVATE_INCLUDE

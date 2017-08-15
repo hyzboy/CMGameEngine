@@ -1,7 +1,7 @@
 #ifndef HGL_GRAPH_PIXEL_COMPENT_INCLUDE
 #define HGL_GRAPH_PIXEL_COMPENT_INCLUDE
 
-#include<glew/include/GL/glew.h>
+#include<hgl/graph/GL/glew.h>
 namespace hgl
 {
     namespace graph

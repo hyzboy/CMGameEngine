@@ -25,7 +25,6 @@ namespace hgl
                 hgl_zero(mtc_tex_type);
 
                 alpha_test=false;
-                hsv_clamp_color=false;
                 outside_discard=false;
             }
 
@@ -39,13 +38,6 @@ namespace hgl
                 alpha_test=true;
 
                 add_uniform_float(HGL_FS_ALPHA_TEST);
-            }
-
-            void fs::add_hsv_clamp_color()
-            {
-                hsv_clamp_color=true;
-
-                add_uniform_vec4(HGL_FS_HSV_CLAMP_COLOR);
             }
 
             void fs::add_in_normal()
@@ -184,7 +176,10 @@ namespace hgl
                     if(!in_color)               //无顶点颜色
                     {
                         if(!color_material)     //无材质颜色
-                            return(false);      //即使有其它贴图，也必须有颜色
+						{
+							LOG_ERROR("No Diffuse,No VertexColor,No Color Material.");
+                            RETURN_FALSE;      //即使有其它贴图，也必须有颜色
+						}
 
                         fin_color=HGL_MATERIAL_COLOR;
                     }
@@ -214,22 +209,6 @@ namespace hgl
                         add("\tif("+fin_color+U8_TEXT(".a<" HGL_FS_ALPHA_TEST ")discard;\n"));
 
                     add();
-                }
-
-                if(hsv_clamp_color)
-                {
-                    //a*alpha+b*(1-alpha)=c;
-                    //c-a*alpha=b*(1-alpha);
-                    //(c-a*alpha)/(1-alpha)=b;
-
-                    //已知a,c，根据hsv色的H值误差，算出一个近似的alpha，以此alpha为结果，逆推出b
-                    //在HSV色彩空间上，一个颜色与其所有的近似色都在一起，所以可以使用H+V的值进行假设
-
-                    add(U8_TEXT("\tvec3 " HGL_FS_HSV_COLOR "=rgb2hsv(")+fin_color+U8_TEXT(");\n"));
-
-                    add(U8_TEXT("\tif(hsv_clamp(" HGL_FS_HSV_COLOR "))discard;\n"));
-
-                    //float hsv_alpha
                 }
 
                 if(in_normal)        //计算法线
@@ -302,7 +281,7 @@ namespace hgl
         * @return NULL 生成失败
         */
 #ifdef _DEBUG
-        char *MakeFragmentShader(const RenderState *state,const os_char *filename)
+        char *MakeFragmentShader(const RenderState *state,const OSString &filename)
 #else
         char *MakeFragmentShader(const RenderState *state)
 #endif//_DEBUG
@@ -407,23 +386,8 @@ namespace hgl
                 code.add();
             }
 
-            //color test
-            if(state->hsv_clamp_color)
-            {
-                code.add_hsv_clamp_color();
-                code.add();
-            }
-
             code.add_frag_color();                    //指定颜色输出
             code.add();
-
-            if(state->hsv_clamp_color)
-            {
-                code.add_rgb2hsv();
-//                code.add_rgb2lum();
-                code.add_hsv_clamp();
-                code.add();
-            }
 
             //if(state->render_mode)                    //是否是延迟渲染
             //    code.add_gbuffer_encode();
@@ -438,7 +402,7 @@ namespace hgl
             code.add_main_end();
 
 #ifdef _DEBUG
-            code.debug_out(filename);
+            code.debug_out(filename+OS_TEXT(".fs.glsl"));
 #endif//_DEBUG
 
             return code.end_get();
