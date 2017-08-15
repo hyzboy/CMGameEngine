@@ -195,13 +195,13 @@ namespace hgl
             //颜色
             if(state->color_material)
             {
-                glsl->Shader::SetUniform4fv(HGL_MATERIAL_COLOR,mat->GetColor());
+                glsl->SetUniform4fv(HGL_MATERIAL_COLOR,mat->GetColor());
             }
 
             //AlphaTest
             if(state->alpha_test)
             {
-                glsl->Shader::SetUniform1f(HGL_FS_ALPHA_TEST,mat->GetAlphaTest());
+                glsl->SetUniform1f(HGL_FS_ALPHA_TEST,mat->GetAlphaTest());
             }
 
             //灯光
@@ -232,7 +232,7 @@ namespace hgl
 
                     GetMaterialTextureName(mtc_name,i);
 
-                    if(!glsl->Shader::SetUniform1i(mtc_name,tex_binding_point))			//设定贴图对应索引
+                    if(!glsl->SetUniform1i(mtc_name,tex_binding_point))			//设定贴图对应索引
                     {
                         LOG_PROBLEM(u8"attach Shader sampler \""+UTF8String(mtc_name)+u8"\" to texture "+UTF8String(tex_binding_point)+u8" error!");
                         return(false);
@@ -257,14 +257,14 @@ namespace hgl
             {
                 const Matrix4f mvp=(*projection)*(*modelview);
 
-                if(!glsl->Shader::SetUniformMatrix4fv(HGL_VS_MVP_MATRIX,mvp))
+                if(!glsl->SetUniformMatrix4fv(HGL_VS_MVP_MATRIX,mvp))
                     return(false);
 
                 if ((state->vertex_normal || state->normal_map) && state->light_mode>HGL_NONE_LIGHT)    //需要法线
                 {
                     Matrix3f normal_matrix = modelview->Float3x3Part();             //法线矩阵为3x3
 
-                    if (!glsl->Shader::SetUniformMatrix3fv(HGL_VS_NORMAL_MATRIX,normal_matrix))
+                    if (!glsl->SetUniformMatrix3fv(HGL_VS_NORMAL_MATRIX,normal_matrix))
                         return(false);
 
                     //调试使用
@@ -272,13 +272,13 @@ namespace hgl
                     {
                         static Vector3f sun_light_direction(rand(),rand(),rand());
 
-                        glsl->Shader::SetUniform3fv(HGL_SUN_LIGHT_DIRECTION, sun_light_direction.Normalized());
+                        glsl->SetUniform3fv(HGL_SUN_LIGHT_DIRECTION, sun_light_direction.Normalized());
                     }
                 }
             }
             else    //没modelview时将projection传为mvp
             {
-                if(!glsl->Shader::SetUniformMatrix4fv(HGL_VS_MVP_MATRIX,*projection))
+                if(!glsl->SetUniformMatrix4fv(HGL_VS_MVP_MATRIX,*projection))
                     return(false);
             }
 
