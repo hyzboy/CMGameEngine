@@ -32,9 +32,6 @@ namespace hgl
 
 		#define HGL_FS_ALPHA_TEST				"AlphaTest"
 
-        #define HGL_FS_HSV_COLOR                "HSVColor"
-        #define HGL_FS_HSV_CLAMP_COLOR          "HSVClampColor"
-
 		#define HGL_FS_TEXCOORD					"FragmentTexCoord_"
 
         //仅在fs中使用的

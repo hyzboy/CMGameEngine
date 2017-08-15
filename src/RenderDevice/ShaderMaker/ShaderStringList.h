@@ -94,8 +94,6 @@ namespace hgl
 				void add_texture_smooth();
 
                 void add_rgb2lum();
-                void add_rgb2hsv();
-                void add_hsv_clamp();
 
 				void add_normal_3to2();
 				void add_normal_2to3();

@@ -204,12 +204,6 @@ namespace hgl
                 glsl->Shader::SetUniform1f(HGL_FS_ALPHA_TEST,mat->GetAlphaTest());
             }
 
-            //HSV Clamp Color
-            if(state->hsv_clamp_color)
-            {
-                glsl->Shader::SetUniform4fv(HGL_FS_HSV_CLAMP_COLOR,mat->GetHSVClampColor());
-            }
-
             //灯光
             //if(state->light_mode>HGL_NONE_LIGHT)
             //{
@@ -222,9 +216,9 @@ namespace hgl
         {
             Material *mat=able->GetMaterial();
 
-            int tex_count=0;
+            int tex_binding_point=0;						//纹理绑定点，必须按顺序递增排列，与纹理id无关
 
-            if(mat->GetTextureNumber())                    //如果有贴图
+            if(mat->GetTextureNumber())						//如果有贴图
             {
                 MATERIAL_TEXTURE_CHANNEL_NAME mtc_name;
 
@@ -232,19 +226,19 @@ namespace hgl
                 {
                     Texture *tex=mat->GetTexture(i);                                    //取指定通道贴图
 
-                    if(!tex)continue;                                                    //贴图不存在
+                    if(!tex)continue;                                                   //贴图不存在
 
-                    BindTexture(tex_count,tex->GetType(),tex->GetID());                    //绑定贴图
+                    BindTexture(tex_binding_point,tex->GetType(),tex->GetID());         //绑定贴图(在这里我们使用纹理绑定点当做texture active编号)
 
                     GetMaterialTextureName(mtc_name,i);
 
-                    if(!glsl->Shader::SetUniform1i(mtc_name,tex_count))    //设定贴图对应索引
+                    if(!glsl->Shader::SetUniform1i(mtc_name,tex_binding_point))			//设定贴图对应索引
                     {
-                        LOG_PROBLEM(u8"attach Shader sampler \""+UTF8String(mtc_name)+u8"\" to texture "+UTF8String(tex_count)+u8" error!");
+                        LOG_PROBLEM(u8"attach Shader sampler \""+UTF8String(mtc_name)+u8"\" to texture "+UTF8String(tex_binding_point)+u8" error!");
                         return(false);
                     }
 
-                    tex_count++;
+                    tex_binding_point++;
                 }
             }
 
