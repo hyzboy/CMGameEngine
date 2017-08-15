@@ -8,7 +8,7 @@
 using namespace hgl;
 using namespace hgl::graph;
 
-//#define USE_PRIM_RECTANGLE			//不支持
+#define USE_PRIM_RECTANGLE			//不支持
 
 #ifndef USE_PRIM_RECTANGLE
 const uint16	vertex[]={	100,100,	//left-top
@@ -55,7 +55,7 @@ public:
 
             vertex_data->SetVertex(new VB4u16(1,vertex));							///<设定矩形的坐标数据
 
-			vertex_data->SetVertexBuffer(vbtDiffuseTexCoord,new VB4f(1,texcoord));	///<设定矩形的贴图坐标数据
+//			vertex_data->SetVertexBuffer(vbtDiffuseTexCoord,new VB4f(1,texcoord));	///<设定矩形的贴图坐标数据
 		#endif//USE_PRIM_RECTANGLE
         }
 
@@ -64,14 +64,16 @@ public:
 			tex=CreateTexture2D(OS_TEXT("lena_256.Tex2D"));
 
 			mtl=new Material;
-			mtl->SetTexture(mtcDiffuse,tex);
+			//mtl->SetTexture(mtcDiffuse,tex);
+			mtl->SetColorMaterial(true);
+			mtl->SetColor(1,1,1,1);
 		}
 
 		//创建渲染对象
         {
             rect_obj=new Renderable(vertex_data,mtl);						///<创建可渲染对象
 
-			rect_obj->SetTexCoord(mtcDiffuse,vbtDiffuseTexCoord);			///<设定指定通道使用的纹理坐标数据
+//			rect_obj->SetTexCoord(mtcDiffuse,vbtDiffuseTexCoord);			///<设定指定通道使用的纹理坐标数据
 
 #ifdef _DEBUG
             rect_obj->AutoCreateShader(true,nullptr,OS_TEXT("rectangle"));	///<自动创建shader，DEBUG模式下如果是新生成shader，输出成指定文件名的文件

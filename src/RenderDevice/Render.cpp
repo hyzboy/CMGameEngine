@@ -1,5 +1,5 @@
 ﻿#include<hgl/graph/GL/glew.h>
-#include"GLSL/GLSL.h"
+#include"ShaderDefine.h"
 #include<hgl/graph/Render.h>
 #include<hgl/graph/Texture.h>
 #include<hgl/graph/Material.h>
@@ -45,7 +45,17 @@ namespace hgl
         void ClearDefaultMaterial();
         void InitGlobalShaderStorage();
         void ClearGlobalShaderStorage();
-        bool InitUBO();
+
+        namespace ubo
+        {
+            bool Init();
+        }//namespace ubo
+
+        namespace ssbo
+        {
+            bool Init();
+        }//namespace ssbo
+
 //         void InitFontStorage();
 //         void ClearFontStorage();
 
@@ -69,7 +79,9 @@ namespace hgl
 
             InitVertexBuffer();
 
-            InitUBO();
+            ubo::Init();
+            ssbo::Init();
+
             InitDefaultMaterial();
             InitGlobalShaderStorage();
             InitPrimaryRenderBuffer();
@@ -378,6 +390,9 @@ namespace hgl
 
             //绘制
             {
+				if(draw_prim==HGL_PRIM_RECTANGLE)
+					draw_prim=GL_POINTS;
+
                 if(vb_index)
                     glDrawElements(draw_prim,draw_count,vb_index->GetDataType(),(const void *)(draw_start*vb_index->GetDataBytes()));
                 else

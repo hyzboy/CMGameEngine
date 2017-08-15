@@ -5,6 +5,7 @@
 #include<hgl/type/Map.h>
 #include<hgl/algorithm/VectorMath.h>
 #include<hgl/graph/UBO.h>
+#include<hgl/graph/SSBO.h>
 #include<hgl/graph/VertexBufferType.h>
 namespace hgl
 {
@@ -46,12 +47,17 @@ namespace hgl
 
 			Map<UTF8String,int> attrib_location;
 			Map<UTF8String,int> uniform_location;
+            
             Map<UTF8String,int> uniform_block_index;
 			MapObject<UTF8String,UBO> uniform_block_object;
 
+            Map<UTF8String,int> ssbo_index;
+            MapObject<UTF8String,SSBO> ssbo_object;
+
 			int _GetAttribLocation(const char *);																        ///<取得指定属性地址
 			int _GetUniformLocation(const char *);															            ///<取得一个变量的地址
-			int _GetUniformBlockIndex(const char *);                                                                    ///<取得一个数据块的地址索引
+			int _GetUniformBlockIndex(const char *);                                                                    ///<取得一个只读数据块的地址索引
+            int _GetShaderStorageIndex(const char *);                                                                   ///<取得一个数据存储区的地址索引
 
 		public:
 
@@ -80,7 +86,8 @@ namespace hgl
 
 			int GetAttribLocation(const char *);																        ///<取得指定属性地址
 			int GetUniformLocation(const char *);																        ///<取得一个变量的地址
-            int GetUniformBlockIndex(const char *);                                                                     ///<取得一个数据块索引
+            int GetUniformBlockIndex(const char *);                                                                     ///<取得一个只读数据块索引
+            int GetShaderStorageIndex(const char *);                                                                    ///<取得一个数据存储区索引
 
 			//bool SetAttrib1f(int,float);
 			//bool GetAttrib1f(int,float &);
@@ -185,6 +192,7 @@ namespace hgl
         public: //Uniform Block
 
             UBO *GetUniformBlock(const char *,uint=HGL_DYNAMIC_DRAW);
+            SSBO *GetShaderStorage(const char *,uint=HGL_DYNAMIC_DRAW);
 		};//class Shader
 	}//namespace graph
 }//namespace hgl

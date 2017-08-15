@@ -1,6 +1,6 @@
 ﻿#include"GenVertexShader.h"
+#include"../ShaderDefine.h"
 #include<hgl/graph/Renderable.h>
-#include"../GLSL/GLSL.h"
 #include<hgl/graph/Render.h>
 #include<hgl/LogInfo.h>
 #include<stdio.h>

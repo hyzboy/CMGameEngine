@@ -70,6 +70,8 @@ namespace hgl
 
             bool				two_side;				///<双面材质
 
+			bool				rect_primivate;			///<矩形图元(暂时)
+
             RenderMode          render_mode;			///<渲染模式
 
         public:

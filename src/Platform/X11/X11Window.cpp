@@ -1,5 +1,5 @@
 ﻿#include"X11Window.h"
-#include<hgl/InputState.h>
+#include<hgl/platform/InputDevice.h>
 
 namespace
 {

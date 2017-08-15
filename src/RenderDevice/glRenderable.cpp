@@ -1,6 +1,6 @@
 ﻿#include<hgl/graph/Renderable.h>
 #include<hgl/graph/ShaderStorage.h>
-#include"GLSL/GLSL.h"
+#include"ShaderDefine.h"
 #include<hgl/type/Smart.h>
 #include<hgl/type/Map.h>
 #include<hgl/graph/GL/glew.h>
@@ -24,7 +24,7 @@ namespace hgl
 			GL_TRIANGLE_STRIP_ADJACENCY,
 			GL_PATCHES,
 
-//			HGL_PRIM_RECTANGLE
+			HGL_PRIM_RECTANGLE
 		};//const uint OpenGLCorePrim[]
 
 		constexpr int OpenGLCorePrimCount=sizeof(OpenGLCorePrim)/sizeof(uint);
@@ -214,6 +214,9 @@ namespace hgl
 				LOG_ERROR(OS_TEXT("错误的图元类型：")+OSString(GetPrimitive()));
 				return(false);
 			}
+
+			if(GetPrimitive()==HGL_PRIM_RECTANGLE)	//矩形
+				state.rect_primivate=true;			//临时设计
 
 			return(true);
 		}

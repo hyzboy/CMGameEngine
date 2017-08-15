@@ -43,8 +43,8 @@ public:
 
         grid->Render(&proj,&mv);
         
-        ss->Render(&proj,&mv);            //äÖÈ¾ÇòÌåÁĞ±í
+        ss->Render(&proj,&mv);            //æ¸²æŸ“çƒä½“åˆ—è¡¨
 	}
 };//class TestObject
 
-HGL_GRAPHICS_APPLICATION("ÉãÏñ»ú¿ØÖÆ","CameraControl",new TestObject());
+HGL_GRAPHICS_APPLICATION("æ‘„åƒæœºæ§åˆ¶","CameraControl",new TestObject());
