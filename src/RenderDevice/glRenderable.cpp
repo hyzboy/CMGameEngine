@@ -1,6 +1,6 @@
 ﻿#include<hgl/graph/Renderable.h>
 #include<hgl/graph/ShaderStorage.h>
-#include"GLSL/GLSL.h"
+#include"ShaderDefine.h"
 #include<hgl/type/Smart.h>
 #include<hgl/type/Map.h>
 #include<hgl/graph/GL/glew.h>

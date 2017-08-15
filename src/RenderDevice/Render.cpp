@@ -1,5 +1,5 @@
 ﻿#include<hgl/graph/GL/glew.h>
-#include"GLSL/GLSL.h"
+#include"ShaderDefine.h"
 #include<hgl/graph/Render.h>
 #include<hgl/graph/Texture.h>
 #include<hgl/graph/Material.h>

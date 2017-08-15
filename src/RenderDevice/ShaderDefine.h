@@ -1,10 +1,11 @@
-﻿#ifndef HGL_OPENGL_CORE_GLSL_INCLUDE
-#define HGL_OPENGL_CORE_GLSL_INCLUDE
+﻿#ifndef HGL_SHADER_DEFINE_INCLUDE
+#define HGL_SHADER_DEFINE_INCLUDE
 
 namespace hgl
 {
 	namespace graph
 	{
+		//这两个变量未来改用get出来的值
 		#define HGL_MAX_TEX_COORD		32
 		#define HGL_MAX_VERTEX_BUFFER	32
 
@@ -44,4 +45,4 @@ namespace hgl
         #define HGL_SUN_LIGHT_SPECULAR          "SunLightSpecular"      //太阳光高光
 	}//namespace graph
 }//namespace hgl
-#endif//HGL_OPENGL_CORE_GLSL_INCLUDE
+#endif//HGL_SHADER_DEFINE_INCLUDE

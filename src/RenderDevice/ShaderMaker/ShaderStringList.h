@@ -1,7 +1,7 @@
 ﻿#ifndef HGL_SHADER_STRING_LIST_INCLUDE
 #define HGL_SHADER_STRING_LIST_INCLUDE
 
-#include"../GLSL/GLSL.h"
+#include"../ShaderDefine.h"
 #include<hgl/type/BaseString.h>
 namespace hgl
 {

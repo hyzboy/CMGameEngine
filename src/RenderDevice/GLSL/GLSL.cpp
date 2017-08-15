@@ -1,5 +1,4 @@
-﻿#include"GLSL.h"
-#include<hgl/graph/Shader.h>
+﻿#include<hgl/graph/Shader.h>
 #include<hgl/LogInfo.h>
 #include<hgl/type/Smart.h>
 #include<hgl/graph/GL/glew.h>
