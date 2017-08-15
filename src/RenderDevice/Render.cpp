@@ -390,6 +390,9 @@ namespace hgl
 
             //绘制
             {
+				if(draw_prim==HGL_PRIM_RECTANGLE)
+					draw_prim=GL_POINTS;
+
                 if(vb_index)
                     glDrawElements(draw_prim,draw_count,vb_index->GetDataType(),(const void *)(draw_start*vb_index->GetDataBytes()));
                 else
