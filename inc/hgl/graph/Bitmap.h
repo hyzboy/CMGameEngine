@@ -203,6 +203,8 @@ namespace hgl
 		//void ClearColor(uchar *,uchar *,uint,uint);
 
 		void SplitToChannels(uint8 *,uint8 *,int,int);
+		
+        bool SaveToTGA(const OSString &filename,void *data,const uint16 width,const uint16 height,const uint8 bit,const bool upper_to_bottom=true);
 	}//namespace graph
 }//namespace hgl
 #endif//HGL_GRAPH_BITMAP_INCLUDE
