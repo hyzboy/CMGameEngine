@@ -1,4 +1,4 @@
-#ifndef HGL_WORKFLOW_INCLUDE
+ï»¿#ifndef HGL_WORKFLOW_INCLUDE
 #define HGL_WORKFLOW_INCLUDE
 
 #include<hgl/thread/Thread.h>
@@ -7,76 +7,76 @@
 namespace hgl
 {
 	/**
-	 * ¹¤×÷Á÷Ãû×Ö¿Õ¼ä<br>
-	 * ¹¤×÷Á÷ÊÇÒ»ÖÖ¶Ô¹¤×÷µÄ¶àÏß°²ÅÅ¹ÜÀí»úÖÆ£¬ËüÊÊÓÃÓÚ°´ÒµÎñ·ÖÅä¶àÏß³ÌµÄ¹¤×÷»·¾³<br>
-	 * ¿ª·¢ÕßÐèÒªÎªÃ¿Ò»ÖÖ¹¤×÷Ö¸¶¨Ò»¶¨µÄÏß³ÌÊýÁ¿£¬µ«Ã¿Ò»ÖÖ¹¤×÷È·Ö»ÓÐÒ»¸ö¹¤×÷·ÖÅäÈë¿ÚºÍ·Ö·¢³ö¿Ú¡£<br>
-	 * ÓÉÆäËü³ÌÐòÌá½»¹¤×÷ÈÎÎñµ½Èë¿Ú£¬¿ª·¢Õß¿ÉÒÔ×ÔÐÐÖØÔØ·ÖÅäÈë¿ÚµÄ·ÖÅäº¯Êý¡£
+	 * å·¥ä½œæµåå­—ç©ºé—´<br>
+	 * å·¥ä½œæµæ˜¯ä¸€ç§å¯¹å·¥ä½œçš„å¤šçº¿å®‰æŽ’ç®¡ç†æœºåˆ¶ï¼Œå®ƒé€‚ç”¨äºŽæŒ‰ä¸šåŠ¡åˆ†é…å¤šçº¿ç¨‹çš„å·¥ä½œçŽ¯å¢ƒ<br>
+	 * å¼€å‘è€…éœ€è¦ä¸ºæ¯ä¸€ç§å·¥ä½œæŒ‡å®šä¸€å®šçš„çº¿ç¨‹æ•°é‡ï¼Œä½†æ¯ä¸€ç§å·¥ä½œç¡®åªæœ‰ä¸€ä¸ªå·¥ä½œåˆ†é…å…¥å£å’Œåˆ†å‘å‡ºå£ã€‚<br>
+	 * ç”±å…¶å®ƒç¨‹åºæäº¤å·¥ä½œä»»åŠ¡åˆ°å…¥å£ï¼Œå¼€å‘è€…å¯ä»¥è‡ªè¡Œé‡è½½åˆ†é…å…¥å£çš„åˆ†é…å‡½æ•°ã€‚
 
-	 Ê¹ÓÃ·½·¨Ò»£ºÃ¿¸ö¹¤×÷Ïß³ÌÒ»¸ö¹¤×÷Í¶µÝÆ÷
+	 ä½¿ç”¨æ–¹æ³•ä¸€ï¼šæ¯ä¸ªå·¥ä½œçº¿ç¨‹ä¸€ä¸ªå·¥ä½œæŠ•é€’å™¨
 
-		group=new WorkGroup;			//´´½¨group
+		group=new WorkGroup;			//åˆ›å»ºgroup
 
 		WorkPost *wp[10];
 
 		for(int i=0;i<MAX_THREADS;i++)
 		{
-			wp=new WorkPost();			//´´½¨ÊÂ¼þÍ¶µÝÆ÷
-			wt=new WorkThread(wp);		//´´½¨¹¤×÷Ïß³Ì
+			wp=new WorkPost();			//åˆ›å»ºäº‹ä»¶æŠ•é€’å™¨
+			wt=new WorkThread(wp);		//åˆ›å»ºå·¥ä½œçº¿ç¨‹
 
-			group->Add(wp);				//Ìí¼ÓÍ¶µÝÆ÷µ½group
-			group->Add(wt);				//Ìí¼Ó¹¤×÷Ïß³Ìµ½group
+			group->Add(wp);				//æ·»åŠ æŠ•é€’å™¨åˆ°group
+			group->Add(wt);				//æ·»åŠ å·¥ä½œçº¿ç¨‹åˆ°group
 		}
 
-		group->Start();					//Æô¶¯group£¬¿ªÆôËùÓÐ¹¤×÷Ïß³Ì
+		group->Start();					//å¯åŠ¨groupï¼Œå¼€å¯æ‰€æœ‰å·¥ä½œçº¿ç¨‹
 
 		for(int i=0;i<0xffff;i++)
 		{
-			int index=rand()%10;		//Ëæ»úÒ»¸öÏß³Ì
+			int index=rand()%10;		//éšæœºä¸€ä¸ªçº¿ç¨‹
 
 			for(int j=0;j<rand()%10;j++)
 			{
-				wp[index]->Post(new Work);			//Í¶µÝÒ»¸ö¹¤×÷
+				wp[index]->Post(new Work);			//æŠ•é€’ä¸€ä¸ªå·¥ä½œ
 			}
 
 			wp[index]->ToWork();
 		}
 
-		group->Close();					//¹Ø±Õgroup,¹Ø±ÕËùÓÐ¹¤×÷Ïß³Ì
+		group->Close();					//å…³é—­group,å…³é—­æ‰€æœ‰å·¥ä½œçº¿ç¨‹
 
 
-	Ê¹ÓÃ·½·¨¶þ£º¶à¸ö¹¤×÷Ïß³Ì¹²ÓÃÒ»¸ö¹¤×÷Í¶µÝÆ÷
+	ä½¿ç”¨æ–¹æ³•äºŒï¼šå¤šä¸ªå·¥ä½œçº¿ç¨‹å…±ç”¨ä¸€ä¸ªå·¥ä½œæŠ•é€’å™¨
 
-		group=new WorkGroup;			//´´½¨group
+		group=new WorkGroup;			//åˆ›å»ºgroup
 
 		WorkPost *wp=new WorkPost();
-		group->Add(wp);					//Ìí¼ÓÍ¶µÝÆ÷µ½group
+		group->Add(wp);					//æ·»åŠ æŠ•é€’å™¨åˆ°group
 
 		for(int i=0;i<MAX_THREADS;i++)
 		{
-			wt=new WorkThread(wp);		//´´½¨¹¤×÷Ïß³Ì
+			wt=new WorkThread(wp);		//åˆ›å»ºå·¥ä½œçº¿ç¨‹
 
-			group->Add(wt);				//Ìí¼Ó¹¤×÷Ïß³Ìµ½group
+			group->Add(wt);				//æ·»åŠ å·¥ä½œçº¿ç¨‹åˆ°group
 		}
 
-		group->Start();					//Æô¶¯group£¬¿ªÆôËùÓÐ¹¤×÷Ïß³Ì
+		group->Start();					//å¯åŠ¨groupï¼Œå¼€å¯æ‰€æœ‰å·¥ä½œçº¿ç¨‹
 
 		for(int i=0;i<0xffff;i++)
 		{
 			for(int j=0;j<rand()%10;j++)
 			{
-				wp->Post(new Work);			//Í¶µÝÒ»¸ö¹¤×÷
+				wp->Post(new Work);			//æŠ•é€’ä¸€ä¸ªå·¥ä½œ
 			}
 
 			wp->ToWork();
 		}
 
-		group->Close();					//¹Ø±Õgroup,¹Ø±ÕËùÓÐ¹¤×÷Ïß³Ì
-	 */ 
+		group->Close();					//å…³é—­group,å…³é—­æ‰€æœ‰å·¥ä½œçº¿ç¨‹
+	 */
 	namespace workflow
 	{
 		/**
-		 * Èë¿Ú·ÖÅäÆ÷<br>
-		 * PostµÄ¹¤×÷ÄÚÈÝÊÇ½«ÈÎÎñ·ÖÅä¸øËù¶ÔÓ¦µÄWorkThread
+		 * å…¥å£åˆ†é…å™¨<br>
+		 * Postçš„å·¥ä½œå†…å®¹æ˜¯å°†ä»»åŠ¡åˆ†é…ç»™æ‰€å¯¹åº”çš„WorkThread
 		 */
 		template<typename W> class WorkPost
 		{
@@ -84,7 +84,7 @@ namespace hgl
 			
 			using WorkList=List<W *>;
 
-			SemSwapData<WorkList> work_list;																///<¹¤³ÌÁÐ±í
+			SemSwapData<WorkList> work_list;																///<å·¥ç¨‹åˆ—è¡¨
 
 		public:
 
@@ -92,21 +92,21 @@ namespace hgl
 			{
 			}
 
-			virtual void Post(W *w)																			///<Í¶µÝÒ»¸ö¹¤×÷
+			virtual void Post(W *w)																			///<æŠ•é€’ä¸€ä¸ªå·¥ä½œ
 			{
 				WorkList &wl=work_list.GetBack();
 					wl.Add(w);
 				work_list.ReleaseBack();
 			}
-			
-			virtual void Post(W **w,int count)																///<Í¶µÝÒ»Åú¹¤×÷
+
+			virtual void Post(W **w,int count)																///<æŠ•é€’ä¸€æ‰¹å·¥ä½œ
 			{
 				WorkList &wl=work_list.GetBack();
 					wl.Add(w,count);
 				work_list.ReleaseBack();
 			}
 
-			virtual void ToWork()																			///<½«¶Ñ»ýµÄ¹¤×÷ÁÐ±í·¢ËÍ¸ø¹¤×÷Ïß³Ì
+			virtual void ToWork()																			///<å°†å †ç§¯çš„å·¥ä½œåˆ—è¡¨å‘é€ç»™å·¥ä½œçº¿ç¨‹
 			{
 				work_list.ReleaseSem(1);
 			}
@@ -123,7 +123,7 @@ namespace hgl
 		};//template<typename W> class WorkPost
 
 		/**
-		 * ¹¤×÷Ïß³Ì£¬ÓÃÓÚÕæÕý´¦ÀíÊÂÎñ
+		 * å·¥ä½œçº¿ç¨‹ï¼Œç”¨äºŽçœŸæ­£å¤„ç†äº‹åŠ¡
 		 */
 		template<typename W> class WorkThread:public Thread
 		{
@@ -134,7 +134,7 @@ namespace hgl
 			WorkPost<W> *work_post;
 			WorkList *wl;
 
-			volatile bool exit_work;																///<ÍË³ö±ê¼Ç
+			volatile bool exit_work;																///<é€€å‡ºæ ‡è®°
 
 		public:
 
@@ -149,7 +149,7 @@ namespace hgl
 			{
 			}
 
-			virtual void ProcWork(W *obj)=0;														///<Ö±½Ó´¦Àí¹¤×÷µÄ´¿Ðéº¯Êý£¬ÐèÊ¹ÓÃÕßÖØÔØÊµÏÖ
+			virtual void ProcWork(W *obj)=0;														///<ç›´æŽ¥å¤„ç†å·¥ä½œçš„çº¯è™šå‡½æ•°ï¼Œéœ€ä½¿ç”¨è€…é‡è½½å®žçŽ°
 
 			virtual void ExitWork()
 			{
@@ -179,14 +179,14 @@ namespace hgl
 		};//template<typename W> class WorkThread:public Thread
 
 		/**
-		 * ¹¤×÷×é<br>
-		 * ÓÃÓÚ¹ÜÀíÒ»×éµÄ¹¤×÷Ïß³ÌÒÔ¼°Í¶µÝÆ÷<br>
-		 * ×¢£º¿ÉÒÔÒ»×é¹¤×÷Ïß³Ì¹²ÓÃÒ»¸öÍ¶µÝÆ÷£¬Ò²¿ÉÒÔÃ¿¸ö¹¤×÷Ïß³ÌÅäÒ»¸öÍ¶µÝÆ÷¡£¹¤×÷×é¹ÜÀíÖ»Îª·½±ãÍ³Ò»ÇåÀí
+		 * å·¥ä½œç»„<br>
+		 * ç”¨äºŽç®¡ç†ä¸€ç»„çš„å·¥ä½œçº¿ç¨‹ä»¥åŠæŠ•é€’å™¨<br>
+		 * æ³¨ï¼šå¯ä»¥ä¸€ç»„å·¥ä½œçº¿ç¨‹å…±ç”¨ä¸€ä¸ªæŠ•é€’å™¨ï¼Œä¹Ÿå¯ä»¥æ¯ä¸ªå·¥ä½œçº¿ç¨‹é…ä¸€ä¸ªæŠ•é€’å™¨ã€‚å·¥ä½œç»„ç®¡ç†åªä¸ºæ–¹ä¾¿ç»Ÿä¸€æ¸…ç†
 		 */
 		template<typename WP,typename WT> class WorkGroup
 		{
-			ObjectList<WP> wp_list;														///<Í¶µÝÆ÷ÁÐ±í
-			ObjectList<WT> wt_list;														///<¹¤×÷Ïß³ÌÁÐ±í
+			ObjectList<WP> wp_list;														///<æŠ•é€’å™¨åˆ—è¡¨
+			ObjectList<WT> wt_list;														///<å·¥ä½œçº¿ç¨‹åˆ—è¡¨
 
 		public:
 
