@@ -11,7 +11,7 @@ IF(BUILD_OPENAL_LIB)
     add_subdirectory(audio)
 ENDIF()
 
-#add_subdirectory(multithread)
+add_subdirectory(multithread)
 
 IF(BUILD_NETWORK_LIB)
     add_subdirectory(network)
