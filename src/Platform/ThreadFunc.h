@@ -4,15 +4,21 @@
 
 // 	os_char str[(sizeof(void *)+1)<<1];
 //     OSString thread_addr;
-// 
+//
 // 	htos(str,(sizeof(void *)+1)<<1,(uint64)ptr);
-// 
+//
 // 	thread_addr=str;
 
 //	LOG_INFO(OS_TEXT("Thread[")+thread_addr+OS_TEXT("] Init"));
 
 	if(!tc->ProcStartThread())
+    {
+#if HGL_OS == HGL_OS_Windows
 		return(0);
+#else
+        pthread_exit(nullptr);
+#endif//
+    }
 
 //	LOG_INFO(OS_TEXT("Thread[")+thread_addr+OS_TEXT("] Start"));
 
@@ -30,7 +36,11 @@
 //		LOG_INFO(OS_TEXT("Thread[")+thread_addr+OS_TEXT("] Delete"));
 	}
 
+#if HGL_OS == HGL_OS_Windows
 	return(0);
+#else
+    pthread_exit(nullptr);
+#endif//
 }
 
 Thread::Thread()

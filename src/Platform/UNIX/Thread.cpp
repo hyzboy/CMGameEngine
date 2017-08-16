@@ -13,7 +13,6 @@ namespace hgl
 
 	/**
 	* (线程外部调用)执行当前线程
-	* @param tplevel 线程优先级
 	* @return 是否创建线程成功
 	*/
 	bool Thread::Start()
@@ -28,10 +27,10 @@ namespace hgl
 
 		pthread_attr_init(&attr);
 
-		if(IsExitDelete())
+//		if(IsExitDelete())
 			pthread_attr_setdetachstate(&attr,PTHREAD_CREATE_DETACHED);
-		else
-			pthread_attr_setdetachstate(&attr,PTHREAD_CREATE_JOINABLE);
+// 		else
+// 			pthread_attr_setdetachstate(&attr,PTHREAD_CREATE_JOINABLE);
 
 		if(pthread_create(&threadptr,&attr,ThreadFunc,this))		//返回0表示正常
 		{
@@ -117,9 +116,9 @@ namespace hgl
 
 	/**
 	* (线程外部调用)等待当前线程
-	* @param time 等待的时间，如果为0表示等到线程运行结束为止。默认为0
+	* @param time_out 等待的时间，如果为0表示等到线程运行结束为止。默认为0
 	*/
-	void Thread::Wait(double time)
+	void Thread::Wait(double time_out)
 	{
 		if(!threadptr)
 		{
@@ -129,11 +128,12 @@ namespace hgl
 
 		int retval;
 
-        retval=pthread_kill(threadptr,0);
+        retval=pthread_kill(threadptr,0);           //这个函数不是用来杀线程的哦，而是用来向线程发送一个关闭的信号
 
-        if(retval==ESRCH
-         ||retval==EINVAL)return;
+        if(retval!=ESRCH                            //线程不存在
+         &&retval!=EINVAL)                          //信号不合法
+            pthread_join(threadptr,(void **)&retval);
 
-		pthread_join(threadptr,(void **)&retval);
+        threadptr=0;
 	}
 }//namespace hgl
