@@ -39,12 +39,11 @@ public:
 
 	void ProcWork(MyWork *obj) override			//实现具体工具处理函数
 	{
-		uint8 write_color[3]=					//得出要写入的颜色
-		{
-			base_color[0]*obj->strong,
-			base_color[1]*obj->strong,
-			base_color[2]*obj->strong
-		};
+		uint8 write_color[3]={0,0,0};		   //得出要写入的颜色
+
+		if(base_color[0])write_color[0]=obj->strong;
+        if(base_color[1])write_color[1]=obj->strong;
+        if(base_color[2])write_color[2]=obj->strong;
 
 		uint8 *line_start=obj->start;
 		uint8 *p;
@@ -54,7 +53,7 @@ public:
 			p=line_start;
 			for(uint col=0;col<obj->width;col++)	//写入颜色
 			{
-				*p++=write_color[0];				
+				*p++=write_color[0];
 				*p++=write_color[1];
 				*p++=write_color[2];
 			}
@@ -65,22 +64,26 @@ public:
 	}
 };//class MyWorkThread
 
+using MyWorkPostPtr=MyWorkPost *;
 using MyWorkThreadPtr=MyWorkThread *;
 
 HGL_CONSOLE_MAIN_FUNC()
 {
 	WorkGroup<MyWorkPost,MyWorkThread> group;	//工作组
 
-	MyWorkPost *wp=new MyWorkPost;				//创建工作投递器
+	MyWorkPostPtr wp[4]={   new MyWorkPost,
+                            new MyWorkPost,
+                            new MyWorkPost,
+                            new MyWorkPost};				//创建工作投递器
 
-	group.Add(wp);								//添加到工作组
+	group.Add(wp,4);							//添加到工作组
 
 	MyWorkThreadPtr wt[4];						//创建四个工作线程
 
-	wt[0]=new MyWorkThread(wp);wt[0]->SetBaseColor(1,0,0);group.Add(wt[0]);
-	wt[1]=new MyWorkThread(wp);wt[1]->SetBaseColor(0,1,0);group.Add(wt[1]);
-	wt[2]=new MyWorkThread(wp);wt[2]->SetBaseColor(0,0,1);group.Add(wt[2]);
-	wt[3]=new MyWorkThread(wp);wt[3]->SetBaseColor(1,1,1);group.Add(wt[3]);
+	wt[0]=new MyWorkThread(wp[0]);wt[0]->SetBaseColor(1,0,0);group.Add(wt[0]);
+	wt[1]=new MyWorkThread(wp[1]);wt[1]->SetBaseColor(0,1,0);group.Add(wt[1]);
+	wt[2]=new MyWorkThread(wp[2]);wt[2]->SetBaseColor(0,0,1);group.Add(wt[2]);
+	wt[3]=new MyWorkThread(wp[3]);wt[3]->SetBaseColor(1,1,1);group.Add(wt[3]);
 
 	group.Start();								//启动工作线程
 
@@ -94,8 +97,9 @@ HGL_CONSOLE_MAIN_FUNC()
 	constexpr uint TILE_ROWS	=512/TILE_HEIGHT;		//横向块数量
 	constexpr uint TILE_COLS	=512/TILE_WIDTH;		//纵向块数量
 
-	uint8 *bitmap=new uint8[TILE_WIDTH*TILE_HEIGHT*COLOR_NUM*4*PIXEL_BYTE];			//创建位图,16x16x4x256=512x512，所以下面视图片以512x512
-	uint8 strong=0;
+	constexpr uint bitmap_bytes=TILE_WIDTH*TILE_HEIGHT*COLOR_NUM*4*PIXEL_BYTE;
+	uint8 *bitmap=new uint8[bitmap_bytes];			//创建位图,16x16x4x256=512x512，所以下面视图片以512x512
+	uint8 strong=255;
 	uint row=0,col=0;
 
 	for(uint i=0;i<16*16;i++)
@@ -111,8 +115,8 @@ HGL_CONSOLE_MAIN_FUNC()
 
 			w->start	=bitmap+(row*TILE_COLS*TILE_HEIGHT+col)*TILE_WIDTH*PIXEL_BYTE;
 
-			wp->Post(w);						//提交工作到工作投递器
-			wp->ToWork();						//发送信号给工作线程
+			wp[j]->Post(w);						//提交工作到工作投递器
+			wp[j]->ToWork();					//发送信号给工作线程
 
 			++col;
 			if(col==TILE_COLS)
@@ -122,12 +126,15 @@ HGL_CONSOLE_MAIN_FUNC()
 			}
 		}
 
-		++strong;
+		--strong;
 	}
-	
+
+	//group.Wait();                              //等待所有线程执行完
 	group.Close();								//关闭并等待工作线程结束
 
 	graph::SaveToTGA(OS_TEXT("Workflow.TGA"),bitmap,512,512,24);
+
+    delete[] bitmap;
 
 	return(0);
 }

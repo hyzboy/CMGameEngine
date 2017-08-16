@@ -12,7 +12,7 @@ namespace hgl
 	 * 开发者需要为每一种工作指定一定的线程数量，但每一种工作确只有一个工作分配入口和分发出口。<br>
 	 * 由其它程序提交工作任务到入口，开发者可以自行重载分配入口的分配函数。
 
-	 使用方法一：每个工作线程一个工作投递器
+    使用方法：
 
 		group=new WorkGroup;			//创建group
 
@@ -42,35 +42,6 @@ namespace hgl
 		}
 
 		group->Close();					//关闭group,关闭所有工作线程
-
-
-	使用方法二：多个工作线程共用一个工作投递器
-
-		group=new WorkGroup;			//创建group
-
-		WorkPost *wp=new WorkPost();
-		group->Add(wp);					//添加投递器到group
-
-		for(int i=0;i<MAX_THREADS;i++)
-		{
-			wt=new WorkThread(wp);		//创建工作线程
-
-			group->Add(wt);				//添加工作线程到group
-		}
-
-		group->Start();					//启动group，开启所有工作线程
-
-		for(int i=0;i<0xffff;i++)
-		{
-			for(int j=0;j<rand()%10;j++)
-			{
-				wp->Post(new Work);			//投递一个工作
-			}
-
-			wp->ToWork();
-		}
-
-		group->Close();					//关闭group,关闭所有工作线程
 	 */
 	namespace workflow
 	{
@@ -81,7 +52,7 @@ namespace hgl
 		template<typename W> class WorkPost
 		{
 		protected:
-			
+
 			using WorkList=List<W *>;
 
 			SemSwapData<WorkList> work_list;																///<工程列表
@@ -134,7 +105,7 @@ namespace hgl
 			WorkPost<W> *work_post;
 			WorkList *wl;
 
-			volatile bool exit_work;																///<退出标记
+			atom_bool exit_work;																///<退出标记
 
 		public:
 
@@ -148,6 +119,8 @@ namespace hgl
 			virtual ~WorkThread()
 			{
 			}
+
+            virtual bool IsExitDelete()const override{return false;}								///<返回在退出线程时，不删除本对象
 
 			virtual void ProcWork(W *obj)=0;														///<直接处理工作的纯虚函数，需使用者重载实现
 
@@ -173,6 +146,8 @@ namespace hgl
 					ProcWork(*p);
 					++p;
 				}
+
+				wl->ClearData();
 
 				return(!exit_work);
 			}
@@ -238,21 +213,34 @@ namespace hgl
 				if(count<=0)
 					RETURN_FALSE;
 
+                WT **wt=wt_list.GetData();
+
 				for(int i=0;i<count;i++)
-					wt_list[i]->Start();
+					wt[i]->Start();
 
 				return(true);
 			}
+
+			virtual void Wait()
+            {
+                int count=wt_list.GetCount();
+
+                WT **wt=wt_list.GetData();
+
+
+            }
 
 			virtual void Close()
 			{
 				int count=wt_list.GetCount();
 
-				for(int i=0;i<count;i++)
-					wt_list[i]->ExitWork();
+                WT **wt=wt_list.GetData();
 
 				for(int i=0;i<count;i++)
-					wt_list[i]->Wait();
+					wt[i]->ExitWork();
+
+				for(int i=0;i<count;i++)
+					wt[i]->Wait();
 			}
 		};//template<typename WP,typename WT> class WorkGroup
 	}//namespace workflow

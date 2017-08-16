@@ -56,7 +56,7 @@ namespace hgl
         {
             lock.Unlock();
         }
-		
+
         /**
         * 取得前台数据
         */
@@ -133,7 +133,7 @@ namespace hgl
 			if(!sem.Acquire(time_out))
 				return(false);
 
-			Swap();
+			this->Swap();
 			return(true);
 		}
 
@@ -145,7 +145,7 @@ namespace hgl
 			if(!sem.TryAcquire())
 				return(false);
 
-			Swap();
+			this->Swap();
 			return(true);
 		}
 	};//template<typename T> class SemSwapData:public SwapData<T>
