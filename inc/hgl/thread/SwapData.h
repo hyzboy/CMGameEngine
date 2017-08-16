@@ -21,6 +21,14 @@ namespace hgl
 
         ThreadMutex lock;
 
+	protected:
+
+		void _Swap()
+		{
+            if(front){front=0;back=1;}
+                 else{front=1;back=0;}
+		}
+
     public:
 
         SwapData()
@@ -34,14 +42,11 @@ namespace hgl
         /**
          * 获取后台数据
          */
-        bool GetBack(T &ptr)
+        T &GetBack()
         {
-            if(!lock.Lock())
-                return(false);
+            lock.Lock();
 
-            ptr=data[back];
-
-            return(true);
+            return data[back];
         }
 
         /**
@@ -51,21 +56,51 @@ namespace hgl
         {
             lock.Unlock();
         }
+		
+        /**
+        * 取得前台数据
+        */
+        T &GetFront(){return data[front];}
 
         /**
          * 交换前后台数据
          */
-        bool Swap()
+        void Swap()
         {
-            if(!lock.Lock())
-                return(false);
+            lock.Lock();
 
-            if(front){front=0;back=1;}
-                 else{front=1;back=0;}
+            this->_Swap();
 
             lock.Unlock();
-            return(true);
         }
+
+		/**
+		 * 尝试交换前后台数据
+		 */
+		bool TrySwap()
+		{
+			if(!lock.TryLock())
+				return(false);
+
+			this->_Swap();
+
+            lock.Unlock();
+			return(true);
+		}
+
+		/**
+		 * 尝试交换前后台数据
+		 */
+		bool WaitSwap(const double &time_out)
+		{
+			if(!lock.WaitLock(time_out))
+				return(false);
+
+			this->_Swap();
+
+            lock.Unlock();
+			return(true);
+		}
     };//template<typename T> class SwapData
 
 	/**
@@ -84,7 +119,7 @@ namespace hgl
 		* 释放信号给这个模板
 		* @param count 信号个数
 		*/
-		void Release(int count)
+		void ReleaseSem(int count)
 		{
 			sem.Release(count);
 		}
@@ -93,7 +128,7 @@ namespace hgl
 		* 等待获取一个信号并交换前后台数据
 		* @param time_out 等待时长
 		*/
-		bool WaitSwap(const double time_out=5)
+		bool WaitSemSwap(const double time_out=5)
 		{
 			if(!sem.Acquire(time_out))
 				return(false);
@@ -105,7 +140,7 @@ namespace hgl
 		/**
 		* 尝试获取一个信号并交换前后台数据
 		*/
-		bool TrySwap()
+		bool TrySemSwap()
 		{
 			if(!sem.TryAcquire())
 				return(false);
