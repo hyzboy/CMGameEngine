@@ -81,12 +81,10 @@ namespace hgl
 		template<typename W> class WorkPost
 		{
 		protected:
-
+			
 			using WorkList=List<W *>;
 
 			SemSwapData<WorkList> work_list;																///<工程列表
-
-			friend class WorkThread<W>;
 
 		public:
 
@@ -113,11 +111,11 @@ namespace hgl
 				work_list.ReleaseSem(1);
 			}
 
-		protected:
+		public:
 
 			WorkList *WaitWorkList(const double time_out=5)
 			{
-				if(work_list.WaitSwap(time_out))
+				if(work_list.WaitSemSwap(time_out))
 					return &(work_list.GetFront());
 
 				return(nullptr);
@@ -129,9 +127,12 @@ namespace hgl
 		 */
 		template<typename W> class WorkThread:public Thread
 		{
+		protected:
+
+			using WorkList=List<W *>;
+
 			WorkPost<W> *work_post;
-			WorkPost<W>::WorkList *wl;
-			W *work;
+			WorkList *wl;
 
 			volatile bool exit_work;																///<退出标记
 
@@ -165,12 +166,12 @@ namespace hgl
 				if(!wl)
 					return(!exit_work);
 
-				work=wl->GetData();
+				W **p=wl->GetData();
 
 				for(int i=0;i<wl->GetCount();i++)
 				{
-					ProcWork(*work);
-					++work;
+					ProcWork(*p);
+					++p;
 				}
 
 				return(!exit_work);
@@ -189,15 +190,8 @@ namespace hgl
 
 		public:
 
-			WorkGroup(int wp_count=0,int wt_count=0)
+			WorkGroup()
 			{
-				if(wp_count>0)
-					while(wp_count--)
-						wp_list.Add(new WP);
-
-				if(wt_count>0)
-					while(wt_count--)
-						wt_list.Add(new WT);
 			}
 
 			virtual ~WorkGroup()
@@ -213,7 +207,7 @@ namespace hgl
 				return(true);
 			}
 
-			virtual bool Add(WP *wp,const int count)
+			virtual bool Add(WP **wp,const int count)
 			{
 				if(!wp)return(false);
 
