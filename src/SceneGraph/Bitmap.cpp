@@ -1,5 +1,5 @@
 ﻿#include<hgl/graph/Bitmap.h>
-#include<hgl/FileSystem.h>
+#include<hgl/io/FileOutputStream.h>
 
 namespace hgl
 {
@@ -233,24 +233,24 @@ namespace hgl
             }
         }
 
-        #pragma pack(push,1)             
+        #pragma pack(push,1)
         struct TGAHeader
         {
             uint8 id;
             uint8 color_map_type;
             uint8 image_type;               // 1 colormap image ,2 true-color,3 grayscale
-                 
+
             uint16 color_map_first;
             uint16 color_map_length;
             uint8 color_map_size;
-                 
+
             uint16 x_origin;
             uint16 y_origin;
-                 
+
             uint16 width;
             uint16 height;
             uint8 bit;
-                 
+
             union
             {
                 uint8 image_desc;
@@ -263,39 +263,33 @@ namespace hgl
             };
         };
         #pragma pack(pop)
-        
+
         bool SaveToTGA(const OSString &filename,void *data,const uint16 width,const uint16 height,const uint8 bit,const bool v_flip)
         {
-            uint size=sizeof(TGAHeader)+(width*height*(bit>>3));
+			TGAHeader header;
 
-			char *buf=new char[size];
+			memset(&header,0,sizeof(TGAHeader));
 
-			if(!buf)
-				return(false);
-
-			bool result=false;
-
-			TGAHeader *header=(TGAHeader *)buf;
-             
-			memset(header,0,sizeof(TGAHeader));
-             
 			if(bit==8)
-				header->image_type=3;
+				header.image_type=3;
 			else
-				header->image_type=2;
-             
-			header->width=width;
-			header->height=height;
-			header->bit=bit;
-			header->alpha_depth=8;
-			header->direction=v_flip?1:0;
- 
-			if(filesystem::SaveMemoryToFile(filename,buf,size)==size)
-				result=true;
+				header.image_type=2;
 
-			delete[] buf;
- 
-            return(result);
+			header.width=width;
+			header.height=height;
+			header.bit=bit;
+			header.alpha_depth=8;
+			header.direction=v_flip?1:0;
+
+            io::FileOutputStream fs;
+
+            if(!fs.CreateTrunc(filename))
+                return(false);
+
+            fs.Write(&header,sizeof(TGAHeader));
+            fs.Write(data,width*height*(bit>>3));
+
+            return(true);
         }
     }//namespace graph
 }//namespace hgl
