@@ -36,6 +36,7 @@ namespace hgl
 		typedef atom_win32<float	> atom_float;
 // 		typedef atom_win64<double	> atom_double;
 
+		typedef atom_win32<bool		> atom_bool;
 		typedef atom_win32<char		> atom_char;
 		typedef atom_win32<uchar	> atom_uchar;
 //		typedef atom_win32<wchar_t	> atom_wchar;

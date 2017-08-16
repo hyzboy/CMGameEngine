@@ -116,7 +116,6 @@ HGL_CONSOLE_MAIN_FUNC()
 			w->start	=bitmap+(row*TILE_COLS*TILE_HEIGHT+col)*TILE_WIDTH*PIXEL_BYTE;
 
 			wp[j]->Post(w);						//提交工作到工作投递器
-			wp[j]->ToWork();					//发送信号给工作线程
 
 			++col;
 			if(col==TILE_COLS)
@@ -128,6 +127,9 @@ HGL_CONSOLE_MAIN_FUNC()
 
 		--strong;
 	}
+
+	for(int i=0;i<4;i++)		
+		wp[i]->ToWork();						//发送信号给工作线程
 
 	//group.Wait();                              //等待所有线程执行完
 	group.Close();								//关闭并等待工作线程结束
