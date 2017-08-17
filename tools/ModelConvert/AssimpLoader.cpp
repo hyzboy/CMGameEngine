@@ -511,6 +511,8 @@ void AssimpLoader::LoadMesh()
 		
 		MaterialStruct *mtl=&(material_list[mesh->mMaterialIndex]);
 
+		const uint uv_channels=mtl->uv_use.GetCount();
+
 		LOG_INFO(mesh_name+U8_TEXT(" use UV Channels is ")+UTF8String(uv_channels));
 
 		io::FileOutputStream fos;
@@ -530,18 +532,16 @@ void AssimpLoader::LoadMesh()
 			ms.vertices_number	=mesh->mNumVertices;
 			ms.faces_number		=mesh->mNumFaces;
 			ms.color_channels	=mesh->GetNumColorChannels();
-			ms.texcoord_channels=mesh->GetNumUVChannels();
+			ms.texcoord_channels=uv_channels;
 			ms.material_index	=mesh->mMaterialIndex;
 
 			if(mesh->HasNormals())
 			{
 				if(mesh->HasTangentsAndBitangents())
-					ms.ntb=NTB_FULL;
+					ms.ntb=NTB_BIT_ALL;
 				else
-					ms.ntb=NTB_NORMAL;
+					ms.ntb=NTB_BIT_NORMAL;
 			}
-			else
-				ms.ntb=NTB_NONE;
 
 			ms.bones_number		=mesh->mNumBones;
 
@@ -683,7 +683,7 @@ bool AssimpLoader::LoadFile(const OSString &filename)
 	if(!filedata)
 		return(false);
 
-	scene=aiImportFileFromMemory(filedata,filesize,aiProcessPreset_TargetRealtime_MaxQuality|aiProcess_FlipUVs,nullptr);
+	scene=aiImportFileFromMemory(filedata,filesize,aiProcessPreset_TargetRealtime_Quality|aiProcess_FlipUVs,nullptr);
 	
 	delete[] filedata;
 

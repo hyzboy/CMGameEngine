@@ -13,7 +13,6 @@ namespace hgl
 
 	/**
 	* (线程外部调用)执行当前线程
-	* @param tplevel 线程优先级
 	* @return 是否创建线程成功
 	*/
 	bool Thread::Start()
@@ -29,7 +28,7 @@ namespace hgl
 		pthread_attr_init(&attr);
 
 		if(IsExitDelete())
-			pthread_attr_setdetachstate(&attr,PTHREAD_CREATE_DETACHED);
+			pthread_attr_setdetachstate(&attr,PTHREAD_CREATE_DETACHED);              //注意这种方式初始化的，pthread_join会返回22无效
 		else
 			pthread_attr_setdetachstate(&attr,PTHREAD_CREATE_JOINABLE);
 
@@ -115,11 +114,13 @@ namespace hgl
 	//	apr_thread_yield();
 	//}
 
+	void GetWaitTime(struct timespec &abstime,double t);
+
 	/**
 	* (线程外部调用)等待当前线程
-	* @param time 等待的时间，如果为0表示等到线程运行结束为止。默认为0
+	* @param time_out 等待的时间，如果为0表示等到线程运行结束为止。默认为0
 	*/
-	void Thread::Wait(double time)
+	void Thread::Wait(double time_out)
 	{
 		if(!threadptr)
 		{
@@ -128,12 +129,44 @@ namespace hgl
 		}
 
 		int retval;
+        void *res;
 
-        retval=pthread_kill(threadptr,0);
+        retval=pthread_kill(threadptr,0);           //这个函数不是用来杀线程的哦，而是用来向线程发送一个关闭的信号。而发送0代表获取这个线程是否还活着
 
-        if(retval==ESRCH
-         ||retval==EINVAL)return;
+        if(retval!=ESRCH                            //线程不存在
+         &&retval!=EINVAL)                          //信号不合法
+        {
+#ifdef _DEBUG
+            char str[(sizeof(void *)+1)<<1];
+            UTF8String thread_addr;
 
-		pthread_join(threadptr,(void **)&retval);
+            htos(str,(sizeof(void *)+1)<<1,(uint64)threadptr);
+
+            thread_addr=str;
+
+            LOG_INFO(U8_TEXT("pthread_kill [")+thread_addr+U8_TEXT("] retval:")+UTF8String(retval));
+#endif//_DEBUG
+
+            if(time_out>0)
+            {
+                struct timespec ts;
+
+                GetWaitTime(ts,time_out);
+
+                retval=pthread_timedjoin_np(threadptr,&res,&ts);
+            }
+            else
+            {
+                retval=pthread_join(threadptr,&res);
+            }
+
+            //如果retval返回22，请检查线程初始化时，是否为PTHREAD_CREATE_DETACHED
+
+#ifdef _DEBUG
+            LOG_INFO(U8_TEXT("pthread_timedjoin_np/pthread_join [")+thread_addr+U8_TEXT("] retval:")+UTF8String(retval));
+#endif//_DEBUG
+        }
+
+        threadptr=0;
 	}
 }//namespace hgl

@@ -18,10 +18,9 @@ namespace hgl
 
 	namespace network																					///网络相关处理模块名字空间
 	{
-        #define HGL_IPV4_STRING_MAX         21          ///<IPv4字符串最大长度(255.255.255.255:65535)
-
 		#define HGL_NETWORK_MAX_PORT		65535		///<最大端口号
-		#define HGL_NETWORK_IPv4_STR_MIN	7			///<IPv4字符串最小字符数
+		#define HGL_NETWORK_IPv4_STR_MIN	7			///<IPv4字符串最小字符数(0.0.0.0)
+        #define HGL_NETWORK_IPV4_STR_MAX    21          ///<IPv4字符串最大长度(255.255.255.255:65535)
 
 		enum SocketError
 		{
@@ -51,7 +50,7 @@ namespace hgl
 		*	UDP: MTU - IPHeader(20) - UDPHeader(8)
 		*	TCP: MTU - IPHeader(20) - TCPHeader(20)
 		*
-		* Normal MUT:
+		* Normal MTU:
 		*	1500 (Ethernet, DSL broadband)
 		*	1492 (PPPoE broadband)
 		*	576 (dial-up)

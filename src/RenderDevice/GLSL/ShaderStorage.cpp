@@ -1,4 +1,5 @@
 ﻿#include<hgl/graph/ShaderStorage.h>
+#include<hgl/type/Smart.h>
 
 namespace hgl
 {
@@ -43,21 +44,21 @@ namespace hgl
         Shader *CreateShader(const RenderState *state)
 #endif//_DEBUG
         {
-            char *vs,*fs,*gs;
+			SharedArray<char> vs,fs,gs;
 
 #ifdef _DEBUG
             if(save_filename)
             {
                 vs=MakeVertexShader(state,save_filename);
                 fs=MakeFragmentShader(state,save_filename);
-//				gs=MakeGeometryShader(state,save_filename);
+				gs=MakeGeometryShader(state,save_filename);
             }
             else
 #endif//_DEBUG
 			{
                 vs=MakeVertexShader(state);
                 fs=MakeFragmentShader(state);
-//				gs=MakeGeometryShader(state);
+				gs=MakeGeometryShader(state);
             }
 
             Shader *shader=nullptr;
@@ -66,19 +67,22 @@ namespace hgl
             {
                 shader=new Shader;
 
-                if(!shader->AddVertexShader(vs)
-                 ||!shader->AddFragmentShader(fs)
-                 ||!shader->Build())
-                {
-                    delete shader;
-                    shader=nullptr;
-                }
+                if(shader->AddVertexShader(vs))
+					if(shader->AddFragmentShader(fs))
+					{
+						if((!gs)									//没有gs
+				 		 ||(gs&&shader->AddGeometryShader(gs)))		//有gs并且编译成功
+						{
+							if(shader->Build())
+								return shader;
+						}
+					}
             }
 
-            delete[] vs;        //delete[] nullptr不是个错误，所以不用检测
-            delete[] fs;
+			if(shader)
+				delete shader;
 
-            return(shader);
+            return(nullptr);
         }
 
         Shader *ShaderStorage::Create(const RenderState &state)

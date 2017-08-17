@@ -13,7 +13,7 @@ namespace hgl
 
 	public:
 
-		Semaphore(int=0);
+		Semaphore(int=1024);
 		virtual ~Semaphore();
 
 		virtual bool Release(int n=1);                                                              ///<释放信号

@@ -1,13 +1,29 @@
-﻿add_subdirectory(algorithm)
-add_subdirectory(2d)
-add_subdirectory(3d)
-add_subdirectory(audio)
-#add_subdirectory(multithread)
-add_subdirectory(network)
+﻿IF(BUILD_ALGORITHM)
+    add_subdirectory(algorithm)
+ENDIF()
+
+IF(BUILD_OPENGL_LIB)
+    add_subdirectory(2d)
+    add_subdirectory(3d)
+ENDIF()
+
+IF(BUILD_OPENAL_LIB)
+    add_subdirectory(audio)
+ENDIF()
+
+add_subdirectory(multithread)
+
+IF(BUILD_NETWORK_LIB)
+    add_subdirectory(network)
+ENDIF()
+
 add_subdirectory(datatype)
-add_subdirectory(database)
 add_subdirectory(time)
 
-IF(UNIX)
-add_subdirectory(db/redis)
+IF(BUILD_DATABASE)
+    add_subdirectory(database)
+    
+    IF(UNIX)
+        add_subdirectory(db/redis)
+    ENDIF()
 ENDIF()

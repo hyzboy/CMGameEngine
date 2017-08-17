@@ -8,7 +8,7 @@ namespace filesystem
     bool FileRename(const std::string &,const std::string &);                                       ///<文件改名
     bool FileConfirm(const std::string &);                                                          ///<文件确认是否存在
 
-    void *LoadFileToMemory(const std::string &,unsigned int *);                                     ///<加载一个文件到内存
+    char *LoadFileToMemory(const std::string &,unsigned int *);                                     ///<加载一个文件到内存
     unsigned int SaveMemoryToFile(const std::string &,const void *,unsigned int);                   ///<保存一块内存成文件
 
     bool IsDirectory(const std::string &);

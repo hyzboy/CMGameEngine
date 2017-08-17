@@ -84,7 +84,6 @@ public:
             girl_mtl=new Material;
 
             girl_mtl->SetTexture(mtcDiffuse,girl_tex);
-            girl_mtl->SetHSVClampColor(clamp_color);
             girl_mtl->SetDepthTest(false);
 
             back_mtl=new Material;

@@ -11,26 +11,27 @@ using os_char			=char;
 #define U8_TEXT(str)	u8##str
 #define U16_TEXT(str)	u##str
 
-#define HGL_OS_NAME				OS_TEXT("Linux")
-#define HGL_LIB_OS				"Linux"											//库操作系统前缀
+#define HGL_OS_NAME				    OS_TEXT("Linux")
+#define HGL_LIB_OS				    "Linux"										//库操作系统前缀
 //--------------------------------------------------------------------------------------------------
-#define HGL_PLUGIN_FRONTNAME	"libCMP."										//插件文件名前缀
-#define HGL_PLUGIN_EXTNAME		".so"											//插件文件扩展名
-#define HGL_PLUGIN_FUNC 		extern "C"										//插件函数定义
+#define HGL_PLUGIN_FRONTNAME	    "libCMP."									//插件文件名前缀
+#define HGL_PLUGIN_EXTNAME		    ".so"										//插件文件扩展名
+#define HGL_PLUGIN_FUNC 	        extern "C"									//插件函数定义
 
-#define HGL_DIRECTORY_SEPARATOR '/'												//目录分隔符
+#define HGL_DIRECTORY_SEPARATOR     '/'								            //目录分隔符
+#define HGL_DIRECTORY_SEPARATOR_STR OS_TEXT("/")								//目录分隔符
 
-#define HGL_LINE_END			"\n"											//换行符
-#define HGL_LINE_END_SIZE		1												//换行符长度
+#define HGL_LINE_END			    "\n"										//换行符
+#define HGL_LINE_END_SIZE		    1											//换行符长度
 
-#define HGL_MEM_ALIGN			16												//内存对齐字节数
+#define HGL_MEM_ALIGN			    16											//内存对齐字节数
 
-#define HGL_MAX_PATH			_POSIX_PATH_MAX
+#define HGL_MAX_PATH			    _POSIX_PATH_MAX
 
-#define HGL_FMT_I64				"%lld"
-#define HGL_FMT_U64				"%llu"
-#define HGL_FMT_DOUBLE			"%lf"
-#define HGL_FMT_LONG_DOUBLE		"%le"
+#define HGL_FMT_I64				    "%lld"
+#define HGL_FMT_U64				    "%llu"
+#define HGL_FMT_DOUBLE			    "%lf"
+#define HGL_FMT_LONG_DOUBLE		    "%le"
 //--------------------------------------------------------------------------------------------------
 #include<malloc.h>
 #include<pthread.h>

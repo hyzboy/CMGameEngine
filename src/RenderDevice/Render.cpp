@@ -1,5 +1,5 @@
-﻿#include<glew/include/GL/glew.h>
-#include"GLSL/GLSL.h"
+﻿#include<hgl/graph/GL/glew.h>
+#include"ShaderDefine.h"
 #include<hgl/graph/Render.h>
 #include<hgl/graph/Texture.h>
 #include<hgl/graph/Material.h>
@@ -45,7 +45,17 @@ namespace hgl
         void ClearDefaultMaterial();
         void InitGlobalShaderStorage();
         void ClearGlobalShaderStorage();
-        bool InitUBO();
+
+        namespace ubo
+        {
+            bool Init();
+        }//namespace ubo
+
+        namespace ssbo
+        {
+            bool Init();
+        }//namespace ssbo
+
 //         void InitFontStorage();
 //         void ClearFontStorage();
 
@@ -69,7 +79,9 @@ namespace hgl
 
             InitVertexBuffer();
 
-            InitUBO();
+            ubo::Init();
+            ssbo::Init();
+
             InitDefaultMaterial();
             InitGlobalShaderStorage();
             InitPrimaryRenderBuffer();
@@ -195,19 +207,13 @@ namespace hgl
             //颜色
             if(state->color_material)
             {
-                glsl->Shader::SetUniform4fv(HGL_MATERIAL_COLOR,mat->GetColor());
+                glsl->SetUniform4fv(HGL_MATERIAL_COLOR,mat->GetColor());
             }
 
             //AlphaTest
             if(state->alpha_test)
             {
-                glsl->Shader::SetUniform1f(HGL_FS_ALPHA_TEST,mat->GetAlphaTest());
-            }
-
-            //HSV Clamp Color
-            if(state->hsv_clamp_color)
-            {
-                glsl->Shader::SetUniform4fv(HGL_FS_HSV_CLAMP_COLOR,mat->GetHSVClampColor());
+                glsl->SetUniform1f(HGL_FS_ALPHA_TEST,mat->GetAlphaTest());
             }
 
             //灯光
@@ -222,9 +228,9 @@ namespace hgl
         {
             Material *mat=able->GetMaterial();
 
-            int tex_count=0;
+            int tex_binding_point=0;						//纹理绑定点，必须按顺序递增排列，与纹理id无关
 
-            if(mat->GetTextureNumber())                    //如果有贴图
+            if(mat->GetTextureNumber())						//如果有贴图
             {
                 MATERIAL_TEXTURE_CHANNEL_NAME mtc_name;
 
@@ -232,19 +238,19 @@ namespace hgl
                 {
                     Texture *tex=mat->GetTexture(i);                                    //取指定通道贴图
 
-                    if(!tex)continue;                                                    //贴图不存在
+                    if(!tex)continue;                                                   //贴图不存在
 
-                    BindTexture(tex_count,tex->GetType(),tex->GetID());                    //绑定贴图
+                    BindTexture(tex_binding_point,tex->GetType(),tex->GetID());         //绑定贴图(在这里我们使用纹理绑定点当做texture active编号)
 
                     GetMaterialTextureName(mtc_name,i);
 
-                    if(!glsl->Shader::SetUniform1i(mtc_name,tex_count))    //设定贴图对应索引
+                    if(!glsl->SetUniform1i(mtc_name,tex_binding_point))			//设定贴图对应索引
                     {
-                        LOG_PROBLEM(u8"attach Shader sampler \""+UTF8String(mtc_name)+u8"\" to texture "+UTF8String(tex_count)+u8" error!");
+                        LOG_PROBLEM(u8"attach Shader sampler \""+UTF8String(mtc_name)+u8"\" to texture "+UTF8String(tex_binding_point)+u8" error!");
                         return(false);
                     }
 
-                    tex_count++;
+                    tex_binding_point++;
                 }
             }
 
@@ -263,14 +269,14 @@ namespace hgl
             {
                 const Matrix4f mvp=(*projection)*(*modelview);
 
-                if(!glsl->Shader::SetUniformMatrix4fv(HGL_VS_MVP_MATRIX,mvp))
+                if(!glsl->SetUniformMatrix4fv(HGL_VS_MVP_MATRIX,mvp))
                     return(false);
 
                 if ((state->vertex_normal || state->normal_map) && state->light_mode>HGL_NONE_LIGHT)    //需要法线
                 {
                     Matrix3f normal_matrix = modelview->Float3x3Part();             //法线矩阵为3x3
 
-                    if (!glsl->Shader::SetUniformMatrix3fv(HGL_VS_NORMAL_MATRIX,normal_matrix))
+                    if (!glsl->SetUniformMatrix3fv(HGL_VS_NORMAL_MATRIX,normal_matrix))
                         return(false);
 
                     //调试使用
@@ -278,13 +284,13 @@ namespace hgl
                     {
                         static Vector3f sun_light_direction(rand(),rand(),rand());
 
-                        glsl->Shader::SetUniform3fv(HGL_SUN_LIGHT_DIRECTION, sun_light_direction.Normalized());
+                        glsl->SetUniform3fv(HGL_SUN_LIGHT_DIRECTION, sun_light_direction.Normalized());
                     }
                 }
             }
             else    //没modelview时将projection传为mvp
             {
-                if(!glsl->Shader::SetUniformMatrix4fv(HGL_VS_MVP_MATRIX,*projection))
+                if(!glsl->SetUniformMatrix4fv(HGL_VS_MVP_MATRIX,*projection))
                     return(false);
             }
 
@@ -384,6 +390,9 @@ namespace hgl
 
             //绘制
             {
+				if(draw_prim==HGL_PRIM_RECTANGLE)
+					draw_prim=GL_POINTS;
+
                 if(vb_index)
                     glDrawElements(draw_prim,draw_count,vb_index->GetDataType(),(const void *)(draw_start*vb_index->GetDataBytes()));
                 else

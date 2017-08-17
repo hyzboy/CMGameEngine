@@ -6,23 +6,7 @@
 //注：GLM/CML(OpenGLMode)是列矩阵,计算坐标matrix*pos
 //   而MGL是行矩阵，需要反过来pos*matrix
 
-#ifdef MATH_USE_MGL
-    #include<hgl/algorithm/MathMGL.h>        // Game Math and Geometry Library
-
-    #define HGL_MATRIX_RIGHT        //矩阵使用右乘
-#endif//MATH_USE_MGL
-
-#ifdef MATH_USE_CML
-    #include<hgl/algorithm/MathCML.h>        // Configurable Math Library
-
-    #define HGL_MATRIX_LEFT        //矩阵使用左乘
-#endif//MATH_USE_CML
-
-#ifdef MATH_USE_GLM
-    #include<hgl/algorithm/MathGLM.h>        // OpenGL mathematics
-
-    #define HGL_MATRIX_LEFT        //矩阵使用左乘
-#endif//MATH_USE_GLM
+#include<hgl/algorithm/MathMGL.h>        // Game Math and Geometry Library
 
 namespace hgl
 {

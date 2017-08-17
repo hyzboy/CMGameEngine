@@ -1,5 +1,6 @@
 ﻿#ifndef HGL_X11_WINDOW_INCLUDE
 #define HGL_X11_WINDOW_INCLUDE
+
 #include<hgl/platform/Window.h>
 #include<X11/X.h>
 #include<X11/Xutil.h>

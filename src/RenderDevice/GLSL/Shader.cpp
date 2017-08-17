@@ -50,12 +50,12 @@ namespace hgl
         }
 
         /**
-        * 取得一个变量的地址块索引
-        * @param name 变量名称
-        * @return 地址块索引
+        * 取得一个Shader只读数据区索引
+        * @param name 数据区名称
+        * @return 数据区索引
         * @return -1 出错
         */
-        int Shader::GetUniformBlockIndex(const char *name)                                                    ///<取得一个变量的地址
+        int Shader::GetUniformBlockIndex(const char *name)
         {
             if(!name||!(*name))return(-1);
 
@@ -71,6 +71,27 @@ namespace hgl
             return result;
         }
 
+        /**
+        * 取得一个Shader数据存储区索引
+        * @param name 数据存储区名称
+        * @return 数据存储区索引
+        * @return -1 出错
+        */
+        int Shader::GetShaderStorageIndex(const char *name)
+        {
+            if(!name||!(*name))return(-1);
+
+            int result;
+
+            if(!ssbo_index.Get(name,result))
+            {
+                result=_GetShaderStorageIndex(name);
+
+                ssbo_index.Add(name,result);
+            }
+
+            return result;
+        }
 
         #define HGL_GLSL_SetUniform1234(func,type)    bool Shader::SetUniform1##func(const char *uniform_name,type v0)    \
                                                     {    \
@@ -161,6 +182,12 @@ namespace hgl
 
         #undef HGL_GLSL_SetUniformMatrixPointer
 
+        /**
+        * 取得一个Shader只读数据区的访问对象
+        * @param name 对象名称
+        * @param level 访问级别
+        * @return 对象指针
+        */
         UBO *Shader::GetUniformBlock(const char *name,uint level)
         {
             if(!name||!(*name))
@@ -174,19 +201,53 @@ namespace hgl
             if(ubo)
                 return ubo;
 
-            const int block_index=GetUniformBlockIndex(name);
+            const int index=GetUniformBlockIndex(name);
 
-            if(block_index<0)
+            if(index<0)
             {
                 LOG_ERROR(U8_TEXT("UBO name error:")+UTF8String(name));
                 return(nullptr);
             }
 
-            ubo=new UBO(name,program,block_index,level);
+            ubo=new UBO(name,program,index,level);
 
             uniform_block_object.Add(name,ubo);
 
             return ubo;
+        }
+
+        /**
+        * 取得一个Shader数据存储区的访问对象
+        * @param name 对象名称
+        * @param level 访问级别
+        * @return 对象指针
+        */
+        SSBO *Shader::GetShaderStorage(const char *name,uint level)
+        {
+            if(!name||!(*name))
+            {
+                LOG_ERROR(U8_TEXT("SSBO name error:"));
+                return(nullptr);
+            }
+
+            SSBO *ssbo=ssbo_object[name];
+
+            if(ssbo)
+                return ssbo;
+
+            const int index=GetShaderStorageIndex(name);
+
+            if(index<0)
+            {
+                LOG_ERROR(U8_TEXT("SSBO name error:")+UTF8String(name));
+                return(nullptr);
+            }
+
+            ssbo=new SSBO(name,program,index,level);
+
+            ssbo_object.Add(name,ssbo);
+
+            return ssbo;
         }
     }//namespace graph
 }//namespace hgl

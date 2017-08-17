@@ -54,8 +54,8 @@ namespace hgl
 
         OSString out_str=OS_TEXT("Don't find <")+sub+OS_TEXT("> folder from : \"")+work+OS_TEXT("\"");
 
-        if(work!=start)    out_str+=(OS_TEXT(",\"")+start    +OS_TEXT("\""));
-        if(work!=cm)    out_str+=(OS_TEXT(",\"")+cm        +OS_TEXT("\""));
+        if(work!=start) out_str+=(OS_TEXT(",\"")+start  +OS_TEXT("\""));
+        if(work!=cm)    out_str+=(OS_TEXT(",\"")+cm     +OS_TEXT("\""));
 
         LOG_INFO(out_str);
 
@@ -81,7 +81,7 @@ namespace hgl
         cur_path.ClipLeft(end_index);
 
         CheckCMGDKPath(cp.gui,      cp.start,cur_path,cp.cm,OS_TEXT("gui"));
-        CheckCMGDKPath(cp.plug_ins, cp.start,cur_path,cp.cm,OS_TEXT("plug-in") + OSString(HGL_DIRECTORY_SEPARATOR) + HGL_PLATFORM_STRING);        //HGL_PLATFORM_STRING在CMAKE中定义
+        CheckCMGDKPath(cp.plug_ins, cp.start,cur_path,cp.cm,OS_TEXT("plug-in") + OSString(HGL_DIRECTORY_SEPARATOR_STR) + HGL_PLATFORM_STRING);        //HGL_PLATFORM_STRING在CMAKE中定义
 
         GetOSPath(cp);
 

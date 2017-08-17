@@ -1,10 +1,11 @@
-﻿#ifndef HGL_OPENGL_CORE_GLSL_INCLUDE
-#define HGL_OPENGL_CORE_GLSL_INCLUDE
+﻿#ifndef HGL_SHADER_DEFINE_INCLUDE
+#define HGL_SHADER_DEFINE_INCLUDE
 
 namespace hgl
 {
 	namespace graph
 	{
+		//这两个变量未来改用get出来的值
 		#define HGL_MAX_TEX_COORD		32
 		#define HGL_MAX_VERTEX_BUFFER	32
 
@@ -32,9 +33,6 @@ namespace hgl
 
 		#define HGL_FS_ALPHA_TEST				"AlphaTest"
 
-        #define HGL_FS_HSV_COLOR                "HSVColor"
-        #define HGL_FS_HSV_CLAMP_COLOR          "HSVClampColor"
-
 		#define HGL_FS_TEXCOORD					"FragmentTexCoord_"
 
         //仅在fs中使用的
@@ -47,4 +45,4 @@ namespace hgl
         #define HGL_SUN_LIGHT_SPECULAR          "SunLightSpecular"      //太阳光高光
 	}//namespace graph
 }//namespace hgl
-#endif//HGL_OPENGL_CORE_GLSL_INCLUDE
+#endif//HGL_SHADER_DEFINE_INCLUDE

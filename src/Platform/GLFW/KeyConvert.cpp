@@ -53,11 +53,11 @@ namespace hgl
 		KeyConvert[GLFW_KEY_RIGHT_SUPER		]=kbRightOS;
         KeyConvert[GLFW_KEY_MENU            ]=kbRightMenu;
 		KeyConvert[GLFW_KEY_RIGHT_CONTROL   ]=kbRightCtrl;
-        
+
         KeyConvert[GLFW_KEY_PRINT_SCREEN    ]=kbPrintScreen;
 		KeyConvert[GLFW_KEY_SCROLL_LOCK     ]=kbScrollLock;
 		KeyConvert[GLFW_KEY_PAUSE           ]=kbPause;
-        
+
 		KeyConvert[GLFW_KEY_NUM_LOCK        ]=kbNumLock;
 
         for(i=0;i<=9;i++)KeyConvert[GLFW_KEY_KP_0+i]=(KeyboardButton)(kbNum0+i);
@@ -89,9 +89,9 @@ namespace hgl
 #ifdef _DEBUG
 		if(KeyConvert[key]==0)
 		{
-			LOG_INFO(OSString(L"Unknow Key: " )+OSString(key));
+			LOG_INFO(OS_TEXT("Unknow Key: " )+OSString(key));
 		}
-#endif _DEBUG
+#endif//_DEBUG
 
 		return KeyConvert[key];
 	}

@@ -1,7 +1,7 @@
 ﻿#ifndef HGL_SHADER_STRING_LIST_INCLUDE
 #define HGL_SHADER_STRING_LIST_INCLUDE
 
-#include"../GLSL/GLSL.h"
+#include"../ShaderDefine.h"
 #include<hgl/type/BaseString.h>
 namespace hgl
 {
@@ -94,8 +94,6 @@ namespace hgl
 				void add_texture_smooth();
 
                 void add_rgb2lum();
-                void add_rgb2hsv();
-                void add_hsv_clamp();
 
 				void add_normal_3to2();
 				void add_normal_2to3();

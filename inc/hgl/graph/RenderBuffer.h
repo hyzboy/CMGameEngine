@@ -2,7 +2,7 @@
 #define HGL_GRAPH_RENDER_BUFFER_INCLUDE
 
 #include<hgl/type/Color3f.h>
-#include<glew/include/GL/glew.h>
+#include<hgl/graph/GL/glew.h>
 namespace hgl
 {
 	namespace graph
