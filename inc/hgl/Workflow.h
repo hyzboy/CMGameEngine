@@ -221,15 +221,6 @@ namespace hgl
 				return(true);
 			}
 
-			virtual void Wait()
-            {
-                int count=wt_list.GetCount();
-
-                WT **wt=wt_list.GetData();
-
-
-            }
-
 			virtual void Close()
 			{
 				int count=wt_list.GetCount();

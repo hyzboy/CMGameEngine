@@ -27,10 +27,10 @@ namespace hgl
 
 		pthread_attr_init(&attr);
 
-//		if(IsExitDelete())
-			pthread_attr_setdetachstate(&attr,PTHREAD_CREATE_DETACHED);
-// 		else
-// 			pthread_attr_setdetachstate(&attr,PTHREAD_CREATE_JOINABLE);
+		if(IsExitDelete())
+			pthread_attr_setdetachstate(&attr,PTHREAD_CREATE_DETACHED);              //注意这种方式初始化的，pthread_join会返回22无效
+		else
+			pthread_attr_setdetachstate(&attr,PTHREAD_CREATE_JOINABLE);
 
 		if(pthread_create(&threadptr,&attr,ThreadFunc,this))		//返回0表示正常
 		{
@@ -136,6 +136,17 @@ namespace hgl
         if(retval!=ESRCH                            //线程不存在
          &&retval!=EINVAL)                          //信号不合法
         {
+#ifdef _DEBUG
+            char str[(sizeof(void *)+1)<<1];
+            UTF8String thread_addr;
+
+            htos(str,(sizeof(void *)+1)<<1,(uint64)threadptr);
+
+            thread_addr=str;
+
+            LOG_INFO(U8_TEXT("pthread_kill [")+thread_addr+U8_TEXT("] retval:")+UTF8String(retval));
+#endif//_DEBUG
+
             if(time_out>0)
             {
                 struct timespec ts;
@@ -148,6 +159,12 @@ namespace hgl
             {
                 retval=pthread_join(threadptr,&res);
             }
+
+            //如果retval返回22，请检查线程初始化时，是否为PTHREAD_CREATE_DETACHED
+
+#ifdef _DEBUG
+            LOG_INFO(U8_TEXT("pthread_timedjoin_np/pthread_join [")+thread_addr+U8_TEXT("] retval:")+UTF8String(retval));
+#endif//_DEBUG
         }
 
         threadptr=0;

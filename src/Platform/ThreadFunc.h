@@ -8,39 +8,37 @@
 // 	htos(str,(sizeof(void *)+1)<<1,(uint64)ptr);
 //
 // 	thread_addr=str;
-
-//	LOG_INFO(OS_TEXT("Thread[")+thread_addr+OS_TEXT("] Init"));
+//
+// 	LOG_INFO(OS_TEXT("Thread[")+thread_addr+OS_TEXT("] Init"));
 
 	if(!tc->ProcStartThread())
     {
-#if HGL_OS == HGL_OS_Windows
-		return(0);
-#else
+#if HGL_OS != HGL_OS_Windows
         pthread_exit(nullptr);
 #endif//
+		return(0);
     }
 
-//	LOG_INFO(OS_TEXT("Thread[")+thread_addr+OS_TEXT("] Start"));
+// 	LOG_INFO(OS_TEXT("Thread[")+thread_addr+OS_TEXT("] Start"));
 
 	while(tc->Execute());
 
-//	LOG_INFO(OS_TEXT("Thread[")+thread_addr+OS_TEXT("] End"));
+// 	LOG_INFO(OS_TEXT("Thread[")+thread_addr+OS_TEXT("] End"));
 
 	tc->ProcEndThread();
 
-//	LOG_INFO(OS_TEXT("Thread[")+thread_addr+OS_TEXT("] Exit"));
+// 	LOG_INFO(OS_TEXT("Thread[")+thread_addr+OS_TEXT("] Exit"));
 
 	if(tc->IsExitDelete())
 	{
 		delete tc;
-//		LOG_INFO(OS_TEXT("Thread[")+thread_addr+OS_TEXT("] Delete"));
+// 		LOG_INFO(OS_TEXT("Thread[")+thread_addr+OS_TEXT("] Delete"));
 	}
 
-#if HGL_OS == HGL_OS_Windows
-	return(0);
-#else
+#if HGL_OS != HGL_OS_Windows
     pthread_exit(nullptr);
 #endif//
+	return(0);
 }
 
 Thread::Thread()

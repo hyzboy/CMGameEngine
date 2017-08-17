@@ -69,6 +69,10 @@ using MyWorkThreadPtr=MyWorkThread *;
 
 HGL_CONSOLE_MAIN_FUNC()
 {
+    sii.info.ProjectCode=OS_TEXT("WorkflowTest");
+
+    app.Init(&sii);
+
 	WorkGroup<MyWorkPost,MyWorkThread> group;	//工作组
 
 	MyWorkPostPtr wp[4]={   new MyWorkPost,
@@ -128,11 +132,14 @@ HGL_CONSOLE_MAIN_FUNC()
 		--strong;
 	}
 
-	for(int i=0;i<4;i++)		
+	for(int i=0;i<4;i++)
 		wp[i]->ToWork();						//发送信号给工作线程
 
-	//group.Wait();                              //等待所有线程执行完
+    LOG_INFO("group.Close() begin");
+
 	group.Close();								//关闭并等待工作线程结束
+
+    LOG_INFO("group.Close() end,write bitmap to .TGA");
 
 	graph::SaveToTGA(OS_TEXT("Workflow.TGA"),bitmap,512,512,24);
 
