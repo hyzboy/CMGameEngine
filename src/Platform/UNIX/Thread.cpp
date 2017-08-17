@@ -114,6 +114,8 @@ namespace hgl
 	//	apr_thread_yield();
 	//}
 
+	void GetWaitTime(struct timespec &abstime,double t);
+
 	/**
 	* (线程外部调用)等待当前线程
 	* @param time_out 等待的时间，如果为0表示等到线程运行结束为止。默认为0
@@ -127,12 +129,26 @@ namespace hgl
 		}
 
 		int retval;
+        void *res;
 
-        retval=pthread_kill(threadptr,0);           //这个函数不是用来杀线程的哦，而是用来向线程发送一个关闭的信号
+        retval=pthread_kill(threadptr,0);           //这个函数不是用来杀线程的哦，而是用来向线程发送一个关闭的信号。而发送0代表获取这个线程是否还活着
 
         if(retval!=ESRCH                            //线程不存在
          &&retval!=EINVAL)                          //信号不合法
-            pthread_join(threadptr,(void **)&retval);
+        {
+            if(time_out>0)
+            {
+                struct timespec ts;
+
+                GetWaitTime(ts,time_out);
+
+                retval=pthread_timedjoin_np(threadptr,&res,&ts);
+            }
+            else
+            {
+                retval=pthread_join(threadptr,&res);
+            }
+        }
 
         threadptr=0;
 	}
