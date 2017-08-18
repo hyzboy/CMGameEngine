@@ -91,9 +91,11 @@ void LoadMaterialFile(Material &mtl,MaterialData &md,const OSString &filename,Te
 	if(!dis.ReadBool(md.wireframe))return;
 	if(!dis.ReadBool(md.two_sided))return;
 
-	mtl.SetTwoSide(md.two_sided);
+	//mtl.SetTwoSide(md.two_sided);
+	mtl.SetTwoSide(true);
 
     mtl.SetLightMode(HGL_PIXEL_LIGHT);
+	mtl.SetLightMode(HGL_NONE_LIGHT);
 
 	if(!dis.ReadUint8(md.tex_count))return;
 
@@ -191,12 +193,15 @@ bool LoadMeshFile(MeshData &md,const OSString &filename,Material *mtl_list,Mater
 	if(dis.ReadFully(&mfh,sizeof(mfh))!=sizeof(mfh))
 		RETURN_FALSE;
 
+	if(mfh.texcoord_channels<=0)
+		RETURN_FALSE;
+
 	Material *mtl=&(mtl_list[mfh.material_index]);
 	MaterialData *mtd=&(md_list[mfh.material_index]);
 
-	uint8 *uv_comp;
-	float **uv_data;
-	VertexBufferBase **uv_vb;
+	uint8 *uv_comp=nullptr;
+	float **uv_data=nullptr;
+	VertexBufferBase **uv_vb=nullptr;
 
 	md.va=new VertexArray(mfh.primitive_type);
 
@@ -206,19 +211,40 @@ bool LoadMeshFile(MeshData &md,const OSString &filename,Material *mtl_list,Mater
 		md.va->SetVertex(vertex);
 	}
 
-	if(mfh.ntb!=NTB_BIT_NORMAL)
+	if(mfh.ntb)
 	{
-		VB3f *normal=new VB3f(mfh.vertices_number);
+		const uint size=mfh.vertices_number*3*sizeof(float);
 
-		dis.ReadFully(normal->Begin(),normal->GetBytes());normal->End();
+		if(mtl->GetLightMode()==HGL_NONE_LIGHT)
+		{
+			if(mfh.ntb==NTB_BIT_ALL)
+				dis.Seek(size*3,io::soCurrent);
+			else
+				dis.Seek(size,io::soCurrent);
+		}
+		else
+		{
+			VB3f *normal=new VB3f(mfh.vertices_number);
 
-		md.va->SetNormal(normal);
+			dis.ReadFully(normal->Begin(),normal->GetBytes());normal->End();
 
-		if(mfh.ntb==NTB_BIT_ALL)
-			dis.Seek(normal->GetBytes()*2,io::soCurrent);					//跳过tangent和bitangent
+			md.va->SetNormal(normal);
+
+			if(mfh.ntb==NTB_BIT_ALL)
+				dis.Seek(normal->GetBytes()*2,io::soCurrent);					//跳过tangent和bitangent
+		}
 	}
 
-	dis.Seek(mfh.vertices_number*4*mfh.color_channels,io::soCurrent);		//跳过vertex color
+	if(mfh.color_channels)
+	{
+		VB4ub *color=new VB4ub(mfh.vertices_number);
+
+		dis.ReadFully(color->Begin(),color->GetBytes());color->End();
+
+		md.va->SetColor(color,HGL_PC_RGBA);
+
+		dis.Seek(mfh.vertices_number*4*(mfh.color_channels-1),io::soCurrent);		//跳过vertex color
+	}
 
 	if(mfh.texcoord_channels)
 	{
@@ -544,7 +570,7 @@ public:
 	{
         SetClearColor(ceMozillaCharcoal);		//设置清屏颜色
 
-		sl.Load(OS_TEXT("jill_mesh"));
+		sl.Load(OS_TEXT("mp1000"));
 
 		rl=sl.GetRenderList();
 

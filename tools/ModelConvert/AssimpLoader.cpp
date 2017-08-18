@@ -223,7 +223,9 @@ void AssimpLoader::LoadMaterial()
 		aiMaterial *mtl=scene->mMaterials[m];
 
 		for(uint tt=aiTextureType_DIFFUSE;tt<aiTextureType_UNKNOWN;tt++)
+		{
 			tex_count+=mtl->GetTextureCount((aiTextureType)tt);
+		}
 
 		MaterialStruct *ms=&(material_list[m]);
 		
@@ -585,19 +587,29 @@ void AssimpLoader::LoadMesh()
 			delete[] vertex_color;
 		}
 
+		if(mesh->GetNumUVChannels())
 		{
+			int tc=0;
 			int comp_total=0;
-			const int *uv_use=mtl->uv_use.GetData();
+			int *uv_use=mtl->uv_use.GetData();
 
-			for(int c=0;c<uv_channels;c++)
+			//这里要重新审视数据来源，并不是每一个纹理通道都有数据，并且和材质对应。
+			、、材质中的uv index具体对应啥 还不是很清楚
+			
+			for(int c=0;c<AI_MAX_NUMBER_OF_TEXTURECOORDS;c++)
+			{
+				if(uv_use[c]>=mesh->GetNumUVChannels())
+					uv_use[c]=0;
+
 				comp_total+=mesh->mNumUVComponents[uv_use[c]];
+			}
 
 			comp_total*=mesh->mNumVertices;
 
-			uint64 tc_size=uv_channels+comp_total*sizeof(float);
+			uint64 tc_size=mesh->GetNumUVChannels()+comp_total*sizeof(float);
 
 			uint8 *tc_data=new uint8[tc_size];
-			float *tp=(float *)(tc_data+uv_channels);
+			float *tp=(float *)(tc_data+mesh->GetNumUVChannels());
 			for(int c=0;c<uv_channels;c++)
 			{
 				tc_data[c]=mesh->mNumUVComponents[uv_use[c]];

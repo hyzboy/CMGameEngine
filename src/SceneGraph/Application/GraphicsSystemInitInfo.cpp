@@ -22,8 +22,8 @@ namespace hgl
         {
             graphics.FPS=60;
 
-            graphics.Width=1280;
-            graphics.Height=720;
+            graphics.Width=1920;
+            graphics.Height=(graphics.Width/16.0f)*9;
 
             graphics.Bit=32;
             graphics.VSync=75;
