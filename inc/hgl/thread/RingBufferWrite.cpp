@@ -1,4 +1,5 @@
-﻿#include<hgl/thread/RingBuffer.h>
+﻿#ifndef HGL_THREAD_RING_BUFFER_WRITE_SOURCE
+#define HGL_THREAD_RING_BUFFER_WRITE_SOURCE
 #include<string.h>
 
 namespace hgl
@@ -6,7 +7,8 @@ namespace hgl
     /**
     * 安全取得可写入数据长度
     */
-    int RingBuffer::SafeGetWriteSize()
+    template<typename T>
+    int RingBuffer<T>::SafeGetWriteSize()
     {
         Lock();
 
@@ -17,7 +19,8 @@ namespace hgl
         return(result);
     }
 
-    int RingBuffer::WriteStart()
+    template<typename T>
+    int RingBuffer<T>::WriteStart()
     {
         ClampPosition();
 
@@ -31,7 +34,8 @@ namespace hgl
         return write_max;
     }
 
-    int RingBuffer::_SafeWriteStart()
+    template<typename T>
+    int RingBuffer<T>::_SafeWriteStart()
     {
         WriteStart();
 
@@ -47,7 +51,8 @@ namespace hgl
     * @return =0 没有可以写入的空间
     * @return <0 暂时不可写入
     */
-    int RingBuffer::SafeTryWriteStart()
+    template<typename T>
+    int RingBuffer<T>::SafeTryWriteStart()
     {
         if(!TryLock())
             return(-1);
@@ -59,7 +64,8 @@ namespace hgl
     * 开始写入数据,如果没有空间会立即关闭缓冲区，不必再次调用SafeWriteEnd
     * @return 可写入的数据长度
     */
-    int RingBuffer::SafeWriteStart()
+    template<typename T>
+    int RingBuffer<T>::SafeWriteStart()
     {
         Lock();
 
@@ -72,7 +78,8 @@ namespace hgl
     * @param size 要写入的数据长度
     * @return 实际写入的数据长度
     */
-    int RingBuffer::Write(const void *data,int size)
+    template<typename T>
+    int RingBuffer<T>::Write(const void *data,int size)
     {
         if(!data||size<=0)return(-1);
 
@@ -87,7 +94,8 @@ namespace hgl
     * 写入结束
     * @return 返回写入的数据长度
     */
-    int RingBuffer::WriteEnd()
+    template<typename T>
+    int RingBuffer<T>::WriteEnd()
     {
         const int result=write_count;
 
@@ -101,7 +109,8 @@ namespace hgl
     * 安全写入结束
     * @return 返回写入的数据长度
     */
-    int RingBuffer::SafeWriteEnd()
+    template<typename T>
+    int RingBuffer<T>::SafeWriteEnd()
     {
         const int result=WriteEnd();
 
@@ -117,7 +126,8 @@ namespace hgl
     * @return 实际写入的数据长度
     * @return -1 出错
     */
-    int RingBuffer::SafeWrite(const void *data,int size)
+    template<typename T>
+    int RingBuffer<T>::SafeWrite(const void *data,int size)
     {
         if(!data||size<=0)return(-1);
 
@@ -129,7 +139,8 @@ namespace hgl
         return SafeWriteEnd();
     }
 
-    int RingBuffer::_Write(const void *data,int size)
+    template<typename T>
+    int RingBuffer<T>::_Write(const void *data,int size)
     {
         if(size<=0||write_max<=0)return(0);
 
@@ -146,18 +157,18 @@ namespace hgl
 
                 if(size>temp)
                 {
-                    memcpy(buffer+temp_write,data,temp);
+                    memcpy(buffer+temp_write,data,temp*sizeof(T));
 
-                    memcpy(buffer,(char *)data+temp,size-temp);
+                    memcpy(buffer,(char *)data+temp,(size-temp)*sizeof(T));
                 }
                 else
                 {
-                    memcpy(buffer+temp_write,data,size);
+                    memcpy(buffer+temp_write,data,size*sizeof(T));
                 }
             }
             else
             {
-                memcpy(buffer+temp_write,data,size);
+                memcpy(buffer+temp_write,data,size*sizeof(T));
             }
 
             write_cur+=size;
@@ -167,3 +178,4 @@ namespace hgl
         return size;
     }
 }//namespace hgl
+#endif//HGL_THREAD_RING_BUFFER_WRITE_SOURCE

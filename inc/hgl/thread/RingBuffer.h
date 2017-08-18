@@ -9,11 +9,11 @@ namespace hgl
 	/**
 	* 多线程环形数据流,用于随时被读或写的情况以及在多线程应用中同时被读与写的情况。
 	*/
-	class RingBuffer:protected ThreadMutex																///多线程环形数据流
+	template<typename T> class RingBuffer:protected ThreadMutex																///多线程环形数据流
 	{
 	protected:
 
-		char *buffer;
+		T *buffer;
 		int buffer_size;
 
 		int read_pos,write_pos;
@@ -35,8 +35,8 @@ namespace hgl
 		int _SafeWriteStart();
 		int _SafeReadStart(bool);
 
-		int _Write(const void *,int);
-		int _Read(void *,int,bool);
+		int _Write(const T *,int);
+		int _Read(T *,int,bool);
 
 	public:
 
@@ -60,14 +60,14 @@ namespace hgl
 		int SafeWriteEnd();																			///<安全结束写入
 
 		int SafeGetWriteSize();																		///<安全取得可写入数据长度
-		int SafeWrite(const void *,int);															///<安全写入，用于简单的一次性写入
+		int SafeWrite(const T *,int);															    ///<安全写入，用于简单的一次性写入
 
 	public:	//读处理函数
 
 		int ReadStart(bool=true);																	///<开始读取
 		int GetReadSize()const{return read_max;}													///<取得可读取数据长度
-		int Read(void *,int,bool=true);																///<从流中读取数据
-		int Peek(void *ptr,int size){return Read(ptr,size,false);}									///<从流中预读数据
+		int Read(T *,int,bool=true);																///<从流中读取数据
+		int Peek(T *ptr,int size){return Read(ptr,size,false);}									    ///<从流中预读数据
 		int Skip(int size){return Read(0,size,true);}												///<跳过流中的指定长度数据
 		int ReadEnd();																				///<结束写入
 
@@ -77,21 +77,21 @@ namespace hgl
 
 		int SafeGetReadSize();																		///<安全取得可读取数据长度
 		bool SafeTryGetReadSize(int &);																///<安全尝试取得可读取数据长度
-		int SafeRead(void *,int,bool=true);															///<安全读取，用于简单的一次性读取
-		int SafePeek(void *ptr,int size){return SafeRead(ptr,size,false);}							///<安全预读数据
+		int SafeRead(T *,int,bool=true);															///<安全读取，用于简单的一次性读取
+		int SafePeek(T *ptr,int size){return SafeRead(ptr,size,false);}							    ///<安全预读数据
 	};//class RingBuffer
 
 	namespace io
 	{
 		class RingInputStream:public InputStream
 		{
-			RingBuffer *rb;
+			RingBuffer<char> *rb;
 
 		public:
 
-			RingInputStream		(RingBuffer *_rb){rb=_rb;}
+			RingInputStream		(RingBuffer<char> *_rb){rb=_rb;}
 
-			RingBuffer *GetRingBuffer(){return rb;}
+			RingBuffer<char> *GetRingBuffer(){return rb;}
 
 			int		Start		(){return rb?rb->ReadStart():-1;}
 			int		End			(){return rb?rb->ReadEnd():-1;}
@@ -120,13 +120,13 @@ namespace hgl
 
 		class RingOutputStream:public OutputStream
 		{
-			RingBuffer *rb;
+			RingBuffer<char> *rb;
 
 		public:
 
-			RingOutputStream	(RingBuffer *_rb){rb=_rb;}
+			RingOutputStream	(RingBuffer<char> *_rb){rb=_rb;}
 
-			RingBuffer *GetRingBuffer(){return rb;}
+			RingBuffer<char> *GetRingBuffer(){return rb;}
 
 			int		Start		(){return rb?rb->WriteStart():-1;}
 			int		End			(){return rb?rb->WriteEnd():-1;}
@@ -153,12 +153,12 @@ namespace hgl
 
 	class RingBufferRead
 	{
-		RingBuffer *rb;
+		RingBuffer<char> *rb;
 		int size;
 
 	public:
 
-		RingBufferRead(RingBuffer *_rb)
+		RingBufferRead(RingBuffer<char> *_rb)
 		{
 			rb=_rb;
 
@@ -194,12 +194,12 @@ namespace hgl
 
 	class RingBufferSafeRead
 	{
-		RingBuffer *rb;
+		RingBuffer<char> *rb;
 		int size;
 
 	public:
 
-		RingBufferSafeRead(RingBuffer *_rb)
+		RingBufferSafeRead(RingBuffer<char> *_rb)
 		{
 			rb=_rb;
 			size=-1;
@@ -246,12 +246,12 @@ namespace hgl
 
 	class RingBufferWrite
 	{
-		RingBuffer *rb;
+		RingBuffer<char> *rb;
 		int size;
 
 	public:
 
-		RingBufferWrite(RingBuffer *_rb)
+		RingBufferWrite(RingBuffer<char> *_rb)
 		{
 			rb=_rb;
 
@@ -287,12 +287,12 @@ namespace hgl
 
 	class RingBufferSafeWrite
 	{
-		RingBuffer *rb;
+		RingBuffer<char> *rb;
 		int size;
 
 	public:
 
-		RingBufferSafeWrite(RingBuffer *_rb)
+		RingBufferSafeWrite(RingBuffer<char> *_rb)
 		{
 			rb=_rb;
 
@@ -335,4 +335,7 @@ namespace hgl
 		}
 	};//class RingBufferSafeWrite
 }//namespace hgl
+#include<hgl/thread/RingBuffer.cpp>
+#include<hgl/thread/RingBufferRead.cpp>
+#include<hgl/thread/RingBufferWrite.cpp>
 #endif//HGL_THREAD_RING_BUFFER_INCLUDE

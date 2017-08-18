@@ -1,4 +1,5 @@
-﻿#include<hgl/thread/RingBuffer.h>
+﻿#ifndef HGL_THREAD_RING_BUFFER_READ_SOURCE
+#define HGL_THREAD_RING_BUFFER_READ_SOURCE
 #include<string.h>
 
 namespace hgl
@@ -6,7 +7,8 @@ namespace hgl
     /**
     * 安全取得可读取数据长度
     */
-    int RingBuffer::SafeGetReadSize()
+    template<typename T>
+    int RingBuffer<T>::SafeGetReadSize()
     {
         Lock();
 
@@ -20,7 +22,8 @@ namespace hgl
     /**
      * 安全尝试取得可读取数据长度
      */
-    bool RingBuffer::SafeTryGetReadSize(int &result)
+    template<typename T>
+    bool RingBuffer<T>::SafeTryGetReadSize(int &result)
     {
         if(!TryLock())
             return(false);
@@ -32,7 +35,8 @@ namespace hgl
         return(true);
     }
 
-    int RingBuffer::ReadStart(bool peek)
+    template<typename T>
+    int RingBuffer<T>::ReadStart(bool peek)
     {
         ClampPosition();
 
@@ -47,7 +51,8 @@ namespace hgl
         return(read_max);
     }
 
-    int RingBuffer::_SafeReadStart(bool peek)
+    template<typename T>
+    int RingBuffer<T>::_SafeReadStart(bool peek)
     {
         ReadStart(peek);
 
@@ -64,7 +69,8 @@ namespace hgl
     * @return =0 没有可供读取的数据
     * @return <0 暂时不能读取
     */
-    int RingBuffer::SafeTryReadStart(bool peek)
+    template<typename T>
+    int RingBuffer<T>::SafeTryReadStart(bool peek)
     {
         if(!TryLock())
             return(-1);
@@ -77,7 +83,8 @@ namespace hgl
     * @param peek 是否真的取出数据
     * @return 可供读取的数据数量
     */
-    int RingBuffer::SafeReadStart(bool peek)
+    template<typename T>
+    int RingBuffer<T>::SafeReadStart(bool peek)
     {
         Lock();
 
@@ -91,7 +98,8 @@ namespace hgl
     * @param peek 是否后移访问指针(默认为真，仅针对当前这一次)
     * @return 实际可访问的数据长度
     */
-    int RingBuffer::Read(void *data,int size,bool peek)
+    template<typename T>
+    int RingBuffer<T>::Read(void *data,int size,bool peek)
     {
         if(size<=0)return(-1);
 
@@ -107,7 +115,8 @@ namespace hgl
     * 读取结束
     * @return 返回读取的数据长度
     */
-    int RingBuffer::ReadEnd()
+    template<typename T>
+    int RingBuffer<T>::ReadEnd()
     {
         const int result=read_count;
 
@@ -121,7 +130,8 @@ namespace hgl
     * 安全读取结束
     * @return 返回读取的数据长度
     */
-    int RingBuffer::SafeReadEnd()
+    template<typename T>
+    int RingBuffer<T>::SafeReadEnd()
     {
         const int result=ReadEnd();
 
@@ -138,7 +148,8 @@ namespace hgl
     * @return 实际读取的数据长度
     * @return -1 出错
     */
-    int RingBuffer::SafeRead(void *data,int size,bool peek)
+    template<typename T>
+    int RingBuffer<T>::SafeRead(void *data,int size,bool peek)
     {
         if(size<0)return(-1);
         if(size&&!data)return(-1);
@@ -151,7 +162,8 @@ namespace hgl
         return SafeReadEnd();
     }
 
-    int RingBuffer::_Read(void *data,int size,bool peek)
+    template<typename T>
+    int RingBuffer<T>::_Read(void *data,int size,bool peek)
     {
         if(size<=0||read_max<=0)return(0);
 
@@ -166,7 +178,7 @@ namespace hgl
 
                 if(temp_read<write_off)
                 {
-                    memcpy(data,buffer+temp_read,size);
+                    memcpy(data,buffer+temp_read,size*sizeof(T));
                 }
                 else
                 {
@@ -174,13 +186,13 @@ namespace hgl
 
                     if(size>temp)
                     {
-                        memcpy(data,buffer+temp_read,temp);
+                        memcpy(data,buffer+temp_read,temp*sizeof(T));
 
-                        memcpy(((char *)data)+temp,buffer,size-temp);
+                        memcpy(((char *)data)+temp,buffer,(size-temp)*sizeof(T));
                     }
                     else
                     {
-                        memcpy(data,buffer+temp_read,size);
+                        memcpy(data,buffer+temp_read,size*sizeof(T));
                     }
                 }
             }//if(data)
@@ -195,3 +207,4 @@ namespace hgl
         return(size);
     }
 }//namespace hgl
+#endif//HGL_THREAD_RING_BUFFER_READ_SOURCE

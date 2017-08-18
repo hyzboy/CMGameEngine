@@ -65,9 +65,6 @@ SET(BASE_PLUG_IN_SOURCE
 SOURCE_GROUP("PlugIn" FILES ${BASE_PLUG_IN_SOURCE})
 
 SET(BASE_MULTI_THREAD_SOURCE
-    MultiThread/RingBuffer.cpp
-    MultiThread/RingBufferRead.cpp
-    MultiThread/RingBufferWrite.cpp)
 #     MultiThread/ASyncThread.cpp)
 
 SOURCE_GROUP("MultiThread"    FILES ${BASE_MULTI_THREAD_SOURCE})
@@ -84,9 +81,9 @@ SET(CM_BASE_ALL_SOURCE    ${BASE_COMMON_SOURCE}
 
 IF(WIN32)
     ADD_LIBRARY(CM.Base STATIC ${CM_BASE_ALL_SOURCE})
-    
+
     ADD_LIBRARY(CM.Base.Static STATIC ${CM_BASE_ALL_SOURCE})
-    
+
     target_compile_options(CM.Base.Static PRIVATE "/MT")
 ELSE()
     ADD_LIBRARY(CM.Base SHARED ${CM_BASE_ALL_SOURCE})
