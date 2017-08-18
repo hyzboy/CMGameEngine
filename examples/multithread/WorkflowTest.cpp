@@ -64,6 +64,7 @@ public:
 	}
 };//class MyWorkThread
 
+using MyWorkPtr=MyWork *;
 using MyWorkPostPtr=MyWorkPost *;
 using MyWorkThreadPtr=MyWorkThread *;
 
@@ -106,6 +107,8 @@ HGL_CONSOLE_MAIN_FUNC()
 	uint8 strong=255;
 	uint row=0,col=0;
 
+    MyWorkPtr mwp[4][16*16];
+
 	for(uint i=0;i<16*16;i++)
 	{
 		for(int j=0;j<4;j++)
@@ -119,7 +122,7 @@ HGL_CONSOLE_MAIN_FUNC()
 
 			w->start	=bitmap+(row*TILE_COLS*TILE_HEIGHT+col)*TILE_WIDTH*PIXEL_BYTE;
 
-			wp[j]->Post(w);						//提交工作到工作投递器
+            mwp[j][i]=w;
 
 			++col;
 			if(col==TILE_COLS)
@@ -133,7 +136,10 @@ HGL_CONSOLE_MAIN_FUNC()
 	}
 
 	for(int i=0;i<4;i++)
+    {
+        wp[i]->Post(mwp[i],256);				//提交工作到工作投递器
 		wp[i]->ToWork();						//发送信号给工作线程
+    }
 
     LOG_INFO("group.Close() begin");
 
