@@ -37,6 +37,23 @@ public:
 		base_color[2]=b;
 	}
 
+	uint8 ComputeColor(uint8 origin_color)
+    {
+        int off=(rand()%16)-8;          //在原始颜色上随机-8 to +8
+
+        int result=origin_color;
+
+        result+=off;
+
+        if(result+off<0)
+            return 0;
+        else
+        if(result+off>255)
+            return 255;
+        else
+            return result;
+    }
+
 	void ProcWork(MyWork *obj) override			//实现具体工具处理函数
 	{
 		uint8 write_color[3]={0,0,0};		   //得出要写入的颜色
@@ -47,15 +64,16 @@ public:
 
 		uint8 *line_start=obj->start;
 		uint8 *p;
+        uint8 off;
 
 		for(uint row=0;row<obj->height;row++)
 		{
 			p=line_start;
 			for(uint col=0;col<obj->width;col++)	//写入颜色
 			{
-				*p++=write_color[0];
-				*p++=write_color[1];
-				*p++=write_color[2];
+				*p++=ComputeColor(write_color[0]);
+				*p++=ComputeColor(write_color[1]);
+				*p++=ComputeColor(write_color[2]);
 			}
 			line_start+=obj->line_gap;			//下一行
 		}
