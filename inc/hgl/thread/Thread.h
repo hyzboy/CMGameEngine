@@ -67,6 +67,10 @@ namespace hgl
 		virtual bool Cancel();																		///<放弃这个线程
 #endif//HGL_OS != HGL_OS_Windows
 
+        /**
+         * 等待当前线程结束<br>
+         * 注：此函数在Win平台下任何情况下都起作用，但在linux/bsd下，如果IsExitDelete提供true的值，此函数将不起作用
+         */
 		virtual void Wait(double time=0);                                                 			///<等待当前线程
 	};//class Thread
 
