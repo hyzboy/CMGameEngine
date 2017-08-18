@@ -8,16 +8,16 @@ namespace hgl
 {
     /**
      * 单向多线程数据交换模板<br>
-     * 适用环境为一方单线程独占方，一方多线程共享访问方。独占方可以在适当时候交换前后台数据
+     * 适用环境为多个线程向其投递数据，一个线程接收数据。接收方在每次处理前交换数据指针，以达到最小线程切换代价
      */
-    template<typename T> class SingleSwapData
+    template<typename T> class SwapData
     {
     protected:
 
         T data[2];
 
-        int shared;
-        int exclusive;
+        int post;
+        int receive;
 
         ThreadMutex lock;
 
@@ -25,42 +25,42 @@ namespace hgl
 
 		void _Swap()
 		{
-            if(exclusive){exclusive=0;shared=1;}
-                     else{exclusive=1;shared=0;}
+            if(receive){receive=0;post=1;}
+                   else{receive=1;post=0;}
 		}
 
     public:
 
-        SingleSwapData()
+        SwapData()
         {
-            exclusive=0;
-            shared=1;
+            receive=0;
+            post=1;
         }
 
-        virtual ~SingleSwapData()=default;
+        virtual ~SwapData()=default;
 
         /**
-         * 获取共享的数据访问权
+         * 获取投递方数据访问权
          */
-        T &GetShared()
+        T &GetPost()
         {
             lock.Lock();
 
-            return data[shared];
+            return data[post];
         }
 
         /**
-         * 释放多线程共享的数据访问权
+         * 释放多线程投递方数据访问权
          */
-        void ReleaseShared()
+        void ReleasePost()
         {
             lock.Unlock();
         }
 
         /**
-        * 取得独占数据访问权
+        * 取得接收方数据访问权
         */
-        T &GetExclusive(){return data[exclusive];}
+        T &GetReceive(){return data[receive];}
 
         /**
          * 交换双方数据
@@ -101,33 +101,25 @@ namespace hgl
             lock.Unlock();
 			return(true);
 		}
-    };//template<typename T> class SingleSwapData
-
-    /**
-     * 多向数据交换访问模板<br>
-     * 在多线程之间，每个线程都可以随意的访问指定的前后台2份数据
-     */
-    template<typename T> class MutliSwapData
-    {
-    };//template<typename T> class MutliSwapData
+    };//template<typename T> class SwapData
 
 	/**
 	* 信号自动交换数据访问模板
 	*/
-	template<typename T,typename SD> class SemSwapData:public SD<T>
+	template<typename T> class SemSwapData:public SwapData<T>
 	{
 		Semaphore sem;
 
 	public:
 
-		using SD<T>::SwapData;
+		using SwapData<T>::SwapData;
 		~SemSwapData()=default;
 
 		/**
-		* 释放信号给这个模板
+		* 释放接收信号
 		* @param count 信号个数
 		*/
-		void ReleaseSem(int count)
+		void ReleaseSem(int count=1)
 		{
 			sem.Release(count);
 		}
@@ -156,6 +148,6 @@ namespace hgl
 			this->Swap();
 			return(true);
 		}
-	};//template<typename T,typename SD> class SemSwapData:public SD<T>
+	};//template<typename T> class SemSwapData:public SwapData<T>
 }//namespace hgl
 #endif//HGL_THREAD_SWAP_DATA_INCLUDE
