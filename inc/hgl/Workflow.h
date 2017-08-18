@@ -11,37 +11,37 @@ namespace hgl
 	 * 工作流是一种对工作的多线安排管理机制，它适用于按业务分配多线程的工作环境<br>
 	 * 开发者需要为每一种工作指定一定的线程数量，但每一种工作确只有一个工作分配入口和分发出口。<br>
 	 * 由其它程序提交工作任务到入口，开发者可以自行重载分配入口的分配函数。
-
-    使用方法：
-
-		group=new WorkGroup;			//创建group
-
-		WorkPost *wp[10];
-
-		for(int i=0;i<MAX_THREADS;i++)
-		{
-			wp=new WorkPost();			//创建事件投递器
-			wt=new WorkThread(wp);		//创建工作线程
-
-			group->Add(wp);				//添加投递器到group
-			group->Add(wt);				//添加工作线程到group
-		}
-
-		group->Start();					//启动group，开启所有工作线程
-
-		for(int i=0;i<0xffff;i++)
-		{
-			int index=rand()%10;		//随机一个线程
-
-			for(int j=0;j<rand()%10;j++)
-			{
-				wp[index]->Post(new Work);			//投递一个工作
-			}
-
-			wp[index]->ToWork();
-		}
-
-		group->Close();					//关闭group,关闭所有工作线程
+     *
+     * 使用方法：
+     *
+	 *	group=new WorkGroup;			//创建group
+     *
+	 *	WorkPost *wp[10];
+     *
+	 *	for(int i=0;i<MAX_THREADS;i++)
+	 *	{
+	 *		wp=new WorkPost();			//创建事件投递器
+	 *		wt=new WorkThread(wp);		//创建工作线程
+     *
+	 *		group->Add(wp);				//添加投递器到group
+	 *		group->Add(wt);				//添加工作线程到group
+	 *	}
+     *
+	 *	group->Start();					//启动group，开启所有工作线程
+     *
+	 *	for(int i=0;i<0xffff;i++)
+	 *	{
+	 *		int index=rand()%10;		//随机一个线程
+     *
+	 *		for(int j=0;j<rand()%10;j++)
+	 *		{
+	 *			wp[index]->Post(new Work);			//投递一个工作
+	 *		}
+     *
+	 *		wp[index]->ToWork();
+	 *	}
+     *
+	 *	group->Close();					//关闭group,关闭所有工作线程
 	 */
 	namespace workflow
 	{
