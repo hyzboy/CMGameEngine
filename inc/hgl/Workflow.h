@@ -65,16 +65,16 @@ namespace hgl
 
 			virtual void Post(W *w)																			///<投递一个工作
 			{
-				WorkList &wl=work_list.GetBack();
+				WorkList &wl=work_list.GetPost();
 					wl.Add(w);
-				work_list.ReleaseBack();
+				work_list.ReleasePost();
 			}
 
 			virtual void Post(W **w,int count)																///<投递一批工作
 			{
-				WorkList &wl=work_list.GetBack();
+				WorkList &wl=work_list.GetPost();
 					wl.Add(w,count);
-				work_list.ReleaseBack();
+				work_list.ReleasePost();
 			}
 
 			virtual void ToWork()																			///<将堆积的工作列表发送给工作线程
@@ -87,7 +87,7 @@ namespace hgl
 			WorkList *WaitWorkList(const double time_out=5)
 			{
 				if(work_list.WaitSemSwap(time_out))
-					return &(work_list.GetFront());
+					return &(work_list.GetReceive());
 
 				return(nullptr);
 			}
