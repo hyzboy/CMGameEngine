@@ -122,13 +122,14 @@ namespace hgl
 			}
 
             virtual bool IsExitDelete()const override{return false;}								///<返回在退出线程时，不删除本对象
-
-			virtual void ProcWork(W *obj)=0;														///<直接处理工作的纯虚函数，需使用者重载实现
-
+			
 			virtual void ExitWork()
 			{
 				exit_work=true;
 			}
+
+			virtual void OnWork(W *obj)=0;															///<直接处理工作的纯虚函数，需使用者重载实现
+			virtual void OnFinish(){}																///<工作结束
 
 			virtual bool Execute() override
 			{
@@ -144,9 +145,11 @@ namespace hgl
 
 				for(int i=0;i<wl->GetCount();i++)
 				{
-					ProcWork(*p);
+					OnWork(*p);
 					++p;
 				}
+
+				OnFinish();
 
 				wl->ClearData();
 
