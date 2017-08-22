@@ -37,9 +37,10 @@ namespace hgl
 	 *		{
 	 *			wp[index]->Post(new Work);			//投递一个工作
 	 *		}
-     *
-	 *		wp[index]->ToWork();
 	 *	}
+	 *
+	 *	for(int i=0;i<MAX_THREADS;i++)
+	 *		wp[i]->ToWork();
      *
 	 *	group->Close();					//关闭group,关闭所有工作线程
 	 */

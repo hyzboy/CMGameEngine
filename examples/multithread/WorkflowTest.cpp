@@ -64,7 +64,6 @@ public:
 
 		uint8 *line_start=obj->start;
 		uint8 *p;
-        uint8 off;
 
 		for(uint row=0;row<obj->height;row++)
 		{
