@@ -17,24 +17,24 @@ struct MyWork
 	uint line_gap;		//行间隔
 };
 
-using MyWorkPost=WorkPost<MyWork>;				//重定义工作投递器
+#pragma pack(push,1)
+using COLOR3B=uint8[3];
+#pragma pack(pop)
 
 /**
- * 工作线程
+ * 工作处理
  */
-class MyWorkThread:public WorkThread<MyWork>	//实现工作线程类
+class MyWorkProc:public SingleWorkProc<MyWork>		//实现工作处理类
 {
-	uint8 base_color[3];						//基础色
+	COLOR3B work_color;								//工作颜色，用以区分是那个线程
 
 public:
 
-	using WorkThread<MyWork>::WorkThread;
+	using SingleWorkProc<MyWork>::SingleWorkProc;	//使用基类构造函数
 
-	void SetBaseColor(uint8 r,uint8 g,uint8 b)
+	void SetWorkColor(const COLOR3B &c)
 	{
-		base_color[0]=r;
-		base_color[1]=g;
-		base_color[2]=b;
+		memcpy(&work_color,&c,sizeof(COLOR3B));
 	}
 
 	uint8 ComputeColor(uint8 origin_color)
@@ -54,13 +54,13 @@ public:
             return result;
     }
 
-	void ProcWork(MyWork *obj) override			//实现具体工具处理函数
+	void OnWork(MyWork *obj) override			//实现具体工具处理函数
 	{
 		uint8 write_color[3]={0,0,0};		   //得出要写入的颜色
 
-		if(base_color[0])write_color[0]=obj->strong;
-        if(base_color[1])write_color[1]=obj->strong;
-        if(base_color[2])write_color[2]=obj->strong;
+		if(work_color[0])write_color[0]=obj->strong;
+        if(work_color[1])write_color[1]=obj->strong;
+        if(work_color[2])write_color[2]=obj->strong;
 
 		uint8 *line_start=obj->start;
 		uint8 *p;
@@ -81,9 +81,35 @@ public:
 	}
 };//class MyWorkThread
 
-using MyWorkPtr=MyWork *;
-using MyWorkPostPtr=MyWorkPost *;
-using MyWorkThreadPtr=MyWorkThread *;
+using MyWorkPtr			=MyWork *;
+using MyWorkProcPtr		=MyWorkProc *;
+using MyWorkThread		=WorkThread<MyWork>;
+using MyWorkThreadPtr	=MyWorkThread *;
+using MyWorkGroup		=WorkGroup<MyWorkProc,MyWorkThread>;
+
+const uint WORK_TEAM_COUNT=4;				//工作组数量
+const COLOR3B WorkColor[WORK_TEAM_COUNT]=
+{
+	{1,0,0},{0,1,0},{0,0,1},{1,1,1},
+	//{1,1,0},{1,0,1},{0,1,1}
+};
+
+constexpr uint TILE_WIDTH	=16;
+constexpr uint TILE_HEIGHT	=16;
+constexpr uint PIXEL_BYTE	=3;
+constexpr uint COLOR_NUM	=256;
+
+constexpr uint TILE_ROWS	=COLOR_NUM/TILE_HEIGHT;						//按块算图片高
+constexpr uint TILE_COLS	=(COLOR_NUM/TILE_WIDTH)*WORK_TEAM_COUNT;	//按块算图片宽
+
+constexpr uint TILE_COUNT	=TILE_ROWS*TILE_COLS;						//块数量
+
+constexpr uint IMAGE_WIDTH	=TILE_WIDTH*TILE_COLS;
+constexpr uint IMAGE_HEIGHT	=TILE_HEIGHT*TILE_ROWS;
+
+constexpr uint LINE_BYTES	=TILE_WIDTH*PIXEL_BYTE*TILE_COLS;			//图片每行字节数
+
+constexpr uint IMAGE_BYTES	=IMAGE_WIDTH*IMAGE_HEIGHT*PIXEL_BYTE;		//图片总字节数
 
 HGL_CONSOLE_MAIN_FUNC()
 {
@@ -91,51 +117,39 @@ HGL_CONSOLE_MAIN_FUNC()
 
     app.Init(&sii);
 
-	WorkGroup<MyWorkPost,MyWorkThread> group;	//工作组
+	MyWorkGroup group;	//工作组
 
-	MyWorkPostPtr wp[4]={   new MyWorkPost,
-                            new MyWorkPost,
-                            new MyWorkPost,
-                            new MyWorkPost};				//创建工作投递器
+	MyWorkProcPtr	wp[WORK_TEAM_COUNT];
+	MyWorkThreadPtr wt[WORK_TEAM_COUNT];
+	
+	for(int i=0;i<WORK_TEAM_COUNT;i++)
+	{
+		wp[i]=new MyWorkProc;					//创建工作处理类
+		wp[i]->SetWorkColor(WorkColor[i]);		//设定工作颜色
 
-	group.Add(wp,4);							//添加到工作组
+		wt[i]=new MyWorkThread(wp[i]);			//创建工作线程并配对
+	}
 
-	MyWorkThreadPtr wt[4];						//创建四个工作线程
+	group.Add(wp,WORK_TEAM_COUNT);				//添加到工作组
+	group.Add(wt,WORK_TEAM_COUNT);				//添加到工作组
 
-	wt[0]=new MyWorkThread(wp[0]);wt[0]->SetBaseColor(1,0,0);group.Add(wt[0]);
-	wt[1]=new MyWorkThread(wp[1]);wt[1]->SetBaseColor(0,1,0);group.Add(wt[1]);
-	wt[2]=new MyWorkThread(wp[2]);wt[2]->SetBaseColor(0,0,1);group.Add(wt[2]);
-	wt[3]=new MyWorkThread(wp[3]);wt[3]->SetBaseColor(1,1,1);group.Add(wt[3]);
+	group.Start();								//启动工作组
 
-	group.Start();								//启动工作线程
-
-	//让四个工作线程，各画256个16x16大小的块。
-
-	constexpr uint TILE_WIDTH	=16;
-	constexpr uint TILE_HEIGHT	=16;
-	constexpr uint PIXEL_BYTE	=3;
-	constexpr uint COLOR_NUM	=256;
-	constexpr uint LINE_BYTES	=512*PIXEL_BYTE;		//图片每行字节数
-	constexpr uint TILE_ROWS	=512/TILE_HEIGHT;		//横向块数量
-	constexpr uint TILE_COLS	=512/TILE_WIDTH;		//纵向块数量
-
-	constexpr uint bitmap_bytes=TILE_WIDTH*TILE_HEIGHT*COLOR_NUM*4*PIXEL_BYTE;
-	uint8 *bitmap=new uint8[bitmap_bytes];			//创建位图,16x16x4x256=512x512，所以下面视图片以512x512
-	uint8 strong=255;
+	uint8 *bitmap=new uint8[IMAGE_BYTES];
 	uint row=0,col=0;
 
-    MyWorkPtr mwp[4][16*16];
+    MyWorkPtr mwp[WORK_TEAM_COUNT][COLOR_NUM];
 
-	for(uint i=0;i<16*16;i++)
+	for(uint i=0;i<COLOR_NUM;i++)
 	{
-		for(int j=0;j<4;j++)
+		for(int j=0;j<WORK_TEAM_COUNT;j++)
 		{
 			MyWork *w=new MyWork;
 
 			w->line_gap	=LINE_BYTES;
 			w->width	=TILE_WIDTH;
 			w->height	=TILE_HEIGHT;
-			w->strong	=strong;
+			w->strong	=i;
 
 			w->start	=bitmap+(row*TILE_COLS*TILE_HEIGHT+col)*TILE_WIDTH*PIXEL_BYTE;
 
@@ -148,13 +162,11 @@ HGL_CONSOLE_MAIN_FUNC()
 				++row;
 			}
 		}
-
-		--strong;
 	}
 
-	for(int i=0;i<4;i++)
+	for(int i=0;i<WORK_TEAM_COUNT;i++)
     {
-        wp[i]->Post(mwp[i],256);				//提交工作到工作投递器
+        wp[i]->Post(mwp[i],COLOR_NUM);			//提交工作到工作投递器
 		wp[i]->ToWork();						//发送信号给工作线程
     }
 
@@ -164,7 +176,7 @@ HGL_CONSOLE_MAIN_FUNC()
 
     LOG_INFO("group.Close() end,write bitmap to .TGA");
 
-	graph::SaveToTGA(OS_TEXT("Workflow.TGA"),bitmap,512,512,24);
+	graph::SaveToTGA(OS_TEXT("Workflow.TGA"),bitmap,IMAGE_WIDTH,IMAGE_HEIGHT,24);
 
     delete[] bitmap;
 

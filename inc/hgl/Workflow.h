@@ -46,22 +46,68 @@ namespace hgl
 	 */
 	namespace workflow
 	{
-		/**
-		 * 入口分配器<br>
-		 * Post的工作内容是将任务分配给所对应的WorkThread
-		 */
-		template<typename W> class WorkPost
+		template<typename W> class WorkProc
 		{
-		protected:
+		public:
+
+			virtual ~WorkProc()=default;
+
+		public:	//投递工作线程所需调用的方法
+			
+			virtual void Post(W *w)=0;																		///<投递一个工作
+			virtual void Post(W **w,int count)=0;															///<投递一批工作
+			virtual void ToWork()=0;																		///<将堆积的工作列表发送给工作线程
+
+		public:	//需用户重载实现的真正执行工作的方法
+
+			/**
+			 * 单个工作执行事件函数，此函数需用户重载实现
+			 */
+			virtual void OnWork(W *)=0;
+
+			/**
+			 * 当前工作序列完成事件函数，如需使用请重载此函数
+			 */
+			virtual void OnFinish()
+			{
+			}
+
+		public:	//由工作线程调用的执行工作事件函数
+
+			virtual bool OnExecuteWork()=0;
+		};//template<typename W> class WorkProc
+		
+		/**
+		 * 单体工作处理<br>
+		 * 该类可以由多个线程投递工作，但只能被一个工作线程调用
+		 */
+		template<typename W> class SingleWorkProc:public WorkProc<W>
+		{
+		public:
 
 			using WorkList=List<W *>;
 
+		private:
+
 			SemSwapData<WorkList> work_list;																///<工程列表
+
+		protected:
+
+			double time_out;
 
 		public:
 
-			virtual ~WorkPost()
+			SingleWorkProc::SingleWorkProc():WorkProc()
 			{
+				time_out=5;
+			}
+
+			virtual ~SingleWorkProc()=default;
+
+			void SetTimeOut(const double to)																///<设置超时时间
+			{
+				if(to<=0)time_out=0;
+					else time_out=to;
 			}
 
 			virtual void Post(W *w)																			///<投递一个工作
@@ -85,12 +131,29 @@ namespace hgl
 
 		public:
 
-			WorkList *WaitWorkList(const double time_out=5)
+			/**
+			 * 开始执行工作函数
+			 */
+			virtual bool OnExecuteWork()
 			{
-				if(work_list.WaitSemSwap(time_out))
-					return &(work_list.GetReceive());
+				if(!work_list.WaitSemSwap(time_out))
+					return(true);
 
-				return(nullptr);
+				WorkList &wl=work_list.GetReceive();
+
+				W **p=wl.GetData();
+
+				for(int i=0;i<wl.GetCount();i++)
+				{
+					OnWork(*p);
+					++p;
+				}
+
+				OnFinish();
+
+				wl.ClearData();
+
+				return(true);
 			}
 		};//template<typename W> class WorkPost
 
@@ -103,55 +166,34 @@ namespace hgl
 
 			using WorkList=List<W *>;
 
-			WorkPost<W> *work_post;
-			WorkList *wl;
+			WorkProc<W> *work_proc;
 
-			atom_bool exit_work;																///<退出标记
+			atom_bool exit_work;																	///<退出标记
 
 		public:
 
-			WorkThread(WorkPost<W> *wp)
+			WorkThread(WorkProc<W> *wp)
 			{
-				work_post=wp;
-				wl=nullptr;
+				work_proc=wp;
 				exit_work=false;
 			}
 
-			virtual ~WorkThread()
-			{
-			}
+			virtual ~WorkThread()=default;
 
-            virtual bool IsExitDelete()const override{return false;}								///<返回在退出线程时，不删除本对象
+            bool IsExitDelete()const override{return false;}								///<返回在退出线程时，不删除本对象
 			
-			virtual void ExitWork()
+			void ExitWork()
 			{
 				exit_work=true;
 			}
 
-			virtual void OnWork(W *obj)=0;															///<直接处理工作的纯虚函数，需使用者重载实现
-			virtual void OnFinish(){}																///<工作结束
-
 			virtual bool Execute() override
 			{
-				if(!work_post)
+				if(!work_proc)
 					RETURN_FALSE;
 
-				wl=work_post->WaitWorkList();
-
-				if(!wl)
-					return(!exit_work);
-
-				W **p=wl->GetData();
-
-				for(int i=0;i<wl->GetCount();i++)
-				{
-					OnWork(*p);
-					++p;
-				}
-
-				OnFinish();
-
-				wl->ClearData();
+				if(!work_proc->OnExecuteWork())
+					return(false);
 
 				return(!exit_work);
 			}
@@ -168,10 +210,6 @@ namespace hgl
 			ObjectList<WT> wt_list;														///<工作线程列表
 
 		public:
-
-			WorkGroup()
-			{
-			}
 
 			virtual ~WorkGroup()
 			{
@@ -202,7 +240,7 @@ namespace hgl
 				return(true);
 			}
 
-			virtual bool Add(WT *wt,const int count)
+			virtual bool Add(WT **wt,const int count)
 			{
 				if(!wt)return(false);
 
