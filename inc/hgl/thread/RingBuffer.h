@@ -52,7 +52,7 @@ namespace hgl
 
 		int WriteStart();																			///<开始写入
 		int GetWriteSize()const{return write_max;}													///<取得可写入数据长度
-		int Write(const void *,int);																///<向流中写入数据
+		int Write(const T *,int);																	///<向流中写入数据
 		int WriteEnd();																				///<结束写入
 
 		int SafeTryWriteStart();																	///<安全尝试开始写入
@@ -80,7 +80,14 @@ namespace hgl
 		int SafeRead(T *,int,bool=true);															///<安全读取，用于简单的一次性读取
 		int SafePeek(T *ptr,int size){return SafeRead(ptr,size,false);}							    ///<安全预读数据
 	};//class RingBuffer
+}//namespace hgl
 
+#include<hgl/thread/RingBuffer.cpp>
+#include<hgl/thread/RingBufferRead.cpp>
+#include<hgl/thread/RingBufferWrite.cpp>
+
+namespace hgl
+{
 	namespace io
 	{
 		class RingInputStream:public InputStream
@@ -102,8 +109,8 @@ namespace hgl
 
 		public:
 
-			int64	Read		(void *buf,int64 size){return rb?rb->Read(buf,size):-1;}			///<读取数据
-			int64	Peek		(void *buf,int64 size){return rb?rb->Peek(buf,size):-1;}			///<预览数据
+			int64	Read		(void *buf,int64 size){return rb?rb->Read((char *)buf,size):-1;}	///<读取数据
+			int64	Peek		(void *buf,int64 size){return rb?rb->Peek((char *)buf,size):-1;}	///<预览数据
 
 			bool	CanRestart	()const{return false;}												///<是否可以复位
 			bool	CanSeek		()const{return false;}												///<是否可以定位
@@ -137,7 +144,7 @@ namespace hgl
 
 		public:
 
-			int64	Write		(const void *buf,int64 size){return rb?rb->Write(buf,size):-1;}		///<写入数据
+			int64	Write		(const void *buf,int64 size){return rb?rb->Write((char *)buf,size):-1;}		///<写入数据
 
 			bool	CanRestart	()const{return false;};												///<是否可以复位
 			bool	CanSeek		()const{return false;};												///<是否可以定位
@@ -335,7 +342,4 @@ namespace hgl
 		}
 	};//class RingBufferSafeWrite
 }//namespace hgl
-#include<hgl/thread/RingBuffer.cpp>
-#include<hgl/thread/RingBufferRead.cpp>
-#include<hgl/thread/RingBufferWrite.cpp>
 #endif//HGL_THREAD_RING_BUFFER_INCLUDE

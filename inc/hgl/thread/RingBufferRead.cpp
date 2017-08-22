@@ -99,7 +99,7 @@ namespace hgl
     * @return 实际可访问的数据长度
     */
     template<typename T>
-    int RingBuffer<T>::Read(void *data,int size,bool peek)
+    int RingBuffer<T>::Read(T *data,int size,bool peek)
     {
         if(size<=0)return(-1);
 
@@ -149,7 +149,7 @@ namespace hgl
     * @return -1 出错
     */
     template<typename T>
-    int RingBuffer<T>::SafeRead(void *data,int size,bool peek)
+    int RingBuffer<T>::SafeRead(T *data,int size,bool peek)
     {
         if(size<0)return(-1);
         if(size&&!data)return(-1);
@@ -163,7 +163,7 @@ namespace hgl
     }
 
     template<typename T>
-    int RingBuffer<T>::_Read(void *data,int size,bool peek)
+    int RingBuffer<T>::_Read(T *data,int size,bool peek)
     {
         if(size<=0||read_max<=0)return(0);
 
@@ -188,7 +188,7 @@ namespace hgl
                     {
                         memcpy(data,buffer+temp_read,temp*sizeof(T));
 
-                        memcpy(((char *)data)+temp,buffer,(size-temp)*sizeof(T));
+                        memcpy((char *)(data+temp),buffer,(size-temp)*sizeof(T));
                     }
                     else
                     {

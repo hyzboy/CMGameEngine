@@ -5,7 +5,7 @@
 #include<hgl/thread/RingBuffer.h>
 namespace hgl
 {
-	class RingBuffer;
+	template<typename T> class RingBuffer;
 	template<typename T> class MemBlock;
 
 	namespace network
@@ -109,8 +109,8 @@ namespace hgl
 			io::RingInputStream *ris;
 			io::RingOutputStream *ros;
 
-			RingBuffer *RecvBuffer;
-			RingBuffer *SendBuffer;
+			RingBuffer<char> *RecvBuffer;
+			RingBuffer<char> *SendBuffer;
 
 			MemBlock<char> *recv_temp_buffer;
 			char *send_temp_buffer;

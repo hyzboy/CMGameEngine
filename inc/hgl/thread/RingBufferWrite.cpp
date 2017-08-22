@@ -79,7 +79,7 @@ namespace hgl
     * @return 实际写入的数据长度
     */
     template<typename T>
-    int RingBuffer<T>::Write(const void *data,int size)
+    int RingBuffer<T>::Write(const T *data,int size)
     {
         if(!data||size<=0)return(-1);
 
@@ -127,7 +127,7 @@ namespace hgl
     * @return -1 出错
     */
     template<typename T>
-    int RingBuffer<T>::SafeWrite(const void *data,int size)
+    int RingBuffer<T>::SafeWrite(const T *data,int size)
     {
         if(!data||size<=0)return(-1);
 
@@ -140,7 +140,7 @@ namespace hgl
     }
 
     template<typename T>
-    int RingBuffer<T>::_Write(const void *data,int size)
+    int RingBuffer<T>::_Write(const T *data,int size)
     {
         if(size<=0||write_max<=0)return(0);
 
@@ -159,7 +159,7 @@ namespace hgl
                 {
                     memcpy(buffer+temp_write,data,temp*sizeof(T));
 
-                    memcpy(buffer,(char *)data+temp,(size-temp)*sizeof(T));
+                    memcpy(buffer,(char *)(data+temp),(size-temp)*sizeof(T));
                 }
                 else
                 {
