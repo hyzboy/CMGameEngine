@@ -8,8 +8,8 @@ namespace hgl
     {
         void TCPSocketRB::InitPrivate()
         {
-            RecvBuffer=new RingBuffer(HGL_TCP_BUFFER_SIZE);
-            SendBuffer=new RingBuffer(HGL_TCP_BUFFER_SIZE);
+            RecvBuffer=new RingBuffer<char>(HGL_TCP_BUFFER_SIZE);
+            SendBuffer=new RingBuffer<char>(HGL_TCP_BUFFER_SIZE);
 
             recv_temp_buffer=new MemBlock<char>(HGL_TCP_BUFFER_SIZE);
             send_temp_buffer=new char[HGL_TCP_BUFFER_SIZE];
