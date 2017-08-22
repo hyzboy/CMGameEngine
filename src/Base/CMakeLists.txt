@@ -64,11 +64,6 @@ SET(BASE_PLUG_IN_SOURCE
 
 SOURCE_GROUP("PlugIn" FILES ${BASE_PLUG_IN_SOURCE})
 
-SET(BASE_MULTI_THREAD_SOURCE
-#     MultiThread/ASyncThread.cpp)
-
-SOURCE_GROUP("MultiThread"    FILES ${BASE_MULTI_THREAD_SOURCE})
-
 SET(CM_BASE_ALL_SOURCE    ${BASE_COMMON_SOURCE}
                         ${BASE_OBJECT_SOURCE}
                         ${BASE_OTHER_SOURCE}
@@ -76,8 +71,7 @@ SET(CM_BASE_ALL_SOURCE    ${BASE_COMMON_SOURCE}
                         ${BASE_APPLICATION_SOURCE}
                         ${BASE_TYPE_SOURCE}
                         ${BASE_IO_SOURCE}
-                        ${BASE_PLUG_IN_SOURCE}
-                        ${BASE_MULTI_THREAD_SOURCE})
+                        ${BASE_PLUG_IN_SOURCE})
 
 IF(WIN32)
     ADD_LIBRARY(CM.Base STATIC ${CM_BASE_ALL_SOURCE})
