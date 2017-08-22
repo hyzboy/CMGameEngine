@@ -250,16 +250,19 @@ namespace hgl
             uint16 width;
             uint16 height;
             uint8 bit;
-
-            union
+			
+			uint8 image_desc;
+        };
+		
+        union TGA_IMAGE_DESC
+        {
+			//不要把此union放到上面的struct中，否则Visual C++会将此union编译成4字节。GCC无此问题
+            uint8 image_desc;
+            struct
             {
-                uint8 image_desc;
-                struct
-                {
-                    uint alpha_depth:4;
-                    uint reserved:1;
-                    uint direction:1;       //0 lower-left,1 upper left
-                };
+                uint alpha_depth:4;
+                uint reserved:1;
+                uint direction:1;       //0 lower-left,1 upper left
             };
         };
         #pragma pack(pop)
@@ -270,6 +273,8 @@ namespace hgl
 
 			memset(&header,0,sizeof(TGAHeader));
 
+			TGA_IMAGE_DESC tid;
+
 			if(bit==8)
 				header.image_type=3;
 			else
@@ -278,8 +283,11 @@ namespace hgl
 			header.width=width;
 			header.height=height;
 			header.bit=bit;
-			header.alpha_depth=8;
-			header.direction=v_flip?1:0;
+
+			tid.alpha_depth=8;
+			tid.direction=v_flip?1:0;
+
+			header.image_desc=tid.image_desc;
 
             io::FileOutputStream fs;
 
