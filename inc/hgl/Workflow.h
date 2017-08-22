@@ -53,7 +53,7 @@ namespace hgl
 			virtual ~WorkProc()=default;
 
 		public:	//投递工作线程所需调用的方法
-			
+
 			virtual void Post(W *w)=0;																		///<投递一个工作
 			virtual void Post(W **w,int count)=0;															///<投递一批工作
 			virtual void ToWork()=0;																		///<将堆积的工作列表发送给工作线程
@@ -76,7 +76,7 @@ namespace hgl
 
 			virtual bool OnExecuteWork()=0;
 		};//template<typename W> class WorkProc
-		
+
 		/**
 		 * 单体工作处理<br>
 		 * 该类可以由多个线程投递工作，但只能被一个工作线程调用
@@ -97,7 +97,7 @@ namespace hgl
 
 		public:
 
-			SingleWorkProc::SingleWorkProc():WorkProc()
+			SingleWorkProc()
 			{
 				time_out=5;
 			}
@@ -145,11 +145,11 @@ namespace hgl
 
 				for(int i=0;i<wl.GetCount();i++)
 				{
-					OnWork(*p);
+					this->OnWork(*p);
 					++p;
 				}
 
-				OnFinish();
+				this->OnFinish();
 
 				wl.ClearData();
 
@@ -181,7 +181,7 @@ namespace hgl
 			virtual ~WorkThread()=default;
 
             bool IsExitDelete()const override{return false;}								///<返回在退出线程时，不删除本对象
-			
+
 			void ExitWork()
 			{
 				exit_work=true;
