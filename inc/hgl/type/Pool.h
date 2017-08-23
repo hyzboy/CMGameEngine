@@ -110,7 +110,7 @@ namespace hgl
 		virtual bool TryWriteLock(){return lock.TryWriteLock();}
 
 		virtual void ReadUnlock(){lock.ReadUnlock();}												///<读访问解锁(用于访问整个列表)
-		virtual void WriteUnlock(){lock.WriteUnlock();}											///<写访问解锁(用于访问整个列表)
+		virtual void WriteUnlock(){lock.WriteUnlock();}												///<写访问解锁(用于访问整个列表)
 
 		virtual T SafeAcquire()                                                                     ///<安全申请一个数据
 		{

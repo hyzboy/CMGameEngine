@@ -1,5 +1,5 @@
 ﻿#include<hgl/Console.h>
-#include<hgl/Workflow.h>
+#include<hgl/thread/Workflow.h>
 #include<hgl/graph/Bitmap.h>
 
 using namespace hgl;
