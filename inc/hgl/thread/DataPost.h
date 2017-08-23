@@ -3,122 +3,102 @@
 
 #include<hgl/thread/ThreadMutex.h>
 #include<hgl/thread/Semaphore.h>
+#include<hgl/type/Stack.h>
 
 namespace hgl
 {
-    /**
-     * 数据多线程投递模板<br>
-     * 适用环境为一方线程接收，一方多线程投递。接收方可以在适当时候交换前后台数据
-     */
-    template<typename T> class DataPost
-    {
-    protected:
-
-        T data[2];
-
-        int post;
-        int receive;
-
-        ThreadMutex p_lock;
-        ThreadMutex r_lock;
-
+	/**
+	 * 多线程数据投递模板<br>
+	 * 需要注意每个任务都会重新由空闲线程来进行获取，所以请将连续的任务合并为一个任务，而不是一次大量投递。
+	 */
+	template<typename T> class DataPost
+	{
 	protected:
 
+		List<T *> data_list[2];
+		
+		int post_index,recv_index;
+		int recv_offset;
+
+		ThreadMutex post_lock,recv_lock;
+
+	protected:
+		
 		void _Swap()
 		{
-            if(receive){receive=0;post=1;}
-                   else{receive=1;post=0;}
+            if(recv_index){recv_index=0;post_index=1;}
+					  else{recv_index=1;post_index=0;}
+
+			recv_offset=0;
 		}
 
-    public:
+	public:
 
-        DataPost()
-        {
-            receive=0;
-            post=1;
-        }
+		DataPost()
+		{
+			post_index=0;
+			recv_index=1;
 
-        virtual ~DataPost()=default;
+			recv_offset=0;
+		}
 
-        /**
-         * 交换双方数据
-         */
-        void Swap()
-        {
-            p_lock.Lock();
-            r_lock.Lock();
+		virtual ~DataPost()=default;
 
-            this->_Swap();
+		/**
+		 * 投递一个数据
+		 */
+		void Post(T *obj)
+		{
+			if(!obj)return;
 
-            r_lock.Unlock();
-            p_lock.Unlock();
-        }
+			post_lock.Lock();
+				data_list[post_index].Add(obj);
+			post_lock.Unlock();
+		}
 
-        /**
-         * 获取投递区的数据访问权
-         */
-        bool AcquirePost(const double &time_out=0)
-        {
-            if(time_out==0)
-            {
-                p_lock.Lock();
-                return(true);
-            }
-            else
-            {
-                return p_lock.WaitLock(time_out);
-            }
-        }
+		/**
+		 * 投递一批数据
+		 */
+		void Post(T **obj,int count)
+		{
+			if(!obj)return;
 
-        /**
-         * 尝试获取投递区的数据访问权
-         */
-        bool TryAcquirePost()
-        {
-            return p_lock.TryLock();
-        }
+			post_lock.Lock();
+				data_list[post_index].Add(obj,count);
+			post_lock.Unlock();
+		}
 
-        /**
-         * 获取投递区数据
-         */
-        T &GetPost()
-        {
-            return data[post];
-        }
+		/**
+		 * 获取一个数据
+		 */
+		T *Receive()
+		{
+			T *obj=nullptr;
 
-        /**
-         * 获取接收区的数据访问权
-         */
-        bool AcquireRecv(const double &time_out=0)
-        {
-            if(time_out==0)
-            {
-                r_lock.Lock();
-                return(true);
-            }
-            else
-            {
-                return r_lock.WaitLock(time_out);
-            }
-        }
+			recv_lock.Lock();
+				int count=data_list[recv_index].GetCount();
 
-        /**
-         * 尝试获取接收区的数据访问权
-         */
-        bool TryAcquireRecv()
-        {
-            return r_lock.TryLock();
-        }
+				if(recv_offset<count)
+				{
+					obj=*(data_list[recv_index].GetData()+recv_offset);
 
-        /**
-         * 获取接收区数据
-         */
-        T &GetRecv()
-        {
-            return data[recvive];
-        }
-    };//template<typename T> class DataPost
+					++recv_offset;
+				}
 
+				if(recv_offset>=count)
+				{
+					data_list[recv_index].ClearData();		//清空接收区的数据
+
+					post_lock.Lock();
+					_Swap();
+					post_lock.Unlock();
+				}
+			recv_lock.Unlock();
+
+			return obj;
+		}
+	};//template<typename T> class DataPost
+	
 	/**
 	* 信号自动交换数据访问模板
 	*/
@@ -132,30 +112,36 @@ namespace hgl
 		~SemDataPost()=default;
 
 		/**
-		* 释放信号给这个模板
+		* 释放接收信号
 		* @param count 信号个数
 		*/
-		void Release(int count)
+		void ReleaseSem(int count=1)
 		{
 			sem.Release(count);
 		}
 
 		/**
-		* 等待获取一个信号并
+		* 等待获取一个信号并获取数据
 		* @param time_out 等待时长
 		*/
-		bool Acquire(const double time_out=5)
+		T *WaitSemSwap(const double time_out=5)
 		{
-			return sem.Acquire(time_out))
+			if(!sem.Acquire(time_out))
+				return(nullptr);
+
+			return this->Receive();
 		}
 
 		/**
-		* 尝试获取一个信号
+		* 尝试获取一个信号并交换数据
 		*/
-		bool TryAcquire()
+		T *TrySemSwap()
 		{
-			return sem.TryAcquire())
+			if(!sem.TryAcquire())
+				return(nullptr);
+
+			return this->Receive();
 		}
-	};//template<typename T,typename DP> class SemDataPost:public DP<T>
+	};//template<typename T> class SemDataPost:public DataPost<T>
 }//namespace hgl
 #endif//HGL_THREAD_DATA_POST_INCLUDE

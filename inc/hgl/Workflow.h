@@ -3,6 +3,7 @@
 
 #include<hgl/thread/Thread.h>
 #include<hgl/thread/SwapData.h>
+#include<hgl/thread/DataPost.h>
 #include<hgl/type/List.h>
 namespace hgl
 {
@@ -46,6 +47,19 @@ namespace hgl
 	 */
 	namespace workflow
 	{
+		/**
+		 * 工作线程退出枚举
+		 */
+		enum WorkThreadExit:uint
+		{
+			wteNone=0,
+
+			wteFinish,				///<工作结束退出
+			wteForce,				///<强制退出
+
+			wteEnd
+		};
+
 		template<typename W> class WorkProc
 		{
 		public:
@@ -56,30 +70,22 @@ namespace hgl
 
 			virtual void Post(W *w)=0;																		///<投递一个工作
 			virtual void Post(W **w,int count)=0;															///<投递一批工作
-			virtual void ToWork()=0;																		///<将堆积的工作列表发送给工作线程
 
 		public:	//需用户重载实现的真正执行工作的方法
 
 			/**
 			 * 单个工作执行事件函数，此函数需用户重载实现
 			 */
-			virtual void OnWork(W *)=0;
-
-			/**
-			 * 当前工作序列完成事件函数，如需使用请重载此函数
-			 */
-			virtual void OnFinish()
-			{
-			}
+			virtual void OnWork(const uint,W *)=0;
 
 		public:	//由工作线程调用的执行工作事件函数
 
-			virtual bool OnExecuteWork()=0;
+			virtual bool OnExecuteWork(const uint,const WorkThreadExit)=0;
 		};//template<typename W> class WorkProc
 
 		/**
 		 * 单体工作处理<br>
-		 * 该类可以由多个线程投递工作，但只能被一个工作线程调用
+		 * 该类可以由多个线程投递工作，但只能被一个工作线程获取工作
 		 */
 		template<typename W> class SingleWorkProc:public WorkProc<W>
 		{
@@ -132,30 +138,121 @@ namespace hgl
 		public:
 
 			/**
+			 * 当前工作序列完成事件函数，如需使用请重载此函数
+			 */
+			virtual void OnFinish(const uint wt_index)
+			{
+			}
+
+			/**
 			 * 开始执行工作函数
 			 */
-			virtual bool OnExecuteWork()
+			virtual bool OnExecuteWork(const uint wt_index,const WorkThreadExit wte)
 			{
 				if(!work_list.WaitSemSwap(time_out))
+				{
+					if(wte==wteForce||wte==wteFinish)
+						return(false);
+
 					return(true);
+				}
 
 				WorkList &wl=work_list.GetReceive();
 
-				W **p=wl.GetData();
+				const int count=wl.GetCount();
 
-				for(int i=0;i<wl.GetCount();i++)
+				if(count>0)
 				{
-					this->OnWork(*p);
-					++p;
+					W **p=wl.GetData();
+
+					for(int i=0;i<count;i++)
+					{
+						this->OnWork(wt_index,*p);
+						++p;
+					}
+
+					this->OnFinish(wt_index);
+
+					wl.ClearData();
 				}
 
-				this->OnFinish();
-
-				wl.ClearData();
+				if(wte==wteForce)
+					return(false);
 
 				return(true);
 			}
-		};//template<typename W> class WorkPost
+		};//template<typename W> class SingleWorkProc:public WorkProc<W>
+
+		/**
+		 * 多体工作处理<br>
+		 * 该类可以由多个线程投递工作，也可以同时被多个工作线程获取工作
+		 */
+		template<typename W> class MultiWorkProc:public WorkProc<W>
+		{
+		protected:
+
+			SemDataPost<W> work_list;																		///<工程列表
+
+		protected:
+
+			double time_out;
+
+		public:
+
+			MultiWorkProc()
+			{
+				time_out=5;
+			}
+
+			virtual ~MultiWorkProc()=default;
+
+			void SetTimeOut(const double to)																///<设置超时时间
+			{
+				if(to<=0)time_out=0;
+					else time_out=to;
+			}
+
+			virtual void Post(W *w)																			///<投递一个工作
+			{
+				if(!w)return;
+
+				work_list.Post(w);
+				work_list.ReleaseSem(1);
+			}
+
+			virtual void Post(W **w,int count)																///<投递一批工作
+			{
+				if(!w||count<=0)return;
+
+				work_list.Post(w,count);				
+				work_list.ReleaseSem(count);
+			}
+
+		public:
+
+			/**
+			 * 开始执行工作函数
+			 */
+			virtual bool OnExecuteWork(const uint wt_index,const WorkThreadExit wte)
+			{
+				W *obj=work_list.WaitSemSwap(time_out);
+
+				if(!obj)
+				{
+					if(wte==wteForce||wte==wteFinish)
+						return(false);
+
+					return(true);
+				}
+
+				this->OnWork(wt_index,obj);
+
+				if(wte==wteForce)
+					return(false);
+
+				return(true);
+			}			
+		};//template<typename W> class MultiWorkProc:public WorkProc<W>
 
 		/**
 		 * 工作线程，用于真正处理事务
@@ -168,23 +265,31 @@ namespace hgl
 
 			WorkProc<W> *work_proc;
 
-			atom_bool exit_work;																	///<退出标记
+			uint work_thread_index;
+
+			atom_uint exit_work;																	///<退出标记
 
 		public:
 
 			WorkThread(WorkProc<W> *wp)
 			{
 				work_proc=wp;
-				exit_work=false;
+				work_thread_index=0;
+				exit_work=wteNone;
 			}
 
 			virtual ~WorkThread()=default;
 
             bool IsExitDelete()const override{return false;}								///<返回在退出线程时，不删除本对象
 
-			void ExitWork()
+			void SetWorkThreadIndex(const uint index)
 			{
-				exit_work=true;
+				work_thread_index=index;
+			}
+
+			void ExitWork(WorkThreadExit wte)
+			{
+				exit_work=wte;
 			}
 
 			virtual bool Execute() override
@@ -192,10 +297,7 @@ namespace hgl
 				if(!work_proc)
 					RETURN_FALSE;
 
-				if(!work_proc->OnExecuteWork())
-					return(false);
-
-				return(!exit_work);
+				return work_proc->OnExecuteWork(work_thread_index,WorkThreadExit(exit_work.operator const hgl::uint()));
 			}
 		};//template<typename W> class WorkThread:public Thread
 
@@ -236,7 +338,8 @@ namespace hgl
 			{
 				if(!wt)return(false);
 
-				wt_list.Add(wt);
+				int index=wt_list.Add(wt);
+				wt->SetWorkThreadIndex(index);
 				return(true);
 			}
 
@@ -244,7 +347,14 @@ namespace hgl
 			{
 				if(!wt)return(false);
 
-				wt_list.Add(wt,count);
+				int index=wt_list.Add(wt,count);
+				for(int i=0;i<count;i++)
+				{
+					(*wt)->SetWorkThreadIndex(index);
+					++index;
+					++wt;
+				}
+
 				return(true);
 			}
 
@@ -263,14 +373,14 @@ namespace hgl
 				return(true);
 			}
 
-			virtual void Close()
+			virtual void Close(WorkThreadExit wte=wteFinish)
 			{
 				int count=wt_list.GetCount();
 
                 WT **wt=wt_list.GetData();
 
 				for(int i=0;i<count;i++)
-					wt[i]->ExitWork();
+					wt[i]->ExitWork(wte);
 
 				for(int i=0;i<count;i++)
 					wt[i]->Wait();

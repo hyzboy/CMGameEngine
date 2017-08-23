@@ -1,5 +1,6 @@
 ﻿#include<hgl/Console.h>
 #include<hgl/Workflow.h>
+#include<hgl/Time.h>
 #include<hgl/graph/Bitmap.h>
 
 using namespace hgl;
@@ -38,21 +39,21 @@ constexpr uint IMAGE_BYTES	=IMAGE_WIDTH*IMAGE_HEIGHT*PIXEL_BYTE;		//图片总字
  */
 struct MyWork
 {
-	COLOR3B color;
-
 	uint8 *start;		//起始地址
 	uint width,height;	//大小
 	uint line_gap;		//行间隔
+
+	uint8 strong;		//颜色强度
 };
 
 /**
  * 工作处理
  */
-class MyWorkProc:public SingleWorkProc<MyWork>		//实现工作处理类
+class MyWorkProc:public MultiWorkProc<MyWork>		//实现工作处理类
 {
 public:
 
-	using SingleWorkProc<MyWork>::SingleWorkProc;	//使用基类构造函数
+	using MultiWorkProc<MyWork>::MultiWorkProc;		//使用基类构造函数
 
 	uint8 ComputeColor(uint8 origin_color)
     {
@@ -71,28 +72,28 @@ public:
             return result;
     }
 
-	void OnWork(const uint,MyWork *obj) override			//实现具体工具处理函数
+	void OnWork(const uint wt_index,MyWork *obj) override			//实现具体工具处理函数
 	{
-		uint8 write_color[3]={0,0,0};		   //得出要写入的颜色
-
 		uint8 *line_start=obj->start;
 		uint8 *p;
 
 		for(uint row=0;row<obj->height;row++)
 		{
 			p=line_start;
-			for(uint col=0;col<obj->width;col++)	//写入颜色
+			for(uint col=0;col<obj->width;col++)			//写入颜色
 			{
-				*p++=ComputeColor(obj->color[0]);
-				*p++=ComputeColor(obj->color[1]);
-				*p++=ComputeColor(obj->color[2]);
+				*p++=ComputeColor(WorkColor[wt_index][0]*obj->strong);
+				*p++=ComputeColor(WorkColor[wt_index][1]*obj->strong);
+				*p++=ComputeColor(WorkColor[wt_index][2]*obj->strong);
 			}
 			line_start+=obj->line_gap;			//下一行
 		}
 
 		delete obj;								//删除工作对象
+
+		WaitTime(double(rand()%10)/100000.0f);	//随机等待一个时间，好让所有线程每一次执行时间不等形成乱序
 	}
-};//class MyWorkProc:public SingleWorkProc<MyWork>
+};//class MyWorkThread
 
 using MyWorkPtr			=MyWork *;
 using MyWorkProcPtr		=MyWorkProc *;
@@ -102,31 +103,26 @@ using MyWorkGroup		=WorkGroup<MyWorkProc,MyWorkThread>;
 
 HGL_CONSOLE_MAIN_FUNC()
 {
-    sii.info.ProjectCode=OS_TEXT("WorkflowTest");
+    sii.info.ProjectCode=OS_TEXT("WorkflowUnsortTest");
 
     app.Init(&sii);
 
 	MyWorkGroup group;	//工作组
 
-	MyWorkProcPtr	wp[WORK_TEAM_COUNT];
+	MyWorkProcPtr	wp=new MyWorkProc();
 	MyWorkThreadPtr wt[WORK_TEAM_COUNT];
 	
 	for(int i=0;i<WORK_TEAM_COUNT;i++)
-	{
-		wp[i]=new MyWorkProc;					//创建工作处理类
-		wt[i]=new MyWorkThread(wp[i]);			//创建工作线程并配对
-	}
+		wt[i]=new MyWorkThread(wp);				//创建工作线程并配对
 
-	group.Add(wp,WORK_TEAM_COUNT);				//添加到工作组
+	group.Add(wp);								//添加到工作组
 	group.Add(wt,WORK_TEAM_COUNT);				//添加到工作组
 
 	group.Start();								//启动工作组
 
 	uint8 *bitmap=new uint8[IMAGE_BYTES];
 	uint row=0,col=0;
-
-    MyWorkPtr mwp[WORK_TEAM_COUNT][COLOR_NUM];
-
+	
 	for(uint i=0;i<COLOR_NUM;i++)
 	{
 		for(int j=0;j<WORK_TEAM_COUNT;j++)
@@ -136,14 +132,12 @@ HGL_CONSOLE_MAIN_FUNC()
 			w->line_gap	=LINE_BYTES;
 			w->width	=TILE_WIDTH;
 			w->height	=TILE_HEIGHT;
-			
-			w->color[0]	=i*WorkColor[j][0];
-			w->color[1]	=i*WorkColor[j][1];
-			w->color[2]	=i*WorkColor[j][2];
+
+			w->strong	=i;
 
 			w->start	=bitmap+(row*TILE_COLS*TILE_HEIGHT+col)*TILE_WIDTH*PIXEL_BYTE;
 
-            mwp[j][i]=w;
+			wp->Post(w);						//提交工作
 
 			++col;
 			if(col==TILE_COLS)
@@ -154,19 +148,13 @@ HGL_CONSOLE_MAIN_FUNC()
 		}
 	}
 
-	for(int i=0;i<WORK_TEAM_COUNT;i++)
-    {
-        wp[i]->Post(mwp[i],COLOR_NUM);			//提交工作到工作投递器
-		wp[i]->ToWork();						//发送信号给工作线程
-    }
-
     LOG_INFO("group.Close() begin");
 
-	group.Close();								//关闭并等待工作线程结束
+	group.Close();								//关闭工作线程结束
 
     LOG_INFO("group.Close() end,write bitmap to .TGA");
 
-	graph::SaveToTGA(OS_TEXT("Workflow.TGA"),bitmap,IMAGE_WIDTH,IMAGE_HEIGHT,24);
+	graph::SaveToTGA(OS_TEXT("WorkflowUnsort.TGA"),bitmap,IMAGE_WIDTH,IMAGE_HEIGHT,24);
 
     delete[] bitmap;
 

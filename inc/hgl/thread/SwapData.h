@@ -16,8 +16,8 @@ namespace hgl
 
         T data[2];
 
-        int post;
-        int receive;
+        int post_index;
+        int recv_index;
 
         ThreadMutex lock;
 
@@ -25,16 +25,16 @@ namespace hgl
 
 		void _Swap()
 		{
-            if(receive){receive=0;post=1;}
-                   else{receive=1;post=0;}
+            if(recv_index){recv_index=0;post_index=1;}
+					  else{recv_index=1;post_index=0;}
 		}
 
     public:
 
         SwapData()
         {
-            receive=0;
-            post=1;
+            recv_index=0;
+            post_index=1;
         }
 
         virtual ~SwapData()=default;
@@ -46,7 +46,7 @@ namespace hgl
         {
             lock.Lock();
 
-            return data[post];
+            return data[post_index];
         }
 
         /**
@@ -60,7 +60,7 @@ namespace hgl
         /**
         * 取得接收方数据访问权
         */
-        T &GetReceive(){return data[receive];}
+        T &GetReceive(){return data[recv_index];}
 
         /**
          * 交换双方数据
