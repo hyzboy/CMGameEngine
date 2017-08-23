@@ -177,6 +177,9 @@ IF(CMAKE_COMPILER_IS_GNUCC OR MINGW)
 ENDIF()
 
 IF(MSVC)
+
+    add_compile_options(/GR-)
+
 	if(X86_USE_CPU_COMMAND STREQUAL AVX2)
 		add_definitions("-DMATH_AVX2")
         add_compile_options(/arch:AVX2)
