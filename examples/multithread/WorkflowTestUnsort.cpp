@@ -90,8 +90,6 @@ public:
 		}
 
 		delete obj;								//删除工作对象
-
-		WaitTime(double(rand()%10)/100000.0f);	//随机等待一个时间，好让所有线程每一次执行时间不等形成乱序
 	}
 };//class MyWorkThread
 
@@ -100,6 +98,21 @@ using MyWorkProcPtr		=MyWorkProc *;
 using MyWorkThread		=WorkThread<MyWork>;
 using MyWorkThreadPtr	=MyWorkThread *;
 using MyWorkGroup		=WorkGroup<MyWorkProc,MyWorkThread>;
+
+void FillGrey(uint8 *bitmap,uint size)
+{
+    uint8 *p=bitmap;
+
+    for(uint i=0;i<size/2;i++)
+    {
+        *p=255;++p;
+        *p=255;++p;
+        *p=255;++p;
+        *p=0;++p;
+        *p=0;++p;
+        *p=0;++p;
+    }
+}
 
 HGL_CONSOLE_MAIN_FUNC()
 {
@@ -111,7 +124,7 @@ HGL_CONSOLE_MAIN_FUNC()
 
 	MyWorkProcPtr	wp=new MyWorkProc();
 	MyWorkThreadPtr wt[WORK_TEAM_COUNT];
-	
+
 	for(int i=0;i<WORK_TEAM_COUNT;i++)
 		wt[i]=new MyWorkThread(wp);				//创建工作线程并配对
 
@@ -122,7 +135,9 @@ HGL_CONSOLE_MAIN_FUNC()
 
 	uint8 *bitmap=new uint8[IMAGE_BYTES];
 	uint row=0,col=0;
-	
+
+    FillGrey(bitmap,IMAGE_BYTES/3);             //填充网格，好根据图像调试是否有格子没有被填充
+
 	for(uint i=0;i<COLOR_NUM;i++)
 	{
 		for(int j=0;j<WORK_TEAM_COUNT;j++)

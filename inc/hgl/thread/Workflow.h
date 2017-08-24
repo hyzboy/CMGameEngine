@@ -224,7 +224,7 @@ namespace hgl
 			{
 				if(!w||count<=0)return;
 
-				work_list.Post(w,count);				
+				work_list.Post(w,count);
 				work_list.ReleaseSem(count);
 			}
 
@@ -235,7 +235,7 @@ namespace hgl
 			 */
 			virtual bool OnExecuteWork(const uint wt_index,const WorkThreadExit wte)
 			{
-				W *obj=work_list.WaitSemSwap(time_out);
+				W *obj=work_list.WaitSemReceive(time_out);
 
 				if(!obj)
 				{
@@ -251,7 +251,7 @@ namespace hgl
 					return(false);
 
 				return(true);
-			}			
+			}
 		};//template<typename W> class MultiWorkProc:public WorkProc<W>
 
 		/**

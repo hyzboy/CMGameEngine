@@ -16,14 +16,14 @@ namespace hgl
 	protected:
 
 		List<T *> data_list[2];
-		
+
 		int post_index,recv_index;
 		int recv_offset;
 
 		ThreadMutex post_lock,recv_lock;
 
 	protected:
-		
+
 		void _Swap()
 		{
             if(recv_index){recv_index=0;post_index=1;}
@@ -68,6 +68,8 @@ namespace hgl
 			post_lock.Unlock();
 		}
 
+    public:
+
 		/**
 		 * 获取一个数据
 		 */
@@ -84,21 +86,28 @@ namespace hgl
 
 					++recv_offset;
 				}
-
-				if(recv_offset>=count)
+				else
 				{
 					data_list[recv_index].ClearData();		//清空接收区的数据
 
 					post_lock.Lock();
 					_Swap();
 					post_lock.Unlock();
+
+                    count=data_list[recv_index].GetCount();
+                    if(count>0)                             //如果换出来的区有数据
+                    {
+                        obj=*(data_list[recv_index].GetData()+recv_offset);
+
+                        ++recv_offset;
+                    }
 				}
 			recv_lock.Unlock();
 
 			return obj;
 		}
 	};//template<typename T> class DataPost
-	
+
 	/**
 	* 信号自动交换数据访问模板
 	*/
@@ -124,7 +133,7 @@ namespace hgl
 		* 等待获取一个信号并获取数据
 		* @param time_out 等待时长
 		*/
-		T *WaitSemSwap(const double time_out=5)
+		T *WaitSemReceive(const double time_out=5)
 		{
 			if(!sem.Acquire(time_out))
 				return(nullptr);
@@ -133,9 +142,9 @@ namespace hgl
 		}
 
 		/**
-		* 尝试获取一个信号并交换数据
+		* 尝试获取一个信号并获取数据
 		*/
-		T *TrySemSwap()
+		T *TrySemReceive()
 		{
 			if(!sem.TryAcquire())
 				return(nullptr);
