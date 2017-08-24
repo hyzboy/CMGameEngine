@@ -71,7 +71,12 @@ public:
 
 	using SingleWorkProc<MyWork>::SingleWorkProc;	//使用基类构造函数
 
-	void OnWork(const uint wt_index,MyWork *obj) override			//实现具体工具处理函数
+	/**
+	 * 具体工作处理函数
+	 * @parma wt_index 线程索引
+	 * @parma obj 工作对象
+	 */
+	void OnWork(const uint wt_index,MyWork *obj) override			
 	{
 		uint8 *line_start=obj->start;
 		uint8 *p;
@@ -121,8 +126,8 @@ HGL_CONSOLE_MAIN_FUNC()
 
 	MyWorkGroup group;	//工作组
 
-	MyWorkProcPtr	wp[WORK_TEAM_COUNT];
-	MyWorkThreadPtr wt[WORK_TEAM_COUNT];
+	MyWorkProc	*wp[WORK_TEAM_COUNT];
+	MyWorkThread *wt[WORK_TEAM_COUNT];
 
 	for(int i=0;i<WORK_TEAM_COUNT;i++)
 	{

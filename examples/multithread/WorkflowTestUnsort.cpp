@@ -71,8 +71,13 @@ class MyWorkProc:public MultiWorkProc<MyWork>		//实现工作处理类
 public:
 
 	using MultiWorkProc<MyWork>::MultiWorkProc;		//使用基类构造函数
-
-	void OnWork(const uint wt_index,MyWork *obj) override			//实现具体工具处理函数
+	
+	/**
+	 * 具体工作处理函数
+	 * @parma wt_index 线程索引
+	 * @parma obj 工作对象
+	 */
+	void OnWork(const uint wt_index,MyWork *obj) override	
 	{
 		uint8 *line_start=obj->start;
 		uint8 *p;
