@@ -5,30 +5,16 @@ namespace hgl
 {
     namespace graph
     {
-//         void put(const char *name,const Vector3f &v)
-//         {
-//             std::cout<<name<<": "<<v.x<<","<<v.y<<","<<v.z<<std::endl;
-//         }
-//
-//         void put(const char *name,const Vector4f &v)
-//         {
-//             std::cout<<name<<": "<<v.x<<","<<v.y<<","<<v.z<<","<<v.w<<std::endl;
-//         }
-//
-//         void put(const char *name,const Matrix4f &mat)
-//         {
-//             for(int r=0;r<4;r++)
-//             {
-//                 std::cout<<"mat["<<name<<"]["<<r<<"] ";
-//                 for(int c=0;c<4;c++)
-// #ifdef MATH_USE_MGL
-//                     std::cout<<mat[r][c]<<"\t";
-// #else
-//                     std::cout<<mat[c][r]<<"\t";
-// #endif//MATH_USE_MGL
-//                 std::cout<<std::endl;
-//             }
-//         }
+         void put(const char *name,const Matrix4f &mat)
+         {
+             for(int r=0;r<4;r++)
+             {
+                 std::cout<<"mat["<<name<<"]["<<r<<"] ";
+                 for(int c=0;c<4;c++)
+                     std::cout<<mat[r][c]<<"\t";
+                 std::cout<<std::endl;
+             }
+         }
 
         inline Matrix4f Perspective(const float fov,const float aspect,const float znear,const float zfar)
         {
@@ -37,18 +23,10 @@ namespace hgl
             const float left=top*aspect;
             const float right=bottom*aspect;
 
-//#ifdef MATH_USE_MGL
             return Matrix4f(2.0f*znear/(right-left),    0.0f,                       (right+left)/(right-left),          0.0f,
                             0.0f,                       2.0f*znear/(bottom-top),    (bottom+top)/(bottom-top),          0.0f,
                             0.0f,                       0.0f,                       -(zfar+znear)/(zfar-znear),         -(2.0f*zfar*znear)/(zfar-znear),
                             0.0f,                       0.0f,                       -1.0f,                              0.0f);
-
-//#else
-//            return Matrix4f(2.0f*znear/(right-left),    0.0f,                       0.0f,                               0.0f,
-//                            0.0f,                       2.0f*znear/(bottom-top),    0.0f,                               0.0f,
-//                            (right+left)/(right-left),  (bottom+top)/(bottom-top),  -(zfar+znear)/(zfar-znear),         -1.0f,
-//                            0.0f,                       0.0f,                       -(2.0f*zfar*znear)/(zfar-znear),    0.0f);
-//#endif//MATH_USE_MGL
         }
 
         inline Matrix4f LookAt(const Vector3f &eye,const Vector3f &target,const Vector3f &up)
@@ -57,30 +35,16 @@ namespace hgl
 
             normalize(forward);
 
-//             put("forward",forward);
-
             Vector3f side=cross(forward,up);
 
             normalize(side);
 
-//             put("side",side);
-
             Vector3f nup=cross(side,forward);
 
-//             put("nup",nup);
-
-//#ifdef MATH_USE_MGL
             Matrix4f result(side.x,     side.y,     side.z,     0.0f,
                             nup.x,      nup.y,      nup.z,      0.0f,
                             -forward.x, -forward.y, -forward.z, 0.0f,
                             0.0f,       0.0f,       0.0f,       1.0f);
-//#else
-//            Matrix4f result(side.x, nup.x, -forward.x, 0.0f,
-//                            side.y, nup.y,  -forward.y, 0.0f,
-//                            side.z, nup.z,  -forward.z, 0.0f,
-//                            0.0f,   0.0f,   0.0f,       1.0f);
-//
-//#endif//MATH_USE_MGL
 
             return result*translate(-eye);
         }

@@ -95,7 +95,6 @@ void LoadMaterialFile(Material &mtl,MaterialData &md,const OSString &filename,Te
 	mtl.SetTwoSide(true);
 
     mtl.SetLightMode(HGL_PIXEL_LIGHT);
-	mtl.SetLightMode(HGL_NONE_LIGHT);
 
 	if(!dis.ReadUint8(md.tex_count))return;
 
