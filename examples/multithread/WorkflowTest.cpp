@@ -38,12 +38,29 @@ constexpr uint IMAGE_BYTES	=IMAGE_WIDTH*IMAGE_HEIGHT*PIXEL_BYTE;		//图片总字
  */
 struct MyWork
 {
-	COLOR3B color;
-
 	uint8 *start;		//起始地址
 	uint width,height;	//大小
 	uint line_gap;		//行间隔
+
+	uint8 strong;		//颜色强度
 };
+
+inline uint8 ComputeColor(uint8 origin_color)
+{
+    int off=(rand()%16)-8;          //在原始颜色上随机-8 to +8
+
+    int result=origin_color;
+
+    result+=off;
+
+    if(result+off<0)
+        return 0;
+    else
+    if(result+off>255)
+        return 255;
+    else
+        return result;
+}
 
 /**
  * 工作处理
@@ -54,27 +71,8 @@ public:
 
 	using SingleWorkProc<MyWork>::SingleWorkProc;	//使用基类构造函数
 
-	uint8 ComputeColor(uint8 origin_color)
-    {
-        int off=(rand()%16)-8;          //在原始颜色上随机-8 to +8
-
-        int result=origin_color;
-
-        result+=off;
-
-        if(result+off<0)
-            return 0;
-        else
-        if(result+off>255)
-            return 255;
-        else
-            return result;
-    }
-
-	void OnWork(const uint,MyWork *obj) override			//实现具体工具处理函数
+	void OnWork(const uint wt_index,MyWork *obj) override			//实现具体工具处理函数
 	{
-		uint8 write_color[3]={0,0,0};		   //得出要写入的颜色
-
 		uint8 *line_start=obj->start;
 		uint8 *p;
 
@@ -83,9 +81,9 @@ public:
 			p=line_start;
 			for(uint col=0;col<obj->width;col++)	//写入颜色
 			{
-				*p++=ComputeColor(obj->color[0]);
-				*p++=ComputeColor(obj->color[1]);
-				*p++=ComputeColor(obj->color[2]);
+				*p++=ComputeColor(WorkColor[wt_index][0]*obj->strong);
+				*p++=ComputeColor(WorkColor[wt_index][1]*obj->strong);
+				*p++=ComputeColor(WorkColor[wt_index][2]*obj->strong);
 			}
 			line_start+=obj->line_gap;			//下一行
 		}
@@ -100,6 +98,21 @@ using MyWorkThread		=WorkThread<MyWork>;
 using MyWorkThreadPtr	=MyWorkThread *;
 using MyWorkGroup		=WorkGroup<MyWorkProc,MyWorkThread>;
 
+inline MyWorkPtr CreateWork(uint8 *bitmap,uint row,uint col,uint8 strong)
+{
+    MyWork *w=new MyWork;                //创建工作
+
+    w->line_gap	=LINE_BYTES;
+    w->width	=TILE_WIDTH;
+    w->height	=TILE_HEIGHT;
+
+    w->strong   =strong;
+
+    w->start	=bitmap+(row*TILE_COLS*TILE_HEIGHT+col)*TILE_WIDTH*PIXEL_BYTE;
+
+    return w;
+}
+
 HGL_CONSOLE_MAIN_FUNC()
 {
     sii.info.ProjectCode=OS_TEXT("WorkflowTest");
@@ -110,7 +123,7 @@ HGL_CONSOLE_MAIN_FUNC()
 
 	MyWorkProcPtr	wp[WORK_TEAM_COUNT];
 	MyWorkThreadPtr wt[WORK_TEAM_COUNT];
-	
+
 	for(int i=0;i<WORK_TEAM_COUNT;i++)
 	{
 		wp[i]=new MyWorkProc;					//创建工作处理类
@@ -131,19 +144,7 @@ HGL_CONSOLE_MAIN_FUNC()
 	{
 		for(int j=0;j<WORK_TEAM_COUNT;j++)
 		{
-			MyWork *w=new MyWork;
-
-			w->line_gap	=LINE_BYTES;
-			w->width	=TILE_WIDTH;
-			w->height	=TILE_HEIGHT;
-			
-			w->color[0]	=i*WorkColor[j][0];
-			w->color[1]	=i*WorkColor[j][1];
-			w->color[2]	=i*WorkColor[j][2];
-
-			w->start	=bitmap+(row*TILE_COLS*TILE_HEIGHT+col)*TILE_WIDTH*PIXEL_BYTE;
-
-            mwp[j][i]=w;
+            mwp[j][i]=CreateWork(bitmap,row,col,i); //创建工作
 
 			++col;
 			if(col==TILE_COLS)
@@ -162,7 +163,7 @@ HGL_CONSOLE_MAIN_FUNC()
 
     LOG_INFO("group.Close() begin");
 
-	group.Close();								//关闭并等待工作线程结束
+	group.Close();								//等待线程结束关闭工作组
 
     LOG_INFO("group.Close() end,write bitmap to .TGA");
 

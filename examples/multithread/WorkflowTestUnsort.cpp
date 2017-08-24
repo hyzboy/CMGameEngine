@@ -46,6 +46,23 @@ struct MyWork
 	uint8 strong;		//颜色强度
 };
 
+uint8 ComputeColor(uint8 origin_color)
+{
+    int off=(rand()%16)-8;          //在原始颜色上随机-8 to +8
+
+    int result=origin_color;
+
+    result+=off;
+
+    if(result+off<0)
+        return 0;
+    else
+    if(result+off>255)
+        return 255;
+    else
+        return result;
+}
+
 /**
  * 工作处理
  */
@@ -54,23 +71,6 @@ class MyWorkProc:public MultiWorkProc<MyWork>		//实现工作处理类
 public:
 
 	using MultiWorkProc<MyWork>::MultiWorkProc;		//使用基类构造函数
-
-	uint8 ComputeColor(uint8 origin_color)
-    {
-        int off=(rand()%16)-8;          //在原始颜色上随机-8 to +8
-
-        int result=origin_color;
-
-        result+=off;
-
-        if(result+off<0)
-            return 0;
-        else
-        if(result+off>255)
-            return 255;
-        else
-            return result;
-    }
 
 	void OnWork(const uint wt_index,MyWork *obj) override			//实现具体工具处理函数
 	{
@@ -99,7 +99,7 @@ using MyWorkThread		=WorkThread<MyWork>;
 using MyWorkThreadPtr	=MyWorkThread *;
 using MyWorkGroup		=WorkGroup<MyWorkProc,MyWorkThread>;
 
-void FillGrey(uint8 *bitmap,uint size)
+inline void FillGrey(uint8 *bitmap,uint size)
 {
     uint8 *p=bitmap;
 
@@ -112,6 +112,21 @@ void FillGrey(uint8 *bitmap,uint size)
         *p=0;++p;
         *p=0;++p;
     }
+}
+
+inline MyWorkPtr CreateWork(uint8 *bitmap,uint row,uint col,uint8 strong)
+{
+    MyWork *w=new MyWork;                //创建工作
+
+    w->line_gap	=LINE_BYTES;
+    w->width	=TILE_WIDTH;
+    w->height	=TILE_HEIGHT;
+
+    w->strong   =strong;
+
+    w->start	=bitmap+(row*TILE_COLS*TILE_HEIGHT+col)*TILE_WIDTH*PIXEL_BYTE;
+
+    return w;
 }
 
 HGL_CONSOLE_MAIN_FUNC()
@@ -142,17 +157,9 @@ HGL_CONSOLE_MAIN_FUNC()
 	{
 		for(int j=0;j<WORK_TEAM_COUNT;j++)
 		{
-			MyWork *w=new MyWork;
+            MyWorkPtr mw=CreateWork(bitmap,row,col,i);    //创建工作
 
-			w->line_gap	=LINE_BYTES;
-			w->width	=TILE_WIDTH;
-			w->height	=TILE_HEIGHT;
-
-			w->strong	=i;
-
-			w->start	=bitmap+(row*TILE_COLS*TILE_HEIGHT+col)*TILE_WIDTH*PIXEL_BYTE;
-
-			wp->Post(w);						//提交工作
+			wp->Post(mw);						          //提交工作
 
 			++col;
 			if(col==TILE_COLS)
@@ -165,7 +172,7 @@ HGL_CONSOLE_MAIN_FUNC()
 
     LOG_INFO("group.Close() begin");
 
-	group.Close();								//关闭工作线程结束
+	group.Close();								//等待线程结束关闭工作组
 
     LOG_INFO("group.Close() end,write bitmap to .TGA");
 
