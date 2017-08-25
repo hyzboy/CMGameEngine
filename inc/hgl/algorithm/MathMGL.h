@@ -119,25 +119,11 @@ namespace hgl
         return m.Inverted();
     }
 
-    //inline Matrix4f perspective_yfov(float fovy,float aspect,float znear,float zfar);
-
-    inline Matrix4f perspective_wh(float width,float height,float znear,float zfar)
-    {
-        return Matrix4f::OpenGLPerspProjRH(znear,zfar,width,height);
-    }
-
     inline Matrix4f ortho2d(float width,float height,float znear=0,float zfar=1)
     {
         //MathGeoLib生成的2D正交矩阵中心是0,0，所以需要偏移
 
         return Matrix4f::OpenGLOrthoProjRH(znear,zfar,width,height)*Matrix4f::Scale(1,-1,1)*Matrix4f::Translate(-(width/2.0f),-(height/2.0f),0);
-    }
-
-    //inline Matrix4f ortho4(float left,float right,float bottom,float top,float znear=0,float zfar=1);
-
-    inline Matrix4f lookAt(const Vector3f &eye,const Vector3f &target,const Vector3f &local_forward,const Vector3f &local_up,const Vector3f &world_up)
-    {
-        return Matrix4f::LookAt(eye,target,local_forward,local_up,world_up);
     }
 
     inline Matrix4f translate(const Vector3f &v)

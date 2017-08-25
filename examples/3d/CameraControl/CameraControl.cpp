@@ -17,9 +17,8 @@ CameraControlFlowObject::CameraControlFlowObject()
 
 	cam.eye=eye;
 	cam.center=center;
-	cam.world_up_vector=up_vector;
-    cam.local_up_vector=up_vector;
-    cam.local_forward_vector=forward_vector;
+	cam.up_vector=up_vector;
+    cam.forward_vector=forward_vector;
 
 	step=0.01f;
 
@@ -107,9 +106,8 @@ bool CameraControlFlowObject::OnKeyDown(KeyboardButton key)
 	{
 		cam.eye=eye;
 		cam.center=center;
-		cam.world_up_vector=up_vector;
-        cam.local_up_vector=up_vector;
-        cam.local_forward_vector=forward_vector;
+		cam.up_vector=up_vector;
+        cam.forward_vector=forward_vector;
 	}
 	else
 	if(key==kbMinus		)step*=0.9f;else				//-ºÅ£¬¼õËÙ

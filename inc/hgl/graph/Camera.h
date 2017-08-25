@@ -19,12 +19,13 @@ namespace hgl
 			float fov;		            ///<水平FOV
 			float znear,zfar;           ///<Z轴上离眼睛的距离
 
-			Vector3f eye;                   ///<眼睛坐标
-			Vector3f center;                ///<视点坐标
-            Vector3f world_up_vector;       ///<世界向上量
-			Vector3f local_up_vector;       ///<本地向上量
-            Vector3f local_forward_vector;  ///<本地向前量
+			Vector3f eye;               ///<眼睛坐标
+			Vector3f center;            ///<视点坐标
+            Vector3f up_vector;			///<向上量
+            Vector3f forward_vector;	///<向前量
 		};//struct Camera
+
+		void CameraToFrustum(Frustum *,const Camera *);
 
 		void MakeCameraMatrix(Matrix4f *proj,Matrix4f *mv,const Camera *cam);
 

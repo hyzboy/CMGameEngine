@@ -48,23 +48,21 @@ namespace hgl
 
             return result*translate(-eye);
         }
+		
+		void CameraToFrustum(Frustum *f,const Camera *cam)
+		{
+			if(!f||!cam)return;
+
+			f->SetVerticalFovAndAspectRatio(DegToRad(cam->fov),cam->width/cam->height);
+			f->SetViewPlaneDistances(cam->znear,cam->zfar);
+
+			//Matrix4f projection_matrix=f->ProjectionMatrix();		//可以用Frustum来算projection matrix
+		}
 
         void MakeCameraMatrix(Matrix4f *proj,Matrix4f *mv,const Camera *cam)
         {
-// #ifdef MATH_USE_MGL
-//             *proj=perspective_wh(cam->width,cam->height,cam->znear,cam->zfar);
-//
-//             *mv=lookAt(cam->eye,cam->center,cam->local_forward_vector,cam->local_up_vector,cam->world_up_vector);
-// #else
-//              *proj=perspective_yfov(cam->fov,cam->width/cam->height,cam->znear,cam->zfar);
-//
-//              *mv=lookAt(cam->eye,cam->center,cam->world_up_vector);
-// #endif//MATH_USE_MGL
-
-            //其实GLM/CML自带的结果也是正确的，只有MGL的产生的特殊，为统一，所以参考各方代码，自行实现一套，以保证统一
-
-            *proj=hgl::graph::Perspective(cam->fov,cam->width/cam->height,cam->znear,cam->zfar);
-            *mv=hgl::graph::LookAt(cam->eye,cam->center,cam->world_up_vector);
+			*proj=hgl::graph::Perspective(cam->fov,cam->width/cam->height,cam->znear,cam->zfar);
+            *mv=hgl::graph::LookAt(cam->eye,cam->center,cam->up_vector);
         }
     }//namespace graph
 }//namespace hgl

@@ -44,7 +44,7 @@ private:
 
         cam.eye=eye;
         cam.center=center;
-        cam.world_up_vector=up_vector;
+        cam.up_vector=up_vector;
 
         MakeCameraMatrix(&proj,&mv,&cam);
     }
