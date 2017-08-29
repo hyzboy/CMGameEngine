@@ -3,14 +3,11 @@
 
 namespace hgl
 {
-	Pipe::~Pipe()
-	{
-		if(pd.read_pipe!=-1)close(pd.read_pipe);
-		if(pd.write_pipe!=-1)close(pd.write_pipe);
-	}
+    bool CreatePipe(PipePair &pp)
+    {
+        if(pipe(pp))            // return 0 表示成功
+            return(false);
 
-	bool Pipe::Create()
-	{
-		return(pipe(pd.file_pipes)==0);
-	}
+        return true;
+    }
 }//namespace hgl

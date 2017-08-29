@@ -1,37 +1,22 @@
 ﻿#ifndef HGL_MULTI_PROC_PIPE_INCLUDE
 #define HGL_MULTI_PROC_PIPE_INCLUDE
 
+#include<hgl/platform/Platform.h>
+
+#if HGL_OS==HGL_OS_Windows
+#include<windows.h>
+#endif//
+
 namespace hgl
 {
-	/**
-	 * 进程管道通信
-	 */
-	class Pipe																						///进程Pipe管道通信
-	{
-	public:
+    #if HGL_OS==HGL_OS_Windows
+        using PipePtr_FD=HANDLE;
+    #else
+        using PipePtr=int;
+    #endif//
 
-		union pipe_data
-		{
-			int file_pipes[2];
+    using PipePair=PipePtr[2];
 
-			struct
-			{
-				int read_pipe;
-				int write_pipe;
-			};
-		}pd;
-
-	public:
-
-		Pipe()
-		{
-			pd.read_pipe=-1;
-			pd.write_pipe=-1;
-		}
-
-		virtual ~Pipe();
-
-		bool Create();																				///<创建一个pipe通信管道
-	};//class Pipe
+    bool CreatePipe(PipePair &);            ///<创建一对通信管理
 }//namespace hgl
 #endif//HGL_MULTI_PROC_PIPE_INCLUDE
