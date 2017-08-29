@@ -10,7 +10,7 @@
 namespace hgl
 {
     #if HGL_OS==HGL_OS_Windows
-        using PipePtr_FD=HANDLE;
+        using PipePtr=HANDLE;
     #else
         using PipePtr=int;
     #endif//
