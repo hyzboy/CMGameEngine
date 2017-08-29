@@ -56,7 +56,9 @@ IF(WIN32)
                                         Win/Thread.cpp
                                         Win/ThreadMutex.cpp)
 
-    SET(PLATFORM_MULTI_PROCESS_SOURCE   Win/ProcMutex.cpp)
+    SET(PLATFORM_MULTI_PROCESS_SOURCE   Win/ProcMutex.cpp
+                                        Win/Pipe.cpp
+                                        Win/Fifo.cpp)
 
     SET(PLATFORM_TIME_SOURCE            Win/Time.cpp
                                         Win/DateTime.cpp)
