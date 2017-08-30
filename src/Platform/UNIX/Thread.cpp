@@ -120,7 +120,7 @@ namespace hgl
 	* (线程外部调用)等待当前线程
 	* @param time_out 等待的时间，如果为0表示等到线程运行结束为止。默认为0
 	*/
-	void Thread::Wait(double time_out)
+	void Thread::Wait(const double time_out)
 	{
 		if(!tp)
 		{

@@ -91,7 +91,7 @@ namespace hgl
 		/**
 		 * 尝试交换双方数据
 		 */
-		bool WaitSwap(const double &time_out)
+		bool WaitSwap(const double time_out)
 		{
 			if(!lock.WaitLock(time_out))
 				return(false);

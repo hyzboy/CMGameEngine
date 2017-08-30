@@ -43,7 +43,7 @@
 
 Thread::Thread()
 {
-	threadptr=0;
+	tp=0;
 }
 
 Thread::~Thread()
