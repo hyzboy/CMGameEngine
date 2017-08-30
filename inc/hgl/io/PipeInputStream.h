@@ -1,6 +1,7 @@
 ﻿#ifndef HGL_IO_PIPE_INPUT_STREAM_INCLUDE
 #define HGL_IO_PIPE_INPUT_STREAM_INCLUDE
 
+#include<hgl/proc/Pipe.h>
 #include<hgl/io/InputStream.h>
 #include<hgl/io/SeekAccess.h>
 namespace hgl
@@ -14,16 +15,16 @@ namespace hgl
 		 */
 		class PipeInputStream:public InputStream
 		{
-			int pipe_fd;
+			pipe_ptr pipe_fd;
 
 		public:
 
-			PipeInputStream(){pipe_fd=-1;}
-			PipeInputStream(int fd){pipe_fd=fd;}
-			~PipeInputStream();
+			PipeInputStream(){pipe_fd=PIPE_NULL;}
+			PipeInputStream(pipe_ptr fd){pipe_fd=fd;}
+			~PipeInputStream(){Close();}
 
-			void Init(int fd){pipe_fd=fd;}
-			void Close(){pipe_fd=-1;}
+			void Init(pipe_ptr fd){pipe_fd=fd;}
+			void Close();
 
 			int64	Read(void *,int64);														///<读取数据
 			int64	Peek(void *,int64){return -1;}											///<预览数据

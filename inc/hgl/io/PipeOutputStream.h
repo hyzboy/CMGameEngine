@@ -1,4 +1,4 @@
-#ifndef HGL_IO_PIPE_OUTPUT_STREAM_INCLUDE
+﻿#ifndef HGL_IO_PIPE_OUTPUT_STREAM_INCLUDE
 #define HGL_IO_PIPE_OUTPUT_STREAM_INCLUDE
 
 #include<hgl/io/OutputStream.h>
@@ -11,12 +11,15 @@ namespace hgl
 		*/
 		class PipeOutputStream:public OutputStream
 		{
-			int pipe_fd;
+			pipe_ptr pipe_fd;
 
 		public:
 
-			virtual ~PipeOutputStream();
+			PipeOutputStream(){pipe_fd=PIPE_NULL;}
+			PipeOutputStream(pipe_ptr fd){pipe_fd=fd;}
+			~PipeOutputStream(){Close();}
 
+			void	Init(pipe_ptr fd){pipe_fd=fd;}
 			void	Close();																		///<关闭输出流
 
 			int64	Write(const void *,int64);														///<写入数据

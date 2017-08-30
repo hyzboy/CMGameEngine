@@ -3,7 +3,7 @@
 
 namespace hgl
 {
-    bool CreatePipe(PipePair &pp)
+    bool CreatePipe(pipe_pair &pp)
     {
         if(pipe(pp))            // return 0 表示成功
             return(false);

@@ -16,9 +16,9 @@ namespace hgl
     {
         unsigned long threadid;
 
-        threadptr=::CreateThread(0,0,ThreadFunc,this,0,&threadid);
+        tp=::CreateThread(0,0,ThreadFunc,this,0,&threadid);
 
-        if(!threadptr)
+        if(!tp)
         {
             LOG_ERROR(OS_TEXT("创建线程失败，Windows错误码：")+OSString((uint)GetLastError()));
             return(false);
@@ -32,11 +32,11 @@ namespace hgl
     */
     void Thread::Close()
     {
-        if(!threadptr)return;
+        if(!tp)return;
 
-        TerminateThread(threadptr,0);
-        CloseHandle(threadptr);
-        threadptr=nullptr;
+        TerminateThread(tp,0);
+        CloseHandle(tp);
+        tp=nullptr;
     }
 
     /**
@@ -44,7 +44,7 @@ namespace hgl
     */
     bool Thread::IsCurThread()
     {
-        return(threadptr==GetCurrentThread());
+        return(tp==GetCurrentThread());
     }
 
     /**
@@ -53,8 +53,8 @@ namespace hgl
     */
     void Thread::Wait(double time_out)
     {
-        if(threadptr)
-            WaitForSingleObject(threadptr,time_out>0?time_out*1000:INFINITE);
+        if(tp)
+            WaitForSingleObject(tp,time_out>0?time_out*1000:INFINITE);
     }
 
     /**
@@ -68,7 +68,7 @@ namespace hgl
         void **obj=new void *[count];
 
         for(int i=0;i<count;i++)
-            obj[i]=mt[i]->threadptr;
+            obj[i]=mt[i]->tp;
 
         WaitForMultipleObjects(count,obj,false,time_out>0?time_out*1000:INFINITE);
 

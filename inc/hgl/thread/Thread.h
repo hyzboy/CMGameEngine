@@ -6,10 +6,10 @@
 
 #if HGL_OS == HGL_OS_Windows
 	#include<windows.h>
-	typedef HANDLE ThreadPtr;
+	using thread_ptr=HANDLE;
 #else
 	#include<pthread.h>
-	typedef pthread_t ThreadPtr;
+	using thread_ptr=pthread_t;
 #endif//HGL_OS == HGL_Windows
 namespace hgl
 {
@@ -31,7 +31,7 @@ namespace hgl
 
 	protected:
 
-		ThreadPtr threadptr;
+		thread_ptr tp;
 
 #if HGL_OS != HGL_OS_Windows
 		virtual void SetCancelState(bool,bool=true);

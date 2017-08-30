@@ -2,7 +2,7 @@
 
 namespace hgl
 {
-    bool CreatePipe(PipePair &pp)
+    bool CreatePipe(pipe_pair &pp)
     {
 		SECURITY_ATTRIBUTES sa;
 

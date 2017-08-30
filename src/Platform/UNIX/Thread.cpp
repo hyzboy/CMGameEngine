@@ -17,9 +17,9 @@ namespace hgl
 	*/
 	bool Thread::Start()
 	{
-		if(threadptr)
+		if(tp)
 		{
-			LOG_ERROR(OS_TEXT("Thread::Start() error,threadptr!=nullptr."));
+			LOG_ERROR(OS_TEXT("Thread::Start() error,tp!=nullptr."));
 			Cancel();
 		}
 
@@ -32,9 +32,9 @@ namespace hgl
 		else
 			pthread_attr_setdetachstate(&attr,PTHREAD_CREATE_JOINABLE);
 
-		if(pthread_create(&threadptr,&attr,ThreadFunc,this))		//返回0表示正常
+		if(pthread_create(&tp,&attr,ThreadFunc,this))		//返回0表示正常
 		{
-			threadptr=0;
+			tp=0;
 
 			pthread_attr_destroy(&attr);
 			LOG_ERROR(OS_TEXT("Create Thread (pthread_create) failed.errno:")+OSString(errno));
@@ -55,7 +55,7 @@ namespace hgl
 
 	const uint64 Thread::GetThreadID()const
 	{
-		return threadptr;
+		return tp;
 	}
 
 	/**
@@ -63,13 +63,13 @@ namespace hgl
 	*/
 	bool Thread::IsCurThread()
 	{
-		if(!threadptr)
+		if(!tp)
 		{
-			LOG_ERROR(OS_TEXT("Thread::IsCurThread() error,threadptr=nullptr."));
+			LOG_ERROR(OS_TEXT("Thread::IsCurThread() error,tp=nullptr."));
 			return(true);
 		}
 
-		return pthread_equal(pthread_self(),threadptr);		//返回非0表示一致
+		return pthread_equal(pthread_self(),tp);		//返回非0表示一致
 	}
 
 	void Thread::SetCancelState(bool enable,bool async)
@@ -93,16 +93,16 @@ namespace hgl
 	 */
 	bool Thread::Cancel()																		///<放弃这个线
 	{
-		if(!threadptr)
+		if(!tp)
 		{
-			LOG_ERROR(OS_TEXT("Thread::Cancel() error,threadptr=nullptr."));
+			LOG_ERROR(OS_TEXT("Thread::Cancel() error,tp=nullptr."));
 			return(true);
 		}
 
-		if(pthread_cancel(threadptr)!=0)		// 0 is success
+		if(pthread_cancel(tp)!=0)		// 0 is success
 			return(false);
 
-		threadptr=0;
+		tp=0;
 		return(true);
 	}
 
@@ -122,16 +122,16 @@ namespace hgl
 	*/
 	void Thread::Wait(double time_out)
 	{
-		if(!threadptr)
+		if(!tp)
 		{
-			LOG_ERROR(OS_TEXT("Thread::Wait() error,threadptr=nullptr."));
+			LOG_ERROR(OS_TEXT("Thread::Wait() error,tp=nullptr."));
 			return;
 		}
 
 		int retval;
         void *res;
 
-        retval=pthread_kill(threadptr,0);           //这个函数不是用来杀线程的哦，而是用来向线程发送一个关闭的信号。而发送0代表获取这个线程是否还活着
+        retval=pthread_kill(tp,0);           //这个函数不是用来杀线程的哦，而是用来向线程发送一个关闭的信号。而发送0代表获取这个线程是否还活着
 
         if(retval!=ESRCH                            //线程不存在
          &&retval!=EINVAL)                          //信号不合法
@@ -140,7 +140,7 @@ namespace hgl
             char str[(sizeof(void *)+1)<<1];
             UTF8String thread_addr;
 
-            htos(str,(sizeof(void *)+1)<<1,(uint64)threadptr);
+            htos(str,(sizeof(void *)+1)<<1,(uint64)tp);
 
             thread_addr=str;
 
@@ -153,11 +153,11 @@ namespace hgl
 
                 GetWaitTime(ts,time_out);
 
-                retval=pthread_timedjoin_np(threadptr,&res,&ts);
+                retval=pthread_timedjoin_np(tp,&res,&ts);
             }
             else
             {
-                retval=pthread_join(threadptr,&res);
+                retval=pthread_join(tp,&res);
             }
 
             //如果retval返回22，请检查线程初始化时，是否为PTHREAD_CREATE_DETACHED
@@ -167,6 +167,6 @@ namespace hgl
 #endif//_DEBUG
         }
 
-        threadptr=0;
+        tp=0;
 	}
 }//namespace hgl
