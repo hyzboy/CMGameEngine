@@ -279,12 +279,12 @@ namespace hgl
                     if (!glsl->SetUniformMatrix3fv(HGL_VS_NORMAL_MATRIX,normal_matrix))
                         return(false);
 
-                    //调试使用
+                    //随机太阳光方向，调试使用
                     if (state->sun_light)
                     {
-                        static Vector3f sun_light_direction(rand(),rand(),rand());
+                        static Vector3f sun_light_direction=Vector3f(rand(),rand(),rand()).Normalized();
 
-                        glsl->SetUniform3fv(HGL_SUN_LIGHT_DIRECTION, sun_light_direction.Normalized());
+                        glsl->SetUniform3fv(HGL_SUN_LIGHT_DIRECTION, sun_light_direction);
                     }
                 }
             }
