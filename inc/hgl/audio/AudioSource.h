@@ -55,7 +55,8 @@ namespace hgl
 		AudioSource(AudioBuffer *);																	///<本类构造函数
 		virtual ~AudioSource();                                                                     ///<本类析构函数
 
-		virtual bool Play(bool=false);                                                              ///<播放当前音源
+		virtual bool Play();                                                                        ///<播放当前音源
+		virtual bool Play(bool);                                                                    ///<播放当前音源，并指定是否循环播放
 		virtual void Pause();                                                                       ///<暂停播放
 		virtual void Resume();																		///<继续播放
 		virtual void Stop();                                                                        ///<停止播放

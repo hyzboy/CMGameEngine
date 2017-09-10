@@ -257,6 +257,30 @@ namespace hgl
         alDopplerVelocity(doppler_velocity);
     }
 
+    /**
+     * 播放当前音源
+     */
+    bool AudioSource::Play()
+    {
+        if(!alSourcePlay)return(false);
+        if(index==InvalidIndex)return(false);
+        if(!Buffer
+          ||Buffer->Time<=0)return(false);
+
+        if(State==AL_PLAYING)
+            alSourceStop(index);
+
+        alSourcePlay(index);
+
+        pause=false;
+
+        return(!alLastError());
+    }
+    
+    /**
+     * 播放当前音源，并指定是否循环播放
+     * @param _loop 是否循环播放
+     */
     bool AudioSource::Play(bool _loop)
     {
         if(!alSourcePlay)return(false);
