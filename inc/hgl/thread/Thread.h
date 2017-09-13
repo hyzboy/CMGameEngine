@@ -2,6 +2,7 @@
 #define HGL_THREAD_INCLUDE
 
 #include<hgl/type/DataType.h>
+#include<hgl/type/BaseString.h>
 #include<hgl/thread/Semaphore.h>
 
 #if HGL_OS == HGL_OS_Windows
@@ -40,10 +41,19 @@ namespace hgl
 
 		virtual ~Thread()
 		{
-			Close();
+            if(tp)
+                Close();
 		}
 
-		const uint64 GetThreadID()const;															///<取得线程ID
+		template<typename T>
+		void GetAddress(BaseString<T> &thread_addr_str)const                                       ///<取得线程地址字符串
+		{
+            T str[(sizeof(void *)+1)<<1];
+
+            hgl::htos(str,(sizeof(void *)+1)<<1,(uint64)tp);
+
+            thread_addr_str=str;
+        }
 
 		/**
 		* 线程执行函数，会被反复调用
