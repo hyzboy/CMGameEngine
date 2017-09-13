@@ -2,7 +2,7 @@
 #define HGL_WORKFLOW_INCLUDE
 
 #include<hgl/thread/Thread.h>
-#include<hgl/thread/Semaphore.h>
+#include<hgl/thread/ThreadMutex.h>
 #include<hgl/thread/SwapData.h>
 #include<hgl/thread/DataPost.h>
 #include<hgl/type/List.h>
@@ -207,12 +207,12 @@ namespace hgl
 
 			uint work_thread_index;
 
-            Semaphore exit_sem;
+            ThreadMutex exit_lock;
             bool force_close;
 
 		public:
 
-			WorkThread(WorkProc<W> *wp):exit_sem(1024)
+			WorkThread(WorkProc<W> *wp)
 			{
 				work_proc=wp;
 				work_thread_index=0;
@@ -232,6 +232,13 @@ namespace hgl
             }
 #endif//_DEBUG
 
+            bool Start() override													  ///<开始运行当前线程
+            {
+                exit_lock.Lock();
+
+                return Thread::Start();
+            }
+
             bool IsExitDelete()const override{return false;}							///<返回在退出线程时，不删除本对象
 
 			void SetWorkThreadIndex(const uint index)
@@ -242,7 +249,7 @@ namespace hgl
 			void ExitWork(const bool fc)
 			{
 				force_close=fc;
-                exit_sem.Release(1);
+                exit_lock.Unlock();
 			}
 
 			virtual bool Execute() override
@@ -252,7 +259,7 @@ namespace hgl
 
                 bool result=work_proc->OnExecuteWork(work_thread_index);
 
-                if(!exit_sem.TryAcquire())
+                if(!exit_lock.TryLock())
                     return(true);
 
                 if(!force_close)        //不是强退
@@ -270,6 +277,7 @@ namespace hgl
                 }
 #endif//_DEBUG
 
+                exit_lock.Unlock();
                 return(false);
 			}
 		};//template<typename W> class WorkThread:public Thread
