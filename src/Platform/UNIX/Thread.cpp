@@ -11,7 +11,7 @@ namespace hgl
       *  tips:	PTHREAD_CREATE_DETACHED 方式创建的线程，在退出时，自动清除线程。无法使用pthread_join函数获取运行状态,pthread_join会返回22号错误
       *         PTHREAD_CREATE_JOINABLE 方式创建的线程，在退出时，不会清除线程，必使使用pthread_join函数获取。或是在退出时使用pthread_detach(pthread_self())。
       */
-        
+
 	void *ThreadFunc(Thread *tc)
 	{
 		if(tc->ProcStartThread())
@@ -48,7 +48,7 @@ namespace hgl
 
 		pthread_attr_setdetachstate(&attr,PTHREAD_CREATE_JOINABLE);
 
-		if(pthread_create(&tp,&attr,ThreadFunc,this))		//返回0表示正常
+		if(pthread_create(&tp,&attr,(void *(*)(void *))ThreadFunc,this))		//返回0表示正常
 		{
 			tp=0;
 
@@ -67,11 +67,6 @@ namespace hgl
 	void Thread::Close()
 	{
 		Cancel();
-	}
-
-	const uint64 Thread::GetThreadID()const
-	{
-		return tp;
 	}
 
 	/**
@@ -147,39 +142,26 @@ namespace hgl
 		int retval;
         void *res;
 
-        retval=pthread_kill(tp,0);           //这个函数不是用来杀线程的哦，而是用来向线程发送一个关闭的信号。而发送0代表获取这个线程是否还活着
-
-        if(retval!=ESRCH                            //线程不存在
-         &&retval!=EINVAL)                          //信号不合法
+        if(time_out>0)
         {
-#ifdef _DEBUG
-            char str[(sizeof(void *)+1)<<1];
-            UTF8String thread_addr;
+            struct timespec ts;
 
-            htos(str,(sizeof(void *)+1)<<1,(uint64)tp);
+            GetWaitTime(ts,time_out);
 
-            thread_addr=str;
-
-            LOG_INFO(U8_TEXT("pthread_kill [")+thread_addr+U8_TEXT("] retval:")+UTF8String(retval));
-#endif//_DEBUG
-
-            if(time_out>0)
-            {
-                struct timespec ts;
-
-                GetWaitTime(ts,time_out);
-
-                retval=pthread_timedjoin_np(tp,&res,&ts);
-            }
-            else
-            {
-                retval=pthread_join(tp,&res);
-            }
-
-#ifdef _DEBUG
-            LOG_INFO(U8_TEXT("pthread_timedjoin_np/pthread_join [")+thread_addr+U8_TEXT("] retval:")+UTF8String(retval));
-#endif//_DEBUG
+            retval=pthread_timedjoin_np(tp,&res,&ts);
         }
+        else
+        {
+            retval=pthread_join(tp,&res);
+        }
+
+#ifdef _DEBUG
+        UTF8String thread_addr;
+
+        GetAddress(thread_addr);
+
+        LOG_INFO(U8_TEXT("pthread_timedjoin_np/pthread_join [")+thread_addr+U8_TEXT("] retval:")+UTF8String(retval));
+#endif//_DEBUG
 
         tp=0;
 	}
