@@ -76,7 +76,7 @@ public:
 	 * @parma wt_index 线程索引
 	 * @parma obj 工作对象
 	 */
-	void OnWork(const uint wt_index,MyWork *obj) override			
+	void OnWork(const uint wt_index,MyWork *obj) override
 	{
 		uint8 *line_start=obj->start;
 		uint8 *p;
@@ -166,7 +166,7 @@ HGL_CONSOLE_MAIN_FUNC()
 		wp[i]->ToWork();						//发送信号给工作线程
     }
 
-    LOG_INFO("group.Close() begin");
+    LOG_INFO("group.Close() begin,Thread count "+OSString(WORK_TEAM_COUNT));
 
 	group.Close();								//等待线程结束关闭工作组
 

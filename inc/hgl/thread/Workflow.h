@@ -2,6 +2,7 @@
 #define HGL_WORKFLOW_INCLUDE
 
 #include<hgl/thread/Thread.h>
+#include<hgl/thread/Semaphore.h>
 #include<hgl/thread/SwapData.h>
 #include<hgl/thread/DataPost.h>
 #include<hgl/type/List.h>
@@ -15,19 +16,6 @@ namespace hgl
 	 */
 	namespace workflow
 	{
-		/**
-		 * 工作线程退出枚举
-		 */
-		enum WorkThreadExit:uint
-		{
-			wteNone=0,
-
-			wteFinish,				///<工作结束退出
-			wteForce,				///<强制退出
-
-			wteEnd
-		};
-
 		template<typename W> class WorkProc
 		{
 		public:
@@ -48,7 +36,7 @@ namespace hgl
 
 		public:	//由工作线程调用的执行工作事件函数
 
-			virtual bool OnExecuteWork(const uint,const WorkThreadExit)=0;
+			virtual bool OnExecuteWork(const uint)=0;
 		};//template<typename W> class WorkProc
 
 		/**
@@ -115,15 +103,10 @@ namespace hgl
 			/**
 			 * 开始执行工作函数
 			 */
-			virtual bool OnExecuteWork(const uint wt_index,const WorkThreadExit wte)
+			virtual bool OnExecuteWork(const uint wt_index) override
 			{
 				if(!work_list.WaitSemSwap(time_out))
-				{
-					if(wte==wteForce||wte==wteFinish)
 						return(false);
-
-					return(true);
-				}
 
 				WorkList &wl=work_list.GetReceive();
 
@@ -143,9 +126,6 @@ namespace hgl
 
 					wl.ClearData();
 				}
-
-				if(wte==wteForce)
-					return(false);
 
 				return(true);
 			}
@@ -201,22 +181,14 @@ namespace hgl
 			/**
 			 * 开始执行工作函数
 			 */
-			virtual bool OnExecuteWork(const uint wt_index,const WorkThreadExit wte)
+			virtual bool OnExecuteWork(const uint wt_index) override
 			{
 				W *obj=work_list.WaitSemReceive(time_out);
 
 				if(!obj)
-				{
-					if(wte==wteForce||wte==wteFinish)
-						return(false);
-
-					return(true);
-				}
+                    return(false);
 
 				this->OnWork(wt_index,obj);
-
-				if(wte==wteForce)
-					return(false);
 
 				return(true);
 			}
@@ -235,29 +207,42 @@ namespace hgl
 
 			uint work_thread_index;
 
-			atom_uint exit_work;																	///<退出标记
+            Semaphore exit_sem;
+            bool force_close;
 
 		public:
 
-			WorkThread(WorkProc<W> *wp)
+			WorkThread(WorkProc<W> *wp):exit_sem(1024)
 			{
 				work_proc=wp;
 				work_thread_index=0;
-				exit_work=wteNone;
+				force_close=false;
 			}
 
+#ifndef _DEBUG
 			virtual ~WorkThread()=default;
+#else
+            virtual ~WorkThread()
+            {
+                UTF8String thread_addr;
 
-            bool IsExitDelete()const override{return false;}								///<返回在退出线程时，不删除本对象
+                GetAddress(thread_addr);
+
+                LOG_INFO(U8_TEXT("WorkThread Destruct [")+thread_addr+U8_TEXT("]"));
+            }
+#endif//_DEBUG
+
+            bool IsExitDelete()const override{return false;}							///<返回在退出线程时，不删除本对象
 
 			void SetWorkThreadIndex(const uint index)
 			{
 				work_thread_index=index;
 			}
 
-			void ExitWork(WorkThreadExit wte)
+			void ExitWork(const bool fc)
 			{
-				exit_work=wte;
+				force_close=fc;
+                exit_sem.Release(1);
 			}
 
 			virtual bool Execute() override
@@ -265,7 +250,27 @@ namespace hgl
 				if(!work_proc)
 					RETURN_FALSE;
 
-				return work_proc->OnExecuteWork(work_thread_index,WorkThreadExit(exit_work.operator const hgl::uint()));
+                bool result=work_proc->OnExecuteWork(work_thread_index);
+
+                if(!exit_sem.TryAcquire())
+                    return(true);
+
+                if(!force_close)        //不是强退
+                {
+                    while(work_proc->OnExecuteWork(work_thread_index));     //把工作全部做完
+                }
+
+#ifdef _DEBUG
+                {
+                    UTF8String thread_addr;
+
+                    GetAddress(thread_addr);
+
+                    LOG_INFO(U8_TEXT("WorkThread Finish [")+thread_addr+U8_TEXT("]"));
+                }
+#endif//_DEBUG
+
+                return(false);
 			}
 		};//template<typename W> class WorkThread:public Thread
 
@@ -278,6 +283,8 @@ namespace hgl
 		{
 			ObjectList<WP> wp_list;														///<投递器列表
 			ObjectList<WT> wt_list;														///<工作线程列表
+
+			bool run=false;
 
 		public:
 
@@ -338,20 +345,25 @@ namespace hgl
 				for(int i=0;i<count;i++)
 					wt[i]->Start();
 
+                run=true;
 				return(true);
 			}
 
-			virtual void Close(WorkThreadExit wte=wteFinish)
+			virtual void Close(bool force_close=false)
 			{
+                if(!run)return;
+
 				int count=wt_list.GetCount();
 
                 WT **wt=wt_list.GetData();
 
 				for(int i=0;i<count;i++)
-					wt[i]->ExitWork(wte);
+					wt[i]->ExitWork(force_close);
 
 				for(int i=0;i<count;i++)
 					wt[i]->Wait();
+
+                run=false;
 			}
 		};//template<typename WP,typename WT> class WorkGroup
 	}//namespace workflow
