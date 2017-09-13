@@ -36,6 +36,9 @@ namespace hgl
 
 		public:	//由工作线程调用的执行工作事件函数
 
+            /**
+             * 工作执行处理函数
+             */
 			virtual bool OnExecuteWork(const uint)=0;
 		};//template<typename W> class WorkProc
 
@@ -105,6 +108,9 @@ namespace hgl
 			 */
 			virtual bool OnExecuteWork(const uint wt_index) override
 			{
+                //为什么不使用TrySemSwap，使用TrySemSwap固然会立即返回结果，但会引起线程频繁刷新造成CPU的流费。
+                //使用WaitSemSwap目前唯一坏处是在退出时，需要等待超时时间。
+
 				if(!work_list.WaitSemSwap(time_out))
 						return(false);
 
@@ -183,6 +189,9 @@ namespace hgl
 			 */
 			virtual bool OnExecuteWork(const uint wt_index) override
 			{
+                //为什么不使用TrySemReceive，使用TrySemReceive固然会立即返回结果，但会引起线程频繁刷新造成CPU的流费。
+                //使用WaitSemReceive目前唯一坏处是在退出时，需要等待超时时间。
+
 				W *obj=work_list.WaitSemReceive(time_out);
 
 				if(!obj)
