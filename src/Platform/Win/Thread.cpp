@@ -1,11 +1,23 @@
 ﻿#include<hgl/thread/Thread.h>
 #include<hgl/LogInfo.h>
+#include<windows.h>
 
 namespace hgl
 {
-    #define hgl_thread_result unsigned long __stdcall
+    DWORD WINAPI ThreadFunc(Thread *tc)
+	{
+		if(tc->ProcStartThread())
+		{
+			while(tc->Execute());
 
-    #include"../ThreadFunc.h"
+			tc->ProcEndThread();
+		}
+
+		if(tc->IsExitDelete())
+			delete tc;
+			
+		return(0);
+	}
 
     /**
     * (线程外部调用)执行当前线程，线程优先级为tplevel
@@ -16,7 +28,7 @@ namespace hgl
     {
         unsigned long threadid;
 
-        tp=::CreateThread(0,0,ThreadFunc,this,0,&threadid);
+        tp=::CreateThread(0,0,(PTHREAD_START_ROUTINE)ThreadFunc,this,0,&threadid);
 
         if(!tp)
         {

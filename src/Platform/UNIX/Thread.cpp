@@ -6,10 +6,24 @@
 #include<errno.h>
 
 namespace hgl
-{
-	#define hgl_thread_result void *
+{	
+	void *ThreadFunc(Thread *tc)
+	{
+		if(tc->ProcStartThread())
+		{
+			while(tc->Execute());
 
-	#include"../ThreadFunc.h"
+			tc->ProcEndThread();
+		}
+
+		if(tc->IsExitDelete())
+		{
+			delete tc;
+			pthread_detach(pthread_self());
+		}
+
+		return(0);
+	}
 
 	/**
 	* (线程外部调用)执行当前线程
@@ -27,10 +41,7 @@ namespace hgl
 
 		pthread_attr_init(&attr);
 
-		if(IsExitDelete())
-			pthread_attr_setdetachstate(&attr,PTHREAD_CREATE_DETACHED);              //注意这种方式初始化的，pthread_join会返回22无效
-		else
-			pthread_attr_setdetachstate(&attr,PTHREAD_CREATE_JOINABLE);
+		pthread_attr_setdetachstate(&attr,PTHREAD_CREATE_JOINABLE);
 
 		if(pthread_create(&tp,&attr,ThreadFunc,this))		//返回0表示正常
 		{
@@ -159,8 +170,6 @@ namespace hgl
             {
                 retval=pthread_join(tp,&res);
             }
-
-            //如果retval返回22，请检查线程初始化时，是否为PTHREAD_CREATE_DETACHED
 
 #ifdef _DEBUG
             LOG_INFO(U8_TEXT("pthread_timedjoin_np/pthread_join [")+thread_addr+U8_TEXT("] retval:")+UTF8String(retval));

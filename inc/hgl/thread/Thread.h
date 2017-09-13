@@ -5,8 +5,7 @@
 #include<hgl/thread/Semaphore.h>
 
 #if HGL_OS == HGL_OS_Windows
-	#include<windows.h>
-	using thread_ptr=HANDLE;
+	using thread_ptr=void *;       //windows版是HANDLE，但HANDLE其实就是void *，这里为了减少#include<windows.h>所以直接写为void *
 #else
 	#include<pthread.h>
 	using thread_ptr=pthread_t;
@@ -31,7 +30,7 @@ namespace hgl
 
 	protected:
 
-		thread_ptr tp;
+		thread_ptr tp=0;
 
 #if HGL_OS != HGL_OS_Windows
 		virtual void SetCancelState(bool,bool=true);
@@ -39,8 +38,10 @@ namespace hgl
 
 	public:
 
-		Thread();
-		virtual ~Thread();
+		virtual ~Thread()
+		{
+			Close();
+		}
 
 		const uint64 GetThreadID()const;															///<取得线程ID
 
@@ -52,7 +53,7 @@ namespace hgl
 		virtual bool Execute()=0;                                                                   ///<线程的运行函数
 
 		virtual bool ProcStartThread(){return(true);}												///<线程启动运行函数,在Execute前被调用
-		virtual void ProcEndThread(){};																///<结程结束运行函数,在Execute后被调用
+		virtual void ProcEndThread(){}																///<结程结束运行函数,在Execute后被调用
 
 		virtual bool IsExitDelete()const{return true;}												///<返回在退出线程时，是否删除本对象
 
