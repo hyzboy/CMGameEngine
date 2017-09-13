@@ -1,4 +1,4 @@
-#include<hgl/thread/Thread.h>
+﻿#include<hgl/thread/Thread.h>
 #include<hgl/thread/CondVar.h>
 #include<hgl/LogInfo.h>
 #include<pthread.h>
@@ -6,7 +6,12 @@
 #include<errno.h>
 
 namespace hgl
-{	
+{
+    /**
+      *  tips:	PTHREAD_CREATE_DETACHED 方式创建的线程，在退出时，自动清除线程。无法使用pthread_join函数获取运行状态,pthread_join会返回22号错误
+      *         PTHREAD_CREATE_JOINABLE 方式创建的线程，在退出时，不会清除线程，必使使用pthread_join函数获取。或是在退出时使用pthread_detach(pthread_self())。
+      */
+        
 	void *ThreadFunc(Thread *tc)
 	{
 		if(tc->ProcStartThread())
