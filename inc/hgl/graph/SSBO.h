@@ -1,4 +1,4 @@
-#ifndef HGL_GRAPH_OPENGL_CORE_SHADER_STORAGE_BUFFER_OBJECT_INCLUDE
+ï»¿#ifndef HGL_GRAPH_OPENGL_CORE_SHADER_STORAGE_BUFFER_OBJECT_INCLUDE
 #define HGL_GRAPH_OPENGL_CORE_SHADER_STORAGE_BUFFER_OBJECT_INCLUDE
 
 #include<hgl/type/Map.h>
@@ -19,7 +19,7 @@ namespace hgl
 
 		protected:
 
-			UTF8String block_name;										///<Êý¾Ý¿éÃû³Æ
+			UTF8String block_name;										///<æ•°æ®å—åç§°
 
 			uint ssbo;
 			int level;
@@ -38,9 +38,9 @@ namespace hgl
 
 			~SSBO();
 
-			int			GetSize		()const{return size;}				///<È¡µÃµ±Ç°UBO³ß´ç´óÐ¡
+			int			GetSize		()const{return size;}				///<å–å¾—å½“å‰UBOå°ºå¯¸å¤§å°
 
-			bool		Commit		(void *,int);						///<Ìá½»Êý¾Ýµ½ÏÔ´æ
+			bool		Commit		(void *,int);						///<æäº¤æ•°æ®åˆ°æ˜¾å­˜
 
 			void *		ReadMap		(int start=0,int access_size=0);
 			void *		WriteMap	(int start=0,int access_size=0);

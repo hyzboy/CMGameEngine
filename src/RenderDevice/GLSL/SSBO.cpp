@@ -1,4 +1,4 @@
-#include<hgl/graph/SSBO.h>
+ï»¿#include<hgl/graph/SSBO.h>
 
 #include<hgl/type/Stack.h>
 #include<hgl/graph/GL/glew.h>
@@ -11,8 +11,8 @@ namespace hgl
     {
         namespace
         {
-            //°ó¶¨µãÊÇÈ«¾Ö²»¿ÉÖØÓÃµÄ£¬ËùÒÔÊ¹ÓÃÒ»¸öÈ«¾Ö¼ÆÊı
-            static Stack<int> ssbo_binding_stack;                                               ///<°ó¶¨µã¼ÆÊı
+            //ç»‘å®šç‚¹æ˜¯å…¨å±€ä¸å¯é‡ç”¨çš„ï¼Œæ‰€ä»¥ä½¿ç”¨ä¸€ä¸ªå…¨å±€è®¡æ•°
+            static Stack<int> ssbo_binding_stack;                                               ///<ç»‘å®šç‚¹è®¡æ•°
 
             static int max_ssbo_binding=0;
             static int max_ssbo_size=0;
@@ -90,9 +90,9 @@ namespace hgl
         }
 
         /**
-         * Ö»¶Á·ÃÎÊÒ»¿éÊı¾İ
-         * @param start ÆğÊ¼×Ö½Ú
-         * @param access_size Òª·ÃÎÊµÄ³¤¶È
+         * åªè¯»è®¿é—®ä¸€å—æ•°æ®
+         * @param start èµ·å§‹å­—èŠ‚
+         * @param access_size è¦è®¿é—®çš„é•¿åº¦
          */
         void *SSBO::ReadMap(int start,int access_size)
         {
@@ -112,9 +112,9 @@ namespace hgl
         }
 
         /**
-         * Ö»Ğ´·ÃÎÊÒ»¿éÊı¾İ
-         * @param start ÆğÊ¼×Ö½Ú
-         * @param access_size Òª·ÃÎÊµÄ³¤¶È
+         * åªå†™è®¿é—®ä¸€å—æ•°æ®
+         * @param start èµ·å§‹å­—èŠ‚
+         * @param access_size è¦è®¿é—®çš„é•¿åº¦
          */
         void *SSBO::WriteMap(int start,int access_size)
         {
