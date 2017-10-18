@@ -26,11 +26,11 @@ namespace hgl
 
         while(*sp&&(int(tp-(uint8 *)dst)<dst_size))
         {
-            if(*sp<=0x7F)                        // U-00000000 - U-0000007F: 0xxx
+            if(*sp<=0x7F)                       // U-00000000 - U-0000007F: 0xxx
             {
                 *tp++=(*sp)&0xFF;
             }
-            else if(*sp<=0x7FF)                    // U-00000080 - U-000007FF: 110xxxxx 10xxxxxx
+            else if(*sp<=0x7FF)                 // U-00000080 - U-000007FF: 110xxxxx 10xxxxxx
             {
                 *tp++=0xC0|((*sp>> 6)&0x1F);
                 *tp++=0x80|((*sp    )&0x3F);
