@@ -50,10 +50,6 @@ namespace hgl
 
         OSString gui;                   ///<《古月》GUI资源路径
         OSString plug_ins;              ///<《古月》插件路径
-
-    public:
-
-        CMGDKPATH();
     };//struct CMGDKPATH
 
     /**

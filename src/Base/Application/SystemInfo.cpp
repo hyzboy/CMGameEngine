@@ -13,10 +13,6 @@ namespace hgl
         memset(this,0,sizeof(MemInfo));
     }
 
-    CMGDKPATH::CMGDKPATH()
-    {
-    }
-
     SystemInfo::SystemInfo()
     {
         memset(os_name,0,sizeof(os_name));
