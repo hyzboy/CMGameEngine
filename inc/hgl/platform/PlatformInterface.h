@@ -65,10 +65,13 @@ namespace hgl
 
             bool no_use_stencil;                                                                    ///<不使用Stencil缓冲区
 
-            int32 AccumRedBits;																		///<Accum缓冲区红色位深度,默认0
-            int32 AccumGreenBits;																	///<Accum缓冲区绿色位深度,默认0
-            int32 AccumBlueBits;																	///<Accum缓冲区蓝色位深度,默认0
-            int32 AccumAlphaBits;																	///<Accum缓冲区Alpha位深度,默认0
+			struct
+			{
+				int32 red;																			///<Accum缓冲区红色位深度,默认0
+				int32 green;																		///<Accum缓冲区绿色位深度,默认0
+				int32 blue;																			///<Accum缓冲区蓝色位深度,默认0
+				int32 alpha;																		///<Accum缓冲区Alpha位深度,默认0
+			}AccumBits;
 
             int32 MultiSample;																		///<多重采样级别(全屏抗矩齿级别)
 
