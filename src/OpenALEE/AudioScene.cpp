@@ -73,8 +73,8 @@ namespace hgl
 
         listener=al;
 
-        ref_distance=1000;
-        max_distance=100000;
+        ref_distance=1;
+        max_distance=10000;
     }
 
     AudioSourceItem *AudioScene::Create(AudioBuffer *buf,const Vector3f &pos,const float &gain)
