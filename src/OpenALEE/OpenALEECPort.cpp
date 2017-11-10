@@ -9,46 +9,46 @@ using namespace openal;
 
 HGL_PLUGIN_FUNC AudioListener *CreateListener()
 {
-	return(new AudioListener());
+    return(new AudioListener());
 }
 
 HGL_PLUGIN_FUNC void ClearListener(AudioListener *listener)
 {
-	if(listener)
-		delete listener;
+    if(listener)
+        delete listener;
 }
 
-HGL_PLUGIN_FUNC const float	ListenerGetGain			(AudioListener *listener) 
-{ 
-	if (!listener)
-		return(0);
-
-	return listener->GetGain(); 
-}
-
-HGL_PLUGIN_FUNC const bool	ListenerGetPosition		(AudioListener *listener, Vector3f &			pos) 
-{ 
-	if (!listener)
-		return(false); 
-	
-	pos = listener->GetPosition(); 
-	return(true); 
-}
-
-HGL_PLUGIN_FUNC const bool	ListenerGetVelocity		(AudioListener *listener, Vector3f &			vel) 
-{ 
-	if (!listener)
-		return(false); 
-	
-	vel = listener->GetVelocity(); 
-	return(true); 
-}
-
-HGL_PLUGIN_FUNC const bool	ListenerGetOrientation	(AudioListener *listener, ListenerOrientation &	ori) 
+HGL_PLUGIN_FUNC const float	ListenerGetGain			(AudioListener *listener)
 {
-	if (!listener)return(false); 
-	memcpy(&ori, &(listener->GetOrientation()), sizeof(ListenerOrientation));
-	return(true);
+    if (!listener)
+        return(0);
+
+    return listener->GetGain();
+}
+
+HGL_PLUGIN_FUNC const bool	ListenerGetPosition		(AudioListener *listener, Vector3f &pos)
+{
+    if (!listener)
+        return(false);
+
+    pos = listener->GetPosition();
+    return(true);
+}
+
+HGL_PLUGIN_FUNC const bool	ListenerGetVelocity		(AudioListener *listener, Vector3f &vel)
+{
+    if (!listener)
+        return(false);
+
+    vel = listener->GetVelocity();
+    return(true);
+}
+
+HGL_PLUGIN_FUNC const bool	ListenerGetOrientation	(AudioListener *listener, ListenerOrientation &	ori)
+{
+    if (!listener)return(false);
+    memcpy(&ori, &(listener->GetOrientation()), sizeof(ListenerOrientation));
+    return(true);
 }
 
 HGL_PLUGIN_FUNC void ListenerSetGain		(AudioListener *listener,		float					gain) {if (listener)listener->SetGain(gain); }
@@ -58,38 +58,38 @@ HGL_PLUGIN_FUNC void ListenerSetOrientation	(AudioListener *listener, const List
 
 HGL_PLUGIN_FUNC AudioBuffer *CreateAudioBufferFromData(void *buf, int size, AudioFileType aft){return(new AudioBuffer(buf, size, aft));}
 HGL_PLUGIN_FUNC AudioBuffer *CreateAudioBufferFromFile(const os_char *filename, AudioFileType aft){return(new AudioBuffer(filename, aft));}
-				
+
 HGL_PLUGIN_FUNC void ClearAudioBuffer(AudioBuffer *buf){if(buf)delete buf;}
 
 HGL_PLUGIN_FUNC bool SetAudioBufferData(AudioBuffer *audio_buffer, uint format, const void *data, uint size, uint freq)
 {
-	if (!audio_buffer)return(false);
+    if (!audio_buffer)return(false);
 
-	return audio_buffer->SetData(format, data, size, freq);
+    return audio_buffer->SetData(format, data, size, freq);
 }
 
 HGL_PLUGIN_FUNC bool LoadDataToAudioBuffer(AudioBuffer *audio_buffer, void *data, int size, AudioFileType aft)
 {
-	if (!audio_buffer)return(false);
+    if (!audio_buffer)return(false);
 
-	return audio_buffer->Load(data, size, aft);
+    return audio_buffer->Load(data, size, aft);
 }
 
 HGL_PLUGIN_FUNC bool LoadFileToAudioBuffer(AudioBuffer *audio_buffer, const os_char *filename, AudioFileType aft)
 {
-	if (!audio_buffer)return(false);
+    if (!audio_buffer)return(false);
 
-	return audio_buffer->Load(filename, aft);
+    return audio_buffer->Load(filename, aft);
 }
 
 HGL_PLUGIN_FUNC void ClearAudioBufferData(AudioBuffer *audio_buffer)
 {
-	if (!audio_buffer)return;
+    if (!audio_buffer)return;
 
-	audio_buffer->Clear();
+    audio_buffer->Clear();
 }
 
-HGL_PLUGIN_FUNC bool SourceGetPosition	(AudioSource *source,Vector3f &pos){if(!source)return(false);pos=source->GetPosition();return(true);} 
+HGL_PLUGIN_FUNC bool SourceGetPosition	(AudioSource *source,Vector3f &pos){if(!source)return(false);pos=source->GetPosition();return(true);}
 HGL_PLUGIN_FUNC bool SourceGetVelocity	(AudioSource *source,Vector3f &vel){if(!source)return(false);vel=source->GetVelocity();return(true);}
 HGL_PLUGIN_FUNC bool SourceGetDirection	(AudioSource *source,Vector3f &dir){if(!source)return(false);dir=source->GetDirection();return(true);}
 HGL_PLUGIN_FUNC bool SourceGetAngle		(AudioSource *source,ConeAngle &ca){if(!source)return(false);ca =source->GetAngle();return(true);}
