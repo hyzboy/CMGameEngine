@@ -3,33 +3,31 @@
 
 namespace hgl
 {
-    void SystemCheck(SystemInfo *,bool);
+//    void SystemCheck(SystemInfo *,bool);
 
-    void InitCore(SystemInfo &si,bool create_log);
+	class ConsoleSystemInitInfo;
+
+	bool InitCore(SystemInfo &si, ConsoleSystemInitInfo *sii);
     void CloseCore();
 }
 
 using namespace hgl;
 
-namespace openal
+HGL_PLUGIN_FUNC bool InitOpenALEE(const os_char *driver_name,const char *device_name)
 {
-    bool InitOpenALEE(const os_char *driver_name,const char *device_name,bool create_log)
-    {
-        SystemInfo si;
+    SystemInfo si;
 
-        InitCore(si,create_log);                //初始化内核
-        SystemCheck(&si,create_log);            //系统检测
+    InitCore(si,nullptr);                //初始化内核
 
-        if(!InitOpenAL(driver_name,device_name))
-            return(false);
+    if(!openal::InitOpenAL(driver_name,device_name))
+        return(false);
 
-        return(true);
-    }
+    return(true);
+}
 
-    void CloseOpenALEE()
-    {
-        CloseOpenAL();
+HGL_PLUGIN_FUNC void CloseOpenALEE()
+{
+	openal::CloseOpenAL();
 
-        CloseCore();
-    }
+    CloseCore();
 }

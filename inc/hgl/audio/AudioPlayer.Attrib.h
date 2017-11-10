@@ -58,12 +58,12 @@ protected:
 	bool GetLoop();
 	void SetLoop(bool);
 
-protected:
+public:
 
 	uint    	GetIndex(){return audiosource.index;}
 	double		GetTime(){return time;}
 	PlayState	GetPlayState(){return ps;}
-	int     	GetState(){return audiosource.GetState();}
+	int     	GetSourceState(){return audiosource.GetState();}
 	float   	GetMinGain(){return audiosource.GetMinGain();}
 	float   	GetMaxGain(){return audiosource.GetMaxGain();}
 

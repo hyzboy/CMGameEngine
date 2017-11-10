@@ -32,13 +32,14 @@ namespace hgl
 
     bool InitCore(SystemInfo &si,ConsoleSystemInitInfo *sii)
     {
-        if(sii->log.disable_log==false)
+        if(sii
+		 &&sii->log.disable_log==false)
         {
-            AddLogger(CreateLoggerConsole    (sii->info.ProjectCode,(logger::LogLevel)sii->log.console    ));
-            AddLogger(CreateLoggerFile        (sii->info.ProjectCode,(logger::LogLevel)sii->log.file        ));
+            AddLogger(CreateLoggerConsole   (sii->info.ProjectCode,(logger::LogLevel)sii->log.console	));
+            AddLogger(CreateLoggerFile		(sii->info.ProjectCode,(logger::LogLevel)sii->log.file		));
 
 #if HGL_OS==HGL_OS_Windows
-            AddLogger(CreateLoggerDialog    (sii->info.ProjectCode,(logger::LogLevel)sii->log.dialog    ));
+            AddLogger(CreateLoggerDialog	(sii->info.ProjectCode,(logger::LogLevel)sii->log.dialog	));
 #endif//HGL_OS==HGL_OS_Windows
             //AddLogger(CreateLoggerNetwork    (sii->info.ProjectCode,sii->log.network    ));
 
@@ -55,7 +56,8 @@ namespace hgl
     #endif//HGL_BIG_ENDIAN
             LOG_ERROR(OS_TEXT("cpu endian error,this library is bad.library macro Cpu=") HGL_CPU_NAME OS_TEXT(", Endian is ") HGL_CPU_ENDIAN);
 
-        if(sii->info.ProjectCode.Length()<=0)
+        if(sii
+		 &&sii->info.ProjectCode.Length()<=0)
         {
             LOG_PROBLEM(OS_TEXT("please set ProjectCode,use in Registry,Filename,Network Name,Code,....."));
             return(false);
@@ -78,7 +80,8 @@ namespace hgl
 
         GetCMGDKPath(si.path);        //取得CMGDK路径
 
-        if(sii->CheckSystem)
+        if(sii
+		 &&sii->CheckSystem)
             SystemCheck(&si);
 
         return(true);
