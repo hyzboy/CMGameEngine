@@ -353,8 +353,8 @@ namespace hgl
                 {
                     if(draw_rect)
                     {
-                        add("\tvec4 lt=vec4(Position.xy,vec2(0,0));\n"
-                            "\tvec4 rb=vec4(Position.zw,vec2(0,0));\n"
+                        add("\tvec4 lt=vec4(Position.xy,vec2(0,1));\n"
+                            "\tvec4 rb=vec4(Position.zw,vec2(0,1));\n"
                             "\n"
                             "\tvec4 lt_fin=lt*" HGL_VS_MVP_MATRIX ";\n"
                             "\tvec4 rb_fin=rb*" HGL_VS_MVP_MATRIX ";\n"
