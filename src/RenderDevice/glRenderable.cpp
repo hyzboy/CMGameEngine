@@ -262,7 +262,7 @@ namespace hgl
 				sm->Add(state,shader);
 			}
 #else
-			shader=storage->Get(state);
+			shader=sm->Get(state);
 #endif//_DEBUG
 
 			return shader;

@@ -130,7 +130,7 @@ namespace hgl
 
             void shader_stringlist::add_main_begin()
             {
-                add("void main(void)\n"
+                add("void main()\n"
                     "{\n");
             }
 

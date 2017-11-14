@@ -221,7 +221,7 @@ namespace hgl
                 add_out_fv(out_texcoord_name[mtc_index],coord_num);
             }
 
-            bool vs::add_end()
+            bool vs::add_end(bool draw_rect)
             {
                 add("\tvec4 Position;\n");
 
@@ -350,7 +350,22 @@ namespace hgl
                 if (!mvp_matrix)
                     add("\tgl_Position=Position;\n");
                 else
-                    add("\tgl_Position=Position*" HGL_VS_MVP_MATRIX ";\n");
+                {
+                    if(draw_rect)
+                    {
+                        add("\tvec4 lt=vec4(Position.xy,vec2(0,0));\n"
+                            "\tvec4 rb=vec4(Position.zw,vec2(0,0));\n"
+                            "\n"
+                            "\tvec4 lt_fin=lt*" HGL_VS_MVP_MATRIX ";\n"
+                            "\tvec4 rb_fin=rb*" HGL_VS_MVP_MATRIX ";\n"
+                            "\n"
+                            "\tgl_Position=vec4(lt_fin.xy,rb_fin.xy);\n");
+                    }
+                    else
+                    {
+                        add("\tgl_Position=Position*" HGL_VS_MVP_MATRIX ";\n");
+                    }
+                }
 
                 return(true);
             }
@@ -461,7 +476,7 @@ namespace hgl
 
             code.add_main_begin();
 
-            code.add_end();                            //收尾各方面的处理
+            code.add_end(state->rect_primivate);                            //收尾各方面的处理
 
             code.add_main_end();
 

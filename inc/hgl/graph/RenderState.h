@@ -19,9 +19,14 @@ namespace hgl
             rmNone=0,
 
             rmForward,              //前向
-            rmDeferredLighting,     //前向+延迟灯光
 
-            rmDeferredShading128,   //延迟,128位GBuffer模式(48位RGB,16位Specular,32位法线,32位XY坐标)
+            rmDeferred1RT,          //128位GBuffer模式(48位RGB,16位Specular,32位法线,32位XY坐标)
+            rmDeferred2RT,          //2RT模式
+            rmDeferred7RT,          //7RT模式(rgb,depth,specular.......所有数据各独占一个完整通道，主要用于调试)
+
+            rmDeferredMerge,        //延迟结果最终合并
+
+            rmDepth,                //仅深度
 
             rmEnd
         };
