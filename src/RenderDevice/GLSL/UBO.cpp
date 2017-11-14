@@ -21,7 +21,7 @@ namespace hgl
             static Stack<int> ubo_binding_stack;                                               ///<绑定点计数
 
             static int max_ubo_binding=0;
-            static int max_ubo_size=0;
+            static int max_ubo_size=0;                                                          ///<UBO最大容量，测试了一下，Quadro K600是64k
         }//namespace
 
         namespace ubo
@@ -103,12 +103,12 @@ namespace hgl
             UBO_VALUE(Mat3,float,9)
             UBO_VALUE(Mat4,float,16)
 
-             UBO_VALUE(Mat2x3,float,6)
-             UBO_VALUE(Mat2x4,float,8)
-             UBO_VALUE(Mat3x2,float,6)
+            UBO_VALUE(Mat2x3,float,6)
+            UBO_VALUE(Mat2x4,float,8)
+            UBO_VALUE(Mat3x2,float,6)
             UBO_VALUE(Mat3x4,float,12)
-             UBO_VALUE(Mat4x2,float,8)
-             UBO_VALUE(Mat4x3,float,12)
+            UBO_VALUE(Mat4x2,float,8)
+            UBO_VALUE(Mat4x3,float,12)
     #undef UBO_VALUE
 
         GLuint sizeFromUniformType(GLint type)
