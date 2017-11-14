@@ -8,7 +8,7 @@
 using namespace hgl;
 using namespace hgl::graph;
 
-#define USE_PRIM_RECTANGLE			//不支持
+#define USE_PRIM_RECTANGLE			//现仅支持了vertex，还未实现texcoord/color
 
 #ifndef USE_PRIM_RECTANGLE
 const uint16	vertex[]={	100,100,	//left-top
