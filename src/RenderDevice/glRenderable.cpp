@@ -1,5 +1,5 @@
 ﻿#include<hgl/graph/Renderable.h>
-#include<hgl/graph/ShaderStorage.h>
+#include<hgl/graph/ShaderManage.h>
 #include"ShaderDefine.h"
 #include<hgl/type/Smart.h>
 #include<hgl/type/Map.h>
@@ -224,12 +224,12 @@ namespace hgl
 #ifdef _DEBUG
 		Shader *CreateShader(const RenderState *state,const OSString &save_filename);
 
-		Shader *Renderable::AutoCreateShader(bool mvp,ShaderStorage *storage,const OSString &debug_outname)
+		Shader *Renderable::AutoCreateShader(bool mvp,ShaderManage *sm,const OSString &debug_outname)
 #else
-		Shader *Renderable::AutoCreateShader(bool mvp,ShaderStorage *storage)
+		Shader *Renderable::AutoCreateShader(bool mvp,ShaderManage *sm)
 #endif//_DEBUG
 		{
-			if(!storage)storage=global_shader_storage;			//使用全局Shader仓库
+			if(!sm)sm=global_shader_manage;			            //使用全局Shader仓库
 
 			if(shader)											//如果有shader存在
 			{
@@ -250,7 +250,7 @@ namespace hgl
 			}
 
 #ifdef _DEBUG
-			shader=storage->Find(state);
+			shader=sm->Find(state);
 
 			if(!shader)
 			{
@@ -259,7 +259,7 @@ namespace hgl
 				if(!shader)
 					return(nullptr);
 
-				storage->Add(state,shader);
+				sm->Add(state,shader);
 			}
 #else
 			shader=storage->Get(state);
