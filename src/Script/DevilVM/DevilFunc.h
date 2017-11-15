@@ -42,7 +42,7 @@ namespace hgl
 
 		void AddScriptFuncCall(DevilFunc *);		//增加脚本函数呼叫
 
-		DevilValueInterface *AddValue(eTokenType,const UTF16String &);			//增加一个变量
+		DevilValueInterface *AddValue(TokenType,const UTF16String &);			//增加一个变量
 	};//class DevilFunc
 }//namespace hgl
 #endif

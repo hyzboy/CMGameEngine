@@ -1,47 +1,13 @@
-/*
-   AngelCode Scripting Library
-   Copyright (c) 2003-2007 Andreas Jonsson
+#ifndef HGL_TOKENDEF_INCLUDE
+#define HGL_TOKENDEF_INCLUDE
 
-   This software is provided 'as-is', without any express or implied
-   warranty. In no event will the authors be held liable for any
-   damages arising from the use of this software.
+/**
+ * like C Token 定义，此模块源自Angel script
+ */
 
-   Permission is granted to anyone to use this software for any
-   purpose, including commercial applications, and to alter it and
-   redistribute it freely, subject to the following restrictions:
-
-   1. The origin of this software must not be misrepresented; you
-      must not claim that you wrote the original software. If you use
-      this software in a product, an acknowledgment in the product
-      documentation would be appreciated but is not required.
-
-   2. Altered source versions must be plainly marked as such, and
-      must not be misrepresented as being the original software.
-
-   3. This notice may not be removed or altered from any source
-      distribution.
-
-   The original version of this library can be located at:
-   http://www.angelcode.com/angelscript/
-
-   Andreas Jonsson
-   andreas@angelcode.com
-*/
-
-
-//
-// as_tokendef.h
-//
-// Definitions for tokens identifiable by the tokenizer
-//
-
-
-#ifndef AS_TOKENDEF_H
-#define AS_TOKENDEF_H
-
-namespace angle_script
+namespace hgl
 {
-	enum eTokenType
+	enum TokenType
 	{
 		ttUnrecognizedToken,
 
@@ -166,15 +132,15 @@ namespace angle_script
 		ttNull,                // null
 		ttClass,               // class
 		ttCast                 // cast
-	};
+    };//enum TokenType
 
-	struct sTokenWord
+	struct TokenWord
 	{
 		const u16char *word;
-		eTokenType   tokenType;
+		TokenType   type;
 	};
 
-	constexpr sTokenWord tokenWords[] =
+	constexpr TokenWord TokenWordsList[] =
 	{
 		{U16_TEXT("+")        , ttPlus},
 		{U16_TEXT("-")        , ttMinus},
@@ -225,23 +191,13 @@ namespace angle_script
 		{U16_TEXT("^^")       , ttXor},
 		{U16_TEXT("@")        , ttHandle},
 		{U16_TEXT("and")      , ttAnd},
-	#ifdef AS_DEPRECATED
-		{U16_TEXT("bits")     , ttUInt},
-		{U16_TEXT("bits8")    , ttUInt8},
-		{U16_TEXT("bits16")   , ttUInt16},
-		{U16_TEXT("bits32")   , ttUInt},
-	#endif
 		{U16_TEXT("bool")     , ttBool},
 		{U16_TEXT("break")    , ttBreak},
 		{U16_TEXT("cast")     , ttCast},
 		{U16_TEXT("const")    , ttConst},
 		{U16_TEXT("continue") , ttContinue},
 		{U16_TEXT("do")       , ttDo},
-	#ifdef  AS_USE_DOUBLE_AS_FLOAT
-		{U16_TEXT("double")   , ttFloat},
-	#else
 		{U16_TEXT("double")   , ttDouble},
-	#endif
 		{U16_TEXT("else")     , ttElse},
 		{U16_TEXT("false")    , ttFalse},
 		{U16_TEXT("float")    , ttFloat},
@@ -284,9 +240,9 @@ namespace angle_script
 		{U16_TEXT("xor")      , ttXor},
 	};
 
-	constexpr int       numTokenWords   =sizeof(tokenWords)/sizeof(sTokenWord);
+    constexpr int       TokenWordsNumber=sizeof(TokenWordsList)/sizeof(TokenWord);
 
-	constexpr u16char * whiteSpace      =U16_TEXT(" \t\r\n\xFEFF");
-	constexpr int       whiteSpaceNumber=sizeof(whiteSpace)/sizeof(u16char);
-}//namespace angle_script
-#endif
+	constexpr u16char * WhiteSpace      =U16_TEXT(" \t\r\n\xFEFF");
+    constexpr int       WhiteSpaceNumber=sizeof(WhiteSpace)/sizeof(u16char);
+}//namespace hgl
+#endif//HGL_TOKENDEF_INCLUDE

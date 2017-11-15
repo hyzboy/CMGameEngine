@@ -5,7 +5,6 @@
 #include"DevilFunc.h"
 #include<hgl/type/BaseString.h>
 
-using namespace angle_script;
 namespace hgl
 {
 	class DevilParse

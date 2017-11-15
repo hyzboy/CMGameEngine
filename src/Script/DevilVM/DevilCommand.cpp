@@ -1,5 +1,4 @@
-﻿#include<hgl.h>
-#include"DevilCommand.h"
+﻿#include"DevilCommand.h"
 #include"DevilContext.h"
 #include"DevilFunc.h"
 

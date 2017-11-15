@@ -5,7 +5,6 @@
 #include<hgl/type/BaseString.h>
 #include"as_tokenizer.h"
 
-using namespace angle_script;
 namespace hgl
 {
 	class DevilScriptModule;
@@ -48,9 +47,9 @@ namespace hgl
 
         void *func;						//函数地址
 
-		eTokenType result;				//返回类型
+		TokenType result;				//返回类型
 
-		List<eTokenType> param;			//参数类型
+		List<TokenType> param;			//参数类型
 
 		DevilFuncMap()
 		{
@@ -63,7 +62,7 @@ namespace hgl
 
 	struct DevilPropertyMap				//真实属性映射
 	{
-		eTokenType type;				//数据类型
+		TokenType type;                 //数据类型
 
 		void *address;					//属性地址
 	};
@@ -100,11 +99,11 @@ namespace hgl
 
 	public:
 
-    	eTokenType type;
+    	TokenType type;
 
 	public:
 
-		DevilValueInterface(DevilScriptModule *dm,eTokenType tt)
+		DevilValueInterface(DevilScriptModule *dm,TokenType tt)
 		{
 			module=dm;
 			type=tt;
@@ -210,7 +209,7 @@ namespace hgl
 
 	public:
 
-		DevilValueProperty(DevilScriptModule *dm,DevilPropertyMap *dpm,eTokenType type):DevilValue<T>(dm,type)
+		DevilValueProperty(DevilScriptModule *dm,DevilPropertyMap *dpm,TokenType type):DevilValue<T>(dm,type)
 		{
 			address=(T *)(dpm->address);
 		}
@@ -227,7 +226,7 @@ namespace hgl
 
 	public:
 
-		DevilValueFuncMap(DevilScriptModule *dm,DevilCommand *dfc,eTokenType type):DevilValue<T>(dm,type)
+		DevilValueFuncMap(DevilScriptModule *dm,DevilCommand *dfc,TokenType type):DevilValue<T>(dm,type)
 		{
 			cmd=dfc;
 		}
@@ -260,7 +259,7 @@ namespace hgl
 			value_name=u"null";
 		}
 
-		DevilScriptValue(DevilScriptModule *dm,const UTF16String &fn,const UTF16String &vn,eTokenType tt):DevilValue<T>(dm,tt)
+		DevilScriptValue(DevilScriptModule *dm,const UTF16String &fn,const UTF16String &vn,TokenType tt):DevilValue<T>(dm,tt)
 		{
 			func_name=fn;
 			value_name=vn;
@@ -329,7 +328,7 @@ namespace hgl
 		bool Run(DevilScriptContext *);
 	};
 
-	class DevilScriptFuncCall:public DevilFuncCall                                                  //脚本函数呼叫
+	template<typename T> class DevilScriptFuncCall:public DevilFuncCall<T>                          //脚本函数呼叫
 	{
 		DevilScriptModule *module;
 		DevilFunc *func;

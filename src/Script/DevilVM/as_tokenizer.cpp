@@ -1,92 +1,51 @@
-/*
-   AngelCode Scripting Library
-   Copyright (c) 2003-2007 Andreas Jonsson
-
-   This software is provided 'as-is', without any express or implied
-   warranty. In no event will the authors be held liable for any
-   damages arising from the use of this software.
-
-   Permission is granted to anyone to use this software for any
-   purpose, including commercial applications, and to alter it and
-   redistribute it freely, subject to the following restrictions:
-
-   1. The origin of this software must not be misrepresented; you
-      must not claim that you wrote the original software. If you use
-      this software in a product, an acknowledgment in the product
-      documentation would be appreciated but is not required.
-
-   2. Altered source versions must be plainly marked as such, and
-      must not be misrepresented as being the original software.
-
-   3. This notice may not be removed or altered from any source
-      distribution.
-
-   The original version of this library can be located at:
-   http://www.angelcode.com/angelscript/
-
-   Andreas Jonsson
-   andreas@angelcode.com
-*/
-
-
-//
-// as_tokenizer.cpp
-//
-// This class identifies tokens from the script code
-//
-
 #include "as_tokenizer.h"
 #include "as_tokendef.h"
 
-#if !defined(AS_NO_MEMORY_H)
-#include <memory.h>
-#endif
-#include <assert.h> // assert()
 #include <hgl/Str.h> // strcmp()
 
-namespace angle_script
+namespace hgl
 {
-	asCTokenizer::asCTokenizer()
+	CTokenizer::CTokenizer()
 	{
 	}
 
-	asCTokenizer::~asCTokenizer()
+	CTokenizer::~CTokenizer()
 	{
 	}
 
-	const u16char *asGetTokenDefinition(int tokenType)
+	const u16char *GetTokenDefinition(int type)
 	{
-		if( tokenType == ttUnrecognizedToken			) return U16_TEXT("<unrecognized token>");
-		if( tokenType == ttEnd							) return U16_TEXT("<end of file>");
-		if( tokenType == ttWhiteSpace					) return U16_TEXT("<white space>");
-		if( tokenType == ttOnelineComment				) return U16_TEXT("<one line comment>");
-		if( tokenType == ttMultilineComment				) return U16_TEXT("<multiple lines comment>");
-		if( tokenType == ttIdentifier					) return U16_TEXT("<identifier>");
-		if( tokenType == ttIntConstant					) return U16_TEXT("<integer constant>");
-		if( tokenType == ttFloatConstant				) return U16_TEXT("<float constant>");
-		if( tokenType == ttDoubleConstant				) return U16_TEXT("<double constant>");
-		if( tokenType == ttStringConstant				) return U16_TEXT("<string constant>");
-		if( tokenType == ttNonTerminatedStringConstant	) return U16_TEXT("<unterminated string constant>");
-		if( tokenType == ttBitsConstant					) return U16_TEXT("<bits constant>");
-		if( tokenType == ttHeredocStringConstant		) return U16_TEXT("<heredoc string constant>");
+		if( type == ttUnrecognizedToken			) return U16_TEXT("<unrecognized token>");
+		if( type == ttEnd							) return U16_TEXT("<end of file>");
+		if( type == ttWhiteSpace					) return U16_TEXT("<white space>");
+		if( type == ttOnelineComment				) return U16_TEXT("<one line comment>");
+		if( type == ttMultilineComment				) return U16_TEXT("<multiple lines comment>");
+		if( type == ttIdentifier					) return U16_TEXT("<identifier>");
+		if( type == ttIntConstant					) return U16_TEXT("<integer constant>");
+		if( type == ttFloatConstant				) return U16_TEXT("<float constant>");
+		if( type == ttDoubleConstant				) return U16_TEXT("<double constant>");
+		if( type == ttStringConstant				) return U16_TEXT("<string constant>");
+		if( type == ttNonTerminatedStringConstant	) return U16_TEXT("<unterminated string constant>");
+		if( type == ttBitsConstant					) return U16_TEXT("<bits constant>");
+		if( type == ttHeredocStringConstant		) return U16_TEXT("<heredoc string constant>");
 
-		for( hgl::uint n = 0; n < numTokenWords; n++ )
-			if( tokenWords[n].tokenType == tokenType )
-				return tokenWords[n].word;
+		for( uint n = 0; n < TokenWordsNumber; n++ )
+			if( TokenWordsList[n].type == type )
+				return TokenWordsList[n].word;
 
 		return 0;
 	}
 
-	const u16char *GetTokenName(eTokenType type)
+	const u16char *GetTokenName(TokenType type)
 	{
-		for(hgl::uint i=0;i<numTokenWords;i++)
-			if(tokenWords[i].tokenType==type)
-				return(tokenWords[i].word);
+		for(uint i=0;i<TokenWordsNumber;i++)
+			if(TokenWordsList[i].type==type)
+				return(TokenWordsList[i].word);
 
 		return(nullptr);
 	}
 
-	eTokenType asCTokenizer::GetToken(const u16char *source, hgl::uint sourceLength, hgl::uint *tokenLength)
+	TokenType CTokenizer::GetToken(const u16char *source, uint sourceLength, uint *tokenLength)
 	{
 // 		assert(source != 0);
 // 		assert(tokenLength != 0);
@@ -102,7 +61,7 @@ namespace angle_script
 		return tokenType;
 	}
 
-	int asCTokenizer::ParseToken()
+	int CTokenizer::ParseToken()
 	{
 		if( IsWhiteSpace() ) return 0;
 		if( IsComment()    ) return 0;
@@ -119,18 +78,18 @@ namespace angle_script
 		return -1;
 	}
 
-	bool asCTokenizer::IsWhiteSpace()
+	bool CTokenizer::IsWhiteSpace()
 	{
-		hgl::uint n;
+		uint n;
 
-		const hgl::uint numWhiteSpace = whiteSpaceNumber;
+		const uint numWhiteSpace = WhiteSpaceNumber;
 
 		for( n = 0; n < sourceLength; n++ )
 		{
 			bool isWhiteSpace = false;
-			for( hgl::uint w = 0; w < numWhiteSpace; w++ )
+			for( uint w = 0; w < numWhiteSpace; w++ )
 			{
-				if( source[n] == whiteSpace[w] )
+				if( source[n] == WhiteSpace[w] )
 				{
 					isWhiteSpace = true;
 					break;
@@ -149,7 +108,7 @@ namespace angle_script
 		return false;
 	}
 
-	bool asCTokenizer::IsComment()
+	bool CTokenizer::IsComment()
 	{
 		if( sourceLength < 2 )
 			return false;
@@ -162,7 +121,7 @@ namespace angle_script
 			// One-line comment
 
 			// Find the length
-			hgl::uint n;
+			uint n;
 			for( n = 2; n < sourceLength; n++ )
 			{
 				if( source[n] == '\n' )
@@ -180,7 +139,7 @@ namespace angle_script
 			// Multi-line comment
 
 			// Find the length
-			hgl::uint n;
+			uint n;
 			for( n = 2; n < sourceLength-1; )
 			{
 				if( source[n++] == '*' && source[n] == '/' )
@@ -196,7 +155,7 @@ namespace angle_script
 		return false;
 	}
 
-	bool asCTokenizer::IsConstant()
+	bool CTokenizer::IsConstant()
 	{
 		// Starting with number
 		if( source[0] >= '0' && source[0] <= '9' )
@@ -204,7 +163,7 @@ namespace angle_script
 			// Is it a hexadecimal number?
 			if( sourceLength >= 1 && (source[1] == 'x' || source[1] == 'X') )
 			{
-				hgl::uint n;
+				uint n;
 				for( n = 2; n < sourceLength; n++ )
 				{
 					if( !(source[n] >= '0' && source[n] <= '9') &&
@@ -218,7 +177,7 @@ namespace angle_script
 				return true;
 			}
 
-			hgl::uint n;
+			uint n;
 			for( n = 1; n < sourceLength; n++ )
 			{
 				if( source[n] < '0' || source[n] > '9' )
@@ -254,11 +213,7 @@ namespace angle_script
 				}
 				else
 				{
-	#ifdef AS_USE_DOUBLE_AS_FLOAT
-					tokenType = ttFloatConstant;
-	#else
 					tokenType = ttDoubleConstant;
-	#endif
 					tokenLength = n;
 				}
 				return true;
@@ -273,7 +228,7 @@ namespace angle_script
 		if( source[0] == '\'' )
 		{
 			bool evenSlashes = true;
-			hgl::uint n;
+			uint n;
 			for( n = 1; n < sourceLength; n++ )
 			{
 				if( source[n] == '\n' ) break;
@@ -301,7 +256,7 @@ namespace angle_script
 				// Heredoc string constant (spans multiple lines, no escape sequences)
 
 				// Find the length
-				hgl::uint n;
+				uint n;
 				for( n = 3; n < sourceLength-2; n++ )
 				{
 					if( source[n] == '"' && source[n+1] == '"' && source[n+2] == '"' )
@@ -315,7 +270,7 @@ namespace angle_script
 			{
 				// Normal string constant
 				bool evenSlashes = true;
-				hgl::uint n;
+				uint n;
 				for( n = 1; n < sourceLength; n++ )
 				{
 					if( source[n] == '\n' ) break;
@@ -338,7 +293,7 @@ namespace angle_script
 		return false;
 	}
 
-	bool asCTokenizer::IsIdentifier()
+	bool CTokenizer::IsIdentifier()
 	{
 		// Starting with letter or underscore
 		if( (source[0] >= 'a' && source[0] <= 'z') ||
@@ -348,7 +303,7 @@ namespace angle_script
 			tokenType = ttIdentifier;
 			tokenLength = 1;
 
-			for( hgl::uint n = 1; n < sourceLength; n++ )
+			for( uint n = 1; n < sourceLength; n++ )
 			{
 				if( (source[n] >= 'a' && source[n] <= 'z') ||
 					(source[n] >= 'A' && source[n] <= 'Z') ||
@@ -366,10 +321,10 @@ namespace angle_script
 			memcpy(test, source, tokenLength*sizeof(u16char));
 			test[tokenLength] = 0;
 
-			for( hgl::uint i = 0; i < numTokenWords; i++ )
+			for( uint i = 0; i < TokenWordsNumber; i++ )
 			{
-				//if( strcmp(test, tokenWords[i].word) == 0 )
-				if( strcmp(test, tokenWords[i].word) == 0 )
+				//if( strcmp(test, TokenWordsList[i].word) == 0 )
+				if( strcmp(test, TokenWordsList[i].word) == 0 )
 					return false;
 			}
 
@@ -379,18 +334,18 @@ namespace angle_script
 		return false;
 	}
 
-	bool asCTokenizer::IsKeyWord()
+	bool CTokenizer::IsKeyWord()
 	{
 		// Fill the list with all possible keywords
 		// Check each character against all the keywords in the list,
 		// remove keywords that don't match. When only one remains and
 		// it matches the source completely we have found a match.
-		int words[numTokenWords];
-		hgl::uint n;
-		for( n = 0; n < numTokenWords; n++ )
+		int words[TokenWordsNumber];
+		uint n;
+		for( n = 0; n < TokenWordsNumber; n++ )
 			words[n] = n;
 
-		int numWords = numTokenWords;
+		int numWords = TokenWordsNumber;
 		int lastPossible = -1;
 
 		n = 0;
@@ -398,7 +353,7 @@ namespace angle_script
 		{
 			for( int i = 0; i < numWords; i++ )
 			{
-				if( tokenWords[words[i]].word[n] == '\0' )
+				if( TokenWordsList[words[i]].word[n] == '\0' )
 				{
 					if( numWords > 1 )
 					{
@@ -408,13 +363,13 @@ namespace angle_script
 					}
 					else
 					{
-						tokenType = tokenWords[words[i]].tokenType;
+						tokenType = TokenWordsList[words[i]].type;
 						tokenLength = n;
 						return true;
 					}
 				}
 
-				if( tokenWords[words[i]].word[n] != source[n] )
+				if( TokenWordsList[words[i]].word[n] != source[n] )
 				{
 					words[i--] = words[--numWords];
 				}
@@ -425,13 +380,13 @@ namespace angle_script
 		// The source length ended or there where no more matchable words
 		if( numWords )
 		{
-			// If any of the tokenWords also end at this
+			// If any of the TokenWordsList also end at this
 			// position then we have found the matching token
 			for( int i = 0; i < numWords; i++ )
 			{
-				if( tokenWords[words[i]].word[n] == '\0' )
+				if( TokenWordsList[words[i]].word[n] == '\0' )
 				{
-					tokenType = tokenWords[words[i]].tokenType;
+					tokenType = TokenWordsList[words[i]].type;
 					tokenLength = n;
 					return true;
 				}
@@ -441,13 +396,12 @@ namespace angle_script
 		// It is still possible that a shorter token was found
 		if( lastPossible > -1 )
 		{
-			tokenType = tokenWords[lastPossible].tokenType;
-			//tokenLength = strlen(tokenWords[lastPossible].word);
-			tokenLength = strlen(tokenWords[lastPossible].word);
+			tokenType = TokenWordsList[lastPossible].type;
+			//tokenLength = strlen(TokenWordsList[lastPossible].word);
+			tokenLength = strlen(TokenWordsList[lastPossible].word);
 			return true;
 		}
 
 		return false;
 	}
-}
-
+}//namespace hgl

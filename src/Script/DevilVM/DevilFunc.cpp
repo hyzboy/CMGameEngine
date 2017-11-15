@@ -67,7 +67,7 @@ namespace hgl
 		#endif//
 	}
 
-	DevilValueInterface *DevilFunc::AddValue(eTokenType type,const UTF16String &name)
+	DevilValueInterface *DevilFunc::AddValue(TokenType type,const UTF16String &name)
 	{
 		if(script_value_list.Find(name)!=-1)
 		{
@@ -77,7 +77,7 @@ namespace hgl
 		}
 
 		if(type==ttBool		)return(new DevilScriptValue<bool		>(module,func_name,name,type));else
-		if(type==ttString	)return(new DevilScriptValue<UTF16String	>(module,func_name,name,type));else
+		if(type==ttString	)return(new DevilScriptValue<UTF16String>(module,func_name,name,type));else
 		if(type==ttInt		)return(new DevilScriptValue<int		>(module,func_name,name,type));else
 		if(type==ttUInt		)return(new DevilScriptValue<uint		>(module,func_name,name,type));else
 		if(type==ttInt8		)return(new DevilScriptValue<int8		>(module,func_name,name,type));else
