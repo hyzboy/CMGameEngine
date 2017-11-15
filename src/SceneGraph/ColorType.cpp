@@ -30,10 +30,10 @@ namespace hgl
         GL_RGBA,                    //  ctRGBA
         GL_ALPHA,                   //  ctAlpha
 
-        GL_BGR,                        //    ctBGR
-        GL_BGRA,                    //    ctBGRA
+        GL_BGR,                     //  ctBGR
+        GL_BGRA,                    //  ctBGRA
 
-        GL_NONE                        //    ctEnd
+        GL_NONE                     //  ctEnd
     };
 
     const unsigned int BytesByColorType[ColorTypeCount]=  ///针对色彩类型而对应的每象素字节数
@@ -46,10 +46,10 @@ namespace hgl
         4,      //  ctRGBA
         1,      //  ctAlpha
 
-        3,        //    ctBGR
-        4,        //    ctBGRA
+        3,      //  ctBGR
+        4,      //  ctBGRA
 
-        0,        //    ctEnd
+        0,      //  ctEnd
     };
 
        const bool BlendByColorType[]=          //这一种格式是否需要混合
@@ -62,10 +62,10 @@ namespace hgl
         true,   //  ctRGBA
         true,   //  ctAlpha
 
-        false,    //    ctBGR
-        true,    //    ctBGRA
+        false,  //  ctBGR
+        true,   //  ctBGRA
 
-        false,    //    ctEnd
+        false,  //  ctEnd
     };
 
     unsigned int ColorNameToFormat(const u16char *str)
