@@ -1,9 +1,9 @@
 ﻿#include<hgl/Graphics.h>                //GraphicsApplication,SystemInitInfo
 #include<hgl/graph/Render.h>            //SetClearColor,ClearColorDepthBuffer
 #include<hgl/graph/Camera.h>            //WalkerCamera
-#include<hgl/object/FlowObject.h>        //FlowObject
-#include<hgl/graph/RenderToTexture.h>    //RenderToTextureColorDepth
-#include<hgl/graph/InlineRenderable.h>    //CreateRenderableRect
+#include<hgl/object/FlowObject.h>       //FlowObject
+#include<hgl/graph/RenderToTexture.h>   //RenderToTextureMultiChannel
+#include<hgl/graph/InlineRenderable.h>  //CreateRenderableRect
 #include<hgl/Time.h>
 #include"SpiralCubeScene.h"
 
@@ -17,7 +17,11 @@ const Vector3f  eye(100,100,80),
 class TestObject:public FlowObject
 {
     SpiralCubeScene *sc;                 //Cube螺旋排列场景
-    RenderToTextureColorDepth *rtt;      //渲染到纹理对象
+    RenderToTextureMultiChannel *rtt;    //渲染到纹理对象
+
+    Texture2D *tex_depth;
+    Texture2D *tex_color;
+    Texture2D *tex_normal;
 
     VertexArray *rect_data_color;        //矩形顶点数据
     VertexArray *rect_data_depth;        //矩形顶点数据
@@ -67,7 +71,14 @@ public:
 
         sc=new SpiralCubeScene(up_vector);                            ///<创建Cube螺旋排列场景
 
-        rtt=new RenderToTextureColorDepth(512,512,HGL_SF_R3_G3_B2,HGL_SF_DEPTH16);    ///<创建渲染到纹理对象
+        rtt=new RenderToTextureMultiChannel(512,512);    ///<创建渲染到纹理对象
+        {
+            tex_depth   =rtt->AddDepth(HGL_SF_DEPTH32);
+            tex_color   =rtt->AddColor(HGL_SF_R3_G3_B2);
+            tex_normal  =rtt->AddColor(HGL_SF_RGB8);
+
+            rtt->BindComplete();
+        }
 
         {
             RectScope2f pos((GetScreenWidth()-1024)/2,
@@ -80,7 +91,7 @@ public:
             rect_data_color=CreateRenderableRect(pos,vbtDiffuseTexCoord,tex_coord);
 
             rect_mtl_color=new Material;
-            rect_mtl_color->SetTexture(mtcDiffuse,rtt->GetColorTexture());
+            rect_mtl_color->SetTexture(mtcDiffuse,tex_color);
 
             rect_obj_color=new Renderable(rect_data_color,rect_mtl_color);
             rect_obj_color->SetTexCoord(mtcDiffuse,vbtDiffuseTexCoord);            ///<设定指定通道使用的纹理坐标数据
@@ -98,7 +109,7 @@ public:
             rect_data_depth=CreateRenderableRect(pos,vbtDiffuseTexCoord,tex_coord);
 
             rect_mtl_depth=new Material;
-            rect_mtl_depth->SetTexture(mtcDiffuse,rtt->GetDepthTexture());
+            rect_mtl_depth->SetTexture(mtcDiffuse,tex_depth);
 
             rect_obj_depth=new Renderable(rect_data_depth,rect_mtl_depth);
             rect_obj_depth->SetTexCoord(mtcDiffuse,vbtDiffuseTexCoord);            ///<设定指定通道使用的纹理坐标数据

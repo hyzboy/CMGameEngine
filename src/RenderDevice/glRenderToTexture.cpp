@@ -242,6 +242,8 @@ namespace hgl
                 return(tex_depth);
             
 			tex_depth=CreateTexture2D(width,height,depth_tsf);
+            
+            return(tex_depth);
         }
 
         Texture2D *RenderToTextureMultiChannel::AddColor(const TextureSourceFormat &color_tsf)
