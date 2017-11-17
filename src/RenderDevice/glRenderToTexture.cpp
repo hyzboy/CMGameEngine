@@ -287,7 +287,6 @@ namespace hgl
             else
             {
 			    glCreateRenderbuffers(1,&rb_depth);
-			    glBindRenderbuffer(GL_RENDERBUFFER_EXT, rb_depth);
 			    glNamedRenderbufferStorage(rb_depth,GL_DEPTH_COMPONENT32,width,height);
             }
 
@@ -323,11 +322,15 @@ namespace hgl
             if(tex_count>0)
             {
                 glNamedFramebufferDrawBuffers(fbo,tex_count,attachments);
-            }
 
-			glViewport(0,0,tex_depth->GetWidth(),tex_depth->GetHeight());
-//			glClearBufferfv(GL_COLOR,0,(float *)&back_color);
-//			glClearBufferfv(GL_DEPTH,0,&init_depth);
+                glViewport(0,0,tex_depth->GetWidth(),tex_depth->GetHeight());
+
+                for(uint i=0;i<tex_count;i++)
+                    glClearNamedFramebufferfv(fbo,GL_COLOR,0,(float *)&back_color);
+            }
+            else
+                glViewport(0,0,tex_depth->GetWidth(),tex_depth->GetHeight());
+
             glClearNamedFramebufferfv(fbo,GL_DEPTH,0,&init_depth);
 			return(true);
 		}
