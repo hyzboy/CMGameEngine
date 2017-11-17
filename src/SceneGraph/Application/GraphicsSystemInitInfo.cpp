@@ -56,8 +56,8 @@ namespace hgl
 
                 graphics.gl.es = false;
 
-                graphics.gl.major=3;
-                graphics.gl.minor=3;
+                graphics.gl.major=4;
+                graphics.gl.minor=5;
 
 #ifdef _DEBUG
                 graphics.gl.debug=true;

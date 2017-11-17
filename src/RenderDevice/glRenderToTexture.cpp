@@ -75,7 +75,7 @@ namespace hgl
 
 	namespace graph
 	{
-		RenderToTextureColor::RenderToTextureColor(uint width,uint height,const TextureSourceFormat &tsf,const Color3f &bc,const float id)
+		RenderToTextureColor::RenderToTextureColor(uint width,uint height,const TextureSourceFormat &tsf,const Color4f &bc,const float id)
 		{
 			if(width<=0||height<=0||!TextureSourceFormatCheck(tsf))
 			{
@@ -93,7 +93,6 @@ namespace hgl
 			draw_buffers=GL_COLOR_ATTACHMENT0;
 
 			glCreateRenderbuffers(1,&rb_depth);
-			glBindRenderbuffer(GL_RENDERBUFFER_EXT, rb_depth);
 			glNamedRenderbufferStorage(rb_depth,GL_DEPTH_COMPONENT32,width,height);
 
 			glNamedFramebufferTexture(fbo, GL_COLOR_ATTACHMENT0, tex_color->GetID(), 0);
@@ -116,11 +115,11 @@ namespace hgl
 		{
 			if(!tex_color)return(false);
 
-			glDrawBuffers(1,&draw_buffers);
+            glNamedFramebufferDrawBuffers(fbo,1,&draw_buffers);
 
 			glViewport(0,0,tex_color->GetWidth(),tex_color->GetHeight());
-			glClearBufferfv(GL_COLOR,0,(float *)&back_color);
-			glClearBufferfv(GL_DEPTH,0,&init_depth);
+            glClearNamedFramebufferfv(fbo,GL_COLOR,0,(float *)&back_color);
+            glClearNamedFramebufferfv(fbo,GL_DEPTH,0,&init_depth);
 			return(true);
 		}
 	}//namespace graph
@@ -153,18 +152,19 @@ namespace hgl
 		bool RenderToTextureDepth::Use()
 		{
 			if(!tex_depth)return(false);
-			glDrawBuffer(GL_NONE);
-			glReadBuffer(GL_NONE);
+
+            glNamedFramebufferDrawBuffer(fbo,GL_NONE);
+            glNamedFramebufferReadBuffer(fbo,GL_NONE);
 
 			glViewport(0,0,tex_depth->GetWidth(),tex_depth->GetHeight());
-			glClearBufferfv(GL_DEPTH,0,&init_depth);
+            glClearNamedFramebufferfv(fbo,GL_DEPTH,0,&init_depth);
 			return(true);
 		}
 	}//namespace graph
 
 	namespace graph
 	{
-		RenderToTextureColorDepth::RenderToTextureColorDepth(uint width,uint height,const TextureSourceFormat &color_tsf,const TextureSourceFormat &depth_tsf,const Color3f &bc,const float id)
+		RenderToTextureColorDepth::RenderToTextureColorDepth(uint width,uint height,const TextureSourceFormat &color_tsf,const TextureSourceFormat &depth_tsf,const Color4f &bc,const float id)
 		{
 			if(width<=0||height<=0||!TextureSourceFormatCheck(color_tsf)||!TextureSourceFormatCheck(depth_tsf))
 			{
@@ -205,11 +205,130 @@ namespace hgl
 		{
 			if(!tex_color)return(false);
 
-			glDrawBuffers(1,&draw_buffers);
+            glNamedFramebufferDrawBuffers(fbo,1,&draw_buffers);
 
 			glViewport(0,0,tex_color->GetWidth(),tex_color->GetHeight());
-			glClearBufferfv(GL_COLOR,0,(float *)&back_color);
-			glClearBufferfv(GL_DEPTH,0,&init_depth);
+            glClearNamedFramebufferfv(fbo,GL_COLOR,0,(float *)&back_color);
+            glClearNamedFramebufferfv(fbo,GL_DEPTH,0,&init_depth);
+			return(true);
+		}
+	}//namespace graph
+
+    namespace graph
+	{
+		RenderToTextureMultiChannel::RenderToTextureMultiChannel(uint w,uint h,const Color4f &bc,const float id)
+		{
+            attachments=nullptr;
+
+			if(w<=0||h<=0)
+				return;
+
+            width=w;
+            height=h;
+
+            tex_depth=nullptr;
+            init_depth=id;
+            rb_depth=0;
+
+            back_color=bc;
+		}
+
+        Texture2D *RenderToTextureMultiChannel::AddDepth(const TextureSourceFormat &depth_tsf)
+        {
+            if(width<=0||height<=0)
+				return(nullptr);
+
+            if(tex_depth)
+                return(tex_depth);
+            
+			tex_depth=CreateTexture2D(width,height,depth_tsf);
+        }
+
+        Texture2D *RenderToTextureMultiChannel::AddColor(const TextureSourceFormat &color_tsf)
+        {
+            if(!tex_depth)
+                return(nullptr);
+
+            if(!TextureSourceFormatCheck(color_tsf))
+                return(nullptr);
+
+            Texture2D *tex=CreateTexture2D(width,height,color_tsf);
+
+            if(!tex)
+                return(nullptr);
+
+            tex_list.Add(tex);
+
+            return tex;
+        }
+
+		RenderToTextureMultiChannel::~RenderToTextureMultiChannel()
+		{
+            delete[] attachments;       //delete[] nullptr不是个错误
+
+			if(tex_depth)
+				delete tex_depth;
+            else
+				glDeleteRenderbuffers(1,&rb_depth);
+		}
+
+        bool RenderToTextureMultiChannel::BindComplete()
+        {
+            const uint tex_count=tex_list.GetCount();
+
+            if(!tex_depth&&tex_count==0)
+                return(false);
+
+            if(tex_depth)
+            {
+			    glNamedFramebufferTexture(fbo, GL_DEPTH_ATTACHMENT, tex_depth->GetID(), 0);
+			    CheckFrameBufferStatus(fbo,__FILE__,__LINE__);
+            }
+            else
+            {
+			    glCreateRenderbuffers(1,&rb_depth);
+			    glBindRenderbuffer(GL_RENDERBUFFER_EXT, rb_depth);
+			    glNamedRenderbufferStorage(rb_depth,GL_DEPTH_COMPONENT32,width,height);
+            }
+
+            if(tex_count<=0)return(true);
+
+            attachments=new uint[tex_count];
+
+            Texture2D **tex=tex_list.GetData();
+
+            uint buffers=GL_COLOR_ATTACHMENT0;
+
+            for(uint i=0;i<tex_count;i++)
+            {
+			    glNamedFramebufferTexture(fbo, buffers, (*tex)->GetID(), 0);
+			    CheckFrameBufferStatus(fbo,__FILE__,__LINE__);
+
+                attachments[i]=buffers;
+
+                ++buffers;
+                ++tex;
+            }
+
+            return(true);
+        }
+
+		bool RenderToTextureMultiChannel::Use()
+		{
+            const uint tex_count=tex_list.GetCount();
+
+            if(!tex_depth&&tex_count==0)
+                return(false);
+
+            if(tex_count>0)
+            {
+                glNamedFramebufferDrawBuffers(fbo,tex_count,attachments);
+            }
+
+			glViewport(0,0,tex_depth->GetWidth(),tex_depth->GetHeight());
+//			glClearBufferfv(GL_COLOR,0,(float *)&back_color);
+//			glClearBufferfv(GL_DEPTH,0,&init_depth);
+            glClearNamedFramebufferfv(fbo,GL_DEPTH,0,&init_depth);
 			return(true);
 		}
 	}//namespace graph
