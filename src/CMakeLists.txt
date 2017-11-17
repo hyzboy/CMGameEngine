@@ -33,7 +33,7 @@ IF(BUILD_OPENAL_LIB)
 	add_subdirectory(OpenALEE)
 ENDIF(BUILD_OPENAL_LIB)
 
-add_subdirectory(DFS)
+#add_subdirectory(DFS)
 
 add_subdirectory(Platform)
 

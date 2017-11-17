@@ -97,10 +97,10 @@ namespace hgl
 //         }
 //
          /**
-         /* 创建一个画坐标轴的可渲染数据(默认尺寸为1)
+          * 创建一个画坐标轴的可渲染数据(默认尺寸为1)
           * @param size 坐标轴尺寸
-         /* @return 可渲染数据
-         /*/
+          * @return 可渲染数据
+          */
          VertexArray *CreateRenderableAxis(const float size)
          {
              VertexArray *obj=new VertexArray(HGL_PRIM_LINES);
@@ -173,7 +173,6 @@ namespace hgl
         * @param v3 网格顶点3
         * @param step01 顶点0至1之间的格数
         * @param step12 顶点2至3之间的格数
-        * @param color 颜色
         * @return 可渲染数据
         */
         VertexArray *CreateRenderablePlaneGrid( const Vector3f &v0,                                                        ///<创建一个平面网格的可渲染数据
@@ -251,7 +250,7 @@ namespace hgl
         VertexArray *CreateRenderableCube(bool use_normal,const VertexBufferType tex_coord_vbt,const float tex_scale)
         {                                // Points of a cube.
             /*     4            5 */    const float points[]={  -0.5f, -0.5f, -0.5f,    -0.5f, -0.5f, +0.5f,    +0.5f, -0.5f, +0.5f,    +0.5f, -0.5f, -0.5f,    -0.5f, +0.5f, -0.5f,    -0.5f, +0.5f, +0.5f,
-            /*        *------------* */                         +0.5f, +0.5f, +0.5f,    +0.5f, +0.5f, -0.5f,    -0.5f, -0.5f, -0.5f,    -0.5f, +0.5f, -0.5f,    +0.5f, +0.5f, -0.5f,    +0.5f, -0.5f, -0.5f,
+            /*     *------------* */                            +0.5f, +0.5f, +0.5f,    +0.5f, +0.5f, -0.5f,    -0.5f, -0.5f, -0.5f,    -0.5f, +0.5f, -0.5f,    +0.5f, +0.5f, -0.5f,    +0.5f, -0.5f, -0.5f,
             /*    /|           /| */                            -0.5f, -0.5f, +0.5f,    -0.5f, +0.5f, +0.5f,    +0.5f, +0.5f, +0.5f,    +0.5f, -0.5f, +0.5f,    -0.5f, -0.5f, -0.5f,    -0.5f, -0.5f, +0.5f,
             /*  0/ |         1/ | */                            -0.5f, +0.5f, +0.5f,    -0.5f, +0.5f, -0.5f,    +0.5f, -0.5f, -0.5f,    +0.5f, -0.5f, +0.5f,    +0.5f, +0.5f, +0.5f,    +0.5f, +0.5f, -0.5f    };
             /*  *--+---------*  | */    // Normals of a cube.
@@ -262,8 +261,8 @@ namespace hgl
             /*  |/          2|/   */    // The associated indices.
             /* 3*------------*    */    const uint16 indices[]={    0,    2,    1,    0,    3,    2,    4,    5,    6,    4,    6,    7,    8,    9,    10,    8,    10,    11, 12,    15,    14,    12,    14,    13, 16,    17,    18,    16,    18,    19, 20,    23,    22,    20,    22,    21    };
 
-            const float tangents[] = {  +1.0f, 0.0f, 0.0f,      +1.0f, 0.0f, 0.0f,      +1.0f, 0.0f, 0.0f,      +1.0f, 0.0f, 0.0f,      +1.0f, 0.0f, 0.0f,      +1.0f, 0.0f, 0.0f, 
-                                        +1.0f, 0.0f, 0.0f,      +1.0f, 0.0f, 0.0f,      -1.0f, 0.0f, 0.0f,      -1.0f, 0.0f, 0.0f,      -1.0f, 0.0f, 0.0f,      -1.0f, 0.0f, 0.0f, 
+            const float tangents[] = {  +1.0f, 0.0f, 0.0f,      +1.0f, 0.0f, 0.0f,      +1.0f, 0.0f, 0.0f,      +1.0f, 0.0f, 0.0f,      +1.0f, 0.0f, 0.0f,      +1.0f, 0.0f, 0.0f,
+                                        +1.0f, 0.0f, 0.0f,      +1.0f, 0.0f, 0.0f,      -1.0f, 0.0f, 0.0f,      -1.0f, 0.0f, 0.0f,      -1.0f, 0.0f, 0.0f,      -1.0f, 0.0f, 0.0f,
                                         +1.0f, 0.0f, 0.0f,      +1.0f, 0.0f, 0.0f,      +1.0f, 0.0f, 0.0f,      +1.0f, 0.0f, 0.0f,       0.0f, 0.0f,+1.0f,       0.0f, 0.0f,+1.0f,
                                          0.0f, 0.0f,+1.0f,       0.0f, 0.0f,+1.0f,       0.0f, 0.0f,-1.0f,       0.0f, 0.0f,-1.0f,       0.0f, 0.0f,-1.0f,       0.0f, 0.0f,-1.0f };
 
@@ -412,7 +411,7 @@ namespace hgl
             /*  | /          | /  */
             /*  |/          2|/   */	// The associated indices.
             /* 3*------------*    */    const uint16 indices[]={    0,1,1,2,2,3,3,0,    0,4,1,5,2,6,3,7,    4,5,5,6,6,7,7,4};
-			 
+
 			VertexArray *obj=new VertexArray(HGL_PRIM_LINES);
 
             obj->SetVertex(new VB3f(8,points));
@@ -554,9 +553,9 @@ namespace hgl
             }
 
             {
-                const uint8 black_white_line[4] = { 255,0,255,0 };
+                const uint8 black_white_line[4]={255,0,255,0};
 
-                BlackWhiteLine = CreateTexture1D(4, (void *)black_white_line, 4, HGL_SF_R8, HGL_R8);
+                BlackWhiteLine=CreateTexture1D(4,(void *)black_white_line,4,HGL_SF_R8,HGL_R8);
             }
 
             {
