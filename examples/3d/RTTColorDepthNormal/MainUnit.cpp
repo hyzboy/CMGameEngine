@@ -14,26 +14,28 @@ const Vector3f  eye(100,100,80),
                 center(0,0,0),
                 up_vector(0,0,1);
 
+constexpr float TILE_SIZE=256;
+
 class TestObject:public FlowObject
 {
     SpiralCubeScene *sc;                 //Cube螺旋排列场景
     RenderToTextureMultiChannel *rtt;    //渲染到纹理对象
 
-    Texture2D *tex_depth;
-    Texture2D *tex_color;
-    Texture2D *tex_normal;
+    struct RectRenderObject
+    {
+        Texture2D *     tex =nullptr;   //纹理
+        VertexArray *   va  =nullptr;   //顶点数据
+        Material *      mtl =nullptr;   //材质
+        Renderable *    ro  =nullptr;   //渲染对象
 
-    VertexArray *rect_data_color;        //矩形顶点数据
-    VertexArray *rect_data_depth;        //矩形顶点数据
+    public:
 
-    Material *rect_mtl_color;            //矩形材质
-    Renderable *rect_obj_color;          //矩形可渲染对象
-
-    Material *rect_mtl_depth;            //矩形材质
-    Renderable *rect_obj_depth;          //矩形可渲染对象
-
-    Material *rect_mtl_normal;           //矩形材质
-    Renderable *rect_obj_normal;         //矩形可渲染对象
+        ~RectRenderObject()
+        {
+            delete ro;
+            delete va;
+        }
+    }color,depth,normal;
 
     Camera cam;
 
@@ -61,6 +63,28 @@ private:
         MakeCameraMatrix(&proj,&mv,&cam);
     }
 
+    void MakeRenderRect(RectRenderObject &rro,int index)
+    {
+        const uint left   =(GetScreenWidth()-TILE_SIZE*3)/2;
+        const uint top    =(GetScreenHeight()-TILE_SIZE)/2;
+
+        RectScope2f pos(left+TILE_SIZE*index,
+                        top,
+                        TILE_SIZE,
+                        TILE_SIZE);
+
+        RectScope2f tex_coord(0,0,1,1);
+
+        rro.va=CreateRenderableRect(pos,vbtDiffuseTexCoord,tex_coord);
+
+        rro.mtl=new Material;
+        rro.mtl->SetTexture(mtcDiffuse,rro.tex);
+
+        rro.ro=new Renderable(rro.va,rro.mtl);
+        rro.ro->SetTexCoord(mtcDiffuse,vbtDiffuseTexCoord);            ///<设定指定通道使用的纹理坐标数据
+        rro.ro->AutoCreateShader();
+    }
+
 public:
 
     TestObject()
@@ -71,50 +95,18 @@ public:
 
         sc=new SpiralCubeScene(up_vector);                            ///<创建Cube螺旋排列场景
 
-        rtt=new RenderToTextureMultiChannel(512,512);    ///<创建渲染到纹理对象
+        rtt=new RenderToTextureMultiChannel(TILE_SIZE,TILE_SIZE);     ///<创建渲染到纹理对象
         {
-            tex_depth   =rtt->AddDepth(HGL_SF_DEPTH32);
-            tex_color   =rtt->AddColor(HGL_SF_R3_G3_B2);
-            tex_normal  =rtt->AddColor(HGL_SF_RGB8);
+            depth.tex   =rtt->AddDepth(HGL_SF_DEPTH32);
+            color.tex   =rtt->AddColor(HGL_SF_R3_G3_B2);
+            normal.tex  =rtt->AddColor(HGL_SF_RGB8);
 
             rtt->BindComplete();
         }
 
-        {
-            RectScope2f pos((GetScreenWidth()-1024)/2,
-                            (GetScreenHeight()-512)/2,
-                            512,
-                            512);
-
-            RectScope2f tex_coord(0,0,1,1);
-
-            rect_data_color=CreateRenderableRect(pos,vbtDiffuseTexCoord,tex_coord);
-
-            rect_mtl_color=new Material;
-            rect_mtl_color->SetTexture(mtcDiffuse,tex_color);
-
-            rect_obj_color=new Renderable(rect_data_color,rect_mtl_color);
-            rect_obj_color->SetTexCoord(mtcDiffuse,vbtDiffuseTexCoord);            ///<设定指定通道使用的纹理坐标数据
-            rect_obj_color->AutoCreateShader();
-        }
-
-        {
-            RectScope2f pos(((GetScreenWidth()-1024)/2)+512,
-                            (GetScreenHeight()-512)/2,
-                            512,
-                            512);
-
-            RectScope2f tex_coord(0,0,1,1);
-
-            rect_data_depth=CreateRenderableRect(pos,vbtDiffuseTexCoord,tex_coord);
-
-            rect_mtl_depth=new Material;
-            rect_mtl_depth->SetTexture(mtcDiffuse,tex_depth);
-
-            rect_obj_depth=new Renderable(rect_data_depth,rect_mtl_depth);
-            rect_obj_depth->SetTexCoord(mtcDiffuse,vbtDiffuseTexCoord);            ///<设定指定通道使用的纹理坐标数据
-            rect_obj_depth->AutoCreateShader();
-        }
+        MakeRenderRect(depth,0);
+        MakeRenderRect(color,1);
+        MakeRenderRect(normal,2);
 
         start_time=GetDoubleTime();
     }
@@ -122,10 +114,6 @@ public:
     ~TestObject()
     {
         delete rtt;
-        delete rect_obj_color;
-        delete rect_obj_depth;
-        delete rect_data_color;
-        delete rect_data_depth;
         delete sc;
     }
 
@@ -141,8 +129,9 @@ public:
         }
         rtt->End();
 
-        DirectRender2D(rect_obj_color);
-        DirectRender2D(rect_obj_depth);
+        DirectRender2D(color.ro);
+        DirectRender2D(depth.ro);
+        DirectRender2D(normal.ro);
     }
 };//class TestObject
 
