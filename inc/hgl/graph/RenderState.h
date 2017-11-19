@@ -18,10 +18,24 @@ namespace hgl
         {
             rmNone=0,
 
-            rmForward,              //前向
-            rmDeferredLighting,     //前向+延迟灯光
+            rmForward,              ///<前向
 
-            rmDeferredShading128,   //延迟,128位GBuffer模式(48位RGB,16位Specular,32位法线,32位XY坐标)
+            rmDeferred1RT64,        ///<1RT 64位GBuffer模式(24位RGB,24位法线,8位Specular,空8位)
+            rmDeferred1RT128,       ///<1RT 128位GBuffer模式(48位RGB,48位法线,16位Specular,空16位)
+
+            rmDeferred2RT64,        ///<2RT 64位GBuffer模式
+                                    //  RT1(RGBA8): RGB
+                                    //  RT2(RGBA8): Normal+Specular
+
+            rmDeferred3RT,          ///<3RT 128位GBuffer模式，用于调试
+                                    //  RT1(RGBA8): RGB+Specular
+                                    //  RT2(RGBA8): Normal
+                                    //  RT3(RGB16UI): XYZ(Position)
+
+            rmDeferredLight,        ///<延迟灯光计算
+            rmDeferredMerge,        ///<延迟结果最终合并
+
+            rmDepth,                ///<仅深度
 
             rmEnd
         };

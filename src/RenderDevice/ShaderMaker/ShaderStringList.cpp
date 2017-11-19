@@ -73,59 +73,6 @@ namespace hgl
                 add("#version "+UTF8String(ver)+" core\n\n");
             }
 
-			void shader_stringlist::add_texture_smooth()
-            {//高质量纹理采样,对应HGL_FILTER_SMOOTH
-                if(glsl_version<400)                                        //GLSL 4.0以下不支持smoothstep，所以使用自行实现
-                add("float smoothstep(float edge0,float edge1,float x)\n"
-                    "{\n"
-                    "\tx=clamp((x-edge0)/(edge1-edge0),0.0,1.0);\n"
-                    "\treturn x*x*(3.0-2.0*x);\n"
-                    "}\n\n");
-
-                add("vec4 texture_smooth(sampler2D samp, vec2 tc)\n"
-                    "{\n"
-                    "\n"
-                    "\tvec2 texSize=textureSize(samp, 0);\n"
-                    "\tvec2 uvScaled=tc * texSize + 0.5;\n"
-                    "\tvec2 uvInt=floor(uvScaled);\n"
-                    "\tvec2 uvFrac=fract(uvScaled);\n"
-                    "\n"
-                    "\tuvFrac=smoothstep(0.0, 1.0, uvFrac);\n"
-                    "\tvec2 uv=(uvInt + uvFrac - 0.5) / texSize;\n"
-                    "\n"
-                    "\treturn texture(samp, uv);\n"
-                    "}\n\n");
-            }
-
-            void shader_stringlist::add_rgb2lum()
-            {
-                add("float rgb2lum(vec3 color)\n"
-                    "{\n"
-                    "\treturn (color.r*0.299)+(color.g*0.587)+(color.b*0.114);\n"
-                    "}\n\n");
-            }
-
-            void shader_stringlist::add_normal_3to2()
-            {
-                add("vec2 normal_3to2(vec3 normal)\n"
-                    "{\n"
-                    "\treturn normalize(normal.xy)*sqrt(normal.z*0.5+0.5);\n"
-                    "}\n\n");
-            }
-
-            void shader_stringlist::add_normal_2to3()
-            {
-                add("vec3 normal_2to3(vec2 n)\n"
-                    "{\n"
-                    "\tvec3 normal;\n"
-                    "\n"
-                    "\tnormal.z=dot(n,n)*2-1;\n"
-                    "\tnormal.xy=normalize(n)*sqrt(1-normal.z*normal.z);\n"
-                    "\n"
-                    "\treturn normal;\n"
-                    "}\n\n");
-            }
-
             void shader_stringlist::add_material(bool two_side)
             {
                 add("struct Material\n"
@@ -183,7 +130,7 @@ namespace hgl
 
             void shader_stringlist::add_main_begin()
             {
-                add("void main(void)\n"
+                add("void main()\n"
                     "{\n");
             }
 

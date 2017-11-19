@@ -8,7 +8,7 @@
 using namespace hgl;
 using namespace hgl::graph;
 
-#define USE_PRIM_RECTANGLE			//不支持
+//#define USE_PRIM_RECTANGLE			//现仅支持了vertex，还未实现texcoord/color
 
 #ifndef USE_PRIM_RECTANGLE
 const uint16	vertex[]={	100,100,	//left-top
@@ -22,7 +22,7 @@ const float		texcoord[]={0,0,
 							0,1};
 #else
 const uint16	vertex[]={	100,100,	//left,top
-							256,256};	//width,height
+							356,356};	//right,bottom
 
 const float		texcoord[]={0,0,		//left,top
 							1,1};		//width,height
@@ -67,6 +67,7 @@ public:
 			//mtl->SetTexture(mtcDiffuse,tex);
 			mtl->SetColorMaterial(true);
 			mtl->SetColor(1,1,1,1);
+            mtl->SetDepthTest(false);
 		}
 
 		//创建渲染对象

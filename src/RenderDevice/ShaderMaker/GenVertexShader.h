@@ -94,7 +94,7 @@ namespace hgl
 
 			public:		//最终计算
 
-				bool add_end();
+				bool add_end(bool);
 			};//struct vs
 		}//namespace shadergen
 	}//namespace graph

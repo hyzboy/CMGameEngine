@@ -1,0 +1,1 @@
+﻿texture_smooth需要smoothstep,该函数在GLSL 4.0开始有原生实现

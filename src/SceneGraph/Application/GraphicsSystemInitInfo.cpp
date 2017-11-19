@@ -22,7 +22,7 @@ namespace hgl
         {
             graphics.FPS=60;
 
-            graphics.Width=1920;
+            graphics.Width=1280;
             graphics.Height=(graphics.Width/16.0f)*9;
 
             graphics.Bit=32;
@@ -56,8 +56,8 @@ namespace hgl
 
                 graphics.gl.es = false;
 
-                graphics.gl.major=3;
-                graphics.gl.minor=3;
+                graphics.gl.major=4;
+                graphics.gl.minor=5;
 
 #ifdef _DEBUG
                 graphics.gl.debug=true;

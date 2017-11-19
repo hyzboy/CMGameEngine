@@ -10,7 +10,7 @@ namespace hgl
 {
 	namespace graph
 	{
-		class ShaderStorage;
+		class ShaderManage;
 
 		/**
 		* 可渲染对象
@@ -79,9 +79,9 @@ namespace hgl
             const RenderState * GetRenderState      ()const { return &state; }                                              ///<取得渲染状态
 
 #ifdef _DEBUG
-			Shader *			AutoCreateShader	(bool mvp=true,ShaderStorage *storage=nullptr,const OSString &debug_outname=nullptr);
+			Shader *			AutoCreateShader	(bool mvp=true,ShaderManage *sm=nullptr,const OSString &debug_outname=nullptr);
 #else
-            Shader *			AutoCreateShader	(bool mvp=true,ShaderStorage *storage=nullptr);							///<自动创建Shader
+            Shader *			AutoCreateShader	(bool mvp=true,ShaderManage *sm=nullptr);							///<自动创建Shader
 #endif//#endif//_DEBUG
 
 			

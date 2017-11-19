@@ -83,6 +83,7 @@ namespace hgl
 			char *buffer;
 
 			int uniform_count;
+
 			int *uniform_indices;
 			int *uniform_name_size;
 			char **uniform_name;

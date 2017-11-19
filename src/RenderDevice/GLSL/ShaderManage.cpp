@@ -1,4 +1,4 @@
-﻿#include<hgl/graph/ShaderStorage.h>
+﻿#include<hgl/graph/ShaderManage.h>
 #include<hgl/type/Smart.h>
 
 namespace hgl
@@ -85,7 +85,7 @@ namespace hgl
             return(nullptr);
         }
 
-        Shader *ShaderStorage::Create(const RenderState &state)
+        Shader *ShaderManage::Create(const RenderState &state)
         {
 #ifdef _DEBUG
             return CreateShader(&state,nullptr);
@@ -94,16 +94,16 @@ namespace hgl
 #endif//_DEBUG
         }
 
-        ShaderStorage *global_shader_storage=nullptr;
+        ShaderManage *global_shader_manage=nullptr;
 
         void InitGlobalShaderStorage()
         {
-            global_shader_storage=new ShaderStorage;
+            global_shader_manage=new ShaderManage;
         }
 
         void ClearGlobalShaderStorage()
         {
-            SAFE_CLEAR(global_shader_storage);
+            SAFE_CLEAR(global_shader_manage);
         }
     }//namespace graph
 }//namespace hgl
