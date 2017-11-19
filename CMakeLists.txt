@@ -26,5 +26,7 @@ IF(BUILD_EXAMPLES_PROJECT)
     add_subdirectory(examples)
 ENDIF(BUILD_EXAMPLES_PROJECT)
 
+IF(BUILD_GUI_TOOLS)
 add_subdirectory(tools)
+ENDIF(BUILD_GUI_TOOLS)
 

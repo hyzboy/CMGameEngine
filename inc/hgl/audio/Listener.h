@@ -4,7 +4,14 @@
 #include<hgl/algorithm/VectorMath.h>
 namespace hgl
 {
-	using ListenerOrientation = Vector3f[2];
+    /**
+     * 收听者方向,用值请参考gluLookAt
+     */
+    struct ListenerOrientation
+    {
+        Vector3f direction;
+        Vector3f rotation;
+    };
 
 	/**
 	* 这个类用于管理收听者的一些状态，可以通过它设定统一的音量，收听者的位置、方向等
