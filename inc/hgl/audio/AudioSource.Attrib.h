@@ -27,7 +27,7 @@ protected:
     float doppler_factor;
     float doppler_velocity;
 
-protected:
+public:
 
 	uint GetIndex()const{return index;}
 

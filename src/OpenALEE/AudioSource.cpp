@@ -22,22 +22,22 @@ namespace hgl
         index=InvalidIndex;
         Buffer=nullptr;
 
-        hglSetPropertyRead(    Index,            this,AudioSource::GetIndex);
+        hglSetPropertyRead(     Index,          this,AudioSource::GetIndex);
 
-        hglSetProperty(       CurTime,        this,AudioSource::GetCurTime,        AudioSource::SetCurTime);
+        hglSetProperty(         CurTime,        this,AudioSource::GetCurTime,       AudioSource::SetCurTime);
 
-        hglSetPropertyRead(    State,            this,AudioSource::GetState);
-        hglSetPropertyRead(    MinGain,        this,AudioSource::GetMinGain);
-        hglSetPropertyRead(    MaxGain,        this,AudioSource::GetMaxGain);
+        hglSetPropertyRead(     State,          this,AudioSource::GetState);
+        hglSetPropertyRead(     MinGain,        this,AudioSource::GetMinGain);
+        hglSetPropertyRead(     MaxGain,        this,AudioSource::GetMaxGain);
 
-        hglSetProperty(        Loop,            this,AudioSource::GetLoop,            AudioSource::SetLoop);
+        hglSetProperty(         Loop,           this,AudioSource::GetLoop,          AudioSource::SetLoop);
 
-        hglSetProperty(        Pitch,            this,AudioSource::GetPitch,            AudioSource::SetPitch);
-        hglSetProperty(        Gain,            this,AudioSource::GetGain,            AudioSource::SetGain);
-        hglSetProperty(        ConeGain,        this,AudioSource::GetConeGain,        AudioSource::SetConeGain);
+        hglSetProperty(         Pitch,          this,AudioSource::GetPitch,         AudioSource::SetPitch);
+        hglSetProperty(         Gain,           this,AudioSource::GetGain,          AudioSource::SetGain);
+        hglSetProperty(         ConeGain,       this,AudioSource::GetConeGain,      AudioSource::SetConeGain);
 
-        hglSetProperty(     DistanceModel,  this,AudioSource::GetDistanceModel, AudioSource::SetDistanceModel   );
-        hglSetProperty(        RolloffFactor,    this,AudioSource::GetRolloffFactor,    AudioSource::SetRolloffFactor    );
+        hglSetProperty(         DistanceModel,  this,AudioSource::GetDistanceModel, AudioSource::SetDistanceModel);
+        hglSetProperty(         RolloffFactor,  this,AudioSource::GetRolloffFactor, AudioSource::SetRolloffFactor);
     }
 
     /**
@@ -372,16 +372,16 @@ namespace hgl
         loop=false;
 
         alGetSourcef    (index,AL_PITCH,                &pitch);
-        alGetSourcef    (index,AL_GAIN,                    &gain);
-        alGetSourcef    (index,AL_CONE_OUTER_GAIN,        &cone_gain);
-        alGetSourcefv    (index,AL_POSITION,                position);
-        alGetSourcefv    (index,AL_VELOCITY,                velocity);
-        alGetSourcefv    (index,AL_DIRECTION,            direction);
-        alGetSourcef    (index,AL_MAX_DISTANCE,            &max_dist);
-        alGetSourcef    (index,AL_REFERENCE_DISTANCE,    &ref_dist);
-        alGetSourcef    (index,AL_ROLLOFF_FACTOR,        &rolloff_factor);
-        alGetSourcef    (index,AL_CONE_INNER_ANGLE,        &angle.inner);
-        alGetSourcef    (index,AL_CONE_OUTER_ANGLE,        &angle.outer);
+        alGetSourcef	(index,AL_GAIN,                 &gain);
+        alGetSourcef    (index,AL_CONE_OUTER_GAIN,      &cone_gain);
+        alGetSourcefv   (index,AL_POSITION,             position);
+        alGetSourcefv   (index,AL_VELOCITY,             velocity);
+        alGetSourcefv   (index,AL_DIRECTION,			direction);
+        alGetSourcef    (index,AL_MAX_DISTANCE,         &max_dist);
+        alGetSourcef    (index,AL_REFERENCE_DISTANCE,   &ref_dist);
+        alGetSourcef    (index,AL_ROLLOFF_FACTOR,       &rolloff_factor);
+        alGetSourcef    (index,AL_CONE_INNER_ANGLE,     &angle.inner);
+        alGetSourcef    (index,AL_CONE_OUTER_ANGLE,     &angle.outer);
 
         return(true);
     }
