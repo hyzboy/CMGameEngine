@@ -109,7 +109,7 @@ namespace hgl
 			lock.Unlock();
 
 			if(result>0)
-				sem.Release(1);
+				sem.Post(1);
 
 			return result;
 		}

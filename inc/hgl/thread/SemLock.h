@@ -132,7 +132,7 @@ namespace hgl
 			this->lock.Unlock();
 
 			if(n>0)
-			this->sem.Release(n);
+			this->sem.Post(n);
 		}
 	};//template<typename T> class SemThreadMutex
 

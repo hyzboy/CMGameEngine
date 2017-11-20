@@ -124,9 +124,9 @@ namespace hgl
 		* 释放接收信号
 		* @param count 信号个数
 		*/
-		void ReleaseSem(int count=1)
+		void PostSem(int count=1)
 		{
-			sem.Release(count);
+			sem.Post(count);
 		}
 
 		/**
