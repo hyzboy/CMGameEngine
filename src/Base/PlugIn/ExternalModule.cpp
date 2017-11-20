@@ -41,7 +41,7 @@ namespace hgl
         }
         else
         {
-            LOG_ERROR("Get func <" + UTF8String(name) + "> need load module！");
+            LOG_ERROR("Get func <"+UTF8String(name)+"> error: no load module!");
 
             return(nullptr);
         }

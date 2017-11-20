@@ -91,7 +91,7 @@ namespace hgl
 
 			virtual void ToWork()																			///<将堆积的工作列表发送给工作线程
 			{
-				work_list.ReleaseSem(1);
+				work_list.PostSem(1);
 			}
 
 		public:
@@ -171,7 +171,7 @@ namespace hgl
 				if(!w)return;
 
 				work_list.Post(w);
-				work_list.ReleaseSem(1);
+				work_list.PostSem(1);
 			}
 
 			virtual void Post(W **w,int count)																///<投递一批工作
@@ -179,7 +179,7 @@ namespace hgl
 				if(!w||count<=0)return;
 
 				work_list.Post(w,count);
-				work_list.ReleaseSem(count);
+				work_list.PostSem(count);
 			}
 
 		public:

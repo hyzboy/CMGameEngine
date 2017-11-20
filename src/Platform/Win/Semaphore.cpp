@@ -23,11 +23,11 @@ namespace hgl
     }
 
     /**
-    * 释放一个信号
-    * @param n 释放信号数量
+    * 发送信号
+    * @param n 发送的信号数量
     * @return 是否释放成功
     */
-    bool Semaphore::Release(int n)
+    bool Semaphore::Post(int n)
     {
         if(n<=0)return(false);
         return(ReleaseSemaphore(ptr,n,nullptr));

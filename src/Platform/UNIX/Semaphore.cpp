@@ -29,13 +29,13 @@ namespace hgl
 		sem_destroy((sem_t *)ptr);
 		delete (sem_t *)ptr;
 	}
-
-	/**
-	* 释放一个信号
-	* @param n 释放信号数量
-	* @return 是否释放成功
-	*/
-	bool Semaphore::Release(int n)
+        
+    /**
+    * 发送信号
+    * @param n 发送的信号数量
+    * @return 是否释放成功
+    */
+	bool Semaphore::Pos(int n)
 	{
 		if(!ptr)return(false);
 		if(n<=0)return(false);
