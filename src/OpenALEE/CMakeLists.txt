@@ -19,8 +19,10 @@ ELSE()
     ADD_LIBRARY(CM.OpenALEE SHARED ${OpenALEESource})
 ENDIF()
 
-ADD_LIBRARY(CM.OpenALEEStandAlone SHARED ${OpenALEESource} OpenALEECPort.cpp OpenALEEStandAlone.cpp ${CM_BASE_ALL_SOURCE})
+ADD_LIBRARY(CM.OpenALEE.StandAlone SHARED ${OpenALEESource} OpenALEECPort.cpp OpenALEEStandAlone.cpp ${CM_BASE_ALL_SOURCE})
 
-target_compile_options(CM.OpenALEEStandAlone PRIVATE "/MT")
+IF(WIN32)
+    target_compile_options(CM.OpenALEE.StandAlone PRIVATE "/MT")
+ENDIF(WIN32)
 
-target_link_libraries(CM.OpenALEEStandAlone CM.Base.Static CM.Platform.Static)
+target_link_libraries(CM.OpenALEE.StandAlone CM.Base.Static CM.Platform.Static)
