@@ -175,7 +175,7 @@ namespace hgl
 
                 if(in_vertex_buffer[vbt])return;                                            //已经定义过了，多个数据共用一个贴图坐标时有可能产生这种情况
 
-                add_in_fv(vb_name,coord_num);                                                //用vb_name是为了让输入的顶点数据依旧使用TexCoord0,1,2,3这样的名字以便于调试
+                add_in_fv(vb_name,coord_num);                                               //用vb_name是为了让输入的顶点数据依旧使用TexCoord0,1,2,3这样的名字以便于调试
 
                 in_vertex_buffer[vbt]=true;
             }

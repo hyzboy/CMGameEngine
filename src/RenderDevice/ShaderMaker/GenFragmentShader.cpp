@@ -257,21 +257,6 @@ namespace hgl
 
                 return(true);
             }
-
-            //void fs::add_gbuffer_encode()
-            //{
-            //    add("vec4 gbuffer_encode(in vec3 color,in vec3 normal,in vec2 pos,in float spec)\n"
-            //        "{\n"
-            //        "\treturn uvec4(packHalf2x16(color.rg),packHalf2x16(color.b,spec),packHalf2x16(normal_3to2(normal)),packHalf2x16(pos));\n"
-            //        "}\n\n");
-            //}
-
-            //bool fs::add_ds_end()
-            //{
-            //    add(U8_TEXT("\t" HGL_FS_FRAG_COLOR "=gbuffer_encode(")+fin_color+U8_TEXT(",normal," HGL_FS_POSITION ".xy,specular_power);"));
-
-            //    return(true);
-            //}
         }//namespace shadergen
 
         /**

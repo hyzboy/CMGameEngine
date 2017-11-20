@@ -2,7 +2,8 @@
 #define HGL_GRAPH_RENDER_TO_TEXTURE_INCLUDE
 
 #include<hgl/graph/TextureFormat.h>
-#include<hgl/type/Color3f.h>
+#include<hgl/type/Color4f.h>
+#include<hgl/type/List.h>
 namespace hgl
 {
 	namespace graph
@@ -48,12 +49,12 @@ namespace hgl
 
 			GLenum draw_buffers;
 
-			Color3f back_color;
+			Color4f back_color;
 			float init_depth;
 
 		public:
 
-			RenderToTextureColor(uint width,uint height,const TextureSourceFormat &,const Color3f &bc=Color3f(0,0,0),const float id=1.0f);
+			RenderToTextureColor(uint width,uint height,const TextureSourceFormat &,const Color4f &bc=Color4f(0,0,0,0),const float id=1.0f);
 			virtual ~RenderToTextureColor();
 
 			Texture2D *GetTexture(){return tex_color;}
@@ -94,12 +95,12 @@ namespace hgl
 
 			GLenum draw_buffers;
 
-			Color3f back_color;
+			Color4f back_color;
 			float init_depth;
 
 		public:
 
-			RenderToTextureColorDepth(uint width,uint height,const TextureSourceFormat &color_tsf,const TextureSourceFormat &depth_tsf,const Color3f &bc=Color3f(0,0,0),const float id=1.0f);
+			RenderToTextureColorDepth(uint width,uint height,const TextureSourceFormat &color_tsf,const TextureSourceFormat &depth_tsf,const Color4f &bc=Color4f(0,0,0,0),const float id=1.0f);
 			virtual ~RenderToTextureColorDepth();
 
 			Texture2D *GetColorTexture(){return tex_color;}
@@ -107,6 +108,38 @@ namespace hgl
 
 			bool Use()override;
 		};//class RenderToTextureColorDepth
+
+        /**
+		 * 渲染到纹理，多通道
+		 */
+		class RenderToTextureMultiChannel:public RenderToTexture
+		{
+		protected:
+
+            uint width,height;
+
+			Texture2D *tex_depth;
+			float init_depth;
+            uint rb_depth;
+
+            Color4f back_color;
+
+            ObjectList<Texture2D> tex_list;
+
+            uint *attachments;
+
+		public:
+
+			RenderToTextureMultiChannel(uint w,uint h,const Color4f &bc=Color4f(0,0,0,0),const float id=1.0f);
+			virtual ~RenderToTextureMultiChannel();
+
+            Texture2D *AddDepth(const TextureSourceFormat &depth_tsf);
+            Texture2D *AddColor(const TextureSourceFormat &color_tsf);
+
+            bool BindComplete();            ///<绑定完成
+
+			bool Use()override;
+		};//class RenderToTextureMultiChannel
 
 		///**
 		// * 渲染到2D阵列纹理
