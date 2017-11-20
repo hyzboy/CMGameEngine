@@ -427,14 +427,14 @@ namespace hgl
 
             audio_buffer_count+=audio_buffer_size;
 
-            alSourceUnqueueBuffers(source,1,&buffer);    //解除一个已处理完成的缓冲区
+            alSourceUnqueueBuffers(source,1,&buffer);       //解除一个已处理完成的缓冲区
             alLastError();
 
-            active=ReadData(buffer);                    //解码数据到这个缓冲区
+            active=ReadData(buffer);                        //解码数据到这个缓冲区
 
             if(active)
             {
-                alSourceQueueBuffers(source,1,&buffer);    //重新将这个缓冲区加入队列
+                alSourceQueueBuffers(source,1,&buffer);     //重新将这个缓冲区加入队列
                 alLastError();
             }
             else
