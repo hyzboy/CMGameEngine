@@ -9,7 +9,7 @@ namespace hgl
     {
         openal::alGetListenerfv(param, (ALfloat *)&v3f);
     }
-    
+
     inline void alGetListenerfv(ALenum param, ListenerOrientation &v3f)
     {
         openal::alGetListenerfv(param, (ALfloat *)&v3f);
@@ -63,7 +63,7 @@ namespace hgl
 
     void AudioListener::SetOrientation(const ListenerOrientation &ori)
     {
-        memcpy(orientation,ori,sizeof(ListenerOrientation));
+        memcpy(&orientation,&ori,sizeof(ListenerOrientation));
         alListenerfv(AL_ORIENTATION,orientation);
     }
 }//namespace hgl
