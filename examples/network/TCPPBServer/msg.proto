@@ -1,4 +1,9 @@
+syntax = "proto3";
+
 option optimize_for = LITE_RUNTIME;
+
+package game;
+
 message c2s_login
 {
 	enum MsgID

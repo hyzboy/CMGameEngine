@@ -7,52 +7,69 @@
 #include <algorithm>
 
 #include <google/protobuf/stubs/common.h>
+#include <google/protobuf/stubs/port.h>
 #include <google/protobuf/stubs/once.h>
 #include <google/protobuf/io/coded_stream.h>
 #include <google/protobuf/wire_format_lite_inl.h>
 #include <google/protobuf/io/zero_copy_stream_impl_lite.h>
 // @@protoc_insertion_point(includes)
+class c2s_loginDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<c2s_login> {
+} _c2s_login_default_instance_;
 
-void protobuf_ShutdownFile_msg_2eproto() {
-  delete c2s_login::default_instance_;
+namespace protobuf_msg_2eproto {
+
+PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::ParseTableField
+    const TableStruct::entries[] = {
+  {0, 0, 0, ::google::protobuf::internal::kInvalidMask, 0, 0},
+};
+
+PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::AuxillaryParseTableField
+    const TableStruct::aux[] = {
+  ::google::protobuf::internal::AuxillaryParseTableField(),
+};
+PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::ParseTable const
+    TableStruct::schema[] = {
+  { NULL, NULL, 0, -1, -1, false },
+};
+
+
+void TableStruct::Shutdown() {
+  _c2s_login_default_instance_.Shutdown();
 }
 
-#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-void protobuf_AddDesc_msg_2eproto_impl() {
+void TableStruct::InitDefaultsImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-#else
-void protobuf_AddDesc_msg_2eproto() {
-  static bool already_here = false;
-  if (already_here) return;
-  already_here = true;
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-#endif
-  c2s_login::default_instance_ = new c2s_login();
-  c2s_login::default_instance_->InitAsDefaultInstance();
-  ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_msg_2eproto);
+  ::google::protobuf::internal::InitProtobufDefaults();
+  _c2s_login_default_instance_.DefaultConstruct();
 }
 
+void InitDefaults() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &TableStruct::InitDefaultsImpl);
+}
+void AddDescriptorsImpl() {
+  InitDefaults();
+  ::google::protobuf::internal::OnShutdown(&TableStruct::Shutdown);
+}
+
+void AddDescriptors() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &AddDescriptorsImpl);
+}
 #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-GOOGLE_PROTOBUF_DECLARE_ONCE(protobuf_AddDesc_msg_2eproto_once_);
-void protobuf_AddDesc_msg_2eproto() {
-  ::google::protobuf::GoogleOnceInit(&protobuf_AddDesc_msg_2eproto_once_,
-                 &protobuf_AddDesc_msg_2eproto_impl);
-}
-#else
 // Force AddDescriptors() to be called at static initialization time.
-struct StaticDescriptorInitializer_msg_2eproto {
-  StaticDescriptorInitializer_msg_2eproto() {
-    protobuf_AddDesc_msg_2eproto();
+struct StaticDescriptorInitializer {
+  StaticDescriptorInitializer() {
+    AddDescriptors();
   }
-} static_descriptor_initializer_msg_2eproto_;
-#endif
+} static_descriptor_initializer;
+#endif  // GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
 
-// ===================================================================
+}  // namespace protobuf_msg_2eproto
 
 bool c2s_login_MsgID_IsValid(int value) {
-  switch(value) {
+  switch (value) {
     case 0:
       return true;
     default:
@@ -60,37 +77,43 @@ bool c2s_login_MsgID_IsValid(int value) {
   }
 }
 
-#ifndef _MSC_VER
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
 const c2s_login_MsgID c2s_login::id;
 const c2s_login_MsgID c2s_login::MsgID_MIN;
 const c2s_login_MsgID c2s_login::MsgID_MAX;
 const int c2s_login::MsgID_ARRAYSIZE;
-#endif  // _MSC_VER
-#ifndef _MSC_VER
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int c2s_login::kNameFieldNumber;
-#endif  // !_MSC_VER
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 c2s_login::c2s_login()
-  : ::google::protobuf::MessageLite() {
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_msg_2eproto::InitDefaults();
+  }
   SharedCtor();
   // @@protoc_insertion_point(constructor:c2s_login)
 }
-
-void c2s_login::InitAsDefaultInstance() {
-}
-
 c2s_login::c2s_login(const c2s_login& from)
-  : ::google::protobuf::MessageLite() {
-  SharedCtor();
-  MergeFrom(from);
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _has_bits_(from._has_bits_),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_name()) {
+    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
+  }
   // @@protoc_insertion_point(copy_constructor:c2s_login)
 }
 
 void c2s_login::SharedCtor() {
-  ::google::protobuf::internal::GetEmptyString();
   _cached_size_ = 0;
-  name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 c2s_login::~c2s_login() {
@@ -99,15 +122,7 @@ c2s_login::~c2s_login() {
 }
 
 void c2s_login::SharedDtor() {
-  if (name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    delete name_;
-  }
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  if (this != &default_instance()) {
-  #else
-  if (this != default_instance_) {
-  #endif
-  }
+  name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 void c2s_login::SetCachedSize(int size) const {
@@ -116,53 +131,53 @@ void c2s_login::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
 const c2s_login& c2s_login::default_instance() {
-#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  protobuf_AddDesc_msg_2eproto();
-#else
-  if (default_instance_ == NULL) protobuf_AddDesc_msg_2eproto();
-#endif
-  return *default_instance_;
+  protobuf_msg_2eproto::InitDefaults();
+  return *internal_default_instance();
 }
 
-c2s_login* c2s_login::default_instance_ = NULL;
-
-c2s_login* c2s_login::New() const {
-  return new c2s_login;
+c2s_login* c2s_login::New(::google::protobuf::Arena* arena) const {
+  c2s_login* n = new c2s_login;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
 }
 
 void c2s_login::Clear() {
+// @@protoc_insertion_point(message_clear_start:c2s_login)
   if (has_name()) {
-    if (name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-      name_->clear();
-    }
+    GOOGLE_DCHECK(!name_.IsDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited()));
+    (*name_.UnsafeRawStringPointer())->clear();
   }
-  ::memset(_has_bits_, 0, sizeof(_has_bits_));
-  mutable_unknown_fields()->clear();
+  _has_bits_.Clear();
+  _internal_metadata_.Clear();
 }
 
 bool c2s_login::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  ::google::protobuf::io::StringOutputStream unknown_fields_string(
-      mutable_unknown_fields());
+  ::google::protobuf::io::LazyStringOutputStream unknown_fields_string(
+      ::google::protobuf::NewPermanentCallback(&_internal_metadata_,
+          &::google::protobuf::internal::InternalMetadataWithArenaLite::
+              mutable_unknown_fields));
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
-      &unknown_fields_string);
+      &unknown_fields_string, false);
   // @@protoc_insertion_point(parse_start:c2s_login)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
       // required string name = 1;
       case 1: {
-        if (tag == 10) {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_name()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectAtEnd()) goto success;
         break;
       }
 
@@ -191,33 +206,36 @@ failure:
 void c2s_login::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:c2s_login)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
   // required string name = 1;
-  if (has_name()) {
+  if (cached_has_bits & 0x00000001u) {
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->name(), output);
   }
 
   output->WriteRaw(unknown_fields().data(),
-                   unknown_fields().size());
+                   static_cast<int>(unknown_fields().size()));
   // @@protoc_insertion_point(serialize_end:c2s_login)
 }
 
-int c2s_login::ByteSize() const {
-  int total_size = 0;
+size_t c2s_login::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:c2s_login)
+  size_t total_size = 0;
 
-  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required string name = 1;
-    if (has_name()) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::StringSize(
-          this->name());
-    }
-
-  }
   total_size += unknown_fields().size();
 
+  // required string name = 1;
+  if (has_name()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->name());
+  }
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = total_size;
+  _cached_size_ = cached_size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
   return total_size;
 }
@@ -228,16 +246,20 @@ void c2s_login::CheckTypeAndMergeFrom(
 }
 
 void c2s_login::MergeFrom(const c2s_login& from) {
-  GOOGLE_CHECK_NE(&from, this);
-  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    if (from.has_name()) {
-      set_name(from.name());
-    }
+// @@protoc_insertion_point(class_specific_merge_from_start:c2s_login)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.has_name()) {
+    set_has_name();
+    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
   }
-  mutable_unknown_fields()->append(from.unknown_fields());
 }
 
 void c2s_login::CopyFrom(const c2s_login& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:c2s_login)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -245,23 +267,91 @@ void c2s_login::CopyFrom(const c2s_login& from) {
 
 bool c2s_login::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
-
   return true;
 }
 
 void c2s_login::Swap(c2s_login* other) {
-  if (other != this) {
-    std::swap(name_, other->name_);
-    std::swap(_has_bits_[0], other->_has_bits_[0]);
-    _unknown_fields_.swap(other->_unknown_fields_);
-    std::swap(_cached_size_, other->_cached_size_);
-  }
+  if (other == this) return;
+  InternalSwap(other);
+}
+void c2s_login::InternalSwap(c2s_login* other) {
+  name_.Swap(&other->name_);
+  std::swap(_has_bits_[0], other->_has_bits_[0]);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  std::swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string c2s_login::GetTypeName() const {
   return "c2s_login";
 }
 
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// c2s_login
+
+// required string name = 1;
+bool c2s_login::has_name() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+void c2s_login::set_has_name() {
+  _has_bits_[0] |= 0x00000001u;
+}
+void c2s_login::clear_has_name() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+void c2s_login::clear_name() {
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_name();
+}
+const ::std::string& c2s_login::name() const {
+  // @@protoc_insertion_point(field_get:c2s_login.name)
+  return name_.GetNoArena();
+}
+void c2s_login::set_name(const ::std::string& value) {
+  set_has_name();
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:c2s_login.name)
+}
+#if LANG_CXX11
+void c2s_login::set_name(::std::string&& value) {
+  set_has_name();
+  name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:c2s_login.name)
+}
+#endif
+void c2s_login::set_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  set_has_name();
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:c2s_login.name)
+}
+void c2s_login::set_name(const char* value, size_t size) {
+  set_has_name();
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:c2s_login.name)
+}
+::std::string* c2s_login::mutable_name() {
+  set_has_name();
+  // @@protoc_insertion_point(field_mutable:c2s_login.name)
+  return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* c2s_login::release_name() {
+  // @@protoc_insertion_point(field_release:c2s_login.name)
+  clear_has_name();
+  return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void c2s_login::set_allocated_name(::std::string* name) {
+  if (name != NULL) {
+    set_has_name();
+  } else {
+    clear_has_name();
+  }
+  name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
+  // @@protoc_insertion_point(field_set_allocated:c2s_login.name)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // @@protoc_insertion_point(namespace_scope)
 

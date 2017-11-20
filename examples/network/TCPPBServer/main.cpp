@@ -1,4 +1,5 @@
 ﻿#include<hgl/ConsolePBServer.h>
+#include<hgl/serialize/pb/PBUserManage.h>
 #include"msg.pb.h"                                            //自动生成的头文件
 
 using USER_ID=uint32;                                        //用户ID类型定义

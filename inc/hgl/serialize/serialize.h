@@ -1,11 +1,11 @@
-#ifndef HGL_PB_SERIALIZE_INCLUDE
-#define HGL_PB_SERIALIZE_INCLUDE
+#ifndef HGL_SERIALIZE_INCLUDE
+#define HGL_SERIALIZE_INCLUDE
 
 #include<hgl/MemBlock.h>
 #include<hgl/io/OutputStream.h>
 namespace hgl
 {
-	namespace pb
+    namespace serialize
 	{
 		/**
 		* 序列化控制
@@ -68,7 +68,7 @@ namespace hgl
 		/**
          * 序列化输出流
          */
-        class SerializeOutputStream:public pb::Serialize
+        class SerializeOutputStream:public Serialize
         {
             hgl::io::OutputStream *os;
 
@@ -98,6 +98,6 @@ namespace hgl
                 return(true);
             }
         };//class SerializeOutputStream
-	}//namespace pb
+    }//namespace serialize
 }//namespace hgl
-#endif//HGL_PB_SERIALIZE_INCLUDE
+#endif//HGL_SERIALIZE_INCLUDE
