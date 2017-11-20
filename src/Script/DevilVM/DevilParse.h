@@ -16,7 +16,7 @@ namespace hgl
 		const u16char *		source_cur;
 		uint 				source_length;
 
-		asCTokenizer 		parse;
+		CTokenizer          parse;
 
 	private:
 
@@ -26,7 +26,7 @@ namespace hgl
         bool                    ParseNumber(T &,const UTF16String &);
 
 		DevilValueInterface *	ParseValue();														//解析一个量(属性/数值/真实函数调用)
-		void					ParseValue(DevilFunc *,eTokenType,UTF16String &);
+		void					ParseValue(DevilFunc *,TokenType,UTF16String &);
 		void					ParseEnum();
 
 		#ifdef _DEBUG
@@ -37,16 +37,16 @@ namespace hgl
 		bool 					ParseIf(DevilFunc *);
 
 		DevilCompInterface *	ParseComp();
-		eTokenType 				ParseCompType();
+		TokenType 				ParseCompType();
 
 	public:
 
 		DevilParse(DevilScriptModule *,const u16char *,int=-1);
 
-		eTokenType GetToken(UTF16String &);		//取得一个token,自动跳过注释、换行、空格
-		eTokenType CheckToken(UTF16String &);	//检测下一个token,自动跳过注释、换行、空格,但不取出
+		TokenType GetToken(UTF16String &);		//取得一个token,自动跳过注释、换行、空格
+		TokenType CheckToken(UTF16String &);	//检测下一个token,自动跳过注释、换行、空格,但不取出
 
-		bool GetToken(eTokenType,UTF16String &);	//找某一种Token为止
+		bool GetToken(TokenType,UTF16String &);	//找某一种Token为止
 
     	bool ParseFunc(DevilFunc *);		//解析一个函数
 	};

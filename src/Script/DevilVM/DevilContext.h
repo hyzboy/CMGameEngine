@@ -32,15 +32,14 @@ namespace hgl
 		void ScriptFuncCall(DevilFunc *);
 		bool Goto(DevilFunc *,int);
 		bool Goto(DevilFunc *);
-		bool Goto(DevilFunc *);
 		bool Return();
 
 	public:
 
 		bool Start(DevilFunc *,...);
 		bool Start(const u16char *,...);
-		bool StartFlag(DevilFunc *,const u16char *,);
-		bool StartFlag(const u16char *,const u16char *,);
+		bool StartFlag(DevilFunc *,const u16char *);
+		bool StartFlag(const u16char *,const u16char *);
 		bool Run(const u16char *);
 		void Pause();
 		void Stop();
