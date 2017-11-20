@@ -92,7 +92,7 @@ HGL_PLUGIN_FUNC void ClearAudioBufferData(AudioBuffer *audio_buffer)
 HGL_PLUGIN_FUNC uint        SourceGetIndex          (AudioSource *source){return source?source->GetIndex():0;}
 
 HGL_PLUGIN_FUNC double      SourceGetCurTime        (AudioSource *source){return source?source->GetCurTime():0;}
-HGL_PLUGIN_FUNC void        SourceSetCurTime        (AudioSource *source,const double &t){if(!source)return;source->SetCurTime(t);}
+HGL_PLUGIN_FUNC void        SourceSetCurTime        (AudioSource *source,const double &t){if(source)source->SetCurTime(t);}
 
 HGL_PLUGIN_FUNC int         SourceGetState          (AudioSource *source){return source?source->GetState():-1;}
 HGL_PLUGIN_FUNC float       SourceGetMinGain        (AudioSource *source){return source?source->GetMinGain():0;}
@@ -109,14 +109,14 @@ HGL_PLUGIN_FUNC const float SourceGetRolloffFactor  (AudioSource *source){return
 
 HGL_PLUGIN_FUNC bool        SourceGetDistance       (AudioSource *source,float &rd,float &md){if(!source)return(false);source->GetDistance(rd,md);return(true);}
 
-HGL_PLUGIN_FUNC bool        SourceGetDoppler        (AudioSource *source,float &factor,float &velocity)if(!source)return(false);source->GetDoppler(factor,velocity);return(true);}
+HGL_PLUGIN_FUNC bool        SourceGetDoppler        (AudioSource *source,float &factor,float &velocity){if(!source)return(false);source->GetDoppler(factor,velocity);return(true);}
 
-HGL_PLUGIN_FUNC void        SourceSetLoop           (AudioSource *source,bool l     ){if(!source)return(false);source->SetLoop(l);}
-HGL_PLUGIN_FUNC void        SourceSetPitch          (AudioSource *source,float p    ){if(!source)return(false);source->SetPitch(p);}
-HGL_PLUGIN_FUNC void        SourceSetGain           (AudioSource *source,float g    ){if(!source)return(false);source->SetGain(g);}
-HGL_PLUGIN_FUNC void        SourceSetConeGain       (AudioSource *source,float cg   ){if(!source)return(false);source->SetConeGain(cg);}
-HGL_PLUGIN_FUNC void        SourceSetDistanceModel  (AudioSource *source,uint dm    ){if(!source)return(false);source->SetDistanceModel(dm);}
-HGL_PLUGIN_FUNC void        SourceSetRolloffFactor  (AudioSource *source,float rf   ){if(!source)return(false);source->SetRolloffFactor(rf);}
+HGL_PLUGIN_FUNC void        SourceSetLoop           (AudioSource *source,bool l     ){if(source)source->SetLoop(l);}
+HGL_PLUGIN_FUNC void        SourceSetPitch          (AudioSource *source,float p    ){if(source)source->SetPitch(p);}
+HGL_PLUGIN_FUNC void        SourceSetGain           (AudioSource *source,float g    ){if(source)source->SetGain(g);}
+HGL_PLUGIN_FUNC void        SourceSetConeGain       (AudioSource *source,float cg   ){if(source)source->SetConeGain(cg);}
+HGL_PLUGIN_FUNC void        SourceSetDistanceModel  (AudioSource *source,uint dm    ){if(source)source->SetDistanceModel(dm);}
+HGL_PLUGIN_FUNC void        SourceSetRolloffFactor  (AudioSource *source,float rf   ){if(source)source->SetRolloffFactor(rf);}
 
 HGL_PLUGIN_FUNC bool        SourceGetPosition       (AudioSource *source,Vector3f &pos){if(!source)return(false);pos=source->GetPosition();return(true);}
 HGL_PLUGIN_FUNC bool        SourceGetVelocity       (AudioSource *source,Vector3f &vel){if(!source)return(false);vel=source->GetVelocity();return(true);}

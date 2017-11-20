@@ -23,6 +23,5 @@ ADD_LIBRARY(CM.OpenALEE.StandAlone SHARED ${OpenALEESource} OpenALEECPort.cpp Op
 
 IF(WIN32)
     target_compile_options(CM.OpenALEE.StandAlone PRIVATE "/MT")
+    target_link_libraries(CM.OpenALEE.StandAlone CM.Base.Static CM.Platform.Static)
 ENDIF(WIN32)
-
-target_link_libraries(CM.OpenALEE.StandAlone CM.Base.Static CM.Platform.Static)
