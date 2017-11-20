@@ -17,9 +17,9 @@ namespace hgl
     {
     protected:
 
-        typedef BaseString<T>			SelfClass;
-        typedef StringInstance<T>		InstClass;
-        typedef SharedPtr<InstClass>	SharedClass;
+        using SelfClass     =BaseString<T>;
+        using InstClass     =StringInstance<T>;
+        using SharedClass   =SharedPtr<InstClass>;
 
         SharedClass data;																			///<字符串数据实例
 
@@ -1020,12 +1020,12 @@ namespace hgl
         return BaseString<T>(value)+str;
     }
 
-    typedef BaseString<char>		UTF8String;
-    typedef BaseString<char>		AnsiString;
-    typedef BaseString<u16char>		UTF16String;
-    typedef BaseString<os_char>		OSString;
-    typedef BaseString<char32_t>	UTF32String;
-    typedef BaseString<wchar_t>		WideString;
+    using UTF8String    =BaseString<char>;
+    using AnsiString    =BaseString<char>;
+    using UTF16String   =BaseString<u16char>;
+    using OSString      =BaseString<os_char>;
+    using UTF32String   =BaseString<char32_t>;
+    using WideString    =BaseString<wchar_t>;
 
     /**
      * 以累加的方式为一个字符串计算出一个hash码
