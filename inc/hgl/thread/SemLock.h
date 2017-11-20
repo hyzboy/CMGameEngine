@@ -41,10 +41,10 @@ namespace hgl
 		 * @param n 释放的信号数量
 		 * @return 是否成功
 		 */
-		bool Release(int n=1)
+		bool Post(int n=1)
 		{
 			if(n<=0)return(false);
-			return sem.Release(n);
+			return sem.Post(n);
 		}
 
 		bool TryAcquire(){return sem.TryAcquire();}													///<尝试获取一个信号
@@ -214,7 +214,7 @@ namespace hgl
 			this->lock.ReadUnlock();
 
 			if(n>0)
-			this->sem.Release(n);
+			this->sem.Post(n);
 		}
 
 		/**
@@ -226,7 +226,7 @@ namespace hgl
 			this->lock.WriteUnlock();
 
 			if(n>0)
-			this->sem.Release(n);
+			this->sem.Post(n);
 		}
 	};//template<typename T> class SemRWLock
 }//namespace hgl
