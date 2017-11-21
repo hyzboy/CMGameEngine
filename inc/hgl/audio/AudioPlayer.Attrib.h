@@ -32,7 +32,9 @@ protected:
 	void ClearBuffer();
 
 	bool Playback();
-	virtual bool Execute() override;
+
+    bool IsExitDelete()const override{return false;}	
+	bool Execute() override;
 
 	void InitPrivate();
 	bool Load(AudioFileType);

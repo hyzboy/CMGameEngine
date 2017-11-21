@@ -337,18 +337,18 @@ namespace hgl
     {
         if(!audio_data)return;
 
-        bool close_thread=true;
+        bool thread_is_live=true;
 
         lock.Lock();
 
-        if(ps!=psNone&&ps!=psPause)
+        if(Thread::IsLive())
             ps=psExit;
         else
-            close_thread=false;
+            thread_is_live=false;
 
         lock.Unlock();
 
-        if(close_thread)
+        if(thread_is_live)
             Thread::Wait();
 
         ps=psNone;

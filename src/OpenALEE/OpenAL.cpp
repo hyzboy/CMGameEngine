@@ -14,16 +14,16 @@ namespace openal
 {
     static ALCchar AudioDeviceName[AL_DEVICE_NAME_MAX_LEN]={0};
 
-    static ExternalModule *AudioEM		=nullptr;        //OpenAL动态链接库指针
-    static ALCdevice *AudioDevice		=nullptr;        //OpenAL设备
-    static ALCcontext *AudioContext		=nullptr;        //OpenAL上下文
+    static ExternalModule *AudioEM      =nullptr;        //OpenAL动态链接库指针
+    static ALCdevice *AudioDevice       =nullptr;        //OpenAL设备
+    static ALCcontext *AudioContext     =nullptr;        //OpenAL上下文
 
     static UTF8StringList OpenALExt_List;
     static UTF8StringList OpenALContextExt_List;
 
-    static bool AudioFloat32			=false;         //是否支持float 32数据
-    static bool AudioEFX				=false;         //EFX是否可用
-    static bool AudioXRAM				=false;         //X-RAM是否可用
+    static bool AudioFloat32            =false;         //是否支持float 32数据
+    static bool AudioEFX                =false;         //EFX是否可用
+    static bool AudioXRAM               =false;         //X-RAM是否可用
 
     bool LoadALCFunc(ExternalModule *);
     bool LoadALFunc(ExternalModule *);
@@ -507,9 +507,9 @@ namespace openal
     }
     al_format_bytes[]=
     {
-        {AL_FORMAT_MONO8,            1},
-        {AL_FORMAT_MONO16,            2},
-        {AL_FORMAT_STEREO8,            2},
+        {AL_FORMAT_MONO8,           1},
+        {AL_FORMAT_MONO16,          2},
+        {AL_FORMAT_STEREO8,         2},
         {AL_FORMAT_STEREO16,        4},
 
 //         {AL_FORMAT_QUAD16,            8},
@@ -518,7 +518,7 @@ namespace openal
 //         {AL_FORMAT_71CHN16,            16},
 //
         {AL_FORMAT_MONO_FLOAT32,    4},
-        {AL_FORMAT_STEREO_FLOAT32,    8},
+        {AL_FORMAT_STEREO_FLOAT32,  8},
 //
 //         {AL_FORMAT_QUAD8,            4},
 //         {AL_FORMAT_QUAD16,            8},
@@ -635,23 +635,23 @@ namespace openal
 
         const char *result=nullptr;
 
-        const char al_error_invalid                []=U8_TEXT("invalid");
+        const char al_error_invalid             []=U8_TEXT("invalid");
         const char al_error_invalid_name        []=U8_TEXT("invalid name");
         const char al_error_invalid_enum        []=U8_TEXT("invalid enum");
-        const char al_error_invalid_value        []=U8_TEXT("invalid value");
-        const char al_error_invalid_operation    []=U8_TEXT("invalid operation");
-        const char al_error_out_of_memory        []=U8_TEXT("out of memory");
-        const char al_error_unknown_error        []=U8_TEXT("unknown error");
+        const char al_error_invalid_value       []=U8_TEXT("invalid value");
+        const char al_error_invalid_operation   []=U8_TEXT("invalid operation");
+        const char al_error_out_of_memory       []=U8_TEXT("out of memory");
+        const char al_error_unknown_error       []=U8_TEXT("unknown error");
 
         const ALenum error=alGetError();
 
-        if(error==AL_NO_ERROR            )result=nullptr;else
+        if(error==AL_NO_ERROR           )result=nullptr;else
         if(error==AL_INVALID            )result=al_error_invalid;else
-        if(error==AL_INVALID_NAME        )result=al_error_invalid_name;else
-        if(error==AL_INVALID_ENUM        )result=al_error_invalid_enum;else
-        if(error==AL_INVALID_VALUE        )result=al_error_invalid_value;else
-        if(error==AL_INVALID_OPERATION    )result=al_error_invalid_operation;else
-        if(error==AL_OUT_OF_MEMORY        )result=al_error_out_of_memory;else
+        if(error==AL_INVALID_NAME       )result=al_error_invalid_name;else
+        if(error==AL_INVALID_ENUM       )result=al_error_invalid_enum;else
+        if(error==AL_INVALID_VALUE      )result=al_error_invalid_value;else
+        if(error==AL_INVALID_OPERATION  )result=al_error_invalid_operation;else
+        if(error==AL_OUT_OF_MEMORY      )result=al_error_out_of_memory;else
                                          result=al_error_unknown_error;
 
         if(result)
@@ -672,14 +672,14 @@ namespace openal
         LOG_INFO(UTF8String(u8"　　　音频芯片制造商: ")+alGetString(AL_VENDOR    ));
         LOG_INFO(UTF8String(u8"　　支持的OpenAL版本: ")+alGetString(AL_VERSION   ));
         LOG_INFO(UTF8String(u8"　　　　音频芯片名称: ")+alGetString(AL_RENDERER  ));
-        LOG_INFO(OS_TEXT(            "　　　　　最大音源数: ")+OSString(GetMaxNumSources()));
-           LOG_INFO(AudioFloat32?OS_TEXT(    "    浮点音频数据支持: 是")
-                             :OS_TEXT(    "    浮点音频数据支持: 否"));
+        LOG_INFO(OS_TEXT(               "　　　　　最大音源数: ")+OSString(GetMaxNumSources()));
+        LOG_INFO(AudioFloat32?OS_TEXT(  "    浮点音频数据支持: 是")
+                             :OS_TEXT(  "    浮点音频数据支持: 否"));
 
-        LOG_INFO(AudioEFX?OS_TEXT(    "　　　　　   EFX支持: 是")
-                        :OS_TEXT(    "　　　　　   EFX支持: 否"));
-        LOG_INFO(AudioXRAM?OS_TEXT(    "           X-RAM支持: 是")
-                        :OS_TEXT(    "           X-RAM支持: 否"));
+        LOG_INFO(AudioEFX?OS_TEXT(  "　　　　　   EFX支持: 是")
+                         :OS_TEXT(  "　　　　　   EFX支持: 否"));
+        LOG_INFO(AudioXRAM?OS_TEXT( "           X-RAM支持: 是")
+                          :OS_TEXT( "           X-RAM支持: 否"));
 
         if(AudioXRAM)
         {
