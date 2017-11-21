@@ -7,6 +7,22 @@
 using namespace hgl;
 using namespace openal;
 
+namespace openal
+{
+    const char *alcGetDeviceNameList();
+    bool alcGetDefaultDeviceName(char *name);
+}//namespace openal
+
+HGL_PLUGIN_FUNC const char *GetAudioDeviceNameList()
+{
+    return openal::alcGetDeviceNameList();
+}
+
+HGL_PLUGIN_FUNC bool GetDefaultAudioDeviceName(char *name)
+{
+    return openal::alcGetDefaultDeviceName(name);
+}
+
 HGL_PLUGIN_FUNC AudioListener *CreateListener()
 {
     return(new AudioListener());
@@ -88,6 +104,10 @@ HGL_PLUGIN_FUNC void ClearAudioBufferData(AudioBuffer *audio_buffer)
 
     audio_buffer->Clear();
 }
+
+HGL_PLUGIN_FUNC double      AudioBufferTime         (AudioBuffer *buf){return buf?buf->Time:0;}
+HGL_PLUGIN_FUNC uint        AudioBufferBytes        (AudioBuffer *buf){return buf?buf->Size:0;}
+HGL_PLUGIN_FUNC uint        AudioBufferFreq         (AudioBuffer *buf){return buf?buf->Freq:0;}
 
 HGL_PLUGIN_FUNC uint        SourceGetIndex          (AudioSource *source){return source?source->GetIndex():0;}
 
