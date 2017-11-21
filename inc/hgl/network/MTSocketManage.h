@@ -83,6 +83,8 @@ namespace hgl
 			{
 				if(!StartRecvThread())return(false);
 				if(!StartSendThread())return(false);
+
+                return(true);
 			}
 
 			virtual void Update();																	///<线程刷新函数(主要处理错误socket删除)
