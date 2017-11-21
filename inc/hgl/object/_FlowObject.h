@@ -15,7 +15,7 @@ namespace hgl
         T *NextObject;                                                                              ///<下一个对象
 
         FlowObjectState fos;                                                                        ///<当前对象状态
-        
+
     public:  //事件
 
         virtual void OnToBack(){}                                                                   ///<将当前流程切入后台

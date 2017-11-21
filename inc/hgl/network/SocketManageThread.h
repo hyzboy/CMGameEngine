@@ -15,8 +15,8 @@ namespace hgl
 		class Socket;
 		class OnewaySocketManageBase;
 
-		OnewaySocketManageBase *CreateRecvSocketManage(int max_user);										///<创建一个只处理读取的Socket管理器
-		OnewaySocketManageBase *CreateSendSocketManage(int max_user);										///<创建一个只处理发送的Socket管理器
+		OnewaySocketManageBase *CreateRecvSocketManage(int max_user);								///<创建一个只处理读取的Socket管理器
+		OnewaySocketManageBase *CreateSendSocketManage(int max_user);								///<创建一个只处理发送的Socket管理器
 
 		/**
 		 * Socket管理线程
@@ -53,7 +53,7 @@ namespace hgl
 			SocketManageThread();
 			virtual ~SocketManageThread();
 
-			virtual bool Execute()override;														///<本线程刷新函数
+			virtual bool Execute()override;														    ///<本线程刷新函数
 
 			virtual bool ProcStartThread()override=0;
 			virtual void ProcError(IOSocket **,const int)=0;										///<处理错误Socket列表函数

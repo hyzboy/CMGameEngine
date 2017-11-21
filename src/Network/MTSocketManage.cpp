@@ -127,10 +127,10 @@ namespace hgl
             error_sock_set.Add(sock_list,count);
         }
 
-        bool MTSocketManage::Execute()
+        void MTSocketManage::Update()
         {
             if(!error_sock_set.WaitProc())
-                return(true);
+                return;
 
             const int count=error_sock_set->GetCount();
             IOSocket **sp=error_sock_set->GetData();
@@ -147,8 +147,6 @@ namespace hgl
             }
 
             error_sock_set->ClearData();
-
-            return(true);
         }
     }//namespace network
 }//namespace hgl
