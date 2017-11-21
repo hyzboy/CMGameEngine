@@ -13,6 +13,9 @@ namespace hgl
 		{
 			char *ipstr;
 
+            fd_set accept_set;
+            struct timeval accept_timeout;
+
 		protected:
 
 			virtual int CreateServerSocket()=0;														///<创建Server Socket
@@ -27,9 +30,14 @@ namespace hgl
 			{
 				overload_wait=HGL_SERVER_OVERLOAD_RESUME_TIME;
 				ipstr = nullptr;
+
+                FD_ZERO(&accept_set);
+                hgl_zero(accept_timeout);
 			}
 
 			virtual ~AcceptServer(){SAFE_CLEAR(ipstr);}
+
+                    void SetTimeOut(const double);
 
 			virtual int Accept(IPAddress *);														///<接入一个socket连接
 		};//class AcceptServer
