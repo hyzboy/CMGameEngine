@@ -56,7 +56,7 @@ namespace hgl
 
 			int _GetAttribLocation(const char *);																        ///<取得指定属性地址
 			int _GetUniformLocation(const char *);															            ///<取得一个变量的地址
-			int _GetUniformBlockIndex(const char *);                                                                    ///<取得一个只读数据块的地址索引
+			int _GetUniformBlockIndex(const char *);                                                                    ///<取得一个变量数据块的地址索引
             int _GetShaderStorageIndex(const char *);                                                                   ///<取得一个数据存储区的地址索引
 
 		public:
@@ -86,7 +86,7 @@ namespace hgl
 
 			int GetAttribLocation(const char *);																        ///<取得指定属性地址
 			int GetUniformLocation(const char *);																        ///<取得一个变量的地址
-            int GetUniformBlockIndex(const char *);                                                                     ///<取得一个只读数据块索引
+            int GetUniformBlockIndex(const char *);                                                                     ///<取得一个变量数据块索引
             int GetShaderStorageIndex(const char *);                                                                    ///<取得一个数据存储区索引
 
 			//bool SetAttrib1f(int,float);
@@ -191,7 +191,7 @@ namespace hgl
 
         public: //Uniform Block
 
-            UBO *GetUniformBlock(const char *,uint=HGL_DYNAMIC_DRAW);
+            UBO *GetUniformBlock(const char *,int,uint=HGL_DYNAMIC_DRAW);
             SSBO *GetShaderStorage(const char *,uint=HGL_DYNAMIC_DRAW);
 		};//class Shader
 	}//namespace graph

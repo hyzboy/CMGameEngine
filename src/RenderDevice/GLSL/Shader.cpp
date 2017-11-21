@@ -50,9 +50,9 @@ namespace hgl
         }
 
         /**
-        * 取得一个Shader只读数据区索引
-        * @param name 数据区名称
-        * @return 数据区索引
+        * 取得一个Shader变量数据块索引
+        * @param name 数据块名称
+        * @return 数据块索引
         * @return -1 出错
         */
         int Shader::GetUniformBlockIndex(const char *name)
@@ -184,11 +184,12 @@ namespace hgl
 
         /**
         * 取得一个Shader只读数据区的访问对象
-        * @param name 对象名称
+        * @param name 对象名称        
+        * @param ubo_binding_point 数据块绑定点
         * @param level 访问级别
         * @return 对象指针
         */
-        UBO *Shader::GetUniformBlock(const char *name,uint level)
+        UBO *Shader::GetUniformBlock(const char *name,int ubo_binding_point,uint level)
         {
             if(!name||!(*name))
             {
@@ -209,7 +210,7 @@ namespace hgl
                 return(nullptr);
             }
 
-            ubo=new UBO(name,program,index,level);
+            ubo=new UBO(name,program,index,ubo_binding_point,level);
 
             uniform_block_object.Add(name,ubo);
 

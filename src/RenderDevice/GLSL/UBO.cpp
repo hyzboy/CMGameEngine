@@ -222,19 +222,19 @@ namespace hgl
             }
         }
 
-        UBO::UBO(const UTF8String &n,uint p,uint i,uint l)
+        UBO::UBO(const UTF8String &n,uint p,uint i,int bp,uint l)
         {
             block_name=n;
             program=p;
             block_index=i;
-            binding_point=ubo::AcquireBindingPoint();
+            binding_point=bp;
             level=l;
 
             use_map=0;
-
-            glGetActiveUniformBlockiv(program,block_index,GL_UNIFORM_BLOCK_DATA_SIZE,&size);
+            
             glUniformBlockBinding(program,block_index,binding_point);
 
+            glGetActiveUniformBlockiv(program,block_index,GL_UNIFORM_BLOCK_DATA_SIZE,&size);
             glGetActiveUniformBlockiv(program,block_index,GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS,&uniform_count);
 
             uniform_indices         =new int[uniform_count];
@@ -303,7 +303,6 @@ namespace hgl
             delete[] uniform_name_size;
             delete[] uniform_indices;
             delete[] buffer;
-            ubo::ReleaseBindingPoint(binding_point);
             glDeleteBuffers(1,&ubo);
         }
 

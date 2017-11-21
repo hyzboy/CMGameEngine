@@ -56,6 +56,12 @@ namespace hgl
 			virtual bool SetMat4x3		(const float *){return(false);}
 		};//class UBOValue
 
+        namespace ubo
+        {
+            int AcquireBindingPoint();
+            void ReleaseBindingPoint(int bb);
+        }//namespace ubo
+
 		/**
 		* OpenGL Core Uniform Buffer Object
 		*/
@@ -63,7 +69,7 @@ namespace hgl
 		{
 			friend class Shader;
 
-			UBO(const UTF8String &,uint,uint,uint);
+			UBO(const UTF8String &,uint,uint,int,uint);
 
 		protected:
 
