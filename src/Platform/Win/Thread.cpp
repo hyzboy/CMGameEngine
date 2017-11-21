@@ -70,8 +70,12 @@ namespace hgl
     void Thread::Wait(const double time_out)
     {
         if(tp)
+        {
             if(IsLive())        //有时候线程还在，但在做最后一步delete，就不处理了。完全以这个为基准
                 WaitForSingleObject(tp,time_out>0?time_out*1000:INFINITE);
+            else
+                tp=nullptr;
+        }
     }
 
     /**
