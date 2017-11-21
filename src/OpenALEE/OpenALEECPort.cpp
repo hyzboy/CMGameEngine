@@ -7,6 +7,22 @@
 using namespace hgl;
 using namespace openal;
 
+namespace openal
+{
+    const char *alcGetDeviceNameList();
+    bool alcGetDefaultDeviceName(char *name);
+}//namespace openal
+
+HGL_PLUGIN_FUNC const char *GetAudioDeviceNameList()
+{
+    return openal::alcGetDeviceNameList();
+}
+
+HGL_PLUGIN_FUNC bool GetDefaultAudioDeviceName(char *name)
+{
+    return openal::alcGetDefaultDeviceName(name);
+}
+
 HGL_PLUGIN_FUNC AudioListener *CreateListener()
 {
     return(new AudioListener());
