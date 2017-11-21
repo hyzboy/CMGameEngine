@@ -14,12 +14,16 @@ namespace hgl
 
 	void *ThreadFunc(Thread *tc)
 	{
+        tc->live_lock.Lock();
+
 		if(tc->ProcStartThread())
 		{
 			while(tc->Execute());
 
 			tc->ProcEndThread();
 		}
+        
+        tc->live_lock.Unlock();
 
 		if(tc->IsExitDelete())
 		{
@@ -138,6 +142,12 @@ namespace hgl
 			LOG_ERROR(OS_TEXT("Thread::Wait() error,tp=nullptr."));
 			return;
 		}
+
+        if(!IsLive())       //已经死了
+        {
+            tp=0;
+            return;
+        }
 
 		int retval;
         void *res;

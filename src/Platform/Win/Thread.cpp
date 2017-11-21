@@ -6,12 +6,16 @@ namespace hgl
 {
     DWORD WINAPI ThreadFunc(Thread *tc)
 	{
+        tc->live_lock.Lock();
+
 		if(tc->ProcStartThread())
 		{
 			while(tc->Execute());
 
 			tc->ProcEndThread();
 		}
+        
+        tc->live_lock.Unlock();
 
 		if(tc->IsExitDelete())
 			delete tc;

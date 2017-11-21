@@ -3,7 +3,7 @@
 
 #include<hgl/type/DataType.h>
 #include<hgl/type/BaseString.h>
-#include<hgl/thread/Semaphore.h>
+#include<hgl/thread/ThreadMutex.h>
 
 #if HGL_OS == HGL_OS_Windows
 	using thread_ptr=void *;       //windows版是HANDLE，但HANDLE其实就是void *，这里为了减少#include<windows.h>所以直接写为void *
@@ -33,8 +33,14 @@ namespace hgl
 
 		thread_ptr tp=0;
 
+        ThreadMutex live_lock;
+
 #if HGL_OS != HGL_OS_Windows
 		virtual void SetCancelState(bool,bool=true);
+        
+        friend void *ThreadFunc(Thread *tc);
+#else
+        friend DWORD WINAPI ThreadFunc(Thread *tc);
 #endif//HGL_OS != HGL_OS_Windows
 
 	public:
@@ -66,6 +72,18 @@ namespace hgl
 		virtual void ProcEndThread(){}																///<结程结束运行函数,在Execute后被调用
 
 		virtual bool IsExitDelete()const{return true;}												///<返回在退出线程时，是否删除本对象
+
+                bool IsLive()                                                                       ///<当前线程是否还活着
+                {
+                    if(live_lock.TryLock())
+                    {
+                        //成功了，证明这个线程已经关闭了
+                        live_lock.Unlock();
+                        return(false);
+                    }
+
+                    return(true);
+                }
 
 	public:	//线程运行控制
 
