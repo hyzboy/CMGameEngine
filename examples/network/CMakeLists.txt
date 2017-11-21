@@ -4,7 +4,7 @@
 ENDIF(BUILD_NETWORK_SCTP)
 
 add_subdirectory(AutoUpdate)
-add_subdirectory(TCPPBServer)
+#add_subdirectory(TCPPBServer)
 
 add_subdirectory(DownloadHTTPServer)
 add_subdirectory(FlashPolicyServer)

@@ -17,7 +17,7 @@ namespace hgl
 #if HGL_OS != HGL_OS_Windows
         /**
          * 设置推迟Accept（在接收到第一个数据后，才会Accept成功）
-         * @param time_out 收到数据的时间限制
+         * @param time_out 收到数据的时间限制(单位秒)
          */
         void TCPServer::SetDeferAccept(const int time_out)
         {

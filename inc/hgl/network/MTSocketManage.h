@@ -2,7 +2,6 @@
 #define HGL_NETWORK_MULTI_THREAD_SOCKET_MANAGE_INCLUDE
 
 #include<hgl/type/Set.h>
-#include<hgl/thread/Thread.h>
 #include<hgl/thread/SemLock.h>
 #include<hgl/thread/SwapColl.h>
 #include<hgl/network/SocketManageThread.h>
@@ -48,7 +47,7 @@ namespace hgl
 		/**
 		 * 多线程Socket I/O管理
 		 */
-		class MTSocketManage:public MTSocketManageBase,public Thread
+		class MTSocketManage:public MTSocketManageBase
 		{
 			int max_socket_count;																	///<最大socket数
 			int recv_thread_count;																	///<接收线程数量
@@ -85,10 +84,10 @@ namespace hgl
 				if(!StartRecvThread())return(false);
 				if(!StartSendThread())return(false);
 
-				return Thread::Start();
+                return(true);
 			}
 
-			virtual bool Execute();																	///<线程刷新函数(主要处理错误socket删除)
+			virtual void Update();																	///<线程刷新函数(主要处理错误socket删除)
 
 		public:
 

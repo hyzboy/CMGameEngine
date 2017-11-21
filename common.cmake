@@ -27,6 +27,7 @@ IF(CMAKE_COMPILER_IS_GNUCC OR MINGW)
 	ENDIF()
 
 	OPTION(USE_GPERF_TOOLS			"Use Google Performance Tools"			FALSE	)
+	OPTION(NO_RTTI                  "Don't Use RTTI"                       TRUE)
 
 	OPTION(USE_ALL_STATIC			"Use All Static"						FALSE	)
 	OPTION(USE_STATIC_GLIBC			"Use Static libgcc"						FALSE	)
@@ -158,7 +159,9 @@ IF(CMAKE_COMPILER_IS_GNUCC OR MINGW)
 		add_compile_options(-Ofast)
 	ENDIF()
 
-	add_compile_options(-fno-rtti)
+	IF(NO_RTTI)
+        add_compile_options(-fno-rtti)
+    ENDIF(NO_RTTI)
 
     if(X86_USE_CPU_COMMAND STREQUAL AVX)
         add_definitions("-DMATH_AVX")

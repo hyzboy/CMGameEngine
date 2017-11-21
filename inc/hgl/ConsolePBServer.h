@@ -4,10 +4,10 @@
 #include<hgl/Console.h>
 #include<hgl/network/SocketThreadServer.h>
 #include<hgl/network/TCPServer.h>
-#include<hgl/pb/PBTCPSocketThread.h>
+#include<hgl/serialize/pb/PBTCPSocketThread.h>
 
 using namespace hgl;
-using namespace hgl::pb;
+using namespace hgl::serialize;
 
 namespace hgl
 {
@@ -18,7 +18,7 @@ namespace hgl
     class WORK_THREAD_NAME:public WORK_THREAD_NAME##BASE
 
     #define HGL_CONSOLE_PB_SERVER_APPLICATION(app_name,app_code,USER_THREAD_NAME,IP_ADDRESS)	using namespace hgl;    \
-                                                                                                using namespace hgl::pb;    \
+                                                                                                using namespace hgl::serialize;    \
     \
     HGL_CONSOLE_MAIN_FUNC()	\
     {	\

@@ -70,6 +70,34 @@ namespace hgl
 {
 	namespace network
 	{
+        /**
+         * IP类型枚举
+         */
+        enum IPType
+        {
+            iptNone=0,
+
+            iptV4,
+            iptV6,
+
+            iptEnd
+        };//enum IPType
+
+        inline IPType CheckIPType(const char *name)
+        {
+            if(!name)return(iptNone);
+
+            while(*name)
+            {
+                if(*name==':')return(iptV6);
+                if(*name=='.')return(iptV4);
+
+                ++name;
+            }
+
+            return(iptNone);
+        }
+
         struct IPSupport
         {
             uint family;            ///<协议家族：AF_INET,AF_INET6,AF_NETBIOS
@@ -90,6 +118,18 @@ namespace hgl
         };
 
         int GetIPSupport(List<IPSupport> &);        ///<取得本机IP支持列表
+        bool CheckIPSupport(const List<IPSupport> &ips_list,uint family,uint socktype,uint protocol);
+        bool CheckIPSupport(uint family,uint socktype,uint protocol);
+
+        inline bool CheckIPv4SupportTCP     (){return CheckIPSupport(AF_INET,SOCK_STREAM,   IPPROTO_TCP     );}
+        inline bool CheckIPv4SupportUDP     (){return CheckIPSupport(AF_INET,SOCK_DGRAM,    IPPROTO_UDP     );}
+        inline bool CheckIPv4SupportUDPLite (){return CheckIPSupport(AF_INET,SOCK_DGRAM,    IPPROTO_UDPLITE );}
+        inline bool CheckIPv4SupportSCTP    (){return CheckIPSupport(AF_INET,SOCK_SEQPACKET,IPPROTO_SCTP    );}
+
+        inline bool CheckIPv6SupportTCP     (){return CheckIPSupport(AF_INET6,SOCK_STREAM,   IPPROTO_TCP     );}
+        inline bool CheckIPv6SupportUDP     (){return CheckIPSupport(AF_INET6,SOCK_DGRAM,    IPPROTO_UDP     );}
+        inline bool CheckIPv6SupportUDPLite (){return CheckIPSupport(AF_INET6,SOCK_DGRAM,    IPPROTO_UDPLITE );}
+        inline bool CheckIPv6SupportSCTP    (){return CheckIPSupport(AF_INET6,SOCK_SEQPACKET,IPPROTO_SCTP    );}
 
 		/**
          * IP地址类
@@ -134,9 +174,10 @@ namespace hgl
              */
             virtual bool Set(const char *_name,ushort _port,int socktype,int protocol)=0;
 
-                    bool SetTCP (const char *_name,ushort _port){return Set(_name,_port,SOCK_STREAM,    IPPROTO_TCP );}
-                    bool SetUDP (const char *_name,ushort _port){return Set(_name,_port,SOCK_DGRAM,     IPPROTO_UDP );}
-                    bool SetSCTP(const char *_name,ushort _port){return Set(_name,_port,SOCK_SEQPACKET, IPPROTO_SCTP);}
+                    bool SetTCP     (const char *_name,ushort _port){return Set(_name,_port,SOCK_STREAM,    IPPROTO_TCP     );}
+                    bool SetUDP     (const char *_name,ushort _port){return Set(_name,_port,SOCK_DGRAM,     IPPROTO_UDP     );}
+                    bool SetUDPLite (const char *_name,ushort _port){return Set(_name,_port,SOCK_DGRAM,     IPPROTO_UDPLITE );}
+                    bool SetSCTP    (const char *_name,ushort _port){return Set(_name,_port,SOCK_SEQPACKET, IPPROTO_SCTP    );}
 
             /**
              * 设置一个仅有端口号的地址，一般用于服务器监听本机所有地址
@@ -290,23 +331,23 @@ namespace hgl
             bool Comp(const IPAddress *ipa)const;
         };//class IPv6Address
 
-        inline IPv4Address *CreateIPv4TCP(const char *name,ushort port){return(new IPv4Address(name,port,SOCK_STREAM,  IPPROTO_TCP));}
-        inline IPv6Address *CreateIPv6TCP(const char *name,ushort port){return(new IPv6Address(name,port,SOCK_STREAM,  IPPROTO_TCP));}
+        inline IPv4Address *CreateIPv4TCP       (const char *name,ushort port){return(new IPv4Address(name,port,SOCK_STREAM,    IPPROTO_TCP));}
+        inline IPv6Address *CreateIPv6TCP       (const char *name,ushort port){return(new IPv6Address(name,port,SOCK_STREAM,    IPPROTO_TCP));}
+        inline IPv4Address *CreateIPv4UDP       (const char *name,ushort port){return(new IPv4Address(name,port,SOCK_DGRAM,     IPPROTO_UDP));}
+        inline IPv6Address *CreateIPv6UDP       (const char *name,ushort port){return(new IPv6Address(name,port,SOCK_DGRAM,     IPPROTO_UDP));}
+        inline IPv4Address *CreateIPv4UDPLite   (const char *name,ushort port){return(new IPv4Address(name,port,SOCK_DGRAM,     IPPROTO_UDPLITE));}
+        inline IPv6Address *CreateIPv6UDPLite   (const char *name,ushort port){return(new IPv6Address(name,port,SOCK_DGRAM,     IPPROTO_UDPLITE));}
+        inline IPv4Address *CreateIPv4SCTP      (const char *name,ushort port){return(new IPv4Address(name,port,SOCK_SEQPACKET, IPPROTO_SCTP));}
+        inline IPv6Address *CreateIPv6SCTP      (const char *name,ushort port){return(new IPv6Address(name,port,SOCK_SEQPACKET, IPPROTO_SCTP));}
 
-        inline IPv4Address *CreateIPv4UDP(const char *name,ushort port){return(new IPv4Address(name,port,SOCK_DGRAM,   IPPROTO_UDP));}
-        inline IPv6Address *CreateIPv6UDP(const char *name,ushort port){return(new IPv6Address(name,port,SOCK_DGRAM,   IPPROTO_UDP));}
-
-        inline IPv4Address *CreateIPv4UDPLite(const char *name,ushort port){return(new IPv4Address(name,port,SOCK_DGRAM,   IPPROTO_UDPLITE));}
-        inline IPv6Address *CreateIPv6UDPLite(const char *name,ushort port){return(new IPv6Address(name,port,SOCK_DGRAM,   IPPROTO_UDPLITE));}
-
-        inline IPv4Address *CreateIPv4TCP(ushort port){return(new IPv4Address(nullptr,port,SOCK_STREAM,  IPPROTO_TCP));}
-        inline IPv6Address *CreateIPv6TCP(ushort port){return(new IPv6Address(nullptr,port,SOCK_STREAM,  IPPROTO_TCP));}
-
-        inline IPv4Address *CreateIPv4UDP(ushort port){return(new IPv4Address(nullptr,port,SOCK_DGRAM,   IPPROTO_UDP));}
-        inline IPv6Address *CreateIPv6UDP(ushort port){return(new IPv6Address(nullptr,port,SOCK_DGRAM,   IPPROTO_UDP));}
-
-        inline IPv4Address *CreateIPv4UDPLite(ushort port){return(new IPv4Address(nullptr,port,SOCK_DGRAM,   IPPROTO_UDPLITE));}
-        inline IPv6Address *CreateIPv6UDPLite(ushort port){return(new IPv6Address(nullptr,port,SOCK_DGRAM,   IPPROTO_UDPLITE));}
+        inline IPv4Address *CreateIPv4TCP       (ushort port){return(new IPv4Address(nullptr,port,SOCK_STREAM,      IPPROTO_TCP));}
+        inline IPv6Address *CreateIPv6TCP       (ushort port){return(new IPv6Address(nullptr,port,SOCK_STREAM,      IPPROTO_TCP));}
+        inline IPv4Address *CreateIPv4UDP       (ushort port){return(new IPv4Address(nullptr,port,SOCK_DGRAM,       IPPROTO_UDP));}
+        inline IPv6Address *CreateIPv6UDP       (ushort port){return(new IPv6Address(nullptr,port,SOCK_DGRAM,       IPPROTO_UDP));}
+        inline IPv4Address *CreateIPv4UDPLite   (ushort port){return(new IPv4Address(nullptr,port,SOCK_DGRAM,       IPPROTO_UDPLITE));}
+        inline IPv6Address *CreateIPv6UDPLite   (ushort port){return(new IPv6Address(nullptr,port,SOCK_DGRAM,       IPPROTO_UDPLITE));}
+        inline IPv4Address *CreateIPv4SCTP      (ushort port){return(new IPv4Address(nullptr,port,SOCK_SEQPACKET,   IPPROTO_SCTP));}
+        inline IPv6Address *CreateIPv6SCTP      (ushort port){return(new IPv6Address(nullptr,port,SOCK_SEQPACKET,   IPPROTO_SCTP));}
 
         inline IPv4Address *CreateIPv4UDPBoradcast      (ushort port){return(new IPv4Address(htonl(INADDR_BROADCAST),port,SOCK_DGRAM,   IPPROTO_UDP));}
         inline IPv4Address *CreateIPv4UDPLiteBoradcast  (ushort port){return(new IPv4Address(htonl(INADDR_BROADCAST),port,SOCK_DGRAM,   IPPROTO_UDPLITE));}
