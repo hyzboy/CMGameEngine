@@ -183,6 +183,54 @@ namespace hgl
             freeaddrinfo(answer);
             return(count);
         }
+
+        /**
+         * 检测这个IP类型是否在支持列表中
+         * @param ips_list IP协议支持列表
+         * @param family IP家族
+         * @param socktype socket类型
+         * @param protocol 协议类型
+         * @return 是否支持
+         */
+        bool CheckIPSupport(const List<IPSupport> &ips_list,uint family,uint socktype,uint protocol)
+        {
+            int count=ips_list.GetCount();
+
+            if(count<=0)
+                return(false);
+
+            const IPSupport *ips=ips_list.GetData();
+
+            while(count--)
+            {
+                if(ips->family==family
+                    &&ips->socktype==socktype
+                    &&ips->protocol==protocol)
+                    return(true);
+
+                ++ips;
+            }
+
+            return(false);
+        }
+
+        /**
+         * 检测本机是否支持指定协议
+         * @param family IP家族
+         * @param socktype socket类型
+         * @param protocol 协议类型
+         * @return 是否支持
+         */
+        bool CheckIPSupport(uint family,uint socktype,uint protocol)
+        {
+            List<IPSupport> ips_list;
+
+            const int count=GetIPSupport(ips_list);
+
+            if(count<=0)return(false);
+
+            return CheckIPSupport(ips_list,family,socktype,protocol);
+        }
     }//namespace network
 
     namespace network
