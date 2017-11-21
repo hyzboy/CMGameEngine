@@ -121,15 +121,15 @@ namespace hgl
         bool CheckIPSupport(const List<IPSupport> &ips_list,uint family,uint socktype,uint protocol);
         bool CheckIPSupport(uint family,uint socktype,uint protocol);
 
-        inline bool CheckIPSupportIPv4TCP       (){return CheckIPSupport(AF_INET,SOCK_STREAM,   IPPROTO_TCP     );}
-        inline bool CheckIPSupportIPv4UDP       (){return CheckIPSupport(AF_INET,SOCK_DGRAM,    IPPROTO_UDP     );}
-        inline bool CheckIPSupportIPv4UDPLite   (){return CheckIPSupport(AF_INET,SOCK_DGRAM,    IPPROTO_UDPLITE );}
-        inline bool CheckIPSupportIPv4SCTP      (){return CheckIPSupport(AF_INET,SOCK_SEQPACKET,IPPROTO_SCTP    );}
+        inline bool CheckIPv4SupportTCP     (){return CheckIPSupport(AF_INET,SOCK_STREAM,   IPPROTO_TCP     );}
+        inline bool CheckIPv4SupportUDP     (){return CheckIPSupport(AF_INET,SOCK_DGRAM,    IPPROTO_UDP     );}
+        inline bool CheckIPv4SupportUDPLite (){return CheckIPSupport(AF_INET,SOCK_DGRAM,    IPPROTO_UDPLITE );}
+        inline bool CheckIPv4SupportSCTP    (){return CheckIPSupport(AF_INET,SOCK_SEQPACKET,IPPROTO_SCTP    );}
 
-        inline bool CheckIPSupportIPv6TCP       (){return CheckIPSupport(AF_INET6,SOCK_STREAM,   IPPROTO_TCP     );}
-        inline bool CheckIPSupportIPv6UDP       (){return CheckIPSupport(AF_INET6,SOCK_DGRAM,    IPPROTO_UDP     );}
-        inline bool CheckIPSupportIPv6UDPLite   (){return CheckIPSupport(AF_INET6,SOCK_DGRAM,    IPPROTO_UDPLITE );}
-        inline bool CheckIPSupportIPv6SCTP      (){return CheckIPSupport(AF_INET6,SOCK_SEQPACKET,IPPROTO_SCTP    );}
+        inline bool CheckIPv6SupportTCP     (){return CheckIPSupport(AF_INET6,SOCK_STREAM,   IPPROTO_TCP     );}
+        inline bool CheckIPv6SupportUDP     (){return CheckIPSupport(AF_INET6,SOCK_DGRAM,    IPPROTO_UDP     );}
+        inline bool CheckIPv6SupportUDPLite (){return CheckIPSupport(AF_INET6,SOCK_DGRAM,    IPPROTO_UDPLITE );}
+        inline bool CheckIPv6SupportSCTP    (){return CheckIPSupport(AF_INET6,SOCK_SEQPACKET,IPPROTO_SCTP    );}
 
 		/**
          * IP地址类
