@@ -18,9 +18,9 @@ namespace hgl
         namespace
         {
             //绑定点是全局不可重用的，所以使用一个全局计数
-            static Stack<int> ubo_binding_stack;                                               ///<绑定点计数
+            static Stack<int> ubo_binding_stack;                                                ///<绑定点计数
 
-            static int max_ubo_binding=0;
+            static int max_ubo_binding=0;                                                       ///<UBO最大绑定点数量，Quadro K600是84个
             static int max_ubo_size=0;                                                          ///<UBO最大容量，测试了一下，Quadro K600是64k
         }//namespace
 
