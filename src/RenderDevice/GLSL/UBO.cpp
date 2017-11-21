@@ -117,31 +117,31 @@ namespace hgl
 
             switch(type)
             {
-                UNI_CASE(GL_FLOAT, 1, GLfloat);
-                UNI_CASE(GL_FLOAT_VEC2, 2, GLfloat);
-                UNI_CASE(GL_FLOAT_VEC3, 3, GLfloat);
-                UNI_CASE(GL_FLOAT_VEC4, 4, GLfloat);
-                UNI_CASE(GL_INT, 1, GLint);
-                UNI_CASE(GL_INT_VEC2, 2, GLint);
-                UNI_CASE(GL_INT_VEC3, 3, GLint);
-                UNI_CASE(GL_INT_VEC4, 4, GLint);
-                UNI_CASE(GL_UNSIGNED_INT, 1, GLuint);
-                UNI_CASE(GL_UNSIGNED_INT_VEC2, 2, GLuint);
-                UNI_CASE(GL_UNSIGNED_INT_VEC3, 3, GLuint);
-                UNI_CASE(GL_UNSIGNED_INT_VEC4, 4, GLuint);
-                UNI_CASE(GL_BOOL, 1, GLboolean);
-                UNI_CASE(GL_BOOL_VEC2, 2, GLboolean);
-                UNI_CASE(GL_BOOL_VEC3, 3, GLboolean);
-                UNI_CASE(GL_BOOL_VEC4, 4, GLboolean);
-                UNI_CASE(GL_FLOAT_MAT2, 4, GLfloat);
-                UNI_CASE(GL_FLOAT_MAT3, 9, GLfloat);
-                UNI_CASE(GL_FLOAT_MAT4, 16, GLfloat);
-                UNI_CASE(GL_FLOAT_MAT2x3, 6, GLfloat);
-                UNI_CASE(GL_FLOAT_MAT2x4, 8, GLfloat);
-                UNI_CASE(GL_FLOAT_MAT3x2, 6, GLfloat);
-                UNI_CASE(GL_FLOAT_MAT3x4, 12, GLfloat);
-                UNI_CASE(GL_FLOAT_MAT4x2, 8, GLfloat);
-                UNI_CASE(GL_FLOAT_MAT4x3, 12, GLfloat);
+                UNI_CASE(GL_FLOAT,               1, GLfloat);
+                UNI_CASE(GL_FLOAT_VEC2,          2, GLfloat);
+                UNI_CASE(GL_FLOAT_VEC3,          3, GLfloat);
+                UNI_CASE(GL_FLOAT_VEC4,          4, GLfloat);
+                UNI_CASE(GL_INT,                 1, GLint);
+                UNI_CASE(GL_INT_VEC2,            2, GLint);
+                UNI_CASE(GL_INT_VEC3,            3, GLint);
+                UNI_CASE(GL_INT_VEC4,            4, GLint);
+                UNI_CASE(GL_UNSIGNED_INT,        1, GLuint);
+                UNI_CASE(GL_UNSIGNED_INT_VEC2,   2, GLuint);
+                UNI_CASE(GL_UNSIGNED_INT_VEC3,   3, GLuint);
+                UNI_CASE(GL_UNSIGNED_INT_VEC4,   4, GLuint);
+                UNI_CASE(GL_BOOL,                1, GLboolean);
+                UNI_CASE(GL_BOOL_VEC2,           2, GLboolean);
+                UNI_CASE(GL_BOOL_VEC3,           3, GLboolean);
+                UNI_CASE(GL_BOOL_VEC4,           4, GLboolean);
+                UNI_CASE(GL_FLOAT_MAT2,          4, GLfloat);
+                UNI_CASE(GL_FLOAT_MAT3,          9, GLfloat);
+                UNI_CASE(GL_FLOAT_MAT4,         16, GLfloat);
+                UNI_CASE(GL_FLOAT_MAT2x3,        6, GLfloat);
+                UNI_CASE(GL_FLOAT_MAT2x4,        8, GLfloat);
+                UNI_CASE(GL_FLOAT_MAT3x2,        6, GLfloat);
+                UNI_CASE(GL_FLOAT_MAT3x4,       12, GLfloat);
+                UNI_CASE(GL_FLOAT_MAT4x2,        8, GLfloat);
+                UNI_CASE(GL_FLOAT_MAT4x3,       12, GLfloat);
                 default : return(0);
             }
 
@@ -152,32 +152,32 @@ namespace hgl
         {
             switch(type)
             {
-                case GL_FLOAT : return "GL_FLOAT";
-                case GL_FLOAT_VEC2 : return "GL_FLOAT_VEC2";
-                case GL_FLOAT_VEC3 : return "GL_FLOAT_VEC3";
-                case GL_FLOAT_VEC4 : return "GL_FLOAT_VEC4";
-                case GL_INT : return "GL_INT";
-                case GL_INT_VEC2 : return "GL_INT_VEC2";
-                case GL_INT_VEC3 : return "GL_INT_VEC3";
-                case GL_INT_VEC4 : return "GL_INT_VEC4";
-                case GL_UNSIGNED_INT : return "GL_UNSIGNED_INT";
-                case GL_UNSIGNED_INT_VEC2 : return "GL_UNSIGNED_INT_VEC2";
-                case GL_UNSIGNED_INT_VEC3 : return "GL_UNSIGNED_INT_VEC3";
-                case GL_UNSIGNED_INT_VEC4 : return "GL_UNSIGNED_INT_VEC4";
-                case GL_BOOL : return "GL_BOOL";
-                case GL_BOOL_VEC2 : return "GL_BOOL_VEC2";
-                case GL_BOOL_VEC3 : return "GL_BOOL_VEC3";
-                case GL_BOOL_VEC4 : return "GL_BOOL_VEC4";
-                case GL_FLOAT_MAT2 : return "GL_FLOAT_MAT2";
-                case GL_FLOAT_MAT3 : return "GL_FLOAT_MAT3";
-                case GL_FLOAT_MAT4 : return "GL_FLOAT_MAT4";
-                case GL_FLOAT_MAT2x3 : return "GL_FLOAT_MAT2x3";
-                case GL_FLOAT_MAT2x4 : return "GL_FLOAT_MAT2x4";
-                case GL_FLOAT_MAT3x2 : return "GL_FLOAT_MAT3x2";
-                case GL_FLOAT_MAT3x4 : return "GL_FLOAT_MAT3x4";
-                case GL_FLOAT_MAT4x2 : return "GL_FLOAT_MAT4x2";
-                case GL_FLOAT_MAT4x3 : return "GL_FLOAT_MAT4x3";
-                default : return "Unknown";
+                case GL_FLOAT               : return "GL_FLOAT";
+                case GL_FLOAT_VEC2          : return "GL_FLOAT_VEC2";
+                case GL_FLOAT_VEC3          : return "GL_FLOAT_VEC3";
+                case GL_FLOAT_VEC4          : return "GL_FLOAT_VEC4";
+                case GL_INT                 : return "GL_INT";
+                case GL_INT_VEC2            : return "GL_INT_VEC2";
+                case GL_INT_VEC3            : return "GL_INT_VEC3";
+                case GL_INT_VEC4            : return "GL_INT_VEC4";
+                case GL_UNSIGNED_INT        : return "GL_UNSIGNED_INT";
+                case GL_UNSIGNED_INT_VEC2   : return "GL_UNSIGNED_INT_VEC2";
+                case GL_UNSIGNED_INT_VEC3   : return "GL_UNSIGNED_INT_VEC3";
+                case GL_UNSIGNED_INT_VEC4   : return "GL_UNSIGNED_INT_VEC4";
+                case GL_BOOL                : return "GL_BOOL";
+                case GL_BOOL_VEC2           : return "GL_BOOL_VEC2";
+                case GL_BOOL_VEC3           : return "GL_BOOL_VEC3";
+                case GL_BOOL_VEC4           : return "GL_BOOL_VEC4";
+                case GL_FLOAT_MAT2          : return "GL_FLOAT_MAT2";
+                case GL_FLOAT_MAT3          : return "GL_FLOAT_MAT3";
+                case GL_FLOAT_MAT4          : return "GL_FLOAT_MAT4";
+                case GL_FLOAT_MAT2x3        : return "GL_FLOAT_MAT2x3";
+                case GL_FLOAT_MAT2x4        : return "GL_FLOAT_MAT2x4";
+                case GL_FLOAT_MAT3x2        : return "GL_FLOAT_MAT3x2";
+                case GL_FLOAT_MAT3x4        : return "GL_FLOAT_MAT3x4";
+                case GL_FLOAT_MAT4x2        : return "GL_FLOAT_MAT4x2";
+                case GL_FLOAT_MAT4x3        : return "GL_FLOAT_MAT4x3";
+                default                     : return "Unknown";
             }
         }
 
