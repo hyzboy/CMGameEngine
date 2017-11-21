@@ -114,7 +114,7 @@ namespace openal
         else
         {
         #if HGL_OS == HGL_OS_Windows
-            LOG_ERROR(    OS_TEXT("加载OpenAL动态链接库失败！OpenAL动态链接库可能是: OpenAL32.DLL、wrap_oal.DLL、ct_oal.DLL、nvOpenAL.DLL\n")
+            LOG_ERROR(  OS_TEXT("加载OpenAL动态链接库失败！OpenAL动态链接库可能是: OpenAL32.DLL、wrap_oal.DLL、ct_oal.DLL、nvOpenAL.DLL\n")
                         OS_TEXT("软件实现的OpenAL32.DLL、wrap_oal可在http://www.openal.org上下载!\n")
                         OS_TEXT("硬件实现的OpenAL32.DLL请到对应您声卡的厂商网站下载对应的驱动程序!\n")
                         OS_TEXT("下载完成后可其放入Windows\\System32目录下或Plug-Ins目录下即可!"));
@@ -305,7 +305,7 @@ namespace openal
 
             if(*AudioDeviceName)
             {
-                LOG_INFO(UTF8String("没有指定音频设备，按缺省设备初始化，可能不是最佳选择：")+UTF8String(AudioDeviceName));
+                LOG_INFO(u8"没有指定音频设备，按缺省设备初始化，可能不是最佳选择："+UTF8String(AudioDeviceName));
             }
             else
             {
@@ -319,7 +319,7 @@ namespace openal
 
         if(AudioDevice==nullptr)
         {
-            LOG_ERROR(UTF8String("打开音频设备失败: ")+AudioDeviceName);
+            LOG_ERROR(u8"打开音频设备失败: "+UTF8String(AudioDeviceName));
 
             if(default_device)
             {
@@ -374,7 +374,7 @@ namespace openal
 
         hgl::strcpy(AudioDeviceName,AL_DEVICE_NAME_MAX_LEN,alcGetString(AudioDevice,ALC_DEVICE_SPECIFIER));
 
-        LOG_INFO("初始化音频设备完成: "+UTF8String(AudioDeviceName));
+        LOG_INFO(u8"初始化音频设备完成: "+UTF8String(AudioDeviceName));
 
         if (!LoadALFunc(AudioEM))
         {
