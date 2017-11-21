@@ -22,9 +22,9 @@ namespace hgl
 	public:
 
 		uint      Index;
-		double    Time;                                                                          		///<缓冲区中音频数据可以播放的时间(秒)
+		double    Time;                                                                          	///<缓冲区中音频数据可以播放的时间(秒)
 		uint      Size;																				///<缓冲区中音频数据的总字节数
-		uint      Freq;                                                                                   ///<音频数量采样率
+		uint      Freq;                                                                             ///<音频数量采样率
 
 	public:
 

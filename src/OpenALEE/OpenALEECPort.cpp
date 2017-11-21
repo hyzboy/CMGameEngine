@@ -105,6 +105,10 @@ HGL_PLUGIN_FUNC void ClearAudioBufferData(AudioBuffer *audio_buffer)
     audio_buffer->Clear();
 }
 
+HGL_PLUGIN_FUNC double      AudioBufferTime         (AudioBuffer *buf){return buf?buf->Time:0;}
+HGL_PLUGIN_FUNC uint        AudioBufferBytes        (AudioBuffer *buf){return buf?buf->Size:0;}
+HGL_PLUGIN_FUNC uint        AudioBufferFreq         (AudioBuffer *buf){return buf?buf->Freq:0;}
+
 HGL_PLUGIN_FUNC uint        SourceGetIndex          (AudioSource *source){return source?source->GetIndex():0;}
 
 HGL_PLUGIN_FUNC double      SourceGetCurTime        (AudioSource *source){return source?source->GetCurTime():0;}
