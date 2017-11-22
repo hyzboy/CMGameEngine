@@ -19,3 +19,9 @@ target_link_libraries(Example.Network.IPSupport ${HGL_CONSOLE_LIB})
 
 add_executable(Example.Network.IP2Hostname IP2Hostname.cpp ${HGL_CONSOLE_MAIN_SOURCE})
 target_link_libraries(Example.Network.IP2Hostname ${HGL_CONSOLE_LIB})
+
+add_executable(Example.Network.MultiAcceptServer MultiAcceptServer.cpp ${HGL_CONSOLE_MAIN_SOURCE})
+target_link_libraries(Example.Network.MultiAcceptServer ${HGL_CONSOLE_LIB})
+
+add_executable(Example.Network.OnlyConnect OnlyConnectTest.cpp ${HGL_CONSOLE_MAIN_SOURCE})
+target_link_libraries(Example.Network.OnlyConnect ${HGL_CONSOLE_LIB})
