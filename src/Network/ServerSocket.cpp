@@ -20,7 +20,7 @@ namespace hgl
         * 创建服务器
         * @param addr 服务器地址
         * @param max_listen 最大监听数量(指同一时间在未处理的情况下，最多有多少个连接可以被处理。注：并非越大越好)
-        * @param reuse 是否可以复用这个IP地址，默认为真
+        * @param reuse 是否可以复用这个IP地址，默认为假
         * @return 创建服务器是否成功
         */
         bool ServerSocket::CreateServer(const IPAddress *addr,const uint max_listen,bool reuse)

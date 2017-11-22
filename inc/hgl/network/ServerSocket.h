@@ -27,7 +27,7 @@ namespace hgl
                     IPAddress *CreateIPAddress()const
                                 {return server_address?server_address->Create():nullptr;}           ///<创建一个空的IP地址
 
-			virtual bool CreateServer(const IPAddress *,const uint ml=HGL_SERVER_LISTEN_COUNT,bool reuse=true);	         ///<创建服务器
+			virtual bool CreateServer(const IPAddress *,const uint ml=HGL_SERVER_LISTEN_COUNT,bool reuse=false);	         ///<创建服务器
 			virtual void CloseServer();                                                                                  ///<关闭服务器
 
 					/**
