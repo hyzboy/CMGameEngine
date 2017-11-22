@@ -3,6 +3,8 @@
 #include<hgl/thread/Semaphore.h>
 #include<hgl/network/TCPSocket.h>
 
+#include<iostream>
+
 using namespace hgl;
 
 constexpr uint      CONNECT_THREAD_COUNT    =4;
@@ -32,16 +34,14 @@ public:
 
         if(sock>0)
         {
-
-
             CloseSocket(sock);
-            LOG_INFO(OS_TEXT("Connect to server OK!"));
+            std::cout<<"Connect to server OK!"<<std::endl;
 
             wait_time=CONNECT_TIME_GAP;
         }
         else
         {
-            LOG_INFO(OS_TEXT("Connect to server failed,return ")+OSString(sock)+OS_TEXT(",errno: ")+OSString(errno));
+            std::cout<<"Connect to server failed,return "<<sock<<",errno: "<<errno<<std::endl;
 
             wait_time=CONNECT_TIME_GAP_ERROR;
         }

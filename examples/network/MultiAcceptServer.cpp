@@ -4,6 +4,8 @@
 #include<hgl/network/TCPServer.h>
 #include<hgl/LogInfo.h>
 
+#include<iostream>
+
 using namespace hgl;
 
 constexpr uint      ACCEPT_THREAD_COUNT =4;     //Accept线程数量
@@ -35,14 +37,14 @@ public:
 
         if(new_sock<0)
         {
-            LOG_INFO(OS_TEXT("[")+OSString(id)+OS_TEXT("] Accept Error"));
+            std::cout<<"["<<id<<"] Accept Error"<<std::endl;
             delete client_ip;
             return(false);
         }
 
         if(new_sock>0)
         {
-            LOG_INFO(OS_TEXT("[")+OSString(id)+OS_TEXT("] Accept Socket: ")+OSString(new_sock));
+            std::cout<<"["<<id<<"] Accept Socket: "<<new_sock<<std::endl;
 
             CloseSocket(new_sock);      //关掉
             delete client_ip;
