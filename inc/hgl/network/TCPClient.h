@@ -2,6 +2,8 @@
 #define HGL_TCP_CLIENT_INCLUDE
 
 #include<hgl/network/TCPSocket.h>
+#include<hgl/io/InputStream.h>
+#include<hgl/io/OutputStream.h>
 namespace hgl
 {
 	namespace network

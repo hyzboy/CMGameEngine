@@ -14,7 +14,7 @@ ENDIF()
 
 SET(NETWORK_TCP_COMMON_SOURCE
     TCPSocket.cpp
-    TCPSocketRB.cpp
+#     TCPSocketRB.cpp
     SocketInputStream.cpp
     SocketOutputStream.cpp
 )
@@ -58,7 +58,7 @@ IF(WIN32)
 ENDIF(WIN32)
 
 IF(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
-        SET(NETWORK_OS_SOURCE TCPSocketRBEpoll.cpp SocketManageEpoll.cpp)
+#         SET(NETWORK_OS_SOURCE TCPSocketRBEpoll.cpp SocketManageEpoll.cpp)
 ENDIF(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 
 IF(APPLE)
@@ -87,8 +87,8 @@ SET(CM_NETWORK_ALL_SOURCE
     ${NETWORK_TCP_CLIENT_SOURCE}
     ${NETWORK_TCP_SERVER_SOURCE}
 
-    SocketManageThread.cpp
-    MTSocketManage.cpp
+#     SocketManageThread.cpp
+#     MTSocketManage.cpp
 
 #     SocketManageSelect.cpp
 #     TCPSocketRBThread.cpp

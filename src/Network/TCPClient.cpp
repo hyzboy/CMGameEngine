@@ -39,7 +39,6 @@ namespace hgl
     {
         /**
         * TCP客户端连接类构造函数
-        * @param buffer_size 接收缓冲区大小
         */
         TCPClient::TCPClient():TCPSocket()
         {
