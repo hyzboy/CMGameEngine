@@ -1,4 +1,4 @@
-#include<hgl/Console.h>
+﻿#include<hgl/Console.h>
 #include<hgl/thread/Thread.h>
 #include<hgl/thread/Semaphore.h>
 #include<hgl/network/TCPServer.h>
@@ -87,7 +87,8 @@ public:
     {
         for(int i=0;i<ACCEPT_THREAD_COUNT;i++)
         {
-            server_accept[i]->Thread::Close();
+            server_accept[i]->Thread::Exit();
+            server_accept[i]->Thread::Wait();
 
             delete server_accept[i];
         }

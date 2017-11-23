@@ -21,20 +21,24 @@ namespace hgl
 			while(tc->Execute())
             {
                 if(tc->exit_lock.TryLock())
+                {
+                    tc->exit_lock.Unlock();
                     break;
+                }
             }
 
 			tc->ProcEndThread();
 		}
 
-		tc->exit_lock.Unlock();
-        tc->live_lock.Unlock();
-
 		if(tc->IsExitDelete())
 		{
-			delete tc;
+            tc->live_lock.Unlock();
+
+            delete tc;
 			pthread_detach(pthread_self());
 		}
+		else
+            tc->live_lock.Unlock();
 
 		return(0);
 	}
@@ -76,7 +80,7 @@ namespace hgl
 	/**
 	* (线程外部调用)关闭当前线程.不推荐使用此函数，正在执行的线程被强制关闭会引起无法预知的错误。
 	*/
-	void Thread::ForceClose()
+	bool Thread::ForceClose()
     {
         if(!tp)
         {
@@ -134,12 +138,6 @@ namespace hgl
 			LOG_ERROR(OS_TEXT("Thread::Wait() error,tp=nullptr."));
 			return;
 		}
-
-        if(!IsLive())       //已经死了
-        {
-            tp=0;
-            return;
-        }
 
 		int retval;
         void *res;

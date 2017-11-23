@@ -4,6 +4,7 @@
 #include<hgl/type/DataType.h>
 #include<hgl/type/BaseString.h>
 #include<hgl/thread/ThreadMutex.h>
+#include<hgl/LogInfo.h>
 
 #if HGL_OS == HGL_OS_Windows
 	using thread_ptr=void *;       //windows版是HANDLE，但HANDLE其实就是void *，这里为了减少#include<windows.h>所以直接写为void *
@@ -49,7 +50,10 @@ namespace hgl
 		virtual ~Thread()
 		{
             if(tp)
-                Close();
+            {
+                LOG_ERROR("This is ERROR,Thread not exit.");
+                ForceClose();           //正常状态下这种情况是不该发生的
+            }
 		}
 
 		template<typename T>
@@ -57,7 +61,15 @@ namespace hgl
 		{
             T str[(sizeof(void *)+1)<<1];
 
+#if HGL_OS==HGL_OS_Windows
+    #if HGL_MIN_MEMORY_ALLOC_BYTES==4
+            hgl::htos(str,(sizeof(void *)+1)<<1,(uint32)tp);
+    #else
             hgl::htos(str,(sizeof(void *)+1)<<1,(uint64)tp);
+    #endif//
+#else
+            hgl::htos(str,(sizeof(void *)+1)<<1,tp);
+#endif//
 
             thread_addr_str=str;
         }
@@ -89,11 +101,14 @@ namespace hgl
 	public:	//线程运行控制
 
 		virtual bool Start();																		///<开始运行当前线程
-		virtual void ForceClose();                                                                  ///<强制关闭当前线程(其它线程调)
+		virtual bool ForceClose();                                                                  ///<强制关闭当前线程(其它线程调用)
 
 		virtual bool IsCurThread();																	///<是否是当前线程
 
-        virtual void Exit();                                                                        ///<退出当前线程
+        virtual void Exit()                                                                         ///<退出当前线程(其它线程调用)
+        {
+            exit_lock.Unlock();
+        }
 
         /**
          * 等待当前线程结束<br>
