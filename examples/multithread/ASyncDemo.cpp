@@ -1,4 +1,4 @@
-#include<hgl/thread/ASync.h>
+﻿#include<hgl/thread/ASync.h>
 #include<iostream>
 
 using namespace hgl;
