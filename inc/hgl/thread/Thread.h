@@ -34,10 +34,11 @@ namespace hgl
 		thread_ptr tp=0;
 
         ThreadMutex live_lock;
+        ThreadMutex exit_lock;
 
 #if HGL_OS != HGL_OS_Windows
 		virtual void SetCancelState(bool,bool=true);
-        
+
         friend void *ThreadFunc(Thread *tc);
 #else
         friend DWORD WINAPI ThreadFunc(Thread *tc);
@@ -88,13 +89,11 @@ namespace hgl
 	public:	//线程运行控制
 
 		virtual bool Start();																		///<开始运行当前线程
-		virtual void Close();                                                                       ///<强制关闭当前线程(其它线程调)
+		virtual void ForceClose();                                                                  ///<强制关闭当前线程(其它线程调)
 
 		virtual bool IsCurThread();																	///<是否是当前线程
 
-#if HGL_OS != HGL_OS_Windows
-		virtual bool Cancel();																		///<放弃这个线程
-#endif//HGL_OS != HGL_OS_Windows
+        virtual void Exit();                                                                        ///<退出当前线程
 
         /**
          * 等待当前线程结束<br>

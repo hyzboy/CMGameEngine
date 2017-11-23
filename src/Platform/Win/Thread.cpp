@@ -10,16 +10,21 @@ namespace hgl
 
 		if(tc->ProcStartThread())
 		{
-			while(tc->Execute());
+            while(tc->Execute())
+            {
+                if(tc->exit_lock.TryLock())
+                    break;
+            }
 
 			tc->ProcEndThread();
 		}
-        
+
+		tc->exit_lock.Unlock();
         tc->live_lock.Unlock();
 
 		if(tc->IsExitDelete())
 			delete tc;
-			
+
 		return(0);
 	}
 
@@ -32,10 +37,13 @@ namespace hgl
     {
         unsigned long threadid;
 
+        exit_lock.Lock();
+
         tp=::CreateThread(0,0,(PTHREAD_START_ROUTINE)ThreadFunc,this,0,&threadid);
 
         if(!tp)
         {
+            exit_lock.Unlock();
             LOG_ERROR(OS_TEXT("创建线程失败，Windows错误码：")+OSString((uint)GetLastError()));
             return(false);
         }
@@ -46,7 +54,7 @@ namespace hgl
     /**
     * (线程外部调用)关闭当前线程.不推荐使用此函数，正在执行的线程被强制关闭会引起无法预知的错误。
     */
-    void Thread::Close()
+    void Thread::ForceClose()
     {
         if(!tp)return;
 
