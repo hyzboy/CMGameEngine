@@ -13,17 +13,23 @@ namespace hgl
             while(tc->Execute())
             {
                 if(tc->exit_lock.TryLock())
+                {
+                    tc->exit_lock.Unlock();
                     break;
+                }
             }
 
 			tc->ProcEndThread();
 		}
 
-		tc->exit_lock.Unlock();
-        tc->live_lock.Unlock();
 
 		if(tc->IsExitDelete())
+        {
+            tc->live_lock.Unlock();
 			delete tc;
+        }
+        else
+            tc->live_lock.Unlock();
 
 		return(0);
 	}
@@ -54,13 +60,14 @@ namespace hgl
     /**
     * (线程外部调用)关闭当前线程.不推荐使用此函数，正在执行的线程被强制关闭会引起无法预知的错误。
     */
-    void Thread::ForceClose()
+    bool Thread::ForceClose()
     {
-        if(!tp)return;
+        if(!tp)return(false);
 
         TerminateThread(tp,0);
         CloseHandle(tp);
         tp=nullptr;
+        return(true);
     }
 
     /**
@@ -77,13 +84,11 @@ namespace hgl
     */
     void Thread::Wait(const double time_out)
     {
-        if(tp)
-        {
-            if(IsLive())        //有时候线程还在，但在做最后一步delete，就不处理了。完全以这个为基准
-                WaitForSingleObject(tp,time_out>0?time_out*1000:INFINITE);
-            else
-                tp=nullptr;
-        }
+        if(!tp)return;
+
+        WaitForSingleObject(tp,time_out>0?time_out*1000:INFINITE);
+
+        tp=nullptr;
     }
 
     /**

@@ -1,4 +1,4 @@
-#include<hgl/Console.h>
+﻿#include<hgl/Console.h>
 #include<hgl/thread/Thread.h>
 #include<hgl/thread/Semaphore.h>
 #include<hgl/network/TCPSocket.h>
@@ -18,12 +18,10 @@ class ConnectThread:public Thread
 
 public:
 
-    void Init(IPAddress *ip,Semaphore *s)
+    ConnectThread(IPAddress *ip,Semaphore *s)
     {
         server_ip=ip;
         sem=s;
-
-        Thread::Start();
     }
 
     bool Execute() override
@@ -57,7 +55,8 @@ class TestObject:public ConsoleFlowObject
     IPAddress *server_ip;
 
     Semaphore sem;
-    ConnectThread *ct;
+
+    MultiThreadManage connect_thread_manage;
 
 public:
 
@@ -65,15 +64,15 @@ public:
     {
         server_ip=CreateIPv4TCP("127.0.0.1",10240);
 
-        ct=new ConnectThread[CONNECT_THREAD_COUNT];
-
         for(uint i=0;i<CONNECT_THREAD_COUNT;i++)
-            ct[i].Init(server_ip,&sem);
+            connect_thread_manage.Add(new ConnectThread(server_ip,&sem));
+
+        connect_thread_manage.Start();
     }
 
     ~TestObject()
     {
-        delete[] ct;
+        connect_thread_manage.Close();
         delete server_ip;
     }
 

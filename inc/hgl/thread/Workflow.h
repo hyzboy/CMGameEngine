@@ -216,7 +216,6 @@ namespace hgl
 
 			uint work_thread_index;
 
-            ThreadMutex exit_lock;
             bool force_close;
 
 		public:
@@ -241,13 +240,6 @@ namespace hgl
             }
 #endif//_DEBUG
 
-            bool Start() override													  ///<开始运行当前线程
-            {
-                exit_lock.Lock();
-
-                return Thread::Start();
-            }
-
             bool IsExitDelete()const override{return false;}							///<返回在退出线程时，不删除本对象
 
 			void SetWorkThreadIndex(const uint index)
@@ -258,25 +250,15 @@ namespace hgl
 			void ExitWork(const bool fc)
 			{
 				force_close=fc;
-                exit_lock.Unlock();
+                Thread::Exit();
 			}
 
-			virtual bool Execute() override
+			virtual void ProcEndThread() override
 			{
-				if(!work_proc)
-					RETURN_FALSE;
-
-                bool result=work_proc->OnExecuteWork(work_thread_index);
-
-                if(!exit_lock.TryLock())
-                    return(true);
-
                 if(!force_close)        //不是强退
-                {
                     while(work_proc->OnExecuteWork(work_thread_index));     //把工作全部做完
-                }
 
-#ifdef _DEBUG
+                #ifdef _DEBUG
                 {
                     UTF8String thread_addr;
 
@@ -284,10 +266,17 @@ namespace hgl
 
                     LOG_INFO(U8_TEXT("WorkThread Finish [")+thread_addr+U8_TEXT("]"));
                 }
-#endif//_DEBUG
+                #endif//_DEBUG
+            }
 
-                exit_lock.Unlock();
-                return(false);
+			virtual bool Execute() override
+			{
+				if(!work_proc)
+					RETURN_FALSE;
+
+                work_proc->OnExecuteWork(work_thread_index);
+
+                return(true);
 			}
 		};//template<typename W> class WorkThread:public Thread
 
