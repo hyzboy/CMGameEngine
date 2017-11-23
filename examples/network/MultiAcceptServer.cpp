@@ -60,7 +60,7 @@ class TestObject:public ConsoleFlowObject
     IPAddress *server_ip;
     TCPServer server;
 
-    AcceptThread **     server_accept   =nullptr;   //监听线程
+    MultiThreadManage accept_thread_manage;
 
     Semaphore sem;
 
@@ -73,27 +73,15 @@ public:
         if(!server.CreateServer(server_ip,1024,false))
             Exit(nullptr,fosExitApp);
 
-        server_accept=new AcceptThread *[ACCEPT_THREAD_COUNT];
-
         for(int i=0;i<ACCEPT_THREAD_COUNT;i++)
-        {
-            server_accept[i]=new AcceptThread(i,&server,&sem);
+            accept_thread_manage.Add(new AcceptThread(i,&server,&sem));
 
-            server_accept[i]->Start();
-        }
+        accept_thread_manage.Start();
     }
 
     ~TestObject()
     {
-        for(int i=0;i<ACCEPT_THREAD_COUNT;i++)
-        {
-            server_accept[i]->Thread::Exit();
-            server_accept[i]->Thread::Wait();
-
-            delete server_accept[i];
-        }
-
-        delete[] server_accept;
+        accept_thread_manage.Close();
 
         server.CloseServer();
         delete server_ip;

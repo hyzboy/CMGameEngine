@@ -2,6 +2,7 @@
 #define HGL_THREAD_INCLUDE
 
 #include<hgl/type/DataType.h>
+#include<hgl/type/Set.h>
 #include<hgl/type/BaseString.h>
 #include<hgl/thread/ThreadMutex.h>
 #include<hgl/LogInfo.h>
@@ -48,7 +49,7 @@ namespace hgl
 	public:
 
 		virtual ~Thread()
-		{
+        {
             if(tp)
             {
                 LOG_ERROR("This is ERROR,Thread not exit.");
@@ -61,15 +62,15 @@ namespace hgl
 		{
             T str[(sizeof(void *)+1)<<1];
 
-#if HGL_OS==HGL_OS_Windows
-    #if HGL_MIN_MEMORY_ALLOC_BYTES==4
-            hgl::htos(str,(sizeof(void *)+1)<<1,(uint32)tp);
-    #else
-            hgl::htos(str,(sizeof(void *)+1)<<1,(uint64)tp);
-    #endif//
-#else
-            hgl::htos(str,(sizeof(void *)+1)<<1,tp);
-#endif//
+            #if HGL_OS==HGL_OS_Windows
+                #if HGL_MIN_MEMORY_ALLOC_BYTES==4
+                    hgl::htos(str,(sizeof(void *)+1)<<1,(uint32)tp);
+                #else
+                    hgl::htos(str,(sizeof(void *)+1)<<1,(uint64)tp);
+                #endif//
+            #else
+                hgl::htos(str,(sizeof(void *)+1)<<1,tp);
+            #endif//
 
             thread_addr_str=str;
         }
@@ -120,5 +121,92 @@ namespace hgl
 	void WaitThread(Thread **,int,double time=0);													///<等待多个线程中的一个完成
 
 	bool CreateThread(Thread *);																	///<创建一个线程
+
+    /**
+     * 简单的多线程管理
+     */
+    class MultiThreadManage
+    {
+    protected:
+
+        Set<Thread *> thread_set;
+
+    public:
+
+        virtual ~MultiThreadManage()
+        {
+            Close();
+        }
+
+        /**
+         * 增加一个线程到合集中
+         * @return 是否增加成功
+         */
+        bool Add(Thread *p)
+        {
+            if(!p)return(false);
+
+            return(thread_set.Add(p)!=-1);
+        }
+
+        /**
+         * 删除一个线程
+         */
+        void Delete(Thread *p)
+        {
+            if(!p)return;
+
+            thread_set.Delete(p);
+        }
+
+        /**
+         * 关闭所有线程
+         */
+        void Close()
+        {
+            const int count=thread_set.GetCount();
+
+            Thread **p=thread_set.GetData();
+
+            for(int i=0;i<count;i++)
+            {
+                (*p)->Exit();
+                ++p;
+            }
+
+            p=thread_set.GetData();
+
+            for(int i=0;i<count;i++)
+            {
+                (*p)->Wait();
+                ++p;
+            }
+
+            thread_set.ClearData();
+        }
+
+        /**
+         * 启动所有线程
+         * @return 成功启动的线程数量
+         */
+        int Start()
+        {
+            const int count=thread_set.GetCount();
+
+            Thread **p=thread_set.GetData();
+
+            int total=0;
+
+            for(int i=0;i<count;i++)
+            {
+                if((*p)->Start())
+                    ++total;
+
+                ++p;
+            }
+
+            return total;
+        }
+    };//class MultiThreadManage
 }//namespace hgl
 #endif//HGL_THREAD_INCLUDE
