@@ -46,7 +46,7 @@ namespace hgl
 				int		Find(const F &)const;														///<查找数据是否存在，返回-1表示数据不存在
 				int		FindByData(const T &)const;													///<查找数据是否存在，返回-1表示数据不存在
 		virtual bool	Get(const F &,T &)const;													///<取得数据
-		virtual bool	Delete(const F &,T &);														///<将指定数据从列表中移除
+		virtual bool	Delete(const F &,T &);														///<将指定数据从列表中移除，并获得这个数据
 		virtual bool	DeleteByIndex(const F &);													///<根据索引将指定数据从列表中移除
 		virtual int		DeleteByIndex(const F *,const int);											///<根据索引将指定数据从列表中批量移除
 		virtual bool	DeleteByData(const T &);													///<根据数据将指定数据从列表中移除

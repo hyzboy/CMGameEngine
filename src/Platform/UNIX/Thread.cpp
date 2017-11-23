@@ -18,11 +18,16 @@ namespace hgl
 
 		if(tc->ProcStartThread())
 		{
-			while(tc->Execute());
+			while(tc->Execute())
+            {
+                if(tc->exit_lock.TryLock())
+                    break;
+            }
 
 			tc->ProcEndThread();
 		}
-        
+
+		tc->exit_lock.Unlock();
         tc->live_lock.Unlock();
 
 		if(tc->IsExitDelete())
@@ -43,7 +48,7 @@ namespace hgl
 		if(tp)
 		{
 			LOG_ERROR(OS_TEXT("Thread::Start() error,tp!=nullptr."));
-			Cancel();
+			return(false);
 		}
 
 		pthread_attr_t attr;
@@ -52,8 +57,11 @@ namespace hgl
 
 		pthread_attr_setdetachstate(&attr,PTHREAD_CREATE_JOINABLE);
 
+        exit_lock.Lock();
+
 		if(pthread_create(&tp,&attr,(void *(*)(void *))ThreadFunc,this))		//返回0表示正常
 		{
+            exit_lock.Unlock();
 			tp=0;
 
 			pthread_attr_destroy(&attr);
@@ -68,9 +76,19 @@ namespace hgl
 	/**
 	* (线程外部调用)关闭当前线程.不推荐使用此函数，正在执行的线程被强制关闭会引起无法预知的错误。
 	*/
-	void Thread::Close()
-	{
-		Cancel();
+	void Thread::ForceClose()
+    {
+        if(!tp)
+        {
+            LOG_ERROR(OS_TEXT("Thread::Cancel() error,tp=nullptr."));
+            return(true);
+        }
+
+        if(pthread_cancel(tp)!=0)		// 0 is success
+            return(false);
+
+        tp=0;
+        return(true);
 	}
 
 	/**
@@ -102,32 +120,6 @@ namespace hgl
 			pthread_setcancelstate(PTHREAD_CANCEL_DISABLE,nullptr);
 		}
 	}
-
-	/**
-	 * 放弃当前线程
-	 */
-	bool Thread::Cancel()																		///<放弃这个线
-	{
-		if(!tp)
-		{
-			LOG_ERROR(OS_TEXT("Thread::Cancel() error,tp=nullptr."));
-			return(true);
-		}
-
-		if(pthread_cancel(tp)!=0)		// 0 is success
-			return(false);
-
-		tp=0;
-		return(true);
-	}
-
-	///**
-	//* 强制当前线程放弃处理器
-	//*/
-	//void Thread::Yield()
-	//{
-	//	apr_thread_yield();
-	//}
 
 	void GetWaitTime(struct timespec &abstime,double t);
 
