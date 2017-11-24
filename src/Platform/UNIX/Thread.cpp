@@ -34,8 +34,8 @@ namespace hgl
 		{
             tc->live_lock.Unlock();
 
+            pthread_detach(pthread_self());
             delete tc;
-			pthread_detach(pthread_self());
 		}
 		else
             tc->live_lock.Unlock();
