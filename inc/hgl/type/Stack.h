@@ -25,7 +25,7 @@ namespace hgl
 	public: //属性
 
 		int   GetCount()      const{return count;}													///<取得堆栈中数据的个数
-		bool  SetCount(int c) const{if(c<=0||c>=max_count)return(false);count=c;}                   ///<直接设置堆栈中数据的个数
+		bool  SetCount(int c);                                                                      ///<直接设置堆栈中数据的个数
 
 		int   GetMax  ()      const{return max_count;}												///<取得堆栈中的最大数据个数
 		void  SetMax  (int);																		///<设置堆栈中的最大数据个数

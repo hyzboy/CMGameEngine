@@ -37,16 +37,36 @@ namespace hgl
 	template<typename T>
 	void Stack<T>::SetMax(int m)
 	{
-		if(max_count||(!max_count&&count))
-			items=(T *)hgl_realloc(items,m*sizeof(T));
-		else
-			items=(T *)hgl_malloc(m*sizeof(T));
+        if(m<=0)return;
+
+        if(mem_count==0)
+        {
+            mem_count=power_to_2(m);
+            items=(T *)hgl_malloc(mem_count*sizeof(T));
+        }
+        else
+        if(mem_count<m)
+        {
+            mem_count=power_to_2(m);
+            items=(T *)hgl_realloc(items,mem_count*sizeof(T));
+        }
 
 		max_count=m;
-		mem_count=m;
 
 		if(count>=max_count)count=max_count-1;
 	}
+
+	template<typename T>
+	bool Stack<T>::SetCount(int c)
+    {
+        if(c<0)return(false);
+
+        if(c>max_count)
+            return(false);
+
+        count=c;
+        return(true);
+    }
 
 	/**
 	* 清除堆栈中的所有数据
