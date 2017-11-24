@@ -17,6 +17,27 @@ namespace hgl
         }
 
         /**
+         * 创建多个空的IP地址空间
+         * @param ip_buffer 存放IP地址空间的缓冲区
+         * @param count 需要产生的IP地址空间数量
+         * @return 是否创建成功
+         */
+        bool ServerSocket::CreateIPAddress(IPAddress **ip_buffer,int count)const
+        {
+            if(!server_address)return(false);
+            if(!ip_buffer)return(false);
+            if(count<=0)return(false);
+
+            for(int i=0;i<count;i++)
+            {
+                *ip_buffer=server_address->Create();
+                ip_buffer++;
+            }
+
+            return(true);
+        }
+
+        /**
         * 创建服务器
         * @param addr 服务器地址
         * @param max_listen 最大监听数量(指同一时间在未处理的情况下，最多有多少个连接可以被处理。注：并非越大越好)
