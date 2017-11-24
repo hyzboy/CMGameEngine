@@ -174,7 +174,7 @@ namespace hgl
 	* @return false 放入数据失败
 	*/
 	template<typename T>
-	bool Stack<T>::Push(T *data,int data_count)
+	bool Stack<T>::MultiPush(T *data,int data_count)
 	{
 		if(max_count)
 		{
