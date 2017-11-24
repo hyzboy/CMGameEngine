@@ -57,6 +57,11 @@ SET(BASE_IO_SOURCE
 
 SOURCE_GROUP("IO" FILES ${BASE_IO_SOURCE})
 
+SET(THREAD_SOURCE   MultiThread/WorkThread.cpp
+                    MultiThread/WorkThreadTeam.cpp)
+
+SOURCE_GROUP("MultiThread" FILES ${THREAD_SOURCE})
+
 SET(BASE_PLUG_IN_SOURCE
     PlugIn/ExternalModule.cpp
     PlugIn/PlugIn.cpp
@@ -64,13 +69,14 @@ SET(BASE_PLUG_IN_SOURCE
 
 SOURCE_GROUP("PlugIn" FILES ${BASE_PLUG_IN_SOURCE})
 
-SET(CM_BASE_ALL_SOURCE    ${BASE_COMMON_SOURCE}
+SET(CM_BASE_ALL_SOURCE  ${BASE_COMMON_SOURCE}
                         ${BASE_OBJECT_SOURCE}
                         ${BASE_OTHER_SOURCE}
                         ${BASE_LOG_SOURCE}
                         ${BASE_APPLICATION_SOURCE}
                         ${BASE_TYPE_SOURCE}
                         ${BASE_IO_SOURCE}
+                        ${THREAD_SOURCE}
                         ${BASE_PLUG_IN_SOURCE})
 
 IF(WIN32)

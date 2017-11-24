@@ -60,16 +60,19 @@ namespace hgl
 		template<typename T>
 		void GetAddress(BaseString<T> &thread_addr_str)const                                       ///<取得线程地址字符串
 		{
-            T str[(sizeof(void *)+1)<<1];
+            constexpr size_t size=(sizeof(thread_ptr)+1)<<1;
+            T str[size];
+
+            hgl_zero(str);
 
             #if HGL_OS==HGL_OS_Windows
                 #if HGL_MIN_MEMORY_ALLOC_BYTES==4
-                    hgl::htos(str,(sizeof(void *)+1)<<1,(uint32)tp);
+                    hgl::htos(str,size,(uint32)tp);
                 #else
-                    hgl::htos(str,(sizeof(void *)+1)<<1,(uint64)tp);
+                    hgl::htos(str,size,(uint64)tp);
                 #endif//
             #else
-                hgl::htos(str,(sizeof(void *)+1)<<1,tp);
+                hgl::htos(str,size,tp);
             #endif//
 
             thread_addr_str=str;
@@ -200,6 +203,28 @@ namespace hgl
             for(int i=0;i<count;i++)
             {
                 if((*p)->Start())
+                    ++total;
+
+                ++p;
+            }
+
+            return total;
+        }
+
+        /**
+         * 检查还有几个线程活着
+         */
+        int IsLive()
+        {
+            const int count=thread_set.GetCount();
+
+            Thread **p=thread_set.GetData();
+
+            int total=0;
+
+            for(int i=0;i<count;i++)
+            {
+                if((*p)->IsLive())
                     ++total;
 
                 ++p;
