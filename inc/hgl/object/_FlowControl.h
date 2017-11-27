@@ -286,13 +286,14 @@ namespace hgl
 
             {
                 int n,max=objstack.GetCount();
+                T **obj=objstack.GetData();
 
                 for(n=0;n<max;n++)
                 {
-                    T *obj=objstack[n];
+                    if((*obj)->CanUpdate())
+                        (*obj)->Update();
 
-                    if(obj->CanUpdate())
-                        obj->Update();
+                    ++obj;
                 }
             }
 
