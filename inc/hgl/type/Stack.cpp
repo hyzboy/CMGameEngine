@@ -85,16 +85,17 @@ namespace hgl
 	}
 
 	template<typename T>
-	T &Stack<T>::GetItem(int n)
+	bool Stack<T>::GetItem(int n,T &data)
 	{
 		if(n<0||n>=count)
 		{
 			LOG_ERROR(OS_TEXT("从堆栈中按索引<") + OSString(n) + OS_TEXT(">取数据，超出正常范围<")+OSString(count) + OS_TEXT(">"));
 
-			return(*(T *)NULL);
+			return(false);
 		}
 
-		return(items[n]);
+		data=items[n];
+        return(true);
 	}
 
 	/**

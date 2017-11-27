@@ -13,7 +13,7 @@
 #define HGL_OS_XBOX360				HGL_MERGE32('X','3','6','0')
 #define HGL_OS_XBOX1				HGL_MERGE32('X','B','1',' ')
 #define HGL_OS_NetWare				HGL_MERGE32('N','e','t','W')
-#define HGL_OS_MacOSX				HGL_MERGE32('M','a','c','X')
+#define HGL_OS_macOS				HGL_MERGE32('m','a','c',' ')
 #define HGL_OS_iOS					HGL_MERGE32('i','O','S',' ')
 #define HGL_OS_FreeBSD				HGL_MERGE32('F','B','S','D')
 #define HGL_OS_NetBSD				HGL_MERGE32('N','B','S','D')
@@ -150,7 +150,7 @@
 #elif defined(NETWARE)
 	#define HGL_OS			HGL_OS_NetWare
 #elif defined(__APPLE__)||defined(__MAC__)||defined(macintosh)||defined(__APPLE_CC__)
-	#define HGL_OS			HGL_OS_MacOS
+	#define HGL_OS			HGL_OS_macOS
 #elif defined(__FreeBSD)||defined(__FreeBSD__)
 	#define HGL_OS 			HGL_OS_FreeBSD
 #elif defined(__NetBSD)||defined(__NetBSD__)
@@ -384,7 +384,7 @@ namespace hgl
 
     #define enum_int(name)	enum name:int
     #define enum_uint(name)	enum name:uint
-    
+
 	using uchar			=unsigned char;  	///< 无符号字符型
 	using ushort		=unsigned short;	///< 无符号短整型
 	using uint			=unsigned int;   	///< 无符号整型

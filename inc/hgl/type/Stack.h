@@ -18,10 +18,6 @@ namespace hgl
 		int count;
 		T *items;
 
-	protected:
-
-		T &GetItem(int);
-
 	public: //属性
 
 		int   GetCount()      const{return count;}													///<取得堆栈中数据的个数
@@ -44,7 +40,7 @@ namespace hgl
 
 		virtual void Clear();                                                                       ///<清除所有数据
 
-		T &operator[](int n){return GetItem(n);}
+                bool GetItem(int,T &);
 
 		virtual void operator =(const Stack<T> &);
 	};//template<typename T> class Stack
