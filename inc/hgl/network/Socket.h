@@ -104,8 +104,6 @@ namespace hgl
 		*/
 		class Socket                                                                                    ///Socket基类
 		{
-			friend class SocketManage;
-
 		protected:
 
 			int socket_domain;																			///<Socket域
@@ -141,9 +139,9 @@ namespace hgl
 						SetSocketBlock(ThisSocket,block,sto,rto);
 					}
 
-		public: //被动事件函数
-
-			virtual void	ProcDisconnect()=0;															///<断线事件处理函数
+// 		public: //被动事件函数
+//
+// 			virtual void	ProcDisconnect()=0;															///<断线事件处理函数
 		};//class Socket
 	}//namespace network
 

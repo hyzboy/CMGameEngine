@@ -1,7 +1,7 @@
 ﻿#ifndef HGL_TCP_SOCKET_INCLUDE
 #define HGL_TCP_SOCKET_INCLUDE
 
-#include<hgl/network/Socket.h>
+#include<hgl/network/IOSocket.h>
 //#include<hgl/thread/RingBuffer.h>
 namespace hgl
 {
@@ -16,7 +16,7 @@ namespace hgl
 		* TCP连接处理基类<br>
 		* 提供统一的Recv/Send函数以及缓冲区，但请注意这个recv/send都只是针对缓冲区的，真正的send/recv在各自的派生类中。
 		*/
-		class TCPSocket:public Socket//IOSocket                                                             ///TCP连接处理基类
+		class TCPSocket:public IOSocket                                                             ///TCP连接处理基类
 		{
 		protected:
 
@@ -26,13 +26,6 @@ namespace hgl
 			fd_set local_set,recv_set,err_set;
 
 			void InitPrivate();
-
-		public: //被动事件函数
-
-// 			virtual void ProcDisconnect()override{}											       ///<断线事件处理函数
-// 			virtual int ProcRecv(int recv_buf_size=-1,const double cur_time=0)override			///<接收数据事件处理函数
-// 						{return IOSocket::ProcRecv(recv_buf_size,cur_time);}
-// 			virtual int ProcSend(int,int &left_bytes)override{return -1;}						///<发送数据事件处理函数
 
 		public: //方法
 
