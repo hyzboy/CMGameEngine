@@ -43,7 +43,14 @@ namespace hgl
 				void	ClearData		();															///<清除数据，但不释放内存
             	void	DeleteClear		(){data_list.DeleteClear();}								///<清除所有数据并全部调用delete
 
-				T &		operator[]		(int n)const{return data_list[n];}							///<按序列号取得一个数据
+				bool    Get             (const int index,T &data)
+                {
+                    if(index<0||index>=data_list.GetCount())
+                        return(false);
+
+                    data=*(data_list.GetData()+index);
+                    return(true);
+                }
 
 				bool	Rand			(T &)const;													///<随机取得一个
 	};//template<typename T> class Set
