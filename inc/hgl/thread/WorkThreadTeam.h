@@ -45,7 +45,10 @@ namespace hgl
 
                 index%=wt_list.GetCount();
 
-                return wt_list[index];
+                WorkThread *wt;
+
+                wt_list.Get(index,wt);
+                return wt;
             }
 
         public:

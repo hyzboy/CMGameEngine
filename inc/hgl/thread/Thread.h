@@ -128,11 +128,11 @@ namespace hgl
     /**
      * 简单的多线程管理
      */
-    class MultiThreadManage
+    template<typename THREAD> class MultiThreadManage
     {
     protected:
 
-        Set<Thread *> thread_set;
+        Set<THREAD *> thread_set;
 
     public:
 
@@ -141,11 +141,21 @@ namespace hgl
             Close();
         }
 
+        THREAD *GetThread(int index)
+        {
+            THREAD *result;
+
+            if(thread_set.Get(index,result))
+                return result;
+
+            return nullptr;
+        }
+
         /**
          * 增加一个线程到合集中
          * @return 是否增加成功
          */
-        bool Add(Thread *p)
+        bool Add(THREAD *p)
         {
             if(!p)return(false);
 
@@ -155,7 +165,7 @@ namespace hgl
         /**
          * 删除一个线程
          */
-        void Delete(Thread *p)
+        void Delete(THREAD *p)
         {
             if(!p)return;
 
@@ -169,7 +179,7 @@ namespace hgl
         {
             const int count=thread_set.GetCount();
 
-            Thread **p=thread_set.GetData();
+            THREAD **p=thread_set.GetData();
 
             for(int i=0;i<count;i++)
             {
@@ -196,7 +206,7 @@ namespace hgl
         {
             const int count=thread_set.GetCount();
 
-            Thread **p=thread_set.GetData();
+            THREAD **p=thread_set.GetData();
 
             int total=0;
 
@@ -218,7 +228,7 @@ namespace hgl
         {
             const int count=thread_set.GetCount();
 
-            Thread **p=thread_set.GetData();
+            THREAD **p=thread_set.GetData();
 
             int total=0;
 

@@ -17,14 +17,14 @@ namespace hgl
 	{
 	public:
 
-		typedef DataPair IDItem;
+        using IDItem=DataPair;
 
 	protected:
 
 		ObjectPool<IDItem> data_pool;
 		List<IDItem *> data_list;
 
-		typedef _Map<F,T,IDItem> this_calss;
+        using this_calss=_Map<F,T,IDItem>;
 
     public: //事件
 

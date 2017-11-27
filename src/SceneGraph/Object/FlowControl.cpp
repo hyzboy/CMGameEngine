@@ -7,17 +7,25 @@ namespace hgl
         if(active_obj)
             active_obj->OnClose();
 
+        FlowObject **p=objstack.GetData();
         for(int i=0;i<objstack.GetCount();i++)
-            objstack[i]->OnClose();
+        {
+            (*p)->OnClose();
+            ++p;
+        }
     }
 
     void FlowControl::OnResize      (int w,int h)
     {
         if(active_obj)
             active_obj->OnResize(w,h);
-        
+
+        FlowObject **p=objstack.GetData();
         for(int i=0;i<objstack.GetCount();i++)
-            objstack[i]->OnResize(w,h);
+        {
+            (*p)->OnResize(w,h);
+            ++p;
+        }
     }
 
     void FlowControl::OnRotate      (int ang)
@@ -25,8 +33,12 @@ namespace hgl
         if(active_obj)
             active_obj->OnRotate(ang);
 
+        FlowObject **p=objstack.GetData();
         for(int i=0;i<objstack.GetCount();i++)
-            objstack[i]->OnRotate(ang);
+        {
+            (*p)->OnRotate(ang);
+            ++p;
+        }
     }
 
     bool FlowControl::OnMouseMove   (int x,int y)
@@ -34,8 +46,12 @@ namespace hgl
         if(active_obj)
             active_obj->OnMouseMove(x,y);
 
+        FlowObject **p=objstack.GetData();
         for(int i=0;i<objstack.GetCount();i++)
-            objstack[i]->OnMouseMove(x,y);
+        {
+            (*p)->OnMouseMove(x,y);
+            ++p;
+        }
 
         return(false);
     }
@@ -45,19 +61,27 @@ namespace hgl
         if(active_obj)
             active_obj->OnMouseWheel(x,y);
 
+        FlowObject **p=objstack.GetData();
         for(int i=0;i<objstack.GetCount();i++)
-            objstack[i]->OnMouseWheel(x,y);
+        {
+            (*p)->OnMouseWheel(x,y);
+            ++p;
+        }
 
         return(false);
-    }                                       
+    }
 
     bool FlowControl::OnMouseDown   (MouseButton mb)
     {
         if(active_obj)
             active_obj->OnMouseDown(mb);
 
+        FlowObject **p=objstack.GetData();
         for(int i=0;i<objstack.GetCount();i++)
-            objstack[i]->OnMouseDown(mb);
+        {
+            (*p)->OnMouseDown(mb);
+            ++p;
+        }
 
         return(false);
     }
@@ -67,9 +91,12 @@ namespace hgl
         if(active_obj)
             active_obj->OnMouseUp(mb);
 
+        FlowObject **p=objstack.GetData();
         for(int i=0;i<objstack.GetCount();i++)
-            objstack[i]->OnMouseUp(mb);
-
+        {
+            (*p)->OnMouseUp(mb);
+            ++p;
+        }
         return(false);
     }
 
@@ -78,8 +105,12 @@ namespace hgl
         if(active_obj)
             active_obj->OnMouseRepeat(mb);
 
+        FlowObject **p=objstack.GetData();
         for(int i=0;i<objstack.GetCount();i++)
-            objstack[i]->OnMouseRepeat(mb);
+        {
+            (*p)->OnMouseRepeat(mb);
+            ++p;
+        }
 
         return(false);
     }
@@ -89,9 +120,12 @@ namespace hgl
         if(active_obj)
             active_obj->OnKeyDown(kb);
 
+        FlowObject **p=objstack.GetData();
         for(int i=0;i<objstack.GetCount();i++)
-            objstack[i]->OnKeyDown(kb);
-
+        {
+            (*p)->OnKeyDown(kb);
+            ++p;
+        }
         return(false);
     }
 
@@ -100,8 +134,12 @@ namespace hgl
         if(active_obj)
             active_obj->OnKeyUp(kb);
 
+        FlowObject **p=objstack.GetData();
         for(int i=0;i<objstack.GetCount();i++)
-            objstack[i]->OnKeyUp(kb);
+        {
+            (*p)->OnKeyUp(kb);
+            ++p;
+        }
 
         return(false);
     }
@@ -111,8 +149,12 @@ namespace hgl
         if(active_obj)
             active_obj->OnKeyRepeat(kb);
 
+        FlowObject **p=objstack.GetData();
         for(int i=0;i<objstack.GetCount();i++)
-            objstack[i]->OnKeyRepeat(kb);
+        {
+            (*p)->OnKeyRepeat(kb);
+            ++p;
+        }
 
         return(false);
     }
@@ -122,8 +164,12 @@ namespace hgl
         if(active_obj)
             active_obj->OnChar(ch);
 
+        FlowObject **p=objstack.GetData();
         for(int i=0;i<objstack.GetCount();i++)
-            objstack[i]->OnChar(ch);
+        {
+            (*p)->OnChar(ch);
+            ++p;
+        }
 
         return(false);
     }
@@ -132,7 +178,7 @@ namespace hgl
     {
         if(active_obj)
             active_obj->UnjoinControl(this);
-            
+
         _FlowControl<FlowObject>::ChangeActiveObject(obj);
 
         if(active_obj)
@@ -150,13 +196,14 @@ namespace hgl
 
         {
             int n,count=this->objstack.GetCount();
+            FlowObject **p=objstack.GetData();
 
             for(n=0;n<count;n++)
             {
-                FlowObject *obj=this->objstack[n];
+                if((*p)->CanDraw())
+                    (*p)->Draw(mv);
 
-                if(obj->CanDraw())
-                    obj->Draw(mv);
+                ++p;
             }
         }
 
