@@ -58,7 +58,7 @@ IF(WIN32)
 ENDIF(WIN32)
 
 IF(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
-#         SET(NETWORK_OS_SOURCE TCPSocketRBEpoll.cpp SocketManageEpoll.cpp)
+         SET(NETWORK_OS_SOURCE SocketManageEpoll.cpp)
 ENDIF(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 
 IF(APPLE)
