@@ -60,7 +60,7 @@ class TestObject:public ConsoleFlowObject
     IPAddress *server_ip;
     TCPServer server;
 
-    MultiThreadManage accept_thread_manage;
+    MultiThreadManage<AcceptThread> accept_thread_manage;
 
     Semaphore sem;
 

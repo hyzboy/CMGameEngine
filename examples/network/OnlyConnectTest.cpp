@@ -56,7 +56,7 @@ class TestObject:public ConsoleFlowObject
 
     Semaphore sem;
 
-    MultiThreadManage connect_thread_manage;
+    MultiThreadManage<Thread> connect_thread_manage;
 
 public:
 
