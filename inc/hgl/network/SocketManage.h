@@ -240,7 +240,10 @@ namespace hgl
                 socket_list.ClearData();
             }
 
-            virtual bool OnUpdate(USER_SOCKET *)=0;
+            virtual bool OnUpdate(USER_SOCKET *us)
+            {
+                return us->OnUpdate();
+            }
         };//class SocketManage
 
         /**

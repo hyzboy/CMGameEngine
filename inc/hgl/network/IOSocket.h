@@ -75,7 +75,9 @@ namespace hgl
              * 错误处理事件函数
              * @param errno_number 错误号
              */
-            virtual void    OnError(int errno_number){}
+            virtual void    OnError(int errno_number)
+            {
+            }
 
             /**
              * 关闭事件函数
@@ -83,6 +85,12 @@ namespace hgl
             virtual void    OnClose()
             {
             }
+
+            /**
+             * 刷新事件函数，由开发者重写实现。这里故意写为纯虚函数，是为了提醒开发者此函数的存在，即便什么都不做，也必须由开发者自行实现。
+             * @return 是否正常，如返回否则会让管理器认为此socket出错需要退出
+             */
+            virtual bool    OnUpdate()=0;
 
         public:	//属性函数
 
