@@ -1,0 +1,171 @@
+﻿#ifndef HGL_NETWORK_MULTI_THREAD_TCP_SERVER_INCLUDE
+#define HGL_NETWORK_MULTI_THREAD_TCP_SERVER_INCLUDE
+
+#include<hgl/network/TCPSocket.h>
+#include<hgl/network/TCPServer.h>
+#include<hgl/network/MultiThreadAccept.h>
+#include<hgl/network/SocketManage.h>
+
+namespace hgl
+{
+    namespace network
+    {
+        /**
+        * UserSocket类范例
+        *
+        class UserSocket:public TCPSocket
+        {
+        public:
+
+            using TCPSocket::TCPSocket;
+
+            int OnRecv(int recv_buf_size=-1,const double ct=0) override
+            {
+            }
+
+            int OnSend(int send_buf_size=-1) override
+            {
+            }
+
+            void OnError(int err) override
+            {
+            }
+
+            bool OnUpdate() override
+            {
+            }
+        };//class UserSocket:public TCPSocket
+        */
+
+        template<typename USER_SOCKET> class MTTCPServer
+        {
+        protected:
+
+            using UserSocketManageThread=SocketManageThread<USER_SOCKET,SocketManage<USER_SOCKET>>;
+
+        protected:
+
+            class Accept2SocketManageThread:public AcceptThread
+            {
+                UserSocketManageThread *sm_thread;
+
+            public:
+
+                using AcceptThread::AcceptThread;
+
+                void SetSocketManage(UserSocketManageThread *smt)
+                {
+                    sm_thread=smt;
+                }
+
+                bool OnAccept(int client_sock,IPAddress *ip_address) override
+                {
+                    if(!sm_thread)return(false);
+
+                    bool result;
+                    USER_SOCKET *us;
+
+                    us=new USER_SOCKET(client_sock,ip_address);      //这个new非常占时间，未来放到各自的线程去做
+
+                    auto &sl=sm_thread->JoinBegin();
+
+                    result=sl.Add(us);
+
+                    sm_thread->JoinEnd();
+
+                    if(!result)
+                        delete us;
+
+                    return(result);
+                }
+            };//class Accept2SocketManageThread:public AcceptThread
+
+        protected:
+
+            IPAddress *                                     server_ip=nullptr;
+            TCPServer                                       server;
+
+            MultiThreadAccept<Accept2SocketManageThread>    accept_manage;
+            MultiThreadManage<UserSocketManageThread>       sock_manage;
+
+        public:
+
+            /**
+            * 服务器初始化信息结构
+            */
+            struct InitInfomation
+            {
+                IPAddress * server_ip           =nullptr;               ///<服务器IP地址
+                bool        port_reuse          =false;                 ///<端口复用
+                bool        ipv6_only           =false;                 ///<是否使用IPv6 Only
+                bool        block               =true;                  ///<是否使用阻塞模式
+                uint        defer_accept_time   =1;                     ///<延迟Accept成功超时时间,单位:秒(第一次收到数据才会成功Accept，这里指从connect到第一个包的超时时间)
+                double      accept_time_out     =1;                     ///<Accept超时时间,单位:秒
+
+                uint        max_user            =1024;                  ///<最大用户数量
+                uint        thread_count        =4;                     ///<线程数量
+            };//struct MTTCPServerInitInfomation
+
+            bool Init(InitInfomation &info)
+            {
+                if(!info.server_ip)return(false);
+                if(info.max_user<=0)return(false);
+                if(info.thread_count<=0)return(false);
+
+                if(!server.CreateServer(info.server_ip,info.max_user,info.port_reuse))
+                    return(false);
+
+                if(info.server_ip->GetFamily()==AF_INET6)               //如果是IPv6地址
+                    server.SetIPv6Only(info.ipv6_only);                 //设置是否仅使用IPv6,这个有可能失败，但是不管它
+
+                    server.SetBlock(true);                                  //设置使用阻塞模式
+                    server.SetDeferAccept(info.defer_accept_time);          //指定时间内收到数据才会产生accept
+                    server.SetTimeOut(info.accept_time_out);                //设置accept超时时间
+
+                    if(!accept_manage.Init(&server,info.thread_count))
+                        return(false);
+
+                    for(int i=0;i<info.thread_count;i++)
+                    {
+                        Accept2SocketManageThread *at=accept_manage.GetAcceptThread(i);
+
+                        SocketManage<USER_SOCKET> *sm=new SocketManage<USER_SOCKET>(info.max_user);
+                        UserSocketManageThread *smt=new UserSocketManageThread(sm);
+
+                        at->SetSocketManage(smt);
+
+                        sock_manage.Add(smt);
+                    }
+
+                    if(!sock_manage.Start())
+                        return(false);
+
+                    if(!accept_manage.Start())
+                    {
+                        sock_manage.Close();
+                        return(false);
+                    }
+
+                    server_ip=info.server_ip;
+
+                    return(true);
+            }
+
+            bool Wait()
+            {
+                WaitTime(5);        //每5秒测一下线程是否还活着
+
+                const int live_s=sock_manage.IsLive();
+                const int live_a=accept_manage.IsLive();
+
+                if(live_s+live_s<=0)
+                    return(false);
+
+                std::cout<<"live accept thread "<<live_a<<", sock thread: "<<live_s<<std::endl;
+
+                return(true);
+            }
+        };//template<typename USER_SOCKET> class MTTCPServer
+    }//namespace network
+}//namespace hgl
+#endif//HGL_NETWORK_MULTI_THREAD_TCP_SERVER_INCLUDE
