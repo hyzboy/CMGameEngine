@@ -13,10 +13,7 @@ namespace hgl
 
             union
             {
-                #if HGL_OS==HGL_OS_FreeBSD||HGL_OS==HGL_OS_OpenBSD||HGL_OS==HGL_OS_NetBSD||HGL_OS==HGL_OS_macOS||HGL_OS==HGL_OS_iOS
                 int size;           //数据长度(此属性为BSD系统独有)
-                #endif
-
                 int error;          //错误号
             };
         };//struct SocketEvent

@@ -4,8 +4,6 @@
 #include<hgl/network/Socket.h>
 namespace hgl
 {
-	template<typename T> class RingBuffer;
-
 	namespace network
 	{
 		int CreateTCPConnect(IPAddress *);							                                ///<创建一个tcp连接

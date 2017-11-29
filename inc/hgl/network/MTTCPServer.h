@@ -1,77 +1,50 @@
 ﻿#ifndef HGL_NETWORK_MULTI_THREAD_TCP_SERVER_INCLUDE
 #define HGL_NETWORK_MULTI_THREAD_TCP_SERVER_INCLUDE
 
-#include<hgl/network/TCPSocket.h>
+#include<hgl/network/TCPAccept.h>
 #include<hgl/network/TCPServer.h>
 #include<hgl/network/MultiThreadAccept.h>
-#include<hgl/network/SocketManage.h>
+#include<hgl/network/ServerAcceptManage.h>
 
 namespace hgl
 {
     namespace network
     {
-        /**
-        * UserSocket类范例
-        *
-        class UserSocket:public TCPSocket
-        {
-        public:
-
-            using TCPSocket::TCPSocket;
-
-            int OnRecv(int recv_buf_size=-1,const double ct=0) override
-            {
-            }
-
-            int OnSend(int send_buf_size=-1) override
-            {
-            }
-
-            void OnError(int err) override
-            {
-            }
-
-            bool OnUpdate() override
-            {
-            }
-        };//class UserSocket:public TCPSocket
-        */
-
-        template<typename USER_SOCKET> class MTTCPServer
+        template<typename USER_ACCEPT> class MTTCPServer
         {
         protected:
 
-            using UserSocketManageThread=SocketManageThread<USER_SOCKET,SocketManage<USER_SOCKET>>;
+            using UserAcceptManageThread=ServerAcceptManageThread<USER_ACCEPT,ServerAcceptManage<USER_ACCEPT>>;
 
         protected:
 
             class Accept2SocketManageThread:public AcceptThread
             {
-                UserSocketManageThread *sm_thread;
+                UserAcceptManageThread *am_thread;
 
             public:
 
                 using AcceptThread::AcceptThread;
 
-                void SetSocketManage(UserSocketManageThread *smt)
+                void SetSocketManage(UserAcceptManageThread *amt)
                 {
-                    sm_thread=smt;
+                    am_thread=amt;
                 }
 
                 bool OnAccept(int client_sock,IPAddress *ip_address) override
                 {
-                    if(!sm_thread)return(false);
+                    if(!am_thread)return(false);
 
                     bool result;
-                    USER_SOCKET *us;
+                    USER_ACCEPT *us;
 
-                    us=new USER_SOCKET(client_sock,ip_address);      //这个new非常占时间，未来放到各自的线程去做
+                    us=new USER_ACCEPT(client_sock,ip_address);      //这个new非常占时间，未来放到各自的线程去做
 
-                    auto &sl=sm_thread->JoinBegin();
+                    auto &sl=am_thread->JoinBegin();
 
                     result=sl.Add(us);
 
-                    sm_thread->JoinEnd();
+                    am_thread->JoinEnd();
 
                     if(!result)
                         delete us;
@@ -86,7 +59,7 @@ namespace hgl
             TCPServer                                       server;
 
             MultiThreadAccept<Accept2SocketManageThread>    accept_manage;
-            MultiThreadManage<UserSocketManageThread>       sock_manage;
+            MultiThreadManage<UserAcceptManageThread>       sock_manage;
 
         public:
 
@@ -129,8 +102,8 @@ namespace hgl
                     {
                         Accept2SocketManageThread *at=accept_manage.GetAcceptThread(i);
 
-                        SocketManage<USER_SOCKET> *sm=new SocketManage<USER_SOCKET>(info.max_user);
-                        UserSocketManageThread *smt=new UserSocketManageThread(sm);
+                        ServerAcceptManage<USER_ACCEPT> *sam=new ServerAcceptManage<USER_ACCEPT>(info.max_user);
+                        UserAcceptManageThread *smt=new UserAcceptManageThread(sam);
 
                         at->SetSocketManage(smt);
 
@@ -165,7 +138,7 @@ namespace hgl
 
                 return(true);
             }
-        };//template<typename USER_SOCKET> class MTTCPServer
+        };//template<typename USER_ACCEPT> class MTTCPServer
     }//namespace network
 }//namespace hgl
 #endif//HGL_NETWORK_MULTI_THREAD_TCP_SERVER_INCLUDE

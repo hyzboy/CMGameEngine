@@ -1,5 +1,7 @@
 ﻿#ifndef HGL_NETWORK_SOCKET_EVENT_INCLUDE
 #define HGL_NETWORK_SOCKET_EVENT_INCLUDE
+
+#include<hgl/type/List.h>
 namespace hgl
 {
 	namespace network
@@ -7,20 +9,20 @@ namespace hgl
 		/**
 		 * Socket事件
 		 */
-		template<typename T> struct socket_event
+		struct SocketEvent
 		{
-			T sock;			//socket号
+            int sock;
 
-			int size;		//数据长度,-1表示出错
-		};
+            uint event;
 
-		typedef socket_event<int> SocketEvent;
+            union
+            {
+                int size;
+                int error;
+            };
+        };//struct SocketEvent
 
-		class Socket;
-		class IOSocket;
-
-		typedef socket_event<Socket *> SocketClassEvent;
-		typedef socket_event<IOSocket *> IOSocketClassEvent;
+        using SocketEventList=List<SocketEvent>;
 	}//namespace network
 }//namespace hgl
 #endif//HGL_NETWORK_SOCKET_EVENT_INCLUDE

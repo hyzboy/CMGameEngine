@@ -1,4 +1,4 @@
-﻿#include<hgl/network/SocketManageBase.h>
+﻿#include"SocketManageBase.h"
 #include<hgl/network/Socket.h>
 #include<hgl/LogInfo.h>
 
@@ -62,7 +62,7 @@ namespace hgl
                 event_list=new epoll_event[max_connect];
             }
 
-            ~SocketManageEpoll() override
+            ~SocketManageEpoll()
             {
                 delete[] event_list;
 
@@ -210,6 +210,7 @@ namespace hgl
                     if(ee->events&EPOLLIN)				//可以读数据
                     {
                         rp->sock=ee->data.fd;
+                        rp->size=0;
                         ++rp;
                         ++recv_num;
                     }
@@ -217,6 +218,7 @@ namespace hgl
                     if(ee->events&EPOLLOUT)				//可以发数据
                     {
                         sp->sock=ee->data.fd;
+                        sp->size=0;
                         ++sp;
                         ++send_num;
                     }
