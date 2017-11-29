@@ -11,6 +11,7 @@ namespace hgl
         class AcceptServer;
 
         using IPAddressStack=Stack<IPAddress *>;
+
         /**
          * Socket接入线程
          */
