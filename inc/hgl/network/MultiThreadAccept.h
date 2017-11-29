@@ -61,25 +61,10 @@ namespace hgl
                 return accept_thread_manage.GetThread(index);
             }
 
-            bool Start()
-            {
-                return accept_thread_manage.Start()>0;
-            }
-
-            int IsLive()
-            {
-                return accept_thread_manage.IsLive();
-            }
-
-            bool Wait()
-            {
-                return accept_thread_manage.Wait();
-            }
-
-            bool Close()
-            {
-                return accept_thread_manage.Close();
-            }
+            bool Start  (){return accept_thread_manage.Start()>0;}
+             int IsLive (){return accept_thread_manage.IsLive();}
+            bool Wait   (){return accept_thread_manage.Wait();}
+            bool Close  (){return accept_thread_manage.Close();}
         };//template<typename ACCEPT_THREAD> class MultiThreadAccept
     }//namespace network
 }//namespace hgl
