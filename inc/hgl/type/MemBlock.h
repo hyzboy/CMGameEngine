@@ -25,23 +25,20 @@ namespace hgl
 		const	size_t GetBytes		()const{return cur_size*sizeof(T);}								///<取得内存块字节数
 		const	size_t GetMaxBytes	()const{return buf_size*sizeof(T);}								///<取得内存块最大字节数
 
-		void SetMax(size_t size)                                                                    ///<设置内存块最大长度(注：非字节数)
-        {
-            if(size<=buf_size)
-                return;
-
-            buf_size=power_to_2(size);
-
-            if(!buf)
-                buf=(T *)hgl_malloc(buf_size*sizeof(T));
-            else
-                buf=(T *)hgl_realloc(buf,buf_size*sizeof(T));
-        }
-
-		void SetLength(size_t size)																	///<设置内存块当前长度(注：非字节数)
+		void SetLength(size_t size)																	///<设置内存块长度(注：非字节数)
 		{
-            if(size>buf_size)
-                SetMax(size);
+			if(size<=buf_size)
+			{
+				cur_size=size;
+				return;
+			}
+
+			buf_size=power_to_2(size);
+
+			if(!buf)
+				buf=(T *)hgl_malloc(buf_size*sizeof(T));
+			else
+				buf=(T *)hgl_realloc(buf,buf_size*sizeof(T));
 
 			cur_size=size;
 		}
