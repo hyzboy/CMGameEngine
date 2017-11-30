@@ -4,7 +4,7 @@
 #include<hgl/network/TCPAccept.h>
 #include<hgl/network/TCPServer.h>
 #include<hgl/network/MultiThreadAccept.h>
-#include<hgl/network/ServerAcceptManage.h>
+#include<hgl/network/SocketManageThread.h>
 
 namespace hgl
 {
@@ -14,37 +14,33 @@ namespace hgl
         {
         protected:
 
-            using UserAcceptManageThread=ServerAcceptManageThread<USER_ACCEPT,ServerAcceptManage<USER_ACCEPT>>;
-
-        protected:
-
             class Accept2SocketManageThread:public AcceptThread
             {
-                UserAcceptManageThread *am_thread;
+                SocketManageThread *sm_thread;
 
             public:
 
                 using AcceptThread::AcceptThread;
 
-                void SetSocketManage(UserAcceptManageThread *amt)
+                void SetSocketManage(SocketManageThread *smt)
                 {
-                    am_thread=amt;
+                    sm_thread=smt;
                 }
 
                 bool OnAccept(int client_sock,IPAddress *ip_address) override
                 {
-                    if(!am_thread)return(false);
+                    if(!sm_thread)return(false);
 
                     bool result;
                     USER_ACCEPT *us;
 
                     us=new USER_ACCEPT(client_sock,ip_address);      //这个new非常占时间，未来放到各自的线程去做
 
-                    auto &sl=am_thread->JoinBegin();
+                    auto &sl=sm_thread->JoinBegin();
 
                     result=sl.Add(us);
 
-                    am_thread->JoinEnd();
+                    sm_thread->JoinEnd();
 
                     if(!result)
                         delete us;
@@ -59,7 +55,7 @@ namespace hgl
             TCPServer                                       server;
 
             MultiThreadAccept<Accept2SocketManageThread>    accept_manage;
-            MultiThreadManage<UserAcceptManageThread>       sock_manage;
+            MultiThreadManage<SocketManageThread>           sock_manage;
 
         public:
 
@@ -102,8 +98,8 @@ namespace hgl
                     {
                         Accept2SocketManageThread *at=accept_manage.GetAcceptThread(i);
 
-                        ServerAcceptManage<USER_ACCEPT> *sam=new ServerAcceptManage<USER_ACCEPT>(info.max_user);
-                        UserAcceptManageThread *smt=new UserAcceptManageThread(sam);
+                        SocketManage *sm=new SocketManage(info.max_user);
+                        SocketManageThread *smt=new SocketManageThread(sm);
 
                         at->SetSocketManage(smt);
 

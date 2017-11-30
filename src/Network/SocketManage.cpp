@@ -1,10 +1,24 @@
 ﻿#include<hgl/network/SocketManage.h>
+#include<hgl/type/MultiLevelMemoryPool.h>
 #include"SocketManageBase.h"
 
 namespace hgl
 {
     namespace network
     {
+        SocketManage::SocketManage(int max_user)
+        {
+            manage=CreateSocketManageBase(max_user);
+
+            memory_pool=new MultiLevelMemoryPool(HGL_SIZE_1KB,12);      //12级，最大是4MB了
+        }
+
+        SocketManage::~SocketManage()
+        {
+            delete manage;
+            delete memory_pool;
+        }
+
         void SocketManage::ProcSocketRecvList()
         {
             const int count=sock_recv_list.GetCount();
@@ -18,7 +32,7 @@ namespace hgl
             {
                 if(socket_list.Get(se->sock,sock))
                 {
-                    if(sock->OnSocketRecv(se->error)<0)
+                    if(sock->OnSocketRecv(se->error)<=0)
                         error_list.Add(sock);
                 }
                 else
@@ -28,6 +42,8 @@ namespace hgl
 
                 ++se;
             }
+
+            sock_recv_list.ClearData();
         }
 
         void SocketManage::ProcSocketSendList()
@@ -43,7 +59,7 @@ namespace hgl
             {
                 if(socket_list.Get(se->sock,sock))
                 {
-                    if(sock->OnSocketSend(se->size)<0)
+                    if(sock->OnSocketSend(se->size)<=0)
                         error_list.Add(sock);
                 }
                 else
@@ -53,6 +69,8 @@ namespace hgl
 
                 ++se;
             }
+
+            sock_send_list.ClearData();
         }
 
         void SocketManage::ProcSocketErrorList()
@@ -78,6 +96,8 @@ namespace hgl
 
                 ++se;
             }
+
+            sock_error_list.ClearData();
         }
 
         void SocketManage::ProcErrorList()
@@ -93,16 +113,8 @@ namespace hgl
                 Unjoin(*sp);
                 ++sp;
             }
-        }
 
-        SocketManage::SocketManage(int max_user)
-        {
-            manage=CreateSocketManageBase(max_user);
-        }
-
-        SocketManage::~SocketManage()
-        {
-            delete manage;
+            error_list.ClearData();
         }
 
         bool SocketManage::Join(TCPAccept *s)

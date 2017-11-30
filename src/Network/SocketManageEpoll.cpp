@@ -246,7 +246,8 @@ namespace hgl
                 return(nullptr);
             }
 
-            return(new SocketManageEpoll(epoll_fd,EPOLLIN|EPOLLOUT,max_user));
+            return(new SocketManageEpoll(epoll_fd,EPOLLIN,max_user));           //暂时只处理recv。。。至于send则直接强制发完，不走epoll
+            //return(new SocketManageEpoll(epoll_fd,EPOLLIN|EPOLLOUT,max_user));
         }
     }//namespace network
 }//namespace hgl
