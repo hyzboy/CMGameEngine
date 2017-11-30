@@ -1,6 +1,7 @@
 #ifndef HGL_ALGORITHM_RAND_INCLUDE
 #define HGL_ALGORITHM_RAND_INCLUDE
 
+#include<hgl/type/DataType.h>
 #include<cstdlib>
 namespace hgl
 {

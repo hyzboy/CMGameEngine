@@ -38,7 +38,8 @@ SET(BASE_TYPE_SOURCE
     DataType/Color3f.cpp
     DataType/Color4f.cpp
     DataType/FontInfo.cpp
-    DataType/StringList.cpp)
+    DataType/StringList.cpp
+    DataType/MultiLevelMemoryPool.cpp)
 
 SOURCE_GROUP("DataType" FILES ${BASE_TYPE_SOURCE})
 
