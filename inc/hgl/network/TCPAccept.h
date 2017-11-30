@@ -2,7 +2,7 @@
 #define HGL_NETWORK_TCP_ACCEPT_INCLUDE
 
 #include<hgl/network/TCPSocket.h>
-#include<hgl/MemBlock.h>
+#include<hgl/type/MemBlock.h>
 namespace hgl
 {
     namespace network
