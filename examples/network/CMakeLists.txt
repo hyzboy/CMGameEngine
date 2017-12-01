@@ -25,3 +25,9 @@ target_link_libraries(Example.Network.MultiAcceptServer ${HGL_CONSOLE_LIB})
 
 add_executable(Example.Network.OnlyConnect OnlyConnectTest.cpp ${HGL_CONSOLE_MAIN_SOURCE})
 target_link_libraries(Example.Network.OnlyConnect ${HGL_CONSOLE_LIB})
+
+add_executable(Example.Network.MTEchoTCPServer MTEchoTCPServer.cpp ${HGL_CONSOLE_MAIN_SOURCE})
+target_link_libraries(Example.Network.MTEchoTCPServer ${HGL_CONSOLE_LIB})
+
+add_executable(Example.Network.TCPClientHello TCPClientHello.cpp ${HGL_CONSOLE_MAIN_SOURCE})
+target_link_libraries(Example.Network.TCPClientHello ${HGL_CONSOLE_LIB})
