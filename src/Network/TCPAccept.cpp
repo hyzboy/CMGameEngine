@@ -28,15 +28,18 @@ namespace hgl
         int TCPAccept::OnSocketRecv(int /*size*/)
         {
             if(!sis)
+            {
                 sis=new SocketInputStream(ThisSocket);
+                recv_length=0;
+            }
 
             int total=0;
 
             while(true)
             {
-                if(recv_buffer.bytes()<PACKET_SIZE_TYPE_BYTES)       //头都没收完
+                if(recv_length<PACKET_SIZE_TYPE_BYTES)       //头都没收完
                 {
-                    int result=sis->Read(recv_buffer.data()+recv_buffer.bytes(),PACKET_SIZE_TYPE_BYTES-recv_buffer.bytes());
+                    int result=sis->Read(recv_buffer.data()+recv_length,PACKET_SIZE_TYPE_BYTES-recv_length);
 
                     if(result<0)
                         return(result);
@@ -44,18 +47,17 @@ namespace hgl
                     if(result==0)
                         return total;
 
-                    recv_buffer.AddLength(result);
-
+                    recv_length+=result;
                     total+=result;
                 }
 
-                if(recv_buffer.bytes()>=PACKET_SIZE_TYPE_BYTES)      //已经有头了
+                if(recv_length>=PACKET_SIZE_TYPE_BYTES)      //已经有头了
                 {
                     PACKET_SIZE_TYPE pack_size=*(PACKET_SIZE_TYPE *)(recv_buffer.data());
 
-                    recv_buffer.SetMax(PACKET_SIZE_TYPE_BYTES+pack_size);
+                    recv_buffer.SetLength(PACKET_SIZE_TYPE_BYTES+pack_size);
 
-                    int result=sis->Read(recv_buffer.data()+recv_buffer.bytes(),pack_size-(recv_buffer.bytes()-PACKET_SIZE_TYPE_BYTES));
+                    int result=sis->Read(recv_buffer.data()+recv_length,pack_size-(recv_length-PACKET_SIZE_TYPE_BYTES));
 
                     if(result<0)
                         return(result);
@@ -63,15 +65,16 @@ namespace hgl
                     if(result==0)
                         return total;
 
+                    recv_length+=result;
                     total+=result;
-                    recv_buffer.AddLength(result);
 
-                    if(recv_buffer.bytes()<pack_size+PACKET_SIZE_TYPE_BYTES)                //这个包还没收完整
+                    if(recv_length<pack_size+PACKET_SIZE_TYPE_BYTES)                //这个包还没收完整
                         return(total);                                                      //证明socket缓冲区里没有数据了，直接返回
 
                     OnRecvPacket(recv_buffer.data()+PACKET_SIZE_TYPE_BYTES,pack_size);  //调用回调
 
                     recv_buffer.ClearData();
+                    recv_length=0;
                 }
             }
         }

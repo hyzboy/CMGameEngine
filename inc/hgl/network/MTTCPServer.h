@@ -14,6 +14,9 @@ namespace hgl
         {
         protected:
 
+            //8888888888888888888888888888888
+            //也就这个子类用模板，未来将TCPAccept中的包处理分，这里改成不用模板的
+
             class Accept2SocketManageThread:public AcceptThread
             {
                 SocketManageThread *sm_thread;
@@ -31,21 +34,17 @@ namespace hgl
                 {
                     if(!sm_thread)return(false);
 
-                    bool result;
                     USER_ACCEPT *us;
 
                     us=new USER_ACCEPT(client_sock,ip_address);      //这个new非常占时间，未来放到各自的线程去做
 
                     auto &sl=sm_thread->JoinBegin();
 
-                    result=sl.Add(us);
+                    sl.Add(us);
 
                     sm_thread->JoinEnd();
 
-                    if(!result)
-                        delete us;
-
-                    return(result);
+                    return(true);
                 }
             };//class Accept2SocketManageThread:public AcceptThread
 

@@ -21,7 +21,6 @@ namespace hgl
          *          4.TCPAccept将缓冲区送回BufferPool
          */
 
-
         using PACKET_SIZE_TYPE=uint32;                                          ///<描述包长度的数据类型
         constexpr uint PACKET_SIZE_TYPE_BYTES=sizeof(uint32);                   ///<描述包长度的数据类型的字节长度
 
@@ -41,6 +40,7 @@ namespace hgl
             SocketOutputStream *sos=nullptr;
 
             MemBlock<uchar> recv_buffer;
+            int recv_length=0;
 
         protected://事件函数，由SocketManage调用
 
