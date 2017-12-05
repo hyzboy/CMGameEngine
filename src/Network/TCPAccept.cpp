@@ -81,6 +81,7 @@ namespace hgl
 
         int TCPAccept::OnSocketSend(int /*size*/)
         {
+            return 0;
         }
 
         void TCPAccept::OnSocketError(int error_no)

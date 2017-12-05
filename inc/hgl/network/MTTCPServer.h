@@ -87,7 +87,11 @@ namespace hgl
                     server.SetIPv6Only(info.ipv6_only);                 //设置是否仅使用IPv6,这个有可能失败，但是不管它
 
                     server.SetBlock(true);                                  //设置使用阻塞模式
+
+#if HGL_OS != HGL_OS_Windows
                     server.SetDeferAccept(info.defer_accept_time);          //指定时间内收到数据才会产生accept
+#endif
+
                     server.SetTimeOut(info.accept_time_out);                //设置accept超时时间
 
                     if(!accept_manage.Init(&server,info.thread_count))

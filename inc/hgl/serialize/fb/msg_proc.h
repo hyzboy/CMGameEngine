@@ -10,6 +10,9 @@ namespace hgl
     {
         namespace fb
         {
+            /**
+             * 基于FlatBuffers的消息解晰处理类
+             */
             class MessageProc
             {
             public:
@@ -32,6 +35,11 @@ namespace hgl
 
             public:
 
+                /**
+                 * 本类构造函数
+                 * @param start 消息起始ID号
+                 * @param end 消息结束ID号
+                 */
                 MessageProc(const uint start,const uint end)
                 {
                     msg_start=start;
@@ -48,6 +56,11 @@ namespace hgl
                     delete[] msg_proc;      //delete[] nullptr 不是个错误
                 }
 
+                /**
+                 * 设置一个消息处理函数
+                 * @param cmd 消息ID号
+                 * @param mp 处理函数
+                 */
                 bool Map(const uint cmd,MSG_PROC &mp)
                 {
                     if(cmd<msg_start||cmd>msg_end)return(false);
@@ -59,6 +72,11 @@ namespace hgl
                     return(true);
                 }
 
+                /**
+                 * 分晰设定消息并处理
+                 * @param cmd 消息ID号
+                 * @param data 数据
+                 */
                 bool Proc(const uint cmd,const void *data)
                 {
                     if(cmd<msg_start||cmd>msg_end)return(false);
