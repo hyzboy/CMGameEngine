@@ -166,11 +166,11 @@ HGL_CONSOLE_MAIN_FUNC()
 		wp[i]->ToWork();						//发送信号给工作线程
     }
 
-    LOG_INFO("group.Close() begin,Thread count "+OSString(WORK_TEAM_COUNT));
+    LOG_INFO(OS_TEXT("group.Close() begin,Thread count ")+OSString(WORK_TEAM_COUNT));
 
 	group.Close();								//等待线程结束关闭工作组
 
-    LOG_INFO("group.Close() end,write bitmap to .TGA");
+    LOG_INFO(OS_TEXT("group.Close() end,write bitmap to .TGA"));
 
 	graph::SaveToTGA(OS_TEXT("Workflow.TGA"),bitmap,IMAGE_WIDTH,IMAGE_HEIGHT,24);
 
