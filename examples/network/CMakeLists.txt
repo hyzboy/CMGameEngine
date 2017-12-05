@@ -3,7 +3,10 @@
     add_subdirectory(SCTPO2M)
 ENDIF(BUILD_NETWORK_SCTP)
 
+IF(UNIX)
 add_subdirectory(AutoUpdate)
+ENDIF(UNIX)
+
 #add_subdirectory(TCPPBServer)
 
 add_subdirectory(DownloadHTTPServer)
