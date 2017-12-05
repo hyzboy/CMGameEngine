@@ -14,9 +14,6 @@ namespace hgl
         {
         protected:
 
-            //8888888888888888888888888888888
-            //也就这个子类用模板，未来将TCPAccept中的包处理分，这里改成不用模板的
-
             class Accept2SocketManageThread:public AcceptThread
             {
                 SocketManageThread *sm_thread;
@@ -86,41 +83,41 @@ namespace hgl
                 if(info.server_ip->GetFamily()==AF_INET6)               //如果是IPv6地址
                     server.SetIPv6Only(info.ipv6_only);                 //设置是否仅使用IPv6,这个有可能失败，但是不管它
 
-                    server.SetBlock(true);                                  //设置使用阻塞模式
-
+                server.SetBlock(true);                                  //设置使用阻塞模式
+                    
 #if HGL_OS != HGL_OS_Windows
-                    server.SetDeferAccept(info.defer_accept_time);          //指定时间内收到数据才会产生accept
+                server.SetDeferAccept(info.defer_accept_time);          //指定时间内收到数据才会产生accept
 #endif
 
-                    server.SetTimeOut(info.accept_time_out);                //设置accept超时时间
+                server.SetTimeOut(info.accept_time_out);                //设置accept超时时间
 
-                    if(!accept_manage.Init(&server,info.thread_count))
-                        return(false);
+                if(!accept_manage.Init(&server,info.thread_count))
+                    return(false);
 
-                    for(int i=0;i<info.thread_count;i++)
-                    {
-                        Accept2SocketManageThread *at=accept_manage.GetAcceptThread(i);
+                for(int i=0;i<info.thread_count;i++)
+                {
+                    Accept2SocketManageThread *at=accept_manage.GetAcceptThread(i);
 
-                        SocketManage *sm=new SocketManage(info.max_user);
-                        SocketManageThread *smt=new SocketManageThread(sm);
+                    SocketManage *sm=new SocketManage(info.max_user);
+                    SocketManageThread *smt=new SocketManageThread(sm);
 
-                        at->SetSocketManage(smt);
+                    at->SetSocketManage(smt);
 
-                        sock_manage.Add(smt);
-                    }
+                    sock_manage.Add(smt);
+                }
 
-                    if(!sock_manage.Start())
-                        return(false);
+                if(!sock_manage.Start())
+                    return(false);
 
-                    if(!accept_manage.Start())
-                    {
-                        sock_manage.Close();
-                        return(false);
-                    }
+                if(!accept_manage.Start())
+                {
+                    sock_manage.Close();
+                    return(false);
+                }
 
-                    server_ip=info.server_ip;
+                server_ip=info.server_ip;
 
-                    return(true);
+                return(true);
             }
 
             bool Wait()
