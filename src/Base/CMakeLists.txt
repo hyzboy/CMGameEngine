@@ -12,6 +12,7 @@ SET(BASE_OTHER_SOURCE
     Other/ExpendString.cpp
     Other/File.cpp
     Other/TimeCount.cpp
+	Other/TimeVal.cpp
     Other/DateTime.cpp
     Other/CodePage.cpp)
 

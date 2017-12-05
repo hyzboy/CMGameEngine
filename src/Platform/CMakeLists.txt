@@ -111,11 +111,11 @@ IF(BUILD_OPENGL_LIB)
                                         ${GLFW_SOURCE})
         ENDIF(WIN32)
     ELSE(OPENGL_USE_GLFW)
-    
+
         IF(WIN32)
             SET(PLATFORM_INPUT_DEVICE_SOURCE    Win/KeyConvert.cpp)
         ENDIF(WIN32)
-    
+
         IF(UNIX)
             set(X11_PLATFORM_SOURCE X11/X11Window.cpp)
 
@@ -124,11 +124,11 @@ IF(BUILD_OPENGL_LIB)
             SET(PLATFORM_DESKTOP_SOURCE ${PLATFORM_DESKTOP_SOURCE}
                                         ${X11_PLATFORM_SOURCE})
         ENDIF(UNIX)
-        
+
         IF(APPLE)
         ENDIF(APPLE)
     ENDIF(OPENGL_USE_GLFW)
-    
+
     SOURCE_GROUP("InputDevice"  FILES ${PLATFORM_INPUT_DEVICE_SOURCE})
 ENDIF(BUILD_OPENGL_LIB)
 
@@ -159,11 +159,16 @@ IF(WIN32)
     add_library(CM.Platform STATIC ${PLATFORM_SOURCE})
     add_library(CM.Platform.Static STATIC ${PLATFORM_SOURCE} ${PLATFORM_RENDER_SOURCE})
     target_compile_options(CM.Platform.Static PRIVATE "/MT")
-    
-    add_library(CM.PlatformRender STATIC ${PLATFORM_SOURCE} ${PLATFORM_RENDER_SOURCE})
-    add_library(CM.PlatformRender.Static STATIC ${PLATFORM_SOURCE} ${PLATFORM_RENDER_SOURCE})    
-    target_compile_options(CM.PlatformRender.Static PRIVATE "/MT")
+
+    IF(BUILD_OPENGL_LIB)
+        add_library(CM.PlatformRender STATIC ${PLATFORM_SOURCE} ${PLATFORM_RENDER_SOURCE})
+        add_library(CM.PlatformRender.Static STATIC ${PLATFORM_SOURCE} ${PLATFORM_RENDER_SOURCE})
+        target_compile_options(CM.PlatformRender.Static PRIVATE "/MT")
+    ENDIF(BUILD_OPENGL_LIB)
 ELSE(WIN32)
     add_library(CM.Platform SHARED ${PLATFORM_SOURCE})
-    add_library(CM.PlatformRender SHARED ${PLATFORM_SOURCE} ${PLATFORM_RENDER_SOURCE})
+
+    IF(BUILD_OPENGL_LIB)
+        add_library(CM.PlatformRender SHARED ${PLATFORM_SOURCE} ${PLATFORM_RENDER_SOURCE})
+    ENDIF(BUILD_OPENGL_LIB)
 ENDIF(WIN32)
