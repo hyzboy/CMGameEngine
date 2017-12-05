@@ -18,6 +18,10 @@ HGL_CONSOLE_MAIN(sii,app,args)
     if(!app.Init(&sii))
         return(-1);
 
+    #if HGL_OS == HGL_OS_Windows
+        InitWinSocket();
+    #endif//
+
     IPAddress *ip=CreateIPv4TCP("127.0.0.1",10240);
 
     TCPClient client;
@@ -39,7 +43,7 @@ HGL_CONSOLE_MAIN(sii,app,args)
             cout<<"send ok,str: "<<str.c_str()<<endl;
     }
 
-    int result=client.WaitRecv(60);
+    int result=client.WaitRecv(5);
 
     if(result>0)//接收
     {

@@ -62,6 +62,10 @@ public:
 
     TestObject()
     {
+    #if HGL_OS == HGL_OS_Windows
+        InitWinSocket();
+    #endif//
+
         server_ip=CreateIPv4TCP("127.0.0.1",10240);
 
         for(uint i=0;i<CONNECT_THREAD_COUNT;i++)

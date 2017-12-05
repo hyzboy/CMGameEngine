@@ -5,6 +5,7 @@
 #include<hgl/network/TCPServer.h>
 #include<hgl/network/MultiThreadAccept.h>
 #include<hgl/network/SocketManageThread.h>
+#include<hgl/Time.h>
 
 namespace hgl
 {

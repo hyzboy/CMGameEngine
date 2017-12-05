@@ -51,6 +51,8 @@ namespace hgl
 
 				cur_count++;
 
+                LOG_INFO(OS_TEXT("Join ")+OSString(sock)+OS_TEXT(" to SocketManageSelect"));
+
 				return(true);
 			}
 
@@ -61,6 +63,8 @@ namespace hgl
 				FD_CLR(sock,&fd_sock_list);
 
 				sock_id_list.Delete(sock);
+
+                LOG_INFO(OS_TEXT("Unjoin ")+OSString(sock)+OS_TEXT(" to SocketManageSelect"));
 
 				return(true);
 			}
@@ -78,7 +82,25 @@ namespace hgl
 
 				FD_ZERO(&fd_sock_list);
 				FD_ZERO(&fd_recv_list);
+                FD_ZERO(&fd_send_list);
+                FD_ZERO(&fd_error_list);
 			}
+
+            int ConvertList(SocketEventList &sel,const fd_set &fs)
+            {                
+                sel.SetCount(fs.fd_count);
+                    
+                SocketEvent *p=sel.GetData();
+
+				for(int i=0;i<fs.fd_count;i++)
+				{   
+					p->sock=fs.fd_array[i];
+					p->size=-1;
+					++p;
+				}
+                
+                return fs.fd_count;    
+            }
 
             int Update(const double &to,SocketEventList &recv_list,SocketEventList &send_list,SocketEventList &error_list) override
 			{
@@ -94,7 +116,9 @@ namespace hgl
 					time_par=&time_out;
 				}
 
-				fd_recv_list=fd_sock_list;
+				memcpy(&fd_recv_list,   &fd_sock_list,sizeof(fd_sock_list));
+                memcpy(&fd_send_list,   &fd_sock_list,sizeof(fd_sock_list));
+                memcpy(&fd_error_list,  &fd_sock_list,sizeof(fd_sock_list));
 
 				if(select(max_fd+1,&fd_recv_list,&fd_send_list,&fd_error_list,time_par)<0)
 				{
@@ -108,60 +132,17 @@ namespace hgl
 					return(0);
 				}
 
-				int recv_num=0;
-				int send_num=0;
-                int error_num=0;
-				{
-					int count=sock_id_list.GetCount();
-					int *id=sock_id_list.GetData();
+				ConvertList(recv_list,fd_recv_list);
+				ConvertList(send_list,fd_send_list);
+                ConvertList(error_list,fd_error_list);
 
-                    recv_list.PreMalloc(count);
-                    send_list.PreMalloc(count);
-                    error_list.PreMalloc(count);
-                    
-                    SocketEvent *rp=recv_list.GetData();
-                    SocketEvent *sp=send_list.GetData();
-                    SocketEvent *ep=error_list.GetData();
-
-					for(int i=0;i<count;i++)
-					{
-						if(FD_ISSET(*id,&fd_recv_list))				//读进了数据
-						{
-							rp->sock=*id;
-							rp->size=-1;
-							++rp;
-							++recv_num;
-						}
-
-						if(FD_ISSET(*id,&fd_send_list))				//可以写数据
-						{
-							sp->sock=*id;
-							sp->size=-1;
-							++sp;
-							++send_num;
-						}
-
-                        if(FD_ISSET(*id,&fd_error_list))			//有错误
-						{
-							ep->sock=*id;
-							ep->size=-1;
-							++ep;
-							++error_num;
-						}
-
-						++id;
-					}
-				}
-                
-                recv_list.SetCount(recv_num);
-                send_list.SetCount(send_num);
-                error_list.SetCount(error_num);
-
-				return(recv_num+send_num+error_num);
+				return(fd_recv_list.fd_count
+                      +fd_send_list.fd_count
+                      +fd_error_list.fd_count);
 			}
         };//class SocketManageSelect:public SocketManageBase
         
-		SocketManageBase *CreateSelectSocketManageBase(int max_user)
+		SocketManageBase *CreateSocketManageBase(int max_user)
 		{
 			return(new SocketManageSelect(max_user));
 		}

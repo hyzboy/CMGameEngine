@@ -45,6 +45,10 @@ HGL_CONSOLE_MAIN(sii,app,args)
     if(!app.Init(&sii))
         return(-1);
 
+#if HGL_OS == HGL_OS_Windows
+    InitWinSocket();
+#endif//
+
     IPAddress *server_ip;
 
     server_ip=CreateIPv4TCP(10240);
@@ -56,7 +60,7 @@ HGL_CONSOLE_MAIN(sii,app,args)
     MTTCPServer<UserAccept>::InitInfomation info;
 
     info.server_ip=server_ip;
-    info.thread_count=4;
+    info.thread_count=1;
 
     if(!server.Init(info))
         return(-3);

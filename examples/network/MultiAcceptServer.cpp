@@ -68,6 +68,10 @@ public:
 
     TestObject()
     {
+#if HGL_OS == HGL_OS_Windows
+    InitWinSocket();
+#endif//
+
         server_ip=CreateIPv4TCP(10240);
 
         if(!server.CreateServer(server_ip,1024,false))
