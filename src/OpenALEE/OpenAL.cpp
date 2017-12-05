@@ -47,10 +47,11 @@ namespace openal
         const os_char oalfn[][HGL_MAX_PATH]=
         {
 #if HGL_OS == HGL_OS_Windows
-            OS_TEXT("\\OpenAL32.DLL"),
-            OS_TEXT("\\ct_oal.DLL"),
-            OS_TEXT("\\nvOpenAL.DLL"),
-            OS_TEXT("\\wrap_oal.DLL"),
+            OS_TEXT("\\OpenAL32.dll"),
+            OS_TEXT("\\ct_oal.dll"),
+            OS_TEXT("\\nvOpenAL.dll"),
+            OS_TEXT("\\soft_oal.dll"),
+            OS_TEXT("\\wrap_oal.dll"),
 #elif (HGL_OS == HGL_OS_Linux)||(HGL_OS == HGL_OS_FreeBSD)||(HGL_OS == HGL_OS_NetBSD)||(HGL_OS == HGL_OS_OpenBSD)
             OS_TEXT("/libopenal.so"),
             OS_TEXT("/libopenal.so.1"),
@@ -114,12 +115,11 @@ namespace openal
         else
         {
         #if HGL_OS == HGL_OS_Windows
-            LOG_ERROR(  OS_TEXT("加载OpenAL动态链接库失败！OpenAL动态链接库可能是: OpenAL32.DLL、wrap_oal.DLL、ct_oal.DLL、nvOpenAL.DLL\n")
-                        OS_TEXT("软件实现的OpenAL32.DLL、wrap_oal可在http://www.openal.org上下载!\n")
-                        OS_TEXT("硬件实现的OpenAL32.DLL请到对应您声卡的厂商网站下载对应的驱动程序!\n")
-                        OS_TEXT("下载完成后可其放入Windows\\System32目录下或Plug-Ins目录下即可!"));
+            LOG_ERROR(  OS_TEXT("加载OpenAL动态链接库失败！OpenAL动态链接库可能是: OpenAL32.dll、soft_oal.dll、wrap_oal.dll、ct_oal.dll、nvOpenAL.dll\n")
+                        OS_TEXT("软件实现的OpenAL32.DLL、wrap_oal可在http://www.openal.org上下载、soft_oal.dll可在http://kcat.strangesoft.net/openal.html下载!\n")
+                        OS_TEXT("硬件实现的OpenAL32.DLL请到对应您声卡的厂商网站下载对应的驱动程序! 下载完成后可其放入Windows\\System32目录下或应用程序Plug-Ins目录下即可!"));
         #else
-            LOG_ERROR(    OS_TEXT("加载OpenAL动态链接库失败！"));
+            LOG_ERROR(  OS_TEXT("加载OpenAL动态链接库失败！"));
         #endif//#if HGL_OS == HGL_OS_Windows
             return (AL_FALSE);
         }
