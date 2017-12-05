@@ -58,6 +58,7 @@ ENDIF(BUILD_NETWORK_SCTP)
 
 IF(WIN32)
     SET(NETWORK_OS_SOURCE
+		SocketManageSelect.cpp
         WinFireWall.cpp)
 ENDIF(WIN32)
 
@@ -66,7 +67,7 @@ IF(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 ENDIF(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 
 IF(APPLE)
-        SET(NETWORK_OS_SOURCE SocketManageKqueue.cpp)
+		SET(NETWORK_OS_SOURCE SocketManageKqueue.cpp)
 elseif(APPLE)
     IF(${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
         SET(NETWORK_OS_SOURCE SocketManageKqueue.cpp)
