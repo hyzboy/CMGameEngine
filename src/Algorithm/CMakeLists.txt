@@ -27,7 +27,8 @@ IF(ALGORITHM_INCLUDE_Crypt)
     SET(CRYPT_SOURCE_FILES  Crypt/aes.cpp
                             Crypt/Overflow.cpp
                             Crypt/rc4.cpp
-                            Crypt/uECC.c)
+                            Crypt/uECC.c
+							Crypt/base64.cpp)
 
     SOURCE_GROUP("Crypt" FILES ${CRYPT_SOURCE_FILES})
     

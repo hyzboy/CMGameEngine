@@ -1,17 +1,25 @@
-#ifndef HGL_ALGORITHM_CRYPT_INCLUDE
+ï»¿#ifndef HGL_ALGORITHM_CRYPT_INCLUDE
 #define HGL_ALGORITHM_CRYPT_INCLUDE
 
-namespace hgl   //Ð£Ñé/¼ÓÃÜËã·¨
+namespace hgl   //æ ¡éªŒ/åŠ å¯†ç®—æ³•
 {
+    namespace io
+    {
+        class OutputStream;
+    }//namespace io
+
     namespace algorithm
     {
-        void OverflowEncrypt(void *, void *, int, void *, int);			        ///<Òç³ö¼ÓÃÜ(Çá¶È¼ÓÃÜ)
-        void OverflowDecrypt(void *, void *, int, void *, int);			        ///<Òç³ö½âÃÜ
+        void OverflowEncrypt(void *, void *, int, void *, int);			        ///<æº¢å‡ºåŠ å¯†(è½»åº¦åŠ å¯†)
+        void OverflowDecrypt(void *, void *, int, void *, int);			        ///<æº¢å‡ºè§£å¯†
 
-        void AesEncrypt(uint8 data[16], uint8 *key, int keysize);               ///<AES¼ÓÃÜ
-        void AesDecrypt(uint8 data[16], uint8 *key, int keysize);               ///<AES½âÃÜ
+        void AesEncrypt(uint8 data[16], uint8 *key, int keysize);               ///<AESåŠ å¯†
+        void AesDecrypt(uint8 data[16], uint8 *key, int keysize);               ///<AESè§£å¯†
 
-        void RC4Encrypt(uint8 *data, int datasize, uint8 *key, int keysize);    ///<RC4¼ÓÃÜ
+        void RC4Encrypt(uint8 *data, int datasize, uint8 *key, int keysize);    ///<RC4åŠ å¯†
+
+        bool base64_encode(io::OutputStream *os,const uchar *input, size_t len);
+        bool base64_decode(io::OutputStream *os,const uchar *input,size_t len);
     }//namespace algorithm
 }//namespace hgl
 #endif//HGL_ALGORITHM_CRYPT_INCLUDE

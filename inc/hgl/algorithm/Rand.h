@@ -1,4 +1,4 @@
-#ifndef HGL_ALGORITHM_RAND_INCLUDE
+ï»¿#ifndef HGL_ALGORITHM_RAND_INCLUDE
 #define HGL_ALGORITHM_RAND_INCLUDE
 
 #include<cstdlib>
@@ -6,7 +6,7 @@ namespace hgl
 {
     namespace algorithm
     {
-        //´Ë´úÂëÈ¡×Ôxiph.orgµÄopus dec
+        //æ­¤ä»£ç å–è‡ªxiph.orgçš„opus dec
         static inline uint32 FastRand32()
         {
             static uint32 rngseed = 22222;

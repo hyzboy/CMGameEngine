@@ -1,4 +1,4 @@
-#ifndef HGL_ALGORITHM_SORT_INCLUDE
+﻿#ifndef HGL_ALGORITHM_SORT_INCLUDE
 #define HGL_ALGORITHM_SORT_INCLUDE
 
 #include<hgl/TypeFunc.h>
