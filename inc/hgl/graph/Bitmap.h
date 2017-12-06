@@ -1,7 +1,6 @@
 ﻿#ifndef HGL_GRAPH_BITMAP_INCLUDE
 #define HGL_GRAPH_BITMAP_INCLUDE
 
-#include<hgl/graph/TextureFormat.h>
 #include<hgl/type/BaseString.h>
 #include<hgl/FileSystem.h>
 #include<hgl/LogInfo.h>
@@ -31,6 +30,10 @@ namespace hgl
 		struct TexCubeMapFileHeader		:public TexFileHeader{uint32 width,height,faces;		};
 		struct TexCubeMapArrayFileHeader:public TexFileHeader{uint32 width,height,faces,count;  };
 #pragma pack(pop)
+
+        enum TextureSourceFormat:uint;
+        
+        TextureSourceFormat GetTextureFormatEnum(const char *);       //根据简写名称取得对应的TextureSourceFormat
 
 		/**
 		* 位图数据文件格式基类
