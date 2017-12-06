@@ -1,6 +1,7 @@
 ﻿#ifndef HGL_ALGORITHM_CRYPT_INCLUDE
 #define HGL_ALGORITHM_CRYPT_INCLUDE
 
+#include<hgl/type/DataType.h>
 namespace hgl   //校验/加密算法
 {
     namespace io

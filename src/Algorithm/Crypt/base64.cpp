@@ -26,10 +26,9 @@ namespace hgl
         {
             int i = 0;
             int j = 0;
-            unsigned char char_array_3[3];
-            unsigned char char_array_4[4];
-
-            unsigned char out[4];
+            uchar char_array_3[3];
+            uchar char_array_4[4];
+            uchar out[4];
 
             while (len--) 
             {
@@ -87,8 +86,7 @@ namespace hgl
             int i = 0;
             int j = 0;
             int in_ = 0;
-            unsigned char char_array_4[4], char_array_3[3];
-            uchar out[4];
+            uchar char_array_4[4], char_array_3[3];
 
             while (in_len-- && ( input[in_] != '=') && isbase64(input[in_])) 
             {
@@ -122,10 +120,7 @@ namespace hgl
                 char_array_3[1] = ((char_array_4[1] & 0xf) << 4) + ((char_array_4[2] & 0x3c) >> 2);
                 char_array_3[2] = ((char_array_4[2] & 0x3) << 6) + char_array_4[3];
 
-                for (j = 0; (j < i - 1); j++) 
-                    out[j]=char_array_3[j];
-
-                if(os->Write(out,i-1)!=i-1)
+                if(os->Write(char_array_3,i-1)!=i-1)
                     return(false);
             }
 
