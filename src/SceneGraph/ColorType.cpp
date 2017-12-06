@@ -1,5 +1,4 @@
-﻿#include<hgl/graph/GL/glew.h>
-#include<hgl/type/ColorType.h>
+﻿#include<hgl/type/ColorType.h>
 #include<hgl/Str.h>
 
 namespace hgl
@@ -22,18 +21,19 @@ namespace hgl
 
     const unsigned int GLFormatByColorType[ColorTypeCount]=    ///针对色彩类型而对应的OpenGL格式
     {
-        GL_NONE,                    //  ctNone
+        //使用数字是为了避在编译时非渲染库时依然需要依赖opengl开发库
+        0,      //GL_NONE,                    //  ctNone
 
-        GL_LUMINANCE,               //  ctLuminance
-        GL_LUMINANCE_ALPHA,         //  ctLuminanceAlpha
-        GL_RGB,                     //  ctRGB
-        GL_RGBA,                    //  ctRGBA
-        GL_ALPHA,                   //  ctAlpha
+        0x1909, //GL_LUMINANCE,               //  ctLuminance
+        0x190A, //GL_LUMINANCE_ALPHA,         //  ctLuminanceAlpha
+        0x1907, //GL_RGB,                     //  ctRGB
+        0x1908, //GL_RGBA,                    //  ctRGBA
+        0x1906, //GL_ALPHA,                   //  ctAlpha
 
-        GL_BGR,                     //  ctBGR
-        GL_BGRA,                    //  ctBGRA
+        0x80E0, //GL_BGR,                     //  ctBGR
+        0x80E1, //GL_BGRA,                    //  ctBGRA
 
-        GL_NONE                     //  ctEnd
+        0       //GL_NONE                     //  ctEnd
     };
 
     const unsigned int BytesByColorType[ColorTypeCount]=  ///针对色彩类型而对应的每象素字节数
