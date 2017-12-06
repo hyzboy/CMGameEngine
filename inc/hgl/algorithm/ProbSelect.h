@@ -10,7 +10,7 @@ namespace hgl
         /**
         * 机率选择器，用于按一定机率选择结果
         */
-        class ProbSelect                                                                                ///机率选择器
+        class ProbSelect                                                                            ///机率选择器
         {
             uint total;
 
@@ -18,8 +18,8 @@ namespace hgl
 
         public:
 
-            uint GetCount() { return val.GetCount(); }                                                      ///<数据数量
-            uint GetTotal() { return total; }                                                               ///<总量值
+            uint GetCount() { return val.GetCount(); }                                              ///<数据数量
+            uint GetTotal() { return total; }                                                       ///<总量值
 
         public:
 
@@ -44,9 +44,9 @@ namespace hgl
             ProbSelect();
             virtual ~ProbSelect() = default;
 
-            void Add(const uint);                                                                       ///<添加一个机率数据
-            void Add(const uint *, const uint);                                                          ///<添加多个机率数据
-            uint AddBatch(const uint, ...);                                                              ///<添加多个机率数据，<0为结尾
+            void Add(const uint);                                                                   ///<添加一个机率数据
+            void Add(const uint *, const uint);                                                     ///<添加多个机率数据
+            uint AddBatch(const uint, ...);                                                         ///<添加多个机率数据，<0为结尾
 
             uint Select()const;
         };//class ProbSelect

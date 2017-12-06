@@ -20,7 +20,7 @@ namespace hgl
 
         public:
 
-            PseudoRandom(uint32 init = 1024);																///<本类构造函数
+            PseudoRandom(uint32 init = 1024);															///<本类构造函数
             ~PseudoRandom();                                                                    		///<本类析构函数
 
             void Init(uint32 = 1024);                                                             		///<初始化随机数
@@ -28,15 +28,15 @@ namespace hgl
 
             void Restart();																				///<重计算一批随机数
 
-            bool Rand(uint8 *, int);																		///<产生一段随机数
+            bool Rand(uint8 *, int);																	///<产生一段随机数
 
             void Push(const void *, int);																///<压入一些数据做为随机数
 
-            template<typename T> void Push(const T &v) { Push(&v, sizeof(T)); }								///<压入一些数据做为随机数
+            template<typename T> void Push(const T &v) { Push(&v, sizeof(T)); }							///<压入一些数据做为随机数
 
-            template<typename T> bool Rand(T &v) { return Rand((uint8 *)&v, sizeof(T)); }					///<产生一个随机数
+            template<typename T> bool Rand(T &v) { return Rand((uint8 *)&v, sizeof(T)); }				///<产生一个随机数
 
-            template<typename T> T Rand() { T v; Rand((uint8 *)&v, sizeof(T)); return v; }					///<产生一个随机数
+            template<typename T> T Rand() { T v; Rand((uint8 *)&v, sizeof(T)); return v; }				///<产生一个随机数
 
         };//class PseudoRandom
     }//namespace algorithm

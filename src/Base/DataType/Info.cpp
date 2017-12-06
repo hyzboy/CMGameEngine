@@ -1,7 +1,7 @@
 ﻿#include<hgl/type/DataType.h>
 #include<hgl/Info.h>
 
-#define HGL_VERSION_STRING OS_TEXT("201708")
+#define HGL_VERSION_STRING OS_TEXT("201712")
 
 namespace hgl
 {

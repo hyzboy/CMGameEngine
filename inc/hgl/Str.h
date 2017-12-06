@@ -116,8 +116,8 @@ namespace hgl
     bool isxdigit(const T ch)
     {
         return((ch>='0'&&ch<='9')
-            ||(ch>='a'&&ch<='f')
-            ||(ch>='A'&&ch<='F'));
+             ||(ch>='a'&&ch<='f')
+             ||(ch>='A'&&ch<='F'));
     }
 
     /**
@@ -145,6 +145,18 @@ namespace hgl
     bool iscodechar(const T ch)
     {
         return(isalnum(ch)||ch=='_');
+    }
+
+    /**
+    * 测试当前字符是否为BASE64编码字符
+    */
+    template<typename T>   
+    bool isbase64(const T c) 
+    {
+        return (c == 43 || // +
+               (c >= 47 && c <= 57) || // /-9
+               (c >= 65 && c <= 90) || // A-Z
+               (c >= 97 && c <= 122)); // a-z
     }
 
     /**
