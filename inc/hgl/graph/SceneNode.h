@@ -3,7 +3,6 @@
 
 #include<hgl/type/List.h>
 #include<hgl/graph/SceneOrient.h>
-#include<hgl/graph/Renderable.h>
 namespace hgl
 {
 	namespace graph
@@ -11,6 +10,7 @@ namespace hgl
 		class SceneNode;
 		struct Camera;
 		class Frustum;
+        class Renderable;
 
 		typedef List<const SceneNode *> RenderList;													///<渲染列表类型重定义
 
