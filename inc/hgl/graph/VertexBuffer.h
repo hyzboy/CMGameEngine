@@ -1,11 +1,11 @@
 ﻿#ifndef HGL_VERTEX_BUFFER_OBJECT_INCLUDE
 #define HGL_VERTEX_BUFFER_OBJECT_INCLUDE
 
-#include<hgl/type/DataType.h>
 #include<hgl/type/Color3f.h>
 #include<hgl/type/Color4f.h>
 #include<hgl/type/RectScope.h>
 #include<hgl/type/BaseString.h>
+#include<hgl/graph/VertexBufferBase.h>
 #include<hgl/graph/VertexBufferType.h>
 #include<hgl/LogInfo.h>
 namespace hgl
