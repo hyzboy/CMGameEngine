@@ -120,10 +120,7 @@ namespace hgl
                 if(recv_total==PACKET_SIZE_TYPE_BYTES)              //最开始，判断一下是不是WebSocket
                 {
                     if(memcmp(recv_buffer.data(),"GET ",4)==0)      //HTTP头，可能是WebSocket
-                    {
                         RecvWebSocketHeader();
-                        continue;
-                    }
                 }
 
                 if(recv_length>=PACKET_SIZE_TYPE_BYTES)      //已经有头了
