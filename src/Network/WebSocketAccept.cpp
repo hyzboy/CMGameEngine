@@ -27,7 +27,7 @@ namespace hgl
                 wsfError            =0xFF00,
             };
         }
-
+        
         void WebSocketAccept::WebSocketHandshake()
         {
             constexpr char HTTP_HEADER_END_STR[4]={'\r','\n','\r','\n'};        //别用"\r\n\r\n"，不然sizeof会得出来5
@@ -43,7 +43,7 @@ namespace hgl
 
             while(true)
             {
-                size=this->sis->Read(ws_header.data()+pos,1024);
+                size=sis->Read(ws_header.data()+pos,1024);
 
                 if(size==0)continue;
                 if(size<0)
@@ -88,7 +88,7 @@ namespace hgl
                 break;
             }
 
-            this->CloseSocket();
+            CloseSocket();
         }
         
         /**
@@ -96,9 +96,9 @@ namespace hgl
          */
         int WebSocketAccept::OnSocketRecv(int /*size*/)
         {
-            if(!this->sis)
+            if(!sis)
             {
-                this->sis=new SocketInputStream(ThisSocket);
+                sis=new SocketInputStream(ThisSocket);
                 recv_length=0;
             }
 
@@ -121,7 +121,7 @@ namespace hgl
 
                 if(recv_length<msg_header_size)         //头都没收完
                 {
-                    int result=this->sis->Read(recv_buffer.data()+recv_length,msg_header_size-recv_length);
+                    int result=sis->Read(recv_buffer.data()+recv_length,msg_header_size-recv_length);
 
                     if(result<0)
                         return(result);
@@ -179,7 +179,7 @@ namespace hgl
 
                 recv_buffer.SetLength(msg_full_length);
 
-                int result=this->sis->Read(recv_buffer.data()+recv_length,msg_full_length-(recv_length-msg_header_size));
+                int result=sis->Read(recv_buffer.data()+recv_length,msg_full_length-(recv_length-msg_header_size));
 
                 if(result<0)
                     return(result);
