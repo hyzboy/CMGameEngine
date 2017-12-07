@@ -26,13 +26,16 @@ namespace hgl
 
         void TCPAccept::RecvWebSocketHeader()
         {
+            constexpr char HTTP_HEADER_END_STR[]="\r\n\r\n";
+            constexpr int HTTP_HEADER_END_SIZE=sizeof(HTTP_HEADER_END_STR);
+
             MemBlock<char>  ws_header(1024);
 
             int pos=0;
             int total=0;
             int size=0;
 
-            char *end;
+            const char *end;
 
             while(true)
             {
@@ -45,12 +48,12 @@ namespace hgl
                 recv_total+=size;
                 pos+=size;
 
-                end=hgl::strstr<char>(ws_header.data(),pos,"\r\n\r\n");
+                end=hgl::strstr<const char>(ws_header.data(),pos,HTTP_HEADER_END_STR);
 
                 if(!end)
                     continue;
 
-                end+=2;
+                end+=HTTP_HEADER_END_SIZE;
                 total=end-ws_header.data();
 
                 UTF8String key;
