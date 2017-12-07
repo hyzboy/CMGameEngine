@@ -44,7 +44,9 @@ namespace hgl
             }
             else
             {
-                LOG_INFO(OS_TEXT("Socket ")+OSString(sock)+OS_TEXT(" send ")+OSString(size)+OS_TEXT(" bytes failed,,error: ")+OSString(GetLastSocketError()));
+                int err=GetLastSocketError();
+
+                LOG_INFO(OS_TEXT("Socket ")+OSString(sock)+OS_TEXT(" send ")+OSString(size)+OS_TEXT(" bytes failed,,error: ")+OSString(err)+OS_TEXT(",")+GetSocketString(err));
             }
 
             return(result);

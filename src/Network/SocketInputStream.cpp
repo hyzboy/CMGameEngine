@@ -55,7 +55,12 @@ namespace hgl
             }
             else
             {
-                LOG_INFO(OS_TEXT("Socket ")+OSString(sock)+OS_TEXT(" recv ")+OSString(size)+OS_TEXT(" bytes failed,error: ")+OSString(GetLastSocketError()));
+                int err=GetLastSocketError();
+
+                if(err==nseTryAgain)
+                    return 0;
+
+                LOG_INFO(OS_TEXT("Socket ")+OSString(sock)+OS_TEXT(" recv ")+OSString(size)+OS_TEXT(" bytes failed,error: ")+OSString(err)+OS_TEXT(",")+GetSocketString(err));
             }
 
             return(result);
