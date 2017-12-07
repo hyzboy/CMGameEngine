@@ -74,11 +74,10 @@ namespace hgl
                             size=pos-total;
 
                             if(size>0)
-                            {
                                 memcpy(recv_buffer.data(),end,size);
-                                recv_length=size;
-                                return;
-                            }
+                            
+                            recv_length=size;                            
+                            return;
                         }
                     }
 
