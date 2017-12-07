@@ -57,7 +57,7 @@ namespace hgl
             if(unjoin_list.TrySemSwap())
                 ProcUnjoinList();
 
-            sock_manage->Update();
+            sock_manage->Update(1);         //这里写一秒，只是为了不卡住主轮循。未来要将epoll完全独立一个线程跑
             return(true);
         }
     }//namespace network

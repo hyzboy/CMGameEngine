@@ -44,7 +44,8 @@ SET(NETWORK_HTTP_SOURCE
     WebApi_Currency.cpp)
 
 SET(NETWORK_WEBSOCKET_SOURCE
-	WebSocket.cpp)
+	WebSocket.cpp
+	WebSocketAccept.cpp)
 
 SOURCE_GROUP("Base"                     FILES ${NETWORK_BASE_SOURCE})
 SOURCE_GROUP("Transport\\UDP"           FILES ${NETWORK_UDP_SOURCE})
