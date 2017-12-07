@@ -85,11 +85,11 @@ namespace hgl
 
             const UTF8String sec_websocket_accept((char *)mos.GetData(),mos.GetSize());
 
-            result="HTTP/1.1 101 Switching Protocols\n"
-                   "Upgrade: websocket\n"
-                   "Connection: Upgrade\n"
-                   "Sec-WebSocket-Accept: "+sec_websocket_accept+"\n"
-                   "Sec-WebSocket-Protocol: "+sec_websocket_protocol+"\n\n";
+            result="HTTP/1.1 101 Switching Protocols\r\n"
+                   "Upgrade: websocket\r\n"
+                   "Connection: Upgrade\r\n"
+                   "Sec-WebSocket-Accept: "+sec_websocket_accept+"\r\n"
+                   "Sec-WebSocket-Protocol: "+sec_websocket_protocol+"\r\n\r\n";
         }
     }//namespace network
 }//namespace hgl

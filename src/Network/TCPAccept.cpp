@@ -45,7 +45,7 @@ namespace hgl
                 recv_total+=size;
                 pos+=size;
 
-                end=hgl::strstr<char>(ws_header.data(),pos,"\n\n");
+                end=hgl::strstr<char>(ws_header.data(),pos,"\r\n\r\n");
 
                 if(!end)
                     continue;
