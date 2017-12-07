@@ -1,4 +1,5 @@
 #include<hgl/network/WebSocket.h>
+#include<hgl/Str.h>
 #include<iostream>
 
 using namespace hgl;
@@ -16,20 +17,24 @@ int main(int,char **)
                                     "Origin: http://example.com\r\n"
                                     "Sec-WebSocket-Protocol: chat, superchat\r\n"
                                     "Sec-WebSocket-Version: 13\r\n\r\n";
+    const uint http_header_length=hgl::strlen(http_header);
     constexpr char split_line[]="---------------------------------------------------\n";
 
     UTF8String key;
     UTF8String protocol;
-    uint version;
+    uint version=0;
     UTF8String reply;
 
     cout<<"Origin HTTP Header:"<<endl<<split_line<<http_header<<split_line;
 
-    GetWebSocketInfo(key,protocol,version,http_header,sizeof(http_header));
+    GetWebSocketInfo(key,protocol,version,http_header,http_header_length);
 
-    cout<<"WebSocket Key:      "<<key.c_str()<<endl
-        <<"WebSocket Protocol: "<<protocol.c_str()<<endl
-        <<"WebSocket Version:  "<<version<<endl<<split_line;
+    cout<<"WebSocket Key:      "<<key.c_str()<<endl;
+
+    if(!protocol.IsEmpty())
+    cout<<"WebSocket Protocol: "<<protocol.c_str()<<endl;
+
+    cout<<"WebSocket Version:  "<<version<<endl<<split_line;
 
     MakeWebSocketAccept(reply,key,protocol);
 
