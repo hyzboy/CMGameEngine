@@ -26,7 +26,7 @@ namespace hgl
 
         void TCPAccept::RecvWebSocketHeader()
         {
-            constexpr char HTTP_HEADER_END_STR[]="\r\n\r\n";
+            constexpr char HTTP_HEADER_END_STR[4]={'\r','\n','\r','\n'};        //别用"\r\n\r\n"，不然sizeof会得出来5
             constexpr int HTTP_HEADER_END_SIZE=sizeof(HTTP_HEADER_END_STR);
 
             MemBlock<char>  ws_header(1024);
