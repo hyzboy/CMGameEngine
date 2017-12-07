@@ -92,8 +92,12 @@ namespace hgl
             result="HTTP/1.1 101 Switching Protocols\r\n"
                    "Upgrade: websocket\r\n"
                    "Connection: Upgrade\r\n"
-                   "Sec-WebSocket-Accept: "+sec_websocket_accept+"\r\n"
-                   "Sec-WebSocket-Protocol: "+sec_websocket_protocol+"\r\n\r\n";
+                   "Sec-WebSocket-Accept: "+sec_websocket_accept+"\r\n";
+
+            if(!sec_websocket_protocol.IsEmpty())
+                result+="Sec-WebSocket-Protocol: "+sec_websocket_protocol;
+            
+            result+="\r\n\r\n";
         }
     }//namespace network
 }//namespace hgl
