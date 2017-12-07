@@ -48,7 +48,7 @@ namespace hgl
                 recv_total+=size;
                 pos+=size;
 
-                end=hgl::strstr<const char>(ws_header.data(),pos,HTTP_HEADER_END_STR);
+                end=hgl::strrstr<const char>(ws_header.data(),pos,HTTP_HEADER_END_STR,HTTP_HEADER_END_SIZE);
 
                 if(!end)
                     continue;

@@ -16,21 +16,21 @@ namespace hgl
          */
         bool GetWebSocketInfo(UTF8String &sec_websocket_key,UTF8String &sec_websocket_protocol,uint &sec_websocket_version,const char *data,int size)
         {
-            constexpr char SEC_WEBSOCKET_KEY_STR[]="Sec-WebSocket-Key:";
-            constexpr uint SEC_WEBSOCKET_KEY_STR_SIZE=sizeof(SEC_WEBSOCKET_KEY_STR);        //sizeof得出来的是带\0的，所以多一个字节
+            constexpr char SEC_WEBSOCKET_KEY_STR[]="Sec-WebSocket-Key: ";
+            constexpr uint SEC_WEBSOCKET_KEY_STR_SIZE=sizeof(SEC_WEBSOCKET_KEY_STR)-1;      //sizeof的带\0所以要-1
 
-            constexpr char SEC_WEBSOCKET_PROTOCOL[]="Sec-WebSocket-Protocol:";
-            constexpr uint SEC_WEBSOCKET_PROTOCOL_SIZE=sizeof(SEC_WEBSOCKET_PROTOCOL);
+            constexpr char SEC_WEBSOCKET_PROTOCOL[]="Sec-WebSocket-Protocol: ";
+            constexpr uint SEC_WEBSOCKET_PROTOCOL_SIZE=sizeof(SEC_WEBSOCKET_PROTOCOL)-1;
 
-            constexpr char SEC_WEBSOCKET_VERSION[]="Sec-WebSocket-Version:";
-            constexpr uint SEC_WEBSOCKET_VERSION_SIZE=sizeof(SEC_WEBSOCKET_VERSION);
+            constexpr char SEC_WEBSOCKET_VERSION[]="Sec-WebSocket-Version: ";
+            constexpr uint SEC_WEBSOCKET_VERSION_SIZE=sizeof(SEC_WEBSOCKET_VERSION)-1;
 
             if(!data||size<40)return(false);
             
             const char *end;
 
             {
-                const char *key=hgl::strstr(data,size,SEC_WEBSOCKET_KEY_STR);
+                const char *key=hgl::strstr(data,size,SEC_WEBSOCKET_KEY_STR,SEC_WEBSOCKET_KEY_STR_SIZE);
 
                 if(!key)return(false);
 
@@ -43,28 +43,32 @@ namespace hgl
             }
 
             {
-                const char *protocol=hgl::strstr(end,size,SEC_WEBSOCKET_PROTOCOL);
+                const char *protocol=hgl::strstr(data,size,SEC_WEBSOCKET_PROTOCOL,SEC_WEBSOCKET_PROTOCOL_SIZE);
 
-                if(!protocol)return(false);
+                if(protocol)        //也有可能是不存在的
+                {
+                    protocol+=SEC_WEBSOCKET_PROTOCOL_SIZE;
+                    end=protocol;
+                    while(*end!='\r')++end;
 
-                protocol+=SEC_WEBSOCKET_PROTOCOL_SIZE;
-                end=protocol;
-                while(*end!='\r')++end;
-
-                sec_websocket_protocol.Set(protocol,end-protocol);
+                    sec_websocket_protocol.Set(protocol,end-protocol);
+                }
             }
 
             {
-                const char *version=hgl::strstr(end,size,SEC_WEBSOCKET_VERSION);
+                const char *version=hgl::strstr(data,size,SEC_WEBSOCKET_VERSION,SEC_WEBSOCKET_VERSION_SIZE);
 
-                if(!version)return(false);
+                if(version)
+                {
+                    version+=SEC_WEBSOCKET_VERSION_SIZE;
+                    end=version;
+                    while(*end!='\r')++end;
 
-                version+=SEC_WEBSOCKET_VERSION_SIZE;
-                end=version;
-                while(*end!='\r')++end;
-
-                return hgl::stou(version,sec_websocket_version);
+                    hgl::stou(version,sec_websocket_version);
+                }
             }
+
+            return(true);
         }
 
         /**

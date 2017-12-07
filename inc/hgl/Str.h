@@ -316,33 +316,76 @@ namespace hgl
     /**
     * 在字符串str1内查找另一个字符串str2
     * @param str1 完整的字符串
-    * @param size str1最大查找字符
+    * @param size1 str1最大查找字符
     * @param str2 要查找的字符串
+    * @param size2 str2长度
     * @return str2在str1中所在位置的指针
     */
     template<typename T>
-    T *strstr(T *str1,uint size,T *str2)
+    T *strstr(T *str1,uint size1,T *str2,uint size2)
     {
         if(!str1||!str2)return(nullptr);
         if(!*str1||!*str2)return(nullptr);
-        if(size<=0)return(nullptr);
+        if(size1<=0)return(nullptr);
+        if(size2<=0)return(nullptr);
 
-        T *cp = (T *) str1;
+        T *cp = str1;
+        T *end= str1+size1-size2;
         T *s1, *s2;
+        uint s;
 
-        while (*cp&&size)
+        while (*cp&&cp<=end)
         {
             s1 = cp;
-            s2 = (T *) str2;
+            s2 = str2;
 
-            while ( *s1 && *s2 && !(*s1-*s2) )
-                ++s1, ++s2;
+            s=size2;
+            while ( s && !(*s1-*s2) )
+                ++s1, ++s2,--s;
 
-            if (!*s2)
+            if(!s)
                 return(cp);
 
             ++cp;
-            --size;
+        }
+
+        return(0);
+    }
+
+    
+    /**
+    * 在字符串str1内查找另一个字符串str2(从向后前)
+    * @param str1 完整的字符串
+    * @param size str1最大查找字符
+    * @param str2 要查找的字符串
+    * @param size2 str2长度
+    * @return str2在str1中所在位置的指针
+    */
+    template<typename T>
+    T *strrstr(T *str1,uint size1,T *str2,uint size2)
+    {
+        if(!str1||!str2)return(nullptr);
+        if(!*str1||!*str2)return(nullptr);
+        if(size1<=0)return(nullptr);
+        if(size2<=0)return(nullptr);
+
+        T *cp = str1+size1-size2;
+        T *s1, *s2;
+        uint s;
+
+        while (*cp&&cp>str1)
+        {
+            s1 = cp;
+            s2 = str2;
+
+            s=size2;
+            while ( s && !(*s1-*s2) )
+                ++s1, ++s2,--s;
+
+            if (!s)
+                return(cp);
+
+            --cp;
         }
 
         return(0);
@@ -355,7 +398,7 @@ namespace hgl
     * @return str2在str1中所在位置的指针
     */
     template<typename T>
-    T *stristr(T *str1,T *str2)
+    T *stristr(T *str1,uint size1,T *str2,uint size2)
     {
         T *cp = (T *) str1;
         T *s1, *s2;
