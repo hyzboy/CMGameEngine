@@ -1,8 +1,10 @@
 ﻿#include<hgl/network/TCPAccept.h>
 #include<hgl/network/SocketInputStream.h>
 #include<hgl/network/SocketOutputStream.h>
+#include<hgl/network/WebSocket.h>
 #include<hgl/io/DataInputStream.h>
 #include<hgl/io/DataOutputStream.h>
+#include<hgl/Str.h>
 
 namespace hgl
 {
@@ -20,6 +22,67 @@ namespace hgl
         {
             SAFE_CLEAR(sos);
             SAFE_CLEAR(sis);
+        }
+
+        void TCPAccept::RecvWebSocketHeader()
+        {
+            MemBlock<char>  ws_header(1024);
+
+            int pos=0;
+            int total=0;
+            int size=0;
+
+            char *end;
+
+            while(true)
+            {
+                size=sis->Read(ws_header.data()+pos,1024);
+
+                if(size==0)continue;
+                if(size<0)
+                    break;
+                
+                recv_total+=size;
+                pos+=size;
+
+                end=hgl::strstr<char>(ws_header.data(),pos,"\n\n");
+
+                if(!end)
+                    continue;
+
+                end+=2;
+                total=end-ws_header.data();
+
+                UTF8String key;
+                UTF8String ws_protocol;                                     
+                uint       ws_version;
+                    
+                UTF8String ws_accept_protocol;
+
+                if(GetWebSocketInfo(key,ws_protocol,ws_version,ws_header.data(),total))
+                    if(OnWebSocket(ws_accept_protocol,ws_protocol,ws_version))
+                    {
+                        UTF8String ws_return;
+
+                        MakeWebSocketAccept(ws_return,key,ws_accept_protocol);
+
+                        if(Send(ws_return.c_str(),ws_return.Length()))
+                        {
+                            size=pos-total;
+
+                            if(size>0)
+                            {
+                                memcpy(recv_buffer.data(),end,size);
+                                recv_length=size;
+                                return;
+                            }
+                        }
+                    }
+
+                break;
+            }
+
+            this->CloseSocket();
         }
 
         /**
@@ -48,7 +111,17 @@ namespace hgl
                         return total;
 
                     recv_length+=result;
+                    recv_total+=result;
                     total+=result;
+                }
+                
+                if(recv_total==PACKET_SIZE_TYPE_BYTES)              //最开始，判断一下是不是WebSocket
+                {
+                    if(memcmp(recv_buffer.data(),"GET ",4)==0)      //HTTP头，可能是WebSocket
+                    {
+                        RecvWebSocketHeader();
+                        continue;
+                    }
                 }
 
                 if(recv_length>=PACKET_SIZE_TYPE_BYTES)      //已经有头了
@@ -66,6 +139,7 @@ namespace hgl
                         return total;
 
                     recv_length+=result;
+                    recv_total+=result;
                     total+=result;
 
                     if(recv_length<pack_size+PACKET_SIZE_TYPE_BYTES)                //这个包还没收完整
@@ -86,6 +160,22 @@ namespace hgl
 
         void TCPAccept::OnSocketError(int error_no)
         {
+        }
+
+        bool TCPAccept::Send(void *data,const uint size)
+        {
+            if(!data)return(false);
+            if(size<=0)return(false);
+
+            if(!sos)
+                sos=new SocketOutputStream(ThisSocket);
+
+            int result=sos->WriteFully(data,size);
+
+            if(result!=size)
+                return(false);
+
+            return(true);
         }
 
         bool TCPAccept::SendPacket(void *data,const PACKET_SIZE_TYPE &size)

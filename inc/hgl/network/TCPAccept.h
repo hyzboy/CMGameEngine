@@ -40,7 +40,13 @@ namespace hgl
             SocketOutputStream *sos=nullptr;
 
             MemBlock<uchar> recv_buffer;
-            int recv_length=0;
+            uint            recv_length=0;
+
+            uint64          recv_total=0;
+
+        protected:
+
+            void RecvWebSocketHeader();
 
         protected://事件函数，由SocketManage调用
 
@@ -50,6 +56,8 @@ namespace hgl
             virtual int OnSocketSend(int);                                      ///<Socket发送处理函数
             virtual void OnSocketError(int);                                    ///<Socket错误处理函数
 
+                    bool Send(void *,const uint);                               ///<发送原始数据
+
         public:
 
             TCPAccept();                                                        ///<本类构造函数
@@ -57,8 +65,22 @@ namespace hgl
             virtual ~TCPAccept();
 
             virtual bool SendPacket(void *,const PACKET_SIZE_TYPE &);           ///<发包
-
             virtual bool OnRecvPacket(void *,const PACKET_SIZE_TYPE &)=0;       ///<接收包事件函数
+
+        public: //WebSocket支持
+
+            /**
+             * WebSocket 头响应
+             * @param accept_protocol 接受的WebSocket协议
+             * @param protocol 需求的WebSocket协议
+             * @param version 需求的WebSocket版本
+             * @return 是否成功
+             */
+            virtual bool OnWebSocket(UTF8String &accept_protocol,const UTF8String &protocol,uint version)
+            {
+                accept_protocol=protocol;           //原样接收，如有需求请自行重载此函数处理
+                return(true);
+            }
         };//class TCPAccept:public TCPSocket
     }//namespace network
 }//namespace hgl

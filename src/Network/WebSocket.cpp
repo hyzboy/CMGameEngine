@@ -30,7 +30,7 @@ namespace hgl
             const char *end;
 
             {
-                const char *key=hgl::strstr(data,SEC_WEBSOCKET_KEY_STR);
+                const char *key=hgl::strstr(data,size,SEC_WEBSOCKET_KEY_STR);
 
                 if(!key)return(false);
 
@@ -43,7 +43,7 @@ namespace hgl
             }
 
             {
-                const char *protocol=hgl::strstr(end,SEC_WEBSOCKET_PROTOCOL);
+                const char *protocol=hgl::strstr(end,size,SEC_WEBSOCKET_PROTOCOL);
 
                 if(!protocol)return(false);
 
@@ -55,7 +55,7 @@ namespace hgl
             }
 
             {
-                const char *version=hgl::strstr(end,SEC_WEBSOCKET_VERSION);
+                const char *version=hgl::strstr(end,size,SEC_WEBSOCKET_VERSION);
 
                 if(!version)return(false);
 

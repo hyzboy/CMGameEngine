@@ -316,35 +316,37 @@ namespace hgl
     /**
     * 在字符串str1内查找另一个字符串str2
     * @param str1 完整的字符串
+    * @param size str1最大查找字符
     * @param str2 要查找的字符串
     * @return str2在str1中所在位置的指针
     */
     template<typename T>
-    T *strstr(T *str1,T *str2)
+    T *strstr(T *str1,uint size,T *str2)
     {
+        if(!str1||!str2)return(nullptr);
+        if(!*str1||!*str2)return(nullptr);
+        if(size<=0)return(nullptr);
+
         T *cp = (T *) str1;
         T *s1, *s2;
 
-        if ( !*str2)
-            return (T *)str1;
-
-        while (*cp)
+        while (*cp&&size)
         {
             s1 = cp;
             s2 = (T *) str2;
 
             while ( *s1 && *s2 && !(*s1-*s2) )
-                s1++, s2++;
+                ++s1, ++s2;
 
             if (!*s2)
                 return(cp);
 
             ++cp;
+            --size;
         }
 
         return(0);
     }
-
 
     /**
     * 在字符串str1内查找另一个字符串str2,忽略大小写
