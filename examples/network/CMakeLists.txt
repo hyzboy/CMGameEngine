@@ -34,3 +34,6 @@ target_link_libraries(Example.Network.MTEchoTCPServer ${HGL_CONSOLE_LIB})
 
 add_executable(Example.Network.TCPClientHello TCPClientHello.cpp ${HGL_CONSOLE_MAIN_SOURCE})
 target_link_libraries(Example.Network.TCPClientHello ${HGL_CONSOLE_LIB})
+
+add_executable(Example.Network.WebSocketHeaderParse WebSocketHeaderParse.cpp)
+target_link_libraries(Example.Network.WebSocketHeaderParse ${HGL_CONSOLE_LIB})

@@ -46,7 +46,7 @@ int main(int,char **)
     memcpy(tmp,mos.GetData(),len);
     tmp[len]=0;
 
-    cout<<"Decode: "<<tmp<<endl;
+    cout<<"Decode: "<<tmp<<endl<<endl;
 
     delete[] tmp;
     return 0;

@@ -16,13 +16,13 @@ namespace hgl
          */
         bool GetWebSocketInfo(UTF8String &sec_websocket_key,UTF8String &sec_websocket_protocol,uint &sec_websocket_version,const char *data,int size)
         {
-            constexpr char SEC_WEBSOCKET_KEY_STR[]="Sec-WebSocket-Key: ";
-            constexpr uint SEC_WEBSOCKET_KEY_STR_SIZE=sizeof(SEC_WEBSOCKET_KEY_STR);
+            constexpr char SEC_WEBSOCKET_KEY_STR[]="Sec-WebSocket-Key:";
+            constexpr uint SEC_WEBSOCKET_KEY_STR_SIZE=sizeof(SEC_WEBSOCKET_KEY_STR);        //sizeof得出来的是带\0的，所以多一个字节
 
-            constexpr char SEC_WEBSOCKET_PROTOCOL[]="Sec-WebSocket-Protocol: ";
+            constexpr char SEC_WEBSOCKET_PROTOCOL[]="Sec-WebSocket-Protocol:";
             constexpr uint SEC_WEBSOCKET_PROTOCOL_SIZE=sizeof(SEC_WEBSOCKET_PROTOCOL);
 
-            constexpr char SEC_WEBSOCKET_VERSION[]="Sec-WebSocket-Version: ";
+            constexpr char SEC_WEBSOCKET_VERSION[]="Sec-WebSocket-Version:";
             constexpr uint SEC_WEBSOCKET_VERSION_SIZE=sizeof(SEC_WEBSOCKET_VERSION);
 
             if(!data||size<40)return(false);
@@ -37,7 +37,7 @@ namespace hgl
                 key+=SEC_WEBSOCKET_KEY_STR_SIZE;
 
                 end=key;
-                while(*end!='\n')++end;     //找到非BASE64字符为止
+                while(*end!='\r')++end;
 
                 sec_websocket_key.Set(key,end-key);
             }
@@ -49,7 +49,7 @@ namespace hgl
 
                 protocol+=SEC_WEBSOCKET_PROTOCOL_SIZE;
                 end=protocol;
-                while(*end!='\n')++end;
+                while(*end!='\r')++end;
 
                 sec_websocket_protocol.Set(protocol,end-protocol);
             }
@@ -61,7 +61,7 @@ namespace hgl
 
                 version+=SEC_WEBSOCKET_VERSION_SIZE;
                 end=version;
-                while(*end!='\n')++end;
+                while(*end!='\r')++end;
 
                 return hgl::stou(version,sec_websocket_version);
             }
