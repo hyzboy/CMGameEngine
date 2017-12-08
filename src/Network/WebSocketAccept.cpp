@@ -133,6 +133,13 @@ namespace hgl
                 uint8 *p=recv_buffer.data();
 
                 msg_opcode  =p[0]&0x7;
+
+                if(msg_opcode==8)   //close
+                {
+                    this->CloseSocket();
+                    return(-1);
+                }
+
                 msg_fin     =(p[0]>>7)&0x1;
                 msg_masked  =(p[1]>>7)&0x1;
                     
@@ -213,24 +220,23 @@ namespace hgl
 
                 if(msg_opcode==0xA)OnPong();else
                 if(msg_opcode==0x9)OnPing();else
-                if(msg_opcode==0x8)
-                {
-                    //connection close
-                }
-                else
                 if(msg_opcode>=3
                  &&msg_opcode<=7)
                 {
                 }
                 else
-                if(msg_opcode==2){OnBinary(pack,msg_length,msg_fin);if(!msg_fin)last_opcode=2;else last_opcode=0;}else
-                if(msg_opcode==1){OnText(pack,msg_length,msg_fin);if(!msg_fin)last_opcode=2;else last_opcode=0;}else
+                if(msg_opcode==2){if(msg_length>0)OnBinary(pack,msg_length,msg_fin);if(!msg_fin)last_opcode=2;else last_opcode=0;}else
+                if(msg_opcode==1){if(msg_length>0)OnText(pack,msg_length,msg_fin);if(!msg_fin)last_opcode=2;else last_opcode=0;}else
                 if(msg_opcode==0)
                 {
-                    if(last_opcode==1)
-                        OnText(pack,msg_length,msg_fin);
-                    else
-                        OnBinary(pack,msg_length,msg_fin);
+                    if(msg_length>0)
+                    {
+                        if(last_opcode==1)
+                            OnText(pack,msg_length,msg_fin);
+                        else
+                        if(last_opcode==2)
+                            OnBinary(pack,msg_length,msg_fin);
+                    }
                 }
                 else
                 {
