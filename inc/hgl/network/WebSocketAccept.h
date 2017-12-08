@@ -13,6 +13,13 @@ namespace hgl
         {
         protected:
 
+            MemBlock<uchar> recv_buffer;
+            uint            recv_length=0;
+
+            uint64          recv_total=0;
+
+        protected:
+
             virtual int OnSocketRecv(int) override;                                      ///<Socket接收处理函数
 
             void WebSocketHandshake();
@@ -48,8 +55,8 @@ namespace hgl
 
             virtual void OnPing(){}
             virtual void OnPong(){}
-            virtual bool OnBinary(void *,uint32,bool);
-            virtual bool OnText(char *,uint32,bool);
+            virtual bool OnBinary(void *,uint32,bool)=0;
+            virtual bool OnText(char *,uint32,bool)=0;
             virtual void OnError(){}
         };//class WebSocketAccept:public TCPAccept
     }//namespace network

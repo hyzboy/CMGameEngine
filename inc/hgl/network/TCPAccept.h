@@ -39,16 +39,11 @@ namespace hgl
             SocketInputStream *sis=nullptr;
             SocketOutputStream *sos=nullptr;
 
-            MemBlock<uchar> recv_buffer;
-            uint            recv_length=0;
-
-            uint64          recv_total=0;
-
         protected://事件函数，由SocketManage调用
 
             friend class SocketManage;
 
-            virtual int OnSocketRecv(int);                                      ///<Socket接收处理函数
+            virtual int OnSocketRecv(int)=0;                                    ///<Socket接收处理函数
             virtual int OnSocketSend(int);                                      ///<Socket发送处理函数
             virtual void OnSocketError(int);                                    ///<Socket错误处理函数
 
@@ -56,13 +51,33 @@ namespace hgl
 
         public:
 
-            TCPAccept();                                                        ///<本类构造函数
-            TCPAccept(int,IPAddress *);                                         ///<本类构造函数
+            using TCPSocket::TCPSocket;
             virtual ~TCPAccept();
+
+        };//class TCPAccept:public TCPSocket
+
+        class TCPAcceptPacket:public TCPAccept
+        {
+        protected:
+
+            MemBlock<uchar> recv_buffer;
+            uint            recv_length=0;
+
+            uint64          recv_total=0;
+            
+        protected:
+
+            virtual int OnSocketRecv(int) override;                             ///<Socket接收处理函数
+
+        public:
+            
+            TCPAcceptPacket();                                                  ///<本类构造函数
+            TCPAcceptPacket(int,IPAddress *);                                   ///<本类构造函数
+            virtual ~TCPAcceptPacket()=default;
 
             virtual bool SendPacket(void *,const PACKET_SIZE_TYPE &);           ///<发包
             virtual bool OnRecvPacket(void *,const PACKET_SIZE_TYPE &)=0;       ///<接收包事件函数
-        };//class TCPAccept:public TCPSocket
+        };//class TCPAcceptPacket:public TCPAccept
     }//namespace network
 }//namespace hgl
 #endif//HGL_NETWORK_TCP_ACCEPT_INCLUDE

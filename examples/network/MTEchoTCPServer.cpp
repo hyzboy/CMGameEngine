@@ -6,11 +6,11 @@
 using namespace hgl;
 using namespace hgl::network;
 
-class UserAccept:public TCPAccept
+class UserAccept:public TCPAcceptPacket
 {
 public:
 
-    using TCPAccept::TCPAccept;
+    using TCPAcceptPacket::TCPAcceptPacket;
     ~UserAccept()=default;
 
     bool OnRecvPacket(void *data,const PACKET_SIZE_TYPE &size) override

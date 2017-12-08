@@ -25,6 +25,7 @@ SET(NETWORK_TCP_SERVER_SOURCE
     MultiThreadAccept.cpp
     TCPServer.cpp
     TCPAccept.cpp
+	TCPAcceptPacket.cpp
     SocketManage.cpp
     SocketManageThread.cpp
 )
