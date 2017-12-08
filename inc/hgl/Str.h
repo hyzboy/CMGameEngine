@@ -2148,14 +2148,21 @@ namespace hgl
     * @param src 原始的数据
     * @param size 原始数据字节长度
     * @param hexstr 用于转换的16进制字符
+    * @param gap_char 间隔字符
     */
     template<typename T>
-    void DataToHexStr(T *str,const uint8 *src,const int size,const T *hexstr)
+    void DataToHexStr(T *str,const uint8 *src,const int size,const T *hexstr,const T gap_char=0)
     {
         int i;
 
         for(i=0;i<size;i++)
         {
+            if(i&&gap_char)
+            {
+                *str=gap_char;
+                ++str;
+            }
+
             *str=hexstr[((*src)&0xF0)>>4];
             ++str;
             *str=hexstr[ (*src)&0x0F    ];
@@ -2167,25 +2174,26 @@ namespace hgl
         *str=0;
     }
 
-    template<typename T> void DataToLowerHexStr(T *str,const uint8 *src,const int size){DataToHexStr<T>(str,src,size,LowerHexChar);}
-    template<typename T> void DataToUpperHexStr(T *str,const uint8 *src,const int size){DataToHexStr<T>(str,src,size,UpperHexChar);}
+    template<typename T> void DataToLowerHexStr(T *str,const uint8 *src,const int size,const T gap_char=0){DataToHexStr<T>(str,src,size,LowerHexChar,gap_char);}
+    template<typename T> void DataToUpperHexStr(T *str,const uint8 *src,const int size,const T gap_char=0){DataToHexStr<T>(str,src,size,UpperHexChar,gap_char);}
 
     /**
     * 将一串原始数据转转成16进制数值字符串
     * @param str 16进制数值字符串存入处
     * @param hc 原始的数据
     * @param hexstr 用于转换的16进制字符
+    * @param gap_char 间隔字符
     */
     template<typename T,typename HC>
-    void DataToHexStr(T *str,const HC &hc,const T *hexstr)
+    void DataToHexStr(T *str,const HC &hc,const T *hexstr,const T gap_char=0)
     {
-        return DataToHexStr(str,(const uint8 *)&hc,sizeof(hc),hexstr);
+        return DataToHexStr(str,(const uint8 *)&hc,sizeof(hc),hexstr,gap_char);
     }
 
-    template<typename T,typename HC> void ToUpperHexStr(T *str,const HC &hc){DataToHexStr<T,HC>(str,hc,UpperHexChar);}
-    template<typename T,typename HC> void ToLowerHexStr(T *str,const HC &hc){DataToHexStr<T,HC>(str,hc,LowerHexChar);}
+    template<typename T,typename HC> void ToUpperHexStr(T *str,const HC &hc,const T gap_char=0){DataToHexStr<T,HC>(str,hc,UpperHexChar,gap_char);}
+    template<typename T,typename HC> void ToLowerHexStr(T *str,const HC &hc,const T gap_char=0){DataToHexStr<T,HC>(str,hc,LowerHexChar,gap_char);}
 
-    template<typename T> void ToUpperHexStr(T *str,const void *data,const int size){DataToHexStr<T>(str,(const uint8 *)data,size,UpperHexChar);}
-    template<typename T> void ToLowerHexStr(T *str,const void *data,const int size){DataToHexStr<T>(str,(const uint8 *)data,size,LowerHexChar);}
+    template<typename T> void ToUpperHexStr(T *str,const void *data,const int size,const T gap_char=0){DataToHexStr<T>(str,(const uint8 *)data,size,UpperHexChar,gap_char);}
+    template<typename T> void ToLowerHexStr(T *str,const void *data,const int size,const T gap_char=0){DataToHexStr<T>(str,(const uint8 *)data,size,LowerHexChar,gap_char);}
 }//namespace hgl
 #endif//HGL_STR_TEMPLATE_INCLUDE
