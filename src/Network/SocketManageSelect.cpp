@@ -64,7 +64,7 @@ namespace hgl
 
 				sock_id_list.Delete(sock);
 
-                LOG_INFO(OS_TEXT("Unjoin ")+OSString(sock)+OS_TEXT(" to SocketManageSelect"));
+                LOG_INFO(OS_TEXT("Unjoin ")+OSString(sock)+OS_TEXT(" from SocketManageSelect"));
 
 				return(true);
 			}

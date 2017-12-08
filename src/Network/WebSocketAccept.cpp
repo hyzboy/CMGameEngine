@@ -7,25 +7,14 @@ namespace hgl
 {
     namespace network
     {
-        namespace 
+        //参考工程: https://github.com/katzarsky/WebSocket
+
+        WebSocketAccept::WebSocketAccept():TCPAccept(),recv_buffer(HGL_TCP_BUFFER_SIZE)
         {
-            enum WebSocketFrame
-            {
-                wsfTextIncomplete   =0x1,
-                wsfBinaryIncomplete =0x2,
+        }
 
-                wsfText             =0x81,
-                wsfBinary           =0x82,
-
-                wsfPing             =0x19,
-                wsfPoing            =0x1A,
-
-                wsfOpeing           =0x3300,
-                wsfClosing          =0x3400,
-
-                wsfIncomplete       =0xFE00,
-                wsfError            =0xFF00,
-            };
+        WebSocketAccept::WebSocketAccept(int s,IPAddress *ip):TCPAccept(s,ip),recv_buffer(HGL_TCP_BUFFER_SIZE)
+        {
         }
         
         void WebSocketAccept::WebSocketHandshake()
@@ -47,7 +36,10 @@ namespace hgl
 
                 if(size==0)continue;
                 if(size<0)
+                {
+                    LOG_ERROR(OS_TEXT("WebSocketAccept::WebSocketHandshake() read data error"));
                     break;
+                }
                 
                 recv_total+=size;
                 pos+=size;
@@ -96,15 +88,17 @@ namespace hgl
          */
         int WebSocketAccept::OnSocketRecv(int /*size*/)
         {
+            int total=0;
+
             if(!sis)
             {
                 sis=new SocketInputStream(ThisSocket);
                 recv_total=0;
                 recv_length=0;
                 WebSocketHandshake();
-            }
 
-            int total=0;
+                total+=recv_total;
+            }
 
             while(true)
             {
@@ -123,7 +117,7 @@ namespace hgl
                     int result=sis->Read(recv_buffer.data()+recv_length,msg_header_size-recv_length);
 
                     if(result<0)
-                        return(result);
+                        RETURN_ERROR(result);
 
                     if(result==0)
                         return(total);
@@ -138,11 +132,11 @@ namespace hgl
                 
                 uint8 *p=recv_buffer.data();
 
-                msg_opcode  =p[0]&0xF;
+                msg_opcode  =p[0]&0x7;
                 msg_fin     =(p[0]>>7)&0x1;
                 msg_masked  =(p[1]>>7)&0x1;
                     
-                uint length_field=p[1]&(~0x80);
+                uint length_field=p[1]&0x7F;
 
                 msg_header_size=2;
 
@@ -158,7 +152,7 @@ namespace hgl
                     if(recv_length<msg_header_size)
                         return(total);
 
-                    msg_length=p[2]+(p[3]<<8);
+                    msg_length=ntohs(*(uint16 *)(p+2));
                 }
                 else
                 if(length_field==127)       //64 bit msg_length
@@ -168,7 +162,7 @@ namespace hgl
                     if(recv_length<msg_header_size)
                         return(total);
 
-                    msg_length=p[2]+(p[3]<<8);
+                    msg_length=ntohl(*(uint32 *)(p+2));
                 }
                     
                 msg_full_length=msg_length;
@@ -181,7 +175,7 @@ namespace hgl
                 int result=sis->Read(recv_buffer.data()+recv_length,msg_full_length-(recv_length-msg_header_size));
 
                 if(result<0)
-                    return(result);
+                    RETURN_ERROR(result);
 
                 if(result==0)
                     return total;
@@ -196,15 +190,15 @@ namespace hgl
                 //收完了
 
                 char *pack;
+                
+                p+=msg_header_size;
 
                 if(msg_masked)
-                {
-                    p+=msg_header_size;
-                    pack=(char *)p;
-                        
+                {      
                     uint32 mask=*(uint32 *)p;
 
                     p+=4;
+                    pack=(char *)p;
 
                     for(uint i=0;i<msg_length;i++)
                     {
@@ -214,20 +208,110 @@ namespace hgl
                 }
                 else
                 {
-                    pack=(char *)(p+msg_header_size);
+                    pack=(char *)p;
                 }
 
                 if(msg_opcode==0xA)OnPong();else
                 if(msg_opcode==0x9)OnPing();else
-                if(msg_opcode==2)OnBinary(pack,msg_length,msg_fin);else
-                if(msg_opcode==1
-                 ||msg_opcode==0)OnText(pack,msg_length,msg_fin);
+                if(msg_opcode==0x8)
+                {
+                    //connection close
+                }
                 else
+                if(msg_opcode>=3
+                 &&msg_opcode<=7)
+                {
+                }
+                else
+                if(msg_opcode==2){OnBinary(pack,msg_length,msg_fin);if(!msg_fin)last_opcode=2;else last_opcode=0;}else
+                if(msg_opcode==1){OnText(pack,msg_length,msg_fin);if(!msg_fin)last_opcode=2;else last_opcode=0;}else
+                if(msg_opcode==0)
+                {
+                    if(last_opcode==1)
+                        OnText(pack,msg_length,msg_fin);
+                    else
+                        OnBinary(pack,msg_length,msg_fin);
+                }
+                else
+                {
+                    LOG_PROBLEM(OS_TEXT("WebSocketAccept,opcode error,opcode:")+OSString(msg_opcode)+OS_TEXT(",length:")+OSString(msg_length));
                     OnError();
+                }
 
                 recv_buffer.ClearData();
                 recv_length=0;
             }//while
+        }
+
+        int WebSocketAccept::SendFrame(uint8 opcode,void *msg,uint32 size,bool fin)
+        {
+            uint8 header[14];
+            uint header_size;
+
+            header[0]=opcode&0xF;
+            if(fin)
+                header[0]|=1<<7;
+
+            if(size<=125)
+            {
+                header[1]=size;
+                header_size=2;
+            }
+            else
+            if(size<=65535)
+            {
+                header[1]=126;
+                header[2]=(size&0xFF00)>>8;
+                header[3]= size&0xFF;
+
+                header_size=4;
+            }
+            else
+            {
+                header[1]=127;
+                header[2]=0;
+                header[3]=0;
+                header[4]=0;
+                header[5]=0;
+                header[6]=(size&0xFF000000)>>24;
+                header[7]=(size&0xFF0000)>>16;
+                header[8]=(size&0xFF00)>>8;
+                header[9]= size&0xFF;
+
+                header_size=10;
+            }
+
+            if(!sos)
+                sos=new SocketOutputStream(ThisSocket);
+
+            if(sos->WriteFully(header,header_size)!=header_size)
+                return(-1);
+
+            if(size>0)
+            if(sos->WriteFully(msg,size)!=size)
+                return(-1);
+
+            return header_size+size;
+        }
+
+        bool WebSocketAccept::SendPing()
+        {
+            return SendFrame(0x9,nullptr,0,true,0)>0;
+        }
+
+        bool WebSocketAccept::SendPong()
+        {
+            return SendFrame(0xA,nullptr,0,true,0)>0;
+        }
+
+        bool WebSocketAccept::SendBinary(void *data,uint32 size,bool fin)
+        {
+            return SendFrame(0x2,data,size,fin,0)>0;
+        }
+
+        bool WebSocketAccept::SendText(void *text,uint32 size,bool fin)
+        {
+            return SendFrame(0x1,text,size,fin,0)>0;
         }
     }//namespace network
 }//namespace hgl

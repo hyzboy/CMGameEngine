@@ -2,6 +2,7 @@
 #define HGL_NETWORK_WEBSOCKET_ACCEPT_INCLUDE
 
 #include<hgl/network/TCPAccept.h>
+#include<hgl/type/BaseString.h>
 namespace hgl
 {
     namespace network
@@ -23,6 +24,7 @@ namespace hgl
             virtual int OnSocketRecv(int) override;                                      ///<Socket接收处理函数
 
             void WebSocketHandshake();
+            int SendFrame(uint8,void *,uint32,bool);
 
         protected:
 
@@ -32,6 +34,8 @@ namespace hgl
             uint    msg_header_size;
             uint64  msg_length;
             uint64  msg_full_length;
+
+            uint    last_opcode;
 
         protected: //WebSocket支持
 
@@ -49,8 +53,9 @@ namespace hgl
             }
 
         public:
-
-            using TCPAccept::TCPAccept;
+            
+            WebSocketAccept();                                                  ///<本类构造函数
+            WebSocketAccept(int,IPAddress *);                                   ///<本类构造函数
             virtual ~WebSocketAccept()=default;
 
             virtual void OnPing(){}
@@ -58,6 +63,16 @@ namespace hgl
             virtual bool OnBinary(void *,uint32,bool)=0;
             virtual bool OnText(char *,uint32,bool)=0;
             virtual void OnError(){}
+
+            bool SendPing();
+            bool SendPong();
+            bool SendBinary(void *,uint32,bool=true);
+            bool SendText(void *,uint32,bool=true);
+
+            bool SendText(const UTF8String &str)
+            {
+                return SendText(str.c_str(),str.Length());
+            }
         };//class WebSocketAccept:public TCPAccept
     }//namespace network
 }//namespace hgl

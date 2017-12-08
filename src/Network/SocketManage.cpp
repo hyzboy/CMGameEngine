@@ -32,8 +32,11 @@ namespace hgl
             {
                 if(socket_list.Get(se->sock,sock))
                 {
-                    if(sock->OnSocketRecv(se->error)<=0)
+                    if(sock->OnSocketRecv(se->error)<0)
+                    {
+                        LOG_INFO(OS_TEXT("OnSocketRecv return Error,sock:")+OSString(se->sock));
                         error_list.Add(sock);
+                    }
                 }
                 else
                 {
@@ -59,8 +62,11 @@ namespace hgl
             {
                 if(socket_list.Get(se->sock,sock))
                 {
-                    if(sock->OnSocketSend(se->size)<=0)
+                    if(sock->OnSocketSend(se->size)<0)
+                    {
+                        LOG_INFO(OS_TEXT("OnSocketSend return Error,sock:")+OSString(se->sock));
                         error_list.Add(sock);
+                    }
                 }
                 else
                 {
@@ -86,6 +92,7 @@ namespace hgl
             {
                 if(socket_list.Get(se->sock,sock))
                 {
+                    LOG_INFO(OS_TEXT("SocketError,sock:")+OSString(se->sock)+OS_TEXT(",errno:")+OSString(se->error));
                     sock->OnSocketError(se->error);
                     error_list.Add(sock);
                 }
