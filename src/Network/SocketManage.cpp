@@ -10,7 +10,7 @@ namespace hgl
         {
             manage=CreateSocketManageBase(max_user);
 
-            memory_pool=new MultiLevelMemoryPool(HGL_SIZE_1KB,12);      //12级，最大是4MB了
+            memory_pool=new MultiLevelMemoryPool(HGL_SIZE_1KB,10);      //10级，最大是1MB
         }
 
         SocketManage::~SocketManage()

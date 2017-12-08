@@ -12,7 +12,6 @@ ENDIF()
 
 SET(NETWORK_TCP_COMMON_SOURCE
     TCPSocket.cpp
-    TCPAccept.cpp
     SocketInputStream.cpp
     SocketOutputStream.cpp
 )
