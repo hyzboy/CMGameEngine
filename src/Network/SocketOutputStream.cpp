@@ -31,8 +31,24 @@ namespace hgl
         */
         int64 SocketOutputStream::Write(const void *buf,int64 size)
         {
-            if(sock==-1)return(-1);
-			if(!buf||size<=0)return(-1);
+            if(sock==-1)
+            {
+                LOG_ERROR(OS_TEXT("SocketOutputStream::Write() fatal error,sock=-1"));
+                return(-1);
+            }
+            
+            if(size==0)return(0);
+            if(size<0)
+            {
+                LOG_ERROR(OS_TEXT("SocketOutputStream::Write() fatal error,size<0,sock=")+OSString(sock));
+                return(-3);
+            }
+
+			if(!buf)
+            {
+                LOG_ERROR(OS_TEXT("SocketOutputStream::Write() fatal error,buf=nullptr,sock=")+OSString(sock));
+                return(-2);
+            }
 
             const int64 result=send(sock,(char *)buf,size,0);
 
@@ -61,9 +77,26 @@ namespace hgl
         */
         int64 SocketOutputStream::WriteFully(const void *buf,int64 size)
         {
-            if(sock==-1)return(-1);
-			if(!buf||size<=0)return(-1);
+            if(sock==-1)
+            {
+                LOG_ERROR(OS_TEXT("SocketOutputStream::WriteFully() fatal error,sock=-1"));
+                return(-1);
+            }
 
+            if(size==0)return(0);
+
+            if(size<0)
+            {
+                LOG_ERROR(OS_TEXT("SocketOutputStream::WriteFully() fatal error,size<0,sock=")+OSString(sock));
+                return(-3);
+            }
+
+            if(!buf)
+            {
+                LOG_ERROR(OS_TEXT("SocketOutputStream::WriteFully() fatal error,buf=nullptr,sock=")+OSString(sock));
+                return(-2);
+            }
+            
             int err;
             const os_char *err_str;
             char *p=(char *)buf;
@@ -96,6 +129,7 @@ namespace hgl
                     if(err==0
                      ||err==nseTimeOut
                      ||err==nseTryAgain
+                     ||err==nseWouldBlock
                      ||err==nseInt
                     )
                         continue;

@@ -35,10 +35,12 @@ namespace hgl
 			nseBrokenPipe	=32,		///<管道破裂，一般是因为发送到一半对方断开所引起
 
 #if HGL_OS == HGL_OS_Windows
+            nseWouldBlock   =WSAEWOULDBLOCK,
 			nseSoftwareBreak=WSAECONNABORTED,    ///<我方软件主动断开
 			nsePeerBreak    =WSAECONNRESET,      ///<对方主动断开
 			nseTimeOut		=WSAETIMEDOUT,       ///<超时
 #else
+            nseWouldBlock   =EWOULDBLOCK,
 			nseSoftwareBreak=ECONNABORTED,       ///<我方软件主动断开
 			nsePeerBreak    =ECONNRESET,         ///<对方主动断开
 			nseTimeOut		=ETIMEDOUT,          ///<超时

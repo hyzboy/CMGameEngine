@@ -42,8 +42,24 @@ namespace hgl
         */
         int64 SocketInputStream::Read(void *buf,int64 size)
         {
-            if(sock==-1)return(-1);
-			if(!buf||size<=0)return(-1);
+            if(sock==-1)
+            {
+                LOG_ERROR(OS_TEXT("SocketInputStream::Read() fatal error,sock=-1"));
+                return(-1);
+            }
+            
+            if(size==0)return(0);
+            if(size<0)
+            {
+                LOG_ERROR(OS_TEXT("SocketInputStream::Read() fatal error,size<0,sock=")+OSString(sock));
+                return(-3);
+            }
+
+			if(!buf)
+            {
+                LOG_ERROR(OS_TEXT("SocketInputStream::Read() fatal error,buf=nullptr,sock=")+OSString(sock));
+                return(-2);
+            }
 
             const int64 result=recv(sock,(char *)buf,size,0);
 
@@ -53,11 +69,11 @@ namespace hgl
 
 //                LOG_INFO(OS_TEXT("Socket ")+OSString(sock)+OS_TEXT(" recv ")+OSString(size)+OS_TEXT(" bytes ok,result ")+OSString(result)+OS_TEXT(" total recv ")+OSString(total)+OS_TEXT(" bytes."));
             }
-            else
+            else if(result<0)
             {
                 int err=GetLastSocketError();
 
-                if(err==nseTryAgain)
+                if(err==nseTryAgain||err==nseWouldBlock)
                     return 0;
 
                 LOG_INFO(OS_TEXT("Socket ")+OSString(sock)+OS_TEXT(" recv ")+OSString(size)+OS_TEXT(" bytes failed,error: ")+OSString(err)+OS_TEXT(",")+GetSocketString(err));
@@ -75,8 +91,23 @@ namespace hgl
         */
         int64 SocketInputStream::Peek(void *buf,int64 size)
         {
-            if(sock==-1)return(-1);
-			if(!buf||size<=0)return(-1);
+            if(sock==-1)
+            {
+                LOG_ERROR(OS_TEXT("SocketInputStream::Peek() fatal error,sock=-1"));
+                return(-1);
+            }
+
+			if(!buf)
+            {
+                LOG_ERROR(OS_TEXT("SocketInputStream::Peek() fatal error,buf=nullptr,sock=")+OSString(sock));
+                return(-2);
+            }
+            
+            if(size<=0)
+            {
+                LOG_ERROR(OS_TEXT("SocketInputStream::Peek() fatal error,size<=0,sock=")+OSString(sock));
+                return(-3);
+            }
 
             return recv(sock,(char *)buf,size,MSG_PEEK);
         }
@@ -90,8 +121,24 @@ namespace hgl
         */
         int64 SocketInputStream::ReadFully(void *buf,int64 size)
         {
-            if(sock==-1)return(-1);
-			if(!buf||size<=0)return(-1);
+            if(sock==-1)
+            {
+                LOG_ERROR(OS_TEXT("SocketInputStream::ReadFully() fatal error,sock=-1"));
+                return(-1);
+            }
+            
+            if(size==0)return(0);
+            if(size<0)
+            {
+                LOG_ERROR(OS_TEXT("SocketInputStream::ReadFully() fatal error,size<0,sock=")+OSString(sock));
+                return(-3);
+            }
+
+			if(!buf)
+            {
+                LOG_ERROR(OS_TEXT("SocketInputStream::ReadFully() fatal error,buf=nullptr,sock=")+OSString(sock));
+                return(-2);
+            }
 
             bool to_first=true;
             int err;
@@ -131,7 +178,8 @@ namespace hgl
                     )
                         continue;
 
-                    if(err==nseTryAgain)    //资源临时不可用，仅代表没数据，并不是出错的意思
+                    if(err==nseTryAgain
+                     ||err==nseWouldBlock)    //资源临时不可用，仅代表没数据，并不是出错的意思
                         break;
 
                      if(err==nseTimeOut)        //超时
