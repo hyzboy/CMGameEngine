@@ -296,22 +296,22 @@ namespace hgl
 
         bool WebSocketAccept::SendPing()
         {
-            return SendFrame(0x9,nullptr,0,true,0)>0;
+            return SendFrame(0x9,nullptr,0,true)>0;
         }
 
         bool WebSocketAccept::SendPong()
         {
-            return SendFrame(0xA,nullptr,0,true,0)>0;
+            return SendFrame(0xA,nullptr,0,true)>0;
         }
 
         bool WebSocketAccept::SendBinary(void *data,uint32 size,bool fin)
         {
-            return SendFrame(0x2,data,size,fin,0)>0;
+            return SendFrame(0x2,data,size,fin)>0;
         }
 
         bool WebSocketAccept::SendText(void *text,uint32 size,bool fin)
         {
-            return SendFrame(0x1,text,size,fin,0)>0;
+            return SendFrame(0x1,text,size,fin)>0;
         }
     }//namespace network
 }//namespace hgl
