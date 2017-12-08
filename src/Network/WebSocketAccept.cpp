@@ -99,13 +99,12 @@ namespace hgl
             if(!sis)
             {
                 sis=new SocketInputStream(ThisSocket);
+                recv_total=0;
                 recv_length=0;
+                WebSocketHandshake();
             }
 
             int total=0;
-
-            if(recv_total==0)       //第一次，进行WebSocket握手
-                WebSocketHandshake();
 
             while(true)
             {

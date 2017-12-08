@@ -25,6 +25,7 @@ namespace hgl
             if(!sis)
             {
                 sis=new SocketInputStream(ThisSocket);
+                recv_total=0;
                 recv_length=0;
             }
 
