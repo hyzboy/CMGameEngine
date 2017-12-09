@@ -40,6 +40,45 @@ namespace hgl
 
             #define FBTCP_MSG_MAP(ns,cn,mn) FB_MSG_MAP(msg_proc,tmp_proc,ns,cn,mn)
         }//namespace fb
+
+        //使用范例
+        //
+        //class UserAccept:public fb::FBTCPAccept
+        //{
+        //public:
+        //
+        //    UserAccept(int s,IPAddress *ip):FBTCPAccept(s,ip,c2zNone,c2zEnd)
+        //    {           //                                      ^      ^
+        //                //                                      |      |
+        //                //                                      |      +----------结束消息
+        //                //                                      +-----------------起始消息
+        //                //                                   +--------------------名字空间
+        //                //                                   |      +-------------消息处类名称
+        //                //                                   |      |        +----消息名称
+        //                //                                   |      |        |
+        //                //                                   v      v        v
+        //        #define USER_MSG_MAP(name)    FBTCP_MSG_MAP(c2z,UserAccept,name)
+        //
+        //        //定义消息映射
+        //
+        //        USER_MSG_MAP(Login)
+        //        USER_MSG_MAP(Move)
+        //    }
+        //
+        //    ~UserAccept()=default;
+        //
+        //    bool OnProcLogin(const c2z::Login *pack)
+        //    {
+        //
+        //        return(true);
+        //    }
+        //
+        //    bool OnProcMove(const c2z::Move *pack)
+        //    {
+        //
+        //        return(true);
+        //    }
+        //};//class UserAccept:public fb::FBTCPAccept
     }//namespace serialize
 }//namespace hgl
 #endif//HGL_SERIALIZE_FLAT_BUFFERS_TCP_ACCEPT_INCLUDE
