@@ -12,6 +12,8 @@ OPTION(BUILD_SCRIPT_DEVIL       "Build Script DevilScript"                  FALS
 
 OPTION(BUILD_NETWORK_SCTP		"Include SCTP Support"						FALSE	)
 OPTION(BUILD_NETWORK_UDP_LITE   "Include UDP-Lite Support"                  FALSE   )
+OPTION(BUILD_NETWORK_WEBSOCKET  "Include WebSocket Support"                 FALSE   )
+
 OPTION(BUILD_QT5_SUPPORT_LIB	"Build QT5 Support Library"					FALSE	)
 OPTION(BUILD_EXAMPLES_PROJECT	"Build Examples Project"					FALSE	)
 OPTION(BUILD_TEST_PROJECT		"Build Test Project"						FALSE	)
@@ -73,9 +75,13 @@ ENDIF()
 
 SET(HGL_BASE_LIB CM.Base CM.UT)
 
+IF(BUILD_NETWORK_WEBSOCKET)
+    SET(BUILD_ALGORITHM ON)
+ENDIF()
+
 IF(BUILD_ALGORITHM)
     SET(HGL_BASE_LIB ${HGL_BASE_LIB} CM.Algorithm)
-ENDIF(BUILD_ALGORITHM)
+ENDIF()
 
 IF(BUILD_DATABASE)
     SET(HGL_BASE_LIB ${HGL_BASE_LIB} CM.Database)
