@@ -98,12 +98,8 @@ namespace hgl
 
             #undef STREAM_READ
 
-            template<> bool ReadNumber<int8>(int8 &value){return ReadInt8(value);}
-            template<> bool ReadNumber<uint8>(uint8 &value){return ReadUint8(value);}
-
             #define STREAM_READ(type,name)  virtual bool Read##name(type &)=0;  \
-                                            virtual int64 Read##name(type *,const int64)=0; \
-                                            template<> bool ReadNumber<type>(type &value){return Read##name(value);}
+                                            virtual int64 Read##name(type *,const int64)=0;
 
             STREAM_READ(int16,      Int16   );
             STREAM_READ(int32,      Int32   );
@@ -182,7 +178,7 @@ namespace hgl
             virtual bool ReadUTF8String         (UTF8String &,  uint max_len=0);                    ///<读取utf8格式字符串(前缀四字节的字符串字节长度)
             virtual bool ReadUTF8String         (UTF16String &, uint max_len=0);                    ///<读取utf8格式字符串(前缀四字节的字符串字节长度)
 
-            virtual bool ReadUTF16LEString      (u16char *,     uint max_len=0);    
+            virtual bool ReadUTF16LEString      (u16char *,     uint max_len=0);
             virtual bool ReadUTF16BEString      (u16char *,     uint max_len=0);
 
             virtual bool ReadUTF16LEString      (UTF16String &, uint max_len=0);                    ///<读取utf16-le格式字符串(前缀四字节的字符串字节长度)
@@ -192,7 +188,7 @@ namespace hgl
             virtual bool ReadUTF8ShortString    (char *,        uint max_len=0);
             virtual bool ReadUTF8ShortString    (UTF8String &,  uint max_len=0);                    ///<读取utf8格式字符串(前缀四字节的字符串字节长度)
             virtual bool ReadUTF8ShortString    (UTF16String &, uint max_len=0);                    ///<读取utf8格式字符串(前缀四字节的字符串字节长度)
-            
+
             virtual bool ReadUTF16LEShortString (u16char *,     uint max_len=0);
             virtual bool ReadUTF16BEShortString (u16char *,     uint max_len=0);
 
@@ -203,13 +199,32 @@ namespace hgl
             virtual bool ReadUTF8TinyString     (char *,        uint max_len=0);
             virtual bool ReadUTF8TinyString     (UTF8String &,  uint max_len=0);                    ///<读取utf8格式字符串(前缀四字节的字符串字节长度)
             virtual bool ReadUTF8TinyString     (UTF16String &, uint max_len=0);                    ///<读取utf8格式字符串(前缀四字节的字符串字节长度)
-            
+
             virtual bool ReadUTF16LETinyString  (u16char *,     uint max_len=0);
             virtual bool ReadUTF16BETinyString  (u16char *,     uint max_len=0);
 
             virtual bool ReadUTF16LETinyString  (UTF16String &, uint max_len=0);                    ///<读取utf16-le格式字符串(前缀四字节的字符串字节长度)
             virtual bool ReadUTF16BETinyString  (UTF16String &, uint max_len=0);                    ///<读取utf16-be格式字符串(前缀四字节的字符串字节长度)
         };//class DataInputStream
+
+        template<> bool inline DataInputStream::ReadNumber<int8>(int8 &value){return ReadInt8(value);}
+        template<> bool inline DataInputStream::ReadNumber<uint8>(uint8 &value){return ReadUint8(value);}
+
+        #define DIS_READ_NUMBER(type,name) template<> bool inline DataInputStream::ReadNumber<type>(type &value){return Read##name(value);}
+
+        DIS_READ_NUMBER(int16,      Int16   );
+        DIS_READ_NUMBER(int32,      Int32   );
+        DIS_READ_NUMBER(int64,      Int64   );
+
+        DIS_READ_NUMBER(uint16,     Uint16  );
+        DIS_READ_NUMBER(uint32,     Uint32  );
+        DIS_READ_NUMBER(uint64,     Uint64  );
+
+        DIS_READ_NUMBER(u16char,    UTF16Char);
+        DIS_READ_NUMBER(float,      Float   );
+        DIS_READ_NUMBER(double,     Double  );
+
+        #undef DIS_READ_NUMBER
     }//namespace io
 }//namespace hgl
 #include<hgl/io/EndianDataInputStream.h>

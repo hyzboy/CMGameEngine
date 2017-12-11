@@ -63,7 +63,7 @@ namespace hgl
             virtual int64   Tell        ()const{return out?out->Tell        ():-1;}                 ///<返回当前访问位置
             virtual int64   GetSize     ()const{return out?out->GetSize     ():-1;}                 ///<取得流长度
             virtual int64   Available   ()const{return out?out->Available   ():-1;}                 ///<剩下的可以不受阻塞写入的字节数
-            
+
             template<typename T> bool WriteNumber(const T &value);
 
             #define STREAM_WRITE(type,name) virtual bool Write##name(const type &value) \
@@ -86,12 +86,8 @@ namespace hgl
 
             #undef STREAM_WRITE
 
-            template<> bool WriteNumber<int8>(const int8 &value){return WriteInt8(value);}
-            template<> bool WriteNumber<uint8>(const uint8 &value){return WriteUint8(value);}
-
             #define STREAM_WRITE(type,name) virtual bool Write##name(const type &)=0;   \
-                                            virtual int64 Write##name(const type *,const int64)=0;  \
-                                            template<> bool WriteNumber<type>(const type &value){return Write##name(value);}
+                                            virtual int64 Write##name(const type *,const int64)=0;
 
             STREAM_WRITE(int16,     Int16   );
             STREAM_WRITE(int32,     Int32   );
@@ -145,8 +141,8 @@ namespace hgl
             template<typename T> bool WriteUTF16BEChars     (const BaseString<T> &str){return WriteUTF16BEChars (str.c_str(),str.Length());}
 
             template<typename T> bool WriteUTF8StringWithLength (const char *str,const uint length);
-            template<typename T> bool WriteUTF8StringWithLength (const UTF16String &str);            
-            
+            template<typename T> bool WriteUTF8StringWithLength (const UTF16String &str);
+
             template<uchar C,typename T> bool WriteUTF16StringWithLength(const u16char *str,const uint len);
 
         public:
@@ -205,6 +201,25 @@ namespace hgl
             bool WriteUTF16LETinyString (const UTF8String &str      ){return WriteUTF16LETinyString(to_u16(str));}  ///<按utf16-le格式写入字符串(前置1字节字符串长度,再写入字符阵列)
             bool WriteUTF16BETinyString (const UTF8String &str      ){return WriteUTF16BETinyString(to_u16(str));}  ///<按utf16-be格式写入字符串(前置1字节字符串长度,再写入字符阵列)
         };//class DataOutputStream
+
+        template<> bool inline DataOutputStream::WriteNumber<int8>(const int8 &value){return WriteInt8(value);}
+        template<> bool inline DataOutputStream::WriteNumber<uint8>(const uint8 &value){return WriteUint8(value);}
+
+        #define DOS_WRITE_NUMBER(type,name) template<> bool inline DataOutputStream::WriteNumber<type>(const type &value){return Write##name(value);}
+
+        DOS_WRITE_NUMBER(int16,     Int16   );
+        DOS_WRITE_NUMBER(int32,     Int32   );
+        DOS_WRITE_NUMBER(int64,     Int64   );
+
+        DOS_WRITE_NUMBER(uint16,    Uint16  );
+        DOS_WRITE_NUMBER(uint32,    Uint32  );
+        DOS_WRITE_NUMBER(uint64,    Uint64  );
+
+        DOS_WRITE_NUMBER(u16char,   UTF16Char);
+        DOS_WRITE_NUMBER(float,     Float   );
+        DOS_WRITE_NUMBER(double,    Double  );
+
+        #undef DOS_WRITE_NUMBER
     }//namespace io
 }//namespace hgl
 #include<hgl/io/EndianDataOutputStream.h>

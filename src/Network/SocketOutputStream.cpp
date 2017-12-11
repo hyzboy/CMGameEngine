@@ -36,7 +36,7 @@ namespace hgl
                 LOG_ERROR(OS_TEXT("SocketOutputStream::Write() fatal error,sock=-1"));
                 return(-1);
             }
-            
+
             if(size==0)return(0);
             if(size<0)
             {
@@ -96,7 +96,7 @@ namespace hgl
                 LOG_ERROR(OS_TEXT("SocketOutputStream::WriteFully() fatal error,buf=nullptr,sock=")+OSString(sock));
                 return(-2);
             }
-            
+
             int err;
             const os_char *err_str;
             char *p=(char *)buf;
@@ -128,7 +128,6 @@ namespace hgl
 
                     if(err==0
                      ||err==nseTimeOut
-                     ||err==nseTryAgain
                      ||err==nseWouldBlock
                      ||err==nseInt
                     )
@@ -165,7 +164,7 @@ namespace hgl
 
             return(p-(char *)buf);
         }
-		
+
 		int64 SocketOutputStream::Available()const
 		{
 			int send_buf_size=0;
