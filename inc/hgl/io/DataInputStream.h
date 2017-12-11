@@ -168,17 +168,38 @@ namespace hgl
 				return data;
 			}
 
-			virtual bool ReadUTF16LEChars(u16char *,int);											///<读取utf16-le格式字符阵列到u16char *
-			virtual bool ReadUTF16BEChars(u16char *,int);											///<读取utf16-be格式字符阵列到u16char *
+			virtual bool ReadUTF16LEChars(u16char *,uint);											///<读取utf16-le格式字符阵列到u16char *
+			virtual bool ReadUTF16BEChars(u16char *,uint);											///<读取utf16-be格式字符阵列到u16char *
 
-			virtual bool ReadUTF8String(char *,int max_len=0);
-			virtual bool ReadUTF16LEString(u16char *,int max_len=0);
-			virtual bool ReadUTF16BEString(u16char *,int max_len=0);
+            //32bit str-length
+			virtual bool ReadUTF8String(char *,uint max_len=0);
+			virtual bool ReadUTF16LEString(u16char *,uint max_len=0);
+			virtual bool ReadUTF16BEString(u16char *,uint max_len=0);
 
-			virtual bool ReadUTF8String(UTF8String &,int max_len=0);								///<读取utf8格式字符串(前缀四字节的字符串字节长度)
-			virtual bool ReadUTF8String(UTF16String &,int max_len=0);								///<读取utf8格式字符串(前缀四字节的字符串字节长度)
-			virtual bool ReadUTF16LEString(UTF16String &,int max_len=0);							///<读取utf16-le格式字符串(前缀四字节的字符串字节长度)
-			virtual bool ReadUTF16BEString(UTF16String &,int max_len=0);							///<读取utf16-be格式字符串(前缀四字节的字符串字节长度)
+			virtual bool ReadUTF8String(UTF8String &,uint max_len=0);								///<读取utf8格式字符串(前缀四字节的字符串字节长度)
+			virtual bool ReadUTF8String(UTF16String &,uint max_len=0);								///<读取utf8格式字符串(前缀四字节的字符串字节长度)
+			virtual bool ReadUTF16LEString(UTF16String &,uint max_len=0);							///<读取utf16-le格式字符串(前缀四字节的字符串字节长度)
+			virtual bool ReadUTF16BEString(UTF16String &,uint max_len=0);							///<读取utf16-be格式字符串(前缀四字节的字符串字节长度)
+
+            //16bit str-length
+            virtual bool ReadUTF8ShortString(char *,uint max_len=0);
+			virtual bool ReadUTF16LEShortString(u16char *,uint max_len=0);
+			virtual bool ReadUTF16BEShortString(u16char *,uint max_len=0);
+
+            virtual bool ReadUTF8ShortString(UTF8String &,uint max_len=0);							///<读取utf8格式字符串(前缀四字节的字符串字节长度)
+			virtual bool ReadUTF8ShortString(UTF16String &,uint max_len=0);							///<读取utf8格式字符串(前缀四字节的字符串字节长度)
+			virtual bool ReadUTF16LEShortString(UTF16String &,uint max_len=0);						///<读取utf16-le格式字符串(前缀四字节的字符串字节长度)
+			virtual bool ReadUTF16BEShortString(UTF16String &,uint max_len=0);						///<读取utf16-be格式字符串(前缀四字节的字符串字节长度)
+
+            //8bit str-length
+            virtual bool ReadUTF8TinyString(char *,uint max_len=0);
+			virtual bool ReadUTF16LETinyString(u16char *,uint max_len=0);
+			virtual bool ReadUTF16BETinyString(u16char *,uint max_len=0);
+
+            virtual bool ReadUTF8TinyString(UTF8String &,uint max_len=0);							///<读取utf8格式字符串(前缀四字节的字符串字节长度)
+			virtual bool ReadUTF8TinyString(UTF16String &,uint max_len=0);							///<读取utf8格式字符串(前缀四字节的字符串字节长度)
+			virtual bool ReadUTF16LETinyString(UTF16String &,uint max_len=0);						///<读取utf16-le格式字符串(前缀四字节的字符串字节长度)
+			virtual bool ReadUTF16BETinyString(UTF16String &,uint max_len=0);						///<读取utf16-be格式字符串(前缀四字节的字符串字节长度)
 		};//class DataInputStream
 	}//namespace io
 }//namespace hgl
