@@ -1,4 +1,4 @@
-#ifndef HGL_TYPE_ZERO_COPY_NUMBER_INCLUDE
+﻿#ifndef HGL_TYPE_ZERO_COPY_NUMBER_INCLUDE
 #define HGL_TYPE_ZERO_COPY_NUMBER_INCLUDE
 
 #include<hgl/type/DataType.h>
@@ -42,16 +42,14 @@ namespace hgl
             T       operator %  (T v){return((*value_pointer)%v);}
             T       operator &  (T v){return((*value_pointer)&v);}
             T       operator |  (T v){return((*value_pointer)|v);}
-            T       operator ~  (T v){return((*value_pointer)~v);}
 
-            void    operator += (T v){(*value_pointer)+=v);}
-            void    operator -= (T v){(*value_pointer)-=v);}
-            void    operator *= (T v){(*value_pointer)*=v);}
-            void    operator /= (T v){(*value_pointer)/=v);}
-            void    operator %= (T v){(*value_pointer)%=v);}
-            void    operator &= (T v){(*value_pointer)&=v);}
-            void    operator |= (T v){(*value_pointer)|=v);}
-            void    operator ~= (T v){(*value_pointer)~=v);}
+            void    operator += (T v){(*value_pointer)+=v;}
+            void    operator -= (T v){(*value_pointer)-=v;}
+            void    operator *= (T v){(*value_pointer)*=v;}
+            void    operator /= (T v){(*value_pointer)/=v;}
+            void    operator %= (T v){(*value_pointer)%=v;}
+            void    operator &= (T v){(*value_pointer)&=v;}
+            void    operator |= (T v){(*value_pointer)|=v;}
 
             T       operator ++ (int){return((*value_pointer)++);}                           		///<后置++
             T       operator -- (int){return((*value_pointer)--);}                           		///<后置--
@@ -59,13 +57,13 @@ namespace hgl
             T       operator ++ ()   {return(++(*value_pointer));}                             	///<前置++
             T       operator -- ()   {return(--(*value_pointer));}                             	///<前置--
 
-            bool    operator >  (T v){return((*value_pointer)> v);}
-            bool    operator >= (T v){return((*value_pointer)>=v);}
-            bool    operator <  (T v){return((*value_pointer)< v);}
-            bool    operator <= (T v){return((*value_pointer)<=v);}
+            bool    operator >  (const T & v){return((*value_pointer)> v);}
+            bool    operator >= (const T & v){return((*value_pointer)>=v);}
+            bool    operator <  (const T & v){return((*value_pointer)< v);}
+            bool    operator <= (const T & v){return((*value_pointer)<=v);}
 
-            bool    operator == (T v){return((*value_pointer)==v);}
-            bool    operator != (T v){return((*value_pointer)!=v);}
+            bool    operator == (const T &v){return((*value_pointer)==v);}
+            bool    operator != (const T &v){return((*value_pointer)!=v);}
         };//template<typename T> class ZCNumber
 
         using ZCChar    =ZCNumber<char>;
