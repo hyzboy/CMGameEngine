@@ -27,7 +27,7 @@ namespace hgl
                 size=s;
             }
 
-            virtual ~ConstString()=default;
+            virtual ~ZCString()=default;
 
             template<typename L> void *FromStreamString(void *raw)
             {

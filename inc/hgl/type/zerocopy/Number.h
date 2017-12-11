@@ -2,7 +2,7 @@
 #define HGL_TYPE_ZERO_COPY_NUMBER_INCLUDE
 
 #include<hgl/type/DataType.h>
-namepsace hgl
+namespace hgl
 {
     namespace zerocopy
     {
@@ -24,7 +24,7 @@ namepsace hgl
 
             void *FromStream(void *p)
             {
-                value_pointer=p;
+                value_pointer=(T *)p;
 
                 return(((char *)p)+sizeof(T));
             }
@@ -40,11 +40,18 @@ namepsace hgl
             T       operator *  (T v){return((*value_pointer)*v);}
             T       operator /  (T v){return((*value_pointer)/v);}
             T       operator %  (T v){return((*value_pointer)%v);}
+            T       operator &  (T v){return((*value_pointer)&v);}
+            T       operator |  (T v){return((*value_pointer)|v);}
+            T       operator ~  (T v){return((*value_pointer)~v);}
 
             void    operator += (T v){(*value_pointer)+=v);}
             void    operator -= (T v){(*value_pointer)-=v);}
             void    operator *= (T v){(*value_pointer)*=v);}
             void    operator /= (T v){(*value_pointer)/=v);}
+            void    operator %= (T v){(*value_pointer)%=v);}
+            void    operator &= (T v){(*value_pointer)&=v);}
+            void    operator |= (T v){(*value_pointer)|=v);}
+            void    operator ~= (T v){(*value_pointer)~=v);}
 
             T       operator ++ (int){return((*value_pointer)++);}                           		///<后置++
             T       operator -- (int){return((*value_pointer)--);}                           		///<后置--

@@ -54,11 +54,18 @@ namespace hgl
 		T operator * (T v){return(GetValue()*v);}
 		T operator / (T v){return(GetValue()/v);}
 		T operator % (T v){return(GetValue()%v);}
+        T operator & (T v){return(GetValue()&v);}
+        T operator | (T v){return(GetValue()|v);}
+        T operator ~ (T v){return(GetValue()~v);}
 
 		void operator += (T v){SetValue(GetValue()+v);}
 		void operator -= (T v){SetValue(GetValue()-v);}
 		void operator *= (T v){SetValue(GetValue()*v);}
 		void operator /= (T v){SetValue(GetValue()/v);}
+        void operator %= (T v){SetValue(GetValue()%v);}
+        void operator &= (T v){SetValue(GetValue()&v);}
+        void operator |= (T v){SetValue(GetValue()|v);}
+        void operator ~= (T v){SetValue(GetValue()~v);}
 
 		T operator ++ (int) {T r=GetValue();SetValue(r+1);return(r);}                           		///<后置++
 		T operator -- (int) {T r=GetValue();SetValue(r-1);return(r);}                           		///<后置--
