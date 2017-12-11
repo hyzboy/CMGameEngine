@@ -29,7 +29,6 @@ namespace hgl
 			nseInt			=4,			///<系统中断呼叫，一般出现在Debug时的人工中断
 			nseIOError		=5,			///<I/O错误
 
-			nseTryAgain		=11,		///<请再次尝试
 			nseTooManyLink	=24,		///<太多连接
 
 			nseBrokenPipe	=32,		///<管道破裂，一般是因为发送到一半对方断开所引起
@@ -40,7 +39,7 @@ namespace hgl
 			nsePeerBreak    =WSAECONNRESET,      ///<对方主动断开
 			nseTimeOut		=WSAETIMEDOUT,       ///<超时
 #else
-            nseWouldBlock   =EWOULDBLOCK,
+            nseWouldBlock   =EWOULDBLOCK,        ///<请再次尝试(EAGIN/EWOULDBLACK值是一样的)
 			nseSoftwareBreak=ECONNABORTED,       ///<我方软件主动断开
 			nsePeerBreak    =ECONNRESET,         ///<对方主动断开
 			nseTimeOut		=ETIMEDOUT,          ///<超时
