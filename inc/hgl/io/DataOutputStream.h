@@ -129,24 +129,29 @@ namespace hgl
 				return WriteFully(data,count*sizeof(T))/sizeof(T);
 			}
 
-			template<typename T> bool WriteUTF8Chars		(const T *str,int64 count);							///<按utf8格式写入字符阵列
-			template<typename T> bool WriteUTF16LEChars		(const T *str,int64 count);							///<按utf16-le格式写入字符阵列
-			template<typename T> bool WriteUTF16BEChars		(const T *str,int64 count);							///<按utf16-be格式写入字符阵列
+			template<typename T> bool WriteUTF8Chars		(const T *str,uint count);							///<按utf8格式写入字符阵列
+			template<typename T> bool WriteUTF16LEChars		(const T *str,uint count);							///<按utf16-le格式写入字符阵列
+			template<typename T> bool WriteUTF16BEChars		(const T *str,uint count);							///<按utf16-be格式写入字符阵列
 
 			template<typename T> bool WriteUTF8Chars		(const BaseString<T> &str){return WriteUTF8Chars	(str.c_str(),str.Length());}
 			template<typename T> bool WriteUTF16LEChars		(const BaseString<T> &str){return WriteUTF16LEChars	(str.c_str(),str.Length());}
 			template<typename T> bool WriteUTF16BEChars		(const BaseString<T> &str){return WriteUTF16BEChars	(str.c_str(),str.Length());}
 
-			bool WriteUTF8String	(const char *,int32=-1);
-			bool WriteUTF8String	(const UTF8String &str){return WriteUTF8String(str.c_str(),str.Length());}	///<按utf8格式写入字符串(前置4字节字符串长度,再写入字符阵列)
-			bool WriteUTF16LEString	(const UTF8String &str);							///<按utf16-le格式写入字符串(前置4字节字符串长度,再写入字符阵列)
-			bool WriteUTF16BEString	(const UTF8String &str);							///<按utf16-be格式写入字符串(前置4字节字符串长度,再写入字符阵列)
+			bool WriteUTF8String	(const char *,uint);
+			bool WriteUTF16LEString	(const UTF8String &str);							                        ///<按utf16-le格式写入字符串(前置4字节字符串长度,再写入字符阵列)
+			bool WriteUTF16BEString	(const UTF8String &str);							                        ///<按utf16-be格式写入字符串(前置4字节字符串长度,再写入字符阵列)
 
-			bool WriteUTF16LEString	(const u16char *,int32=-1);							///<按utf16-le格式写入字符串(前置4字节字符串长度,再写入字符阵列)
-			bool WriteUTF16BEString	(const u16char *,int32=-1);							///<按utf16-be格式写入字符串(前置4字节字符串长度,再写入字符阵列)
-			bool WriteUTF8String	(const UTF16String &str);							///<按utf8格式写入字符串(前置4字节字符串长度,再写入字符阵列)
-			bool WriteUTF16LEString	(const UTF16String &str);							///<按utf16-le格式写入字符串(前置4字节字符串长度,再写入字符阵列)
-			bool WriteUTF16BEString	(const UTF16String &str);							///<按utf16-be格式写入字符串(前置4字节字符串长度,再写入字符阵列)
+            bool WriteUTF8String	(const char *str){return WriteUTF8String(str,hgl::strlen(str));}
+			bool WriteUTF8String	(const UTF8String &str){return WriteUTF8String(str.c_str(),str.Length());}	///<按utf8格式写入字符串(前置4字节字符串长度,再写入字符阵列)
+
+			bool WriteUTF16LEString	(const u16char *,uint);							                            ///<按utf16-le格式写入字符串(前置4字节字符串长度,再写入字符阵列)
+			bool WriteUTF16BEString	(const u16char *,uint);							                            ///<按utf16-be格式写入字符串(前置4字节字符串长度,再写入字符阵列)
+			bool WriteUTF8String	(const UTF16String &str);							                        ///<按utf8格式写入字符串(前置4字节字符串长度,再写入字符阵列)
+			bool WriteUTF16LEString	(const UTF16String &str);							                        ///<按utf16-le格式写入字符串(前置4字节字符串长度,再写入字符阵列)
+			bool WriteUTF16BEString	(const UTF16String &str);							                        ///<按utf16-be格式写入字符串(前置4字节字符串长度,再写入字符阵列)
+
+            bool WriteUTF16LEString	(const u16char *str){return WriteUTF16LEString(str,hgl::strlen(str));}		///<按utf16-le格式写入字符串(前置4字节字符串长度,再写入字符阵列)
+            bool WriteUTF16BEString	(const u16char *str){return WriteUTF16BEString(str,hgl::strlen(str));}		///<按utf16-be格式写入字符串(前置4字节字符串长度,再写入字符阵列)
 		};//class DataOutputStream
 	}//namespace io
 }//namespace hgl

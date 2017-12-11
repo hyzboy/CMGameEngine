@@ -5,7 +5,7 @@ namespace hgl
 {
     namespace io    // write utf8 chars
     {
-        template<> bool DataOutputStream::WriteUTF8Chars<char>        (const char *str,int64 size)
+        template<> bool DataOutputStream::WriteUTF8Chars<char>        (const char *str,uint size)
         {
             if(!out)return(false);
             if(size==0)return(true);
@@ -15,7 +15,7 @@ namespace hgl
             return(WriteArrays(str,size)==size);
         }
 
-        template<> bool DataOutputStream::WriteUTF8Chars<u16char>    (const u16char *str,int64 size)
+        template<> bool DataOutputStream::WriteUTF8Chars<u16char>    (const u16char *str,uint size)
         {
             if(!out)return(false);
             if(size==0)return(true);
@@ -28,17 +28,13 @@ namespace hgl
 
     namespace io    //write utf8 string
     {
-        bool DataOutputStream::WriteUTF8String(const char *str,int32 length)
+        bool DataOutputStream::WriteUTF8String(const char *str,uint length)
         {
             if(!out)return(false);
 
-            if(length==-1)
-                length=strlen(str);
-
-            if(length<0)return(false);
             if(length&&!str)return(false);
 
-            if(!WriteInt32(length))
+            if(!WriteUint32(length))
                 return(false);
 
             if(length<=0)
@@ -51,10 +47,10 @@ namespace hgl
         {
             if(!out)return(false);
 
-            int32 utf8_count;
+            int utf8_count;
             char *utf8_str=u16_to_u8(str.c_str(),str.Length(),utf8_count);
 
-            if(!WriteInt32(utf8_count))
+            if(!WriteUint32(utf8_count))
                 return(false);
 
             if(utf8_count<=0)
@@ -67,7 +63,7 @@ namespace hgl
     namespace io    //write utf16 chars
     {
         template<char T>        //非特例化版本，用于需要swap的
-        bool WriteUTF16Chars(DataOutputStream *dos,const u16char *str,int64 count)
+        bool WriteUTF16Chars(DataOutputStream *dos,const u16char *str,uint count)
         {
             SharedArray<u16char> swap_str=new u16char[count];
 
@@ -77,7 +73,7 @@ namespace hgl
         }
 
         template<>                //特例化版本，用于直接写入的
-        bool WriteUTF16Chars<HGL_ENDIAN>(DataOutputStream *dos,const u16char *str,int64 count)
+        bool WriteUTF16Chars<HGL_ENDIAN>(DataOutputStream *dos,const u16char *str,uint count)
         {
             return(dos->WriteArrays(str,count)==count);
         }
@@ -85,7 +81,7 @@ namespace hgl
 
     namespace io    //write utf16-le chars
     {
-        template<> bool DataOutputStream::WriteUTF16LEChars<char>(const char *str,int64 length)
+        template<> bool DataOutputStream::WriteUTF16LEChars<char>(const char *str,uint length)
         {
             if(length==0)return(true);
             if(!out||!str||!*str||length<0)return(false);
@@ -95,7 +91,7 @@ namespace hgl
             return WriteUTF16Chars<HGL_LITTLE_ENDIAN>(this,u16_str.c_str(),u16_str.Length());
         }
 
-        template<> bool DataOutputStream::WriteUTF16LEChars<u16char>(const u16char *str,int64 length)
+        template<> bool DataOutputStream::WriteUTF16LEChars<u16char>(const u16char *str,uint length)
         {
             if(length==0)return(true);
             if(!out||!str||!*str||length<0)return(false);
@@ -106,7 +102,7 @@ namespace hgl
 
     namespace io    //write utf16-be chars
     {
-        template<> bool DataOutputStream::WriteUTF16BEChars<char>(const char *str,int64 length)
+        template<> bool DataOutputStream::WriteUTF16BEChars<char>(const char *str,uint length)
         {
             if(length==0)return(true);
             if(!out||!str||!*str||length<0)return(false);
@@ -116,7 +112,7 @@ namespace hgl
             return WriteUTF16Chars<HGL_BIG_ENDIAN>(this,u16_str.c_str(),u16_str.Length());
         }
 
-        template<> bool DataOutputStream::WriteUTF16BEChars<u16char>(const u16char *str,int64 length)
+        template<> bool DataOutputStream::WriteUTF16BEChars<u16char>(const u16char *str,uint length)
         {
             if(length==0)return(true);
             if(!out||!str||!*str||length<0)return(false);
@@ -132,21 +128,12 @@ namespace hgl
             return WriteUTF16LEString(to_u16(str));
         }
 
-        bool DataOutputStream::WriteUTF16LEString(const u16char *str,int32 len)
+        bool DataOutputStream::WriteUTF16LEString(const u16char *str,uint len)
         {
-            if(!out)return(false);
+            if(!out)return(false);            
+            if(len&&!str)return(false);
 
-            if(!str)
-            {
-                len=0;
-            }
-            else
-            {
-                if(len<0)
-                    len=hgl::strlen(str);
-            }
-
-            if(!WriteInt32(len))
+            if(!WriteUint32(len))
                 return(false);
 
             if(len<=0)return(true);
@@ -169,21 +156,12 @@ namespace hgl
             return WriteUTF16BEString(to_u16(str));
         }
 
-        bool DataOutputStream::WriteUTF16BEString(const u16char *str,int32 len)
+        bool DataOutputStream::WriteUTF16BEString(const u16char *str,uint len)
         {
             if(!out)return(false);
+            if(len&&!str)return(false);
 
-            if(!str)
-            {
-                len=0;
-            }
-            else
-            {
-                if(len<0)
-                    len=hgl::strlen(str);
-            }
-
-            if(!WriteInt32(len))
+            if(!WriteUint32(len))
                 return(false);
 
             if(len<=0)return(true);
