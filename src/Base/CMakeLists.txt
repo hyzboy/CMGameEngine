@@ -46,13 +46,11 @@ SOURCE_GROUP("DataType" FILES ${BASE_TYPE_SOURCE})
 
 SET(BASE_IO_SOURCE
     IO/FileOutputStream.cpp
-    IO/JavaOutputStream.cpp
     IO/RandomAccessFile.cpp
     IO/DataOutputStream.cpp
     IO/FileInputStream.cpp
     IO/DataInputStream.cpp
     IO/FileAccess.cpp
-    IO/JavaInputStream.cpp
     IO/TextOutputStream.cpp
     IO/DataDistribute.cpp
     IO/IOType.cpp)
