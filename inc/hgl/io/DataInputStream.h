@@ -76,6 +76,8 @@ namespace hgl
 			virtual int64	GetSize		()const{return in?in->GetSize	():-1;}						///<取得流长度
 			virtual int64	Available	()const{return in?in->Available	():-1;}						///<剩下的可以不受阻塞读取的字节数
 
+            template<typename T> bool ReadNumber(T &value);
+
 			#define STREAM_READ(type,name)	virtual bool Read##name(type &value)	\
 											{	\
 												return Read(value);	\
@@ -96,8 +98,12 @@ namespace hgl
 
 			#undef STREAM_READ
 
+            template<> bool ReadNumber<int8>(int8 &value){return ReadInt8(value);}
+            template<> bool ReadNumber<uint8>(uint8 &value){return ReadUint8(value);}
+
 			#define STREAM_READ(type,name)	virtual bool Read##name(type &)=0;	\
-											virtual int64 Read##name(type *,const int64)=0;
+											virtual int64 Read##name(type *,const int64)=0; \
+                                            template<> bool ReadNumber<type>(type &value){return Read##name(value);}
 
 			STREAM_READ(int16,		Int16	);
 			STREAM_READ(int32,		Int32	);

@@ -37,15 +37,6 @@ namespace hgl
             return ReadUTF16Chars<HGL_BIG_ENDIAN>(u16str,this,count);
         }
 
-        namespace
-        {
-            template<typename T> bool ReadNumber(DataInputStream *dis,T &num);
-
-            template<> bool ReadNumber<uint8 >(DataInputStream *dis,uint8  &num){return dis->ReadUint8 (num);}
-            template<> bool ReadNumber<uint16>(DataInputStream *dis,uint16 &num){return dis->ReadUint16(num);}
-            template<> bool ReadNumber<uint32>(DataInputStream *dis,uint32 &num){return dis->ReadUint32(num);}
-        }
-
         template<typename T>
         bool ReadUTF8String(char *buf,uint max_len,DataInputStream *dis)
         {
@@ -54,7 +45,7 @@ namespace hgl
 
             T str_len;
 
-            if(!ReadNumber<T>(dis,str_len))
+            if(!dis->ReadNumber<T>(str_len))
                 return(false);
 
             if(str_len<=0)
@@ -94,7 +85,7 @@ namespace hgl
             
             T str_len;
 
-            if(!ReadNumber<T>(dis,str_len))
+            if(!dis->ReadNumber<T>(str_len))
                 return(false);
 
             if(str_len==0)
@@ -129,7 +120,7 @@ namespace hgl
             
             T str_len;
 
-            if(!ReadNumber<T>(dis,str_len))
+            if(!dis->ReadNumber<T>(str_len))
                 return(false);
 
             if(str_len==0)
@@ -170,7 +161,7 @@ namespace hgl
 
             T count;
 
-            if(!ReadNumber<T>(dis,count))
+            if(!dis->ReadNumber<T>(count))
                 return(false);
 
             if(count<=0)
@@ -216,7 +207,7 @@ namespace hgl
 
             T count;
             
-            if(!ReadNumber<T>(dis,count))
+            if(!dis->ReadNumber<T>(count))
                 return(false);
 
             if(count<0)
