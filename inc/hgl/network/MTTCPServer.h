@@ -130,6 +130,11 @@ namespace hgl
                 return(true);
             }
 
+            int IsLive()
+            {
+                return(sock_manage.IsLive()+accept_manage.IsLive());
+            }
+
             bool Wait(const double &time_out=HGL_NETWORK_TIME_OUT)
             {
                 WaitTime(time_out);
@@ -140,7 +145,9 @@ namespace hgl
                 if(live_s+live_s<=0)
                     return(false);
 
+#ifdef _DEBUG
                 std::cout<<"live accept thread "<<live_a<<", sock thread: "<<live_s<<std::endl;
+#endif//_DEBUG
 
                 return(true);
             }

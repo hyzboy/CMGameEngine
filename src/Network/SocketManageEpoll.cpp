@@ -77,6 +77,8 @@ namespace hgl
 
                 ++cur_count;
 
+                LOG_INFO(OS_TEXT("SocketManageEpoll::Join() Socket:")+OSString(sock));
+
                 return(true);
             }
 
