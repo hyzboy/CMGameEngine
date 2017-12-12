@@ -7,7 +7,7 @@
 		return QString::fromWCharArray(ws.c_str(),ws.Length());
 	}
 
-	inline QString ToQString(const wchar_t *str,int size){return QString::fromUtf16((ushort *)str,size);}
+	inline QString toQString(const wchar_t *str,int size){return QString::fromWCharArray(str,size);}
 #else
 	template<int WS> QString WCharToQString(const wchar_t *,int);
 
