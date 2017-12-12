@@ -121,9 +121,9 @@ namespace hgl
                 return(true);
             }
 
-            bool Wait()
+            bool Wait(const double &time_out=HGL_NETWORK_TIME_OUT)
             {
-                WaitTime(5);        //每5秒测一下线程是否还活着
+                WaitTime(time_out);
 
                 const int live_s=sock_manage.IsLive();
                 const int live_a=accept_manage.IsLive();
