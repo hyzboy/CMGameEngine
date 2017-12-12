@@ -69,15 +69,15 @@ namespace hgl
 
         public:
 
-            virtual AcceptSocketList &JoinBegin(){return join_list.GetPost();}    ///<开始添加要接入的Socket对象
-            virtual void            JoinEnd()                                   ///<结束添加要接入的Socket对象
+            virtual AcceptSocketList &  JoinBegin(){return join_list.GetPost();}    ///<开始添加要接入的Socket对象
+            virtual void                JoinEnd()                                   ///<结束添加要接入的Socket对象
             {
                 join_list.ReleasePost();
                 join_list.PostSem();
             }
 
-            virtual AcceptSocketList &UnjoinBegin(){return unjoin_list.GetPost();}///<开始添加要退出的Socket对象
-            virtual void            UnjoinEnd()                                 ///<结束添加要退出的Socket对象
+            virtual AcceptSocketList &  UnjoinBegin(){return unjoin_list.GetPost();}///<开始添加要退出的Socket对象
+            virtual void                UnjoinEnd()                                 ///<结束添加要退出的Socket对象
             {
                 unjoin_list.ReleasePost();
                 unjoin_list.PostSem();

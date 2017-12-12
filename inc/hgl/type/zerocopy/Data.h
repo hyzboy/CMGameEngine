@@ -16,9 +16,9 @@ namespace hgl
                 data_pointer=nullptr;
             }
 
-            ZCData(T *d)
+            ZCData(void *d)
             {
-                data_pointer=d;
+                data_pointer=(T *)d;
             }
 
             void *FromStream(void *p)
