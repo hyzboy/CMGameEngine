@@ -54,6 +54,16 @@ namespace hgl
             MultiThreadAccept<Accept2SocketManageThread>    accept_manage;
             MultiThreadManage<SocketManageThread>           sock_manage;
 
+        protected:
+
+            virtual SocketManageThread *CreateSocketManageThread(int max_user)
+            {
+                SocketManage *sm=new SocketManage(max_user);
+                SocketManageThread *smt=new SocketManageThread(sm);
+
+                return smt;
+            }
+
         public:
 
             /**
@@ -99,8 +109,7 @@ namespace hgl
                 {
                     Accept2SocketManageThread *at=accept_manage.GetAcceptThread(i);
 
-                    SocketManage *sm=new SocketManage(info.max_user);
-                    SocketManageThread *smt=new SocketManageThread(sm);
+                    SocketManageThread *smt=CreateSocketManageThread(info.max_user);
 
                     at->SetSocketManage(smt);
 
