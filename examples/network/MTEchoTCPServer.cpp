@@ -56,8 +56,8 @@ HGL_CONSOLE_MAIN(sii,app,args)
     if(!server_ip)
         return(-2);
 
-    MTTCPServer<UserAccept> server;
-    MTTCPServer<UserAccept>::InitInfomation info;
+    MTTCPServerStd<UserAccept> server;
+    MTTCPServerStd<UserAccept>::InitInfomation info;
 
     info.server_ip=server_ip;
     info.thread_count=1;

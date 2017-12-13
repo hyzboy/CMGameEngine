@@ -152,6 +152,9 @@ namespace hgl
                 return(true);
             }
         };//template<typename USER_ACCEPT,typename SOCKET_MANAGE_THREAD> class MTTCPServer
+        
+        template<typename USER_ACCEPT> 
+        using MTTCPServerStd=MTTCPServer<USER_ACCEPT,SocketManageThread<USER_ACCEPT>>;
     }//namespace network
 }//namespace hgl
 #endif//HGL_NETWORK_MULTI_THREAD_TCP_SERVER_INCLUDE

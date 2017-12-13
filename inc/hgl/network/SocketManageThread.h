@@ -57,7 +57,7 @@ namespace hgl
                 AcceptSocketList &usl=join_list.GetReceive();
 
                 const int count=usl.GetCount();
-                TCPAccept **us=usl.GetData();
+                USER_ACCEPT **us=usl.GetData();
 
                 for(int i=0;i<count;i++)
                 {
@@ -76,7 +76,7 @@ namespace hgl
                 AcceptSocketList &usl=unjoin_list.GetReceive();
 
                 const int count=usl.GetCount();
-                TCPAccept **us=usl.GetData();
+                USER_ACCEPT **us=usl.GetData();
 
                 for(int i=0;i<count;i++)
                 {
