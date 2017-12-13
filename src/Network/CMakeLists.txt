@@ -27,7 +27,6 @@ SET(NETWORK_TCP_SERVER_SOURCE
     TCPAccept.cpp
 	TCPAcceptPacket.cpp
     SocketManage.cpp
-    SocketManageThread.cpp
 )
 
 SET(NETWORK_SCTP_SOURCE
