@@ -11,11 +11,11 @@ namespace hgl
         /**
          * 简单的Socket管理器线程
          */
-        class SocketManageThread:public Thread
+        template<typename USER_ACCEPT> class SocketManageThread:public Thread
         {
         public:
 
-            using AcceptSocketList=List<TCPAccept *>;                           ///<工作对象列表定义
+            using AcceptSocketList=List<USER_ACCEPT *>;                           ///<工作对象列表定义
 
         protected:
 
@@ -26,7 +26,7 @@ namespace hgl
             SemSwapData<AcceptSocketList> join_list;                            ///<待添加的Socket对象列表
             SemSwapData<AcceptSocketList> unjoin_list;                          ///<待移出的Socket对象列表
 
-            virtual void ClearUserSocket(TCPAccept *us)
+            virtual void ClearUserSocket(USER_ACCEPT *us)
             {
                 delete us;
             }
@@ -35,7 +35,7 @@ namespace hgl
             void ClearAcceptSocketList(ST &sl)
             {
                 const int count=sl.GetCount();
-                TCPAccept **us=sl.GetData();
+                USER_ACCEPT **us=sl.GetData();
 
                 for(int i=0;i<count;i++)
                 {
@@ -46,8 +46,8 @@ namespace hgl
                 sl.ClearData();
             }
 
-            bool Join(TCPAccept *us){return sock_manage->Join(us);}             ///<单个工作对象接入处理函数
-            bool Unjoin(TCPAccept *us){return sock_manage->Unjoin(us);}         ///<单个工作对象退出处理函数
+            virtual bool Join(USER_ACCEPT *us){return sock_manage->Join(us);}     ///<单个工作对象接入处理函数
+            virtual bool Unjoin(USER_ACCEPT *us){return sock_manage->Unjoin(us);} ///<单个工作对象退出处理函数
 
             void ProcJoinList();                                                ///<处理要接入的工作对象列表
             void ProcUnjoinList();                                              ///<处理要退出的工作对象列表
@@ -82,7 +82,7 @@ namespace hgl
                 unjoin_list.ReleasePost();
                 unjoin_list.PostSem();
             }
-        };//template<typename TCPAccept> class SocketManageThread:public Thread
+        };//template<typename USER_ACCEPT> class SocketManageThread:public Thread
     }//namespace network
 }//namespace hgl
 #endif//HGL_NETWORK_SOCKET_MANAGE_THREAD_INCLUDE

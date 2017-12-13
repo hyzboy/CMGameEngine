@@ -11,19 +11,19 @@ namespace hgl
 {
     namespace network
     {
-        template<typename USER_ACCEPT> class MTTCPServer
+        template<typename USER_ACCEPT,typename SOCKET_MANAGE_THREAD> class MTTCPServer
         {
         protected:
 
             class Accept2SocketManageThread:public AcceptThread
             {
-                SocketManageThread *sm_thread;
+                SOCKET_MANAGE_THREAD *sm_thread;
 
             public:
 
                 using AcceptThread::AcceptThread;
 
-                void SetSocketManage(SocketManageThread *smt)
+                void SetSocketManage(SOCKET_MANAGE_THREAD *smt)
                 {
                     sm_thread=smt;
                 }
@@ -52,14 +52,14 @@ namespace hgl
             TCPServer                                       server;
 
             MultiThreadAccept<Accept2SocketManageThread>    accept_manage;
-            MultiThreadManage<SocketManageThread>           sock_manage;
+            MultiThreadManage<SOCKET_MANAGE_THREAD>           sock_manage;
 
         protected:
 
-            virtual SocketManageThread *CreateSocketManageThread(int max_user)
+            virtual SOCKET_MANAGE_THREAD *CreateSocketManageThread(int max_user)
             {
                 SocketManage *sm=new SocketManage(max_user);
-                SocketManageThread *smt=new SocketManageThread(sm);
+                SOCKET_MANAGE_THREAD *smt=new SOCKET_MANAGE_THREAD(sm);
 
                 return smt;
             }
@@ -109,7 +109,7 @@ namespace hgl
                 {
                     Accept2SocketManageThread *at=accept_manage.GetAcceptThread(i);
 
-                    SocketManageThread *smt=CreateSocketManageThread(info.max_user);
+                    SOCKET_MANAGE_THREAD *smt=CreateSocketManageThread(info.max_user);
 
                     at->SetSocketManage(smt);
 
@@ -151,7 +151,7 @@ namespace hgl
 
                 return(true);
             }
-        };//template<typename USER_ACCEPT> class MTTCPServer
+        };//template<typename USER_ACCEPT,typename SOCKET_MANAGE_THREAD> class MTTCPServer
     }//namespace network
 }//namespace hgl
 #endif//HGL_NETWORK_MULTI_THREAD_TCP_SERVER_INCLUDE
