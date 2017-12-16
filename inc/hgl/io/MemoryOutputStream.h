@@ -107,7 +107,7 @@ namespace hgl
 				return(true);
 			}
 
-			void Close()
+			void Close() override
 			{
 				if(buf)
 				{
@@ -127,7 +127,7 @@ namespace hgl
 				buf_size=0;
 			}
 
-			int64 Write(const void *ptr,int64 size)
+			int64 Write(const void *ptr,int64 size) override
 			{
 				if(!ptr||size<0)
 					return(-1);
@@ -165,17 +165,17 @@ namespace hgl
 				return size;
 			}
 
-			bool	CanRestart()const{return true;}
-			bool	CanSeek()const{return true;}
-			bool	CanSize()const{return true;}
+			bool	CanRestart()const override{return true;}
+			bool	CanSeek()const override{return true;}
+			bool	CanSize()const override{return true;}
 
-			bool	Restart()
+			bool	Restart() override
 			{
 				cur_pos=0;
 				return(true);
 			}
 
-			int64	Seek(int64 off,SeekOrigin so=soBegin)
+			int64	Seek(int64 off,SeekOrigin so=soBegin) override
 			{
 				if(!CanSeek())return(-1);
 
@@ -196,17 +196,17 @@ namespace hgl
 				return cur_pos;
 			}
 
-			int64	Tell()const
+			int64	Tell()const override
 			{
 				return cur_pos;
 			}
 
-			int64	GetSize()const
+			int64	GetSize()const override
 			{
 				return buf_size;
 			}
 
-			int64	Available()const
+			int64	Available()const override
 			{
 				return buf_size-cur_pos;
 			}
