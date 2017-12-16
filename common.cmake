@@ -160,7 +160,7 @@ IF(CMAKE_COMPILER_IS_GNUCC OR MINGW)
 	ENDIF()
 
 	IF(NO_RTTI)
-        add_compile_options(-fno-rtti)
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
     ENDIF(NO_RTTI)
 
     if(X86_USE_CPU_COMMAND STREQUAL AVX)
