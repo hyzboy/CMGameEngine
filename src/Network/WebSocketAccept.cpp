@@ -225,7 +225,27 @@ namespace hgl
                 {
                 }
                 else
-                if(msg_opcode==2){if(msg_length>0)OnBinary(pack,msg_length,msg_fin);if(!msg_fin)last_opcode=2;else last_opcode=0;}else
+                if(msg_opcode==2)
+                {
+                    if(msg_length>0)
+                    {                        
+                    #ifdef _DEBUG
+                        data_out_str.SetLength(msg_length*3);
+
+                        DataToLowerHexStr(data_out_str.data(),(uint8 *)pack,msg_length,',');
+
+                        LOG_INFO(U8_TEXT("WebSocket[")+UTF8String(ThisSocket)+U8_TEXT("] Recv binary [")+UTF8String(msg_length)+U8_TEXT("]: ")+UTF8String(data_out_str.data()));
+                    #endif//_DEBUG
+
+                        OnBinary(pack,msg_length,msg_fin);
+                    }
+                    
+                    if(!msg_fin)
+                        last_opcode=2;
+                    else 
+                        last_opcode=0;
+                }
+                else
                 if(msg_opcode==1){if(msg_length>0)OnText(pack,msg_length,msg_fin);if(!msg_fin)last_opcode=2;else last_opcode=0;}else
                 if(msg_opcode==0)
                 {
