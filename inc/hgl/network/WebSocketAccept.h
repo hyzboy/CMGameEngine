@@ -12,6 +12,9 @@ namespace hgl
          */
         class WebSocketAccept:public TCPAccept
         {
+        #ifdef _DEBUG
+            MemBlock<char> data_out_str;
+        #endif//_DEBUG
         protected:
 
             MemBlock<uchar> recv_buffer;

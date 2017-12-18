@@ -311,7 +311,15 @@ namespace hgl
         }
 
         bool WebSocketAccept::SendBinary(void *data,uint32 size,bool fin)
-        {
+        {            
+        #ifdef _DEBUG
+            data_out_str.SetLength(size*3);
+
+            DataToLowerHexStr(data_out_str.data(),(uint8 *)data,size,',');
+
+            LOG_INFO(U8_TEXT("WebSocket[")+UTF8String(ThisSocket)+U8_TEXT("] Send binary [")+UTF8String(size)+U8_TEXT("]: ")+UTF8String(data_out_str.data()));
+        #endif//_DEBUG
+
             return SendFrame(0x2,data,size,fin)>0;
         }
 
