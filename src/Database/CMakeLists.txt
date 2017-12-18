@@ -54,7 +54,6 @@ IF(DATABASE_INCLUDE_MySQL)
         SQL/MySQLField.cpp
         SQL/MySQLRow.cpp
         SQL/MySQLStoreResult.cpp
-        SQL/SQLDriver.cpp
         )
 
     SOURCE_GROUP("MySQL" FILES ${MYSQL_FILES})
