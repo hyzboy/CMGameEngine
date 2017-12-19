@@ -5,7 +5,7 @@
 #include<hgl/type/List.h>
 #include<hgl/type/FixedList.h>
 #include<hgl/db/FieldDesc.h>
-#include<hgl/MemBlock.h>
+#include<hgl/type/MemBlock.h>
 namespace hgl
 {
 	namespace io

@@ -28,7 +28,14 @@ namespace hgl
 
             virtual void ClearUserSocket(USER_ACCEPT *us)
             {
+                if(!us)return;
+
                 delete us;
+            }
+
+            virtual void OnSocketError(USER_ACCEPT *us)
+            {
+                ClearUserSocket(us);
             }
 
             template<typename ST>
@@ -121,7 +128,16 @@ namespace hgl
                 if(unjoin_list.TrySemSwap())
                     ProcUnjoinList();
 
-                sock_manage->Update(0.1);         //这里写0.1秒，只是为了不卡住主轮循。未来要将epoll(recv)完全独立一个线程跑
+                sock_manage->Update(0.1);         //这里写0.1秒，只是为了不卡住主轮循。这是个错误的设计，未来要将epoll(recv)完全独立一个线程跑
+
+                const auto &error_set=sock_manage->GetErrorSocketSet();
+                auto **us=error_set.GetData();
+
+                for(int i=0;i<error_set.GetCount();i++)
+                {
+                    OnSocketError(*us);
+                    ++us;
+                }
                 return(true);
             }
 

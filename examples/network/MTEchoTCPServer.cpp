@@ -13,6 +13,11 @@ public:
     using TCPAcceptPacket::TCPAcceptPacket;
     ~UserAccept()=default;
 
+    void OnSocketError(int err_no) override
+    {
+        std::cout<<"socket error,errno:"<<err_no<<std::endl;
+    }
+
     bool OnRecvPacket(void *data,const PACKET_SIZE_TYPE &size) override
     {
         std::string str((char *)data,size);

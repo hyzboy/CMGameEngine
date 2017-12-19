@@ -22,7 +22,7 @@ namespace hgl
          */
 
         using PACKET_SIZE_TYPE=uint32;                                          ///<描述包长度的数据类型
-        constexpr uint PACKET_SIZE_TYPE_BYTES=sizeof(uint32);                   ///<描述包长度的数据类型的字节长度
+        constexpr uint PACKET_SIZE_TYPE_BYTES=sizeof(PACKET_SIZE_TYPE);         ///<描述包长度的数据类型的字节长度
 
         class SocketInputStream;
         class SocketOutputStream;
@@ -44,8 +44,8 @@ namespace hgl
             friend class SocketManage;
 
             virtual int OnSocketRecv(int)=0;                                    ///<Socket接收处理函数
-            virtual int OnSocketSend(int);                                      ///<Socket发送处理函数
-            virtual void OnSocketError(int);                                    ///<Socket错误处理函数
+            virtual int OnSocketSend(int){return 0;}                            ///<Socket发送处理函数
+            virtual void OnSocketError(int)=0;                                  ///<Socket错误处理函数
 
                     bool Send(void *,const uint);                               ///<发送原始数据
 

@@ -34,7 +34,7 @@ namespace hgl
                             sock_send_list,
                             sock_error_list;
 
-            Set<TCPAccept *> error_list;
+            Set<TCPAccept *> error_set;
 
         protected:
 
@@ -43,6 +43,10 @@ namespace hgl
             void ProcSocketErrorList();
 
             void ProcErrorList();
+
+        public:
+
+            const Set<TCPAccept *> &GetErrorSocketSet(){return error_set;}     ///<获取错误SOCKET合集
 
         public:
 
@@ -55,6 +59,10 @@ namespace hgl
                     bool Unjoin(TCPAccept *s);
                      int Unjoin(TCPAccept **s_list,int count);
 
+            /**
+             * 刷新所有操作(删除错误Socket,轮循可用Socket，发送，接收<br>
+             * 需要注意的是，Update中轮循到的错误/关闭Socket列表，将在下一次Update时清除。所以在每次调用Update后，请调用GetErrorSocketSet获取错误Socket合集并处理出错Socket
+             */
             virtual  int Update(const double &time_out=HGL_NETWORK_TIME_OUT);
 
             virtual void Clear();

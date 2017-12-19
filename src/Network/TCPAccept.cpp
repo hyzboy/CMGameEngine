@@ -15,15 +15,6 @@ namespace hgl
             SAFE_CLEAR(sis);
         }
 
-        int TCPAccept::OnSocketSend(int /*size*/)
-        {
-            return 0;
-        }
-
-        void TCPAccept::OnSocketError(int error_no)
-        {
-        }
-
         bool TCPAccept::Send(void *data,const uint size)
         {
             if(!data)return(false);

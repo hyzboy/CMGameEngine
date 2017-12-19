@@ -35,7 +35,7 @@ namespace hgl
                     if(sock->OnSocketRecv(se->error)<0)
                     {
                         LOG_INFO(OS_TEXT("OnSocketRecv return Error,sock:")+OSString(se->sock));
-                        error_list.Add(sock);
+                        error_set.Add(sock);
                     }
                 }
                 else
@@ -65,7 +65,7 @@ namespace hgl
                     if(sock->OnSocketSend(se->size)<0)
                     {
                         LOG_INFO(OS_TEXT("OnSocketSend return Error,sock:")+OSString(se->sock));
-                        error_list.Add(sock);
+                        error_set.Add(sock);
                     }
                 }
                 else
@@ -94,7 +94,7 @@ namespace hgl
                 {
                     LOG_INFO(OS_TEXT("SocketError,sock:")+OSString(se->sock)+OS_TEXT(",errno:")+OSString(se->error));
                     sock->OnSocketError(se->error);
-                    error_list.Add(sock);
+                    error_set.Add(sock);
                 }
                 else
                 {
@@ -109,11 +109,11 @@ namespace hgl
 
         void SocketManage::ProcErrorList()
         {
-            const int count=error_list.GetCount();
+            const int count=error_set.GetCount();
 
             if(count<=0)return;
 
-            TCPAccept **sp=error_list.GetData();
+            TCPAccept **sp=error_set.GetData();
 
             for(int i=0;i<count;i++)
             {
@@ -121,7 +121,7 @@ namespace hgl
                 ++sp;
             }
 
-            error_list.ClearData();
+            error_set.ClearData();
         }
 
         bool SocketManage::Join(TCPAccept *s)
@@ -192,17 +192,18 @@ namespace hgl
 
         int SocketManage::Update(const double &time_out)
         {
+            // 将ProcErrorList放在最前面是为了在每次Update后，保留error_set给外面的调用者用。
+            ProcErrorList();            //因为这里仅仅是将Socket从列表中移除，并没有删掉。
+            error_set.ClearData();
+
             const int count=manage->Update(time_out,sock_recv_list,sock_send_list,sock_error_list);
 
             if(count<=0)
                 return(count);
 
-            error_list.ClearData();
-
             ProcSocketSendList();       //这是上一帧的，所以先发。未来可能考虑改成另建一批线程发送
             ProcSocketRecvList();
             ProcSocketErrorList();
-            ProcErrorList();
 
             return count;
         }

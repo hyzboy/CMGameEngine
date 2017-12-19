@@ -11,6 +11,9 @@ namespace hgl
 {
     namespace network
     {
+        /**
+         * 多线程TCP服务器
+         */
         template<typename USER_ACCEPT,typename SOCKET_MANAGE_THREAD> class MTTCPServer
         {
         protected:
@@ -52,7 +55,7 @@ namespace hgl
             TCPServer                                       server;
 
             MultiThreadAccept<Accept2SocketManageThread>    accept_manage;
-            MultiThreadManage<SOCKET_MANAGE_THREAD>           sock_manage;
+            MultiThreadManage<SOCKET_MANAGE_THREAD>         sock_manage;
 
         protected:
 
