@@ -42,6 +42,8 @@ public:
     }
 };//class UserAccept:public TCPAccept
 
+using GameServer=MTTCPServerStd<UserAccept>;
+
 HGL_CONSOLE_MAIN(sii,app,args)
 {
     sii.info.ProjectName=U8_TEXT("多线程Echo TCP服务器");
@@ -61,8 +63,8 @@ HGL_CONSOLE_MAIN(sii,app,args)
     if(!server_ip)
         return(-2);
 
-    MTTCPServerStd<UserAccept> server;
-    MTTCPServerStd<UserAccept>::InitInfomation info;
+    GameServer server;
+    GameServer::InitInfomation info;
 
     info.server_ip=server_ip;
     info.thread_count=1;

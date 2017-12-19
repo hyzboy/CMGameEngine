@@ -26,8 +26,8 @@ namespace hgl
             SemSwapData<AcceptSocketList> join_list;                            ///<待添加的Socket对象列表
             SemSwapData<AcceptSocketList> unjoin_list;                          ///<待移出的Socket对象列表
 
-            virtual void ClearUserSocket(USER_ACCEPT *us)=0;
-            virtual void OnSocketError(USER_ACCEPT *us)=0;
+            virtual void OnSocketClear(USER_ACCEPT *us){delete us;}             ///<Socket清理事件
+            virtual void OnSocketError(USER_ACCEPT *us){OnSocketClear(us);}     ///<Socket出错处理事件
 
             template<typename ST>
             void ClearAcceptSocketList(ST &sl)
@@ -37,7 +37,7 @@ namespace hgl
 
                 for(int i=0;i<count;i++)
                 {
-                    ClearUserSocket(*us);
+                    OnSocketClear(*us);
                     ++us;
                 }
 
