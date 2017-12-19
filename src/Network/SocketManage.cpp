@@ -121,7 +121,7 @@ namespace hgl
                 ++sp;
             }
 
-            error_set.ClearData();
+            //error_set不在这里ClearData，在主循环的一开始，参见那里的注释
         }
 
         bool SocketManage::Join(TCPAccept *s)
@@ -192,8 +192,7 @@ namespace hgl
 
         int SocketManage::Update(const double &time_out)
         {
-            // 将ProcErrorList放在最前面是为了在每次Update后，保留error_set给外面的调用者用。
-            ProcErrorList();            //因为这里仅仅是将Socket从列表中移除，并没有删掉。
+            //将error_set放在这里，是为了保留它给外面的调用者使用
             error_set.ClearData();
 
             const int count=manage->Update(time_out,sock_recv_list,sock_send_list,sock_error_list);
@@ -204,6 +203,7 @@ namespace hgl
             ProcSocketSendList();       //这是上一帧的，所以先发。未来可能考虑改成另建一批线程发送
             ProcSocketRecvList();
             ProcSocketErrorList();
+            ProcErrorList();            //这里仅仅是将Socket从列表中移除，并没有删掉。
 
             return count;
         }
