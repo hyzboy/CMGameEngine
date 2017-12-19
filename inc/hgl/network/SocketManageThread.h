@@ -122,7 +122,7 @@ namespace hgl
                 sock_manage->Update(0.1);         //这里写0.1秒，只是为了不卡住主轮循。这是个错误的设计，未来要将epoll(recv)完全独立一个线程跑
 
                 const auto &error_set=sock_manage->GetErrorSocketSet();
-                UserAccept **us=(UserAccept **)error_set.GetData();
+                USER_ACCEPT **us=(USER_ACCEPT **)error_set.GetData();
 
                 for(int i=0;i<error_set.GetCount();i++)
                 {
