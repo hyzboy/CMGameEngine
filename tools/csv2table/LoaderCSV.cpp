@@ -34,9 +34,9 @@ public:
 
         if(record_count<1)return(false);
 
-        ParseFieldName(&name_list,        sl[0]);    //解析字段名称
-        ParseFieldData(&typename_list,    sl[1]);    //解析字段类型
-        ParseFieldType(type_list,typename_list);
+        ParseFieldName(&name_list,      sl[0]);         //解析字段名称
+        ParseFieldData(&typename_list,  sl[1]);         //解析字段类型
+        ParseFieldType(type_list,       typename_list);
 
         use_col_count=(name_list.GetCount()>typename_list.GetCount()?typename_list.GetCount():name_list.GetCount());
 

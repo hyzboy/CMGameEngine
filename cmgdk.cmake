@@ -15,9 +15,19 @@ OPTION(BUILD_NETWORK_UDP_LITE   "Include UDP-Lite Support"                  FALS
 OPTION(BUILD_NETWORK_WEBSOCKET  "Include WebSocket Support"                 FALSE   )
 
 OPTION(BUILD_QT5_SUPPORT_LIB	"Build QT5 Support Library"					FALSE	)
+
+OPTION(BUILD_TOOLS              "Build Tools"                               FALSE   )
+
+IF(BUILD_TOOLS)
+    OPTION(BUILD_GUI_TOOLS		"Build GUI Tools"							FALSE	)
+
+    IF(BUILD_GUI_TOOLS)
+        SET(BUILD_QT5_SUPPORT_LIB TRUE)
+    ENDIF()
+ENDIF()
+
 OPTION(BUILD_EXAMPLES_PROJECT	"Build Examples Project"					FALSE	)
 OPTION(BUILD_TEST_PROJECT		"Build Test Project"						FALSE	)
-OPTION(BUILD_GUI_TOOLS			"Build GUI Tools"							FALSE	)
 
 OPTION(BUILD_OpenCart           "Build OpenCart Tools"                      FALSE   )
 OPTION(LOG_CDB_LOADER_LOG		"Output CDBLoader log"						FALSE	)
