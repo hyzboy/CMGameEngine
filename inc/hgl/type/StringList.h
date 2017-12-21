@@ -326,7 +326,7 @@ namespace hgl
         return count;
     }//int SplitToStringList
 
-    template<typename T> int SplitToStringList(StringList<BaseString<T> > &sl,const BaseString<T> &str,const T &split_char)
+    template<typename T> int SplitToStringListFromString(StringList<BaseString<T> > &sl,const BaseString<T> &str,const T &split_char)
     {
         return SplitToStringList<T>(sl,str.c_str(),str.Length(),split_char);
     }
