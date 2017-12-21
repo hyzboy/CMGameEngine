@@ -5,6 +5,8 @@
 using namespace hgl;
 using namespace hgl::filesystem;
 
+static UTF8StringList ext_list;
+
 static bool japanese_hw2fw=false;
 static bool english_fw2hw=false;
 static bool sub_folder=false;
@@ -15,7 +17,7 @@ static CharSet out_charset;
 
 EnumFileConfig *ConvertSubFolderConfig(struct EnumFileConfig *efc,const OSString &sub_folder_name)
 {
-    if(sub_folder_name.GetBeginChar()=='.')return(nullptr);
+    if(sub_folder_name.GetBeginChar()=='.')return(nullptr);         //跳过第一个字符为.的目录
 
     return DefaultCreateSubConfig(efc,sub_folder_name);
 }
@@ -35,6 +37,8 @@ HGL_CONSOLE_MAIN_FUNC()
     std::cout<<"(C)1997-2017 Copyright. Offical Web:www.hyzgame.com.cn"<<std::endl;
     std::cout<<std::endl;
 
+    LoadStringListFromTextFile(ext_list,OS_TEXT("TextEncodingConvert.config"),UTF8CharSet);
+
     if(args.GetCount()<5)
     {
         std::cout<<" option:"<<std::endl;
@@ -45,7 +49,14 @@ HGL_CONSOLE_MAIN_FUNC()
         std::cout<<std::endl;
         std::cout<<" Format:  TextEncodingConvert [-jh|-bl|-sf] -in <shift_jis|big5|gbk|...> <input path> -out <utf8|utf16le> <output path>"<<std::endl;
         std::cout<<" Example: TextEncodingConvert -in shift_jis -no_bom /home/hyzboy/input/ -out utf8 /home/hyzboy/output/"<<std::endl;
-        std::cout<<std::endl<<std::endl;
+        std::cout<<std::endl;
+
+        std::cout<<" format: "<<std::endl;
+
+        for(int i=0;i<ext_list.GetCount();i++)
+            std::cout<<"\t"<<i<<": "<<ext_list[i].c_str()<<std::endl;
+
+        std::cout<<std::endl;
         return(0);
     }
 
