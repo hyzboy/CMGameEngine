@@ -1,7 +1,7 @@
 ﻿#ifndef HGL_IO_MEMORY_INPUT_STREAM_INCLUDE
 #define HGL_IO_MEMORY_INPUT_STREAM_INCLUDE
 
-#include<hgl/MemBlock.h>
+#include<hgl/type/MemBlock.h>
 #include<hgl/io/InputStream.h>
 namespace hgl
 {
