@@ -172,9 +172,9 @@ namespace hgl
 
 	inline CharSet::CharSet(const char *cs)
 	{
-		strcpy(charset,CharSetNameLength,cs);
 		codepage=FindCodePage(cs);
-	}
+        strcpy(charset,CharSetNameLength,FindCharSet(codepage));
+    }
 
 	extern CharSet DefaultCharSet();
 
