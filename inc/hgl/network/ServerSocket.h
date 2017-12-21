@@ -25,10 +25,12 @@ namespace hgl
 
             const   IPAddress *GetServerAddress()const{return server_address;}                      ///<取得服务器IP地址
                     IPAddress *CreateIPAddress()const
-                                {return server_address?server_address->Create():nullptr;}           ///<创建一个空的IP地址
+                                {return server_address?server_address->Create():nullptr;}           ///<创建一个空的IP地址空间
 
-			virtual bool CreateServer(const IPAddress *,const uint ml=HGL_SERVER_LISTEN_COUNT,bool reuse=false);	         ///<创建服务器
-			virtual void CloseServer();                                                                                  ///<关闭服务器
+                    bool       CreateIPAddress(IPAddress **ip_buffer,int count)const;               ///<创建多个空的IP地址空间
+
+			virtual bool CreateServer(const IPAddress *,const uint ml=HGL_SERVER_LISTEN_COUNT,bool reuse=false);	    ///<创建服务器
+			virtual void CloseServer();                                                                                 ///<关闭服务器
 
 					/**
 					* 设置是否使用堵塞方式传输

@@ -39,19 +39,18 @@ SET(BASE_TYPE_SOURCE
     DataType/Color3f.cpp
     DataType/Color4f.cpp
     DataType/FontInfo.cpp
-    DataType/StringList.cpp)
+    DataType/StringList.cpp
+    DataType/MultiLevelMemoryPool.cpp)
 
 SOURCE_GROUP("DataType" FILES ${BASE_TYPE_SOURCE})
 
 SET(BASE_IO_SOURCE
     IO/FileOutputStream.cpp
-    IO/JavaOutputStream.cpp
     IO/RandomAccessFile.cpp
     IO/DataOutputStream.cpp
     IO/FileInputStream.cpp
     IO/DataInputStream.cpp
     IO/FileAccess.cpp
-    IO/JavaInputStream.cpp
     IO/TextOutputStream.cpp
     IO/DataDistribute.cpp
     IO/IOType.cpp)

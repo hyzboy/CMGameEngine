@@ -51,11 +51,11 @@ namespace hgl
             d.Sync();
             t.Sync();
 
-            const OSString str=    OS_TEXT("Create Log Date/Time: ")+
-                                OSString(d.GetYear    ())+OS_TEXT("-")+
-                                OSString(d.GetMonth    ())+OS_TEXT("-")+
-                                OSString(d.GetDay    ())+OS_TEXT(" ")+
-                                OSString(t.GetHour    ())+OS_TEXT(":")+
+            const OSString str= OS_TEXT("Create Log Date/Time: ")+
+                                OSString(d.GetYear  ())+OS_TEXT("-")+
+                                OSString(d.GetMonth ())+OS_TEXT("-")+
+                                OSString(d.GetDay   ())+OS_TEXT(" ")+
+                                OSString(t.GetHour  ())+OS_TEXT(":")+
                                 OSString(t.GetMinute())+OS_TEXT(":")+
                                 OSString(t.GetSecond())+OS_TEXT("\n");
 
@@ -90,13 +90,13 @@ namespace hgl
          */
         struct LogInterface
         {
-            bool (*Add)(Logger *);                                                                        ///<增加一个日志输出
+            bool (*Add)(Logger *);                                                                      ///<增加一个日志输出
 
-            bool (*Init)();                                                                                ///<初始化日志输出
+            bool (*Init)();                                                                             ///<初始化日志输出
             void (*Close)();                                                                            ///<关闭所有日志输出
 
-            void (*WriteUTF16)(LogLevel,const u16char *,int);                                            ///<输出一行日志
-            void (*WriteUTF8)(LogLevel,const char *,int);                                                ///<输出一行日志
+            void (*WriteUTF16)(LogLevel,const u16char *,int);                                           ///<输出一行日志
+            void (*WriteUTF8)(LogLevel,const char *,int);                                               ///<输出一行日志
         };//struct LogInterface
 
         static LogInterface LogInterface3=

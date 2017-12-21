@@ -28,6 +28,8 @@ namespace hgl
 
                 do
                 {
+                    FD_ZERO(&accept_set);
+                    FD_SET(ThisSocket,&accept_set);
                     result=select(ThisSocket+1,&accept_set,nullptr,nullptr,&accept_timeout);
                 }while(result<0&&result==EINTR);
 
@@ -71,9 +73,6 @@ namespace hgl
         void AcceptServer::SetTimeOut(const double time_out)
         {
             SetTimeVal(accept_timeout,time_out);
-
-            FD_ZERO(&accept_set);
-            FD_SET(ThisSocket,&accept_set);
         }
     }//namespace network
 }//namespace hgl

@@ -2,122 +2,71 @@
 #define HGL_NETWORK_SOCKET_MANAGE_INCLUDE
 
 #include<hgl/type/Map.h>
-#include<hgl/type/Set.h>
-#include<hgl/network/IOSocket.h>
-#include<hgl/thread/ThreadMutex.h>
-#include<hgl/MemBlock.h>
 #include<hgl/network/SocketEvent.h>
+#include<hgl/network/TCPAccept.h>
 namespace hgl
 {
-	namespace network
-	{
-		class SocketManageBase;
+    class MultiLevelMemoryPool;
 
-		/**
-		 * Socket管理类
-		 */
-		class SocketManage																			///Socket管理类
-		{
-			struct SocketItem
-			{
-				IOSocket *sock;
-				bool r;			//读监听
-				bool w;			//写监听
+    namespace network
+    {
+        class SocketManageBase;
 
-			public:
+        /**
+         * 最简单的服Socket管理类，直接在一个Update内处理socket的轮循和处理事件(不关心是recv还是send)<br>
+         * 该类所有函数均为非线程安全，所以不可以直接在多线程中使用
+         */
+        class SocketManage
+        {
+        protected:
 
-				SocketItem()
-				{
-					sock=nullptr;
-					r=false;
-					w=false;
-				}
+            using SocketList=Map<int,TCPAccept *>;
 
-				SocketItem(IOSocket *s)
-				{
-					sock=s;
-					r=true;
-					w=true;
-				}
+        protected:
 
-				bool operator == (const SocketItem &si)const
-				{
-					if(si.sock!=sock)
-						return(false);
+            MultiLevelMemoryPool *memory_pool;
 
-					if(si.r!=r)
-						return(false);
+            SocketList socket_list;
 
-					if(si.w!=w)
-						return(false);
+            SocketManageBase *manage;                                           ///<实际的Socket管理器
 
-					return(true);
-				}
-			};//struct SocketItem
+            SocketEventList sock_recv_list,
+                            sock_send_list,
+                            sock_error_list;
 
-			typedef Map<int,SocketItem> SocketList;
+            Set<TCPAccept *> error_set;
 
-		protected:
+        protected:
 
-			SocketManageBase *manage;																///<具体管理实现
+            void ProcSocketRecvList();
+            void ProcSocketSendList();
+            void ProcSocketErrorList();
 
-			int max_connect;																		///<最大连接数
+            void ProcErrorList();
 
-			atom_int cur_count;																		///<当前连接数
+        public:
 
-			double time_out;																		///<超时时间
+            const Set<TCPAccept *> &GetErrorSocketSet(){return error_set;}     ///<获取错误SOCKET合集
 
-			ThreadMutex lock;																		///<安全锁
+        public:
 
-			SocketList sock_list;																	///<所有socket列表
+            SocketManage(int max_user);
+            virtual ~SocketManage();
 
-			List<SocketEvent>	recv_event_list;													///<接收Socket列表
-			List<SocketEvent>	send_event_list;													///<发送Socket列表
-			List<SocketEvent>	error_event_list;													///<出错Socket列表
+                    bool Join(TCPAccept *s);
+                     int Join(TCPAccept **s_list,int count);
 
-			List<IOSocketClassEvent>	recv_list;													///<接收Socket列表
-			List<IOSocketClassEvent>	send_list;													///<发送Socket列表
+                    bool Unjoin(TCPAccept *s);
+                     int Unjoin(TCPAccept **s_list,int count);
 
-			Set<IOSocket *>				error_set;													///<错误Socket合集
+            /**
+             * 刷新所有操作(删除错误Socket,轮循可用Socket，发送，接收<br>
+             * 需要注意的是，Update中轮循到的错误/关闭Socket列表，将在下一次Update时清除。所以在每次调用Update后，请调用GetErrorSocketSet获取错误Socket合集并处理出错Socket
+             */
+            virtual  int Update(const double &time_out=HGL_NETWORK_TIME_OUT);
 
-// 			Set<IOSocket *>				no_send_set;												///<无发送数据Socket合集
-// 			ThreadMutex					send_set_lock;												///<有无发送数据Socket合集锁
-
-			void ConvEventList(List<IOSocketClassEvent> &,const List<SocketEvent> &);
-
-		protected:
-
-			virtual bool _Join(IOSocket *);
-			virtual int _Unjoin(IOSocket **,const int);
-			virtual bool _Unjoin(IOSocket *);
-			virtual void _Clear();
-
-		public:
-
-			SocketManage(int/*max_connect*/);
-			virtual ~SocketManage();
-
-                    SocketManageBase *	GetRecvManage	(){return manage;}					        ///<返回接收处理
-
-							double		GetTimeOut		()const{return time_out;}					///<取得当前超时设置
-			virtual 		void		SetTimeOut		(double);									///<设置新的超时时间
-
-					const	int			GetCount		()const{return cur_count;}					///<取得加入的Socket数量
-
-			virtual 		bool		Join			(IOSocket *);								///<加入一个Socket连接
-			virtual 		bool		Unjoin			(IOSocket *);								///<分离一个Socket连接
-			virtual			int			Unjoin			(IOSocket **,const int);					///<分离一批Socket连接
-
-			virtual 		void		Clear			();											///<分离所有连接
-
-							bool		Update			(const double );
-
-		public:
-
-			const List<IOSocketClassEvent> &GetRecvList(){return recv_list;}						///<取得有接收数据的连接列表
-			const List<IOSocketClassEvent> &GetSendList(){return send_list;}
-			const Set<IOSocket *> &			GetErrorSet(){return error_set;}						///<取得出错的连接列表
-		};//class SocketManage
-	}//namespace network
+            virtual void Clear();
+        };//class SocketManage
+    }//namespace network
 }//namespace hgl
 #endif//HGL_NETWORK_SOCKET_MANAGE_INCLUDE

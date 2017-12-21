@@ -1,6 +1,6 @@
-﻿#include<hgl/network/TCPSocket.h>
+#include<hgl/network/TCPSocket.h>
 #include<hgl/thread/RingBuffer.h>
-#include<hgl/type/MemBlock.h>
+#include<hgl/MemBlock.h>
 #include<hgl/LogInfo.h>
 
 namespace hgl

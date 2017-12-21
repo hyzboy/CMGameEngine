@@ -316,27 +316,34 @@ namespace hgl
     /**
     * 在字符串str1内查找另一个字符串str2
     * @param str1 完整的字符串
+    * @param size1 str1最大查找字符
     * @param str2 要查找的字符串
+    * @param size2 str2长度
     * @return str2在str1中所在位置的指针
     */
     template<typename T>
-    T *strstr(T *str1,T *str2)
+    T *strstr(T *str1,uint size1,T *str2,uint size2)
     {
-        T *cp = (T *) str1;
+        if(!str1||!str2)return(nullptr);
+        if(!*str1||!*str2)return(nullptr);
+        if(size1<=0)return(nullptr);
+        if(size2<=0)return(nullptr);
+
+        T *cp = str1;
+        T *end= str1+size1-size2;
         T *s1, *s2;
+        uint s;
 
-        if ( !*str2)
-            return (T *)str1;
-
-        while (*cp)
+        while (*cp&&cp<=end)
         {
             s1 = cp;
-            s2 = (T *) str2;
+            s2 = str2;
 
-            while ( *s1 && *s2 && !(*s1-*s2) )
-                s1++, s2++;
+            s=size2;
+            while ( s && !(*s1-*s2) )
+                ++s1, ++s2,--s;
 
-            if (!*s2)
+            if(!s)
                 return(cp);
 
             ++cp;
@@ -345,6 +352,44 @@ namespace hgl
         return(0);
     }
 
+    
+    /**
+    * 在字符串str1内查找另一个字符串str2(从向后前)
+    * @param str1 完整的字符串
+    * @param size str1最大查找字符
+    * @param str2 要查找的字符串
+    * @param size2 str2长度
+    * @return str2在str1中所在位置的指针
+    */
+    template<typename T>
+    T *strrstr(T *str1,uint size1,T *str2,uint size2)
+    {
+        if(!str1||!str2)return(nullptr);
+        if(!*str1||!*str2)return(nullptr);
+        if(size1<=0)return(nullptr);
+        if(size2<=0)return(nullptr);
+
+        T *cp = str1+size1-size2;
+        T *s1, *s2;
+        uint s;
+
+        while (*cp&&cp>str1)
+        {
+            s1 = cp;
+            s2 = str2;
+
+            s=size2;
+            while ( s && !(*s1-*s2) )
+                ++s1, ++s2,--s;
+
+            if (!s)
+                return(cp);
+
+            --cp;
+        }
+
+        return(0);
+    }
 
     /**
     * 在字符串str1内查找另一个字符串str2,忽略大小写
@@ -353,7 +398,7 @@ namespace hgl
     * @return str2在str1中所在位置的指针
     */
     template<typename T>
-    T *stristr(T *str1,T *str2)
+    T *stristr(T *str1,uint size1,T *str2,uint size2)
     {
         T *cp = (T *) str1;
         T *s1, *s2;
@@ -2103,14 +2148,21 @@ namespace hgl
     * @param src 原始的数据
     * @param size 原始数据字节长度
     * @param hexstr 用于转换的16进制字符
+    * @param gap_char 间隔字符
     */
     template<typename T>
-    void DataToHexStr(T *str,const uint8 *src,const int size,const T *hexstr)
+    void DataToHexStr(T *str,const uint8 *src,const int size,const T *hexstr,const T gap_char=0)
     {
         int i;
 
         for(i=0;i<size;i++)
         {
+            if(i&&gap_char)
+            {
+                *str=gap_char;
+                ++str;
+            }
+
             *str=hexstr[((*src)&0xF0)>>4];
             ++str;
             *str=hexstr[ (*src)&0x0F    ];
@@ -2122,25 +2174,26 @@ namespace hgl
         *str=0;
     }
 
-    template<typename T> void DataToLowerHexStr(T *str,const uint8 *src,const int size){DataToHexStr<T>(str,src,size,LowerHexChar);}
-    template<typename T> void DataToUpperHexStr(T *str,const uint8 *src,const int size){DataToHexStr<T>(str,src,size,UpperHexChar);}
+    template<typename T> void DataToLowerHexStr(T *str,const uint8 *src,const int size,const T gap_char=0){DataToHexStr<T>(str,src,size,LowerHexChar,gap_char);}
+    template<typename T> void DataToUpperHexStr(T *str,const uint8 *src,const int size,const T gap_char=0){DataToHexStr<T>(str,src,size,UpperHexChar,gap_char);}
 
     /**
     * 将一串原始数据转转成16进制数值字符串
     * @param str 16进制数值字符串存入处
     * @param hc 原始的数据
     * @param hexstr 用于转换的16进制字符
+    * @param gap_char 间隔字符
     */
     template<typename T,typename HC>
-    void DataToHexStr(T *str,const HC &hc,const T *hexstr)
+    void DataToHexStr(T *str,const HC &hc,const T *hexstr,const T gap_char=0)
     {
-        return DataToHexStr(str,(const uint8 *)&hc,sizeof(hc),hexstr);
+        return DataToHexStr(str,(const uint8 *)&hc,sizeof(hc),hexstr,gap_char);
     }
 
-    template<typename T,typename HC> void ToUpperHexStr(T *str,const HC &hc){DataToHexStr<T,HC>(str,hc,UpperHexChar);}
-    template<typename T,typename HC> void ToLowerHexStr(T *str,const HC &hc){DataToHexStr<T,HC>(str,hc,LowerHexChar);}
+    template<typename T,typename HC> void ToUpperHexStr(T *str,const HC &hc,const T gap_char=0){DataToHexStr<T,HC>(str,hc,UpperHexChar,gap_char);}
+    template<typename T,typename HC> void ToLowerHexStr(T *str,const HC &hc,const T gap_char=0){DataToHexStr<T,HC>(str,hc,LowerHexChar,gap_char);}
 
-    template<typename T> void ToUpperHexStr(T *str,const void *data,const int size){DataToHexStr<T>(str,(const uint8 *)data,size,UpperHexChar);}
-    template<typename T> void ToLowerHexStr(T *str,const void *data,const int size){DataToHexStr<T>(str,(const uint8 *)data,size,LowerHexChar);}
+    template<typename T> void ToUpperHexStr(T *str,const void *data,const int size,const T gap_char=0){DataToHexStr<T>(str,(const uint8 *)data,size,UpperHexChar,gap_char);}
+    template<typename T> void ToLowerHexStr(T *str,const void *data,const int size,const T gap_char=0){DataToHexStr<T>(str,(const uint8 *)data,size,LowerHexChar,gap_char);}
 }//namespace hgl
 #endif//HGL_STR_TEMPLATE_INCLUDE

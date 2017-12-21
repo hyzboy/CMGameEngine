@@ -39,7 +39,6 @@ namespace hgl
     {
         /**
         * TCP客户端连接类构造函数
-        * @param buffer_size 接收缓冲区大小
         */
         TCPClient::TCPClient():TCPSocket()
         {
@@ -74,7 +73,7 @@ namespace hgl
             if(!CreateSocket(addr->GetFamily(),SOCK_STREAM,IPPROTO_TCP))
                 RETURN_FALSE;
 
-            if(connect(ThisSocket,(sockaddr *)&addr,sizeof(addr)))
+            if(connect(ThisSocket,addr->GetSockAddr(),addr->GetSockAddrInSize()))
             {
                 SAFE_CLEAR(ipstr);
                 ipstr=new char[addr->GetIPStringMaxSize()+1];

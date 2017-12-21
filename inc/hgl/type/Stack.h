@@ -1,4 +1,4 @@
-#ifndef HGL_STACK_INCLUDE
+﻿#ifndef HGL_STACK_INCLUDE
 #define HGL_STACK_INCLUDE
 
 #include<hgl/type/DataType.h>
@@ -20,12 +20,13 @@ namespace hgl
 
 	public: //属性
 
-		int GetCount()const{return count;}															///<取得堆栈中数据的个数
-		int GetMax()const{return max_count;}														///<取得堆栈中的最大数据个数
+		int   GetCount()      const{return count;}													///<取得堆栈中数据的个数
+		bool  SetCount(int c);                                                                      ///<直接设置堆栈中数据的个数
 
-		void SetMax(int);																			///<设置堆栈中的最大数据个数
+		int   GetMax  ()      const{return max_count;}												///<取得堆栈中的最大数据个数
+		void  SetMax  (int);																		///<设置堆栈中的最大数据个数
 
-        T *GetData(){return items;}                                                                 ///<取得原始数据
+        T *   GetData ()           {return items;}                                                  ///<取得原始数据
 
 	public: //方法
 
@@ -35,7 +36,7 @@ namespace hgl
 				bool Peek(T &);																		///<尝试访问一个数据
 		virtual bool Pop(T &);																		///<弹出一个数据
 				bool Push(T &);																		///<压入一个数据
-				bool Push(T *,int);																	///<放入多个数据
+				bool MultiPush(T *,int);															///<放入多个数据
 
 		virtual void Clear();                                                                       ///<清除所有数据
 

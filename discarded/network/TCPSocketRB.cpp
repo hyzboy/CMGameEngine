@@ -1,6 +1,6 @@
 ﻿#include<hgl/network/TCPSocket.h>
 #include<hgl/thread/RingBuffer.h>
-#include<hgl/type/MemBlock.h>
+#include<hgl/MemBlock.h>
 
 namespace hgl
 {
@@ -41,7 +41,7 @@ namespace hgl
             delete ris;
         }
 
-        void TCPSocketRB::UseSocket(int sock,IPAddress *addr)
+        void TCPSocketRB::UseSocket(int sock,IPAddress *addr) 
         {
             TCPSocket::UseSocket(sock,addr);
 

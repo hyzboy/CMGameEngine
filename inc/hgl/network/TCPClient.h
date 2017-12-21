@@ -2,6 +2,8 @@
 #define HGL_TCP_CLIENT_INCLUDE
 
 #include<hgl/network/TCPSocket.h>
+#include<hgl/io/InputStream.h>
+#include<hgl/io/OutputStream.h>
 namespace hgl
 {
 	namespace network
@@ -26,9 +28,9 @@ namespace hgl
 			TCPClient();																				///<本类构造函数
 			virtual ~TCPClient();																		///<本类析构函数
 
-			virtual bool Connect(IPAddress *);													          ///<连接到服务器
+			virtual bool Connect(IPAddress *);													        ///<连接到服务器
 			virtual void Disconnect();																	///<断开连接
-			virtual void UseSocket(int,IPAddress *addr=0);										         ///<使用指定socket
+			virtual void UseSocket(int,IPAddress *addr=0);										        ///<使用指定socket
 
 		public:
 

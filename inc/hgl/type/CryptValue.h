@@ -54,11 +54,16 @@ namespace hgl
 		T operator * (T v){return(GetValue()*v);}
 		T operator / (T v){return(GetValue()/v);}
 		T operator % (T v){return(GetValue()%v);}
+        T operator & (T v){return(GetValue()&v);}
+        T operator | (T v){return(GetValue()|v);}
 
 		void operator += (T v){SetValue(GetValue()+v);}
 		void operator -= (T v){SetValue(GetValue()-v);}
 		void operator *= (T v){SetValue(GetValue()*v);}
 		void operator /= (T v){SetValue(GetValue()/v);}
+        void operator %= (T v){SetValue(GetValue()%v);}
+        void operator &= (T v){SetValue(GetValue()&v);}
+        void operator |= (T v){SetValue(GetValue()|v);}
 
 		T operator ++ (int) {T r=GetValue();SetValue(r+1);return(r);}                           		///<后置++
 		T operator -- (int) {T r=GetValue();SetValue(r-1);return(r);}                           		///<后置--
@@ -66,13 +71,13 @@ namespace hgl
 		T operator ++ () {SetValue(GetValue()+1);return(GetValue());}                             	///<前置++
 		T operator -- () {SetValue(GetValue()-1);return(GetValue());}                             	///<前置--
 
-		bool operator > (T v){return(GetValue()> v);}
-		bool operator >=(T v){return(GetValue()>=v);}
-		bool operator < (T v){return(GetValue()< v);}
-		bool operator <=(T v){return(GetValue()<=v);}
+		bool operator > (const T &v){return(GetValue()> v);}
+		bool operator >=(const T &v){return(GetValue()>=v);}
+		bool operator < (const T &v){return(GetValue()< v);}
+		bool operator <=(const T &v){return(GetValue()<=v);}
 
-		bool operator ==(T v){return(GetValue()==v);}
-		bool operator !=(T v){return(GetValue()!=v);}
+		bool operator ==(const T &v){return(GetValue()==v);}
+		bool operator !=(const T &v){return(GetValue()!=v);}
 	};//class CryptValue
 
 	typedef CryptValue<int,Random32>	crypt_int;
