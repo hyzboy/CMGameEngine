@@ -5,7 +5,10 @@
 using namespace hgl;
 using namespace hgl::filesystem;
 
-static UTF8StringList ext_list;
+static OSStringList convert_ext_list;       //要转换的文件
+
+static OSStringList discard_file_list;      //要抛弃的文件
+static OSStringList discard_folder_list;    //要抛弃的目录
 
 static bool japanese_hw2fw=false;
 static bool english_fw2hw=false;
@@ -19,15 +22,62 @@ EnumFileConfig *ConvertSubFolderConfig(struct EnumFileConfig *efc,const OSString
 {
     if(sub_folder_name.GetBeginChar()=='.')return(nullptr);         //跳过第一个字符为.的目录
 
+    for(int i=0;i<discard_folder_list.GetCount();i++)
+    {
+        if(discard_folder_list[i].Comp(sub_folder_name)==0)
+            return(nullptr);
+    }
+
     return DefaultCreateSubConfig(efc,sub_folder_name);
+}
+
+bool ExtNameCheck(const os_char *ext_name)
+{
+    const int len=strlen(ext_name);
+
+    for(int i=0;i<convert_ext_list.GetCount();i++)
+    {
+        const OSString &fn=convert_ext_list[i];
+
+        if(fn.Length()!=len)continue;
+
+        if(fn.CaseComp(ext_name)==0)
+            return(true);
+    }
+
+    return(false);
 }
 
 void ConvertFile(struct EnumFileConfig *efc,FileInfo &fi)
 {
     if(fi.name[0]=='.')return;
-    if(strcmp(fi.name,"CMakeLists.txt")==0)return;
+
+    for(int i=0;i<discard_file_list.GetCount();i++)
+    {
+        if(discard_file_list[i].Comp(fi.name)==0)
+            return;
+    }
+
+    const char *ext_name=strrchr<os_char>(fi.name,'.');
+
+    if(!ext_name)return;
+
+    if(!ExtNameCheck(ext_name))return;
 
     std::cout<<"filename: "<<fi.fullname<<std::endl;
+}
+
+void out_string_list(const OSStringList &sl,const os_char *name)
+{
+    std::cout<<" "<<name<<": "<<std::endl;
+
+    for(int i=0;i<sl.GetCount();i++)
+    {
+        if(sl[i].Length()<=0)continue;
+        std::cout<<"\t"<<i<<": "<<sl[i].c_str()<<std::endl;
+    }
+
+    std::cout<<std::endl;
 }
 
 HGL_CONSOLE_MAIN_FUNC()
@@ -37,7 +87,9 @@ HGL_CONSOLE_MAIN_FUNC()
     std::cout<<"(C)1997-2017 Copyright. Offical Web:www.hyzgame.com.cn"<<std::endl;
     std::cout<<std::endl;
 
-    LoadStringListFromTextFile(ext_list,OS_TEXT("TextEncodingConvert.config"),UTF8CharSet);
+    LoadStringListFromTextFile(convert_ext_list,OS_TEXT("TextEncodingConvert.filter"),UTF8CharSet);
+    LoadStringListFromTextFile(discard_file_list,OS_TEXT("TextEncodingConvert.discard_file"),UTF8CharSet);
+    LoadStringListFromTextFile(discard_folder_list,OS_TEXT("TextEncodingConvert.discard_folder"),UTF8CharSet);
 
     if(args.GetCount()<5)
     {
@@ -51,10 +103,9 @@ HGL_CONSOLE_MAIN_FUNC()
         std::cout<<" Example: TextEncodingConvert -in shift_jis -no_bom /home/hyzboy/input/ -out utf8 /home/hyzboy/output/"<<std::endl;
         std::cout<<std::endl;
 
-        std::cout<<" format: "<<std::endl;
-
-        for(int i=0;i<ext_list.GetCount();i++)
-            std::cout<<"\t"<<i<<": "<<ext_list[i].c_str()<<std::endl;
+        out_string_list(convert_ext_list,OS_TEXT("filter"));
+        out_string_list(discard_file_list,OS_TEXT("discard file"));
+        out_string_list(discard_folder_list,OS_TEXT("discard folder"));
 
         std::cout<<std::endl;
         return(0);
