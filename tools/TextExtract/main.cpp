@@ -201,11 +201,11 @@ HGL_CONSOLE_MAIN_FUNC()
     {
         std::cout<<" option:"<<std::endl;
         std::cout<<"\t\t-test\ttest"<<std::endl;
-        std::cout<<"\t\t-cc\tclear C/C++ comment"<<std::endl;
-        std::cout<<"\t\t-ce\tclear pure english string"<<std::endl;
-        std::cout<<"\t\t-cs\tclear pure symbol char"<<std::endl;
-        std::cout<<"\t\t-cb\tclear broder english&symbol"<<std::endl;
-        std::cout<<"\t\t-sf\tproc sub folder"<<std::endl;
+        std::cout<<"\t\t-cc\tclear C/C++ comment"<<std::endl;               //清除C/C++注释
+        std::cout<<"\t\t-ce\tclear pure english string"<<std::endl;         //清除纯英文字符串
+        std::cout<<"\t\t-cs\tclear pure symbol char"<<std::endl;            //清除纯符号
+        std::cout<<"\t\t-cb\tclear broder english&symbol"<<std::endl;       //清除句子两边的英文和符号
+        std::cout<<"\t\t-sf\tproc sub folder"<<std::endl;                   //处理子目录
         std::cout<<std::endl;
         std::cout<<" Format: TextExtract [-cc,-ce,-cs,-cb,-sf] <shift_jis|big5|gbk|...> <input path> <input filename> <output path> <output file extname>"<<std::endl;
         std::cout<<" Example: TextExtract -cc -ce -cs -cb -sf shift_jis /home/hyzboy/input_csv/ .csv /home/hyzboy/output_txt/ txt"<<std::endl;
