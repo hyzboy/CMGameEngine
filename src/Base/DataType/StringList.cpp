@@ -158,7 +158,7 @@ namespace hgl
       /**
      * 加载一个原始文本文件到UTF16StringList
      */
-    int LoadStringListFromText(UTF16StringList &sl,const OSString &filename,const CharSet &cs)
+    int LoadStringListFromTextFile(UTF16StringList &sl,const OSString &filename,const CharSet &cs)
     {
         uchar *data;
 
