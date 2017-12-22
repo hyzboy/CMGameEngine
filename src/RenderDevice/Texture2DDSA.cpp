@@ -19,14 +19,13 @@ namespace hgl
 					return(true);
 				
 				if(tex->source_format->compress)      //原本就是压缩格式
-                        glCompressedTextureSubImage2D(texture_id, 0, 0, 0, tex->width, tex->height, tex->video_format, tex->bitmap_bytes, tex->bitmap);
+                    glCompressedTextureSubImage2D(texture_id, 0, 0, 0, tex->width, tex->height, tex->video_format, tex->bitmap_bytes, tex->bitmap);
                 else                    //正常非压缩格式
-                        glTextureSubImage2D(texture_id, 0, 0, 0, tex->width, tex->height, tex->source_format->pixel_format, tex->source_format->data_type, tex->bitmap);
+                    glTextureSubImage2D(texture_id, 0, 0, 0, tex->width, tex->height, tex->source_format->pixel_format, tex->source_format->data_type, tex->bitmap);
 				
-                if (tex->gen_mipmaps)
+                if(tex->gen_mipmaps)
                 {
-                    if (tex->bitmap)
-                        glGenerateTextureMipmap(texture_id);
+                    glGenerateTextureMipmap(texture_id);
 
                     //                  glTexEnvf(GL_TEXTURE_FILTER_CONTROL,GL_TEXTURE_LOD_BIAS,-1.5f);     //设置LOD偏向,负是更精细，正是更模糊
                 }
