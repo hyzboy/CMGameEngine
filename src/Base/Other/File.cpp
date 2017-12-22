@@ -20,9 +20,28 @@ namespace hgl
          */
         void MergeFilename(OSString &fullname,const OSString &pathname,const OSString &filename)
         {
-            fullname=(  pathname.GetEndChar()==HGL_DIRECTORY_SEPARATOR?
-                        pathname+filename:
-                        pathname+HGL_DIRECTORY_SEPARATOR+filename);
+            if(pathname.GetEndChar()==HGL_DIRECTORY_SEPARATOR)          //结尾有分隔符
+            {
+                if(filename.GetBeginChar()==HGL_DIRECTORY_SEPARATOR)    //开头有分隔符
+                {
+                    fullname.Set(pathname.c_str(),pathname.Length()-1); //少取一个字符
+                }
+                else
+                {
+                    fullname=pathname;
+                }
+            }
+            else                                                        //结尾没有分隔符
+            {
+                fullname=pathname;
+
+                if(filename.GetBeginChar()!=HGL_DIRECTORY_SEPARATOR)    //开头没有分隔符
+                {
+                    fullname.Strcat(HGL_DIRECTORY_SEPARATOR_STR);       //添加分隔符
+                }
+            }
+                
+            fullname.Strcat(filename);
         }
 
         /**
@@ -164,7 +183,7 @@ namespace hgl
         */
         bool MakePath(const OSString &dirname)
         {
-            const os_char directory_separator=HGL_DIRECTORY_SEPARATOR;
+            constexpr os_char directory_separator=HGL_DIRECTORY_SEPARATOR;
             os_char *p;
 
             os_char str[HGL_MAX_PATH];
@@ -184,6 +203,8 @@ namespace hgl
                 if(*sp==0)
                     return(true);
 
+                
+
                 if(!IsDirectory(str))//没有找到
                     if(!MakeDirectory(str))
                         return(false);
@@ -192,6 +213,9 @@ namespace hgl
                     *p++=directory_separator;
                 else
                     return(true);
+
+                while(*p==directory_separator)  //跳过那种连续的分隔符,比如C:\\Windows
+                    ++p;
 
                 sp=p;
             }
