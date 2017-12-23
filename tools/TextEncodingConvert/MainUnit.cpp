@@ -120,7 +120,7 @@ bool ExtNameCheck(const os_char *ext_name)
 
 template<typename TOS> void Convert(const OSString &in_filename,const OSString &out_filename)
 {
-    UTF16StringList old_text;
+    UTF16StringList old_text;           //全部使用UTF16String是为了方便做各种字符的检测
 
     if(LoadStringListFromTextFile(old_text,in_filename,in_charset)<=0)
         return;
