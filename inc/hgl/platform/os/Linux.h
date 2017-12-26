@@ -45,7 +45,7 @@ using os_char			=char;
 template<typename T>
 inline T *hgl_aligned_malloc(size_t n)
 {
-    return aligned_malloc(alignof(T),n*sizeof(T));
+    return (T *)aligned_alloc(alignof(T),n*sizeof(T));
 }
 
 #define OS_EXTERNAL_H           <dlfcn.h>

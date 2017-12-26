@@ -1,4 +1,4 @@
-#ifndef HGL_OBJECT_LIST_CPP
+﻿#ifndef HGL_OBJECT_LIST_CPP
 #define HGL_OBJECT_LIST_CPP
 
 #include<hgl/type/List.h>
@@ -22,7 +22,7 @@ namespace hgl
 //		if(!this->items)
 //		{
 //			this->max_count=1;
-//			this->items=(T **)hgl_malloc(sizeof(T *));
+//			this->items=(T **)hgl_aligned_malloc<T *>(1);
 //		}
 //		else
 //		{
@@ -238,7 +238,7 @@ namespace hgl
             }
 //            else
 //            {
-//				this->items=(T **)hgl_malloc(this->max_count*sizeof(T *));
+//				this->items=(T **)hgl_aligned_malloc<T *>(this->max_count);
 //
 //                while(new_count--)
 //					this->items[this->count++]=CreateObject();

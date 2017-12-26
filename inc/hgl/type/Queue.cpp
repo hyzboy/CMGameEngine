@@ -1,4 +1,4 @@
-#ifndef HGL_QUEUE_CPP
+﻿#ifndef HGL_QUEUE_CPP
 #define HGL_QUEUE_CPP
 
 namespace hgl
@@ -16,7 +16,7 @@ namespace hgl
 		{
 			max_count=m;
 
-			items=(T *)hgl_malloc(max_count*sizeof(T));
+            items=hgl_aligned_malloc<T>(max_count);
 		}
 		else max_count=0;
 
@@ -38,7 +38,7 @@ namespace hgl
 		if(max_count||(!max_count&&count))
 			items=(T *)hgl_realloc(items,m*sizeof(T));
 		else
-			items=(T *)hgl_malloc(m*sizeof(T));
+            items=hgl_aligned_malloc<T>(m);
 
 		max_count=m;
 		mem_count=m;
@@ -171,7 +171,7 @@ namespace hgl
 			}
 			else
 			{
-				items=(T *)hgl_malloc(sizeof(T));
+                items=hgl_aligned_malloc<T>(1);
 
 				mem_count=1;
 			}
@@ -217,7 +217,7 @@ namespace hgl
 		else
 			mem_count=max_count;
 
-		items=(T *)hgl_malloc(mem_count*sizeof(T));
+        items=hgl_aligned_malloc<T>(mem_count);
 
 		memcpy(items,ori.items,mem_count*sizeof(T));
 	}

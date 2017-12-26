@@ -23,7 +23,7 @@ __fastcall TMainForm::TMainForm(TComponent* Owner)
 	code_page=0;
 
 	config_file=UnicodeString(GetString(hfsStartPath))+UnicodeString(L"\\ConvertText.list");
-	
+
 	list_file=UnicodeString(GetString(hfsStartPath))+UnicodeString(L"\\FileType.list");
 
 	if(FileConfirm(list_file.w_str()))
@@ -165,9 +165,9 @@ void TMainForm::ConvertFile(const UnicodeString &base,const UnicodeString &ext)
 			else
 				continue;
 		}
-		
+
 		ConvertFile(full_filename);
-		
+
 		Application->ProcessMessages();
 	}
 	while(FindNextFile(hFind, &wfd)!=0);
@@ -209,16 +209,16 @@ void TMainForm::ConvertFolder(const UnicodeString &base)
 
 		if(ext.Length())
 			ConvertFile(base,ext);
-			
+
 		Application->ProcessMessages();
-	}	
+	}
 }
 //---------------------------------------------------------------------------
 void __fastcall TMainForm::Button1Click(TObject *Sender)
 {
 	ConvertFolder(RootPathEdit->Text);
-	
-	StatusBar1->SimpleText=L"转换完成！";	
+
+	StatusBar1->SimpleText=L"转换完成！";
 }
 //---------------------------------------------------------------------------
 void __fastcall TMainForm::FormDestroy(TObject *Sender)
@@ -248,7 +248,7 @@ void TMainForm::ConvertName(const UnicodeString &wn,const AnsiString &an)
 		hFind = FindFirstFileA(find_name.c_str(), &wfd);
 
 		if(hFind == INVALID_HANDLE_VALUE)return;
-	
+
 		do
 		{
 			if(wfd.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY)
@@ -277,7 +277,7 @@ void TMainForm::ConvertName(const UnicodeString &wn,const AnsiString &an)
 			Application->ProcessMessages();
 		}
 		while(FindNextFileA(hFind, &wfd)!=0);
-	       
+
 		FindClose(hFind);
 	}
 
@@ -307,7 +307,7 @@ void TMainForm::ConvertName(const UnicodeString &wn,const AnsiString &an)
 void __fastcall TMainForm::Button3Click(TObject *Sender)
 {
 	ConvertName(UnicodeString(RootPathEdit->Text),RootPathEdit->Text);
-	
+
 	StatusBar1->SimpleText=L"转换完成！";
 }
 //---------------------------------------------------------------------------
@@ -435,13 +435,13 @@ void TMainForm::FilterName(const UnicodeString &name)
 	}
 	while(FindNextFile(hFind, &wfd)!=0);
 
-	FindClose(hFind);	
+	FindClose(hFind);
 }
 //---------------------------------------------------------------------------
 void __fastcall TMainForm::Button4Click(TObject *Sender)
 {
 	FilterName(RootPathEdit->Text);
-	
+
 	StatusBar1->SimpleText=L"转换完成！";
 }
 //---------------------------------------------------------------------------

@@ -50,7 +50,7 @@ namespace hgl
 		{
 			max_count=value;
 
-			items=(T *)hgl_malloc(sizeof(T)*max_count);
+            items=hgl_aligned_malloc<T>(max_count);
 
 			memset(items,0,max_count*sizeof(T));
 		}
@@ -170,7 +170,7 @@ namespace hgl
 	T *FixedList<T>::CreateCopy(int &c)
 	{
 		c=count;
-		T *copy=(T *)hgl_malloc(sizeof(T)*count);
+        T *copy=hgl_aligned_malloc<T>(count);
 		memcpy(copy,items,count*sizeof(T));
 
 		return copy;
