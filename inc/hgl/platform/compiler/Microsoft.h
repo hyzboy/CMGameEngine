@@ -18,8 +18,6 @@
     #endif//_MSC_VER
 #endif//_MSC_VER
 
-#define HGL_ALIGN(n)                    __declspec(align(n))                            //设置数据结构对齐宏
-
 #define HGL_THREAD_LOCAL_STORAGE        __declspec(thread)                              //线程本地储存
 //--------------------------------------------------------------------------------------------------
 #define HGL_FMT_I64            "%I64d"
@@ -34,9 +32,6 @@
 #pragma warning(disable:4244)            // -> int 精度丢失警告
 #pragma warning(disable:4804)            // 不安全的类型比较
 #pragma warning(disable:4805)            // 不安全的类型比较
-
-#pragma warning(disable:4458)            // 类成员变量名与类函数参数名相同
-#pragma warning(disable:4459)            // 全局变量名与类函数参数名相同
 
 #ifndef _CRT_SECURE_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS
