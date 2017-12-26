@@ -18,7 +18,9 @@
     #endif//_MSC_VER
 #endif//_MSC_VER
 
-#define HGL_ALIGNED(var) __declspec(align(32)) var
+#define HGL_ALIGN(n)                    __declspec(align(n))                            //设置数据结构对齐宏
+
+#define HGL_THREAD_LOCAL_STORAGE        __declspec(thread)                              //线程本地储存
 //--------------------------------------------------------------------------------------------------
 #define HGL_FMT_I64            "%I64d"
 #define HGL_FMT_U64            "%I64u"

@@ -42,6 +42,12 @@ using os_char			=char;
 #define hgl_realloc(ptr,size)	realloc(ptr,size)
 #define hgl_free				free
 
+template<typename T>
+inline T *hgl_aligned_malloc(size_t n)
+{
+    return aligned_malloc(alignof(T),n*sizeof(T));
+}
+
 #define OS_EXTERNAL_H           <dlfcn.h>
 typedef void *                  ExternalModulePointer;
 #define pi_get                  dlsym

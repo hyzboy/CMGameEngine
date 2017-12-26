@@ -42,6 +42,12 @@ using os_char			=wchar_t;
     #define hgl_malloc(size)        _aligned_malloc(size,HGL_MEM_ALIGN)
     #define hgl_realloc(ptr,size)   _aligned_realloc(ptr,size,HGL_MEM_ALIGN)
     #define hgl_free                _aligned_free
+
+    template<typename T>
+    inline T *hgl_aligned_malloc(size_t n)
+    {
+        return aligned_malloc(n*sizeof(T),alignof(T));
+    }
 #else
     #define hgl_malloc(size)        memalign(HGL_MEM_ALIGN,size)
     #define hgl_realloc(ptr,size)   realloc(ptr,size)

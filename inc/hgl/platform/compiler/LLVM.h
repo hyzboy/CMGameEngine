@@ -1,4 +1,4 @@
-#ifndef HGL_COMPILER_LLVM_CLANG_INCLUDE
+﻿#ifndef HGL_COMPILER_LLVM_CLANG_INCLUDE
 #define HGL_COMPILER_LLVM_CLANG_INCLUDE
 //--------------------------------------------------------------------------------------------------
 #define HGL_COMPILER_NAME		OS_TEXT("LLVM Clang")
@@ -12,7 +12,9 @@
 
 #endif//__clang__
 
-#define HGL_ALIGNED(var) var __declspec(align(32))
+#define HGL_ALIGN(n)                    __declspec(align(n))                    //设置数据结构对齐宏
+
+#define HGL_THREAD_LOCAL_STORAGE        __thread                                //线程本地储存
 //--------------------------------------------------------------------------------------------------
 #define HGL_LIB_FRONT	HGL_LIB_OS "_" HGL_LIB_COMPILER_NAME "_" HGL_LIB_DEBUG_NAME "_"
 
