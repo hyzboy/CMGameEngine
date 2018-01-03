@@ -246,4 +246,22 @@ namespace hgl
 
         return nullptr;
     }
+
+    /**
+     * 转换BOM数据到CharSet结构
+     * @param bom BOM数据
+     * @param cs 字符集数据结构
+     * @return 是否转换成功
+     */
+    bool BOM2CharSet(CharSet *cs,const BOMFileHeader *bom)
+    {
+        if(!cs)return(false);
+        if(!bom)return(false);
+
+        if(bom->bom<=bomNone||bom->bom>=bomEnd)return(false);
+
+        cs->codepage=bom->code_page;
+        memcpy(cs->charset,bom->char_set,sizeof(CharSetName));
+        return(true);
+    }
 }//namespace hgl
