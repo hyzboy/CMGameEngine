@@ -224,4 +224,26 @@ namespace hgl
 
         return dst;
     }
+
+    /**
+     * 分析这个unicode文本文件的字节序
+     * @param input 输入数据
+     * @return 字节序
+     */
+    const BOMFileHeader *ParseBOM(const void *input)
+    {
+        if(!input)return(nullptr);
+
+        const BOMFileHeader *bfh=BOMData;
+
+        for(uint i=bomUTF8;i<bomEnd;i++)
+        {
+            if(memcmp(input,bfh->data,bfh->size)==0)
+                return bfh;
+
+            ++bfh;
+        }
+
+        return nullptr;
+    }
 }//namespace hgl
