@@ -118,6 +118,12 @@ bool ExtNameCheck(const os_char *ext_name)
     return(false);
 }
 
+//未来优化内容： 
+
+//  1.建立永久性的文件缓冲区，避每个文件都分配、释放内存。可提升性能.
+
+//  评估：现在已经很快了，不想做了。留给有心人做吧！
+
 template<typename TOS> void Convert(const OSString &in_filename,const OSString &out_filename)
 {
     char *old_text;
