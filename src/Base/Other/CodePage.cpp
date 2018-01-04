@@ -234,7 +234,7 @@ namespace hgl
     {
         if(!input)return(nullptr);
 
-        const BOMFileHeader *bfh=BOMData;
+        const BOMFileHeader *bfh=BOMData+bomUTF8;
 
         for(uint i=bomUTF8;i<bomEnd;i++)
         {
