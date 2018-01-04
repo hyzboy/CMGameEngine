@@ -120,31 +120,109 @@ bool ExtNameCheck(const os_char *ext_name)
 
 template<typename TOS> void Convert(const OSString &in_filename,const OSString &out_filename)
 {
-    UTF16StringList old_text;           //全部使用UTF16String是为了方便做各种字符的检测
+    char *old_text;
+    union
+    {
+        char *u8_text;
+        u16char *u16_text;
+    }in_text;
 
-    if(LoadStringListFromTextFile(old_text,in_filename,in_charset)<=0)
-        return;
+    const int64 old_size=LoadFileToMemory(in_filename,(void **)&old_text);
+    int64 in_size;
 
+    if(old_size<=0)return;
+
+    const BOMFileHeader *bom=ParseBOM(old_text);
+    CharSet in_cs;
+
+    if(bom)         //有BOM的
+    {
+        BOM2CharSet(&in_cs,bom);
+
+        if(in_cs==out_charset)                              //完全一样
+        {
+            cmd_out<<OS_TEXT("[OK][COPY] filename: ")<<out_filename.c_str()<<std::endl;
+
+            SaveMemoryToFile(out_filename,old_text,old_size);        //直接保存
+            delete[] old_text;
+            return;
+        }
+
+        in_text.u8_text=old_text+bom->size;
+        in_size=old_size-bom->size;
+    }
+    else
+    {
+        in_cs=in_charset;
+        in_text.u8_text=old_text;
+        in_size=old_size;
+    }
+    
     FileOutputStream fos;
 
     if(!fos.CreateTrunc(out_filename))
     {
+        delete[] old_text;
         cmd_out<<OS_TEXT("[ERR] Create file failed: ")<<out_filename.c_str()<<std::endl;
         return;
     }
 
+    bool result=false;
     TOS tos(&fos);
 
     if(include_bom)
         tos.WriteBOM();
 
-    if(!tos.WriteText(old_text))
+    if(in_cs==out_charset)                                  // in/out一样，但走这里，代表它原本是没有BOM头的
+    {        
+        result=tos.WriteChars(old_text,old_size);           //直接写入原始数据
+    }
+    else
+    if(in_cs==utf8_charset)
     {
-        cmd_out<<OS_TEXT("[ERR] Write Text failed")<<std::endl;
-        return;
+        result=tos.WriteChars(in_text.u8_text,in_size);
+    }
+    else 
+    if((in_cs==utf16be_charset&&out_charset==utf16le_charset)
+     ||(in_cs==utf16le_charset&&out_charset==utf16be_charset))      //16位互转
+    {
+        in_size>>=1;
+
+        EndianSwap<u16char>(in_text.u16_text,in_size);
+
+        result=tos.WriteChars(in_text.u16_text,in_size);
+    }
+    else
+    if(out_charset==utf8_charset)
+    {
+        char *new_text;
+        int new_size;
+
+        new_size=to_utf8(in_cs,&new_text,in_text.u8_text,in_size);
+
+        result=tos.WriteChars(new_text,new_size);
+
+        delete[] new_text;
+    }
+    else
+    if(out_charset==utf8_charset)
+    {
+        u16char *new_text;
+        int new_size;
+
+        new_size=to_utf16(in_cs,&new_text,in_text.u8_text,in_size);
+
+        result=tos.WriteChars(new_text,new_size);
+        
+        delete[] new_text;
     }
 
-    cmd_out<<OS_TEXT("[OK] filename: ")<<out_filename.c_str()<<std::endl;
+    if(!result)
+        cmd_out<<OS_TEXT("[ERR] Write Text failed")<<std::endl;
+    else
+        cmd_out<<OS_TEXT("[OK] filename: ")<<out_filename.c_str()<<std::endl;
+    
+    delete[] old_text;
 };
 
 void ConvertFile(struct EnumFileConfig *efc,FileInfo &fi)
@@ -221,8 +299,8 @@ HGL_CONSOLE_MAIN_FUNC()
         std::cout<<"\t-no_bom\ttarget file add BOM header"<<std::endl;                                      //新文件不需要BOM头
         std::cout<<"\t-sf\tproc sub-folder"<<std::endl;                                                     //处理子目录
         std::cout<<std::endl;
-        std::cout<<" Format:  TextEncodingConvert [-fjh|-jh|-fbl|-bl|-no_bom|-sf] -in <shift_jis|big5|gbk|...> <input path> -out <utf8|utf16le> <output path>"<<std::endl;
-        std::cout<<" Example: TextEncodingConvert -in shift_jis -no_bom /home/hyzboy/input/ -out utf8 /home/hyzboy/output/"<<std::endl;
+        std::cout<<" Format:  TextEncodingConvert [-fjh|-jh|-fbl|-bl|-no_bom|-sf] -in <us-ascii|shift_jis|big5|gbk|...> <input path> -out <utf8|utf16le> <output path>"<<std::endl;
+        std::cout<<" Example: TextEncodingConvert -in us-ascii -no_bom /home/hyzboy/input/ -out utf8 /home/hyzboy/output/"<<std::endl;
         std::cout<<std::endl;
 
         out_string_list(convert_ext_list,OS_TEXT("filter"));
@@ -306,11 +384,9 @@ HGL_CONSOLE_MAIN_FUNC()
         const OSString &out_cs_str=args[out_off+1];
 #endif//
 
-        if(out_cs_str.CaseComp("utf8")==0)out_charset=CharSet(ccpUTF8);else
-        if(out_cs_str.CaseComp("utf16")==0
-         ||out_cs_str.CaseComp("utf16le")==0
-         ||out_cs_str.CaseComp("utf16-le")==0
-         ||out_cs_str.CaseComp("utf-16le")==0
+        if(charset_cmp(out_cs_str.c_str(),"utf8")==0)out_charset=CharSet(ccpUTF8);else
+        if(charset_cmp(out_cs_str.c_str(),"utf16")==0
+         ||charset_cmp(out_cs_str.c_str(),"ucs2le")==0
         )out_charset=CharSet(ccpUTF16LE);else
         {
             std::cout<<"out charset error,only support utf8 or utf16le"<<std::endl;
