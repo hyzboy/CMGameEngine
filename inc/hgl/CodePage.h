@@ -122,8 +122,9 @@ namespace hgl
 			codepage=cs.codepage;
 			strcpy(charset,CharSetNameLength,cs.charset);
 		}
-
-        CompOperatorMemcmp(const CharSet &)
+        
+	    int _Comp(const CharSet &data)const{return codepage-data.codepage;}	\
+        CompOperator(const CharSet &,_Comp)
 	};//struct CharacterSet
 
 	inline CharSet::CharSet(CharCodePage ccp)
