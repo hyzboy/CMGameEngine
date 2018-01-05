@@ -68,12 +68,6 @@
 	#define HGL_LIB_CPU_NAME			OS_TEXT("x86")
 	#define HGL_MIN_MEMORY_ALLOC_BYTES	4
 	#define HGL_ENDIAN					HGL_LITTLE_ENDIAN
-#elif defined(__ia64__) || defined(__ia64) || defined(_M_IA64)
-	#define	HGL_CPU						HGL_CPU_Itanium
-	#define HGL_CPU_NAME				OS_TEXT("Itanium IA64")
-	#define HGL_LIB_CPU_NAME			OS_TEXT("Itanium")
-	#define HGL_MIN_MEMORY_ALLOC_BYTES	8
-	#define HGL_ENDIAN					HGL_BIG_ENDIAN
 #elif defined(_M_MIPS)||defined(_MIPS_ARCH) || defined(__mips__) || defined(__mips)
 	#define HGL_MIN_MEMORY_ALLOC_BYTES	4
 	#ifdef __MIPSEL__
@@ -120,18 +114,6 @@
 	#define HGL_CPU_NAME				OS_TEXT("ARM")
 	#define HGL_LIB_CPU_NAME			OS_TEXT("ARM")
 	#define HGL_MIN_MEMORY_ALLOC_BYTES	4
-	#define HGL_ENDIAN					HGL_BIG_ENDIAN
-#elif defined(__sparc64__)||defined(sparc64)
-    #define HGL_CPU                     HGL_CPU_SPARC64
-    #define HGL_CPU_NAME                OS_TEXT("Sparc64")
-    #define HGL_LIB_CPU_NAME            OS_TEXT("Sparc64")
-    #define HGL_MIN_MEMORY_ALLOC_BYTES  8
-    #define HGL_ENDIAN                  HGL_BIG_ENDIAN
-#elif defined(__sparc__) || defined(__sparc) || defined(__sparcv8)
-	#define	HGL_CPU						HGL_CPU_SPARC
-	#define HGL_CPU_NAME				OS_TEXT("Sparc")
-	#define HGL_LIB_CPU_NAME			OS_TEXT("Sparc")
-	#define HGL_MIN_MEMORY_ALLOC_BYTES	8
 	#define HGL_ENDIAN					HGL_BIG_ENDIAN
 #else
 	#error Can not support the cpu.
@@ -307,26 +289,7 @@
 #elif HGL_OS == HGL_OS_iOS
 
 	#include<hgl/platform/os/MacOS.h>
-
-	#if HGL_COMPILER == HGL_COMPILER_LLVM
-		#include<hgl/platform/compiler/LLVM.h>
-	#elif HGL_COMPILER == HGL_COMPILER_GNU
-		#include<hgl/platform/compiler/GNU.h>
-	#else
-		#error Unrecognized compiler
-	#endif
-
-#elif HGL_OS == HGL_OS_Solaris
-
-	#include<hgl/platform/os/Solaris.h>
-
-	#if HGL_COMPILER == HGL_COMPILER_SUN
-		#include<hgl/platform/compiler/SUN.h>
-	#elif HGL_COMPILER == HGL_COMPILER_GNU
-		#include<hgl/platform/compiler/GNU.h>
-	#else
-		#error Unrecognized compiler
-	#endif
+	#include<hgl/platform/compiler/LLVM.h>	
 
 #elif HGL_OS == HGL_OS_PSP
 
