@@ -1,6 +1,7 @@
 ﻿#include<hgl/Graphics.h>                //GraphicsApplication,SystemInitInfo
 #include<hgl/graph/Render.h>            //SetClearColor,ClearColorDepthBuffer
 #include<hgl/graph/Material.h>          //Material
+#include<hgl/graph/InlineTexture.h>
 #include<hgl/graph/InlineRenderable.h>  //CreateRenderableCube
 #include<hgl/graph/Renderable.h>        //Renderable
 #include<hgl/graph/Camera.h>            //WalkerCamera
