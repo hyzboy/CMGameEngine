@@ -8,8 +8,9 @@ HGL_QT_MAIN_FUNC()
 
 	app.Init(&sii);
 
-    MainWindow foo;
+    MainWindow win;
 
-    foo.Init();
+    win.Init();
+    win.show();
     return app.exec();
 }
