@@ -17,13 +17,13 @@ namespace hgl
     struct AudioSourceItem
     {
         friend const double GetGain(AudioListener *,AudioSourceItem *);
-		friend class AudioScene;
+        friend class AudioScene;
 
-	private:
+    private:
 
         AudioBuffer *buffer;
 
-	public:
+    public:
 
         bool loop;                                          ///<是否循环播放
 //         float min_gain,max_gain;
@@ -39,20 +39,20 @@ namespace hgl
         Vector3f velocity;
         Vector3f direction;
 
-	private:
+    private:
 
         double start_play_time;                             ///<开播时间
         bool is_play;                                       ///<是否需要播放
 
-		Vector3f last_pos;
-		double last_time;
+        Vector3f last_pos;
+        double last_time;
 
         Vector3f cur_pos;
         double cur_time;
 
-		double move_speed;
+        double move_speed;
 
-        double last_gain;                                                                           ///<最近一次的音量
+        double last_gain;                                   ///<最近一次的音量
 
         AudioSource *source;
 
@@ -135,18 +135,18 @@ namespace hgl
             return asi?GetGain(listener,asi)*asi->gain:0;
         }
 
-        virtual void    OnToMute(AudioSourceItem *){/*無任何處理，請自行重載處理*/}                      ///<从有声变成聽不到聲音
-        virtual void    OnToHear(AudioSourceItem *){/*無任何處理，請自行重載處理*/}                      ///<从听不到声变成能听到声音
+        virtual void    OnToMute(AudioSourceItem *){/*無任何處理，請自行重載處理*/}                 ///<从有声变成聽不到聲音
+        virtual void    OnToHear(AudioSourceItem *){/*無任何處理，請自行重載處理*/}                 ///<从听不到声变成能听到声音
 
-        virtual void    OnContinuedMute(AudioSourceItem *){/*無任何處理，請自行重載處理*/}               ///<持续聽不到聲音
-        virtual void    OnContinuedHear(AudioSourceItem *){/*無任何處理，請自行重載處理*/}               ///<持续可以聽到聲音
+        virtual void    OnContinuedMute(AudioSourceItem *){/*無任何處理，請自行重載處理*/}          ///<持续聽不到聲音
+        virtual void    OnContinuedHear(AudioSourceItem *){/*無任何處理，請自行重載處理*/}          ///<持续可以聽到聲音
 
-		virtual bool	OnStopped(AudioSourceItem *){return true;}									///<单个音源播放结束事件,返回TRUE表示可以释放这个音源，返回FALSE依然占用这个音源
+        virtual bool    OnStopped(AudioSourceItem *){return true;}                                  ///<单个音源播放结束事件,返回TRUE表示可以释放这个音源，返回FALSE依然占用这个音源
 
     public:
 
         AudioScene(int max_source,AudioListener *al);                                               ///<构造函数(指定最大音源数)
-        virtual ~AudioScene()=default;                                                   ///<析构函数
+        virtual ~AudioScene()=default;                                                              ///<析构函数
 
                 void                SetListener(AudioListener *al){listener=al;}                    ///<設置收聽者
 
@@ -164,11 +164,11 @@ namespace hgl
         virtual AudioSourceItem *   Create(AudioBuffer *,const Vector3f &pos,const float &gain=1);  ///<创建一個音源
         virtual void                Delete(AudioSourceItem *);                                      ///<删除一个音源
 
-		virtual void				Clear()															///<清除所有音源
-		{
-			source_list.Clear();
-			source_pool.ReleaseAll();
-		}
+        virtual void                Clear()                                                         ///<清除所有音源
+        {
+            source_list.Clear();
+            source_pool.ReleaseAll();
+        }
 
         virtual int                 Update(const double &ct=0);                                     ///<刷新,返回仍在發聲的音源數量
     };//class AudioScene

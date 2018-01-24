@@ -5,9 +5,9 @@ namespace hgl
 {
 //    void SystemCheck(SystemInfo *,bool);
 
-	class ConsoleSystemInitInfo;
+    class ConsoleSystemInitInfo;
 
-	bool InitCore(SystemInfo &si, ConsoleSystemInitInfo *sii);
+    bool InitCore(SystemInfo &si, ConsoleSystemInitInfo *sii);
     void CloseCore();
 }
 
@@ -27,7 +27,7 @@ HGL_PLUGIN_FUNC bool InitOpenALEE(const os_char *driver_name,const char *device_
 
 HGL_PLUGIN_FUNC void CloseOpenALEE()
 {
-	openal::CloseOpenAL();
+    openal::CloseOpenAL();
 
     CloseCore();
 }
