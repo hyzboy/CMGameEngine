@@ -139,8 +139,8 @@ namespace hgl
         if(size<=0)return(false);
 
         Clear();
-
-        if(aft!=aftVorbis)
+        
+        if(aft<=aftNone||aft>=aftEnd)
         {
             LOG_ERROR(OS_TEXT("未支持的音频文件类型！AudioFileType: ")+OSString(aft));
 
