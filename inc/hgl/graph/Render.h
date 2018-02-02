@@ -156,15 +156,6 @@ namespace hgl
 		//位于SceneOrient.CPP中
 		extern Matrix4f Ortho2DMatrix;																///<全局2D视图矩阵
 
-		//位于InlineRenderable.CPP中
-
-		extern Texture1D *WhiteLine;																///<白线背景
-		extern Texture1D *BlackWhiteLine;															///<黑白线
-
-		extern Texture2D *BlackWhiteGrid;															///<黑白格贴图
-		extern Texture2D *GrayWhiteGrid;                                                            ///<灰白格贴图
-		extern Texture2D *BlueWhiteGrid;                                                            ///<蓝白格贴图
-
 //         extern VertexArray *WireCube;                                                            ///<白色线框立方体
 //         extern VertexArray *WireRect;                                                            ///<线框2D矩形
 //         extern VertexArray *WireCircle;                                                          ///<空心圆

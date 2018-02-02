@@ -1,4 +1,5 @@
 ﻿#include"SpiralCube.h"
+#include<hgl/graph/InlineTexture.h>
 #include<hgl/graph/InlineRenderable.h>
 
 SpiralCube::SpiralCube(const Vector3f &up_vector)

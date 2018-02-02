@@ -3,20 +3,20 @@
 
 namespace hgl
 {
-	class ConeAngle             ///锥形角度数据类
-	{
-	public:
+    class ConeAngle             ///锥形角度数据类
+    {
+    public:
 
-		float inner;            //内部
-		float outer;            //外部
+        float inner;            //内部
+        float outer;            //外部
 
-	public:
+    public:
 
-		ConeAngle()
-		{
-			inner=0;
-			outer=0;
-		}
-	};
+        ConeAngle()
+        {
+            inner=0;
+            outer=0;
+        }
+    };
 }//namespace hgl
 #endif//HGL_CONEANGLE_INCLUDE

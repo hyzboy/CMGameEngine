@@ -1,54 +1,54 @@
-﻿	friend class AudioPlayer;
+﻿    friend class AudioPlayer;
 
 private:
 
-	void InitPrivate();
+    void InitPrivate();
 
-	AudioBuffer *Buffer;
+    AudioBuffer *Buffer;
 
 protected:
 
-	uint index;
+    uint index;
 
-	bool pause;
+    bool pause;
 
-	bool loop;
-	float pitch;
-	float gain;
-	float cone_gain;
-	Vector3f position;
-	Vector3f velocity;
-	Vector3f direction;
-	float ref_dist,max_dist;
+    bool loop;
+    float pitch;
+    float gain;
+    float cone_gain;
+    Vector3f position;
+    Vector3f velocity;
+    Vector3f direction;
+    float ref_dist,max_dist;
     uint distance_model;
-	float rolloff_factor;
-	ConeAngle angle;
+    float rolloff_factor;
+    ConeAngle angle;
 
     float doppler_factor;
     float doppler_velocity;
 
 public:
 
-	uint GetIndex()const{return index;}
+    uint GetIndex()const{return index;}
 
-	double GetCurTime();
+    double GetCurTime();
     void SetCurTime(const double &);
 
-	int GetState();
-	float GetMinGain();
-	float GetMaxGain();
+    int GetState();
+    float GetMinGain();
+    float GetMaxGain();
 
-	const bool GetLoop()const{return loop;}
+    const bool GetLoop()const{return loop;}
 
-	const float GetPitch()const{return pitch;}
-	const float GetGain()const{return gain;}
-	const float GetConeGain()const{return cone_gain;}
+    const float GetPitch()const{return pitch;}
+    const float GetGain()const{return gain;}
+    const float GetConeGain()const{return cone_gain;}
 
-	const uint GetDistanceModel()const{return distance_model;}
-	const float GetRolloffFactor()const{return rolloff_factor;}
+    const uint GetDistanceModel()const{return distance_model;}
+    const float GetRolloffFactor()const{return rolloff_factor;}
 
-	const void GetDistance(float &rd,float &md)const
-	{
+    const void GetDistance(float &rd,float &md)const
+    {
         rd=ref_dist;
         md=max_dist;
     }
@@ -59,9 +59,9 @@ public:
         velocity=doppler_velocity;
     }
 
-	virtual void SetLoop(bool);
-	void SetPitch(float);
-	void SetGain(float);
-	void SetConeGain(float);
+    virtual void SetLoop(bool);
+    void SetPitch(float);
+    void SetGain(float);
+    void SetConeGain(float);
     void SetDistanceModel(uint);
-	void SetRolloffFactor(float);
+    void SetRolloffFactor(float);

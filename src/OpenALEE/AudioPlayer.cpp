@@ -32,21 +32,21 @@ namespace hgl
         ps=psNone;
 
         {
-            hglSetPropertyRead(	Index,          this,AudioPlayer::GetIndex		);
-            hglSetPropertyRead( Time,           this,AudioPlayer::GetTime		);
+            hglSetPropertyRead( Index,          this,AudioPlayer::GetIndex      );
+            hglSetPropertyRead( Time,           this,AudioPlayer::GetTime       );
 
-            hglSetPropertyRead(	State,          this,AudioPlayer::GetPlayState	);
+            hglSetPropertyRead( State,          this,AudioPlayer::GetPlayState  );
             hglSetPropertyRead( SourceState,    this,AudioPlayer::GetSourceState);
-            hglSetPropertyRead( MinGain,        this,AudioPlayer::GetMinGain	);
-            hglSetPropertyRead( MaxGain,        this,AudioPlayer::GetMaxGain	);
+            hglSetPropertyRead( MinGain,        this,AudioPlayer::GetMinGain    );
+            hglSetPropertyRead( MaxGain,        this,AudioPlayer::GetMaxGain    );
 
-            hglSetProperty(     Loop,           this,AudioPlayer::GetLoop,          AudioPlayer::SetLoop			);
+            hglSetProperty(     Loop,           this,AudioPlayer::GetLoop,          AudioPlayer::SetLoop            );
 
-            hglSetProperty(     Pitch,          this,AudioPlayer::GetPitch,         AudioPlayer::SetPitch			);
-            hglSetProperty(     Gain,           this,AudioPlayer::GetGain,          AudioPlayer::SetGain			);
-            hglSetProperty(     ConeGain,       this,AudioPlayer::GetConeGain,      AudioPlayer::SetConeGain		);
+            hglSetProperty(     Pitch,          this,AudioPlayer::GetPitch,         AudioPlayer::SetPitch           );
+            hglSetProperty(     Gain,           this,AudioPlayer::GetGain,          AudioPlayer::SetGain            );
+            hglSetProperty(     ConeGain,       this,AudioPlayer::GetConeGain,      AudioPlayer::SetConeGain        );
 
-            hglSetProperty(     RolloffFactor,	this,AudioPlayer::GetRolloffFactor,	AudioPlayer::SetRolloffFactor   );
+            hglSetProperty(     RolloffFactor,  this,AudioPlayer::GetRolloffFactor, AudioPlayer::SetRolloffFactor   );
         }
 
         if(!audiosource.Create())return;
@@ -139,8 +139,8 @@ namespace hgl
         if(size<=0)return(false);
 
         Clear();
-
-        if(aft!=aftVorbis)
+        
+        if(aft<=aftNone||aft>=aftEnd)
         {
             LOG_ERROR(OS_TEXT("未支持的音频文件类型！AudioFileType: ")+OSString(aft));
 
