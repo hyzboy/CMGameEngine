@@ -8,7 +8,7 @@
 
 namespace hgl
 {
-    bool GetTempPath(wchar_t *path,unsigned long s)
+    bool GetTempPath(WideString &temp_path,unsigned long s)
     {
         HKEY hKey;
         DWORD type;
@@ -26,7 +26,10 @@ namespace hgl
 
             if(result==ERROR_SUCCESS)
             {
+                wchar_t path[HGL_MAX_PATH];
+                
                 ExpandEnvironmentStringsW(temp,path,s);
+                temp_path=path;
                 return(true);
             }
         }
