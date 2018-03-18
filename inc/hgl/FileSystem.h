@@ -73,10 +73,10 @@ namespace hgl
 
         struct EnumFileConfig;
 
-        using ENUM_FOLDER_FUNC=void(*)(struct EnumFileConfig *parent_efc,struct EnumFileConfig *cur_efc,const FileInfo &fi);
-        using ENUM_FILE_FUNC=void(*)(struct EnumFileConfig *,const FileInfo &fi);
-        using CREATE_SUB_CONFIG=EnumFileConfig *(*)(const struct EnumFileConfig *up_efc,const OSString &sub_folder_name);
-        EnumFileConfig *DefaultCreateSubConfig(const struct EnumFileConfig *efc,const OSString &sub_folder_name);
+        using ENUM_FOLDER_FUNC=void(*)(struct EnumFileConfig *parent_efc,struct EnumFileConfig *cur_efc,FileInfo &fi);
+        using ENUM_FILE_FUNC=void(*)(struct EnumFileConfig *,FileInfo &fi);
+        using CREATE_SUB_CONFIG=EnumFileConfig *(*)(struct EnumFileConfig *up_efc,const OSString &sub_folder_name);
+        EnumFileConfig *DefaultCreateSubConfig(struct EnumFileConfig *efc,const OSString &sub_folder_name);
 
         /**
         * 枚举文件配置

@@ -341,7 +341,7 @@ namespace hgl
             return(new EnumFileConfig(efc,full_sub_folder_name));
         }
 
-        void AddToList(struct EnumFileConfig *efc,const hgl::filesystem::FileInfo &fi)
+        void AddToList(struct EnumFileConfig *efc,hgl::filesystem::FileInfo &fi)
         {
             EnumFileInfo *efi = (EnumFileInfo *)efc;
 

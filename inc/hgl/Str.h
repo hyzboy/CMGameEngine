@@ -242,7 +242,7 @@ namespace hgl
     /**
     * 复制字符串，并指定最大长度
     * @param dst 目标字符串
-    * @param dst_count 目标字符串最大多少个字符
+    * @param count 目标字符串最大多少个字符
     * @param src 源字符串
     */
     template<typename T>
