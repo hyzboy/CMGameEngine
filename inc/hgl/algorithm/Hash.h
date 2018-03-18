@@ -68,15 +68,15 @@ namespace hgl
             CompOperator(const HashCode<SIZE> &,CompFunc)
         };//template<int SIZE> struct HashCode
 
-        typedef HashCode<4>     HashCodeCRC32;
-        typedef HashCode<4>     HashCodeAdler32;
-        typedef HashCode<16>    HashCodeMD5;
-        typedef HashCode<16>    HashCodeMD4;
-        typedef HashCode<20>    HashCodeSHA1;
-//         typedef HashCode<28>    HashCodeSHA224;
-//         typedef HashCode<32>    HashCodeSHA256;
-//         typedef HashCode<48>    HashCodeSHA384;
-//         typedef HashCode<64>    HashCodeSHA512;
+        using HashCodeCRC32     =HashCode<4>     ;
+        using HashCodeAdler32   =HashCode<4>     ;
+        using HashCodeMD5       =HashCode<16>    ;
+        using HashCodeMD4       =HashCode<16>    ;
+        using HashCodeSHA1      =HashCode<20>    ;
+//         using HashCodeSHA224    =HashCode<28>    ;
+//         using HashCodeSHA256    =HashCode<32>    ;
+//         using HashCodeSHA384    =HashCode<48>    ;
+//         using HashCodeSHA512    =HashCode<64>    ;
 
         const int hash_code_bytes[]={0,4,4,16,16,20,28,32,48,64};		//hash码长度
 
