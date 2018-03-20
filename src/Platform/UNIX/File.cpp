@@ -314,8 +314,6 @@ namespace hgl
                     ++count;
                 }
 
-                memset(&fi,0,sizeof(FileInfo));
-
                 strcpy(fi.name,HGL_MAX_PATH,entry->d_name);
 
                 if(config->folder_name.IsEmpty())
