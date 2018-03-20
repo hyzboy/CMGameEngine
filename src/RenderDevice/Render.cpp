@@ -19,16 +19,16 @@ namespace hgl
     {
         bool InitOpenGLAPI();                                                                        //初始化OpenGL API支持
 
-        bool InitTextureAPI();        //初始化贴图API
+        bool InitTextureAPI();      //初始化贴图API
         bool InitVertexBufferAPI(); //初始化顶点缓冲区API
 
         namespace OpenGLCore
         {
-            void PutOpenGLInfo();    //输出OpenGL特性信息
-            void InitScissor();        //初始化裁剪区
-            void InitTexture();        //初始化贴图
+            void PutOpenGLInfo();   //输出OpenGL特性信息
+            void InitScissor();     //初始化裁剪区
+            void InitTexture();     //初始化贴图
             void CloseTexture();    //关闭贴图
-            void InitBuffer();        //初始化缓冲区
+            void InitBuffer();      //初始化缓冲区
             void InitFace();        //初始化面处理
         }//namespace OpenGLCore
 
@@ -162,7 +162,7 @@ namespace hgl
             }
 
             obj->SetShaderLocation((VertexBufferType)vbt,location);                                 //设定缓冲区对应glsl属性
-//            obj->SetShaderLocation((VertexBufferType)vbt,vbt);                                 //设定缓冲区对应glsl属性(使用了layout方法，所以无需再获取)
+            //obj->SetShaderLocation((VertexBufferType)vbt,vbt);                                      //设定缓冲区对应glsl属性(使用了layout方法，所以无需再获取)
 
             return(true);
         }
