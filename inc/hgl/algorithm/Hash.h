@@ -48,6 +48,23 @@ namespace hgl
                 return code[index];
             }
 
+            void ParseFromString(const char *str)
+            {
+                ParseHexStr(code,str,SIZE);
+            }
+
+            template<typename T>
+            void ToUpperString(T *str,const T gap_char=0)
+            {
+                ToUpperHexStr<T>(str,code,SIZE,gap_char);
+            }
+
+            template<typename T>
+            void ToLowerString(T *str,const T gap_char=0)
+            {
+                ToLowerHexStr<T>(str,code,SIZE,gap_char);
+            }
+
             const int CompFunc(const HashCode<SIZE> &hash)const
             {
                 const unsigned char *s=code;
