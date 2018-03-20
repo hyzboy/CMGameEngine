@@ -354,9 +354,9 @@ namespace hgl
 
     
     /**
-    * 在字符串str1内查找另一个字符串str2(从向后前)
+    * 在字符串str1内查找另一个字符串str2(从后向前)
     * @param str1 完整的字符串
-    * @param size str1最大查找字符
+    * @param size1 str1最大查找字符
     * @param str2 要查找的字符串
     * @param size2 str2长度
     * @return str2在str1中所在位置的指针
@@ -394,7 +394,9 @@ namespace hgl
     /**
     * 在字符串str1内查找另一个字符串str2,忽略大小写
     * @param str1 完整的字符串
+    * @param size1 str1的长度
     * @param str2 要查找的字符串
+    * @param size2 str2的长度
     * @return str2在str1中所在位置的指针
     */
     template<typename T>
