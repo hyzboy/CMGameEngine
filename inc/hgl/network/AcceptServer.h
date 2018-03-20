@@ -14,7 +14,7 @@ namespace hgl
 			char *ipstr;
 
             fd_set accept_set;
-            struct timeval accept_timeout;
+            struct timeval accept_timeout,ato;
 
 		protected:
 

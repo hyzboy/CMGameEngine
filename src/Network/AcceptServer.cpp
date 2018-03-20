@@ -25,13 +25,12 @@ namespace hgl
              ||accept_timeout.tv_usec)
             {
                 int result;
+                
+                hgl_cpy(ato,accept_timeout);            //下面的select会将数据清0,所以必须是复制一份出来用
 
-                do
-                {
-                    FD_ZERO(&accept_set);
-                    FD_SET(ThisSocket,&accept_set);
-                    result=select(ThisSocket+1,&accept_set,nullptr,nullptr,&accept_timeout);
-                }while(result<0&&result==EINTR);
+                FD_ZERO(&accept_set);
+                FD_SET(ThisSocket,&accept_set);
+                result=select(ThisSocket+1,&accept_set,nullptr,nullptr,&ato);
 
                 if(result<=0)
                     return(0);
