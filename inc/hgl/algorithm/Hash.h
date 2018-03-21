@@ -41,7 +41,7 @@ namespace hgl
                 hgl_zero(code);
             }
 
-            static const int size(){return SIZE;}
+            static constexpr int size(){return SIZE;}
 
             const unsigned char operator[](int index)const
             {
