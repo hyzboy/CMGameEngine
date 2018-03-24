@@ -171,7 +171,7 @@ namespace hgl
 		{
 			count=0;
 			max_count=power_to_2(n);
-            items=hgl_aligned_malloc<T>(1);
+            items=hgl_aligned_malloc<T>(max_count);
 		}
 		else
 		{
