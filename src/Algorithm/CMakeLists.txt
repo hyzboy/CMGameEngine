@@ -11,6 +11,7 @@ ENDIF(BUILD_NETWORK_WEBSOCKET)
 SET(algorithm_files
 	Compress.cpp
 	LSinCos.cpp
+	LAtan.cpp
 	ProbSelect.cpp
 	PseudoRandom.cpp)
 
