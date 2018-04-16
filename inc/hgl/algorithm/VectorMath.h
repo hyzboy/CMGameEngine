@@ -14,7 +14,10 @@ namespace hgl
     {
         double Lsin(int angle);                                     ///<低精度sin计算,注意传入的参数为角度而非弧度
         double Lcos(int angle);                                     ///<低精度cos计算,注意传入的参数为角度而非弧度
-        void Lsincos(int angle, double &s, double &c);                ///<低精度sin+cos计算,注意传入的参数为角度而非弧度
+        void Lsincos(int angle, double &s, double &c);              ///<低精度sin+cos计算,注意传入的参数为角度而非弧度
+
+        double inline Latan(double z);                              ///<低精度atan函数
+        double Latan2(double y, double x);                          ///<低精度atan2函数
 
         inline float length_squared(const Vector2f &v)
         {
