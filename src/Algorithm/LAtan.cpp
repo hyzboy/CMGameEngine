@@ -1,17 +1,9 @@
-#include<hgl/TypeFunc.h>
+#include<hgl/algorithm/VectorMath.h>
 #include<cmath>
 namespace hgl
 {
     namespace algorithm
     {
-        double inline Latan(double z)
-        {
-            constexpr double n1 = 0.97239411f;
-            constexpr double n2 = -0.19194795f;
-
-            return (n1 + n2 * z * z) * z;
-        }
-
         double Latan2(double y, double x)
         {
             if (x != 0.0f)
