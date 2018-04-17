@@ -132,6 +132,9 @@ IF(UNIX)
 ENDIF(UNIX)
 
 IF(CMAKE_COMPILER_IS_GNUCC OR MINGW)
+
+    add_compile_options("-fext-numeric-literals")
+
 	if(USE_ALL_STATIC)
 		add_compile_options("-static")
 	endif(USE_ALL_STATIC)
