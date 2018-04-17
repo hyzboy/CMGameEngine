@@ -11,6 +11,8 @@ namespace hgl
 	using  int64    =  signed __int64;	///<有符号64位整型
 	using uint64    =unsigned __int64;	///<无符号64位整型
 
-    using float128  =long double     ;
+    using float32   =float;
+    using float64   =double;
+    using float128  =long double;       ///<Visual C++ 2017下long double实质依然精度等于double。x86-64 CPU已有实现128位浮点计算，可使用外联汇编方式实现。
 }//namespace hgl
 #endif//HGL_DATATYPE_TYPEDEF_INCLUDE

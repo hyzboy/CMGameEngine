@@ -11,9 +11,6 @@ namespace hgl
          */
         double Latan2(double y, double x) 
         {
-            constexpr double coeff_1 = HGL_PI / 4;
-            constexpr double coeff_2 = 3 * coeff_1;
-
             double abs_y = fabs(y) + 1e-10;      // kludge to prevent 0/0 condition
             double angle;
             double r;
@@ -21,12 +18,12 @@ namespace hgl
             if (x >= 0) 
             {
                 r = (x - abs_y) / (x + abs_y);
-                angle = coeff_1 - coeff_1 * r;
+                angle = HGL_PI_4 - HGL_PI_4 * r;
             } 
             else 
             {
                 r = (x + abs_y) / (abs_y - x);
-                angle = coeff_2 - coeff_1 * r;
+                angle = HGL_PI_3_4 - HGL_PI_4 * r;
             }
 
             if (y < 0) 
