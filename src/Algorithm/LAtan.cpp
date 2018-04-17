@@ -4,54 +4,35 @@ namespace hgl
 {
     namespace algorithm
     {
-        double Latan2(double y, double x)
+        /**
+         * fast atan2
+         * from£ºJim Shima
+         * date£º1999/04/23
+         */
+        double Latan2(double y, double x) 
         {
-            if (x != 0.0f)
+            constexpr double coeff_1 = HGL_PI / 4;
+            constexpr double coeff_2 = 3 * coeff_1;
+
+            double abs_y = fabs(y) + 1e-10;      // kludge to prevent 0/0 condition
+            double angle;
+            double r;
+
+            if (x >= 0) 
             {
-                if (abs(x) > abs(y))
-                {
-                    const double z = y / x;
-
-                    if (x > 0)
-                    {
-                        return Latan(z);
-                    }
-                    else if (y >= 0)
-                    {
-                        return Latan(z) + HGL_PI;
-                    }
-                    else
-                    {
-                        return Latan(z) - HGL_PI;
-                    }
-                }
-                else 
-                {
-                    const double z = x / y;
-
-                    if (y > 0)
-                    {
-                        return -Latan(z) + HGL_PI_2;
-                    }
-                    else
-                    {
-                        return -Latan(z) - HGL_PI_2;
-                    }
-                }
+                r = (x - abs_y) / (x + abs_y);
+                angle = coeff_1 - coeff_1 * r;
+            } 
+            else 
+            {
+                r = (x + abs_y) / (abs_y - x);
+                angle = coeff_2 - coeff_1 * r;
             }
+
+            if (y < 0) 
+                return (-angle);     // negate if in quad III or IV
             else
-            {
-                if (y > 0) 
-                {
-                    return HGL_PI_2;
-                }
-                else if (y < 0) 
-                {
-                    return -HGL_PI_2;
-                }
-            }
-
-            return 0; 
+                return (angle);
         }
     }//namespace algorithm
 }//namespace hgl
