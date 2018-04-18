@@ -1,9 +1,11 @@
 * 除去黑名单外，使用是免费的。包括所有商业和非商业环境，所有开源和闭源工程。但同样的，我们不会为出现的任何问题负责。
 * 对本工程的再开发或使用，必须有明确的名称标识。否则你将不会得到任何形式的支持，并被加入黑名单，即使你付费。
 
-* 电子邮箱：hyzboy (@) gmail.com
 * 源代码仓库: https://github.com/hyzboy/CMGameEngine
 * 官方网站: http://www.hyzgame.com.cn
+* 联系方式：
+ * 电子邮箱：hyzboy (@) gmail.com
+ * QQ/微信：324000607
 
 * 最低支持操作系统：Microsoft Windows 7/2008 R2 , Linux kernel 3.11
 * 最低支持编译器：GNU C/C++ 4.8 , LLVM Clang 3.8 , Microsoft Visual C++ 2015
@@ -17,9 +19,11 @@
 * Re the development or use of the project, the name must have a clear identity.
     Otherwise you will not get any kind of support,and was added to the blacklist,even if you pay.
 
-* e-mail: hyzboy (@) gmail.com
 * Source repository: https://github.com/hyzboy/CMGameEngine
 * Offical Web (sorry,only chinese): http://www.hyzgame.com
+* Contact:
+  * e-mail: hyzboy (@) gmail.com
+  * QQ/WeChat: 324000607
 
 * Minimum supported OS: Microsoft Windows 7/2008 R2 , Linux kernel 3.11
 * Minimum supported compilers: GNU C/C++ 4.8 , LLVM CLang 3.8 , Microsoft Visual C++ 2015
