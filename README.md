@@ -4,8 +4,8 @@
 * 源代码仓库: https://github.com/hyzboy/CMGameEngine
 * 官方网站: http://www.hyzgame.com.cn
 * 联系方式：
- * 电子邮箱：hyzboy (@) gmail.com
- * QQ/微信：324000607
+  * 电子邮箱：hyzboy (@) gmail.com
+  * QQ/微信：324000607
 
 * 最低支持操作系统：Microsoft Windows 7/2008 R2 , Linux kernel 3.11
 * 最低支持编译器：GNU C/C++ 4.8 , LLVM Clang 3.8 , Microsoft Visual C++ 2015
