@@ -38,7 +38,7 @@
 
 // If MATH_ENABLE_WINXP_SUPPORT is defined, we avoid using Windows symbols that require Vista or newer (e.g. GetTickCount64)
 #if !defined(WIN8) /* Win8 cannot build with XP support - GetTickCount() doesn't exist. */
-//#define MATH_ENABLE_WINXP_SUPPORT
+#define MATH_ENABLE_WINXP_SUPPORT
 #endif
 
 // If MATH_ASSERT_ON_ASSUME is defined, assume() resolves directly to assert().
@@ -50,7 +50,7 @@
 // If MATH_SILENT_ASSUME is defined, all assume() tests are stripped from the build. This
 // overrides MATH_ASSERT_ON_ASSUME.
 #ifndef MATH_SILENT_ASSUME
-//#define MATH_SILENT_ASSUME
+#define MATH_SILENT_ASSUME
 #endif
 
 // If MATH_ENABLE_INSECURE_OPTIMIZATIONS, several security checks (unsafe index out of bounds accesses etc.) are disabled.
@@ -63,7 +63,7 @@
 #ifdef _DEBUG
 // If MATH_ASSERT_CORRECTNESS is defined, special (and possibly rather costly) mathassert()
 // tests are enabled, which test the internal correctness of the library.
-//#define MATH_ASSERT_CORRECTNESS
+#define MATH_ASSERT_CORRECTNESS
 #endif
 
 // If FAIL_USING_EXCEPTIONS is defined, all mathassert(), assert() and assume() macros turn into
