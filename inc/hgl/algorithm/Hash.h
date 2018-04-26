@@ -47,6 +47,11 @@ namespace hgl
             {
                 return code[index];
             }
+            
+            void CopyFrom(const void *ptr)
+            {
+                memcpy(code,ptr,SIZE);
+            }
 
             void ParseFromString(const char *str)
             {
