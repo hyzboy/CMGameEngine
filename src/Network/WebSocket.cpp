@@ -14,7 +14,7 @@ namespace hgl
          * @param size 信息头长度
          * @return 是否解晰成功
          */
-        bool GetWebSocketInfo(UTF8String &sec_websocket_key,UTF8String &sec_websocket_protocol,uint &sec_websocket_version,const char *data,int size)
+        bool GetWebSocketInfo(UTF8String &sec_websocket_key,UTF8String &sec_websocket_protocol,uint &sec_websocket_version,const char *data,const uint size)
         {
             constexpr char SEC_WEBSOCKET_KEY_STR[]="Sec-WebSocket-Key: ";
             constexpr uint SEC_WEBSOCKET_KEY_STR_SIZE=sizeof(SEC_WEBSOCKET_KEY_STR)-1;      //sizeof的带\0所以要-1
