@@ -47,7 +47,7 @@ namespace hgl
             {
                 return code[index];
             }
-            
+
             void CopyFrom(const void *ptr)
             {
                 memcpy(code,ptr,SIZE);
@@ -59,18 +59,18 @@ namespace hgl
             }
 
             template<typename T>
-            void ToUpperString(T *str,const T gap_char=0)
+            void ToUpperString(T *str,const T gap_char=0) const
             {
                 ToUpperHexStr<T>(str,code,SIZE,gap_char);
             }
 
             template<typename T>
-            void ToLowerString(T *str,const T gap_char=0)
+            void ToLowerString(T *str,const T gap_char=0) const
             {
                 ToLowerHexStr<T>(str,code,SIZE,gap_char);
             }
 
-            const int CompFunc(const HashCode<SIZE> &hash)const
+            const int CompFunc(const HashCode<SIZE> &hash) const
             {
                 const unsigned char *s=code;
                 const unsigned char *t=hash.code;
