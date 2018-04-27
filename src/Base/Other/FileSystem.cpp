@@ -14,12 +14,13 @@ namespace hgl
 
         /**
          * 组合路径名与文件名
-         * @param fullname 完整路径文件名
          * @param pathname 路径名
          * @param filename 文件名
          */
-        void MergeFilename(OSString &fullname,const OSString &pathname,const OSString &filename)
+        OSString MergeFilename(const OSString &pathname,const OSString &filename)
         {
+            OSString fullname;
+
             if(pathname.GetEndChar()==HGL_DIRECTORY_SEPARATOR)          //结尾有分隔符
             {
                 if(filename.GetBeginChar()==HGL_DIRECTORY_SEPARATOR)    //开头有分隔符
@@ -42,6 +43,32 @@ namespace hgl
             }
 
             fullname.Strcat(filename);
+            return fullname;
+        }
+
+        /**
+         * 截取完整路径中的文件名
+         * @param filename 文件名
+         * @param fullname 完整路径文件名
+         */
+        OSString ClipFilename(const OSString &fullname)
+        {
+            const int rpos=fullname.FindRightChar('/');
+            const int lpos=fullname.FindRightChar('\\');
+
+            if(rpos==-1&&lpos==-1)
+            {
+                return OSString(fullname);
+            }
+
+            if(rpos>lpos)
+            {
+                return OSString(fullname.c_str()+rpos+1,fullname.Length()-1-rpos);
+            }
+            else
+            {
+                return OSString(fullname.c_str()+lpos+1,fullname.Length()-1-lpos);
+            }
         }
 
         /**
@@ -334,9 +361,7 @@ namespace hgl
 
         EnumFileConfig *DefaultCreateSubConfig(struct EnumFileConfig *efc,const OSString &sub_folder_name)
         {
-            OSString full_sub_folder_name;
-
-            MergeFilename(full_sub_folder_name,efc->folder_name,sub_folder_name);
+            const OSString full_sub_folder_name=MergeFilename(efc->folder_name,sub_folder_name);
 
             return(new EnumFileConfig(efc,full_sub_folder_name));
         }

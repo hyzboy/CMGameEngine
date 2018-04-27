@@ -12,7 +12,8 @@ namespace hgl
 
     namespace filesystem
     {
-	    void MergeFilename(OSString &,const OSString &,const OSString &);								///<组合路径名与文件名
+	    OSString MergeFilename(const OSString &,const OSString &);								        ///<组合路径名与文件名
+        OSString ClipFilename(const OSString &fullname);                                                ///<截取文件名
 
 	    bool FileCopy(const OSString &,const OSString &);                                          		///<文件复制
 	    bool FileDelete(const OSString &);                                                           	///<文件删除
@@ -84,11 +85,11 @@ namespace hgl
         struct EnumFileConfig
         {
             OSString            folder_name;                ///<要枚举的目录名称
-            
+
 #if HGL_OS == HGL_OS_Windows                                ///<通配符过滤是Windows平台独有
             OSString            find_name;                  ///<要枚举的文件名称
 #endif//HGL_OS == HGL_OS_Windows
-            
+
             bool                proc_folder;                ///<是否处理目录
             bool                proc_file;                  ///<是否处理文件
             bool                sub_folder;                 ///<是否查找子目录
@@ -105,7 +106,7 @@ namespace hgl
 #if HGL_OS == HGL_OS_Windows
                 find_name=OS_TEXT("*.*");
 #endif//HGL_OS == HGL_OS_Windows
-                
+
                 proc_folder=true;
                 proc_file=true;
                 sub_folder=false;
@@ -119,11 +120,11 @@ namespace hgl
             EnumFileConfig(const EnumFileConfig *efc,const OSString &sub_folder_name)
             {
                 folder_name =sub_folder_name;
-                
-#if HGL_OS == HGL_OS_Windows                
+
+#if HGL_OS == HGL_OS_Windows
                 find_name   =efc->find_name;
 #endif//HGL_OS == HGL_OS_Windows
-                
+
                 proc_folder =efc->proc_folder;
                 proc_file   =efc->proc_file;
                 sub_folder  =efc->sub_folder;

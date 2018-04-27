@@ -154,7 +154,7 @@ namespace hgl
         {
             const OSString &pi_path=GetString(hfsPlugInPath);
 
-            filesystem::MergeFilename(filename,pi_path,plugin_name);
+            filename=filesystem::MergeFilename(pi_path,plugin_name);
 
             filename+=HGL_PLUGIN_EXTNAME;
         }
