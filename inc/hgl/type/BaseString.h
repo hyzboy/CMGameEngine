@@ -119,7 +119,7 @@ namespace hgl
         BaseString(const Vector4f &v,int n=4):BaseString((const float *)&v,n){}
 
         virtual ~BaseString()=default;
-        
+
         const T GetBeginChar()const                                                                 ///<取得当前字符串第一个字符
         {
             return(data.valid()?data->GetBeginChar():0);
@@ -732,7 +732,7 @@ namespace hgl
         bool Trim(){return StrConv(trim);}															///<删除字符串两端的空格、换行等不可视字符串
 
         bool TrimLeft(int n){return Delete(0,n);}													///<删除字符串前端的指定个字符
-        bool TrimRight(int n){return Unlink()?data->TrimRight(n):false;}							    ///<删除字符串后端的指定个字符
+        bool TrimRight(int n){return Unlink()?data->TrimRight(n):false;}							///<删除字符串后端的指定个字符
 
         bool ClipLeft(int n){return Unlink()?data->ClipLeft(n):false;}								///<截取字符串前端的指定个字符,等同TrimRight(lengths-n))
         bool ClipRight(int n){return Delete(0,Length()-n);}											///<截取字符串后端的指定个字符,等同TrimLeft(length-n)
@@ -747,10 +747,10 @@ namespace hgl
         /**
          * 从字符串中取指定子串为新的内容
          * @param start 起始字符索引
-         * @param n 字符数量
+         * @param n 字符数量,-1表示全部
          * @return 成否成功
          */
-        bool SubString(int start,int n)																///<取字符串指定段的字符
+        bool SubString(int start,int n=-1)															///<取字符串指定段的字符
         {
             if(!Unlink())
                 return(false);

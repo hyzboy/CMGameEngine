@@ -118,10 +118,11 @@ namespace hgl
             return(new SelfClass(buffer,length));
         }
 
-        SelfClass *CreateCopy(int start,int count)
+        SelfClass *CreateCopy(int start,int count=-1)
         {
-            if(!buffer)return(0);
-            if(start<0||count<=0||start+count>=length)return(0);
+            if(!buffer)return(nullptr);
+            if(start<0||count==0)return(nullptr);
+            if(count>0&&start+count>=length)return(nullptr);
 
             return(new SelfClass(buffer+start,count));
         }
@@ -164,7 +165,7 @@ namespace hgl
 
             return(true);
         }
-        
+
         const T GetBeginChar()const
         {
             return buffer?*buffer:0;
@@ -429,9 +430,13 @@ namespace hgl
             return(true);
         }
 
-        bool SubString(int start,int n)
+        bool SubString(const int start,const int n=-1)
         {
-            if(start<0||n<0||n>length||start+n>length)return(false);
+            if(start<0||n==0)return(false);
+            if(n>0&&start+n>length)return(false);
+
+            if(n<0)
+                n=length-start;
 
             hgl_typemove(buffer,buffer+start,n);
             buffer[n]=0;
