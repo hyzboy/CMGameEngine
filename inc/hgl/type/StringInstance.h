@@ -430,7 +430,7 @@ namespace hgl
             return(true);
         }
 
-        bool SubString(const int start,const int n=-1)
+        bool SubString(const int start,int n=-1)
         {
             if(start<0||n==0)return(false);
             if(n>0&&start+n>length)return(false);
