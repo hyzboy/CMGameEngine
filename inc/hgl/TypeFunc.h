@@ -228,7 +228,7 @@ namespace hgl
 	constexpr float128 HGL_COS_ANG_270	=0;
 	constexpr float128 HGL_COS_ANG_315	=0.707106781187;
 
-	constexpr float128 HGL_GOLDEN_RATIO				    =1.61803398874989484820458683436563811772030917980576;//黄金比例
+	constexpr float128 HGL_GOLDEN_RATIO				    =0.61803398874989484820458683436563811772030917980576;//黄金比例
 	constexpr float128 HGL_SILVER_RATIO				    =2.4142135623730950488;	//白银比例
 
     constexpr float128 HGL_SPEED_OF_SOUND               =331.3f;                //音速(米/秒)
