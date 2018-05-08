@@ -237,7 +237,35 @@ namespace hgl
     constexpr float128 HGL_ABSOLUTE_ZERO                =-273.15f;              //绝对零度
 
 	constexpr float128 HGL_UNIVERSAL_GRAVITATION		=6.67384e-11;	        //万有引力常数
-	constexpr float128 HGL_GRAVITATIONAL_ACCELERATION	=9.80665;			    //重力加速度
+	constexpr float128 HGL_GRAVITATIONAL_ACCELERATION	=9.80665;			    //地球重力加速度(牛顿)
+
+	constexpr float128 HGL_EARTH_MASS                   =5.9722e+24;            //地球质量
+	constexpr float128 HGL_EARTH_RADIUS                 =6371000;               //地球半径(米)
+
+	/**
+     * 物体万有引力计算
+     * @param m1 星球质量
+     * @param m2 物体质量
+     * @param length 到星球中心的距离
+     */
+	template<typename T>
+	inline T UniversalGravitation(const T m1,const T m2,const T length)
+    {
+        return HGL_UNIVERSAL_GRAVITATION*((m1*m2)/(length*length));
+    }
+
+    /**
+     * 星球重力加速度<br>
+     * 理论上: (地球质量*万有引力常数)/(地球半径的平方)=地球重力加速度
+     * @param m 星球质量
+     * @param raidus 星球半径
+     * @return 星球的重力加速度(牛顿)
+     */
+    template<typename T>
+    inline T UniversalGravitation(const T m,const T radius)
+    {
+        return (HGL_UNIVERSAL_GRAVITATION*m)/(radius*radius);
+    }
 
 	inline float half_to_float(const uint16 &h)
 	{
