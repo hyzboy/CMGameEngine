@@ -267,6 +267,18 @@ namespace hgl
         return (HGL_UNIVERSAL_GRAVITATION*m)/(radius*radius);
     }
 
+    /**
+     * 向心力计算
+     * @param m 质量
+     * @param v 速度
+     * @param r 距离
+     */
+    template<typename T>
+    inline T CentripetalForce(const T m,const T v,const T r)
+    {
+        return (m*v*v)/r;
+    }
+
 	inline float half_to_float(const uint16 &h)
 	{
 		return ((h&0x8000)<<16) | (((h&0x7c00)+0x1C000)<<13) | ((h&0x03FF)<<13);
