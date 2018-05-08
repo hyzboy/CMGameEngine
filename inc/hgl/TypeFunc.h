@@ -237,10 +237,10 @@ namespace hgl
     constexpr float128 HGL_ABSOLUTE_ZERO                =-273.15f;              //绝对零度
 
 	constexpr float128 HGL_UNIVERSAL_GRAVITATION		=6.67384e-11;	        //万有引力常数
-	constexpr float128 HGL_GRAVITATIONAL_ACCELERATION	=9.80665;			    //地球重力加速度(牛顿)
 
-	constexpr float128 HGL_EARTH_MASS                   =5.9722e+24;            //地球质量
-	constexpr float128 HGL_EARTH_RADIUS                 =6371000;               //地球半径(米)
+	constexpr float128 HGL_EARTH_GRAVITATIONAL_ACCELERATION	=9.80665;			//地球上的重力加速度(牛顿)
+	constexpr float128 HGL_EARTH_MASS                       =5.9722e+24;        //地球质量
+	constexpr float128 HGL_EARTH_RADIUS                     =6371000;           //地球半径(米)
 
 	/**
      * 物体万有引力计算
@@ -255,8 +255,8 @@ namespace hgl
     }
 
     /**
-     * 星球重力加速度<br>
-     * 理论上: (地球质量*万有引力常数)/(地球半径的平方)=地球重力加速度
+     * 星球重力加速度计算<br>
+     * 理论上: (地球质量*万有引力常数)/(地球半径的平方)=地球上的重力加速度
      * @param m 星球质量
      * @param raidus 星球半径
      * @return 星球的重力加速度(牛顿)
