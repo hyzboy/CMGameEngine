@@ -204,43 +204,43 @@ namespace hgl
 	constexpr char LowerHexChar[16]={'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};	///<小写16进制字符
 	constexpr char UpperHexChar[16]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};	///<大写16进制字符
 
-	constexpr float128 HGL_E			=2.7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274;		//欧拉数(自然对数的底数)
-	constexpr float128 HGL_LOG2E		=1.44269504088896340736;
-	constexpr float128 HGL_LOG10E		=0.434294481903251827651;
-	constexpr float128 HGL_LN2			=0.693147180559945309417;
-	constexpr float128 HGL_LN10		    =2.30258509299404568402;
-	constexpr float128 HGL_PI			=3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117068;
-	constexpr float128 HGL_PI_2		    =1.57079632679489661923;
-	constexpr float128 HGL_PI_4		    =0.785398163397448309616;
-    constexpr float128 HGL_PI_3_4	    =2.356194490192344928938;
-	constexpr float128 HGL_1_PI	        =0.318309886183790671538;
-	constexpr float128 HGL_2_PI		    =0.636619772367581343076;
-	constexpr float128 HGL_2_SQRTPI	    =1.12837916709551257390;
-	constexpr float128 HGL_SQRT2		=1.41421356237309504880168872420969807;
-	constexpr float128 HGL_SQRT1_2		=0.707106781186547524401;
+	constexpr double HGL_E			=2.7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274;		//欧拉数(自然对数的底数)
+	constexpr double HGL_LOG2E		=1.44269504088896340736;
+	constexpr double HGL_LOG10E		=0.434294481903251827651;
+	constexpr double HGL_LN2		=0.693147180559945309417;
+	constexpr double HGL_LN10		=2.30258509299404568402;
+	constexpr double HGL_PI			=3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117068;
+	constexpr double HGL_PI_2		=1.57079632679489661923;
+	constexpr double HGL_PI_4		=0.785398163397448309616;
+    constexpr double HGL_PI_3_4	    =2.356194490192344928938;
+	constexpr double HGL_1_PI	    =0.318309886183790671538;
+	constexpr double HGL_2_PI		=0.636619772367581343076;
+	constexpr double HGL_2_SQRTPI	=1.12837916709551257390;
+	constexpr double HGL_SQRT2		=1.41421356237309504880168872420969807;
+	constexpr double HGL_SQRT1_2	=0.707106781186547524401;
 
-	constexpr float128 HGL_COS_ANG_0	=1;
-	constexpr float128 HGL_COS_ANG_45	=0.707106781187;
-	constexpr float128 HGL_COS_ANG_90	=0;
-	constexpr float128 HGL_COS_ANG_135	=-0.707106781187;
-	constexpr float128 HGL_COS_ANG_180	=-1;
-	constexpr float128 HGL_COS_ANG_225	=-0.707106781187;
-	constexpr float128 HGL_COS_ANG_270	=0;
-	constexpr float128 HGL_COS_ANG_315	=0.707106781187;
+	constexpr double HGL_COS_ANG_0	=1;
+	constexpr double HGL_COS_ANG_45	=0.707106781187;
+	constexpr double HGL_COS_ANG_90	=0;
+	constexpr double HGL_COS_ANG_135=-0.707106781187;
+	constexpr double HGL_COS_ANG_180=-1;
+	constexpr double HGL_COS_ANG_225=-0.707106781187;
+	constexpr double HGL_COS_ANG_270=0;
+	constexpr double HGL_COS_ANG_315=0.707106781187;
 
-	constexpr float128 HGL_GOLDEN_RATIO				    =0.61803398874989484820458683436563811772030917980576;//黄金比例
-	constexpr float128 HGL_SILVER_RATIO				    =2.4142135623730950488;	//白银比例
+	constexpr double HGL_GOLDEN_RATIO				        =0.61803398874989484820458683436563811772030917980576;//黄金比例
+	constexpr double HGL_SILVER_RATIO				        =2.4142135623730950488;	//白银比例
 
-    constexpr float128 HGL_SPEED_OF_SOUND               =331.3f;                //音速(米/秒)
-	constexpr float128 HGL_SPEED_OF_LIGHT				=299792458;		        //光速(米/秒)
+    constexpr double HGL_SPEED_OF_SOUND                     =331.3f;                //音速(米/秒)
+	constexpr double HGL_SPEED_OF_LIGHT				        =299792458;		        //光速(米/秒)
 
-    constexpr float128 HGL_ABSOLUTE_ZERO                =-273.15f;              //绝对零度
+    constexpr double HGL_ABSOLUTE_ZERO                      =-273.15f;              //绝对零度
 
-	constexpr float128 HGL_UNIVERSAL_GRAVITATION		=6.67384e-11;	        //万有引力常数
+	constexpr double HGL_UNIVERSAL_GRAVITATION              =6.67384e-11;	        //万有引力常数
 
-	constexpr float128 HGL_EARTH_GRAVITATIONAL_ACCELERATION	=9.80665;			//地球上的重力加速度(牛顿)
-	constexpr float128 HGL_EARTH_MASS                       =5.9722e+24;        //地球质量
-	constexpr float128 HGL_EARTH_RADIUS                     =6371000;           //地球半径(米)
+	constexpr double HGL_EARTH_GRAVITATIONAL_ACCELERATION   =9.80665;			    //地球上的重力加速度(牛顿)
+	constexpr double HGL_EARTH_MASS                         =5.9722e+24;            //地球质量
+	constexpr double HGL_EARTH_RADIUS                       =6371000;               //地球半径(米)
 
 	/**
      * 物体万有引力计算
@@ -329,18 +329,6 @@ namespace hgl
 	{
 		return(x_radius*y_radius*z_radius*(HGL_PI*4.0f))/3.0f;
 	}
-
-#if HGL_OS == HGL_OS_Windows
-	inline uint64 pow10(const int p)
-	{
-		uint64 value = 10;
-
-		for (int i = 1; i < p; i++)
-			value *= 10;
-
-		return value;
-	}
-#endif//HGL_OS == HGL_OS_Windows
 
 	/**
 	 * 取适合正巧大于当前数的2次幂值

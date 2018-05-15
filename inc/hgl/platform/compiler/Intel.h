@@ -1,4 +1,4 @@
-#ifndef HGL_COMPILER_INTEL_INCLUDE
+﻿#ifndef HGL_COMPILER_INTEL_INCLUDE
 #define HGL_COMPILER_INTEL_INCLUDE
 //--------------------------------------------------------------------------------------------------
 #define HGL_COMPILER_NAME	u"Intel C/C++"
@@ -17,7 +17,8 @@
 
 #define vsnwprintf _vsnwprintf
 //--------------------------------------------------------------------------------------------------
-#include<hgl/platform/compiler/DataTypeTypedef.h>
+#include<hgl/platform/compiler/DataTypeGNU.h>
+#include<hgl/platform/compiler/DataTypeTiny.h>
 #include<hgl/platform/compiler/Property.h>
 
 #if HGL_OS == HGL_OS_Windows

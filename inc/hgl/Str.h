@@ -1,7 +1,6 @@
 ﻿#ifndef HGL_STR_TEMPLATE_INCLUDE
 #define HGL_STR_TEMPLATE_INCLUDE
 
-#include<math.h>
 #include<hgl/TypeFunc.h>
 namespace hgl
 {
@@ -150,8 +149,8 @@ namespace hgl
     /**
     * 测试当前字符是否为BASE64编码字符
     */
-    template<typename T>   
-    bool isbase64(const T c) 
+    template<typename T>
+    bool isbase64(const T c)
     {
         return (c == 43 || // +
                (c >= 47 && c <= 57) || // /-9
@@ -352,7 +351,7 @@ namespace hgl
         return(0);
     }
 
-    
+
     /**
     * 在字符串str1内查找另一个字符串str2(从后向前)
     * @param str1 完整的字符串
@@ -1494,7 +1493,7 @@ namespace hgl
 
             if(stof(str+1,power))
             {
-                result=R(temp*pow10(power));
+                result=R(temp*pow(10,power));
 
                 return(true);
             }
