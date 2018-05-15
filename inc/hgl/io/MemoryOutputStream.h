@@ -40,6 +40,21 @@ namespace hgl
 
 			void *GetData()const{return buf;}
 
+			void *CreateCopyData(int *len)const
+			{
+                if(buf_size<=0)
+                    return(nullptr);
+
+                uint8 *data=new uint8[buf_size+1];
+                memcpy(data,buf,buf_size);
+                data[buf_size]=0;
+
+                if(len)
+                    *len=buf_size;
+
+                return data;
+            }
+
 			/**
 			 * 关联一个数据区到当前输出流
 			 * @param ptr 数据指针
