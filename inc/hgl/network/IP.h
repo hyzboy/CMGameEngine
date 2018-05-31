@@ -160,8 +160,9 @@ namespace hgl
             virtual const int GetFamily()const=0;                                                           ///<返回网络家族
                     const int GetSocketType()const{return socktype;}                                        ///<返回Socket类型
                     const int GetProtocol()const{return protocol;}                                          ///<返回协议类型
-            virtual const int GetSockAddrInSize()const=0;                                                   ///<取得SockAddrIn变量长度
-            virtual const int GetIPStringMaxSize()const=0;                                                  ///<取得IP字符串最大长度
+            virtual const uint GetIPSize()const=0;                                                          ///<取得IP地址的长度
+            virtual const uint GetSockAddrInSize()const=0;                                                  ///<取得SockAddrIn变量长度
+            virtual const uint GetIPStringMaxSize()const=0;                                                 ///<取得IP字符串最大长度
 
             virtual const bool IsBoradcast()const=0;                                                        ///<是否为广播
 
@@ -197,6 +198,13 @@ namespace hgl
             virtual bool GetHostname(UTF8String &)const=0;
 
             virtual sockaddr *GetSockAddr()=0;
+
+            virtual void *GetIP()=0;
+
+            /**
+             * 获取当前地址的IP信息
+             */
+            virtual void GetIP(void *)=0;
 
             /**
              * 取得当前地址的端口号
@@ -240,12 +248,17 @@ namespace hgl
 
                 addr.sin_family     =AF_INET;
                 addr.sin_addr.s_addr=_addr;
-                addr.sin_port       =port;
+                addr.sin_port       =htons(port);
             }
 
             IPv4Address(const char *name,ushort port,int _socktype,int _protocol)
             {
                 Set(name,port,_socktype,_protocol);
+            }
+
+            IPv4Address(ushort port,int _socktype,int _protocol)
+            {
+                Set(nullptr,port,_socktype,_protocol);
             }
 
             IPv4Address(const IPv4Address *src)
@@ -256,8 +269,9 @@ namespace hgl
             }
 
             const int GetFamily()const{return AF_INET;}
-            const int GetSockAddrInSize()const{return sizeof(sockaddr_in);}
-            const int GetIPStringMaxSize()const{return INET_ADDRSTRLEN;}
+            const uint GetIPSize()const override{return sizeof(in_addr);}
+            const uint GetSockAddrInSize()const override{return sizeof(sockaddr_in);}
+            const uint GetIPStringMaxSize()const override{return INET_ADDRSTRLEN;}
 
             const bool IsBoradcast()const{return(addr.sin_addr.s_addr==htonl(INADDR_BROADCAST));}
 
@@ -266,8 +280,12 @@ namespace hgl
             bool Bind(int ThisSocket,int reuse=1)const;
             bool GetHostname(UTF8String &)const;
 
-            sockaddr *GetSockAddr(){return (sockaddr *)&addr;}
+            sockaddr *GetSockAddr()override{return (sockaddr *)&addr;}
 
+            void *GetIP() override {return &(addr.sin_addr);}
+            void GetIP(void *data) override { memcpy(data,&(addr.sin_addr),sizeof(in_addr)); }
+
+            const uint32 GetInt32IP()const{return addr.sin_addr.s_addr;}
             const ushort GetPort()const;
 
             void ToString(char *str)const;
@@ -293,9 +311,23 @@ namespace hgl
         public:
 
             IPv6Address(){hgl_zero(addr);}
+            IPv6Address(const in6_addr *ip,ushort port,int _socktype,int _protocol):IPAddress(_socktype,_protocol)
+            {
+                hgl_zero(addr);
+
+                addr.sin6_family=AF_INET6;
+                memcpy(&(addr.sin6_addr),ip,sizeof(in6_addr));
+                addr.sin6_port=htons(port);
+            }
+
             IPv6Address(const char *name,ushort port,int _socktype,int _protocol)
             {
                 Set(name,port,_socktype,_protocol);
+            }
+
+            IPv6Address(ushort port,int _socktype,int _protocol)
+            {
+                Set(nullptr,port,_socktype,_protocol);
             }
 
             IPv6Address(const IPv6Address *src)
@@ -306,8 +338,9 @@ namespace hgl
             }
 
             const int GetFamily()const{return AF_INET6;}
-            const int GetSockAddrInSize()const{return sizeof(sockaddr_in6);}
-            const int GetIPStringMaxSize()const{return INET6_ADDRSTRLEN;}
+            const uint GetIPSize()const override{return sizeof(in6_addr);}
+            const uint GetSockAddrInSize()const override{return sizeof(sockaddr_in6);}
+            const uint GetIPStringMaxSize()const override{return INET6_ADDRSTRLEN;}
 
             const bool IsBoradcast()const{return(false);}
 
@@ -317,6 +350,10 @@ namespace hgl
             bool GetHostname(UTF8String &)const;
 
             sockaddr *GetSockAddr(){return (sockaddr *)&addr;}
+
+            void *GetIP() override {return &(addr.sin6_addr);}
+            void GetIP(void *data) override{memcpy(data,&(addr.sin6_addr),sizeof(in6_addr));}
+
             const ushort GetPort()const;
 
             void ToString(char *str)const;
@@ -340,14 +377,24 @@ namespace hgl
         inline IPv4Address *CreateIPv4SCTP      (const char *name,ushort port){return(new IPv4Address(name,port,SOCK_SEQPACKET, IPPROTO_SCTP));}
         inline IPv6Address *CreateIPv6SCTP      (const char *name,ushort port){return(new IPv6Address(name,port,SOCK_SEQPACKET, IPPROTO_SCTP));}
 
-        inline IPv4Address *CreateIPv4TCP       (ushort port){return(new IPv4Address(nullptr,port,SOCK_STREAM,      IPPROTO_TCP));}
-        inline IPv6Address *CreateIPv6TCP       (ushort port){return(new IPv6Address(nullptr,port,SOCK_STREAM,      IPPROTO_TCP));}
-        inline IPv4Address *CreateIPv4UDP       (ushort port){return(new IPv4Address(nullptr,port,SOCK_DGRAM,       IPPROTO_UDP));}
-        inline IPv6Address *CreateIPv6UDP       (ushort port){return(new IPv6Address(nullptr,port,SOCK_DGRAM,       IPPROTO_UDP));}
-        inline IPv4Address *CreateIPv4UDPLite   (ushort port){return(new IPv4Address(nullptr,port,SOCK_DGRAM,       IPPROTO_UDPLITE));}
-        inline IPv6Address *CreateIPv6UDPLite   (ushort port){return(new IPv6Address(nullptr,port,SOCK_DGRAM,       IPPROTO_UDPLITE));}
-        inline IPv4Address *CreateIPv4SCTP      (ushort port){return(new IPv4Address(nullptr,port,SOCK_SEQPACKET,   IPPROTO_SCTP));}
-        inline IPv6Address *CreateIPv6SCTP      (ushort port){return(new IPv6Address(nullptr,port,SOCK_SEQPACKET,   IPPROTO_SCTP));}
+        inline IPv4Address *CreateIPv4TCP       (const uint32 &ip,ushort port){return(new IPv4Address(ip,port,SOCK_STREAM,    IPPROTO_TCP));}
+        inline IPv4Address *CreateIPv4UDP       (const uint32 &ip,ushort port){return(new IPv4Address(ip,port,SOCK_DGRAM,     IPPROTO_UDP));}
+        inline IPv4Address *CreateIPv4UDPLite   (const uint32 &ip,ushort port){return(new IPv4Address(ip,port,SOCK_DGRAM,     IPPROTO_UDPLITE));}
+        inline IPv4Address *CreateIPv4SCTP      (const uint32 &ip,ushort port){return(new IPv4Address(ip,port,SOCK_SEQPACKET, IPPROTO_SCTP));}
+
+        inline IPv6Address *CreateIPv6TCP       (const in6_addr *ip,ushort port){return(new IPv6Address(ip,port,SOCK_STREAM,    IPPROTO_TCP));}
+        inline IPv6Address *CreateIPv6UDP       (const in6_addr *ip,ushort port){return(new IPv6Address(ip,port,SOCK_DGRAM,     IPPROTO_UDP));}
+        inline IPv6Address *CreateIPv6UDPLite   (const in6_addr *ip,ushort port){return(new IPv6Address(ip,port,SOCK_DGRAM,     IPPROTO_UDPLITE));}
+        inline IPv6Address *CreateIPv6SCTP      (const in6_addr *ip,ushort port){return(new IPv6Address(ip,port,SOCK_SEQPACKET, IPPROTO_SCTP));}
+
+        inline IPv4Address *CreateIPv4TCP       (ushort port){return(new IPv4Address(port,SOCK_STREAM,      IPPROTO_TCP));}
+        inline IPv6Address *CreateIPv6TCP       (ushort port){return(new IPv6Address(port,SOCK_STREAM,      IPPROTO_TCP));}
+        inline IPv4Address *CreateIPv4UDP       (ushort port){return(new IPv4Address(port,SOCK_DGRAM,       IPPROTO_UDP));}
+        inline IPv6Address *CreateIPv6UDP       (ushort port){return(new IPv6Address(port,SOCK_DGRAM,       IPPROTO_UDP));}
+        inline IPv4Address *CreateIPv4UDPLite   (ushort port){return(new IPv4Address(port,SOCK_DGRAM,       IPPROTO_UDPLITE));}
+        inline IPv6Address *CreateIPv6UDPLite   (ushort port){return(new IPv6Address(port,SOCK_DGRAM,       IPPROTO_UDPLITE));}
+        inline IPv4Address *CreateIPv4SCTP      (ushort port){return(new IPv4Address(port,SOCK_SEQPACKET,   IPPROTO_SCTP));}
+        inline IPv6Address *CreateIPv6SCTP      (ushort port){return(new IPv6Address(port,SOCK_SEQPACKET,   IPPROTO_SCTP));}
 
         inline IPv4Address *CreateIPv4UDPBoradcast      (ushort port){return(new IPv4Address(htonl(INADDR_BROADCAST),port,SOCK_DGRAM,   IPPROTO_UDP));}
         inline IPv4Address *CreateIPv4UDPLiteBoradcast  (ushort port){return(new IPv4Address(htonl(INADDR_BROADCAST),port,SOCK_DGRAM,   IPPROTO_UDPLITE));}
