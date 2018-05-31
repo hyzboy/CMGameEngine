@@ -1,4 +1,4 @@
-#include<hgl/algorithm/Crypt.h>
+﻿#include<hgl/algorithm/Crypt.h>
 #include<hgl/io/MemoryOutputStream.h>
 #include<iostream>
 
@@ -15,19 +15,17 @@ int main(int,char **)
     cout<<"Origin: "<<test_str<<endl;
 
     MemoryOutputStream mos;
-    
+
     if(!base64_encode(&mos,test_str,strlen(test_str)))
     {
         cout<<"encode error!"<<endl;
         return(-1);
     }
 
-    int len=mos.GetSize();
+    int len;
+    uchar *tmp;
 
-    uchar *tmp=new uchar[len+1];
-
-    memcpy(tmp,mos.GetData(),len);
-    tmp[len]=0;
+    tmp=(uchar *)mos.CreateCopyData(&len);
 
     cout<<"Encode: "<<tmp<<endl;
 
@@ -41,10 +39,7 @@ int main(int,char **)
 
     delete[] tmp;
 
-    len=mos.GetSize();
-    tmp=new uchar[len+1];
-    memcpy(tmp,mos.GetData(),len);
-    tmp[len]=0;
+    tmp=(uchar *)mos.CreateCopyData(&len);
 
     cout<<"Decode: "<<tmp<<endl<<endl;
 
