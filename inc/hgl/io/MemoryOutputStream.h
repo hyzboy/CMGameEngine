@@ -40,6 +40,11 @@ namespace hgl
 
 			void *GetData()const{return buf;}
 
+			/**
+             * 创建一个当前流数据的内存拷贝，此函数需用户自行delete[]
+             * @param len 存放数据长度的指针
+             * @return 创建好的内存拷贝
+             */
 			void *CreateCopyData(int *len)const
 			{
                 if(buf_size<=0)
