@@ -1,36 +1,41 @@
 ﻿SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE)
 
-OPTION(BUILD_BASE_LIB 			"Build Base Library"						TRUE	)
-OPTION(BUILD_ALGORITHM          "Build Algorithm (Hash/Crypt)"              FALSE   )
+OPTION(BUILD_BASE_LIB 			"Build Base Library"						ON	)
 
-OPTION(BUILD_DATABASE           "Build Database support"                    FALSE   )
+OPTION(BUILD_DATABASE           "Build Database support"                    OFF   )
 
-OPTION(BUILD_NETWORK_LIB		"Build Network Library"						TRUE	)
+OPTION(BUILD_NETWORK_LIB		"Build Network Library"						ON	)
 
-OPTION(BUILD_SCRIPT_ANGEL       "Build Script AngelScript"                  FALSE   )
-OPTION(BUILD_SCRIPT_DEVIL       "Build Script DevilScript"                  FALSE   )
+OPTION(BUILD_SCRIPT_ANGEL       "Build Script AngelScript"                  OFF   )
+OPTION(BUILD_SCRIPT_DEVIL       "Build Script DevilScript"                  OFF   )
 
-OPTION(BUILD_NETWORK_SCTP		"Include SCTP Support"						FALSE	)
-OPTION(BUILD_NETWORK_UDP_LITE   "Include UDP-Lite Support"                  FALSE   )
-OPTION(BUILD_NETWORK_WEBSOCKET  "Include WebSocket Support"                 FALSE   )
+OPTION(BUILD_NETWORK_SCTP		"Include SCTP Support"						OFF	)
+OPTION(BUILD_NETWORK_UDP_LITE   "Include UDP-Lite Support"                  OFF   )
+OPTION(BUILD_NETWORK_WEBSOCKET  "Include WebSocket Support"                 OFF   )
 
-OPTION(BUILD_QT5_SUPPORT_LIB	"Build QT5 Support Library"					FALSE	)
+IF(BUILD_NETWORK_WEBSOCKET)
+    SET(BUILD_ALGORITHM          ON   )
+ELSE()
+    OPTION(BUILD_ALGORITHM          "Build Algorithm (Hash/Crypt)"              OFF   )
+ENDIF()
 
-OPTION(BUILD_TOOLS              "Build Tools"                               FALSE   )
+OPTION(BUILD_QT5_SUPPORT_LIB	"Build QT5 Support Library"					OFF	)
+
+OPTION(BUILD_TOOLS              "Build Tools"                               OFF   )
 
 IF(BUILD_TOOLS)
-    OPTION(BUILD_GUI_TOOLS		"Build GUI Tools"							FALSE	)
+    OPTION(BUILD_GUI_TOOLS		"Build GUI Tools"							OFF	)
 
     IF(BUILD_GUI_TOOLS)
-        SET(BUILD_QT5_SUPPORT_LIB TRUE)
+        SET(BUILD_QT5_SUPPORT_LIB ON)
     ENDIF()
 ENDIF()
 
-OPTION(BUILD_EXAMPLES_PROJECT	"Build Examples Project"					FALSE	)
-OPTION(BUILD_TEST_PROJECT		"Build Test Project"						FALSE	)
+OPTION(BUILD_EXAMPLES_PROJECT	"Build Examples Project"					OFF	)
+OPTION(BUILD_TEST_PROJECT		"Build Test Project"						OFF	)
 
-OPTION(BUILD_OpenCart           "Build OpenCart Tools"                      FALSE   )
-OPTION(LOG_CDB_LOADER_LOG		"Output CDBLoader log"						FALSE	)
+OPTION(BUILD_OpenCart           "Build OpenCart Tools"                      OFF   )
+OPTION(LOG_CDB_LOADER_LOG		"Output CDBLoader log"						OFF	)
 
 if(LOG_CDB_LOADER_LOG)
 	add_definitions("-DLOG_CDB_LOADER_LOG")
@@ -84,10 +89,6 @@ IF(UNIX)
 ENDIF()
 
 SET(HGL_BASE_LIB CM.Base CM.UT)
-
-IF(BUILD_NETWORK_WEBSOCKET)
-    SET(BUILD_ALGORITHM ON)
-ENDIF()
 
 IF(BUILD_ALGORITHM)
     SET(HGL_BASE_LIB ${HGL_BASE_LIB} CM.Algorithm)

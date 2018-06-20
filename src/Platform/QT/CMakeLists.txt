@@ -1,8 +1,4 @@
-﻿IF(BUILD_QT4_SUPPORT_LIB)
-    add_library(CM.QT4Support	SHARED QT4GuiApplication.cpp)
-ENDIF(BUILD_QT4_SUPPORT_LIB)
-
-IF(BUILD_QT5_SUPPORT_LIB)
+﻿IF(BUILD_QT5_SUPPORT_LIB)
 
     find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Gui Widgets)
 
@@ -12,5 +8,5 @@ ELSE()
     add_library(CM.QT5Support	SHARED QT5GuiApplication.cpp)
 ENDIF()
 
-    qt5_use_modules(CM.QT5Support Core Gui Widgets)
+    target_link_libraries(CM.QT5Support Qt5::Core Qt5::Gui Qt5::Widgets)
 ENDIF(BUILD_QT5_SUPPORT_LIB)

@@ -1,15 +1,20 @@
 ﻿#add_subdirectory(StreamCodeMaker)
 
-add_subdirectory(csv2table)
+if(DATABASE_INCLUDE_CDB)
+    add_subdirectory(csv2table)
+endif()
 
 # add_subdirectory(TextExtract)
 # add_subdirectory(TextExchange)
 
 add_subdirectory(TextEncodingConvert)
-add_subdirectory(TextEncodingConvertQt)
 
 IF(BUILD_GUI_TOOLS)
-	add_subdirectory(CDBTableViewer)
+    add_subdirectory(TextEncodingConvertQt)
+
+    IF(DATABASE_INCLUDE_CDB)
+        add_subdirectory(CDBTableViewer)
+	endif()
 ENDIF()
 
 IF(BUILD_OPENGL_LIB)

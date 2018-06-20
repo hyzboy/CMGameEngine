@@ -1,4 +1,3 @@
-
 add_executable(csv2table Common.cpp
                         LoaderCSV.cpp
                         LoaderODS.cpp

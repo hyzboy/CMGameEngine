@@ -19,7 +19,7 @@ namespace hgl   //校验/加密算法
 
         void RC4Encrypt(uint8 *data, int datasize, uint8 *key, int keysize);    ///<RC4加密
 
-        bool base64_encode(io::OutputStream *os,const uchar *input, size_t len);
+        bool base64_encode(io::OutputStream *os,const uchar *input,size_t len);
         bool base64_decode(io::OutputStream *os,const uchar *input,size_t len);
     }//namespace algorithm
 }//namespace hgl
