@@ -72,8 +72,8 @@ EnumFileConfig *ConvertSubFolderConfig(struct EnumFileConfig *efc,const OSString
     OSString old_path;
     OSString new_path;
 
-    MergeFilename(old_path,efc->folder_name,sub_folder_name);
-    MergeFilename(new_path,out_folder_base,old_path.c_str()+in_folder_base.Length());
+    old_path=MergeFilename(efc->folder_name,sub_folder_name);
+    new_path=MergeFilename(out_folder_base,old_path.c_str()+in_folder_base.Length());
 
 #if HGL_OS != HGL_OS_Windows
     UTF16String u16_path=to_u16(new_path);
@@ -118,7 +118,7 @@ bool ExtNameCheck(const os_char *ext_name)
     return(false);
 }
 
-//未来优化内容： 
+//未来优化内容：
 
 //  1.建立永久性的文件缓冲区，避每个文件都分配、释放内存。可提升性能.
 
@@ -163,7 +163,7 @@ template<typename TOS> void Convert(const OSString &in_filename,const OSString &
         in_text.u8_text=old_text;
         in_size=old_size;
     }
-    
+
     FileOutputStream fos;
 
     if(!fos.CreateTrunc(out_filename))
@@ -180,7 +180,7 @@ template<typename TOS> void Convert(const OSString &in_filename,const OSString &
         tos.WriteBOM();
 
     if(in_cs==out_charset)                                  // in/out一样，但走这里，代表它原本是没有BOM头的
-    {        
+    {
         result=tos.WriteChars(old_text,old_size);           //直接写入原始数据
     }
     else
@@ -188,7 +188,7 @@ template<typename TOS> void Convert(const OSString &in_filename,const OSString &
     {
         result=tos.WriteChars(in_text.u8_text,in_size);
     }
-    else 
+    else
     if((in_cs==utf16be_charset&&out_charset==utf16le_charset)
      ||(in_cs==utf16le_charset&&out_charset==utf16be_charset))      //16位互转
     {
@@ -219,7 +219,7 @@ template<typename TOS> void Convert(const OSString &in_filename,const OSString &
         new_size=to_utf16(in_cs,&new_text,in_text.u8_text,in_size);
 
         result=tos.WriteChars(new_text,new_size);
-        
+
         delete[] new_text;
     }
 
@@ -227,7 +227,7 @@ template<typename TOS> void Convert(const OSString &in_filename,const OSString &
         cmd_out<<OS_TEXT("[ERR] Write Text failed")<<std::endl;
     else
         cmd_out<<OS_TEXT("[OK] filename: ")<<out_filename.c_str()<<std::endl;
-    
+
     delete[] old_text;
 };
 
@@ -363,7 +363,7 @@ HGL_CONSOLE_MAIN_FUNC()
 
     if(in_off!=-1)
     {
-#if HGL_OS == HGL_OS_Windows        
+#if HGL_OS == HGL_OS_Windows
         const UTF8String in_cs_str=to_u8(args[in_off+1]);
 #else
         const OSString &in_cs_str=args[in_off+1];
@@ -384,7 +384,7 @@ HGL_CONSOLE_MAIN_FUNC()
 
     if(out_off!=-1)
     {
-#if HGL_OS == HGL_OS_Windows        
+#if HGL_OS == HGL_OS_Windows
         const UTF8String out_cs_str=to_u8(args[out_off+1]);
 #else
         const OSString &out_cs_str=args[out_off+1];
