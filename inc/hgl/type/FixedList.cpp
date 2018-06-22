@@ -57,15 +57,16 @@ namespace hgl
 	}
 
 	template<typename T>
-	T &FixedList<T>::operator [](int n)
+	bool FixedList<T>::Get(int n,T &td)
 	{
 		if(n<0||n>=count)
 		{
-			LOG_ERROR(OS_TEXT("FixedList<T>::operator[] 数据索引超出正常范围：index=")+OSString(n)+OS_TEXT("count=")+OSString(count));
-			return(*(T *)NULL);
+			LOG_ERROR(OS_TEXT("FixedList<T>::Get 数据索引超出正常范围：index=")+OSString(n)+OS_TEXT("count=")+OSString(count));
+			return(false);
 		}
 
-		return(items[n]);
+		td=items[n];
+        return(true);
 	}
 
 	template<typename T>

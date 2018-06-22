@@ -1,4 +1,4 @@
-#ifndef HGL_FIXEDLIST_INCLUDE
+﻿#ifndef HGL_FIXEDLIST_INCLUDE
 #define HGL_FIXEDLIST_INCLUDE
 
 #include<hgl/type/DataType.h>
@@ -51,7 +51,7 @@ namespace hgl
 
 		virtual T *CreateCopy(int &);																///<创建一个拷贝
 
-		virtual T &operator[](int n);
+        virtual bool Get(int,T &);
 	};//template<typename T> class FixedList
 
 	template<typename T> class FixedObjectList:public FixedList<T *>                                ///定长对象列表
