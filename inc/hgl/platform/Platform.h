@@ -160,7 +160,7 @@
 			#define HGL_OS	HGL_OS_iOS
 //		#endif//TARGET_IPHONE_SIMULATOR
 	#elif TARGET_OS_MAC
-		#define HGL_OS		HGL_OS_MacOSX
+		#define HGL_OS		HGL_OS_macOS
 	#endif//
 #elif defined(_AIX)||defined(__AIX)||defined(__AIX__)||defined(__aix)||defined(__aix__)
 	#define HGL_OS			HGL_OS_AIX
@@ -270,7 +270,7 @@
 		#error Unrecognized compiler
 	#endif
 
-#elif HGL_OS == HGL_OS_MacOS
+#elif HGL_OS == HGL_OS_macOS
 
 	#include<hgl/platform/os/MacOS.h>
 
@@ -280,8 +280,8 @@
 //		#include<hgl/platform/compiler/IBM.h>
 	#elif HGL_COMPILER == HGL_COMPILER_LLVM
 		#include<hgl/platform/compiler/LLVM.h>
-    #elif HGL_COMPILER == HGL_COMPILER_GNU
-		#include<hgl/platform/compiler/GNU.h>
+//     #elif HGL_COMPILER == HGL_COMPILER_GNU
+// 		#include<hgl/platform/compiler/GNU.h>
 	#else
 		#error Unrecognized compiler
 	#endif
@@ -289,7 +289,7 @@
 #elif HGL_OS == HGL_OS_iOS
 
 	#include<hgl/platform/os/MacOS.h>
-	#include<hgl/platform/compiler/LLVM.h>	
+	#include<hgl/platform/compiler/LLVM.h>
 
 #elif HGL_OS == HGL_OS_PSP
 
