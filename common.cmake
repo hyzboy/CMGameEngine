@@ -133,7 +133,10 @@ ENDIF(UNIX)
 
 IF(CMAKE_COMPILER_IS_GNUCC OR MINGW)
 
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fext-numeric-literals")
+    IF(USE_LLVM_CLANG)
+    ELSE()
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fext-numeric-literals")
+    ENDIF()
 
 	if(USE_ALL_STATIC)
 		add_compile_options("-static")

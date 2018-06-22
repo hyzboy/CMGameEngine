@@ -75,14 +75,14 @@ namespace hgl
 					else time_out=to;
 			}
 
-			virtual void Post(W *w)																			///<投递一个工作
+			virtual void Post(W *w) override																///<投递一个工作
 			{
 				WorkList &wl=work_list.GetPost();
 					wl.Add(w);
 				work_list.ReleasePost();
 			}
 
-			virtual void Post(W **w,int count)																///<投递一批工作
+			virtual void Post(W **w,int count) override														///<投递一批工作
 			{
 				WorkList &wl=work_list.GetPost();
 					wl.Add(w,count);
@@ -166,7 +166,7 @@ namespace hgl
 					else time_out=to;
 			}
 
-			virtual void Post(W *w)																			///<投递一个工作
+			virtual void Post(W *w) override																///<投递一个工作
 			{
 				if(!w)return;
 
@@ -174,7 +174,7 @@ namespace hgl
 				work_list.PostSem(1);
 			}
 
-			virtual void Post(W **w,int count)																///<投递一批工作
+			virtual void Post(W **w,int count) override														///<投递一批工作
 			{
 				if(!w||count<=0)return;
 

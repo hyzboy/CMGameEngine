@@ -58,8 +58,8 @@ namespace hgl
 
 //         void InitFontStorage();
 //         void ClearFontStorage();
-        
-        void CreateInlineTexture();        
+
+        void CreateInlineTexture();
         void ClearInlineTexture();
         void InitInlineRenderable();
         void ClearInlineRenderable();
@@ -88,8 +88,8 @@ namespace hgl
             InitGlobalShaderStorage();
             InitPrimaryRenderBuffer();
 //             InitFontStorage();
-            
-            CreateInlineTexture();        
+
+            CreateInlineTexture();
             InitInlineRenderable();
         }
 
