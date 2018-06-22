@@ -59,6 +59,12 @@
             return sendfile(tfd,sfd,0,size,nullptr,nullptr,0);
         }
     #endif//HGL_OS == HGL_OS_FreeBSD
+
+    #if HGL_OS == HGL_OS_macOS
+        #ifndef IPPROTO_UDPLITE
+        #define IPPROTO_UDPLITE     136
+        #endif//IPPROTO_UDPLITE
+    #endif//
 #endif//HGL_OS == HGL_OS_Windows
 
 #include<hgl/type/DataType.h>
@@ -268,17 +274,17 @@ namespace hgl
                 protocol=src->protocol;
             }
 
-            const int GetFamily()const{return AF_INET;}
+            const int GetFamily()const override{return AF_INET;}
             const uint GetIPSize()const override{return sizeof(in_addr);}
             const uint GetSockAddrInSize()const override{return sizeof(sockaddr_in);}
             const uint GetIPStringMaxSize()const override{return INET_ADDRSTRLEN;}
 
-            const bool IsBoradcast()const{return(addr.sin_addr.s_addr==htonl(INADDR_BROADCAST));}
+            const bool IsBoradcast()const override{return(addr.sin_addr.s_addr==htonl(INADDR_BROADCAST));}
 
-            bool Set(const char *name,ushort port,int _socktype,int _protocol);
-            void Set(ushort port);
-            bool Bind(int ThisSocket,int reuse=1)const;
-            bool GetHostname(UTF8String &)const;
+            bool Set(const char *name,ushort port,int _socktype,int _protocol) override;
+            void Set(ushort port) override;
+            bool Bind(int ThisSocket,int reuse=1)const override;
+            bool GetHostname(UTF8String &)const override;
 
             sockaddr *GetSockAddr()override{return (sockaddr *)&addr;}
 
@@ -286,19 +292,19 @@ namespace hgl
             void GetIP(void *data) override { memcpy(data,&(addr.sin_addr),sizeof(in_addr)); }
 
             const uint32 GetInt32IP()const{return addr.sin_addr.s_addr;}
-            const ushort GetPort()const;
+            const ushort GetPort()const override;
 
-            void ToString(char *str)const;
+            void ToString(char *str)const override;
 
             static int GetDomainIPList(List<in_addr> &addr_list,const char *domain,int _socktype,int _protocol);        ///<取得当指定域名的IPv4地址列表
             static int GetLocalIPList(List<in_addr> &addr_list,int _socktype,int _protocol);                            ///<取得本机的IPv4地址列表
 
             static void ToString(char str[INET_ADDRSTRLEN],const in_addr &);                                            ///<转换一个IPv4地址到字符串
 
-            IPAddress *CreateCopy()const{return(new IPv4Address(this));}
-            IPAddress *Create()const{return(new IPv4Address());}
+            IPAddress *CreateCopy()const override{return(new IPv4Address(this));}
+            IPAddress *Create()const override{return(new IPv4Address());}
 
-            bool Comp(const IPAddress *ipa)const;
+            bool Comp(const IPAddress *ipa)const override;
         };//class IPv4Address
 
         /**
@@ -337,35 +343,35 @@ namespace hgl
                 protocol=src->protocol;
             }
 
-            const int GetFamily()const{return AF_INET6;}
+            const int GetFamily()const override{return AF_INET6;}
             const uint GetIPSize()const override{return sizeof(in6_addr);}
             const uint GetSockAddrInSize()const override{return sizeof(sockaddr_in6);}
             const uint GetIPStringMaxSize()const override{return INET6_ADDRSTRLEN;}
 
-            const bool IsBoradcast()const{return(false);}
+            const bool IsBoradcast()const override{return(false);}
 
-            bool Set(const char *name,ushort port,int _socktype,int _protocol);
-            void Set(ushort port);
-            bool Bind(int ThisSocket,int reuse=1)const;
-            bool GetHostname(UTF8String &)const;
+            bool Set(const char *name,ushort port,int _socktype,int _protocol) override;
+            void Set(ushort port) override;
+            bool Bind(int ThisSocket,int reuse=1)const override;
+            bool GetHostname(UTF8String &)const override;
 
-            sockaddr *GetSockAddr(){return (sockaddr *)&addr;}
+            sockaddr *GetSockAddr() override{return (sockaddr *)&addr;}
 
             void *GetIP() override {return &(addr.sin6_addr);}
             void GetIP(void *data) override{memcpy(data,&(addr.sin6_addr),sizeof(in6_addr));}
 
-            const ushort GetPort()const;
+            const ushort GetPort()const override;
 
-            void ToString(char *str)const;
+            void ToString(char *str)const override;
             static int GetDomainIPList(List<in6_addr> &addr_list,const char *domain,int _socktype,int _protocol);       ///<取得指定域名的IPv6地址列表
             static int GetLocalIPList(List<in6_addr> &addr_list,int _socktype,int _protocol);                           ///<取得本机的IPv6地址列表
 
             static void ToString(char str[INET6_ADDRSTRLEN],const in6_addr &);                                          ///<转换一个IPv6地址到字符串
 
-            IPAddress *CreateCopy()const{return(new IPv6Address(this));}
-            IPAddress *Create()const{return(new IPv6Address());}
+            IPAddress *CreateCopy()const override{return(new IPv6Address(this));}
+            IPAddress *Create()const override{return(new IPv6Address());}
 
-            bool Comp(const IPAddress *ipa)const;
+            bool Comp(const IPAddress *ipa)const override;
         };//class IPv6Address
 
         inline IPv4Address *CreateIPv4TCP       (const char *name,ushort port){return(new IPv4Address(name,port,SOCK_STREAM,    IPPROTO_TCP));}
