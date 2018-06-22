@@ -1,4 +1,4 @@
-#include"VertexBufferControl.h"
+﻿#include"VertexBufferControl.h"
 #include<hgl/graph/GL/glew.h>
 
 namespace hgl
@@ -49,6 +49,11 @@ namespace hgl
 
             glGenBuffers(1, &index);
             return(new VertexBufferControlBind(type, index));
+        }
+
+        void DeleteVertexBufferControlBind(VertexBufferControl *vbc)
+        {
+            SAFE_CLEAR(vbc);
         }
     }//namespace graph
 }//namespace hgl

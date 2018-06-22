@@ -1,4 +1,4 @@
-#ifndef HGL_GRAPH_VERTEX_BUFFER_OBJECT_CONTROL_INCLUDE
+﻿#ifndef HGL_GRAPH_VERTEX_BUFFER_OBJECT_CONTROL_INCLUDE
 #define HGL_GRAPH_VERTEX_BUFFER_OBJECT_CONTROL_INCLUDE
 
 #include<hgl/type/DataType.h>
@@ -21,7 +21,7 @@ namespace hgl
         public:
 
             VertexBufferControl(uint t, uint i) { type = t; index = i; }
-            ~VertexBufferControl()
+            virtual ~VertexBufferControl()
             {
                 Clear();
             }
