@@ -88,12 +88,16 @@ namespace hgl
 
             hgl_free(mem_data);
 
-            DeleteVertexBufferControl(vbc);
+			if(vbc)
+				DeleteVertexBufferControl(vbc);
         }
 
         void VertexBufferBase::CloseVertexBuffer()
         {
+			if(!vbc)return;
+
             DeleteVertexBufferControl(vbc);
+			vbc = nullptr;
         }
 
         void VertexBufferBase::ChangeVertexBuffer(int start, int size, void *data)
