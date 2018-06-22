@@ -142,6 +142,7 @@ namespace hgl
 		int retval;
         void *res;
 
+#ifndef __APPLE__
         if(time_out>0)
         {
             struct timespec ts;
@@ -151,6 +152,7 @@ namespace hgl
             retval=pthread_timedjoin_np(tp,&res,&ts);
         }
         else
+#endif//__APPLE__
         {
             retval=pthread_join(tp,&res);
         }

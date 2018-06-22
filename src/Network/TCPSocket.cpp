@@ -99,9 +99,11 @@ namespace hgl
                 return;
 
 #if HGL_OS != HGL_OS_Windows        //windows不支持
-            setsockopt(ThisSocket,IPPROTO_TCP,TCP_KEEPIDLE,    &idle,        sizeof(int));
-            setsockopt(ThisSocket,IPPROTO_TCP,TCP_KEEPINTVL,&interval,    sizeof(int));
-            setsockopt(ThisSocket,IPPROTO_TCP,TCP_KEEPCNT,    &count,        sizeof(int));
+    #if HGL_OS != HGL_OS_macOS
+            setsockopt(ThisSocket,IPPROTO_TCP,TCP_KEEPIDLE,   &idle,        sizeof(int));
+    #endif//HGL_OS_macOS
+            setsockopt(ThisSocket,IPPROTO_TCP,TCP_KEEPINTVL,  &interval,    sizeof(int));
+            setsockopt(ThisSocket,IPPROTO_TCP,TCP_KEEPCNT,    &count,       sizeof(int));
 #endif//HGL_OS_Windows
         }
 

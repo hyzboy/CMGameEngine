@@ -144,7 +144,7 @@ namespace hgl
 
             memset(&buf,0,sizeof(struct_stat64));
 
-            if(lstat64(name,&buf)==-1)
+            if(hgl_lstat64(name,&buf)==-1)
                 return(false);				//错误，有可能是不能访问
 
             return S_ISDIR(buf.st_mode);
@@ -256,7 +256,7 @@ namespace hgl
             chdir(fullname);
             if((dir = opendir(fullname)) == NULL)
                 return(-1);
-            if((entry = readdir64(dir)) == NULL)
+            if((entry = hgl_readdir64(dir)) == NULL)
                 return(-1);
 
             EnumFileConfig *sub_efc=nullptr;
@@ -272,7 +272,7 @@ namespace hgl
 
                 memset(&statbuf,0,sizeof(struct_stat64));
 
-                if(lstat64(entry->d_name,&statbuf)==-1)
+                if(hgl_lstat64(entry->d_name,&statbuf)==-1)
                     continue;
 
                 memset(&fi,0,sizeof(FileInfo));
@@ -344,7 +344,7 @@ namespace hgl
                         config->cb_file(config,fi);
                 }
             }
-            while((entry=readdir64(dir)));
+            while((entry=hgl_readdir64(dir)));
 
             closedir(dir);
 

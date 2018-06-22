@@ -25,12 +25,12 @@ namespace hgl
 
 		int OpenFile(const os_char *fn,FileOpenMode fom)
         {
-			if(fom==fomCreate		)return open64(fn,O_WRONLY|O_CREAT,           S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);else
-			if(fom==fomCreateTrunc	)return open64(fn,O_WRONLY|O_CREAT|O_TRUNC,   S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);else
-			if(fom==fomOnlyRead		)return open64(fn,O_RDONLY	);else
-			if(fom==fomOnlyWrite	)return open64(fn,O_WRONLY	);else
-			if(fom==fomReadWrite	)return open64(fn,O_RDWR	);else
-			if(fom==fomAppend		)return open64(fn,O_APPEND	);else
+			if(fom==fomCreate		)return hgl_open64(fn,O_WRONLY|O_CREAT,           S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);else
+			if(fom==fomCreateTrunc	)return hgl_open64(fn,O_WRONLY|O_CREAT|O_TRUNC,   S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);else
+			if(fom==fomOnlyRead		)return hgl_open64(fn,O_RDONLY	);else
+			if(fom==fomOnlyWrite	)return hgl_open64(fn,O_WRONLY	);else
+			if(fom==fomReadWrite	)return hgl_open64(fn,O_RDWR	);else
+			if(fom==fomAppend		)return hgl_open64(fn,O_APPEND	);else
                 RETURN_ERROR(-1);
         }
 
@@ -43,14 +43,14 @@ namespace hgl
 		{
 			if(!CanRead())return(-1);
 
-			return pread64(fp,buf,size,offset);
+			return hgl_pread64(fp,buf,size,offset);
 		}
 
 		int64 FileAccess::Write(int64 offset,const void *buf,int64 size)
 		{
 			if(!CanWrite())return(-1);
 
-			return pwrite64(fp,buf,size,offset);
+			return hgl_pwrite64(fp,buf,size,offset);
 		}
 	}//namespace io
 }//namespace hgl

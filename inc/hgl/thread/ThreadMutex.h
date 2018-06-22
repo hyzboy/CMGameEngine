@@ -22,7 +22,9 @@ namespace hgl
 
 		virtual void	Lock();																		///<取得的控制权(如果对象处于排斥状态，则等待)
 		virtual bool	TryLock();																	///<尝试取得控制权
+#ifndef __APPLE__
 		virtual bool	WaitLock(const double=0);													///<等待并取得控制权
+#endif//__APPLE__
 		virtual void	Unlock();																	///<放弃控制权
 	};//class Mutex
 

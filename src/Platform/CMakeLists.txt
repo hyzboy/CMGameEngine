@@ -20,9 +20,17 @@ IF(UNIX)
 
     SET(PLATFORM_MULTI_THREAD_SOURCE    UNIX/CondVar.cpp
                                         UNIX/RWLock.cpp
-                                        UNIX/Semaphore.cpp
                                         UNIX/Thread.cpp
                                         UNIX/ThreadMutex.cpp)
+
+IF(APPLE)
+    SET(PLATFORM_MULTI_THREAD_SOURCE    ${PLATFORM_MULTI_THREAD_SOURCE}
+                                        Apple/Semaphore.cpp)
+ELSE()
+    SET(PLATFORM_MULTI_THREAD_SOURCE    ${PLATFORM_MULTI_THREAD_SOURCE}
+                                        UNIX/Semaphore.cpp)
+
+ENDIF()
 
     SET(PLATFORM_MULTI_PROCESS_SOURCE   UNIX/ProcMutex.cpp
                                         UNIX/Process.cpp
