@@ -1,4 +1,4 @@
-#ifndef HGL_THREAD_SWAP_DATA_INCLUDE
+﻿#ifndef HGL_THREAD_SWAP_DATA_INCLUDE
 #define HGL_THREAD_SWAP_DATA_INCLUDE
 
 #include<hgl/thread/ThreadMutex.h>
@@ -88,6 +88,7 @@ namespace hgl
 			return(true);
 		}
 
+#ifndef __APPLE__
 		/**
 		 * 尝试交换双方数据
 		 */
@@ -101,6 +102,7 @@ namespace hgl
             lock.Unlock();
 			return(true);
 		}
+#endif//__APPLE__
     };//template<typename T> class SwapData
 
 	/**
