@@ -251,7 +251,7 @@ namespace hgl
             }
             else
             {
-                MergeFilename(full_findname,config->folder_name,config->find_name);
+				full_findname=MergeFilename(config->folder_name,config->find_name);
             }
 
             WIN32_FIND_DATAW FindFileData;
