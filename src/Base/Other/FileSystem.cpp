@@ -4,6 +4,7 @@
 #include <hgl/io/FileOutputStream.h>
 
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <string.h>
 
 namespace hgl
@@ -230,8 +231,6 @@ namespace hgl
                 if(*sp==0)
                     return(true);
 
-
-
                 if(!IsDirectory(str))//没有找到
                     if(!MakeDirectory(str))
                         return(false);
@@ -330,7 +329,7 @@ namespace hgl
 
             memset(&file_state,0,sizeof(struct_stat64));
 
-            if(lstat64(filename.c_str(),&file_state)==-1)
+            if(hgl_lstat64(filename.c_str(),&file_state)==-1)
                 return(false);
 
             memset(&fi,0,sizeof(FileInfo));

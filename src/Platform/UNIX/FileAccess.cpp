@@ -27,7 +27,6 @@ namespace hgl
         {
 			if(fom==fomCreate		)return open64(fn,O_WRONLY|O_CREAT,           S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);else
 			if(fom==fomCreateTrunc	)return open64(fn,O_WRONLY|O_CREAT|O_TRUNC,   S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);else
-			if(fom==fomCreateTemp	)return open64(fn,O_WRONLY|O_CREAT|O_TMPFILE, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);else
 			if(fom==fomOnlyRead		)return open64(fn,O_RDONLY	);else
 			if(fom==fomOnlyWrite	)return open64(fn,O_WRONLY	);else
 			if(fom==fomReadWrite	)return open64(fn,O_RDWR	);else

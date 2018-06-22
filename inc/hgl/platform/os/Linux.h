@@ -57,12 +57,21 @@ typedef pthread_mutex_t         hgl_thread_mutex;
 
 #define iconv_str				char *
 
-#define struct_stat64			struct stat64
-#define tell64(fp)				lseek64(fp,0,SEEK_CUR)
-#define read64					read
-#define write64					write
+#define hgl_stat64				stat64
+#define hgl_open64				open64
+#define hgl_lseek64				lseek64
+#define hgl_tell64(fp)			lseek64(fp,0,SEEK_CUR)
+#define hgl_fstat64				fstat64
+#define hgl_lstat64				lstat64
+#define hgl_read64				read
+#define hgl_write64				write
+#define hgl_pread64				pread64
+#define hgl_pwrite64			pwrite64
 
+#define struct_stat64			struct stat64
 #define struct_dirent64 		struct dirent64
+#define hgl_dirent64			dirent64
+#define hgl_readdir64			readdir64
 
 #define sprintf_s				snprintf
 //--------------------------------------------------------------------------------------------------

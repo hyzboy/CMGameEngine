@@ -109,21 +109,21 @@ namespace hgl
         {
             if(!CanSeek())return(-1);
 
-            return lseek64(fp,offset,orign);
+            return hgl_lseek64(fp,offset,orign);
         }
 
         int64 FileAccess::Tell()const
         {
             if(fp==-1)return(-1);
 
-            return tell64(fp);
+            return hgl_tell64(fp);
         }
 
         int64 FileAccess::GetSize()
         {
             if(!CanSize())return(-1);
 
-            fstat64(fp,&file_state);
+            hgl_fstat64(fp,&file_state);
             return(file_state.st_size);
         }
 
@@ -149,17 +149,17 @@ namespace hgl
         {
             if(!CanRead())return(-1);
 
-            return read64(fp,buf,size);
+            return hgl_read64(fp,buf,size);
         }
 
         int64 FileAccess::Peek(void *buf,int64 size)
         {
             if(!CanPeek())return(-1);
 
-            int result=read64(fp,buf,size);
+            int result=hgl_read64(fp,buf,size);
 
             if(result>0)
-                lseek64(fp,-result,soCurrent);        //回移这个长度
+                hgl_lseek64(fp,-result,soCurrent);        //回移这个长度
 
             return result;
         }
@@ -168,7 +168,7 @@ namespace hgl
         {
             if(!CanWrite())return(-1);
 
-            return write64(fp,buf,size);
+            return hgl_write64(fp,buf,size);
         }
     }//namespace io
 }//namespace hgl

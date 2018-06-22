@@ -93,16 +93,16 @@ namespace hgl
 	constexpr uint      HGL_SIZE_1KB	=1024;
 	constexpr uint      HGL_SIZE_1MB	=HGL_SIZE_1KB*1024;
 	constexpr uint      HGL_SIZE_1GB	=HGL_SIZE_1MB*1024;
-	constexpr uint64    HGL_SIZE_1TB	=HGL_SIZE_1GB*1024LL;
-	constexpr uint64    HGL_SIZE_1PB	=HGL_SIZE_1TB*1024LL;
-	constexpr uint64    HGL_SIZE_1EB	=HGL_SIZE_1PB*1024LL;
-//	constexpr uint128    HGL_SIZE_1ZB	=HGL_SIZE_1EB*1024LL;
-//	constexpr uint128    HGL_SIZE_1YB	=HGL_SIZE_1ZB*1024LL;
+	constexpr uint64    HGL_SIZE_1TB	=HGL_SIZE_1GB*1024ULL;
+	constexpr uint64    HGL_SIZE_1PB	=HGL_SIZE_1TB*1024ULL;
+	constexpr uint64    HGL_SIZE_1EB	=HGL_SIZE_1PB*1024ULL;
+//	constexpr uint128    HGL_SIZE_1ZB	=HGL_SIZE_1EB*1024ULL;
+//	constexpr uint128    HGL_SIZE_1YB	=HGL_SIZE_1ZB*1024ULL;
 
 	constexpr uint8		HGL_U8_MAX		=0xFF;
 	constexpr uint16	HGL_U16_MAX		=0xFFFF;
 	constexpr uint32	HGL_U32_MAX		=0xFFFFFFFF;
-	constexpr uint64	HGL_U64_MAX		=0xFFFFFFFFFFFFFFFFUL;
+	constexpr uint64	HGL_U64_MAX		=0xFFFFFFFFFFFFFFFFULL;
 
 	constexpr int8		HGL_S8_MAX		=0x7F;
 	constexpr int16		HGL_S16_MAX		=0x7FFF;
