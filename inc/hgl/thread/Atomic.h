@@ -1,4 +1,4 @@
-#ifndef HGL_ATOMIC_INCLUDE
+﻿#ifndef HGL_ATOMIC_INCLUDE
 #define HGL_ATOMIC_INCLUDE
 
 #include<hgl/platform/Platform.h>
@@ -8,7 +8,7 @@
 // #else
 	#if HGL_OS == HGL_OS_Windows
 		#include<hgl/thread/atomic/AtomicWin.h>
-	#elif HGL_OS == HGL_OS_MacOSX
+	#elif HGL_OS == HGL_OS_macOS
 		#include<hgl/thread/atomic/AtomicOSX.h>
 	#elif defined(__GNUC__)
 		#if ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 1) || __GNUC__ > 4) && (defined(__x86_64__) || defined(__i386__) || defined(__powerpc__))
