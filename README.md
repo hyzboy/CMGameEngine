@@ -7,7 +7,7 @@
   * 电子邮箱：hyzboy (@) gmail.com
   * QQ/微信：324000607
 
-* 最低支持操作系统：Microsoft Windows 7/2008 R2 , Linux kernel 3.11
+* 最低支持操作系统：Microsoft Windows 7/2008 R2 , Linux kernel 3.11，FreeBSD 8.0，macOS 10
 * 最低支持编译器：GNU C/C++ 4.8 , LLVM Clang 3.8 , Microsoft Visual C++ 2015
 * 最低支持OpenGL: Core 3.3+DSA (HD5xxx/GTX4xx) 或 Core 4.5
 
@@ -25,7 +25,7 @@
   * e-mail: hyzboy (@) gmail.com
   * QQ/WeChat: 324000607
 
-* Minimum supported OS: Microsoft Windows 7/2008 R2 , Linux kernel 3.11
+* Minimum supported OS: Microsoft Windows 7/2008 R2 , Linux kernel 3.11 , FreeBSD 8.0 , macOS 10
 * Minimum supported compilers: GNU C/C++ 4.8 , LLVM CLang 3.8 , Microsoft Visual C++ 2015
 * Minimum supported OpenGL: Core 3.3+DSA (HD5xxx/GTX4xx) or Core 4.5
 
