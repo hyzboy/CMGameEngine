@@ -250,11 +250,7 @@ namespace hgl
             IPv4Address(){hgl_zero(addr);}
             IPv4Address(const uint32 _addr,ushort port,int _socktype,int _protocol):IPAddress(_socktype,_protocol)
             {
-                hgl_zero(addr);
-
-                addr.sin_family     =AF_INET;
-                addr.sin_addr.s_addr=_addr;
-                addr.sin_port       =htons(port);
+                Set(_addr,port);
             }
 
             IPv4Address(const char *name,ushort port,int _socktype,int _protocol)
@@ -282,6 +278,13 @@ namespace hgl
             const bool IsBoradcast()const override{return(addr.sin_addr.s_addr==htonl(INADDR_BROADCAST));}
 
             bool Set(const char *name,ushort port,int _socktype,int _protocol) override;
+            void Set(const uint32 _addr,ushort port)
+            {
+                hgl_zero(addr);
+                addr.sin_family     =AF_INET;
+                addr.sin_addr.s_addr=_addr;
+                addr.sin_port       =htons(port);
+            }
             void Set(ushort port) override;
             bool Bind(int ThisSocket,int reuse=1)const override;
             bool GetHostname(UTF8String &)const override;
