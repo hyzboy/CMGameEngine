@@ -260,7 +260,15 @@ namespace hgl
 
         const ushort IPv4Address::GetPort()const{return addr.sin_port;}
 
-        void IPv4Address::ToString(char *str)const{inet_ntop(AF_INET,(void *)&(addr.sin_addr),str,INET_ADDRSTRLEN);}
+        void IPv4Address::ToString(char *str,int max_size)const
+        {
+            inet_ntop(AF_INET,(void *)&(addr.sin_addr),str,INET_ADDRSTRLEN);
+
+            int size=strlen(str);
+            str[size]=':';
+
+            hgl::utos(str+size+1,max_size-1-size,addr.sin_port);
+        }
 
         /**
         * 取得指定域名的IPv4地址列表
@@ -290,11 +298,6 @@ namespace hgl
                 return(-1);
 
             return GetDomainIPList(addr_list,hostname,_socktype,_protocol);
-        }
-
-        void IPv4Address::ToString(char str[INET_ADDRSTRLEN],const in_addr &addr)
-        {
-            inet_ntop(AF_INET,(void *)&addr,str,INET_ADDRSTRLEN);
         }
 
         bool IPv4Address::Comp(const IPAddress *ipa)const
@@ -336,7 +339,15 @@ namespace hgl
 
         const ushort IPv6Address::GetPort()const{return addr.sin6_port;}
 
-        void IPv6Address::ToString(char *str)const{inet_ntop(AF_INET6, (void *)&(addr.sin6_addr),str,INET6_ADDRSTRLEN);}
+        void IPv6Address::ToString(char *str,int max_size)const
+        {
+            inet_ntop(AF_INET6, (void *)&(addr.sin6_addr),str,INET6_ADDRSTRLEN);
+
+            int size=strlen(str);
+            str[size]=':';
+
+            hgl::utos(str+size+1,max_size-1-size,addr.sin6_port);
+        }
 
         /**
         * 取得指定域名的IPv6地址列表
@@ -366,11 +377,6 @@ namespace hgl
                 return(-1);
 
             return GetDomainIPList(addr_list,hostname,_socktype,_protocol);
-        }
-
-        void IPv6Address::ToString(char str[INET6_ADDRSTRLEN],const in6_addr &addr)
-        {
-            inet_ntop(AF_INET6, (void *)&addr,str,INET6_ADDRSTRLEN);
         }
 
         bool IPv6Address::Comp(const IPAddress *ipa)const

@@ -220,7 +220,7 @@ namespace hgl
             /**
              * 转换当前地址到一个可视字符串,字符串所需长度请使用GetIPStringMaxSize()获取
              */
-            virtual void ToString(char *)const=0;
+            virtual void ToString(char *,int)const=0;
 
             /**
              * 创建一个当前地址的副本
@@ -297,12 +297,10 @@ namespace hgl
             const uint32 GetInt32IP()const{return addr.sin_addr.s_addr;}
             const ushort GetPort()const override;
 
-            void ToString(char *str)const override;
+            void ToString(char *str,int)const override;
 
             static int GetDomainIPList(List<in_addr> &addr_list,const char *domain,int _socktype,int _protocol);        ///<取得当指定域名的IPv4地址列表
             static int GetLocalIPList(List<in_addr> &addr_list,int _socktype,int _protocol);                            ///<取得本机的IPv4地址列表
-
-            static void ToString(char str[INET_ADDRSTRLEN],const in_addr &);                                            ///<转换一个IPv4地址到字符串
 
             IPAddress *CreateCopy()const override{return(new IPv4Address(this));}
             IPAddress *Create()const override{return(new IPv4Address());}
@@ -365,11 +363,9 @@ namespace hgl
 
             const ushort GetPort()const override;
 
-            void ToString(char *str)const override;
+            void ToString(char *str,int)const override;
             static int GetDomainIPList(List<in6_addr> &addr_list,const char *domain,int _socktype,int _protocol);       ///<取得指定域名的IPv6地址列表
             static int GetLocalIPList(List<in6_addr> &addr_list,int _socktype,int _protocol);                           ///<取得本机的IPv6地址列表
-
-            static void ToString(char str[INET6_ADDRSTRLEN],const in6_addr &);                                          ///<转换一个IPv6地址到字符串
 
             IPAddress *CreateCopy()const override{return(new IPv6Address(this));}
             IPAddress *Create()const override{return(new IPv6Address());}
