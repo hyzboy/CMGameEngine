@@ -122,7 +122,7 @@ namespace hgl
 			codepage=cs.codepage;
 			strcpy(charset,CharSetNameLength,cs.charset);
 		}
-        
+
 	    int _Comp(const CharSet &data)const{return codepage-data.codepage;}	\
         CompOperator(const CharSet &,_Comp)
 	};//struct CharacterSet
@@ -223,7 +223,19 @@ namespace hgl
 		return to_u8(ws.c_str(),ws.Length());
 	}
 
-	//utf32<->utf16互转请使用hgl_equcpy,代码在datatype.h
+#if HGL_OS == HGL_OS_Windows
+    inline OSString ToOSString(const char *str){return to_u16(str);}
+    inline OSString ToOSString(const UTF8String &str){return to_u16(str.c_str(), (int)(str.Length()));}
+
+    inline UTF8String ToUTF8String(const os_char *str){return to_u8(str,strlen(str));}
+    inline UTF8String ToUTF8String(const OSString &str){return to_u8(str);}
+#else
+    inline OSString ToOSString(const char *str){return OSString(str);}
+    inline OSString ToOSString(const UTF8String &str){return str;}
+
+    inline UTF8String ToUTF8String(const os_char *str){return UTF8String(str);}
+    inline UTF8String ToUTF8String(const OSString &str){return str;}
+#endif//
 
     const BOMFileHeader *ParseBOM(const void *input);
 
