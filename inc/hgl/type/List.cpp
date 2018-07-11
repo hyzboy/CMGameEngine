@@ -119,8 +119,7 @@ namespace hgl
 		}
 		else
 		{
-			while(count>=max_count)
-				max_count<<=1;
+			max_count=power_to_2(count+1);
 
 			items=(T *)hgl_realloc(items,max_count*sizeof(T));
 
@@ -145,8 +144,7 @@ namespace hgl
 		}
 		else
 		{
-			while(count>=max_count)
-				max_count<<=1;
+			max_count=power_to_2(count+1);
 
 			items=(T *)hgl_realloc(items,max_count*sizeof(T));
 		}
@@ -175,7 +173,7 @@ namespace hgl
 		}
 		else
 		{
-			max_count=power_to_2(n);
+			max_count=power_to_2(count+n);
 
 			items=(T *)hgl_realloc(items,max_count*sizeof(T));
 		}
@@ -435,8 +433,7 @@ namespace hgl
 			}
 			else
 			{
-				if(count>=max_count)
-					max_count<<=1;
+                max_count=power_to_2(count+1);
 
 				items=(T *)hgl_realloc(items,max_count*sizeof(T));
 			}
