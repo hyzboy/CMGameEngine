@@ -36,6 +36,11 @@ namespace hgl
 
         public:
 
+            template<typename T>
+            using CharArray=T[(SIZE<<1)+1];
+
+        public:
+
             HashCode()
             {
                 hgl_zero(code);
@@ -53,7 +58,7 @@ namespace hgl
                 memcpy(code,ptr,SIZE);
             }
 
-            void ParseFromString(const char *str)
+            void FromString(const char *str)
             {
                 ParseHexStr(code,str,SIZE);
             }
@@ -70,7 +75,7 @@ namespace hgl
                 ToLowerHexStr<T>(str,code,SIZE,gap_char);
             }
 
-            const int CompFunc(const HashCode<SIZE> &hash) const
+            const int CompFunc(const HashCode<SIZE> &hash)const
             {
                 const unsigned char *s=code;
                 const unsigned char *t=hash.code;
