@@ -44,7 +44,7 @@ namespace hgl
 
 		bool SocketManage::_Join(IOSocket *sock)
 		{
-			if(sock_list.Find(sock->ThisSocket)!=-1)
+			if(sock_list.IsExist(sock->ThisSocket))
 				RETURN_FALSE;
 
 			if(!manage->Join(sock))

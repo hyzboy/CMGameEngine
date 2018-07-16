@@ -61,7 +61,7 @@ namespace hgl
 
             OnlyWriteLock owl(o4t);
             {
-                if(o4t->Find(wo)!=-1)
+                if(o4t->KeyExist(wo))
                     return(false);
 
                 wt=DistWorkThread(wo);
@@ -99,7 +99,7 @@ namespace hgl
 
             for(int i=0;i<wo_count;i++)
             {
-                if(o4t->Find(wo_list[i])!=-1)
+                if(o4t->KeyExist(wo_list[i]))
                     continue;
 
                 o4t->Add(wo_list[i],wt);

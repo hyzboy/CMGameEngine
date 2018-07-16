@@ -273,35 +273,35 @@ public:
 
 	template<typename DATA_TYPE> bool AddInteger(const STR_TYPE &name,const DATA_TYPE &value)
 	{
-		if(this->Find(name)!=-1)return(false);
+		if(this->KeyExist(name))return(false);
 		this->Add(name,new PropertyItemNumber<STR_TYPE,DATA_TYPE>(value));
 		return(true);
 	}
 
 	template<typename DATA_TYPE> bool AddUInteger(const STR_TYPE &name,const DATA_TYPE &value)
 	{
-		if(this->Find(name)!=-1)return(false);
+		if(this->KeyExist(name))return(false);
 		this->Add(name,new PropertyItemNumber<STR_TYPE,DATA_TYPE>(value));
 		return(true);
 	}
 
 	template<typename DATA_TYPE> bool AddFloat(const STR_TYPE &name,const DATA_TYPE &value)
 	{
-		if(this->Find(name)!=-1)return(false);
+		if(this->KeyExist(name))return(false);
 		this->Add(name,new PropertyItemNumber<STR_TYPE,DATA_TYPE>(value));
 		return(true);
 	}
 
 	template<typename DATA_TYPE> bool AddBool(const STR_TYPE &name,const DATA_TYPE &value)
 	{
-		if(this->Find(name)!=-1)return(false);
+		if(this->KeyExist(name))return(false);
 		this->Add(name,new PropertyItem<STR_TYPE,bool>(value));
 		return(true);
 	}
 
 	bool AddString(const STR_TYPE &name,const STR_TYPE &value)
 	{
-		if(this->Find(name)!=-1)return(false);
+		if(this->KeyExist(name))return(false);
 		this->Add(name,new PropertyItem<STR_TYPE,STR_TYPE>(value));
 	}
 };

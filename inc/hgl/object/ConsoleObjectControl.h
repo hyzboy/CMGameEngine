@@ -57,7 +57,7 @@ namespace hgl
 	public: //方法 查找
 
 		virtual Object *FindObject(const u16char *);                                                ///<查找对象
-		virtual bool FindObject(Object *);															///<查找对象
+		virtual bool IsMember(Object *obj)const{all_object.IsExist(obj);}							///<确认对象是否存在管理器中
 	};//class ConsoleObjectControl
 }//namespace hgl
 #endif//HGL_CONSOLE_OBJECT_CONTROL_INCLUDE

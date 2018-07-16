@@ -155,11 +155,6 @@ namespace hgl
 		return(nullptr);
 	}
 
-	bool ConsoleObjectControl::FindObject(Object *obj)
-	{
-		return(all_object.Find(obj)!=-1);
-    }
-
 	void ConsoleObjectControl::SetEnabledAttrib(Object *obj,bool e)
 	{
 		if(!e)

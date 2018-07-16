@@ -88,8 +88,8 @@ namespace hgl
 
 		public: //方法 查找
 
-			virtual Object *FindObject(const UTF16String &);												///<查找对象
-			virtual bool FindObject(Object *);															///<查找对象
+			virtual Object *FindObject(const UTF16String &);											///<查找对象
+			virtual bool IsMember(Object *obj)const{return all_object.IsExist(obj);}					///<查找对象
 
 			#ifdef _DEBUG
 			virtual void PutDebugInfo(const UTF16String &);												///<输出调试信息

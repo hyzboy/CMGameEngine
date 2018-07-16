@@ -13,7 +13,7 @@ namespace hgl
             if(!log)
                 return(false);
 
-            if(log_list.Find(log)!=-1)        //重复添加
+            if(log_list.IsExist(log))        //重复添加
                 return(false);
 
             log_list.Add(log);

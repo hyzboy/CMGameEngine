@@ -387,7 +387,7 @@ namespace hgl
 				if(!all_object.IsExist(obj))
 					return(nullptr);
 
-				if(destroy_obj.Find(obj)!=-1)
+				if(destroy_obj.IsExist(obj))
 					return(nullptr);
 
 				if(obj->is_key_focus())

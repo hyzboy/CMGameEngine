@@ -47,7 +47,7 @@ namespace hgl
 	{
 		if(!obj)return(false);
 
-		if(items.Find(flag)!=-1)
+		if(items.KeyExist(flag))
 			return(false);
 
 		items.Add(flag,obj);
