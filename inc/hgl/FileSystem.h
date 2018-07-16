@@ -13,7 +13,7 @@ namespace hgl
     namespace filesystem
     {
         template<typename T>
-        inline BaseString<T> MergeFilename(const BaseString<T> &pathname,const BaseString<T> &filename,const T directory_separator_char)
+        inline BaseString<T> MergeFilename(const BaseString<T> &pathname,const BaseString<T> &filename,const T directory_separator_char,const T *directory_separator_str)
         {
             BaseString<T> fullname;
 
@@ -34,7 +34,7 @@ namespace hgl
 
                 if(filename.GetBeginChar()!=directory_separator_char)           //开头没有分隔符
                 {
-                    fullname.Strcat(directory_separator_char);                  //添加分隔符
+                    fullname.Strcat(directory_separator_str);                   //添加分隔符
                 }
             }
 
@@ -69,16 +69,16 @@ namespace hgl
         }
 
         inline UTF8String MergeFilename(const UTF8String &pathname,const UTF8String &filename)          ///<组合路径名与文件名
-        {return MergeFilename(pathname,filename,HGL_DIRECTORY_SEPARATOR);}
+        {return MergeFilename(pathname,filename,HGL_DIRECTORY_SEPARATOR,HGL_DIRECTORY_SEPARATOR_U8STR);}
 
         inline WideString MergeFilename(const WideString &pathname,const WideString &filename)          ///<组合路径名与文件名
-        {return MergeFilename(pathname,filename,L'\\');}
+        {return MergeFilename(pathname,filename,L'\\',L"\\");}
 
 	    bool FileCopy(const OSString &,const OSString &);                                          		///<文件复制
 	    bool FileDelete(const OSString &);                                                           	///<文件删除
 	    bool FileMove(const OSString &,const OSString &);                                          		///<文件移动
 	    bool FileRename(const OSString &,const OSString &);                                        		///<文件改名
-	    bool FileExist(const OSString &);                                                          	///<文件确认是否存在
+	    bool FileExist(const OSString &);                                                          	    ///<文件确认是否存在
 	    bool FileComp(const OSString &,const OSString &);                                          		///<文件比较
 
 	    bool FileCanRead(const OSString &);																///<检测文件是否可读
