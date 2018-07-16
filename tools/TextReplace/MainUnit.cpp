@@ -75,11 +75,11 @@ void __fastcall TMainForm::ParseTextButtonClick(TObject *Sender)
 
 			if(!str)continue;
 
-			while(*str==L' '||*str==L'\t')		//È¥µôĞĞÊ×¿Õ¸ñ
+			while(*str==L' '||*str==L'\t')		//å»æ‰è¡Œé¦–ç©ºæ ¼
 				str++;
 
 			if(str[0]==L'/'
-			 &&str[1]==L'/')continue;			//È¥µô×¢ÊÍĞĞ
+			 &&str[1]==L'/')continue;			//å»æ‰æ³¨é‡Šè¡Œ
 
 			while(true)
 			{
@@ -106,7 +106,7 @@ void __fastcall TMainForm::ParseTextButtonClick(TObject *Sender)
 
 				if(len>0)
 				{
-					if(OperCheckBox->Checked==false)	
+					if(OperCheckBox->Checked==false)
 					{
 						if(*start==L'"')start++;
 						if(*end==L'"')end--;
@@ -114,17 +114,17 @@ void __fastcall TMainForm::ParseTextButtonClick(TObject *Sender)
 
 					if(ClipAscCheckBox->Checked)
 					{
-						while((*start>0)&&(*start<128))	//½«Ç°ÃæµÄÓ¢ÎÄÈ¥µô
+						while((*start>0)&&(*start<128))	//å°†å‰é¢çš„è‹±æ–‡å»æ‰
 							start++;
 
-						while((*end>0)&&(*end<128))	//½«ºóÃæµÄÓ¢ÎÄÈ¥µô
+						while((*end>0)&&(*end<128))	//å°†åé¢çš„è‹±æ–‡å»æ‰
 							end--;
 					}
 
 					result.Strcpy(start,end-start+1);
 
 					if(ClearMultiItemCheckBox->Checked==false
-					 ||intro->Find(result)==-1)						//±£Ö¤ÎŞÖØ¸´
+					 ||!intro->IsExist(result))						//ä¿è¯æ— é‡å¤
 					{
 						wchar_t *tmp=result.wc_str();
 						int n=result.Length;
@@ -158,7 +158,7 @@ void __fastcall TMainForm::ParseTextButtonClick(TObject *Sender)
 
 			delete intro;
 		}
-			
+
 		delete list;
 	}
 
@@ -193,7 +193,7 @@ void __fastcall TMainForm::OrignTextPathBrowserButtonClick(TObject *Sender)
 void __fastcall TMainForm::NewTextPathBrowserButtonClick(TObject *Sender)
 {
 	if(UseOneCheckBox->Checked)
-	{             
+	{
 		OpenTextFileDialog->FileName=NewTextPathEdit->Text;
 
 		if(OpenTextFileDialog->Execute())
@@ -213,7 +213,7 @@ void __fastcall TMainForm::NewTextPathBrowserButtonClick(TObject *Sender)
 void __fastcall TMainForm::NewScriptPathBrowserButtonClick(TObject *Sender)
 {
 	wchar_t str[1024];
-	
+
 	wcscpy(str,NewScriptPathEdit->Text.w_str());
 
 	if(SelectDirectory(str))
@@ -276,7 +276,7 @@ void __fastcall TMainForm::ReplaceTextButtonClick(TObject *Sender)
 		{
 			const wchar_t *str=list->GetString(row);
 			const wchar_t *start,*end;
-			
+
 			const wchar_t *new_str=NULL;
 
 			if(!str)
@@ -285,11 +285,11 @@ void __fastcall TMainForm::ReplaceTextButtonClick(TObject *Sender)
 				continue;
 			}
 
-			while(*str==L' '||*str==L'\t')		//È¥µôĞĞÊ×¿Õ¸ñ
+			while(*str==L' '||*str==L'\t')		//å»æ‰è¡Œé¦–ç©ºæ ¼
 				str++;
 
 			if(str[0]==L'/'
-			 &&str[1]==L'/')continue;			//È¥µô×¢ÊÍĞĞ
+			 &&str[1]==L'/')continue;			//å»æ‰æ³¨é‡Šè¡Œ
 
 			while(true)
 			{
@@ -312,7 +312,7 @@ void __fastcall TMainForm::ReplaceTextButtonClick(TObject *Sender)
                     	break;
 				}
 
-				if(len>0)				//Ìæ»»µÄ½Å±¾±ØĞë±£Ö¤Ã¿ĞĞÖ»ÓĞÒ»ÌõĞèÒªÌæ»»µÄ×Ö·û´®
+				if(len>0)				//æ›¿æ¢çš„è„šæœ¬å¿…é¡»ä¿è¯æ¯è¡Œåªæœ‰ä¸€æ¡éœ€è¦æ›¿æ¢çš„å­—ç¬¦ä¸²
 				{
 					int index;
 
@@ -326,16 +326,16 @@ void __fastcall TMainForm::ReplaceTextButtonClick(TObject *Sender)
 
 					if(ClipAscCheckBox->Checked)
 					{
-						while((*start>0)&&(*start<128))	//½«Ç°ÃæµÄÓ¢ÎÄÈ¥µô
+						while((*start>0)&&(*start<128))	//å°†å‰é¢çš„è‹±æ–‡å»æ‰
 							start++;
 
-						while(*end>0&&(*end<128))	//½«ºóÃæµÄÓ¢ÎÄÈ¥µô
+						while(*end>0&&(*end<128))	//å°†åé¢çš„è‹±æ–‡å»æ‰
 							end--;
 					}
 
 					result.Strcpy(start,end-start+1);
 
-					index=orign_text->Find(result);			//²éÕÒÕâ¸ö×Ö·û´®ÊÇ·ñ´æÔÚÁĞ±íÖĞ
+					index=orign_text->Find(result);			//æŸ¥æ‰¾è¿™ä¸ªå­—ç¬¦ä¸²æ˜¯å¦å­˜åœ¨åˆ—è¡¨ä¸­
 
 					if(index!=-1)
 					{
@@ -360,9 +360,9 @@ void __fastcall TMainForm::ReplaceTextButtonClick(TObject *Sender)
 				result.Strcat(new_str);
 				result.Strcat(end+1);
 
-				intro->Add(result);				      	
+				intro->Add(result);
 			}
-			else		//Ô­Ñù
+			else		//åŸæ ·
 			{
             	intro->Add(list->GetString(row));
 			}
@@ -376,7 +376,7 @@ void __fastcall TMainForm::ReplaceTextButtonClick(TObject *Sender)
 
 			intro->SaveTxt(fn.w_str());
 		}
-                           
+
 		if(UseOneCheckBox->Checked==false)
 		{
 			delete orign_text;
@@ -444,25 +444,25 @@ void TMainForm::ReplacePathAndExt(const UnicodeString &orign_filename,const Unic
 hgl::StringList *TMainForm::GetOrignText(const UnicodeString &orign_filename)
 {
 	UnicodeString fn;
-                   
+
 	ToOrignTextName(orign_filename,fn);
-                                        
+
 	if(hgl::FileFind(fn.w_str()))
 	{
 		hgl::StringList *list=new hgl::StringList;
 
 		list->LoadTxt(fn.w_str());
 
-		return list;        
+		return list;
 	}
 	else
     	return(NULL);
 }
 //---------------------------------------------------------------------------
 hgl::StringList *TMainForm::GetNewText(const UnicodeString &orign_filename)
-{            
+{
 	UnicodeString fn;
-                   
+
 	ToNewTextName(orign_filename,fn);
 
 	if(hgl::FileFind(fn.w_str()))
@@ -481,13 +481,13 @@ void __fastcall TMainForm::UseOneCheckBoxClick(TObject *Sender)
 {
 	if(UseOneCheckBox->Checked)
 	{
-		Label1->Caption=L"ÌáÈ¡ºóµÄÎÄ±¾ÎÄ¼ş:";
-		Label2->Caption=L"·­ÒëºóµÄÎÄ±¾ÎÄ¼ş:";
+		Label1->Caption=L"æå–åçš„æ–‡æœ¬æ–‡ä»¶:";
+		Label2->Caption=L"ç¿»è¯‘åçš„æ–‡æœ¬æ–‡ä»¶:";
 	}
 	else
 	{
-		Label1->Caption=L"ÌáÈ¡ºóÎÄ±¾´æ·ÅÄ¿Â¼:";
-		Label2->Caption=L"·­ÒëÎÄ±¾´æ·ÅÄ¿Â¼:";
+		Label1->Caption=L"æå–åæ–‡æœ¬å­˜æ”¾ç›®å½•:";
+		Label2->Caption=L"ç¿»è¯‘æ–‡æœ¬å­˜æ”¾ç›®å½•:";
 	}
 }
 //---------------------------------------------------------------------------
@@ -519,17 +519,17 @@ void __fastcall TMainForm::Button2Click(TObject *Sender)
 			if(!str)continue;
 
 			if(str[0]==L'/'
-			 &&str[1]==L'/')continue;			//È¥µô×¢ÊÍĞĞ
+			 &&str[1]==L'/')continue;			//å»æ‰æ³¨é‡Šè¡Œ
 
 			hgl::String result;
 
 			start=str;
 			end=start+hgl::strlen(str)-1;
 
-			while((*start>0)&&(*start<128))	//½«Ç°ÃæµÄÓ¢ÎÄÈ¥µô
+			while((*start>0)&&(*start<128))	//å°†å‰é¢çš„è‹±æ–‡å»æ‰
 				start++;
 
-			while((*end>0)&&(*end<128))	//½«ºóÃæµÄÓ¢ÎÄÈ¥µô
+			while((*end>0)&&(*end<128))	//å°†åé¢çš„è‹±æ–‡å»æ‰
 				end--;
 
 			if(end>=start)

@@ -318,7 +318,7 @@ namespace hgl
 
 					while(count--)
 					{
-						if(error_set.Find(rce->sock)==-1)
+						if(!error_set.IsMember(rce->sock))
 						{
 							if(rce->sock->ProcRecv(rce->size,cur_time)<=0)
 							{
@@ -347,7 +347,7 @@ namespace hgl
 					{
 						int left_bytes;
 
-						if(error_set.Find(sce->sock)==-1)
+						if(!error_set.IsMember(sce->sock))
 						{
 							if(sce->sock->ProcSend(sce->size,left_bytes)<=0)
 							{

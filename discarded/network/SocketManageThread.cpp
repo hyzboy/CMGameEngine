@@ -54,7 +54,7 @@ namespace hgl
             {
                 if((*sp)->ThisSocket!=-1)
                 {
-                    if(sock_set->Find((*sp)->ThisSocket)==-1)
+                    if(!sock_set->IsMember((*sp)->ThisSocket))
                     {
                         if(sock_manage->Join((*sp)->ThisSocket))
                             sock_set->Add((*sp)->ThisSocket,*sp);

@@ -225,7 +225,7 @@ namespace hgl
 			{
 				parse.GetToken(name);							//取得函数名
 
-				if(script_func.Find(name)==-1)					//查找是否有同样的函数名存在
+				if(!script_func.KeyExist(name))					//查找是否有同样的函数名存在
 				{
 					DevilFunc *func=new DevilFunc(this,name);
 

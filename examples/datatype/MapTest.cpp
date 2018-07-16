@@ -37,7 +37,7 @@ int main(int,char **)
         while(true)
         {
             index=rand()%20;
-            if(si.Find(index)==-1)break;
+            if(!si.IsMember(index))break;
         }
 
         si.Add(index);
