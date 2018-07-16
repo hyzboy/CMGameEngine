@@ -12,8 +12,67 @@ namespace hgl
 
     namespace filesystem
     {
-	    OSString MergeFilename(const OSString &,const OSString &);								        ///<组合路径名与文件名
-        OSString ClipFilename(const OSString &fullname);                                                ///<截取文件名
+        template<typename T>
+        inline BaseString<T> MergeFilename(const BaseString<T> &pathname,const BaseString<T> &filename,const T directory_separator_char)
+        {
+            BaseString<T> fullname;
+
+            if(pathname.GetEndChar()==directory_separator_char)                 //结尾有分隔符
+            {
+                if(filename.GetBeginChar()==directory_separator_char)           //开头有分隔符
+                {
+                    fullname.Set(pathname.c_str(),pathname.Length()-1);         //少取一个字符
+                }
+                else
+                {
+                    fullname=pathname;
+                }
+            }
+            else                                                                //结尾没有分隔符
+            {
+                fullname=pathname;
+
+                if(filename.GetBeginChar()!=directory_separator_char)           //开头没有分隔符
+                {
+                    fullname.Strcat(directory_separator_char);                  //添加分隔符
+                }
+            }
+
+            fullname.Strcat(filename);
+            return fullname;
+        }
+
+        /**
+         * 截取完整路径中的文件名
+         * @param filename 文件名
+         * @param fullname 完整路径文件名
+         */
+        template<typename T>
+        inline BaseString<T> ClipFilename(const BaseString<T> &fullname)
+        {
+            const int rpos=fullname.FindRightChar('/');
+            const int lpos=fullname.FindRightChar('\\');
+
+            if(rpos==-1&&lpos==-1)
+            {
+                return BaseString<T>(fullname);
+            }
+
+            if(rpos>lpos)
+            {
+                return BaseString<T>(fullname.c_str()+rpos+1,fullname.Length()-1-rpos);
+            }
+            else
+            {
+                return BaseString<T>(fullname.c_str()+lpos+1,fullname.Length()-1-lpos);
+            }
+        }
+
+        inline UTF8String MergeFilename(const UTF8String &pathname,const UTF8String &filename)          ///<组合路径名与文件名
+        {return MergeFilename(pathname,filename,HGL_DIRECTORY_SEPARATOR);}
+
+        inline WideString MergeFilename(const WideString &pathname,const WideString &filename)          ///<组合路径名与文件名
+        {return MergeFilename(pathname,filename,L'\\');}
 
 	    bool FileCopy(const OSString &,const OSString &);                                          		///<文件复制
 	    bool FileDelete(const OSString &);                                                           	///<文件删除

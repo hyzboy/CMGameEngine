@@ -14,65 +14,6 @@ namespace hgl
         constexpr int FILE_PROC_BUF_SIZE=HGL_SIZE_1MB;
 
         /**
-         * 组合路径名与文件名
-         * @param pathname 路径名
-         * @param filename 文件名
-         */
-        OSString MergeFilename(const OSString &pathname,const OSString &filename)
-        {
-            OSString fullname;
-
-            if(pathname.GetEndChar()==HGL_DIRECTORY_SEPARATOR)          //结尾有分隔符
-            {
-                if(filename.GetBeginChar()==HGL_DIRECTORY_SEPARATOR)    //开头有分隔符
-                {
-                    fullname.Set(pathname.c_str(),pathname.Length()-1); //少取一个字符
-                }
-                else
-                {
-                    fullname=pathname;
-                }
-            }
-            else                                                        //结尾没有分隔符
-            {
-                fullname=pathname;
-
-                if(filename.GetBeginChar()!=HGL_DIRECTORY_SEPARATOR)    //开头没有分隔符
-                {
-                    fullname.Strcat(HGL_DIRECTORY_SEPARATOR_STR);       //添加分隔符
-                }
-            }
-
-            fullname.Strcat(filename);
-            return fullname;
-        }
-
-        /**
-         * 截取完整路径中的文件名
-         * @param filename 文件名
-         * @param fullname 完整路径文件名
-         */
-        OSString ClipFilename(const OSString &fullname)
-        {
-            const int rpos=fullname.FindRightChar('/');
-            const int lpos=fullname.FindRightChar('\\');
-
-            if(rpos==-1&&lpos==-1)
-            {
-                return OSString(fullname);
-            }
-
-            if(rpos>lpos)
-            {
-                return OSString(fullname.c_str()+rpos+1,fullname.Length()-1-rpos);
-            }
-            else
-            {
-                return OSString(fullname.c_str()+lpos+1,fullname.Length()-1-lpos);
-            }
-        }
-
-        /**
         * 比较两个文件是否一样
         * @param filename1 第一个文件的名称
         * @param filename2 第二个文件的名称
