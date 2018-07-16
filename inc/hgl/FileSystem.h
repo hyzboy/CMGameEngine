@@ -1,4 +1,4 @@
-﻿#ifndef HGL_FILE_SYSTEM_INCLUDE
+#ifndef HGL_FILE_SYSTEM_INCLUDE
 #define HGL_FILE_SYSTEM_INCLUDE
 
 #include<hgl/type/BaseString.h>
@@ -78,7 +78,7 @@ namespace hgl
 	    bool FileDelete(const OSString &);                                                           	///<文件删除
 	    bool FileMove(const OSString &,const OSString &);                                          		///<文件移动
 	    bool FileRename(const OSString &,const OSString &);                                        		///<文件改名
-	    bool FileConfirm(const OSString &);                                                          	///<文件确认是否存在
+	    bool FileExist(const OSString &);                                                          	///<文件确认是否存在
 	    bool FileComp(const OSString &,const OSString &);                                          		///<文件比较
 
 	    bool FileCanRead(const OSString &);																///<检测文件是否可读

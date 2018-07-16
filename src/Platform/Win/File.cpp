@@ -1,4 +1,4 @@
-﻿#include <hgl/FileSystem.h>
+#include <hgl/FileSystem.h>
 #include <hgl/LogInfo.h>
 #include <hgl/io/FileInputStream.h>
 #include <hgl/io/FileOutputStream.h>
@@ -62,7 +62,7 @@ namespace hgl
         * @param filename 要查找的文件名称
         * @return 这个文件是否存在
         */
-        bool FileConfirm(const OSString &filename)
+        bool FileExist(const OSString &filename)
         {
             WIN32_FIND_DATAW wfd;
             HANDLE hFind;

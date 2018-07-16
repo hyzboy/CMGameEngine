@@ -181,7 +181,7 @@ private:
         replace(fullname,'/','\\');
         replace(compress_file_url,'/','\\');
 
-        if(!filesystem::FileConfirm(fullname))                          //文件不存在，下载
+        if(!filesystem::FileExist(fullname))                          //文件不存在，下载
         {
             if(!CheckPath(fullname))                                    //检测目录，如果不存在则创建
                 return(false);
@@ -303,7 +303,7 @@ bool AutoUpdate()
     {
        std::string backup_self=self_workpath+"/_"+self_filename;                   //创建一个下划线开头的版本
 
-       if(filesystem::FileConfirm(backup_self))
+       if(filesystem::FileExist(backup_self))
            if(!filesystem::FileDelete(backup_self))
            {
                std::cerr<<"delete \""<<backup_self<<"\" failed"<<std::endl;

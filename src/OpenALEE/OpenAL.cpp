@@ -1,4 +1,4 @@
-﻿#include <hgl/LogInfo.h>
+#include <hgl/LogInfo.h>
 #include <hgl/Info.h>
 #include <hgl/FileSystem.h>
 #include <hgl/audio/OpenAL.h>
@@ -79,9 +79,9 @@ namespace openal
             hgl::strcat(pifn,HGL_MAX_PATH,HGL_DIRECTORY_SEPARATOR);
             hgl::strcat(pifn,HGL_MAX_PATH,filename,HGL_MAX_PATH);
 
-            if(filesystem::FileConfirm(filename ))final_filename=(os_char *)filename;else
-            if(filesystem::FileConfirm(dllfn    ))final_filename=dllfn;else
-            if(filesystem::FileConfirm(pifn        ))final_filename=pifn;
+            if(filesystem::FileExist(filename ))final_filename=(os_char *)filename;else
+            if(filesystem::FileExist(dllfn    ))final_filename=dllfn;else
+            if(filesystem::FileExist(pifn        ))final_filename=pifn;
 
             AudioEM=LoadExternalModule(final_filename);
         }
@@ -95,8 +95,8 @@ namespace openal
                 hgl::strcpy(dllfn,HGL_MAX_PATH,hgl::info::GetString(hgl::info::hfsOSLibraryPath).c_str());
                 hgl::strcat(dllfn,HGL_MAX_PATH,oalfn[count],HGL_MAX_PATH);
 
-                if(filesystem::FileConfirm(dllfn))final_filename=dllfn;else
-                if(filesystem::FileConfirm(pifn ))final_filename=pifn;else
+                if(filesystem::FileExist(dllfn))final_filename=dllfn;else
+                if(filesystem::FileExist(pifn ))final_filename=pifn;else
                     continue;
 
                 AudioEM=LoadExternalModule(final_filename);

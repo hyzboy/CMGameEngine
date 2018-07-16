@@ -1,4 +1,4 @@
-﻿//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
 
 #include <vcl.h>
 #include <hgl/vcl.h>
@@ -26,10 +26,10 @@ __fastcall TMainForm::TMainForm(TComponent* Owner)
 
 	list_file=UnicodeString(GetString(hfsStartPath))+UnicodeString(L"\\FileType.list");
 
-	if(FileConfirm(list_file.w_str()))
+	if(FileExist(list_file.w_str()))
 		FileTypeMemo->Lines->LoadFromFile(list_file.w_str());
 
-	if(!FileConfirm(config_file.w_str()))return;
+	if(!FileExist(config_file.w_str()))return;
 
 	PList list;
 	hgl::String str;

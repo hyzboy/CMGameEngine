@@ -158,7 +158,7 @@ namespace filesystem
     * @param filename 要查找的文件名称
     * @return 这个文件是否存在
     */
-    bool FileConfirm(const std::string &filename)
+    bool FileExist(const std::string &filename)
     {
         return access(filename.c_str(),F_OK)>=0;
     }
