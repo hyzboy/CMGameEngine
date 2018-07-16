@@ -96,7 +96,7 @@ namespace hgl
         if(type>pitNormal&&type<pitEnd)
             SpecialPlugIn[type-1]=pi;
 
-        if(plugin_module.FindByValue(pi)==-1)
+        if(!plugin_module.ValueExist(pi))
             plugin_module.Add(pi->GetName(),pi);
     }
 

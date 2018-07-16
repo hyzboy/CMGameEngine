@@ -45,8 +45,8 @@ namespace hgl
 				int		FindPos(const F &flag)const{int pos;FindPos(flag,pos);return(pos);}			///<查找数据如果插入后，会所在的位置
 				int		Find(const F &)const;														///<查找数据是否存在，返回-1表示数据不存在
 				int		FindByValue(const T &)const;												///<查找数据是否存在，返回-1表示数据不存在
-				bool    KeyExist(const F &flag)const{return(Find(flag)!=-1);}                       ///<确认这个数据是否存在
-				bool    ValueExist(const F &flag)const{return(FindByValue(flag)!=-1);}              ///<确认这个数据是否存在
+				bool    KeyExist(const F &key)const{return(Find(key)!=-1);}                         ///<确认这个数据是否存在
+				bool    ValueExist(const T &value)const{return(FindByValue(value)!=-1);}            ///<确认这个数据是否存在
 		virtual bool	Get(const F &,T &)const;													///<取得数据
 		virtual bool	Delete(const F &,T &);														///<将指定数据从列表中移除，并获得这个数据
 		virtual bool	DeleteByKey(const F &);													    ///<根据索引将指定数据从列表中移除
