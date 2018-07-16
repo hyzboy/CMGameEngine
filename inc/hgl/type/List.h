@@ -47,11 +47,12 @@ namespace hgl
 		virtual void Clear();																		///<清除所有数据
 		virtual void ClearData();																	///<清除所有数据，但不清空缓冲区
 		virtual int  Find(const T &)const;															///<查找指定数据的索引
+                bool IsExist(const T &flag)const{return Find(flag)!=-1;}                            ///<确认数据项是否存在
 		virtual bool Delete(int);																	///<删除指定索引的数据
 		virtual bool Delete(int,int);																///<删除指定索引的数据
 		virtual bool DeleteMove(int);																///<删除指定索引的数据,将前移后面的数据
-		virtual	bool DeleteByData(const T &);														///<删除一个指定数据
-		virtual void DeleteByData(const T *,int);													///<删除一批指定的数据
+		virtual	bool DeleteByValue(const T &);														///<删除一个指定数据
+		virtual void DeleteByValue(const T *,int);													///<删除一批指定的数据
 		virtual	void Exchange(int,int);																///<根据索引交换两个数据
 		virtual void Insert(int,const T &);															///<在指定索引处插入一个数据
 		virtual	void Move(int,int);																	///<移动一个数据到移指索引处
@@ -63,7 +64,7 @@ namespace hgl
 
 		virtual void operator += (const T &obj){Add(obj);}											///<操作符重载添加一个数据
 		virtual void operator << (const T &obj){Add(obj);}											///<操作符重载添加一个数据
-		virtual void operator -= (const T &obj){DeleteByData(obj);}									///<操作符重载删除一个数据
+		virtual void operator -= (const T &obj){DeleteByValue(obj);}									///<操作符重载删除一个数据
 
 				bool Get(int,T &)const;																///<取得指定索引处的数据
 				void Set(int,const T &);															///<设置指定索引处的数据
@@ -120,14 +121,14 @@ namespace hgl
 		virtual bool	Unlink(int index){return List<T *>::Delete(index);}							///<将指定索引处的数据与列表断开
 		virtual bool	UnlinkMove(int index){return List<T *>::DeleteMove(index);}					///<将指定索引处的数据与列表断开,将前移后面的数据
 		virtual bool	Unlink(int start,int number){return List<T *>::Delete(start,number);}		///<将指定索引处的数据与列表断开
-		virtual bool	UnlinkByData(const ItemPointer &ip){return List<T *>::DeleteByData(ip);}	///<将一个指定数据与列表断开
-		virtual void	UnlinkByData(const ItemPointer *ip,int n){List<T *>::DeleteByData(ip,n);}	///<将一批指定数据与列表断开
+		virtual bool	UnlinkByData(const ItemPointer &ip){return List<T *>::DeleteByValue(ip);}	///<将一个指定数据与列表断开
+		virtual void	UnlinkByData(const ItemPointer *ip,int n){List<T *>::DeleteByValue(ip,n);}	///<将一批指定数据与列表断开
 		virtual void	UnlinkAll(){List<T *>::ClearData();}										///<断开所有数据
 
 		virtual bool	Delete(int);																///<删除指定索引处的数据
 		virtual bool	DeleteMove(int);															///<删除指定索引处的数据
-		virtual bool	DeleteByData(const ItemPointer &);											///<删除指定的一个数据
-		virtual void	DeleteByData(const ItemPointer *,int);										///<删除指定的一批数据
+		virtual bool	DeleteByValue(const ItemPointer &);											///<删除指定的一个数据
+		virtual void	DeleteByValue(const ItemPointer *,int);										///<删除指定的一批数据
 		virtual void	DeleteAll();																///<删除所有数据
 
 		virtual ItemPointer &operator[](int n)const													///<操作符重载取得指定索引处的数据

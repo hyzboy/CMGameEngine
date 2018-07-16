@@ -1,4 +1,4 @@
-﻿#include<hgl/object/ConsoleObjectControl.h>
+#include<hgl/object/ConsoleObjectControl.h>
 #include<hgl/LogInfo.h>
 
 namespace hgl
@@ -164,7 +164,7 @@ namespace hgl
 	{
 		if(!e)
 		{
-			clas_object[ocUpdate	].DeleteByData(obj);    //不再刷新
+			clas_object[ocUpdate	].DeleteByValue(obj);    //不再刷新
 		}
 		else
 		{
@@ -194,7 +194,7 @@ namespace hgl
 			if(e)
 				clas_object[ocUpdate].Add(obj);
 			else
-				clas_object[ocUpdate].DeleteByData(obj);
+				clas_object[ocUpdate].DeleteByValue(obj);
 		}
 	}
 

@@ -44,14 +44,14 @@ namespace hgl
 				bool	FindPos(const F &,int &)const;												///<查找数据如果插入后，会所在的位置，返回是否存在这个数据
 				int		FindPos(const F &flag)const{int pos;FindPos(flag,pos);return(pos);}			///<查找数据如果插入后，会所在的位置
 				int		Find(const F &)const;														///<查找数据是否存在，返回-1表示数据不存在
-				int		FindByData(const T &)const;													///<查找数据是否存在，返回-1表示数据不存在
-				bool    ContainsIndex(const F &flag)const{return(Find(flag)!=-1);}                  ///<确认这个数据是否存在
-				bool    ContainsData(const F &flag)const{return(FindByData(flag)!=-1);}             ///<确认这个数据是否存在
+				int		FindByValue(const T &)const;												///<查找数据是否存在，返回-1表示数据不存在
+				bool    KeyExist(const F &flag)const{return(Find(flag)!=-1);}                       ///<确认这个数据是否存在
+				bool    ValueExist(const F &flag)const{return(FindByValue(flag)!=-1);}              ///<确认这个数据是否存在
 		virtual bool	Get(const F &,T &)const;													///<取得数据
 		virtual bool	Delete(const F &,T &);														///<将指定数据从列表中移除，并获得这个数据
-		virtual bool	DeleteByIndex(const F &);													///<根据索引将指定数据从列表中移除
-		virtual int		DeleteByIndex(const F *,const int);											///<根据索引将指定数据从列表中批量移除
-		virtual bool	DeleteByData(const T &);													///<根据数据将指定数据从列表中移除
+		virtual bool	DeleteByKey(const F &);													    ///<根据索引将指定数据从列表中移除
+		virtual int		DeleteByKey(const F *,const int);											///<根据索引将指定数据从列表中批量移除
+		virtual bool	DeleteByValue(const T &);													///<根据数据将指定数据从列表中移除
 		virtual bool	DeleteBySerial(int);														///<根据序号将指定数据从列表中移除
 		virtual bool	DeleteBySerial(int,int);													///<根据序号将指定数据从列表中移除
 		virtual void	Update(const F &,const T &);												///<更新一个数据的内容(如不存在则添加)
@@ -173,7 +173,7 @@ namespace hgl
 		*/
 		bool UnlinkByData(T *tp)
 		{
-			return UnlinkBySerial(this->FindByData(tp));
+			return UnlinkBySerial(this->FindByValue(tp));
 		}
 
 		/**
@@ -203,7 +203,7 @@ namespace hgl
 		* @param flag 要删除的数据标识
 		* @return 是否删除成功
 		*/
-		bool DeleteByIndex(const F &flag)
+		bool DeleteByKey(const F &flag)
 		{
 			return DeleteBySerial(SuperClass::Find(flag));
 		}
@@ -213,9 +213,9 @@ namespace hgl
 		* @param tp 要删除的数据
 		* @return 是否删除成功
 		*/
-		bool DeleteByData(T *tp)
+		bool DeleteByValue(T *tp)
 		{
-			return DeleteBySerial(this->FindByData(tp));
+			return DeleteBySerial(this->FindByValue(tp));
 		}
 
 		/**

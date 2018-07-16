@@ -25,7 +25,7 @@ namespace hgl
              ||accept_timeout.tv_usec)
             {
                 int result;
-                
+
                 hgl_cpy(ato,accept_timeout);            //下面的select会将数据清0,所以必须是复制一份出来用
 
                 FD_ZERO(&accept_set);
@@ -60,9 +60,12 @@ namespace hgl
                 return(-1);
             }
 
-            if(!ipstr)ipstr=new char[server_address->GetIPStringMaxSize() + 1];
+            const int IP_STR_MAX_SIZE=server_address->GetIPStringMaxSize();
 
-            addr->ToString(ipstr);
+            if(!ipstr)
+                ipstr=new char[IP_STR_MAX_SIZE+1];
+
+            addr->ToString(ipstr,IP_STR_MAX_SIZE);
 
             LOG_INFO(U8_TEXT("AcceptServer Accept IP:")+UTF8String(ipstr)+U8_TEXT(" ,sock:")+UTF8String(new_sock));
 

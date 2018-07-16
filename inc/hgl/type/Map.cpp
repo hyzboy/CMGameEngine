@@ -1,4 +1,4 @@
-﻿#ifndef HGL_MAP_CPP
+#ifndef HGL_MAP_CPP
 #define HGL_MAP_CPP
 
 #include<hgl/io/FileInputStream.h>
@@ -134,7 +134,7 @@ namespace hgl
 	}
 
 	template<typename F,typename T,typename DataPair>
-	int _Map<F,T,DataPair>::FindByData(const T &data)const
+	int _Map<F,T,DataPair>::FindByValue(const T &data)const
 	{
 		const int count=data_list.GetCount();
 
@@ -326,7 +326,7 @@ namespace hgl
 	* @return 是否成功
 	*/
 	template<typename F,typename T,typename DataPair>
-	bool _Map<F,T,DataPair>::DeleteByIndex(const F &flag)
+	bool _Map<F,T,DataPair>::DeleteByKey(const F &flag)
 	{
 		int index=Find(flag);
 
@@ -345,7 +345,7 @@ namespace hgl
 	* @return 是否成功
 	*/
 	template<typename F,typename T,typename DataPair>
-	int _Map<F,T,DataPair>::DeleteByIndex(const F *fp,const int count)
+	int _Map<F,T,DataPair>::DeleteByKey(const F *fp,const int count)
 	{
 		if(!fp||count<=0)return(0);
 
@@ -376,9 +376,9 @@ namespace hgl
 	* @return 是否成功
 	*/
 	template<typename F,typename T,typename DataPair>
-	bool _Map<F,T,DataPair>::DeleteByData(const T &data)
+	bool _Map<F,T,DataPair>::DeleteByValue(const T &data)
 	{
-		int index=FindByData(data);
+		int index=FindByValue(data);
 
 		if(index==-1)return(false);
 

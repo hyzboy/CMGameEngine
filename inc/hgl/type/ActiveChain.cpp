@@ -58,7 +58,7 @@ namespace hgl
 	{
 		ACItem *temp=end_item->prev;
 
-		Clear(end_item->flag,end_item->data);
+		Clear(end_item->key,end_item->value);
 
 		delete end_item;
 
@@ -82,19 +82,19 @@ namespace hgl
 
 	/**
 	* 添加一个数据
-	* @param flag 数据标识
-	* @param data 数据
+	* @param key 数据标识
+	* @param value 数据
 	*/
 	template<typename F,typename T>
-	ActiveChainItem<F,T> *ActiveChain<F,T>::Add(const F &flag,const T &data)
+	ActiveChainItem<F,T> *ActiveChain<F,T>::Add(const F &key,const T &value)
 	{
 		ACItem *temp;
 
 		while(count>=max_count)ClearEnd();			//满了，清除超出的数据
 
 		temp=new ACItem;
-		temp->flag=flag;
-		temp->data=data;
+		temp->key=key;
+		temp->value=value;
 
 		temp->prev=nullptr;
 		temp->next=start_item;
@@ -158,13 +158,13 @@ namespace hgl
 
 	/**
 	* 取得一个数据,在没有数据时,不自动创建数据,返回false
-	* @param flag 数据标识
-	* @param data 数据存放地
+	* @param key 数据标识
+	* @param value 数据存放地
 	* @param mts 是否对数据调频
 	* @return 是否取得数据成功
 	*/
 	template<typename F,typename T>
-	bool ActiveChain<F,T>::Find(const F &flag,T &data,bool mts)
+	bool ActiveChain<F,T>::Find(const F &key,T &value,bool mts)
 	{
 		if(count<=0)return(false);
 
@@ -173,9 +173,9 @@ namespace hgl
 
 		while(n--)
 		{
-			if(temp->flag==flag)
+			if(temp->key==key)
 			{
-				data=temp->data;
+				value=temp->value;
 
 				if(mts)
 					MoveToStart(temp);
@@ -191,22 +191,22 @@ namespace hgl
 
 	/**
 	* 取得一个数据,如果数据不存在,调用Create创建数据,如失败返回false
-	* @param flag 数据标识
-	* @param data 数据存放地
+	* @param key 数据标识
+	* @param value 数据存放地
 	* @param mts 是否对数据动态调频
 	* @return 是否取得数据 true/false
 	*/
 	template<typename F,typename T>
-	bool ActiveChain<F,T>::Get(const F &flag,T &data,bool mts)
+	bool ActiveChain<F,T>::Get(const F &key,T &value,bool mts)
 	{
-		if(Find(flag,data,mts))
+		if(Find(key,value,mts))
 			return(true);
 
 		while(count>=max_count)ClearEnd();			//满了，清除超出的数据
 
-		if(Create(flag,data))
+		if(Create(key,value))
 		{
-			Add(flag,data);
+			Add(key,value);
 
 			return(true);
 		}
@@ -229,7 +229,7 @@ namespace hgl
 		{
 			ACItem *obj=temp;
 
-			Clear(obj->flag,obj->data);
+			Clear(obj->key,obj->value);
 
 			temp=obj->next;
 
@@ -252,7 +252,7 @@ namespace hgl
 	{
 		if(!obj)return;
 
-		Clear(obj->flag,obj->data);
+		Clear(obj->key,obj->value);
 
 		if(count>1)
 		{
@@ -288,7 +288,7 @@ namespace hgl
 	}
 
 	template<typename F,typename T>
-	void ActiveChain<F,T>::DeleteByFlag(const F &flag)
+	void ActiveChain<F,T>::DeleteByKey(const F &key)
 	{
 		if(count<=0)return;
 
@@ -297,7 +297,7 @@ namespace hgl
 
 		while(n--)
 		{
-			if(temp->flag==flag)
+			if(temp->key==key)
 			{
 				Delete(temp);
 				return;
@@ -308,7 +308,7 @@ namespace hgl
 	}
 
 	template<typename F,typename T>
-	void ActiveChain<F,T>::DeleteByData(T &data)
+	void ActiveChain<F,T>::DeleteByValue(T &value)
 	{
 		if(count<=0)return;
 
@@ -317,7 +317,7 @@ namespace hgl
 
 		while(n--)
 		{
-			if(temp->data==data)
+			if(temp->value==value)
 			{
 				Delete(temp);
 				return;
@@ -328,22 +328,22 @@ namespace hgl
 	}
 
 // 	template<typename F,typename T>
-// 	bool ActiveChain<F,T>::Update(const F &flag,T &data)
+// 	bool ActiveChain<F,T>::Update(const F &key,T &value)
 // 	{
-// 		if(Find(flag,data,false))
+// 		if(Find(key,value,false))
 // 		{
 // 			ACItem *obj=temp;
 //
-// 			Clear(obj->flag,obj->data);
+// 			Clear(obj->key,obj->value);
 //
-// 			Create(obj->flag,obj->data);
+// 			Create(obj->key,obj->value);
 //
 // 			return(true);
 // 		}
 //
-// 		if(Create(flag,data))
+// 		if(Create(key,value))
 // 		{
-// 			Add(flag,data);
+// 			Add(key,value);
 //
 // 			return(true);
 // 		}

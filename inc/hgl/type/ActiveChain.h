@@ -6,9 +6,9 @@ namespace hgl
 {
     template<typename F,typename T> struct ActiveChainItem
 	{
-		F flag;                 //识别标识
+		F key;                    //识别标识
 
-		T data;                 //数据
+		T value;                  //数据
 
 		ActiveChainItem<F,T>    *prev,          //前一数据
 								*next;          //后一数据
@@ -69,8 +69,8 @@ namespace hgl
 					return(obj);
 				}
 
-                void			DeleteByFlag(const F &);
-                void 			DeleteByData(T &);
+                void			DeleteByKey(const F &);
+                void 			DeleteByValue(T &);
 // 				bool			Update		(const F &,T &);										///<更新数据
     };//template<typename F,typename T> class ActiveChain
 }//namespace hgl

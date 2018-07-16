@@ -1,4 +1,4 @@
-﻿#include<hgl/type/List.h>
+#include<hgl/type/List.h>
 #include<hgl/Info.h>
 #include<hgl/FileSystem.h>
 #include<hgl/PlugIn.h>
@@ -59,7 +59,7 @@ namespace hgl
         if(pi->GetType()!=pitNormal)
             SpecialPlugIn[pi->GetType()-1]=nullptr;
 
-        plugin_module.DeleteByData(pi);
+        plugin_module.DeleteByValue(pi);
     }
 
     void RegistryPIMClear(void (*func)())
@@ -96,7 +96,7 @@ namespace hgl
         if(type>pitNormal&&type<pitEnd)
             SpecialPlugIn[type-1]=pi;
 
-        if(plugin_module.FindByData(pi)==-1)
+        if(plugin_module.FindByValue(pi)==-1)
             plugin_module.Add(pi->GetName(),pi);
     }
 

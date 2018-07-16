@@ -266,8 +266,8 @@ namespace hgl
 
 		Lock();
 
-			if(!fin_queue.DeleteByData(hli))
-				load_queue.DeleteByData(hli);
+			if(!fin_queue.DeleteByValue(hli))
+				load_queue.DeleteByValue(hli);
 
 		Unlock();
 	}

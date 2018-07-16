@@ -1,4 +1,4 @@
-﻿#include<hgl/network/IOSocket.h>
+#include<hgl/network/IOSocket.h>
 #include<hgl/network/SocketManage.h>
 #include"SocketManageBase.h"
 
@@ -91,7 +91,7 @@ namespace hgl
 		        RETURN_FALSE;
 			}
 
-			if(!sock_list.DeleteByIndex(sock->ThisSocket))
+			if(!sock_list.DeleteByKey(sock->ThisSocket))
 			{
 				LOG_ERROR(OS_TEXT("SocketManage::_Unjoin() error,socket:")+OSString(sock->ThisSocket));
 				RETURN_FALSE;

@@ -146,8 +146,8 @@ namespace hgl
                 */
                 void Unregistry(const ID id)
                 {
-                    user_list.DeleteByIndex(id);
-                    out_list.DeleteByIndex(id);
+                    user_list.DeleteByKey(id);
+                    out_list.DeleteByKey(id);
                 }
 
                 /**
@@ -262,11 +262,11 @@ namespace hgl
                 void Unregistry(const ID id)
                 {
                     user_lock.WriteLock();
-                        user_list.DeleteByIndex(id);
+                        user_list.DeleteByKey(id);
                     user_lock.WriteUnlock();
 
                     out_lock.WriteLock();
-                        out_list.DeleteByIndex(id);
+                        out_list.DeleteByKey(id);
                     out_lock.WriteUnlock();
                 }
 

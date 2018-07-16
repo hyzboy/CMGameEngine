@@ -1,4 +1,4 @@
-﻿#ifndef HGL_OBJECT_LIST_CPP
+#ifndef HGL_OBJECT_LIST_CPP
 #define HGL_OBJECT_LIST_CPP
 
 #include<hgl/type/List.h>
@@ -147,7 +147,7 @@ namespace hgl
 	* @return 是否成功
 	*/
 	template<typename T>
-	bool CusObjectList<T>::DeleteByData(const ItemPointer &obj)
+	bool CusObjectList<T>::DeleteByValue(const ItemPointer &obj)
 	{
 		int n=this->count;
 
@@ -175,7 +175,7 @@ namespace hgl
 	* @param n 要删除的对象个数
 	*/
 	template<typename T>
-	void CusObjectList<T>::DeleteByData(const ItemPointer *obj,int n)
+	void CusObjectList<T>::DeleteByValue(const ItemPointer *obj,int n)
 	{
 		while(n--)
 		{

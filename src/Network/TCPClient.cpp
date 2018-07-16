@@ -76,9 +76,11 @@ namespace hgl
             if(connect(ThisSocket,addr->GetSockAddr(),addr->GetSockAddrInSize()))
             {
                 SAFE_CLEAR(ipstr);
-                ipstr=new char[addr->GetIPStringMaxSize()+1];
 
-                addr->ToString(ipstr);
+                const int IP_STR_MAX_SIZE=addr->GetIPStringMaxSize();
+                ipstr=new char[IP_STR_MAX_SIZE+1];
+
+                addr->ToString(ipstr,IP_STR_MAX_SIZE);
 
                 LOG_HINT(U8_TEXT("Don't Connect to TCPServer ")+UTF8String(ipstr));
                 CloseSocket();
@@ -99,7 +101,7 @@ namespace hgl
         */
         void TCPClient::Disconnect()
         {
-            SAFE_CLEAR(ipstr);
+            SAFE_CLEAR_ARRAY(ipstr);
 
             if(ThisSocket==-1)
                 return;

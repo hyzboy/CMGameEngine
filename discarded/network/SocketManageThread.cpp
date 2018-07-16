@@ -1,4 +1,4 @@
-﻿#include<hgl/network/SocketManageThread.h>
+#include<hgl/network/SocketManageThread.h>
 #include<hgl/network/SocketManageBase.h>
 #include<hgl/network/Socket.h>
 
@@ -76,7 +76,7 @@ namespace hgl
             sock_manage->Unjoin(s->ThisSocket);
 
             sock_set.Lock();
-                sock_set->DeleteByIndex(s->ThisSocket);
+                sock_set->DeleteByKey(s->ThisSocket);
             sock_set.Unlock();
             return(true);
         }
@@ -102,7 +102,7 @@ namespace hgl
             if(count>0)
             {
                 sock_manage->Unjoin(delete_list.GetData(),count);
-                sock_set->DeleteByIndex(delete_list.GetData(),count);
+                sock_set->DeleteByKey(delete_list.GetData(),count);
 
                 delete_list.ClearData();
             }

@@ -360,7 +360,7 @@ namespace hgl
 	* @return 是否成功
 	*/
 	template<typename T>
-	bool List<T>::DeleteByData(const T &dat)
+	bool List<T>::DeleteByValue(const T &dat)
 	{
 		int index=Find(dat);
 
@@ -379,7 +379,7 @@ namespace hgl
 	* @param n 要删除的数据个数
 	*/
 	template<typename T>
-	void List<T>::DeleteByData(const T *data,int n)
+	void List<T>::DeleteByValue(const T *data,int n)
 	{
 		while(n--)
 		{

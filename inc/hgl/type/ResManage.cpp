@@ -1,4 +1,4 @@
-﻿#ifndef HGL_RES_MANAGE_CPP
+#ifndef HGL_RES_MANAGE_CPP
 #define HGL_RES_MANAGE_CPP
 
 #include<hgl/type/ResManage.h>
@@ -128,7 +128,7 @@ namespace hgl
 	template<typename F,typename T>
 	void ResManage<F,T>::Release(T *td,bool zero_clear)
 	{
-		ReleaseBySerial(items.FindByData(td),zero_clear);
+		ReleaseBySerial(items.FindByValue(td),zero_clear);
 	}
 }//namespace hgl
 #endif//HGL_RES_MANAGE_CPP

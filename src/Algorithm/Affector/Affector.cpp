@@ -1,4 +1,4 @@
-﻿#include<hgl/algorithm/affect/Affector.h>
+#include<hgl/algorithm/affect/Affector.h>
 
     ///////////////////
 /*    影响器是一种关键设计，其本质就是通过一个树形的列表，管理一堆可刷新的处理。
@@ -111,7 +111,7 @@ namespace hgl
                     return(false);
                 }
 
-                return affector_list.DeleteByIndex(name);
+                return affector_list.DeleteByKey(name);
             }
 
             /**

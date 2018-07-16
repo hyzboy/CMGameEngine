@@ -1,4 +1,4 @@
-﻿#include<hgl/type/BaseString.h>
+#include<hgl/type/BaseString.h>
 #include<hgl/type/Map.h>
 #include<hgl/Info.h>
 
@@ -21,7 +21,7 @@ namespace hgl
 
         flag_string.LowerCase();
 
-        ExpendString.DeleteByIndex(flag_string);
+        ExpendString.DeleteByKey(flag_string);
     }
 
     bool GetExpendString(const OSString &flag,OSString &str)

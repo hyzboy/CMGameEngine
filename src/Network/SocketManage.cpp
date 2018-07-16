@@ -1,4 +1,4 @@
-﻿#include<hgl/network/SocketManage.h>
+#include<hgl/network/SocketManage.h>
 #include<hgl/type/MultiLevelMemoryPool.h>
 #include"SocketManageBase.h"
 
@@ -136,7 +136,7 @@ namespace hgl
 
             if(!manage->Join(s->ThisSocket))
             {
-                socket_list.DeleteByIndex(s->ThisSocket);
+                socket_list.DeleteByKey(s->ThisSocket);
                 return(false);
             }
 
@@ -163,7 +163,7 @@ namespace hgl
         {
             if(!s)return(false);
 
-            if(!socket_list.DeleteByIndex(s->ThisSocket))
+            if(!socket_list.DeleteByKey(s->ThisSocket))
             {
                 LOG_ERROR(OS_TEXT("socket don't in SocketManage,sock:")+OSString(s->ThisSocket));
                 return(false);
