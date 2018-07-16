@@ -260,14 +260,24 @@ namespace hgl
 
         const ushort IPv4Address::GetPort()const{return addr.sin_port;}
 
-        void IPv4Address::ToString(char *str,int max_size)const
+        void IPv4Address::ToString(char *str,const int max_size,const in_addr *ip_addr)
         {
-            inet_ntop(AF_INET,(void *)&(addr.sin_addr),str,INET_ADDRSTRLEN);
+            inet_ntop(AF_INET,(void *)&ip_addr,str,INET_ADDRSTRLEN);
+        }
+
+        void IPv4Address::ToString(char *str,const int max_size,const sockaddr_in *ip_addr)
+        {
+            ToString(str,max_size,&(ip_addr->sin_addr));
 
             int size=strlen(str);
             str[size]=':';
 
-            hgl::utos(str+size+1,max_size-1-size,addr.sin_port);
+            hgl::utos(str+size+1,max_size-1-size,ip_addr->sin_port);
+        }
+
+        void IPv4Address::ToString(char *str,int max_size)const
+        {
+            ToString(str,max_size,&addr);
         }
 
         /**
@@ -339,14 +349,24 @@ namespace hgl
 
         const ushort IPv6Address::GetPort()const{return addr.sin6_port;}
 
-        void IPv6Address::ToString(char *str,int max_size)const
+        void IPv6Address::ToString(char *str,const int max_size,const in6_addr *ip_addr)
         {
-            inet_ntop(AF_INET6, (void *)&(addr.sin6_addr),str,INET6_ADDRSTRLEN);
+            inet_ntop(AF_INET6, (void *)&ip_addr,str,INET6_ADDRSTRLEN);
+        }
+
+        void IPv6Address::ToString(char *str,const int max_size,const sockaddr_in6 *ip_addr)
+        {
+            ToString(str,max_size,&(ip_addr->sin6_addr));
 
             int size=strlen(str);
             str[size]=':';
 
-            hgl::utos(str+size+1,max_size-1-size,addr.sin6_port);
+            hgl::utos(str+size+1,max_size-1-size,ip_addr->sin6_port);
+        }
+
+        void IPv6Address::ToString(char *str,const int max_size)const
+        {
+            IPv6Address::ToString(str,max_size,&addr);
         }
 
         /**

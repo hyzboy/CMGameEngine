@@ -297,7 +297,9 @@ namespace hgl
             const uint32 GetInt32IP()const{return addr.sin_addr.s_addr;}
             const ushort GetPort()const override;
 
-            void ToString(char *str,int)const override;
+            static void ToString(char *str,const int,const in_addr *);
+            static void ToString(char *str,const int,const sockaddr_in *);
+            void ToString(char *str,const int)const override;
 
             static int GetDomainIPList(List<in_addr> &addr_list,const char *domain,int _socktype,int _protocol);        ///<取得当指定域名的IPv4地址列表
             static int GetLocalIPList(List<in_addr> &addr_list,int _socktype,int _protocol);                            ///<取得本机的IPv4地址列表
@@ -363,7 +365,10 @@ namespace hgl
 
             const ushort GetPort()const override;
 
-            void ToString(char *str,int)const override;
+            static void ToString(char *str,const int,const in6_addr *);
+            static void ToString(char *str,const int,const sockaddr_in6 *);
+            void ToString(char *str,const int)const override;
+
             static int GetDomainIPList(List<in6_addr> &addr_list,const char *domain,int _socktype,int _protocol);       ///<取得指定域名的IPv6地址列表
             static int GetLocalIPList(List<in6_addr> &addr_list,int _socktype,int _protocol);                           ///<取得本机的IPv6地址列表
 
