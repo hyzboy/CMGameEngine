@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include<string>
 #include<hgl/type/BaseString.h>
@@ -19,7 +19,7 @@ inline std::string ToStdString(const hgl::OSString &str)
 #else
 inline hgl::OSString ToOSString(const std::string &str)
 {
-    return hgl::OSString(str.c_str());
+    return hgl::OSString(str.c_str(),str.size());
 }
 
 inline std::string ToStdString(const hgl::OSString &str)
@@ -27,4 +27,9 @@ inline std::string ToStdString(const hgl::OSString &str)
     return std::string(str.c_str());
 }
 #endif//
+
+inline hgl::UTF8String ToUTF8String(const std::string &str)
+{
+    return hgl::UTF8String(str.c_str(),str.size());
+}
 

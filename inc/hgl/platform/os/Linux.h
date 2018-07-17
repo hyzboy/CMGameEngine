@@ -20,6 +20,7 @@ using os_char			=char;
 
 #define HGL_DIRECTORY_SEPARATOR     '/'								            //目录分隔符
 #define HGL_DIRECTORY_SEPARATOR_STR OS_TEXT("/")								//目录分隔符
+#define HGL_DIRECTORY_SEPARATOR_U8STR U8_TEXT("/")								//目录分隔符
 
 #define HGL_LINE_END			    "\n"										//换行符
 #define HGL_LINE_END_SIZE		    1											//换行符长度
