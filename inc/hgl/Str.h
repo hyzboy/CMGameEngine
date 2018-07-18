@@ -2152,7 +2152,7 @@ namespace hgl
     * @param gap_char 间隔字符
     */
     template<typename T>
-    void DataToHexStr(T *str,const uint8 *src,const int size,const T *hexstr,const T gap_char=0)
+    void DataToHexStr(T *str,const uint8 *src,const int size,const char *hexstr,const T gap_char=0)
     {
         int i;
 
