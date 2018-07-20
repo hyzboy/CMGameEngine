@@ -1,4 +1,4 @@
-#include<hgl/algorithm/Hash.h>
+﻿#include<hgl/algorithm/Hash.h>
 #include<hgl/endian/Endian.h>
 
 namespace hgl
@@ -113,21 +113,24 @@ namespace hgl
                 E = digest[ 4 ];
 
                 /* Step D.  Serious mangling, divided into four sub-rounds */
-                subRound1( 0 ); subRound1( 1 ); subRound1( 2 ); subRound1( 3 );
-                subRound1( 4 ); subRound1( 5 ); subRound1( 6 ); subRound1( 7 );
-                subRound1( 8 ); subRound1( 9 ); subRound1( 10 ); subRound1( 11 );
+                subRound1(  0 ); subRound1(  1 ); subRound1(  2 ); subRound1(  3 );
+                subRound1(  4 ); subRound1(  5 ); subRound1(  6 ); subRound1(  7 );
+                subRound1(  8 ); subRound1(  9 ); subRound1( 10 ); subRound1( 11 );
                 subRound1( 12 ); subRound1( 13 ); subRound1( 14 ); subRound1( 15 );
                 subRound1( 16 ); subRound1( 17 ); subRound1( 18 ); subRound1( 19 );
+
                 subRound2( 20 ); subRound2( 21 ); subRound2( 22 ); subRound2( 23 );
                 subRound2( 24 ); subRound2( 25 ); subRound2( 26 ); subRound2( 27 );
                 subRound2( 28 ); subRound2( 29 ); subRound2( 30 ); subRound2( 31 );
                 subRound2( 32 ); subRound2( 33 ); subRound2( 34 ); subRound2( 35 );
                 subRound2( 36 ); subRound2( 37 ); subRound2( 38 ); subRound2( 39 );
+
                 subRound3( 40 ); subRound3( 41 ); subRound3( 42 ); subRound3( 43 );
                 subRound3( 44 ); subRound3( 45 ); subRound3( 46 ); subRound3( 47 );
                 subRound3( 48 ); subRound3( 49 ); subRound3( 50 ); subRound3( 51 );
                 subRound3( 52 ); subRound3( 53 ); subRound3( 54 ); subRound3( 55 );
                 subRound3( 56 ); subRound3( 57 ); subRound3( 58 ); subRound3( 59 );
+
                 subRound4( 60 ); subRound4( 61 ); subRound4( 62 ); subRound4( 63 );
                 subRound4( 64 ); subRound4( 65 ); subRound4( 66 ); subRound4( 67 );
                 subRound4( 68 ); subRound4( 69 ); subRound4( 70 ); subRound4( 71 );
