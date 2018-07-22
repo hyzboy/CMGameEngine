@@ -279,6 +279,28 @@ namespace hgl
         return (m*v*v)/r;
     }
 
+    /**
+     * 加速度计算
+     * @param power 推力
+     * @param weight 质量
+     */
+    template<typename T>
+    inline T AddSpeed(const T &power,const T &weight)
+    {
+        return power/weight;
+    }
+
+    /**
+     * 物体运动质量计算(物体运动越快，质量越大)
+     * @param m0 静止质量
+     * @param v 运动速度
+     */
+    template<typename T>
+    inline T RunWeight(const T &m0,const T &v)
+    {
+        return m0/sqrt(1-(v*v)/(HGL_SPEED_OF_LIGHT*HGL_SPEED_OF_LIGHT));
+    }
+
 	inline float half_to_float(const uint16 &h)
 	{
 		return ((h&0x8000)<<16) | (((h&0x7c00)+0x1C000)<<13) | ((h&0x03FF)<<13);
