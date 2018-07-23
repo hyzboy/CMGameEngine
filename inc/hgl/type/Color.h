@@ -15,7 +15,8 @@ namespace hgl
 		float r,g,b;            ///<三原色浮点值
         float y;                ///<亮度浮点值
 
-		u16char	name[16];	    ///<中文名称
+        char eng_name[32];      ///<英文名称
+		u16char	chs_name[16];	///<中文名称
 	};
 
 	/**
@@ -96,7 +97,7 @@ namespace hgl
 		ceGreenYellow,			///<蓝绿色
 		ceGrey,					///<灰白色
         ceHollywoodCerise,      ///<好莱坞樱桃红
-		ceHoneydew,				///<蜜色        
+		ceHoneydew,				///<蜜色
 		ceHotPink,				///<火热粉
         ceHunterGreen,          ///<猎人绿
         ceIndianGreen,          ///<印度绿
@@ -148,8 +149,8 @@ namespace hgl
 		ceMistyRose,			///<浅玫瑰
 		ceMoccasin,				///<鹿皮色
 
-		ceMozillaBlue,			///<Mozilla Firefox Blue			
-		ceMozillaCharcoal,		///<Mozilla charcoal			
+		ceMozillaBlue,			///<Mozilla Firefox Blue
+		ceMozillaCharcoal,		///<Mozilla charcoal
 		ceMozillaLightBlue,		///<Mozilla Firefox Light Blue
 		ceMozillaLightOrange,	///<Mozilla Firefox Light orange
 		ceMoziilaNightBlue,		///<Mozilla Nightly Blue
