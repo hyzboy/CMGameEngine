@@ -1,4 +1,4 @@
-#ifndef HGL_FILE_SYSTEM_INCLUDE
+﻿#ifndef HGL_FILE_SYSTEM_INCLUDE
 #define HGL_FILE_SYSTEM_INCLUDE
 
 #include<hgl/type/BaseString.h>
@@ -69,10 +69,10 @@ namespace hgl
         }
 
         inline UTF8String MergeFilename(const UTF8String &pathname,const UTF8String &filename)          ///<组合路径名与文件名
-        {return MergeFilename(pathname,filename,HGL_DIRECTORY_SEPARATOR,HGL_DIRECTORY_SEPARATOR_U8STR);}
+        {return MergeFilename<char>(pathname,filename,HGL_DIRECTORY_SEPARATOR,HGL_DIRECTORY_SEPARATOR_U8STR);}
 
         inline WideString MergeFilename(const WideString &pathname,const WideString &filename)          ///<组合路径名与文件名
-        {return MergeFilename(pathname,filename,L'\\',L"\\");}
+        {return MergeFilename<wchar_t>(pathname,filename,L'\\',L"\\");}
 
 	    bool FileCopy(const OSString &,const OSString &);                                          		///<文件复制
 	    bool FileDelete(const OSString &);                                                           	///<文件删除
