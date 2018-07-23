@@ -88,7 +88,7 @@ namespace hgl
 
         WaitForSingleObject(tp,time_out>0?time_out*1000:INFINITE);
 
-        tp=nullptr;
+        //tp=nullptr; 都退出了，再改就非法指针访问了
     }
 
     /**

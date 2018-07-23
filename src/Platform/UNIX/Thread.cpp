@@ -165,6 +165,6 @@ namespace hgl
         LOG_INFO(U8_TEXT("pthread_timedjoin_np/pthread_join [")+thread_addr+U8_TEXT("] retval:")+UTF8String(retval));
 #endif//_DEBUG
 
-        tp=0;
+//         tp=0; 都退出了，再改就非法指针访问了
 	}
 }//namespace hgl
