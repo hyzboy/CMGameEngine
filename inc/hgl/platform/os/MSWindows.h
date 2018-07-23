@@ -27,6 +27,7 @@ using os_char			=wchar_t;
 
 #define HGL_DIRECTORY_SEPARATOR 		OS_TEXT('\\')									//目录分隔符
 #define HGL_DIRECTORY_SEPARATOR_STR     OS_TEXT("\\")									//目录分隔符
+#define HGL_DIRECTORY_SEPARATOR_U8STR   U8_TEXT("\\")	
 
 #define HGL_LINE_END					OS_TEXT("\r\n")									//换行符
 #define HGL_LINE_END_SIZE				2												//换行符长度
