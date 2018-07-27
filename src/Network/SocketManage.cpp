@@ -1,5 +1,4 @@
-#include<hgl/network/SocketManage.h>
-#include<hgl/type/MultiLevelMemoryPool.h>
+﻿#include<hgl/network/SocketManage.h>
 #include"SocketManageBase.h"
 
 namespace hgl
@@ -9,14 +8,11 @@ namespace hgl
         SocketManage::SocketManage(int max_user)
         {
             manage=CreateSocketManageBase(max_user);
-
-            memory_pool=new MultiLevelMemoryPool(HGL_SIZE_1KB,10);      //10级，最大是1MB
         }
 
         SocketManage::~SocketManage()
         {
             delete manage;
-            delete memory_pool;
         }
 
         void SocketManage::ProcSocketRecvList()

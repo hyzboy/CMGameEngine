@@ -17,18 +17,6 @@ namespace hgl
 	}
 
 	template<typename T>
-	List<T>::List(const std::initializer_list<T> &l):List()
-	{
-		operator=(l);
-	}
-
-	template<typename T>
-	List<T>::~List()
-	{
-		Clear();
-	}
-
-	template<typename T>
 	bool List<T>::Get(int index,T &ti)const
 	{
 		if(!items||index<0||index>=count)

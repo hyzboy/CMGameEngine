@@ -63,7 +63,6 @@ namespace hgl
         {
             uint32 temp;
             uint32 A, B, C, D, E;
-            int i;
 
             /* Step A.  Copy the data buffer into the local work buffer */
             hgl_typecpy(W,data,16);

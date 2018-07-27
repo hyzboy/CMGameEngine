@@ -34,9 +34,9 @@ namespace hgl
 
 		List();                                                                                     ///<本类构造函数
 		List(const List<T> &lt){operator=(lt);}														///<本类构造函数
-		List(const std::initializer_list<T> &l);
+		List(const std::initializer_list<T> &lt){operator=(lt);}
 
-		virtual ~List();                                                                            ///<本类析构函数
+		virtual ~List(){Clear();}                                                                   ///<本类析构函数
 
 		virtual T *  Add();																			///<添加一个空数据
 		virtual int  Add(const T &);																///<增加一个数据

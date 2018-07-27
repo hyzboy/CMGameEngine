@@ -6,8 +6,6 @@
 #include<hgl/network/TCPAccept.h>
 namespace hgl
 {
-    class MultiLevelMemoryPool;
-
     namespace network
     {
         class SocketManageBase;
@@ -23,8 +21,6 @@ namespace hgl
             using SocketList=Map<int,TCPAccept *>;
 
         protected:
-
-            MultiLevelMemoryPool *memory_pool;
 
             SocketList socket_list;
 
