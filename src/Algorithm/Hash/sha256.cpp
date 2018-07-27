@@ -113,12 +113,19 @@ namespace hgl
             void Update(const void *input,uint count)override
             {
                 const uint8 *u8input=(const uint8 *)input;
-                uint32 i;
+                uint32 size;
 
-                for (i = 0; i < count; ++i)
+                while(count>0)
                 {
-                    data[datalen] = u8input[i];
-                    datalen++;
+                    size=BLOCK_SIZE-datalen;
+
+                    if(size>count)
+                        size=count;
+
+                    memcpy(data+datalen,u8input,size);
+                    datalen+=size;
+                    count-=size;
+                    u8input+=size;
 
                     if (datalen == BLOCK_SIZE)
                     {

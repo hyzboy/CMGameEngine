@@ -88,8 +88,7 @@ namespace hgl
                 int i;
 
                 /* Step A.  Copy the data buffer into the local work buffer */
-                for( i = 0; i < 16; i++ )
-                W[ i ] = data[ i ];
+                hgl_typecpy(W,data,16);
 
                 /* Step B.  Expand the 16 words into 64 temporary data words */
                 expand( 16 ); expand( 17 ); expand( 18 ); expand( 19 ); expand( 20 );
@@ -169,7 +168,7 @@ namespace hgl
             void Update(const void *input,uint count)override
             {
                 const uint8 *buffer=(const uint8 *)input;
-                uint8* db = (uint8*) &data[0];
+                uint size;
 
                 /* Update bitcount */
                 if ((countLo + ((uint32) count << 3)) < countLo)
@@ -178,9 +177,18 @@ namespace hgl
                 countHi += ((uint32 ) count >> 29);
 
                 /* Process data in BLOCK_SIZE chunks */
-                while (count-- > 0)
+                while (count > 0)
                 {
-                    db[slop++] = *(buffer++);
+                    size=BLOCK_SIZE-slop;
+                    if(size>count)
+                        size=count;
+
+                    memcpy(data,buffer,size);
+
+                    slop+=size;
+                    buffer+=size;
+                    count-=size;
+
                     if (slop == BLOCK_SIZE)
                     {
                         /* transform this one block */
