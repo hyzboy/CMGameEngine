@@ -120,6 +120,26 @@ namespace hgl
     }
 
     /**
+     * 测试当前字符串是否为16进制数用字符
+     */
+    template<typename T>
+    bool isxdigit(const T *str)
+    {
+        if(!str)
+            return(false);
+
+        while(*str)
+        {
+            if(!isxdigit(*str))
+                return(false);
+
+            ++str;
+        }
+
+        return(true);
+    }
+
+    /**
     * 是否为不显示可打印字符(' ','\t','\r','\f','\v','\n')
     */
     template<typename T>
