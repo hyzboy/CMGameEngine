@@ -23,13 +23,12 @@ namespace filesystem
         if(!size)return(nullptr);
 
         int fp;
-        int err;
 
         fp=open64(filename.c_str(),O_RDONLY);
 
         if(fp==-1)
         {
-            std::cout<<"openfile error("<<err<<") filename:"<<filename.c_str()<<std::endl;
+            std::cerr<<"openfile error("<<fp<<") filename:"<<filename.c_str()<<std::endl;
             return(nullptr);
         }
 
@@ -78,7 +77,7 @@ namespace filesystem
 
         if(fp==-1)
         {
-            std::cout<<"create file error("<<err<<") filename:"<<filename.c_str()<<std::endl;
+            std::cerr<<"create file error("<<err<<") filename:"<<filename.c_str()<<std::endl;
             return(-4);
         }
 

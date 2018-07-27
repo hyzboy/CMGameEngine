@@ -69,7 +69,7 @@ public:
     bool crealloc(const size_t &s)
     {
         if(size>=s)return(true);
-        
+
         T *nb=new T[s];
 
         if(nb)
@@ -80,7 +80,7 @@ public:
             return(true);
         }
 
-        return(false);            
+        return(false);
     }
 
     T *data(){return mb;}
