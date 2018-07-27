@@ -23,6 +23,7 @@ IF(ALGORITHM_INCLUDE_HASH)
         Hash/md4.cpp
         Hash/md5.cpp
         Hash/sha1.cpp
+        Hash/sha1le.cpp
         Hash/Hash.cpp)
 
     SOURCE_GROUP("Hash" FILES ${HASH_SOURCE})

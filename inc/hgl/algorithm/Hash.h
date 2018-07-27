@@ -19,6 +19,7 @@ namespace hgl
             hashMD5,					///<最常用的HASH算法
 
             hashSHA1,					///<较MD5更为安全，但计算较慢
+            hashSHA1LE,                 ///<SHA1简单修改
 //             hashSHA224,
 //             hashSHA256,
 //             hashSHA384,
@@ -100,12 +101,13 @@ namespace hgl
         using HashCodeMD5       =HashCode<16>    ;
         using HashCodeMD4       =HashCode<16>    ;
         using HashCodeSHA1      =HashCode<20>    ;
+        using HashCodeSHA1LE    =HashCode<20>    ;
 //         using HashCodeSHA224    =HashCode<28>    ;
 //         using HashCodeSHA256    =HashCode<32>    ;
 //         using HashCodeSHA384    =HashCode<48>    ;
 //         using HashCodeSHA512    =HashCode<64>    ;
 
-        const int hash_code_bytes[]={0,4,4,16,16,20,28,32,48,64};		//hash码长度
+        const int hash_code_bytes[]={0,4,4,16,16,20,20,28,32,48,64};		//hash码长度
 
         /**
          * 散列值计算功能基类
@@ -135,6 +137,7 @@ namespace hgl
         HGL_CREATE_HASH_FUNC(MD4)
         HGL_CREATE_HASH_FUNC(MD5)
         HGL_CREATE_HASH_FUNC(SHA1)
+        HGL_CREATE_HASH_FUNC(SHA1LE)
 //         HGL_CREATE_HASH_FUNC(SHA224)
 //         HGL_CREATE_HASH_FUNC(SHA256)
 //         HGL_CREATE_HASH_FUNC(SHA384)
@@ -155,6 +158,7 @@ namespace hgl
                 CreateMD4Hash,
                 CreateMD5Hash,
                 CreateSHA1Hash,
+                CreateSHA1LEHash,
 //                 CreateSHA224Hash,
 //                 CreateSHA256Hash,
 //                 CreateSHA384Hash,
@@ -209,6 +213,7 @@ namespace hgl
                 CountHash<hashMD4		>,
                 CountHash<hashMD5		>,
                 CountHash<hashSHA1		>,
+                CountHash<hashSHA1LE	>,
 //                 CountHash<hashSHA224	>,
 //                 CountHash<hashSHA256	>,
 //                 CountHash<hashSHA384	>,
@@ -275,6 +280,7 @@ namespace hgl
                 CountHashStr<hashMD4	>,
                 CountHashStr<hashMD5	>,
                 CountHashStr<hashSHA1	>,
+                CountHashStr<hashSHA1LE	>,
 //                 CountHashStr<hashSHA224	>,
 //                 CountHashStr<hashSHA256	>,
 //                 CountHashStr<hashSHA384	>,
@@ -293,6 +299,7 @@ namespace hgl
         HGL_COUNT_HASH_FUNC(MD4)
         HGL_COUNT_HASH_FUNC(MD5)
         HGL_COUNT_HASH_FUNC(SHA1)
+        HGL_COUNT_HASH_FUNC(SHA1LE)
 //         HGL_COUNT_HASH_FUNC(SHA224)
 //         HGL_COUNT_HASH_FUNC(SHA256)
 //         HGL_COUNT_HASH_FUNC(SHA384)
