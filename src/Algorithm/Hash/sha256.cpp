@@ -1,5 +1,4 @@
 #include<hgl/algorithm/Hash.h>
-#include<hgl/endian/Endian.h>
 
 namespace hgl
 {
