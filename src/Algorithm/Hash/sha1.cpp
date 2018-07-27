@@ -77,11 +77,12 @@ namespace hgl
             uint32 data[16];  // SHA data buffer
             uint32 slop;      // # of bytes saved in data[]
 
+            uint32 W[80];
+
         private:
 
             void sha1_transform()
             {
-                uint32 W[80];
                 uint32 temp;
                 uint32 A, B, C, D, E;
                 int i;

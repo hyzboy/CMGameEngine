@@ -34,7 +34,7 @@ int main(int argc,char **argv)
     UTF8String hash_name;
     int hash_length;
     char *hash_code;
-    char hash_str[(32*2)+1];
+    char hash_str[256];
 
     for(int i=hashNone+1;i<hashEnd;i++)
     {
