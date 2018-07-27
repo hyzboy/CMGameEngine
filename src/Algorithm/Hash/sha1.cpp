@@ -5,63 +5,66 @@ namespace hgl
 {
     namespace algorithm
     {
-        /* The SHA f()-functions */
-        #define f1(x,y,z)   ( ( x & y ) | ( ~x & z ) )              /* Rounds  0-19 */
-        #define f2(x,y,z)   ( x ^ y ^ z )                           /* Rounds 20-39 */
-        #define f3(x,y,z)   ( ( x & y ) | ( x & z ) | ( y & z ) )   /* Rounds 40-59 */
-        #define f4(x,y,z)   ( x ^ y ^ z )                           /* Rounds 60-79 */
+        namespace
+        {
+            /* The SHA f()-functions */
+            #define f1(x,y,z)   ( ( x & y ) | ( ~x & z ) )              /* Rounds  0-19 */
+            #define f2(x,y,z)   ( x ^ y ^ z )                           /* Rounds 20-39 */
+            #define f3(x,y,z)   ( ( x & y ) | ( x & z ) | ( y & z ) )   /* Rounds 40-59 */
+            #define f4(x,y,z)   ( x ^ y ^ z )                           /* Rounds 60-79 */
 
-        /* The SHA Mysterious Constants */
-        #define K1  0x5A827999L     /* Rounds  0-19 */
-        #define K2  0x6ED9EBA1L     /* Rounds 20-39 */
-        #define K3  0x8F1BBCDCL     /* Rounds 40-59 */
-        #define K4  0xCA62C1D6L     /* Rounds 60-79 */
+            /* The SHA Mysterious Constants */
+            #define K1  0x5A827999L     /* Rounds  0-19 */
+            #define K2  0x6ED9EBA1L     /* Rounds 20-39 */
+            #define K3  0x8F1BBCDCL     /* Rounds 40-59 */
+            #define K4  0xCA62C1D6L     /* Rounds 60-79 */
 
-        #define S(n,X)  ( ( ((uint32)X) << n ) | ( ((uint32)X) >> ( 32 - n ) ) )
+            #define S(n,X)  ( ( ((uint32)X) << n ) | ( ((uint32)X) >> ( 32 - n ) ) )
 
-        /* The initial expanding function */
-        #define expand(count)   W[ count ] = S(1,(W[ count - 3 ] ^ W[ count - 8 ] ^ W[ count - 14 ] ^ W[ count - 16 ]))    /* to make this SHA-1 */
+            /* The initial expanding function */
+            #define expand(count)   W[ count ] = S(1,(W[ count - 3 ] ^ W[ count - 8 ] ^ W[ count - 14 ] ^ W[ count - 16 ]))    /* to make this SHA-1 */
 
-        /* The four SHA sub-rounds */
-        #define subRound1(count)    \
-        { \
-            temp = S( 5, A ) + f1( B, C, D ) + E + W[ count ] + K1; \
-            E = D; \
-            D = C; \
-            C = S( 30, B ); \
-            B = A; \
-            A = temp; \
-        }
+            /* The four SHA sub-rounds */
+            #define subRound1(count)    \
+            { \
+                temp = S( 5, A ) + f1( B, C, D ) + E + W[ count ] + K1; \
+                E = D; \
+                D = C; \
+                C = S( 30, B ); \
+                B = A; \
+                A = temp; \
+            }
 
-        #define subRound2(count)    \
-        { \
-            temp = S( 5, A ) + f2( B, C, D ) + E + W[ count ] + K2; \
-            E = D; \
-            D = C; \
-            C = S( 30, B ); \
-            B = A; \
-            A = temp; \
-        }
+            #define subRound2(count)    \
+            { \
+                temp = S( 5, A ) + f2( B, C, D ) + E + W[ count ] + K2; \
+                E = D; \
+                D = C; \
+                C = S( 30, B ); \
+                B = A; \
+                A = temp; \
+            }
 
-        #define subRound3(count)    \
-        { \
-            temp = S( 5, A ) + f3( B, C, D ) + E + W[ count ] + K3; \
-            E = D; \
-            D = C; \
-            C = S( 30, B ); \
-            B = A; \
-            A = temp; \
-        }
+            #define subRound3(count)    \
+            { \
+                temp = S( 5, A ) + f3( B, C, D ) + E + W[ count ] + K3; \
+                E = D; \
+                D = C; \
+                C = S( 30, B ); \
+                B = A; \
+                A = temp; \
+            }
 
-        #define subRound4(count)    \
-        { \
-            temp = S( 5, A ) + f4( B, C, D ) + E + W[ count ] + K4; \
-            E = D; \
-            D = C; \
-            C = S( 30, B ); \
-            B = A; \
-            A = temp; \
-        }
+            #define subRound4(count)    \
+            { \
+                temp = S( 5, A ) + f4( B, C, D ) + E + W[ count ] + K4; \
+                E = D; \
+                D = C; \
+                C = S( 30, B ); \
+                B = A; \
+                A = temp; \
+            }
+        }//namespace
 
         class SHA1:public Hash
         {
