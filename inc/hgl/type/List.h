@@ -50,7 +50,7 @@ namespace hgl
                 bool IsExist(const T &flag)const{return Find(flag)!=-1;}                            ///<确认数据项是否存在
 		virtual bool Delete(int);																	///<删除指定索引的数据
 		virtual bool Delete(int,int);																///<删除指定索引的数据
-		virtual bool DeleteMove(int);																///<删除指定索引的数据,将前移后面的数据
+		virtual bool DeleteMove(int);																///<删除指定索引的数据,将后面紧邻的数据前移
 		virtual	bool DeleteByValue(const T &);														///<删除一个指定数据
 		virtual void DeleteByValue(const T *,int);													///<删除一批指定的数据
 		virtual	void Exchange(int,int);																///<根据索引交换两个数据
