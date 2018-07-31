@@ -487,118 +487,93 @@ namespace hgl
 	}
 
 	template<typename F,typename T,typename DataPair>
-    int _Map<F,T,DataPair>::Enum(bool (*enum_func)(const F &,const T &))const
+    void _Map<F,T,DataPair>::Enum(void (*enum_func)(const F &,const T &))const
     {
         const int count=data_list.GetCount();
 
         if(count<=0)
-            return count;
-
-        int total=0;
+            return;
 
         IDItem **idp=data_list.GetData();
 
         for(int i=0;i<count;i++)
         {
-            if(enum_func((*idp)->left,(*idp)->right))
-                ++total;
+            enum_func((*idp)->left,(*idp)->right);
 
             ++idp;
         }
-
-        return total;
     }
 
     template<typename F,typename T,typename DataPair>
-    int _Map<F,T,DataPair>::EnumKey(bool (*enum_func)(const F &))const
+    void _Map<F,T,DataPair>::EnumKey(void (*enum_func)(const F &))const
     {
         const int count=data_list.GetCount();
 
         if(count<=0)
-            return count;
-
-        int total=0;
+            return;
 
         IDItem **idp=data_list.GetData();
 
         for(int i=0;i<count;i++)
         {
-            if(enum_func((*idp)->left))
-                ++total;
+            enum_func((*idp)->left);
 
             ++idp;
         }
-
-        return total;
     }
 
     template<typename F,typename T,typename DataPair>
-    int _Map<F,T,DataPair>::EnumValue(bool (*enum_func)(const T &))const
+    void _Map<F,T,DataPair>::EnumValue(void (*enum_func)(const T &))const
     {
         const int count=data_list.GetCount();
 
         if(count<=0)
-            return count;
-
-        int total=0;
+            return;
 
         IDItem **idp=data_list.GetData();
 
         for(int i=0;i<count;i++)
         {
-            if(enum_func((*idp)->right))
-                ++total;
+            enum_func((*idp)->right);
 
             ++idp;
         }
-
-        return total;
     }
 
     template<typename F,typename T>
-    int MapObject<F,T>::Enum(bool (*enum_func)(const F &,T *))const
+    void MapObject<F,T>::Enum(void (*enum_func)(const F &,T *))const
     {
         const int count=this->data_list.GetCount();
 
         if(count<=0)
-            return count;
-
-        int total=0;
+            return;
 
         auto **idp=this->data_list.GetData();
 
         for(int i=0;i<count;i++)
         {
-            if(enum_func((*idp)->left,(*idp)->right))
-                ++total;
+            enum_func((*idp)->left,(*idp)->right);
 
             ++idp;
         }
-
-        return total;
     }
 
     template<typename F,typename T>
-    int MapObject<F,T>::EnumValue(bool (*enum_func)(T *))const
+    void MapObject<F,T>::EnumValue(void (*enum_func)(T *))const
     {
         const int count=this->data_list.GetCount();
 
         if(count<=0)
-            return count;
-
-        int total=0;
+            return;
 
         auto **idp=this->data_list.GetData();
 
         for(int i=0;i<count;i++)
         {
-            if(enum_func((*idp)->right))
-                ++total;
+            enum_func((*idp)->right);
 
             ++idp;
         }
-
-        return total;
     }
 }//namespace hgl
 #endif//HGL_MAP_CPP

@@ -102,9 +102,9 @@ namespace hgl
 
 				void	operator=(const _Map<F,T,IDItem> &);									      ///<操作符重载，复制一个列表
 
-                int     Enum(bool (*enum_func)(const F &,const T &))const;                          ///<枚举所有数据项
-                int     EnumKey(bool (*enum_func)(const F &))const;                                 ///<枚举所有索引
-                int     EnumValue(bool (*enum_func)(const T &))const;                               ///<枚举所有数值
+                void    Enum(void (*enum_func)(const F &,const T &))const;                          ///<枚举所有数据项
+                void    EnumKey(void (*enum_func)(const F &))const;                                 ///<枚举所有索引
+                void    EnumValue(void (*enum_func)(const T &))const;                               ///<枚举所有数值
 	};//class _Map
 
 	template<typename F,typename T> class Map:public _Map<F,T,Pair<F,T> >
@@ -318,8 +318,8 @@ namespace hgl
 			return this->data_list[pos]->right;
 		};
 
-        int     Enum(bool (*enum_func)(const F &,T *))const;                          ///<枚举所有数据项
-        int     EnumValue(bool (*enum_func)(T *))const;                               ///<枚举所有数值
+        void    Enum(void (*enum_func)(const F &,T *))const;                          ///<枚举所有数据项
+        void    EnumValue(void (*enum_func)(T *))const;                               ///<枚举所有数值
 	};//class MapObject
 }//namespace hgl
 #include<hgl/type/Map.cpp>

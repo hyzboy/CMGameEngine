@@ -74,20 +74,15 @@ namespace hgl
 		virtual bool Begin(T &)const;																///<取第一个数据
 		virtual bool End(T &)const;																	///<取最后一个数据
 
-		virtual uint Enum(bool (*enum_func)(T &))                                                   ///<枚举所有数据成员
+		virtual void Enum(void (*enum_func)(T &))                                                   ///<枚举所有数据成员
         {
-            uint total=0;
             T *obj=items;
 
             for(int i=0;i<count;i++)
             {
-                if(enum_func(*obj))
-                    ++total;
-
+                enum_func(*obj);
                 ++obj;
             }
-
-            return total;
         }
 	};//template <typename T> class List
 
@@ -157,20 +152,16 @@ namespace hgl
 			return this->items[n];
 		}
 
-		virtual uint Enum(bool (*enum_func)(T *))                                                     ///<枚举所有数据成员
+		virtual void Enum(void (*enum_func)(T *))                                                     ///<枚举所有数据成员
         {
-            uint total=0;
             T **obj=this->items;
 
             for(int i=0;i<this->count;i++)
             {
-                if(enum_func(*obj))
-                    ++total;
+                enum_func(*obj);
 
                 ++obj;
             }
-
-            return total;
         }
 	};//template <typename T> class CusObjectList
 

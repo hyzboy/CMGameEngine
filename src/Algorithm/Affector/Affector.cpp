@@ -179,7 +179,7 @@ namespace hgl
 #define AFFECTOR_ENUM_FUNC(func_name)    \
             bool AffectorControl::_ ##func_name()    \
             {    \
-                affector_list.EnumValue([](AffectorObject *ao)->bool{ao->func_name();return(true);});   \
+                affector_list.EnumValue([](AffectorObject *ao){ao->func_name();});   \
                 \
                 return(true);    \
             }
