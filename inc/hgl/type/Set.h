@@ -53,6 +53,8 @@ namespace hgl
                 }
 
 				bool	Rand			(T &)const;													///<随机取得一个
+
+		virtual uint    Enum(bool (*enum_func)(T &)){return data_list.Enum(enum_func);}             ///<枚举所有数据成员
 	};//template<typename T> class Set
 }//namespace hgl
 #include<hgl/type/Set.cpp>
