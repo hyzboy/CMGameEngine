@@ -24,7 +24,7 @@ namespace hgl
 
 	public:
 
-		Set();
+		Set()=default;
 		virtual ~Set()=default;
 
 				void	SetCount		(int count){data_list.SetCount(count);}						///<指定数据数量，一般用于批量加载前的处理
@@ -54,7 +54,7 @@ namespace hgl
 
 				bool	Rand			(T &)const;													///<随机取得一个
 
-		virtual uint    Enum(bool (*enum_func)(T &)){return data_list.Enum(enum_func);}             ///<枚举所有数据成员
+		virtual uint    Enum            (bool (*enum_func)(T &)){return data_list.Enum(enum_func);} ///<枚举所有数据成员
 	};//template<typename T> class Set
 }//namespace hgl
 #include<hgl/type/Set.cpp>

@@ -4,11 +4,6 @@
 #include<hgl/type/Set.h>
 namespace hgl
 {
-	template<typename T>
-	Set<T>::Set()
-	{
-	}
-
 	/**
 	* 查找数据是否存在
 	* @param flag 数据
