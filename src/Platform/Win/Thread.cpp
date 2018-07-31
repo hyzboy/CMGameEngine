@@ -80,7 +80,7 @@ namespace hgl
 
     void WaitThreadExit(thread_ptr tp,const double &time_out)
     {
-        if(!self_tp)return;
+        if(!tp)return;
 
         WaitForSingleObject(tp,time_out>0?time_out*1000:INFINITE);
     }
