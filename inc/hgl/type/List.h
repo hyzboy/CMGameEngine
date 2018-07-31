@@ -1,4 +1,4 @@
-﻿#ifndef HGL_LIST_INCLUDE
+#ifndef HGL_LIST_INCLUDE
 #define HGL_LIST_INCLUDE
 
 #include<hgl/LogInfo.h>
@@ -121,8 +121,8 @@ namespace hgl
 		virtual bool	Unlink(int index){return List<T *>::Delete(index);}							///<将指定索引处的数据与列表断开
 		virtual bool	UnlinkMove(int index){return List<T *>::DeleteMove(index);}					///<将指定索引处的数据与列表断开,将前移后面的数据
 		virtual bool	Unlink(int start,int number){return List<T *>::Delete(start,number);}		///<将指定索引处的数据与列表断开
-		virtual bool	UnlinkByData(const ItemPointer &ip){return List<T *>::DeleteByValue(ip);}	///<将一个指定数据与列表断开
-		virtual void	UnlinkByData(const ItemPointer *ip,int n){List<T *>::DeleteByValue(ip,n);}	///<将一批指定数据与列表断开
+		virtual bool	UnlinkByValue(const ItemPointer &ip){return List<T *>::DeleteByValue(ip);}	///<将一个指定数据与列表断开
+		virtual void	UnlinkByValue(const ItemPointer *ip,int n){List<T *>::DeleteByValue(ip,n);}	///<将一批指定数据与列表断开
 		virtual void	UnlinkAll(){List<T *>::ClearData();}										///<断开所有数据
 
 		virtual bool	Delete(int);																///<删除指定索引处的数据

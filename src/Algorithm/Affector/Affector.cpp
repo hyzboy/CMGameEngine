@@ -79,7 +79,7 @@ namespace hgl
                     return(false);
                 }
 
-                return affector_list.UnlinkByIndex(name);
+                return affector_list.UnlinkByKey(name);
             }
 
             /**
@@ -95,7 +95,7 @@ namespace hgl
                     return(false);
                 }
 
-                return affector_list.UnlinkByData(ao);
+                return affector_list.UnlinkByValue(ao);
             }
 
             /**
@@ -127,7 +127,7 @@ namespace hgl
                     return(false);
                 }
 
-                return affector_list.UnlinkByData(ao);
+                return affector_list.UnlinkByValue(ao);
             }
 
             /**
@@ -155,7 +155,7 @@ namespace hgl
             {
                 if (!ao)return;
 
-                if (affector_list.UnlinkByData(ao))
+                if (affector_list.UnlinkByValue(ao))
                     delete_list.Add(ao);
             }
 
@@ -179,17 +179,7 @@ namespace hgl
 #define AFFECTOR_ENUM_FUNC(func_name)    \
             bool AffectorControl::_ ##func_name()    \
             {    \
-                int n=affector_list.GetCount();    \
-            \
-                if(n<=0)return(false);    \
-            \
-                AffectorObject *ao;    \
-            \
-                for(int i=0;i<n;i++)    \
-                {    \
-                    if(affector_list.GetData(i,ao))    \
-                        ao->func_name();    \
-                }    \
+                affector_list.EnumValue([](AffectorObject *ao)->bool{ao->func_name();return(true);});   \
                 \
                 return(true);    \
             }

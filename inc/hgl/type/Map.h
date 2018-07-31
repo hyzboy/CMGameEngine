@@ -6,8 +6,6 @@
 #include<hgl/type/Pool.h>
 #include<hgl/LogInfo.h>
 #include<hgl/thread/RWLock.h>
-#include<hgl/io/DataInputStream.h>
-#include<hgl/io/DataOutputStream.h>
 namespace hgl
 {
 	/**
@@ -26,14 +24,9 @@ namespace hgl
 
         using this_calss=_Map<F,T,IDItem>;
 
-    public: //事件
-
-		bool (*OnSaveToStream)(io::DataOutputStream *,const F &,T &);								///<保存到流事件
-		bool (*OnLoadFromStream)(io::DataInputStream *,F &,T &);									///<从流加载事件
-
 	public:	//方法
 
-		_Map();
+		_Map()=default;
 		virtual ~_Map()=default;
 
 		const	int		GetCount()const{return data_list.GetCount();}								///<取得数据总量
@@ -62,8 +55,8 @@ namespace hgl
 		List<IDItem *> &GetList(){return data_list;}												///<取得线性列表
 			IDItem **	GetDataList()const{return data_list.GetData();}								///<取得纯数据线性列表
 
-			template<typename IT>
-				int		GetAllIndex(IT &il_list)
+                template<typename IT>
+				int		GetKey(IT &il_list)                                                        ///<取得所有索引合集
 				{
 					const int count=data_list.GetCount();
 
@@ -74,7 +67,7 @@ namespace hgl
 
 					for(int i=0;i<count;i++)
 					{
-						il_list.Add((*idp)->first);
+						il_list.Add((*idp)->left);
 						++idp;
 					}
 
@@ -82,7 +75,7 @@ namespace hgl
 				}
 
 				template<typename IT>
-				int		GetAllData(IT &il_list)
+				int		GetValue(IT &il_list)                                                      ///<取得所有数值合集
 				{
 					const int count=data_list.GetCount();
 
@@ -93,7 +86,7 @@ namespace hgl
 
 					for(int i=0;i<count;i++)
 					{
-						il_list.Add((*idp)->second);
+						il_list.Add((*idp)->right);
 						++idp;
 					}
 
@@ -102,18 +95,16 @@ namespace hgl
 
 				IDItem *GetItem(int n)const{return data_list[n];}									///<取指定序号的数据
 				bool 	Get(int,F &,T &)const;														///<取指定序号的数据
-				bool	GetIndex(int,F &)const;														///<取指定序号的索引
-				bool	GetData(int,T &)const;														///<取指定序号的数据
+				bool	GetKey(int,F &)const;														///<取指定序号的索引
+				bool	GetValue(int,T &)const;														///<取指定序号的数据
 
-				bool	SetDataBySerial(int,T &);													///<根据序号设置数据
+				bool	SetValueBySerial(int,T &);													///<根据序号设置数据
 
-				bool	SaveToStream(io::DataOutputStream *);										///<保存到流
-				bool	LoadFromStream(io::DataInputStream *);										///<从流加载
+				void	operator=(const _Map<F,T,IDItem> &);									      ///<操作符重载，复制一个列表
 
-				bool	SaveToFile(const os_char *);												///<保存到文件
-				bool	LoadFromFile(const os_char *);                                         		///<从文件加载
-
-				void	operator=(const _Map<F,T,IDItem> &);									///<操作符重载，复制一个列表
+                int     Enum(bool (*enum_func)(const F &,const T &))const;                          ///<枚举所有数据项
+                int     EnumKey(bool (*enum_func)(const F &))const;                                 ///<枚举所有索引
+                int     EnumValue(bool (*enum_func)(const T &))const;                               ///<枚举所有数值
 	};//class _Map
 
 	template<typename F,typename T> class Map:public _Map<F,T,Pair<F,T> >
@@ -161,7 +152,7 @@ namespace hgl
 		* @param flag 要断开的数据标识
 		* @return 是否断开成功
 		*/
-		bool UnlinkByIndex(const F &flag)
+		bool UnlinkByKey(const F &flag)
 		{
 			return UnlinkBySerial(SuperClass::Find(flag));
 		}
@@ -171,7 +162,7 @@ namespace hgl
 		* @param tp 要断开的数据
 		* @return 是否断开成功
 		*/
-		bool UnlinkByData(T *tp)
+		bool UnlinkByValue(T *tp)
 		{
 			return UnlinkBySerial(this->FindByValue(tp));
 		}
@@ -326,6 +317,9 @@ namespace hgl
 
 			return this->data_list[pos]->right;
 		};
+
+        int     Enum(bool (*enum_func)(const F &,T *))const;                          ///<枚举所有数据项
+        int     EnumValue(bool (*enum_func)(T *))const;                               ///<枚举所有数值
 	};//class MapObject
 }//namespace hgl
 #include<hgl/type/Map.cpp>

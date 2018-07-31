@@ -161,7 +161,7 @@ namespace hgl
 
 			Lock();
 
-				load_queue.UnlinkByData(hli);
+				load_queue.UnlinkByValue(hli);
 
 				fin_queue.Add(hli);
 

@@ -10,15 +10,24 @@ using namespace std;
 void out_id(Map<int,int> &ii)
 {
     const int count=ii.GetCount();
-    Pair<int,int> **p=ii.GetDataList();
 
     cout<<"count:"<<count<<" ";
 
-    for(int i=0;i<count;i++)
+//传统用法
+//    Pair<int,int> **p=ii.GetDataList();
+
+//     for(int i=0;i<count;i++)
+//     {
+//         cout<<"["<</*i<<":"<<*/(*p)->left<<","<<(*p)->right<<"]";
+//         ++p;
+//     }
+
+    //lambda用法
+    ii.Enum([](const int &key,const int &value)->bool
     {
-        cout<<"["<</*i<<":"<<*/(*p)->left<<","<<(*p)->right<<"]";
-        ++p;
-    }
+        cout<<"["<<key<<","<<value<<"]";
+        return(true);
+    });
 
     cout<<endl;
 }

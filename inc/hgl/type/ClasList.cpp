@@ -21,7 +21,7 @@ namespace hgl
 		for(int i=0;i<TypeCount;i++)
 			clas_object[i].DeleteByValue(obj);
 
-		return all_object.UnlinkByData(obj);
+		return all_object.UnlinkByValue(obj);
 	}
 
 	template<typename T,int TypeCount>
