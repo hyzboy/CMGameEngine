@@ -45,7 +45,7 @@ public:
         }
 
         sem->Post();
-        Thread::Wait(wait_time);
+        Thread::WaitExit(wait_time);
         return(true);
     }
 };//class ConnectThread:public Thread

@@ -78,17 +78,11 @@ namespace hgl
         return(tp==GetCurrentThread());
     }
 
-    /**
-    * (线程外部调用)等待当前线程
-    * @param time_out 等待的时间，如果为0表示等到线程运行结束为止。默认为0
-    */
-    void Thread::Wait(const double time_out)
+    void WaitThreadExit(thread_ptr tp,const double &time_out)
     {
-        if(!tp)return;
+        if(!self_tp)return;
 
         WaitForSingleObject(tp,time_out>0?time_out*1000:INFINITE);
-
-        //tp=nullptr; 都退出了，再改就非法指针访问了
     }
 
     /**

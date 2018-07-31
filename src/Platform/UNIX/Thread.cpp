@@ -4,6 +4,7 @@
 #include<pthread.h>
 #include<signal.h>
 #include<errno.h>
+#include<hgl/Str.h>
 
 namespace hgl
 {
@@ -127,15 +128,11 @@ namespace hgl
 
 	void GetWaitTime(struct timespec &abstime,double t);
 
-	/**
-	* (线程外部调用)等待当前线程
-	* @param time_out 等待的时间，如果为0表示等到线程运行结束为止。默认为0
-	*/
-	void Thread::Wait(const double time_out)
+	void WaitThreadExit(thread_ptr tp,const double &time_out)
 	{
 		if(!tp)
 		{
-			LOG_ERROR(OS_TEXT("Thread::Wait() error,tp=nullptr."));
+			LOG_ERROR(OS_TEXT("WaitThreadExit error,tp=nullptr."));
 			return;
 		}
 
@@ -158,13 +155,12 @@ namespace hgl
         }
 
 #ifdef _DEBUG
-        UTF8String thread_addr;
 
-        GetAddress(thread_addr);
+        char thread_addr[(sizeof(thread_ptr)<<1)+1];
 
-        LOG_INFO(U8_TEXT("pthread_timedjoin_np/pthread_join [")+thread_addr+U8_TEXT("] retval:")+UTF8String(retval));
+        DataToUpperHexStr(thread_addr,(uint8 *)&tp,sizeof(thread_ptr));
+
+        LOG_INFO(U8_TEXT("pthread_timedjoin_np/pthread_join [")+UTF8String(thread_addr)+U8_TEXT("] retval:")+UTF8String(retval));
 #endif//_DEBUG
-
-//         tp=0; 都退出了，再改就非法指针访问了
 	}
 }//namespace hgl

@@ -15,6 +15,8 @@
 #endif//HGL_OS == HGL_Windows
 namespace hgl
 {
+    void WaitThreadExit(thread_ptr tp,const double &time_out);
+
 	/**
 	* 线程类.本类用于建立一个线程并管理它。<br>
 	* Sleep和Exit函数是给线程内的程序使用的；而Start,Close,Pause,Rewind是给线程外的程序使用的。<br>
@@ -46,37 +48,15 @@ namespace hgl
         friend DWORD WINAPI ThreadFunc(Thread *tc);
 #endif//HGL_OS != HGL_OS_Windows
 
+#ifdef _DEBUG
+        UTF8String thread_addr_string;                                                              ///<线程地址用字符串，调试使用
+#endif//_DEBUG
+
 	public:
 
-		virtual ~Thread()
-        {
-            if(tp)
-            {
-                LOG_ERROR("This is ERROR,Thread not exit.");
-                ForceClose();           //正常状态下这种情况是不该发生的
-            }
-		}
+		virtual ~Thread()=default;
 
-		template<typename T>
-		void GetAddress(BaseString<T> &thread_addr_str)const                                       ///<取得线程地址字符串
-		{
-            constexpr size_t size=(sizeof(thread_ptr)+1)<<1;
-            T str[size];
-
-            hgl_zero(str);
-
-            #if HGL_OS==HGL_OS_Windows
-                #if HGL_MIN_MEMORY_ALLOC_BYTES==4
-                    hgl::htos(str,size,(uint32)tp);
-                #else
-                    hgl::htos(str,size,(uint64)tp);
-                #endif//
-            #else
-                hgl::htos(str,size,tp);
-            #endif//
-
-            thread_addr_str=str;
-        }
+		const UTF8String &GetThreadAddressString()const{return thread_addr_string;}               ///<取得线程地址字符串
 
 		/**
 		* 线程执行函数，会被反复调用
@@ -85,10 +65,20 @@ namespace hgl
 		*/
 		virtual bool Execute()=0;                                                                   ///<线程的运行函数
 
-		virtual bool ProcStartThread(){return(true);}												///<线程启动运行函数,在Execute前被调用
-		virtual void ProcEndThread(){}																///<结程结束运行函数,在Execute后被调用
+		virtual bool ProcStartThread()                                                                ///<线程启动运行函数,在Execute前被调用
+                {
+                    char thread_addr[(sizeof(thread_ptr)<<1)+1];
 
-		virtual bool IsExitDelete()const{return true;}												///<返回在退出线程时，是否删除本对象
+                    DataToUpperHexStr(thread_addr,(uint8 *)&tp,sizeof(thread_ptr));
+
+                    thread_addr_string=thread_addr;
+
+                    return(true);
+                }
+
+		virtual void ProcEndThread(){}														          ///<结程结束运行函数,在Execute后被调用
+
+		virtual bool IsExitDelete()const{return true;}												///<返回在退出线程时，是否删除本对象(注:此函数不可动态变动值)
 
                 bool IsLive()                                                                       ///<当前线程是否还活着
                 {
@@ -115,10 +105,20 @@ namespace hgl
         }
 
         /**
-         * 等待当前线程结束<br>
-         * 注：此函数在Win平台下任何情况下都起作用，但在linux/bsd下，如果IsExitDelete提供true的值，此函数将不起作用
+         * (线程外部调用)退出当前线程，并等待其完成退出<br>
+         * @param time_out 等待的时间，如果为0表示等到线程运行结束为止。默认为0
          */
-		virtual void Wait(double time=0);                                                 			///<等待当前线程
+		virtual void WaitExit(const double &time_out=0)
+        {
+            if(!tp)
+                return;
+
+            thread_ptr self_tp=tp;
+
+            Exit();
+
+            WaitThreadExit(self_tp,time_out);
+        }
 	};//class Thread
 
 	void WaitThread(Thread **,int,double time=0);													///<等待多个线程中的一个完成
@@ -183,15 +183,7 @@ namespace hgl
 
             for(int i=0;i<count;i++)
             {
-                (*p)->Exit();
-                ++p;
-            }
-
-            p=thread_set.GetData();
-
-            for(int i=0;i<count;i++)
-            {
-                (*p)->Wait();
+                (*p)->WaitExit();
                 ++p;
             }
 

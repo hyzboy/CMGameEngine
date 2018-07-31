@@ -232,12 +232,9 @@ namespace hgl
 #else
             virtual ~WorkThread()
             {
-                UTF8String thread_addr;
-
-                GetAddress(thread_addr);
-
-                LOG_INFO(U8_TEXT("WorkThread Destruct [")+thread_addr+U8_TEXT("]"));
+                LOG_INFO(U8_TEXT("WorkThread Destruct [")+thread_addr_string+U8_TEXT("]"));
             }
+
 #endif//_DEBUG
 
             bool IsExitDelete()const override{return false;}							///<返回在退出线程时，不删除本对象
@@ -250,7 +247,7 @@ namespace hgl
 			void ExitWork(const bool fc)
 			{
 				force_close=fc;
-                Thread::Exit();
+                Thread::WaitExit();
 			}
 
 			virtual void ProcEndThread() override
@@ -260,11 +257,7 @@ namespace hgl
 
                 #ifdef _DEBUG
                 {
-                    UTF8String thread_addr;
-
-                    GetAddress(thread_addr);
-
-                    LOG_INFO(U8_TEXT("WorkThread Finish [")+thread_addr+U8_TEXT("]"));
+                    LOG_INFO(U8_TEXT("WorkThread Finish [")+thread_addr_string+U8_TEXT("]"));
                 }
                 #endif//_DEBUG
             }
@@ -365,9 +358,6 @@ namespace hgl
 
 				for(int i=0;i<count;i++)
 					wt[i]->ExitWork(force_close);
-
-				for(int i=0;i<count;i++)
-					wt[i]->Wait();
 
                 run=false;
 			}
