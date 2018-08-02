@@ -52,6 +52,8 @@ namespace hgl
                     return(true);
                 }
 
+                void    operator       =(const Set<T> &set){data_list=set.data_list;}               ///<等号操作符重载
+
 				bool	Rand			(T &)const;													///<随机取得一个
 
         virtual void    Enum            (void (*enum_func)(T &)){data_list.Enum(enum_func);}        ///<枚举所有数据成员
