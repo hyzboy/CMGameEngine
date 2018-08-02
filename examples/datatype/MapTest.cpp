@@ -23,10 +23,9 @@ void out_id(Map<int,int> &ii)
 //     }
 
     //lambda用法
-    ii.Enum([](const int &key,const int &value)->bool
+    ii.Enum([](const int &key,int value)
     {
         cout<<"["<<key<<","<<value<<"]";
-        return(true);
     });
 
     cout<<endl;
