@@ -1,4 +1,4 @@
-#ifndef HGL_MAP_CPP
+﻿#ifndef HGL_MAP_CPP
 #define HGL_MAP_CPP
 
 namespace hgl
@@ -535,6 +535,25 @@ namespace hgl
         for(int i=0;i<count;i++)
         {
             enum_func((*idp)->right);
+
+            ++idp;
+        }
+    }
+
+    template<typename F,typename T,typename DataPair>
+    void _Map<F,T,DataPair>::EnumValue(bool (*enum_func)(T))const
+    {
+        const int count=data_list.GetCount();
+
+        if(count<=0)
+            return;
+
+        IDItem **idp=data_list.GetData();
+
+        for(int i=0;i<count;i++)
+        {
+            if(!enum_func((*idp)->right))
+                return;
 
             ++idp;
         }
