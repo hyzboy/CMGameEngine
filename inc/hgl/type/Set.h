@@ -52,9 +52,28 @@ namespace hgl
                     return(true);
                 }
 
+                int     Intersection    (Set<T> &result,const List<T> &list);                       ///<取得与指定列表的交集
+                int     Intersection    (Set<T> &result,const Set<T> &set)                          ///<取得与指定合集的交集
+                                        {return Intersection(result,set.data_list);}
+
+                int     Intersection    (const List<T> &list);                                      ///<取得与指定列表的交集数量
+                int     Intersection    (const Set<T> &set){return Intersection(set.data_list);}    ///<取得与指定合集的交集数量
+
+                /**
+                 * 取得与指定交集is的合集，但排斥cs合集中的数据
+                 * @param result 结果合集
+                 * @param is 求交集的合集
+                 * @param cs 求排斥的合集
+                 * @return 结果数量
+                 */
+                int     Intersection    (Set<T> &result,const Set<T> &is,const Set<T> &cs)
+                                        {return Intersection(result,is.data_list,cs.data_list);}
+
+                int     Difference      (const Set<T> &is);                                         ///<求差集数量
+
                 void    operator       =(const Set<T> &set){data_list=set.data_list;}               ///<等号操作符重载
 
-				bool	Rand			(T &)const;													///<随机取得一个
+                bool	Rand			(T &)const;													///<随机取得一个
 
         virtual void    Enum            (void (*enum_func)(T &)){data_list.Enum(enum_func);}        ///<枚举所有数据成员
 	};//template<typename T> class Set
