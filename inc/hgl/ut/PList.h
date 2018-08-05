@@ -39,6 +39,7 @@ namespace hgl
             if(((off=key.FindChar(C('\t')))==-1)
             && ((off=key.FindChar(C(' '))) ==-1)
             && ((off=key.FindChar(C('='))) ==-1))
+            && ((off=key.FindChar(C(':'))) ==-1))
                 return(false);
 
             name.Strcpy(key,off);
@@ -50,7 +51,8 @@ namespace hgl
             {
                 if(*value == C('\t')
                 || *value == C('=')
-                || *value == C(' '))
+                || *value == C(' ')
+                || *value == C(':'))
                     value++;
                 else
                 {
