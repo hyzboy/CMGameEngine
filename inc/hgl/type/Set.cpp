@@ -286,11 +286,11 @@ namespace hgl
         if(list.GetCount()<=0)
             return(0);
 
-        data_list.Enum([this](T &obj)
+        data_list.Enum([&](T &obj)
         {
             if(list->IsMember(obj))
                 result.Add(obj);
-        }
+        });
 
         return result.GetCount();
     }
@@ -306,11 +306,11 @@ namespace hgl
 
         int count=0;
 
-        data_list.Enum([this](T &obj)
+        data_list.Enum([&](T &obj)
         {
             if(list->IsMember(obj))
                 ++count;
-        }
+        });
 
         return count;
     }
@@ -321,15 +321,15 @@ namespace hgl
         if(data_list.GetCount()<=0)
             return(0);
 
-        if(list.GetCount()<=0)
+        if(il.GetCount()<=0)
             return(0);
 
-        data_list.Enum([this](T &obj)
+        data_list.Enum([&](T &obj)
         {
             if(il->IsMember(obj))
                 if(!cl.IsMember(obj))
                     result.Add(obj);
-        }
+        });
 
         return result.GetCount();
     }
@@ -340,16 +340,16 @@ namespace hgl
         if(data_list.GetCount()<=0)
             return(0);
 
-        if(list.GetCount()<=0)
+        if(is.GetCount()<=0)
             return(0);
 
         int count=0;
 
-        data_list.Enum([this](T &obj)
+        data_list.Enum([&](T &obj)
         {
-            if(!list->IsMember(obj))
+            if(!is->IsMember(obj))
                 ++count;
-        }
+        });
 
         return count;
     }

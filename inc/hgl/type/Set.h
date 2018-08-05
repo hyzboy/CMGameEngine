@@ -66,8 +66,7 @@ namespace hgl
                  * @param cs 求排斥的合集
                  * @return 结果数量
                  */
-                int     Intersection    (Set<T> &result,const Set<T> &is,const Set<T> &cs)
-                                        {return Intersection(result,is.data_list,cs.data_list);}
+                int     Intersection    (Set<T> &result,const Set<T> &is,const Set<T> &cs);
 
                 int     Difference      (const Set<T> &is);                                         ///<求差集数量
 
