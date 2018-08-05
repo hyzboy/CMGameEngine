@@ -1027,6 +1027,11 @@ namespace hgl
     using UTF32String   =BaseString<char32_t>;
     using WideString    =BaseString<wchar_t>;
 
+    template<typename C> bool ToNumber(const BaseString<C> &str,int &value){return str.ToInt(value);}
+    template<typename C> bool ToNumber(const BaseString<C> &str,uint &value){return str.ToUint(value);}
+    template<typename C> bool ToNumber(const BaseString<C> &str,float &value){return str.ToFloat(value);}
+    template<typename C> bool ToNumber(const BaseString<C> &str,double &value){return str.ToFloat(value);}
+
     /**
      * 以累加的方式为一个字符串计算出一个hash码
      */
