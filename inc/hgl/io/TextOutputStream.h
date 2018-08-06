@@ -61,7 +61,7 @@ namespace hgl
 			template<typename N>
 			bool WriteString(const BaseString<N> &str)												///<写入一个字符串
 			{
-				return WriteChars(str.c_str(),str.Length);
+				return WriteChars(str.c_str(),str.Length());
 			}
 
 			bool WriteLineEnd()																		///<写入一个换行符
