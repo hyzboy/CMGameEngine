@@ -487,7 +487,7 @@ namespace hgl
 	}
 
 	template<typename F,typename T,typename DataPair>
-    void _Map<F,T,DataPair>::Enum(void (*enum_func)(const F &,T))const
+    void _Map<F,T,DataPair>::Enum(void (*enum_func)(const F &,T))
     {
         const int count=data_list.GetCount();
 
@@ -523,7 +523,7 @@ namespace hgl
     }
 
     template<typename F,typename T,typename DataPair>
-    void _Map<F,T,DataPair>::EnumValue(void (*enum_func)(T))const
+    void _Map<F,T,DataPair>::EnumValue(void (*enum_func)(T))
     {
         const int count=data_list.GetCount();
 
@@ -541,7 +541,7 @@ namespace hgl
     }
 
     template<typename F,typename T,typename DataPair>
-    void _Map<F,T,DataPair>::EnumValue(bool (*enum_func)(T))const
+    void _Map<F,T,DataPair>::EnumValue(bool (*enum_func)(T))
     {
         const int count=data_list.GetCount();
 

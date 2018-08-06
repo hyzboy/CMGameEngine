@@ -102,11 +102,11 @@ namespace hgl
 
 				void	operator=(const _Map<F,T,IDItem> &);									    ///<操作符重载，复制一个列表
 
-                void    Enum(void (*enum_func)(const F &,T))const;                                  ///<枚举所有数据项
+                void    Enum(void (*enum_func)(const F &,T));                                       ///<枚举所有数据项
                 void    EnumKey(void (*enum_func)(const F &))const;                                 ///<枚举所有索引
-                void    EnumValue(void (*enum_func)(T))const;                                       ///<枚举所有数值
+                void    EnumValue(void (*enum_func)(T));                                            ///<枚举所有数值
 
-                void    EnumValue(bool (*enum_func)(T))const;                                       ///<枚举所有数值
+                void    EnumValue(bool (*enum_func)(T));                                            ///<枚举所有数值
 	};//class _Map
 
 	template<typename F,typename T> class Map:public _Map<F,T,Pair<F,T> >
