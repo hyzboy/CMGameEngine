@@ -1,4 +1,4 @@
-#ifndef HGL_LIST_INCLUDE
+﻿#ifndef HGL_LIST_INCLUDE
 #define HGL_LIST_INCLUDE
 
 #include<hgl/LogInfo.h>

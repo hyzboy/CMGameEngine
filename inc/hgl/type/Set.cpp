@@ -278,7 +278,7 @@ namespace hgl
      * @return 交集数量
      */
 	template<typename T>
-	int Set<T>::Intersection(Set<T> &result,const List<T> &list)
+	int Set<T>::Intersection(Set<T> &result,const Set<T> &list)
     {
         if(data_list.GetCount()<=0)
             return(0);
@@ -296,7 +296,7 @@ namespace hgl
     }
 
     template<typename T>
-    int Set<T>::Intersection(const List<T> &list)
+    int Set<T>::Intersection(const Set<T> &list)
     {
         if(data_list.GetCount()<=0)
             return(0);
@@ -306,11 +306,14 @@ namespace hgl
 
         int count=0;
 
-        data_list.Enum([&](T &obj)
+        T *obj=data_list.GetData();
+        for(int i=0;i<data_list.GetCount();i++)
         {
-            if(list->IsMember(obj))
+            if(list.IsMember(*obj))
                 ++count;
-        });
+
+            ++obj;
+        }
 
         return count;
     }
@@ -324,12 +327,14 @@ namespace hgl
         if(il.GetCount()<=0)
             return(0);
 
-        data_list.Enum([&](T &obj)
+        T *obj=data_list.GetData();
+        for(int i=0;i<data_list.GetCount();i++)
         {
-            if(il->IsMember(obj))
-                if(!cl.IsMember(obj))
-                    result.Add(obj);
-        });
+            if(il.IsMember(*obj))
+                if(!cl.IsMember(*obj))
+                    result.Add(*obj);
+            ++obj;
+        }
 
         return result.GetCount();
     }
@@ -338,18 +343,21 @@ namespace hgl
     int Set<T>::Difference(const Set<T> &is)
     {
         if(data_list.GetCount()<=0)
-            return(0);
+            return(is.GetCount());
 
         if(is.GetCount()<=0)
-            return(0);
+            return(data_list.GetCount());
 
         int count=0;
 
-        data_list.Enum([&](T &obj)
+        T *obj=data_list.GetData();
+        for(int i=0;i<data_list.GetCount();i++)
         {
-            if(!is->IsMember(obj))
+            if(!is.IsMember(*obj))
                 ++count;
-        });
+
+            ++obj;
+        }
 
         return count;
     }

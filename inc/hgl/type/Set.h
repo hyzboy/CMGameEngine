@@ -52,12 +52,8 @@ namespace hgl
                     return(true);
                 }
 
-                int     Intersection    (Set<T> &result,const List<T> &list);                       ///<取得与指定列表的交集
-                int     Intersection    (Set<T> &result,const Set<T> &set)                          ///<取得与指定合集的交集
-                                        {return Intersection(result,set.data_list);}
-
-                int     Intersection    (const List<T> &list);                                      ///<取得与指定列表的交集数量
-                int     Intersection    (const Set<T> &set){return Intersection(set.data_list);}    ///<取得与指定合集的交集数量
+                int     Intersection    (Set<T> &result,const Set<T> &set);                         ///<取得与指定合集的交集
+                int     Intersection    (const Set<T> &set);                                        ///<取得与指定合集的交集数量
 
                 /**
                  * 取得与指定交集is的合集，但排斥cs合集中的数据
