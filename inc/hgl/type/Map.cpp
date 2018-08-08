@@ -483,7 +483,27 @@ namespace hgl
 	{
 		Clear();
 
-		data_list=ftd.data_list;
+        data_pool.ClearAll();
+        data_list.ClearData();
+
+        const int count=ftd.data_list.GetCount();
+
+        if(count<=0)
+            return;
+
+        IDItem **obj=ftd.data_list.GetData();
+
+        for(int i=0;i<count;i++)
+        {
+            IDItem *new_obj=data_pool.Acquire();
+
+            new_obj->left=(*obj)->left;
+            new_obj->right=(*obj)->right;
+
+            data_list.Add(new_obj);
+
+            ++obj;
+        }
 	}
 
 	template<typename F,typename T,typename DataPair>
