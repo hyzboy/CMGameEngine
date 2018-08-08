@@ -56,7 +56,9 @@ namespace hgl
 
 		virtual ~Thread()=default;
 
+#ifdef _DEBUG
 		const UTF8String &GetThreadAddressString()const{return thread_addr_string;}               ///<取得线程地址字符串
+#endif//_DEBUG
 
 		/**
 		* 线程执行函数，会被反复调用
@@ -67,11 +69,13 @@ namespace hgl
 
 		virtual bool ProcStartThread()                                                                ///<线程启动运行函数,在Execute前被调用
                 {
+#ifdef _DEBUG
                     char thread_addr[(sizeof(thread_ptr)<<1)+1];
 
                     DataToUpperHexStr(thread_addr,(uint8 *)&tp,sizeof(thread_ptr));
 
                     thread_addr_string=thread_addr;
+#endif//_DEBUG
 
                     return(true);
                 }
