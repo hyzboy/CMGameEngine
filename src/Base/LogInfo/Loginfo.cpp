@@ -1,48 +1,53 @@
 ﻿#include<hgl/PlugIn.h>
 #include<hgl/Logger.h>
 #include<hgl/type/DateTime.h>
+#include<hgl/thread/RWLock.h>
 
 namespace hgl
 {
     namespace logger
     {
-        static List<Logger *> log_list;        //记录器列表
+        RWLockObject<List<Logger *>> log_list;        //记录器列表
 
         bool AddLogger(Logger *log)
         {
             if(!log)
                 return(false);
 
-            if(log_list.IsExist(log))        //重复添加
+            OnlyWriteLock owl(log_list);
+
+            if(log_list->IsExist(log))        //重复添加
                 return(false);
 
-            log_list.Add(log);
+            log_list->Add(log);
             return(true);
         }
 
         template<typename T>
         void WriteLog(LogLevel level,const T *str,int size)
         {
-            const int n=log_list.GetCount();
+            OnlyReadLock orl(log_list);
+
+            const int n=log_list->GetCount();
 
             if(n<=0)return;
 
-            Logger *log;
+            Logger **log=log_list->GetData();
 
             for(int i=0;i<n;i++)
             {
-                log=log_list[i];
+                if((*log)->GetLevel()>=level)
+                    (*log)->Write(str,size);
 
-                if(log==nullptr)continue;
-
-                if(log->GetLevel()>=level)
-                    log->Write(str,size);
+                ++log;
             }
         }
 
         bool PutLogHeader()
         {
-            if(log_list.GetCount()<=0)
+            OnlyReadLock orl(log_list);
+
+            if(log_list->GetCount()<=0)
                 return(false);
 
             Date d;
@@ -66,20 +71,23 @@ namespace hgl
 
         void CloseAllLog()
         {
-            const int n=log_list.GetCount();
+            OnlyWriteLock owl(log_list);
+
+            const int n=log_list->GetCount();
 
             if(n<=0)return;
 
-            Logger *log;
+            Logger **log=log_list->GetData();
 
             for(int i=0;i<n;i++)
             {
-                log=log_list[i];
+                (*log)->Close();
+                delete *log;
 
-                log->Close();
+                ++log;
             }
 
-            log_list.Clear();
+            log_list->Clear();
         }
     }//namespace logger
 
@@ -180,6 +188,24 @@ namespace hgl
         {
             if(li)
                 li->WriteUTF8(level,str,size==-1?hgl::strlen(str):size);
+        }
+    }//namespace logger
+
+    namespace logger
+    {
+        Logger *CreateLoggerConsole (const OSString &,LogLevel);
+        Logger *CreateLoggerFile    (const OSString &,LogLevel);
+
+        /**
+         * 独立的日志系统初始化<br>
+         * 供不整体使用SDK的应用程序使用
+         */
+        bool InitLogger(const OSString &app_name)
+        {
+            AddLogger(CreateLoggerConsole(app_name,llLog));
+            AddLogger(CreateLoggerFile(app_name,llLog));
+
+            return InitLog();
         }
     }//namespace logger
 }//namespace hgl
