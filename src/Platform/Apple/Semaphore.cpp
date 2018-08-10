@@ -70,7 +70,7 @@ namespace hgl
         }
 		else
 		{
-			dispatch_time_t when=dispatch_time(DISPATCH_TIME_NOW,t/HGL_NANO_SEC_PER_SEC);
+			dispatch_time_t when=dispatch_time(DISPATCH_TIME_NOW,t*HGL_NANO_SEC_PER_SEC);
 
 			return !dispatch_semaphore_wait(ptr,when);
 		}
