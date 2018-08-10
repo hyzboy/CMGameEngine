@@ -56,8 +56,6 @@ typedef void *                  ExternalModulePointer;
 
 typedef pthread_mutex_t         hgl_thread_mutex;
 
-#define iconv_str				char *
-
 #define hgl_stat64				stat64
 #define hgl_open64				open64
 #define hgl_lseek64				lseek64

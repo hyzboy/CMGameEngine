@@ -46,8 +46,6 @@ typedef char			os_char;
 
 typedef pthread_mutex_t hgl_thread_mutex;
 
-#define iconv_str				const char *
-
 #define stat64					stat
 #define open64					open
 #define lseek64					lseek

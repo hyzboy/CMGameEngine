@@ -201,4 +201,22 @@ namespace hgl
             return InitLog();
         }
     }//namespace logger
+
+    namespace logger
+    {
+        Logger *CreateLoggerConsole (const OSString &,LogLevel);
+        Logger *CreateLoggerFile    (const OSString &,LogLevel);
+
+        /**
+         * 独立的日志系统初始化<br>
+         * 供不整体使用SDK的应用程序使用
+         */
+        bool InitLogger(const OSString &app_name)
+        {
+            AddLogger(CreateLoggerConsole(app_name,llLog));
+            AddLogger(CreateLoggerFile(app_name,llLog));
+
+            return InitLog();
+        }
+    }//namespace logger
 }//namespace hgl

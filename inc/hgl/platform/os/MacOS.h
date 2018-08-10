@@ -55,8 +55,6 @@ using ExternalModulePointer=void *;
 
 using hgl_thread_mutex=pthread_mutex_t;
 
-#define iconv_str				const char *
-
 #define hgl_stat64				stat
 #define hgl_open64				open
 #define hgl_lseek64				lseek
