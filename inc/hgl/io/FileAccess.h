@@ -14,6 +14,7 @@ namespace hgl
 
 			fomCreate,         				///<创建文件，如存在则失败
 			fomCreateTrunc,					///<强制创建，如存在则抹掉
+			fomCreateTemp,
 			fomOnlyRead,         			///<只读方式
 			fomOnlyWrite,         			///<只写方式
 			fomReadWrite,					///<可读可写
@@ -47,6 +48,7 @@ namespace hgl
 			virtual bool CreateTrunc(const OSString &fn){return Open(fn,fomCreateTrunc);}			///<创建一个新文件，如文件已存在则抹消它
 			virtual bool OpenRead(const OSString &fn){return Open(fn,fomOnlyRead);}					///<以只读模式打开一个文件
 			virtual bool OpenWrite(const OSString &fn){return Open(fn,fomOnlyWrite);}				///<以只写模式打开一个文件
+			virtual bool OpenReadWrite(const OSString &fn){return Open(fn,fomReadWrite);}			///<以读写模式打开一个文件
 			virtual bool CreateTemp();
 
 			virtual void Close();																	///<关闭文件
