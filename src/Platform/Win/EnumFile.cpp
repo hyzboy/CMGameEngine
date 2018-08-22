@@ -40,7 +40,6 @@ namespace hgl
                 return(-1);
 
             FileInfo fi;
-            EnumFileConfig *sub_efc=nullptr;
             int sub_count;
 
             do
@@ -54,17 +53,6 @@ namespace hgl
                 if(FindFileData.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY)
                 {
                     if(!config->proc_folder)continue;
-
-                    if(config->sub_folder)
-                    {
-                        sub_efc=CreateSubConfig(config,FindFileData.cFileName);
-
-                        if(!sub_efc)
-                            continue;
-
-                        sub_count=this->Enum(sub_efc);
-                        if(sub_count>0)count+=sub_count;
-                    }
                 }
                 else
                 {
@@ -108,10 +96,20 @@ namespace hgl
                     fi.is_file=false;
                     fi.is_directory=true;
 
-                    ProcFolder(config,sub_efc,fi);
+                    if(config->sub_folder)
+                    {
+                        EnumFileConfig *sub_efc=CreateSubConfig(config,FindFileData.cFileName);
 
-                    delete sub_efc;
-                    sub_efc=nullptr;
+                        ProcFolder(config,sub_efc,fi);
+
+                        if(!sub_efc)
+                            continue;
+
+                        sub_count=this->Enum(sub_efc);
+                        if(sub_count>0)count+=sub_count;
+
+                        delete sub_efc;
+                    }
                 }
                 else
                 {

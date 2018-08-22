@@ -110,10 +110,10 @@ namespace hgl
                 {
                     EnumFileConfig *sub_efc=CreateSubConfig(config,entry->d_name);
 
+                    ProcFolder(config,sub_efc,fi);
+
                     if(!sub_efc)
                         continue;
-
-                    ProcFolder(config,sub_efc,fi);
 
                     if(config->sub_folder)
                     {
