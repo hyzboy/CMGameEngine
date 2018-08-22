@@ -851,6 +851,42 @@ namespace hgl
         }
 
         /**
+         * 返回当前字符串中指定字符开始的索引(从右至左)
+         * @param off 从右至左跳过不查的字符个数
+         * @param ch 要查找的字符
+         */
+        int FindRightChar(const int off,const T ch)const
+        {
+            if(!data.valid())
+                return(-1);
+
+            const T *result=hgl::strrchr(data->c_str(),data->GetLength(),off,ch);
+
+            if(result)
+                return result-(data->c_str());
+
+            return(-1);
+        }
+
+        /**
+         * 返回当前字符串中指定字符开始的索引(从右至左)
+         * @param off 从右至左跳过不查的字符个数
+         * @param ch 要查找的字符
+         */
+        int FindRightChar(const int off,const BaseString<T> &ch)const
+        {
+            if(!data.valid())
+                return(-1);
+
+            const T *result=hgl::strrchr(data->c_str(),data->GetLength(),off,ch.c_str(),ch.Length());
+
+            if(result)
+                return result-(data->c_str());
+
+            return(-1);
+        }
+
+        /**
         * 在整个字符串内，查找指定字符串
         * @param str 要查找的字符串
         * @param start 从第几个字符开始查找，默认0
