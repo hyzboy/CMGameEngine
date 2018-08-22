@@ -189,17 +189,6 @@ namespace hgl
             if(li)
                 li->WriteUTF8(level,str,size==-1?hgl::strlen(str):size);
         }
-
-        Logger *CreateLoggerConsole (const OSString &,LogLevel);
-        Logger *CreateLoggerFile    (const OSString &,LogLevel);
-
-        bool InitLogger(const OSString &app_name)
-        {
-            AddLogger(CreateLoggerConsole(app_name,llLog));
-            AddLogger(CreateLoggerFile(app_name,llLog));
-
-            return InitLog();
-        }
     }//namespace logger
 
     namespace logger
