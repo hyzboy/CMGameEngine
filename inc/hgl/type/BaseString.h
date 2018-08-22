@@ -804,13 +804,45 @@ namespace hgl
             return(-1);
         }
 
+        /**
+         * 在当前字符串中查找字符
+         * @param pos 起始查找位置
+         * @param ch 要查找的字符,可以是多个，找到任意一个就算
+         */
+        int FindChar(int pos,const BaseString<T> &ch)const                                          ///<返回当前字符串中指定字符中的任意一个开始的索引(从左至右)
+        {
+            if(!data.valid())
+                return(-1);
+
+            const T *result=hgl::strchr(data->c_str()+pos,ch.c_str(),ch.Length());
+
+            if(result)
+                return result-(data->c_str()+pos);
+
+            return(-1);
+        }
+
         int FindChar(const T ch)const{return FindChar(0,ch);}										///<返回当前字符串中指定字符开始的索引(从左至右)
+
         int FindRightChar(const T ch)const															///<返回当前字符串中指定字符开始的索引(从右至左)
         {
             if(!data.valid())
                 return(-1);
 
-            const T *result=hgl::strrchr(data->c_str(),ch);
+            const T *result=hgl::strrchr(data->c_str(),data->GetLength(),ch);
+
+            if(result)
+                return result-(data->c_str());
+
+            return(-1);
+        }
+
+        int FindRightChar(const BaseString<T> &ch)const												///<返回当前字符串中指定字符开始的索引(从右至左)
+        {
+            if(!data.valid())
+                return(-1);
+
+            const T *result=hgl::strrchr(data->c_str(),data->GetLength(),ch.c_str(),ch.Length());
 
             if(result)
                 return result-(data->c_str());

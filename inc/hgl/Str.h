@@ -51,8 +51,8 @@ namespace hgl
     }
 
     /**
-    * 测试当前字符是否为小写字母
-    */
+     * 测试当前字符是否为小写字母
+     */
     template<typename T>
     bool islower(const T ch)
     {
@@ -60,8 +60,8 @@ namespace hgl
     }
 
     /**
-    * 测试当前字符是否为大写字母
-    */
+     * 测试当前字符是否为大写字母
+     */
     template<typename T>
     bool isupper(const T ch)
     {
@@ -69,8 +69,8 @@ namespace hgl
     }
 
     /**
-    * 测试当前字符是否为字母
-    */
+     * 测试当前字符是否为字母
+     */
     template<typename T>
     bool isalpha(const T ch)
     {
@@ -78,8 +78,8 @@ namespace hgl
     }
 
     /**
-    * 测试当前字符是否为10进制数字
-    */
+     * 测试当前字符是否为10进制数字
+     */
     template<typename T>
     bool isdigit(const T ch)
     {
@@ -93,30 +93,30 @@ namespace hgl
     bool isfloat(const T ch)
     {
         return isdigit(ch)
-                ||ch=='-'
-                ||ch=='+'
-                ||ch=='.'
-                ||ch=='E'
-                ||ch=='e';
+        ||ch=='-'
+        ||ch=='+'
+        ||ch=='.'
+        ||ch=='E'
+        ||ch=='e';
     }
 
     template<typename T>
     bool isinteger(const T ch)
     {
         return isdigit(ch)
-                ||ch=='-'
-                ||ch=='+';
+        ||ch=='-'
+        ||ch=='+';
     }
 
     /**
-    * 测试当前字符是否为16进制数用字符(0-9,A-F)
-    */
+     * 测试当前字符是否为16进制数用字符(0-9,A-F)
+     */
     template<typename T>
     bool isxdigit(const T ch)
     {
         return((ch>='0'&&ch<='9')
-             ||(ch>='a'&&ch<='f')
-             ||(ch>='A'&&ch<='F'));
+        ||(ch>='a'&&ch<='f')
+        ||(ch>='A'&&ch<='F'));
     }
 
     /**
@@ -140,8 +140,8 @@ namespace hgl
     }
 
     /**
-    * 是否为不显示可打印字符(' ','\t','\r','\f','\v','\n')
-    */
+     * 是否为不显示可打印字符(' ','\t','\r','\f','\v','\n')
+     */
     template<typename T>
     bool isspace(const T ch)
     {
@@ -149,8 +149,8 @@ namespace hgl
     }
 
     /**
-    * 测试当前字符是否为字母或数字
-    */
+     * 测试当前字符是否为字母或数字
+     */
     template<typename T>
     bool isalnum(const T ch)
     {
@@ -158,8 +158,8 @@ namespace hgl
     }
 
     /**
-    * 测试当前字符是否为代码可用字符(仅字母，数字，下划线，常用于文件名之类)
-    */
+     * 测试当前字符是否为代码可用字符(仅字母，数字，下划线，常用于文件名之类)
+     */
     template<typename T>
     bool iscodechar(const T ch)
     {
@@ -167,20 +167,20 @@ namespace hgl
     }
 
     /**
-    * 测试当前字符是否为BASE64编码字符
-    */
+     * 测试当前字符是否为BASE64编码字符
+     */
     template<typename T>
     bool isbase64(const T c)
     {
         return (c == 43 || // +
-               (c >= 47 && c <= 57) || // /-9
-               (c >= 65 && c <= 90) || // A-Z
-               (c >= 97 && c <= 122)); // a-z
+        (c >= 47 && c <= 57) || // /-9
+        (c >= 65 && c <= 90) || // A-Z
+        (c >= 97 && c <= 122)); // a-z
     }
 
     /**
-    * 如果当前字符为大写英文字符，则转换为小写
-    */
+     * 如果当前字符为大写英文字符，则转换为小写
+     */
     template<typename T>
     T tolower(const T ch)
     {
@@ -191,8 +191,8 @@ namespace hgl
     }
 
     /**
-    * 如果当前字符为小写英文字符，则转换为大写
-    */
+     * 如果当前字符为小写英文字符，则转换为大写
+     */
     template<typename T>
     T toupper(const T ch)
     {
@@ -203,8 +203,8 @@ namespace hgl
     }
 
     /**
-    * 比较两个字符的大小(英文不区分大小写)
-    */
+     * 比较两个字符的大小(英文不区分大小写)
+     */
     template<typename S,typename D>
     int chricmp(S src,D dst)
     {
@@ -212,10 +212,10 @@ namespace hgl
     }
 
     /**
-    * 对宽字符串计算字串长度
-    * @param str 要计算长度的字符串指针
-    * @return 字符串长度
-    */
+     * 对宽字符串计算字串长度
+     * @param str 要计算长度的字符串指针
+     * @return 字符串长度
+     */
     template<typename T>
     int strlen(const T *str)
     {
@@ -233,11 +233,11 @@ namespace hgl
     }
 
     /**
-    * 对宽字符串计算字串长度
-    * @param str 要计算长度的字符串指针
-    * @param max_len 最大长度
-    * @return 字符串长度
-    */
+     * 对宽字符串计算字串长度
+     * @param str 要计算长度的字符串指针
+     * @param max_len 最大长度
+     * @return 字符串长度
+     */
     template<typename T>
     int strlen(const T *str,int max_len)
     {
@@ -259,11 +259,11 @@ namespace hgl
     }
 
     /**
-    * 复制字符串，并指定最大长度
-    * @param dst 目标字符串
-    * @param count 目标字符串最大多少个字符
-    * @param src 源字符串
-    */
+     * 复制字符串，并指定最大长度
+     * @param dst 目标字符串
+     * @param count 目标字符串最大多少个字符
+     * @param src 源字符串
+     */
     template<typename T>
     void strcpy(T *dst,int count,const T *src)
     {
@@ -298,12 +298,12 @@ namespace hgl
     }
 
     /**
-    * 复制字符串，并指定最大长度
-    * @param dst 目标字符串
-    * @param dst_count 目标字符串最大多少个字符
-    * @param src 源字符串
-    * @param count 最多复制多少个字符
-    */
+     * 复制字符串，并指定最大长度
+     * @param dst 目标字符串
+     * @param dst_count 目标字符串最大多少个字符
+     * @param src 源字符串
+     * @param count 最多复制多少个字符
+     */
     template<typename T>
     void strcpy(T *dst,int dst_count,const T *src,int count)
     {
@@ -333,13 +333,13 @@ namespace hgl
     }
 
     /**
-    * 在字符串str1内查找另一个字符串str2
-    * @param str1 完整的字符串
-    * @param size1 str1最大查找字符
-    * @param str2 要查找的字符串
-    * @param size2 str2长度
-    * @return str2在str1中所在位置的指针
-    */
+     * 在字符串str1内查找另一个字符串str2
+     * @param str1 完整的字符串
+     * @param size1 str1最大查找字符
+     * @param str2 要查找的字符串
+     * @param size2 str2长度
+     * @return str2在str1中所在位置的指针
+     */
     template<typename T>
     T *strstr(T *str1,const uint size1,T *str2,const uint size2)
     {
@@ -373,13 +373,13 @@ namespace hgl
 
 
     /**
-    * 在字符串str1内查找另一个字符串str2(从后向前)
-    * @param str1 完整的字符串
-    * @param size1 str1最大查找字符
-    * @param str2 要查找的字符串
-    * @param size2 str2长度
-    * @return str2在str1中所在位置的指针
-    */
+     * 在字符串str1内查找另一个字符串str2(从后向前)
+     * @param str1 完整的字符串
+     * @param size1 str1最大查找字符
+     * @param str2 要查找的字符串
+     * @param size2 str2长度
+     * @return str2在str1中所在位置的指针
+     */
     template<typename T>
     T *strrstr(T *str1,const uint size1,T *str2,const uint size2)
     {
@@ -411,13 +411,13 @@ namespace hgl
     }
 
     /**
-    * 在字符串str1内查找另一个字符串str2,忽略大小写
-    * @param str1 完整的字符串
-    * @param size1 str1的长度
-    * @param str2 要查找的字符串
-    * @param size2 str2的长度
-    * @return str2在str1中所在位置的指针
-    */
+     * 在字符串str1内查找另一个字符串str2,忽略大小写
+     * @param str1 完整的字符串
+     * @param size1 str1的长度
+     * @param str2 要查找的字符串
+     * @param size2 str2的长度
+     * @return str2在str1中所在位置的指针
+     */
     template<typename T>
     T *stristr(T *str1,const uint size1,T *str2,const uint size2)
     {
@@ -442,13 +442,13 @@ namespace hgl
                             break;
                     }
                     else
-                    if(*s1>='A'&&*s1<='Z')
-                    {
-                        if(*s1!=*s2+('A'-'a'))
+                        if(*s1>='A'&&*s1<='Z')
+                        {
+                            if(*s1!=*s2+('A'-'a'))
+                                break;
+                        }
+                        else
                             break;
-                    }
-                    else
-                        break;
                 }
 
                 s1++, s2++;
@@ -464,11 +464,11 @@ namespace hgl
     }
 
     /**
-    * 复制一个字符到当前字符串后面
-    * @param dst 目标字符串
-    * @param max_count 目标字符串最大长度
-    * @param ch 源字符
-    */
+     * 复制一个字符到当前字符串后面
+     * @param dst 目标字符串
+     * @param max_count 目标字符串最大长度
+     * @param ch 源字符
+     */
     template<typename T>
     void strcat(T *dst,int max_count,const T ch)
     {
@@ -488,12 +488,12 @@ namespace hgl
     }
 
     /**
-    * 复制一个字符串到当前字符串后面，并指定最大长度
-    * @param dst 目标字符串
-    * @param max_count 目标字符串最大长度
-    * @param src 要追加的源字符串
-    * @param count 源字符串最大长度
-    */
+     * 复制一个字符串到当前字符串后面，并指定最大长度
+     * @param dst 目标字符串
+     * @param max_count 目标字符串最大长度
+     * @param src 要追加的源字符串
+     * @param count 源字符串最大长度
+     */
     template<typename T>
     void strcat(T *dst,int max_count,const T *src,int count)
     {
@@ -519,15 +519,15 @@ namespace hgl
     }
 
     /**
-    * 在字符串中查找某个字符
-    * @param str 字符串
-    * @param ch 字符
-    * @return 查找到的位置指针
-    */
+     * 在字符串中查找某个字符
+     * @param str 字符串
+     * @param ch 字符
+     * @return 查找到的位置指针
+     */
     template<typename TS,typename TC>
     TS *strchr(TS *str,TC ch)
     {
-        if(!str||!(*str))return(0);
+        if(!str||!(*str)||ch==0)return(nullptr);
 
         while(*str)
         {
@@ -537,20 +537,20 @@ namespace hgl
                 ++str;
         }
 
-        return(0);
+        return(nullptr);
     }
 
     /**
-    * 在字符串中查找某个字符,指定字符串最大长度
-    * @param str 字符串
-    * @param ch 字符
-    * @param n 字符串长度
-    * @return 查找到的位置指针
-    */
+     * 在字符串中查找某个字符,指定字符串最大长度
+     * @param str 字符串
+     * @param ch 字符
+     * @param n 字符串长度
+     * @return 查找到的位置指针
+     */
     template<typename TS,typename TC>
     TS *strchr(TS *str,TC ch,int n)
     {
-        if(!str||!(*str))return(0);
+        if(!str||!(*str)||ch==0||n<=0)return(nullptr);
 
         while(*str&&n--)
         {
@@ -560,47 +560,98 @@ namespace hgl
                 ++str;
         }
 
-        return(0);
+        return(nullptr);
     }
 
     /**
-    * 在字符串中从结尾处开始查找某个字符
-    * @param str 字符串
-    * @param ch 字符
-    * @return 查找到的位置指针
-    */
+     * 在字符串中查找某个字符
+     * @param str 字符串
+     * @param ch 字符列表
+     * @param ch_count 字符个数
+     * @return 查找到的位置指针
+     */
     template<typename TS,typename TC>
-    TS *strrchr(TS *str,const TC ch)
+    TS *strchr(TS *str,TC *ch,const int ch_count)
     {
-        if(!str||!(*str))return(0);
-
-        TS *result=0;
+        if(!str||!(*str)||!ch||!(*ch)||ch_count<=0)return(nullptr);
 
         while(*str)
         {
-            if(*str==ch)result=str;
+            if(strchr(ch,*str,ch_count))
+                return(str);
 
             ++str;
         }
 
-        return(result);
+        return(nullptr);
     }
 
     /**
-    * 比较两个字符串的大小
-    * @param src 要比较的字符串
-    * @param dst 要比较的字符串
-    * @return -1 src <  dst
-    * @return  0 src == dst
-    * @return +1 src >  dst
-    */
+     * 在字符串中从结尾处开始查找某个字符
+     * @param str 字符串
+     * @param len 字符串长度
+     * @param ch 字符
+     * @return 查找到的位置指针
+     */
+    template<typename TS,typename TC>
+    TS *strrchr(TS *str,const int len,const TC ch)
+    {
+        if(!str||!(*str)||len<=0||ch==0)return(nullptr);
+
+        TS *ep=str+len-1;
+
+        while(ep>=str)
+        {
+            if(*ep==ch)
+                return ep;
+
+            --ep;
+        }
+
+        return(nullptr);
+    }
+
+    /**
+     * 在字符串中从结尾处开始查找某个字符
+     * @param str 字符串
+     * @param len 字符串长度
+     * @param ch 字符
+     * @param ch_count 字符个数
+     * @return 查找到的位置指针
+     */
+    template<typename TS,typename TC>
+    TS *strrchr(TS *str,const int len,const TC *ch,const int ch_count)
+    {
+        if(!str||!(*str)||len<=0||!ch||!(*ch)||ch_count<=0)return(nullptr);
+
+        TS *ep=str+len-1;
+
+        while(ep>=str)
+        {
+            if(strchr(ch,*ep,ch_count))
+                return ep;
+
+            --ep;
+        }
+
+        return(nullptr);
+    }
+
+    /**
+     * 比较两个字符串的大小
+     * @param src 要比较的字符串
+     * @param dst 要比较的字符串
+     * @return -1 src <  dst
+     * @return  0 src == dst
+     * @return +1 src >  dst
+     */
     template<typename S,typename D>
     int strcmp(S *src,D *dst)
     {
         if(!src)
         {
             if(!dst)return(0);
-                else return(-1);
+            else return(-1);
         }
 
         if(!dst)return(1);
@@ -615,22 +666,22 @@ namespace hgl
     }
 
     /**
-    * 比较两个字符串的大小
-    * @param src 要比较的字符串1
-    * @param src_size 要比较的字符串1长度
-    * @param dst 要比较的字符串2
-    * @param dst_size 要比较的字符串2
-    * @return -1 src <  dst
-    * @return  0 src == dst
-    * @return +1 src >  dst
-    */
+     * 比较两个字符串的大小
+     * @param src 要比较的字符串1
+     * @param src_size 要比较的字符串1长度
+     * @param dst 要比较的字符串2
+     * @param dst_size 要比较的字符串2
+     * @return -1 src <  dst
+     * @return  0 src == dst
+     * @return +1 src >  dst
+     */
     template<typename S,typename D>
     int strcmp(S *src,int src_size,D *dst,int dst_size)
     {
         if(!src)
         {
             if(!dst)return(0);
-                else return(-1);
+            else return(-1);
         }
 
         if(!dst)return(1);
@@ -638,7 +689,7 @@ namespace hgl
         if(src_size<=0)
         {
             if(dst_size<=0)return(0);
-                        else return(-1);
+            else return(-1);
         }
 
         if(dst_size<=0)return(1);
@@ -667,13 +718,13 @@ namespace hgl
     }
 
     /**
-    * 比较两个字符串的大小,并指定最大比较长度
-    * @param src,dst 要比较的字符串
-    * @param count 比较的最大长度
-    * @return -1 src <  dst
-    * @return  0 src == dst
-    * @return +1 src >  dst
-    */
+     * 比较两个字符串的大小,并指定最大比较长度
+     * @param src,dst 要比较的字符串
+     * @param count 比较的最大长度
+     * @return -1 src <  dst
+     * @return  0 src == dst
+     * @return +1 src >  dst
+     */
     template<typename S,typename D>
     int strcmp(S *src,D *dst,int count)
     {
@@ -682,7 +733,7 @@ namespace hgl
         if(!src)
         {
             if(!dst)return(0);
-                else return(-1);
+            else return(-1);
         }
 
         if(!dst)return(1);
@@ -701,19 +752,19 @@ namespace hgl
     }
 
     /**
-    * 比较两个字符串的大小(英文不区大小写)
-    * @param src,dst 要比较的字符串
-    * @return -1 src <  dst
-    * @return  0 src == dst
-    * @return +1 src >  dst
-    */
+     * 比较两个字符串的大小(英文不区大小写)
+     * @param src,dst 要比较的字符串
+     * @return -1 src <  dst
+     * @return  0 src == dst
+     * @return +1 src >  dst
+     */
     template<typename S,typename D>
     int stricmp(S *src,D *dst)
     {
         if(!src)
         {
             if(!dst)return(0);
-                else return(-1);
+            else return(-1);
         }
 
         if(!dst)return(1);
@@ -735,22 +786,22 @@ namespace hgl
     }
 
     /**
-    * 比较两个字符串的大小(英文不区大小写)
-    * @param src 要比较的字符串1
-    * @param src_size 要比较的字符串1长度
-    * @param dst 要比较的字符串2
-    * @param dst_size 要比较的字符串2
-    * @return -1 src <  dst
-    * @return  0 src == dst
-    * @return +1 src >  dst
-    */
+     * 比较两个字符串的大小(英文不区大小写)
+     * @param src 要比较的字符串1
+     * @param src_size 要比较的字符串1长度
+     * @param dst 要比较的字符串2
+     * @param dst_size 要比较的字符串2
+     * @return -1 src <  dst
+     * @return  0 src == dst
+     * @return +1 src >  dst
+     */
     template<typename S,typename D>
     int stricmp(S *src,int src_size,D *dst,int dst_size)
     {
         if(!src)
         {
             if(!dst)return(0);
-                else return(-1);
+            else return(-1);
         }
 
         if(!dst)return(1);
@@ -758,7 +809,7 @@ namespace hgl
         if(src_size<=0)
         {
             if(dst_size<=0)return(0);
-                        else return(-1);
+            else return(-1);
         }
 
         if(dst_size<=0)return(1);
@@ -796,20 +847,20 @@ namespace hgl
     }
 
     /**
-    * 比较两个字符串的大小(英文不区大小写)
-    * @param src,dst 要比较的字符串
-    * @param count 比较的最大长度
-    * @return -1 src <  dst
-    * @return  0 src == dst
-    * @return +1 src >  dst
-    */
+     * 比较两个字符串的大小(英文不区大小写)
+     * @param src,dst 要比较的字符串
+     * @param count 比较的最大长度
+     * @return -1 src <  dst
+     * @return  0 src == dst
+     * @return +1 src >  dst
+     */
     template<typename S,typename D>
     int stricmp(S *src,D *dst,int count)
     {
         if(!src)
         {
             if(!dst)return(0);
-                else return(-1);
+            else return(-1);
         }
 
         if(!dst)return(1);
@@ -835,15 +886,15 @@ namespace hgl
     }
 
     /**
-    * 字符集专用比较函数,只比较字母与数字，无视各种符号，无视大小写
-    */
+     * 字符集专用比较函数,只比较字母与数字，无视各种符号，无视大小写
+     */
     template<typename S,typename D>
     int charset_cmp(S *src,D *dst)
     {
         if(!src)
         {
             if(!dst)return(0);
-                else return(-1);
+            else return(-1);
         }
 
         if(!dst)return(1);
@@ -868,11 +919,11 @@ namespace hgl
     }
 
     /**
-    * 截去字符串前端所有的空格、换行等符号字符
-    * @param src 源字符串指针
-    * @param len 源字符串长度
-    * @return 新的字符串，需自行delete[]
-    */
+     * 截去字符串前端所有的空格、换行等符号字符
+     * @param src 源字符串指针
+     * @param len 源字符串长度
+     * @return 新的字符串，需自行delete[]
+     */
     template<typename T>
     T *trimleft(T *src,int &len)
     {
@@ -895,8 +946,8 @@ namespace hgl
     }
 
     /**
-    * 截去字符串尾端所有的空格、换行等符号字符
-    */
+     * 截去字符串尾端所有的空格、换行等符号字符
+     */
     template<typename T>
     T *trimright(T *src,int &len)
     {
@@ -919,8 +970,8 @@ namespace hgl
     }
 
     /**
-    * 截去字符串前端和尾端的所有空格、换行符等符号
-    */
+     * 截去字符串前端和尾端的所有空格、换行符等符号
+     */
     template<typename T>
     T *trim(T *src,int &len)
     {
@@ -950,12 +1001,12 @@ namespace hgl
     }
 
     /**
-    * 给一个文件名更改扩展名
-    * @param old_filename 原始文件名称
-    * @param new_filename 新文件名称
-    * @param max_len 文件名最大长度以
-    * @param new_extname 新扩展名(不带.)
-    */
+     * 给一个文件名更改扩展名
+     * @param old_filename 原始文件名称
+     * @param new_filename 新文件名称
+     * @param max_len 文件名最大长度以
+     * @param new_extname 新扩展名(不带.)
+     */
     template<typename T>
     void replace_extname(T *new_filename,const T *old_filename,int max_len,const T *new_extname)
     {
@@ -977,10 +1028,10 @@ namespace hgl
     }
 
     /**
-    * 给一个文件名更改扩展名
-    * @param filename 文件名称
-    * @param new_extname 新扩展名(不带.)
-    */
+     * 给一个文件名更改扩展名
+     * @param filename 文件名称
+     * @param new_extname 新扩展名(不带.)
+     */
     template<typename T>
     void replace_extname(T *filename,const T *new_extname)
     {
@@ -998,11 +1049,11 @@ namespace hgl
     }
 
     /**
-    * 创建一个复制
-    * @param str 要复制的字符串
-    * @param size 字符串长度,-1表示自动测试
-    * @return 复制出来的字符串
-    */
+     * 创建一个复制
+     * @param str 要复制的字符串
+     * @param size 字符串长度,-1表示自动测试
+     * @return 复制出来的字符串
+     */
     template<typename T>
     T *create_copy(const T *str,int size=-1)
     {
@@ -1023,12 +1074,12 @@ namespace hgl
     }
 
     /**
-    * 将一个字符串中的某个字符全部替换为另一个字符
-    * @param string 要处理的字符串
-    * @param sch 要被替换掉的字符
-    * @param tch 替换后的字符
-    * @return 替换的次数
-    */
+     * 将一个字符串中的某个字符全部替换为另一个字符
+     * @param string 要处理的字符串
+     * @param sch 要被替换掉的字符
+     * @param tch 替换后的字符
+     * @return 替换的次数
+     */
     template<typename T>
     int replace(T *str,const T tch,const T sch)
     {
@@ -1052,9 +1103,9 @@ namespace hgl
     }
 
     /**
-    * 将一个字符串中的字母全部改为大写
-    * @param src 要处理的字符串
-    */
+     * 将一个字符串中的字母全部改为大写
+     * @param src 要处理的字符串
+     */
     template<typename T>
     void toupper(T *str)
     {
@@ -1070,9 +1121,9 @@ namespace hgl
     }
 
     /**
-    * 将一个字符串中的字母全部改为小写
-    * @param src 要处理的字符串
-    */
+     * 将一个字符串中的字母全部改为小写
+     * @param src 要处理的字符串
+     */
     template<typename T>
     void tolower(T *str)
     {
@@ -1088,9 +1139,9 @@ namespace hgl
     }
 
     /**
-    * 将一个字符串中的字母全部改为大写
-    * @param src 要处理的字符串
-    */
+     * 将一个字符串中的字母全部改为大写
+     * @param src 要处理的字符串
+     */
     template<typename T>
     void toupper(const T *src,T *dst)
     {
@@ -1117,9 +1168,9 @@ namespace hgl
     }
 
     /**
-    * 将一个字符串中的字母全部改为小写
-    * @param src 要处理的字符串
-    */
+     * 将一个字符串中的字母全部改为小写
+     * @param src 要处理的字符串
+     */
     template<typename T>
     void tolower(const T *src,T *dst)
     {
@@ -1146,11 +1197,11 @@ namespace hgl
     }
 
     /**
-    * 统计在字符串中某个字符的出现次数
-    * @param str 字符串
-    * @param ch
-    * @return 出现次数
-    */
+     * 统计在字符串中某个字符的出现次数
+     * @param str 字符串
+     * @param ch
+     * @return 出现次数
+     */
     template<typename T>
     int stat_char(T *str,T ch)
     {
@@ -1170,8 +1221,8 @@ namespace hgl
     }
 
     /**
-    * 统计一个字符串的行数
-    */
+     * 统计一个字符串的行数
+     */
     template<typename T>
     int stat_line(T *str)
     {
@@ -1180,7 +1231,7 @@ namespace hgl
         T *p=str+strlen(str)-1;
 
         if(*p=='\n')return(stat_char(str,'\n'));
-            else return(stat_char(str,'\n')+1);
+        else return(stat_char(str,'\n')+1);
     }
 
     template<typename R,typename S>
@@ -1321,13 +1372,13 @@ namespace hgl
             if(*str>='0'&&*str<='9')
                 result+=(*str-'0');
             else
-            if(*str>='a'&&*str<='f')
-                result+=(*str-'a')+10;
-            else
-            if(*str>='A'&&*str<='F')
-                result+=(*str-'A')+10;
+                if(*str>='a'&&*str<='f')
+                    result+=(*str-'a')+10;
+                else
+                    if(*str>='A'&&*str<='F')
+                        result+=(*str-'A')+10;
 
-            ++str;
+                    ++str;
         }
 
         return(true);
@@ -1351,14 +1402,14 @@ namespace hgl
             if(*str>='0'&&*str<='9')
                 result+=(*str-'0');
             else
-            if(*str>='a'&&*str<='f')
-                result+=(*str-'a')+10;
-            else
-            if(*str>='A'&&*str<='F')
-                result+=(*str-'A')+10;
+                if(*str>='a'&&*str<='f')
+                    result+=(*str-'a')+10;
+                else
+                    if(*str>='A'&&*str<='F')
+                        result+=(*str-'A')+10;
 
-            ++str;
-            --size;
+                    ++str;
+                --size;
         }
 
         return(true);
@@ -1486,8 +1537,8 @@ namespace hgl
     }
 
     /**
-    * 转换带指数的字符串到数值变量(如"1.0123e-10")
-    */
+     * 转换带指数的字符串到数值变量(如"1.0123e-10")
+     */
     template<typename R,typename S>
     bool etof(S *str,R &result)
     {
@@ -1524,10 +1575,10 @@ namespace hgl
     }
 
     /**
-    * 转换一个字符串到bool型
-    * @param str 要转换的字符串
-    * @return 转换后的值
-    */
+     * 转换一个字符串到bool型
+     * @param str 要转换的字符串
+     * @return 转换后的值
+     */
     template<typename T>
     bool stob(T *str,bool &value)
     {
@@ -1538,7 +1589,7 @@ namespace hgl
         }
 
         if(*str=='T'||*str=='t'			//true/false
-        ||*str=='Y'||*str=='y'			//yes/no
+            ||*str=='Y'||*str=='y'			//yes/no
         ||*str=='M'||*str=='m'			//male/women
         ||*str=='1')					//1/0
         {
@@ -1553,12 +1604,12 @@ namespace hgl
     }
 
     /**
-    * 转换一个有符号整数到字符串
-    * @param str 转换后的字符串存放处
-    * @param size 存放处可容纳的字符数
-    * @param num 要转换的数值
-    * @return 转换后的字符串长度
-    */
+     * 转换一个有符号整数到字符串
+     * @param str 转换后的字符串存放处
+     * @param size 存放处可容纳的字符数
+     * @param num 要转换的数值
+     * @return 转换后的字符串长度
+     */
     template<typename T,typename I>
     int itos_rl(T *str,int size,const I num)
     {
@@ -1597,12 +1648,12 @@ namespace hgl
     }
 
     /**
-    * 转换一个有符号整数到字符串
-    * @param str 转换后的字符串存放处
-    * @param size 存放处可容纳的字符数
-    * @param num 要转换的数值
-    * @return 转换后的字符串
-    */
+     * 转换一个有符号整数到字符串
+     * @param str 转换后的字符串存放处
+     * @param size 存放处可容纳的字符数
+     * @param num 要转换的数值
+     * @return 转换后的字符串
+     */
     template<typename T,typename I>
     T *itos(T *str,int size,const I num)
     {
@@ -1611,12 +1662,12 @@ namespace hgl
     }
 
     /**
-    * 转换一个无符号整数到字符串
-    * @param str 转换后的字符串存放处
-    * @param size 存放处可容纳的字符数
-    * @param value 要转换的数值
-    * @return 转换后的字符串
-    */
+     * 转换一个无符号整数到字符串
+     * @param str 转换后的字符串存放处
+     * @param size 存放处可容纳的字符数
+     * @param value 要转换的数值
+     * @return 转换后的字符串
+     */
     template<typename T,typename U>
     T *utos(T *str,int size,U value)
     {
@@ -1645,13 +1696,13 @@ namespace hgl
     }
 
     /**
-    * 转换一个无符号整数到字符串(以16进制表示)
-    * @param str 转换后的字符串存放处
-    * @param size 存放处可容纳的字符数
-    * @param value 要转换的数值
-    * @param upper 大小写
-    * @return 转换后的字符串
-    */
+     * 转换一个无符号整数到字符串(以16进制表示)
+     * @param str 转换后的字符串存放处
+     * @param size 存放处可容纳的字符数
+     * @param value 要转换的数值
+     * @param upper 大小写
+     * @return 转换后的字符串
+     */
     template<typename T,typename U>
     T *htos(T *str,int size,U value,bool upper=true)
     {
@@ -1694,30 +1745,30 @@ namespace hgl
     }
 
     /**
-    * 转换一个无符号整数到字符串(以大写16进制表示)
-    * @param str 转换后的字符串存放处
-    * @param size 存放处可容纳的字符数
-    * @param value 要转换的数值
-    * @return 转换后的字符串
-    */
+     * 转换一个无符号整数到字符串(以大写16进制表示)
+     * @param str 转换后的字符串存放处
+     * @param size 存放处可容纳的字符数
+     * @param value 要转换的数值
+     * @return 转换后的字符串
+     */
     template<typename T,typename U> T *htos_upper(T *str,int size,U value){return htos<T,U>(str,size,value,true);}
 
     /**
-    * 转换一个无符号整数到字符串(以小写16进制表示)
-    * @param str 转换后的字符串存放处
-    * @param size 存放处可容纳的字符数
-    * @param value 要转换的数值
-    * @return 转换后的字符串
-    */
+     * 转换一个无符号整数到字符串(以小写16进制表示)
+     * @param str 转换后的字符串存放处
+     * @param size 存放处可容纳的字符数
+     * @param value 要转换的数值
+     * @return 转换后的字符串
+     */
     template<typename T,typename U> T *htos_lower(T *str,int size,U value){return htos<T,U>(str,size,value,false);}
 
     /**
-    * 转换一个浮点数到字符串
-    * @param str 字符串保存指针
-    * @param size 字符串保存空间长度
-    * @param fsize 小数部分保留长度
-    * @param value 要转换的值
-    */
+     * 转换一个浮点数到字符串
+     * @param str 字符串保存指针
+     * @param size 字符串保存空间长度
+     * @param fsize 小数部分保留长度
+     * @param value 要转换的值
+     */
     template<typename T,typename F>
     T *ftos(T *str,int size,int fsize,F value)
     {
@@ -1773,12 +1824,12 @@ namespace hgl
     }
 
     /**
-    * 转换一个整数到计算机表示法
-    * @param str 字符串保存指针
-    * @param size 字符串保存空间长度
-    * @param value 要转换的值
-    * @return 是否转换成功
-    */
+     * 转换一个整数到计算机表示法
+     * @param str 字符串保存指针
+     * @param size 字符串保存空间长度
+     * @param value 要转换的值
+     * @return 是否转换成功
+     */
     template<typename T,typename V>
     bool int_to_size(T *str,int size,V value)
     {
@@ -1819,18 +1870,18 @@ namespace hgl
         for(int i=1;i<count;i++)
             if(stricmp<T>(str_array[i],str)==0)return(i);
 
-        return(-1);
+            return(-1);
     }
 
     /**
-    * 解析数值阵列字符串到数组,如"1,2,3"或"1 2 3"
-    * @param str 要解析的字符串
-    * @param result 结果数组
-    * @param max_count 最大个数
-    * @param end_char 结尾字符,默认为0
-    * @param end_pointer 结束指针
-    * @return 解晰出来的数据数量
-    */
+     * 解析数值阵列字符串到数组,如"1,2,3"或"1 2 3"
+     * @param str 要解析的字符串
+     * @param result 结果数组
+     * @param max_count 最大个数
+     * @param end_char 结尾字符,默认为0
+     * @param end_pointer 结束指针
+     * @return 解晰出来的数据数量
+     */
     template<typename T,typename I,bool (*IS_FUNC)(const T &),bool (*STOV)(const T *str,I &)>
     int parse_number_array(const T *str,I *result,int max_count,const T end_char=0,const T **end_pointer=0)
     {
@@ -1895,13 +1946,13 @@ namespace hgl
     template<typename T,typename I> inline int parse_xint_array	(const T *str,I *result,int max_count,const T end_char=0,const T **end_pointer=0){return parse_number_array<T,I,hgl::isxdigit,	hgl::xtou>(str,result,max_count,end_char,end_pointer);}
 
     /**
-    * 解析数值阵列字符串到数组,如"1,2,3"或"1 2 3"
-    * @param str 要解析的字符串
-    * @param str_len 字符串的长度
-    * @param result_list 结果数组
-    * @return 解晰出来的数据数量
-    * @return -1 出错
-    */
+     * 解析数值阵列字符串到数组,如"1,2,3"或"1 2 3"
+     * @param str 要解析的字符串
+     * @param str_len 字符串的长度
+     * @param result_list 结果数组
+     * @return 解晰出来的数据数量
+     * @return -1 出错
+     */
     template<typename T,typename I,typename SET,bool (*IS_FUNC)(const T &),bool (*STOV)(const T *str,I &)>
     int parse_number_array(const T *str,const int str_len,SET &result_list)
     {
@@ -2004,11 +2055,11 @@ namespace hgl
     }
 
     /**
-    * 将一个字符串转换成对应的枚举值
-    * @param list 对应的字符串列表,以0结尾,如:const char *target_list[]={"self","line","circle","\0"};
-    * @param str 要查找的字节串
-    * @return 返回查找出的序号,-1表示失败
-    */
+     * 将一个字符串转换成对应的枚举值
+     * @param list 对应的字符串列表,以0结尾,如:const char *target_list[]={"self","line","circle","\0"};
+     * @param str 要查找的字节串
+     * @return 返回查找出的序号,-1表示失败
+     */
     template<typename T> int string_to_enum(const T **list,const T *str)
     {
         if(!str||!list)return(-1);
@@ -2027,8 +2078,8 @@ namespace hgl
     }
 
     /**
-    * 检测字符串是否符合代码命名规则（仅可使用字母和数字、下划线，不能使用数字开头）
-    */
+     * 检测字符串是否符合代码命名规则（仅可使用字母和数字、下划线，不能使用数字开头）
+     */
     template<typename T> bool check_codestr(const T *str)
     {
         if(!str)return(false);
@@ -2045,12 +2096,12 @@ namespace hgl
             if(!iscodechar(*str++))
                 return(false);
 
-        return(true);
+            return(true);
     }
 
     /**
-    * 检测字符串是否包含不可程序使用字符
-    */
+     * 检测字符串是否包含不可程序使用字符
+     */
     template<typename T> bool check_error_char(const T *str)
     {
         if(!str)return(false);
@@ -2076,35 +2127,35 @@ namespace hgl
             '&',
             '!',
             0};
-        const char *sp;
+            const char *sp;
 
-        while(*str)
-        {
-            if(isspace(*str))
-                return(false);
-
-            sp=err_chr;
-
-            while(*sp)
+            while(*str)
             {
-                if(*str==*sp)
+                if(isspace(*str))
                     return(false);
 
-                ++sp;
+                sp=err_chr;
+
+                while(*sp)
+                {
+                    if(*str==*sp)
+                        return(false);
+
+                    ++sp;
+                }
+
+                ++str;
             }
 
-            ++str;
-        }
-
-        return(true);
+            return(true);
     }
 
     /**
-    * 解晰一个10进制字符到数值
-    * @param ch 字符
-    * @param num 进制
-    * @return 解析出来的值
-    */
+     * 解晰一个10进制字符到数值
+     * @param ch 字符
+     * @param num 进制
+     * @return 解析出来的值
+     */
     inline int parse_dec_number_char(const int ch)
     {
         if(ch>='0'&&ch<='9')
@@ -2114,10 +2165,10 @@ namespace hgl
     }
 
     /**
-    * 解析一个多进制字符到数值
-    * @param ch 字符
-    * @return 解析出来的值
-    */
+     * 解析一个多进制字符到数值
+     * @param ch 字符
+     * @return 解析出来的值
+     */
     template<uint NUM,typename T>
     inline int parse_number_char(const T ch)
     {
@@ -2134,12 +2185,12 @@ namespace hgl
     }
 
     /**
-    * 解晰一个16进制数值字符串
-    * @param dst 解晰出来的原始数据存入处
-    * @param src 用来解晰的16进制数值字符串
-    * @param size 原始数据字节数/2
-    */
-	template<typename T>
+     * 解晰一个16进制数值字符串
+     * @param dst 解晰出来的原始数据存入处
+     * @param src 用来解晰的16进制数值字符串
+     * @param size 原始数据字节数/2
+     */
+    template<typename T>
     inline void ParseHexStr(uint8 *dst,const T *src,const int size)
     {
         for(int i=0;i<size;i++)
@@ -2153,10 +2204,10 @@ namespace hgl
     }
 
     /**
-    * 将一个16进制数值字符串转换成原始数据
-    * @param str 16进制数值字符串
-    * @param hc 解晰出来的原始数据存入处
-    */
+     * 将一个16进制数值字符串转换成原始数据
+     * @param str 16进制数值字符串
+     * @param hc 解晰出来的原始数据存入处
+     */
     template<typename T,typename HC>
     void ParseHexStr(HC &hc,const T *str)
     {
@@ -2164,13 +2215,13 @@ namespace hgl
     }
 
     /**
-    * 将一串原始数据转转成16进制数值字符串
-    * @param str 16进制数值字符串存入处
-    * @param src 原始的数据
-    * @param size 原始数据字节长度
-    * @param hexstr 用于转换的16进制字符
-    * @param gap_char 间隔字符
-    */
+     * 将一串原始数据转转成16进制数值字符串
+     * @param str 16进制数值字符串存入处
+     * @param src 原始的数据
+     * @param size 原始数据字节长度
+     * @param hexstr 用于转换的16进制字符
+     * @param gap_char 间隔字符
+     */
     template<typename T>
     void DataToHexStr(T *str,const uint8 *src,const int size,const char *hexstr,const T gap_char=0)
     {
@@ -2199,12 +2250,12 @@ namespace hgl
     template<typename T> void DataToUpperHexStr(T *str,const uint8 *src,const int size,const T gap_char=0){DataToHexStr<T>(str,src,size,UpperHexChar,gap_char);}
 
     /**
-    * 将一串原始数据转转成16进制数值字符串
-    * @param str 16进制数值字符串存入处
-    * @param hc 原始的数据
-    * @param hexstr 用于转换的16进制字符
-    * @param gap_char 间隔字符
-    */
+     * 将一串原始数据转转成16进制数值字符串
+     * @param str 16进制数值字符串存入处
+     * @param hc 原始的数据
+     * @param hexstr 用于转换的16进制字符
+     * @param gap_char 间隔字符
+     */
     template<typename T,typename HC>
     void DataToHexStr(T *str,const HC &hc,const T *hexstr,const T gap_char=0)
     {
@@ -2216,5 +2267,5 @@ namespace hgl
 
     template<typename T> void ToUpperHexStr(T *str,const void *data,const int size,const T gap_char=0){DataToHexStr<T>(str,(const uint8 *)data,size,UpperHexChar,gap_char);}
     template<typename T> void ToLowerHexStr(T *str,const void *data,const int size,const T gap_char=0){DataToHexStr<T>(str,(const uint8 *)data,size,LowerHexChar,gap_char);}
-}//namespace hgl
+    }//namespace hgl
 #endif//HGL_STR_TEMPLATE_INCLUDE
