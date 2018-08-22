@@ -50,22 +50,14 @@ namespace hgl
         template<typename T>
         inline BaseString<T> ClipFilename(const BaseString<T> &fullname)
         {
-            const int rpos=fullname.FindRightChar('/');
-            const int lpos=fullname.FindRightChar('\\');
+            const int pos=fullname.FindRightChar("/\\");
 
-            if(rpos==-1&&lpos==-1)
+            if(pos==-1)
             {
                 return BaseString<T>(fullname);
             }
 
-            if(rpos>lpos)
-            {
-                return BaseString<T>(fullname.c_str()+rpos+1,fullname.Length()-1-rpos);
-            }
-            else
-            {
-                return BaseString<T>(fullname.c_str()+lpos+1,fullname.Length()-1-lpos);
-            }
+            return BaseString<T>(fullname.c_str()+pos+1,fullname.Length()-1-pos);
         }
 
         inline UTF8String MergeFilename(const UTF8String &pathname,const UTF8String &filename)          ///<组合路径名与文件名
