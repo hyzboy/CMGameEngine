@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include<hgl/type/BaseString.h>
 #include<hgl/type/StringList.h>
@@ -92,7 +92,7 @@ namespace hgl
 
         using PAttrib<C,bool>::PAttrib;
 
-        const bool ParseFromString(const BaseString<C> &str)
+        const bool ParseFromString(const BaseString<C> &str) override
         {
             if(str.ToBool(this->value))
                 return(true);
