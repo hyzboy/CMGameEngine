@@ -51,14 +51,14 @@ namespace hgl
         inline BaseString<T> ClipFilename(const BaseString<T> &fullname)
         {
             if(fullname.Length()<=1)
-                return(BaseString<T>(fullname));
+                return(BaseString<T>());
 
             const int pos=fullname.FindRightChar("/\\");
 
             if(pos==-1)
                 return BaseString<T>(fullname);
 
-            return BaseString<T>(fullname.c_str()+pos+1,fullname.Length()-1-pos);
+            return BaseString<T>();
         }
 
         /**
@@ -68,7 +68,7 @@ namespace hgl
         inline BaseString<T> ClipLastPathname(const BaseString<T> &fullname)
         {
             if(fullname.Length()<=1)
-                return(BaseString<T>(fullname));
+                return(BaseString<T>());
 
             const T gap_char[2]={'\\','/'};
 
@@ -101,7 +101,7 @@ namespace hgl
                 }
             }
 
-            return(BaseString<T>(fullname));
+            return(BaseString<T>());
         }
 
         inline UTF8String MergeFilename(const UTF8String &pathname,const UTF8String &filename)          ///<组合路径名与文件名
