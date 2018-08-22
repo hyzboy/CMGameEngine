@@ -71,15 +71,21 @@ namespace hgl
 			{
 				fos=new FileOutputStream();
 
-				fos->Open(filename);
+				if(!fos->Open(filename))
+                {
+                    delete fos;
+                    fos=nullptr;
+                }
 			}
 
 			~OpenFileOutputStream()
 			{
 				SAFE_CLEAR(fos);
-			}
+            }
 
+            const bool operator !(){return !fos;}
 			operator FileOutputStream *(){return fos;}
+			FileOutputStream *operator &(){return fos;}
 			FileOutputStream *operator ->(){return fos;}
 		};//class OpenFileInputStream
 	}//namespace io
