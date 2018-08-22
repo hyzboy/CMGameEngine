@@ -20,6 +20,8 @@ ENDIF()
 add_subdirectory(datatype)
 add_subdirectory(time)
 
+add_subdirectory(filesystem)
+
 IF(BUILD_DATABASE)
     add_subdirectory(database)
 

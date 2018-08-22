@@ -14,7 +14,8 @@ SET(BASE_OTHER_SOURCE
     Other/TimeCount.cpp
 	Other/TimeVal.cpp
     Other/DateTime.cpp
-    Other/CodePage.cpp)
+    Other/CodePage.cpp
+    Other/EnumFile.cpp)
 
 SOURCE_GROUP("Other"                FILES ${BASE_OTHER_SOURCE})
 

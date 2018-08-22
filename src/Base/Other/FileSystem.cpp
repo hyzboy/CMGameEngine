@@ -290,43 +290,5 @@ namespace hgl
             fi.size=file_state.st_size;
             return(true);
         }
-
-        namespace
-        {
-            struct EnumFileInfo :public EnumFileConfig
-            {
-                List<FileInfo> *fi_list;
-            };
-        }
-
-        EnumFileConfig *DefaultCreateSubConfig(struct EnumFileConfig *efc,const OSString &sub_folder_name)
-        {
-            const OSString full_sub_folder_name=MergeFilename(efc->folder_name,sub_folder_name);
-
-            return(new EnumFileConfig(efc,full_sub_folder_name));
-        }
-
-        void AddToList(struct EnumFileConfig *efc,hgl::filesystem::FileInfo &fi)
-        {
-            EnumFileInfo *efi = (EnumFileInfo *)efc;
-
-            efi->fi_list->Add(fi);
-        }
-
-        int GetFileInfoList(List<FileInfo> &fi_list,const OSString &folder_name,bool proc_folder,bool proc_file,bool sub_folder)
-        {
-            EnumFileInfo efc;
-
-            efc.fi_list     = &fi_list;
-
-            efc.folder_name = folder_name;
-            efc.proc_folder = proc_folder;
-            efc.proc_file   = proc_file;
-            efc.sub_folder  = sub_folder;
-
-            efc.cb_file = AddToList;
-
-            return EnumFile(&efc);
-        }
     }//namespace filesystem
 }//namespace hgl
