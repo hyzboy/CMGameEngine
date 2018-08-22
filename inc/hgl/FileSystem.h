@@ -53,9 +53,7 @@ namespace hgl
             const int pos=fullname.FindRightChar("/\\");
 
             if(pos==-1)
-            {
                 return BaseString<T>(fullname);
-            }
 
             return BaseString<T>(fullname.c_str()+pos+1,fullname.Length()-1-pos);
         }

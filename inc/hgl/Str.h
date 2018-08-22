@@ -638,6 +638,59 @@ namespace hgl
     }
 
     /**
+     * 在字符串中从结尾处开始查找某个字符
+     * @param str 字符串
+     * @param len 字符串长度
+     * @param off 起始查找位置(倒数)
+     * @param ch 字符
+     * @return 查找到的位置指针
+     */
+    template<typename TS,typename TC>
+    TS *strrchr(TS *str,const int len,const int off,const TC ch)
+    {
+        if(!str||!(*str)||len<=0||off>=len||ch==0)return(nullptr);
+
+        TS *ep=str+len-1-off;
+
+        while(ep>=str)
+        {
+            if(*ep==ch)
+                return ep;
+
+            --ep;
+        }
+
+        return(nullptr);
+    }
+
+    /**
+     * 在字符串中从结尾处开始查找某个字符
+     * @param str 字符串
+     * @param len 字符串长度
+     * @param off 起始查找位置(倒数)
+     * @param ch 字符
+     * @param ch_count 字符个数
+     * @return 查找到的位置指针
+     */
+    template<typename TS,typename TC>
+    TS *strrchr(TS *str,const int len,const int off,const TC *ch,const int ch_count)
+    {
+        if(!str||!(*str)||len<=0||off>=len||!ch||!(*ch)||ch_count<=0)return(nullptr);
+
+        TS *ep=str+len-1-off;
+
+        while(ep>=str)
+        {
+            if(strchr(ch,*ep,ch_count))
+                return ep;
+
+            --ep;
+        }
+
+        return(nullptr);
+    }
+
+    /**
      * 比较两个字符串的大小
      * @param src 要比较的字符串
      * @param dst 要比较的字符串

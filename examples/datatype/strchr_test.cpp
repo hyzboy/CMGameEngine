@@ -13,5 +13,8 @@ int main(int,char **)
     std::cout<<"strchr(str,\"el\",2) return "<<hgl::strchr(str,"el",2)<<std::endl;
     std::cout<<"strrchr(str,strlen(str),\"el\",2) return "<<hgl::strrchr(str,strlen(str),"el",2)<<std::endl;
 
+    std::cout<<"strrchr(str,strlen(str),3,'l') return "<<hgl::strrchr(str,strlen(str),3,'l')<<std::endl;
+    std::cout<<"strrchr(str,strlen(str),3,\"el\",2) return "<<hgl::strrchr(str,strlen(str),3,"el",2)<<std::endl;
+
     return 0;
 }
