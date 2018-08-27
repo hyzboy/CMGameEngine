@@ -1,4 +1,4 @@
-#include<hgl/type/BaseString.h>
+﻿#include<hgl/type/BaseString.h>
 #include<hgl/Str.h>
 #include<hgl/io/OutputStream.h>
 
@@ -22,7 +22,7 @@ namespace hgl
             }
         }//namespace
 
-        bool base64_encode(io::OutputStream *os,const uchar *input, size_t len) 
+        bool base64_encode(io::OutputStream *os,const uchar *input, size_t len)
         {
             int i = 0;
             int j = 0;
@@ -30,13 +30,13 @@ namespace hgl
             uchar char_array_4[4];
             uchar out[4];
 
-            while (len--) 
+            while (len--)
             {
                 char_array_3[i++] = *(input++);
 
                 if (i != 3)
                     continue;
-                
+
                 char_array_4[0] =  (char_array_3[0] & 0xfc) >> 2;
                 char_array_4[1] = ((char_array_3[0] & 0x03) << 4) +
                                   ((char_array_3[1] & 0xf0) >> 4);
@@ -44,7 +44,7 @@ namespace hgl
                                   ((char_array_3[2] & 0xc0) >> 6);
                 char_array_4[3] =   char_array_3[2] & 0x3f;
 
-                for(i = 0; i <4 ; i++) 
+                for(i = 0; i <4 ; i++)
                     out[i]=base64_chars[char_array_4[i]];
 
                 if(os->Write(out,4)!=4)
@@ -53,9 +53,9 @@ namespace hgl
                 i = 0;
             }
 
-            if (i) 
+            if (i)
             {
-                for(j = i; j < 3; j++) 
+                for(j = i; j < 3; j++)
                     char_array_3[j] = '\0';
 
                 char_array_4[0] =  (char_array_3[0] & 0xfc) >> 2;
@@ -65,7 +65,7 @@ namespace hgl
                                   ((char_array_3[2] & 0xc0) >> 6);
                 char_array_4[3] =   char_array_3[2] & 0x3f;
 
-                for (j = 0; j < i + 1; j++) 
+                for (j = 0; j < i + 1; j++)
                     out[j]=base64_chars[char_array_4[j]];
 
                 if(os->Write(out,i+1)!=i+1)
@@ -88,13 +88,13 @@ namespace hgl
             int in_ = 0;
             uchar char_array_4[4], char_array_3[3];
 
-            while (in_len-- && ( input[in_] != '=') && isbase64(input[in_])) 
+            while (in_len-- && ( input[in_] != '=') && isbase64(input[in_]))
             {
                 char_array_4[i++] = input[in_]; in_++;
 
-                if (i ==4) 
+                if (i ==4)
                 {
-                    for (i = 0; i <4; i++) 
+                    for (i = 0; i <4; i++)
                         char_array_4[i] = base64_char_find(char_array_4[i]);
 
                     char_array_3[0] =  (char_array_4[0] << 2) + ((char_array_4[1] & 0x30) >> 4);
@@ -103,12 +103,12 @@ namespace hgl
 
                     if(os->Write(char_array_3,3)!=3)
                         return(false);
-                    
+
                     i = 0;
                 }
             }
 
-            if (i) 
+            if (i)
             {
                 for (j = i; j <4; j++)
                     char_array_4[j] = 0;

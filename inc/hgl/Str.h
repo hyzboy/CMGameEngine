@@ -1749,6 +1749,50 @@ namespace hgl
     }
 
     /**
+    * 转换一个无符号整数到字符串(指定进制)
+    * @param str 转换后的字符串存放处
+    * @param size 存放处可容纳的字符数
+    * @param value 要转换的数值
+    * @param base 数值进制
+    * @param upper 字母用大写
+    * @return 转换后的字符串
+    */
+    template<typename T,typename U>
+    T *utos(T *str,int size,U value,const uint base,bool upper=true)
+    {
+        if(!str||size<=0)return(nullptr);
+
+        T *p=str;
+        T buf[sizeof(U)*8],*bp;
+        uint m;
+
+        const uchar A=upper?'A':'a';
+
+        bp=buf;
+
+        while(true)
+        {
+            m=value%base;
+
+            if(m<10)
+                *bp++=m+'0';
+            else
+                *bp++=m-10+A;
+
+            if ((value = value / base) == 0)
+                break;
+        }
+
+        while(bp--!=buf&&size--)
+            *p++=*bp;
+
+        if(size)
+            *p=0;
+
+        return(str);
+    }
+
+    /**
      * 转换一个无符号整数到字符串(以16进制表示)
      * @param str 转换后的字符串存放处
      * @param size 存放处可容纳的字符数
