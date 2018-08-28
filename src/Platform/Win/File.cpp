@@ -228,6 +228,26 @@ namespace hgl
         }
 
         /**
+         * 取得当前程序所在路径
+         */
+        bool GetCurrentProgramPath(OSString &result)
+        {
+            os_char *path=new os_char[HGL_MAX_PATH];
+
+            int len=GetModuleFileNameW(nullptr,path,HGL_MAX_PATH);
+
+            os_char *right=hgl::strrchr(path,len,HGL_DIRECTORY_SEPARATOR);
+
+            if(right)
+                *right=0;
+
+            result = path;
+            delete[] path;
+
+            return(true);
+        }
+
+        /**
         * 枚举当前计算机所有卷
         * @param data 用户自定义回传信息
         * @param func 回调函数
