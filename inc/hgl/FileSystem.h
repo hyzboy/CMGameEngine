@@ -53,7 +53,9 @@ namespace hgl
             if(fullname.Length()<=1)
                 return(BaseString<T>());
 
-            const int pos=fullname.FindRightChar("/\\");
+            const T spear_char[] = { '/','\\' };
+
+            const int pos=fullname.FindRightChar(spear_char);
 
             if(pos==-1)
                 return BaseString<T>(fullname);
