@@ -79,6 +79,8 @@ namespace hgl
                 fi.can_read	=statbuf.st_mode&S_IROTH;
                 fi.can_write=statbuf.st_mode&S_IWOTH;
 
+                fi.mtime=statbuf.st_mtime;
+
                 if(S_ISDIR(statbuf.st_mode))
                 {
                     fi.is_file=false;

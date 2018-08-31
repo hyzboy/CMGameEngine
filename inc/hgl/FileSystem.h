@@ -53,9 +53,7 @@ namespace hgl
             if(fullname.Length()<=1)
                 return(BaseString<T>());
 
-            const T spear_char[] = { '/','\\' };
-
-            const int pos=fullname.FindRightChar(spear_char);
+            const int pos=fullname.FindRightChar("/\\");
 
             if(pos==-1)
                 return BaseString<T>(fullname);
@@ -166,6 +164,8 @@ namespace hgl
                     bool can_write:1;				///<可以写
                 };
             };
+
+            uint64 mtime;                           ///<最后修改日期(这个值在win/unix下不通用)
         };//struct FileInfo
 
         bool GetFileInfo(const OSString &filename,struct FileInfo &);	///<取得文件信息

@@ -91,6 +91,8 @@ namespace hgl
                 fi.can_read =true;
                 fi.can_write=!(FindFileData.dwFileAttributes&FILE_ATTRIBUTE_READONLY);
 
+                fi.mtime=*(uint64 *)&FindFileData.ftLastWriteTime;
+
                 if(FindFileData.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY)
                 {
                     fi.is_file=false;
