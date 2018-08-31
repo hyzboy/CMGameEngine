@@ -96,20 +96,18 @@ namespace hgl
                     fi.is_file=false;
                     fi.is_directory=true;
 
-                    if(config->sub_folder)
+                    EnumFileConfig *sub_efc=CreateSubConfig(config,FindFileData.cFileName);
+
+                    if(sub_efc&&config->sub_folder)
                     {
-                        EnumFileConfig *sub_efc=CreateSubConfig(config,FindFileData.cFileName);
-
-                        ProcFolder(config,sub_efc,fi);
-
-                        if(!sub_efc)
-                            continue;
-
                         sub_count=this->Enum(sub_efc);
                         if(sub_count>0)count+=sub_count;
-
-                        delete sub_efc;
                     }
+
+                    ProcFolder(config,sub_efc,fi);
+
+                    if(sub_efc)
+                        delete sub_efc;
                 }
                 else
                 {

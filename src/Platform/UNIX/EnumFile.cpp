@@ -62,8 +62,22 @@ namespace hgl
                 if(hgl_lstat64(entry->d_name,&statbuf)==-1)
                     continue;
 
+                if(S_ISDIR(statbuf.st_mode))
+                {
+                    if(!config->proc_folder)continue;
+                }
+                else
+                {
+                    if(!config->proc_file)continue;
+
+                    ++count;
+                }
+
                 memset(&fi,0,sizeof(FileInfo));
                 fi.size=statbuf.st_size;
+
+                fi.can_read	=statbuf.st_mode&S_IROTH;
+                fi.can_write=statbuf.st_mode&S_IWOTH;
 
                 if(S_ISDIR(statbuf.st_mode))
                 {
@@ -74,20 +88,6 @@ namespace hgl
                 {
                     fi.is_file=true;
                     fi.is_directory=false;
-                }
-
-                fi.can_read	=statbuf.st_mode&S_IROTH;
-                fi.can_write=statbuf.st_mode&S_IWOTH;
-
-                if(S_ISDIR(statbuf.st_mode))
-                {
-                    if(!config->proc_folder)continue;
-                }
-                else
-                {
-                    if(!config->proc_file)continue;
-
-                    ++count;
                 }
 
                 strcpy(fi.name,HGL_MAX_PATH,entry->d_name);
@@ -110,18 +110,16 @@ namespace hgl
                 {
                     EnumFileConfig *sub_efc=CreateSubConfig(config,entry->d_name);
 
-                    ProcFolder(config,sub_efc,fi);
-
-                    if(!sub_efc)
-                        continue;
-
-                    if(config->sub_folder)
+                    if(sub_efc&&config->sub_folder)
                     {
                         sub_count=this->Enum(sub_efc);
                         if(sub_count>0)count+=sub_count;
                     }
 
-                    delete sub_efc;
+                    ProcFolder(config,sub_efc,fi);
+
+                    if(sub_efc)
+                        delete sub_efc;
                 }
                 else
                 {
