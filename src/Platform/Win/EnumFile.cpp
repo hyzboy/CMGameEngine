@@ -88,6 +88,8 @@ namespace hgl
                 fi.size <<= 32;
                 fi.size |=  FindFileData.nFileSizeLow;
 
+                fi.is_hiddle=FindFileData.dwFileAttributes&FILE_ATTRIBUTE_HIDDEN;
+
                 fi.can_read =true;
                 fi.can_write=!(FindFileData.dwFileAttributes&FILE_ATTRIBUTE_READONLY);
 

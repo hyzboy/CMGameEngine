@@ -53,7 +53,9 @@ namespace hgl
             if(fullname.Length()<=1)
                 return(BaseString<T>());
 
-            const int pos=fullname.FindRightChar("/\\");
+			const T spear_char[] = { '/','\\' };
+
+            const int pos=fullname.FindRightChar(spear_char);
 
             if(pos==-1)
                 return BaseString<T>(fullname);
@@ -159,6 +161,8 @@ namespace hgl
                 {
                     bool is_file:1;					///<是文件
                     bool is_directory:1;			///<是目录
+
+                    bool is_hiddle:1;               ///<是否隐藏文件
 
                     bool can_read:1;				///<可以读
                     bool can_write:1;				///<可以写
