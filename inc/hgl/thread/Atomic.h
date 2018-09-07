@@ -3,21 +3,19 @@
 
 #include<hgl/platform/Platform.h>
 
-// #ifdef HGL_ATOMIC_CPP11
-// 	#include<atomic>
-// #else
-	#if HGL_OS == HGL_OS_Windows
-		#include<hgl/thread/atomic/AtomicWin.h>
-	#elif HGL_OS == HGL_OS_macOS
-		#include<hgl/thread/atomic/AtomicOSX.h>
-	#elif defined(__GNUC__)
-		#if ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 1) || __GNUC__ > 4) && (defined(__x86_64__) || defined(__i386__) || defined(__powerpc__))
-			#include<hgl/thread/atomic/AtomicGNU.h>
-		#else
-			#include<hgl/thread/atomic/AtomicAPR.h>
-		#endif//
-	#endif//
-// #endif//C++11 ATOMIC
+#if HGL_OS == HGL_OS_Windows
+    #include<hgl/thread/atomic/AtomicWin.h>
+#elif (HGL_OS == HGL_OS_macOS)||(HGL_OS == HGL_OS_Android)
+    #include<atomic>
+
+    template<typename T> using atom=std::atomic<T>;
+#elif defined(__GNUC__)
+    #if ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 1) || __GNUC__ > 4) && (defined(__x86_64__) || defined(__i386__) || defined(__powerpc__))
+        #include<hgl/thread/atomic/AtomicGNU.h>
+    #else
+        #include<hgl/thread/atomic/AtomicAPR.h>
+    #endif//
+#endif//
 
 //ps.1：老旧的Linux/32bit下原子仅支持24位，但我们设定为不支持旧的Linux
 //ps.2：使用GCC 4.1内置宏实现的AtomicGNU的不支持doubel型处理，如需支持，则尽可能不要用atom_double
@@ -43,10 +41,6 @@ namespace hgl
 		typedef atom_win32<u16char	> atom_char16;
 //		typedef atom_win32<char32_t	> atom_char32;
 	#else
-// 		#ifdef HGL_ATOMIC_CPP11
-// 			template<typename T> using atom=std::atomic<T>;
-// 		#endif//HGL_ATOMIC_CPP11
-
 		typedef atom<bool		> atom_bool;
 		typedef atom<int		> atom_int;
 		typedef atom<uint		> atom_uint;
