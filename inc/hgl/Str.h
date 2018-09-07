@@ -1952,6 +1952,7 @@ namespace hgl
 
         T *p=str+strlen(str);
 
+        *p++=' ';
         if(pos)
             *p++=name[pos-1];
 
