@@ -112,7 +112,7 @@ namespace hgl
 
                 if(fi.is_directory)
                 {
-                    EnumFileConfig *sub_efc=CreateSubConfig(config,entry->d_name);
+                    EnumFileConfig *sub_efc=CreateSubConfig(config,fi);
 
                     if(sub_efc&&config->sub_folder)
                     {

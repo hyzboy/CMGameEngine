@@ -100,7 +100,7 @@ namespace hgl
                     fi.is_file=false;
                     fi.is_directory=true;
 
-                    EnumFileConfig *sub_efc=CreateSubConfig(config,FindFileData.cFileName);
+                    EnumFileConfig *sub_efc=CreateSubConfig(config,fi);
 
                     if(sub_efc&&config->sub_folder)
                     {

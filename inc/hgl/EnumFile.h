@@ -55,9 +55,9 @@ namespace hgl
             virtual void ProcFolder(struct EnumFileConfig *parent_efc,struct EnumFileConfig *cur_efc,FileInfo &fi){}
             virtual void ProcFile(struct EnumFileConfig *,FileInfo &fi){}
 
-            virtual EnumFileConfig *CreateSubConfig(struct EnumFileConfig *up_efc,const OSString &sub_folder_name)
+            virtual EnumFileConfig *CreateSubConfig(struct EnumFileConfig *up_efc,const FileInfo &fi)
             {
-                const OSString full_sub_folder_name=MergeFilename(up_efc->folder_name,sub_folder_name);
+                const OSString full_sub_folder_name=MergeFilename(up_efc->folder_name,fi.name);
 
                 return(new EnumFileConfig(up_efc,full_sub_folder_name));
             }
