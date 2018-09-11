@@ -79,24 +79,6 @@ namespace hgl
 	}
 
 	/**
-	* (线程外部调用)关闭当前线程.不推荐使用此函数，正在执行的线程被强制关闭会引起无法预知的错误。
-	*/
-	bool Thread::ForceClose()
-    {
-        if(!tp)
-        {
-            LOG_ERROR(OS_TEXT("Thread::Cancel() error,tp=nullptr."));
-            return(true);
-        }
-
-        if(pthread_cancel(tp)!=0)		// 0 is success
-            return(false);
-
-        tp=0;
-        return(true);
-	}
-
-	/**
 	* 是否是当前线程
 	*/
 	bool Thread::IsCurThread()
@@ -108,22 +90,6 @@ namespace hgl
 		}
 
 		return pthread_equal(pthread_self(),tp);		//返回非0表示一致
-	}
-
-	void Thread::SetCancelState(bool enable,bool async)
-	{
-		if(enable)
-		{
-			pthread_setcancelstate(PTHREAD_CANCEL_ENABLE,nullptr);
-
-			pthread_setcanceltype(async?PTHREAD_CANCEL_ASYNCHRONOUS:			//立即触发
-										PTHREAD_CANCEL_DEFERRED					//延后
-										,nullptr);
-		}
-		else
-		{
-			pthread_setcancelstate(PTHREAD_CANCEL_DISABLE,nullptr);
-		}
 	}
 
 	void GetWaitTime(struct timespec &abstime,double t);
@@ -139,7 +105,7 @@ namespace hgl
 		int retval;
         void *res;
 
-#ifndef __APPLE__
+#if !defined(__APPLE__)&&!defined(__ANDROID__)
         if(time_out>0)
         {
             struct timespec ts;
@@ -149,7 +115,7 @@ namespace hgl
             retval=pthread_timedjoin_np(tp,&res,&ts);
         }
         else
-#endif//__APPLE__
+#endif//__APPLE__&&__ANDROID__
         {
             retval=pthread_join(tp,&res);
         }

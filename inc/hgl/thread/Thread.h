@@ -33,7 +33,7 @@ namespace hgl
 	{
 		friend void WaitThread(Thread **,int,double);
 
-	protected:
+	private:
 
 		thread_ptr tp=0;
 
@@ -41,8 +41,6 @@ namespace hgl
         ThreadMutex exit_lock;
 
 #if HGL_OS != HGL_OS_Windows
-		virtual void SetCancelState(bool,bool=true);
-
         friend void *ThreadFunc(Thread *tc);
 #else
         friend DWORD WINAPI ThreadFunc(Thread *tc);
@@ -99,7 +97,6 @@ namespace hgl
 	public:	//线程运行控制
 
 		virtual bool Start();																		///<开始运行当前线程
-		virtual bool ForceClose();                                                                  ///<强制关闭当前线程(其它线程调用)
 
 		virtual bool IsCurThread();																	///<是否是当前线程
 

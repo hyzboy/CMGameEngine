@@ -63,7 +63,11 @@ namespace hgl
             }
 
             if(!str)
+#ifdef __ANDROID__
+                return 0;
+#else
                 char_count=to_utf8(cs,&str,(char *)data,size);
+#endif//
 
             line_count=SplitToStringListByEnter<char>(sl,str,char_count);
 
@@ -129,7 +133,13 @@ namespace hgl
             if(cs==UTF8CharSet)
                 str=u8_to_u16((char *)data,size,char_count);
             else
+            {
+#ifdef __ANDROID__
+                return 0;
+#else
                 char_count=to_utf16(cs,&str,(char *)data,size);
+#endif//
+            }
 
             line_count=SplitToStringListByEnter<u16char>(sl,str,char_count);
 

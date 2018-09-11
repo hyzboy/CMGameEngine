@@ -41,7 +41,7 @@ namespace hgl
 		return(!pthread_mutex_trylock(&ptr));
 	}
 
-#ifndef __APPLE__
+#if !defined(__APPLE__)&&!defined(__ANDROID__)
 	/**
 	* 等待并取得控制权
 	* @param time 等待的最大时间,时间为0表示尝试
