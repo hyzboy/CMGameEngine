@@ -1792,6 +1792,16 @@ namespace hgl
         return(str);
     }
 
+    template<int BITS> struct htos_bits
+    {
+        template<typename T,typename U> static T *conv(T *str,int size,U value,bool upper);
+    };
+
+    template<> struct htos_bits<1>{template<typename T,typename U> static T *conv(T *str,int size,U value,bool upper){return utos(str,size,*(uint8  *)&value,16,upper);}};
+    template<> struct htos_bits<2>{template<typename T,typename U> static T *conv(T *str,int size,U value,bool upper){return utos(str,size,*(uint16 *)&value,16,upper);}};
+    template<> struct htos_bits<4>{template<typename T,typename U> static T *conv(T *str,int size,U value,bool upper){return utos(str,size,*(uint32 *)&value,16,upper);}};
+    template<> struct htos_bits<8>{template<typename T,typename U> static T *conv(T *str,int size,U value,bool upper){return utos(str,size,*(uint64 *)&value,16,upper);}};
+
     /**
      * 转换一个无符号整数到字符串(以16进制表示)
      * @param str 转换后的字符串存放处
@@ -1803,7 +1813,7 @@ namespace hgl
     template<typename T,typename U>
     T *htos(T *str,int size,U value,bool upper=true)
     {
-        return utos(str,size,value,16,upper);
+        return htos_bits<sizeof(U)>::template conv<T,U>(str,size,value,upper);
     }
 
     /**
