@@ -1803,42 +1803,7 @@ namespace hgl
     template<typename T,typename U>
     T *htos(T *str,int size,U value,bool upper=true)
     {
-        if(!str||size<=0)return(nullptr);
-
-        const T sc=(upper?'A':'a')-10;
-        int h,l;
-
-        T buf[(sizeof(U)+1)<<1];
-        T *bp=buf;
-        T *p=str;
-
-        while(value>0)
-        {
-            l=value&0xF;
-
-            if(l>=10)
-                *bp++=l+sc;
-            else
-                *bp++=l+'0';
-
-            value>>=4;
-            h=value&0xF;
-
-            if(h>=10)
-                *bp++=h+sc;
-            else
-                *bp++=h+'0';
-
-            value>>=4;
-        }
-
-        while(bp--!=buf&&size--)
-            *p++=*bp;
-
-        if(size)
-            *p=0;
-
-        return(str);
+        return utos(str,size,value,16,upper);
     }
 
     /**
