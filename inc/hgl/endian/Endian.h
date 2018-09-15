@@ -151,6 +151,8 @@ namespace hgl
                 |((value&0xFF00000000000000)>>56);
         }
 
+        template<> inline u16char EndianSwap(const u16char value){return EndianSwap(uint16(value));}
+
 		template<typename T>
 		inline void EndianSwap(T *value,const int64 count)
 		{
@@ -225,28 +227,14 @@ namespace hgl
 
 		#endif//HGL_BIG_ENDIAN
 
-		template<typename T>
-		T *swap_strcpy(const T *in_str,const int length)
-		{
-			if(length<=0||!in_str)return(nullptr);
-
-			T *out_str=new T[length+1];
-
-			EndianSwap<T>(out_str,in_str,length);
-
-			out_str[length]=0;
-
-			return out_str;
-		}
-
 		template<char> struct UTF16CharConvert;
 
 		template<> struct UTF16CharConvert<HGL_LITTLE_ENDIAN>
 		{
         #if HGL_ENDIAN == HGL_BIG_ENDIAN
-			static void convert(const u16char *str,const int length)
+			static void convert(u16char *str,const int length)
 			{
-					swap_strcpy<u16char>(str,length);
+					EndianSwap<u16char>(str,length);
 			}
         #else
             static void convert(const u16char *,const int){}
@@ -257,17 +245,17 @@ namespace hgl
 				#if HGL_ENDIAN == HGL_LITTLE_ENDIAN
 					memcpy(out_str,in_str,length*sizeof(u16char));
 				#else
-					swap_strcpy<u16char>(in_str,length);
+					EndianSwap<u16char>(in_str,length);
 				#endif//HGL_ENDIAN == HGL_LITTLE_ENDIAN
 			}
 		};//template<> struct UTF16CharConvert<HGL_LITTLE_ENDIAN>
 
 		template<> struct UTF16CharConvert<HGL_BIG_ENDIAN>
 		{
-			static void convert(const u16char *str,const int length)
+			static void convert(u16char *str,const int length)
 			{
 				#if HGL_ENDIAN == HGL_LITTLE_ENDIAN
-					swap_strcpy<u16char>(str,length);
+					EndianSwap<u16char>(str,length);
 				#endif//HGL_ENDIAN == HGL_LITTLE_ENDIAN
 			}
 
@@ -276,7 +264,7 @@ namespace hgl
 				#if HGL_ENDIAN == HGL_LITTLE_ENDIAN
 					memcpy(out_str,in_str,length*sizeof(u16char));
 				#else
-					swap_strcpy<u16char>(in_str,length);
+					EndianSwap<u16char>(in_str,length);
 				#endif//HGL_ENDIAN == HGL_LITTLE_ENDIAN
 			}
 		};//template<> struct UTF16ToWideChar<HGL_BIG_ENDIAN>
