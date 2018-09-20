@@ -76,4 +76,13 @@ typedef pthread_mutex_t         hgl_thread_mutex;
 
 #define sprintf_s				snprintf
 //--------------------------------------------------------------------------------------------------
+//初始化Android支持，以下函数二选一
+
+#include<jni.h>
+
+void InitAndroidSupport(JNIEnv *env,jobject obj);           //JNI混编模式初始化Android支持
+
+struct ANativeActivity;
+void InitAndroidSupport(struct ANativeActivity *app);           //NativeActivity模式初始化Android支持
+//--------------------------------------------------------------------------------------------------
 #endif//HGL_OS_ANDROID_INCLUDE

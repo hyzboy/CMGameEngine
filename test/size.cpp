@@ -1,5 +1,5 @@
-#include<stdio.h>
-#include<hgl/VectorMath.h>
+﻿#include<stdio.h>
+#include<hgl/algorithm/VectorMath.h>
 
 template<typename T>
 void test(T &t)

@@ -6,8 +6,15 @@ IF(BUILD_QT5_SUPPORT_LIB)
     add_subdirectory(QT)
 ENDIF()
 
-IF(UNIX)
 
+if(ANDROID)
+    SET(PLATFORM_LOG_SOURCE             Android/LogConsole.cpp
+                                        Android/LogFile.cpp)
+
+    SET(PLATFORM_APPLICATION_SOURCE     ${PLATFORM_APPLICATION_SOURCE}
+                                        Android/JNISupport.cpp
+                                        Android/NativeActivitySupport.cpp)
+ELSEIF(UNIX)
     SET(PLATFORM_FILE_SOURCE            UNIX/File.cpp
                                         UNIX/FileAccess.cpp
                                         UNIX/EnumFile.cpp)
@@ -24,14 +31,13 @@ IF(UNIX)
                                         UNIX/Thread.cpp
                                         UNIX/ThreadMutex.cpp)
 
-IF(APPLE)
-    SET(PLATFORM_MULTI_THREAD_SOURCE    ${PLATFORM_MULTI_THREAD_SOURCE}
-                                        Apple/Semaphore.cpp)
-ELSE()
-    SET(PLATFORM_MULTI_THREAD_SOURCE    ${PLATFORM_MULTI_THREAD_SOURCE}
-                                        UNIX/Semaphore.cpp)
-
-ENDIF()
+    IF(APPLE)
+        SET(PLATFORM_MULTI_THREAD_SOURCE    ${PLATFORM_MULTI_THREAD_SOURCE}
+                                            Apple/Semaphore.cpp)
+    ELSE()
+        SET(PLATFORM_MULTI_THREAD_SOURCE    ${PLATFORM_MULTI_THREAD_SOURCE}
+                                            UNIX/Semaphore.cpp)
+    ENDIF()
 
     SET(PLATFORM_MULTI_PROCESS_SOURCE   UNIX/ProcMutex.cpp
                                         UNIX/Process.cpp
@@ -43,10 +49,7 @@ ENDIF()
                                         UNIX/DateTime.cpp)
 
     SET(PLATFORM_EXTERNAL_MODULE_SOURCE UNIX/ExternalModule.cpp)
-ENDIF(UNIX)
-
-IF(WIN32)
-
+ELSEIF(WIN32)
     SET(PLATFORM_FILE_SOURCE            Win/File.cpp
                                         Win/FileAccess.cpp
                                         Win/EnumFile.cpp)

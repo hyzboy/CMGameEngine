@@ -1,4 +1,4 @@
-﻿#include<hgl/io/TextOutputStream.h>
+#include<hgl/io/TextOutputStream.h>
 #include<pwd.h>
 #include<unistd.h>
 
