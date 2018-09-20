@@ -1,4 +1,6 @@
-﻿struct android_app
+﻿NDK
+
+struct android_app
 {
     /**
     * Path to this application's internal data directory.
@@ -10,3 +12,11 @@
     */
     const char* externalDataPath;
 }
+
+Java:
+
+    GetFilesDir();
+
+AppData:
+
+    /data/data/<app name>/
