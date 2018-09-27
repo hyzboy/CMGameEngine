@@ -6,15 +6,16 @@ IF(BUILD_QT5_SUPPORT_LIB)
     add_subdirectory(QT)
 ENDIF()
 
-
-if(ANDROID)
+IF(ANDROID)
     SET(PLATFORM_LOG_SOURCE             Android/LogConsole.cpp
                                         Android/LogFile.cpp)
 
     SET(PLATFORM_APPLICATION_SOURCE     ${PLATFORM_APPLICATION_SOURCE}
                                         Android/JNISupport.cpp
                                         Android/NativeActivitySupport.cpp)
-ELSEIF(UNIX)
+ENDIF()
+
+IF(UNIX)
     SET(PLATFORM_FILE_SOURCE            UNIX/File.cpp
                                         UNIX/FileAccess.cpp
                                         UNIX/EnumFile.cpp)
@@ -49,7 +50,9 @@ ELSEIF(UNIX)
                                         UNIX/DateTime.cpp)
 
     SET(PLATFORM_EXTERNAL_MODULE_SOURCE UNIX/ExternalModule.cpp)
-ELSEIF(WIN32)
+ENDIF()
+
+IF(WIN32)
     SET(PLATFORM_FILE_SOURCE            Win/File.cpp
                                         Win/FileAccess.cpp
                                         Win/EnumFile.cpp)

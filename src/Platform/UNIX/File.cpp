@@ -150,6 +150,21 @@ namespace hgl
             return S_ISDIR(buf.st_mode);
         }
 
+        /**
+         * 判断当前名称是否是一个链接
+         */
+        bool IsLink(const os_char *name)
+        {
+            struct_stat64 buf;
+
+            memset(&buf,0,sizeof(struct_stat64));
+
+            if(hgl_lstat64(name,&buf)==-1)
+                return(false);				//错误，有可能是不能访问
+
+            return S_ISLNK(buf.st_mode);
+        }
+
         bool MakeDirectory(const OSString &name)
         {
             if(!mkdir(name,S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH))return(true);

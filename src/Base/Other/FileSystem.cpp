@@ -158,6 +158,8 @@ namespace hgl
             os_char str[HGL_MAX_PATH];
             os_char *sp;
 
+            FileInfo fi;
+
             strcpy(str,HGL_MAX_PATH,dirname.c_str());
 
             sp=GetRootPath(str);
@@ -172,9 +174,17 @@ namespace hgl
                 if(*sp==0)
                     return(true);
 
-                if(!IsDirectory(str))//没有找到
+                if(!GetFileInfo(str,fi))    //没有找到
+                {
                     if(!MakeDirectory(str))
                         return(false);
+                }
+                else
+                {
+                    if(!fi.is_directory)        //不是目录
+                        if(!fi.is_link)         //还不是链接
+                            return(false);
+                }
 
                 if(p)
                     *p++=directory_separator;
@@ -264,28 +274,28 @@ namespace hgl
             return fs.Write(offset,data,length);
         }
 
-        bool GetFileInfo(const OSString &filename,struct FileInfo &fi)
+        bool GetFileInfo(const os_char *filename,struct FileInfo &fi)
         {
+            if(!filename||!*filename)
+                return(false);
+
             struct_stat64 file_state;
 
             memset(&file_state,0,sizeof(struct_stat64));
 
-            if(hgl_lstat64(filename.c_str(),&file_state)==-1)
+            if(hgl_lstat64(filename,&file_state)==-1)
                 return(false);
 
             memset(&fi,0,sizeof(FileInfo));
 
             if(file_state.st_mode&S_IFREG)
-            {
                 fi.is_file=true;
-                fi.is_directory=false;
-            }
 
             if(file_state.st_mode&S_IFDIR)
-            {
-                fi.is_file=false;
                 fi.is_directory=true;
-            }
+
+            if(file_state.st_mode&S_IFLNK)
+                fi.is_link=true;
 
             fi.size=file_state.st_size;
             return(true);

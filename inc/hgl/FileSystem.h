@@ -133,6 +133,10 @@ namespace hgl
         bool IsDirectory(const os_char *);
         inline	bool IsDirectory(const OSString &str){return IsDirectory(str.c_str());}					///<判断这个名称是否是目录
 
+#if HGL_OS != HGL_OS_Windows
+        bool IsLink(const os_char *);                                                                   ///<判断这个名称是否是链接
+#endif//
+
         bool MakePath(const OSString &);																///<创建一个路径
         bool DeletePath(const OSString &);																///<删除一个路径
         void DeleteTree(const OSString &);																///<删除一个路径(包含所有文件)
@@ -164,6 +168,8 @@ namespace hgl
 
                     bool is_hiddle:1;               ///<是否隐藏文件
 
+                    bool is_link:1;                 ///<是否是链接
+
                     bool can_read:1;				///<可以读
                     bool can_write:1;				///<可以写
                 };
@@ -172,7 +178,7 @@ namespace hgl
             uint64 mtime;                           ///<最后修改日期(这个值在win/unix下不通用)
         };//struct FileInfo
 
-        bool GetFileInfo(const OSString &filename,struct FileInfo &);	///<取得文件信息
+        bool GetFileInfo(const os_char *filename,struct FileInfo &);	///<取得文件信息
 
         int GetFileInfoList(List<FileInfo> &, const OSString &folder_name, bool proc_folder, bool proc_file, bool sub_folder);
 
