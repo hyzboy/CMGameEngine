@@ -22,9 +22,9 @@ namespace hgl
                                                             ANDROID_LOG_VERBOSE};       //llLog
 
 		/**
-		* unix控制台日志插件接口
+		* Android控制台日志插件接口
 		*/
-		class LogUnixConsole:public Logger
+		class LogAndroidConsole:public Logger
 		{
 			char endline;
             char thread_string[256];
@@ -39,7 +39,7 @@ namespace hgl
 
 		public:
 
-			LogUnixConsole(LogLevel ll):Logger(ll)
+			LogAndroidConsole(LogLevel ll):Logger(ll)
 			{
                 prio=android_priority[ll];
 
@@ -132,14 +132,14 @@ namespace hgl
 				mutex.Unlock();
 			#endif//LOGINFO_THREAD_MUTEX
 			}
-		};//class LogInterface
+		};//class LogAndroidConsole:public Logger
 
 		Logger *CreateLoggerConsole(const OSString &,LogLevel ll)
 		{
 			if(ll<llError)
 				return(nullptr);
 
-			return(new LogUnixConsole(ll));
+			return(new LogAndroidConsole(ll));
 		}
 	}//logger
 }//namespace hgl
