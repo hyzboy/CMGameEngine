@@ -1,21 +1,39 @@
 ﻿#include<hgl/network/HTTPInputStream.h>
-#include<hgl/network/Socket.h>
+#include<hgl/network/TCPClient.h>
 #include<hgl/LogInfo.h>
-#include<hgl/Other.h>
+#include<hgl/type/Smart.h>
 
 namespace hgl
 {
 	namespace network
 	{
+        namespace
+        {
+            constexpr char HTTP_REQUEST_HEADER_BEGIN[]= " HTTP/1.1\n"
+                                                        "Host: ";
+            constexpr uint HTTP_REQUEST_HEADER_BEGIN_SIZE=sizeof(HTTP_REQUEST_HEADER_BEGIN)-1;
+
+            constexpr char HTTP_REQUEST_HEADER_END[]=   "\n"
+                                                        "Accept: */*\n"
+                                                        "User-Agent: Mozilla/5.0\n"
+                                                        "Connection: Keep-Alive\n\n";
+
+            constexpr uint HTTP_REQUEST_HEADER_END_SIZE=sizeof(HTTP_REQUEST_HEADER_END)-1;
+
+            constexpr uint HTTP_HEADER_BUFFER_SIZE=HGL_SIZE_1KB*4;
+        }
+
 		HTTPInputStream::HTTPInputStream()
 		{
 			tcp=nullptr;
 
-			http_header=nullptr;
-			http_header_size=-1;
-
 			pos=-1;
 			filelength=-1;
+
+            tcp_is=nullptr;
+
+            http_header=new char[HTTP_HEADER_BUFFER_SIZE];
+            http_header_size=0;
 		}
 
 		HTTPInputStream::~HTTPInputStream()
@@ -29,85 +47,53 @@ namespace hgl
 		* @param filename 路径及文件名 /download/hgl.rar 之类
 		* @return 打开文件是否成功
 		*/
-		bool HTTPInputStream::Open(const UTF8String &host,const UTF8String &filename)
+		bool HTTPInputStream::Open(IPAddress *host_ip,const UTF8String &filename)
 		{
 			Close();
 
-			//查找服务器
-			in_addr iaHost;
-			hostent *HostEntry=nullptr;
+            if(!host_ip)
+                RETURN_FALSE;
 
-			memset(&iaHost,0,sizeof(in_addr));
+            if(filename.IsEmpty())
+                RETURN_FALSE;
 
-			iaHost.s_addr=inet_addr(host);
+            tcp=CreateTCPClient(host_ip);
 
-			if(iaHost.s_addr==INADDR_NONE)HostEntry=gethostbyname(host);
-		//                             else HostEntry=gethostbyaddr((char *)&iaHost,sizeof(in_addr),AF_INET);
-		/*
-			if(HostEntry==nullptr)
+            char *host_ip_str=host_ip->CreateString();
+            SharedArray<char> self_clear(host_ip_str);
+
+            if(!tcp)
 			{
-				PutError(u"找不到服务器");
-				return(false);
-			}*/
-
-			//建立socket连接
-			ThisSocket=socket(AF_INET,SOCK_STREAM,IPPROTO_TCP);
-
-			if(ThisSocket==INVALID_SOCKET)
-			{
-				PutError(u"创建socket失败！\n");
-				ThisSocket=-1;
-				return(false);
-			}
-
-			sockaddr_in addr;
-			servent *ServerEnt=getservbyname("http","tcp");
-
-			addr.sin_family     =AF_INET;
-
-			if(HostEntry)addr.sin_addr.s_addr=((in_addr *)*HostEntry->h_addr_list)->s_addr;
-					else addr.sin_addr.s_addr=inet_addr(host);
-
-			addr.sin_port       =ServerEnt?ServerEnt->s_port:htons(80);
-
-			//连接socket
-			if(connect(ThisSocket,(sockaddr *)&addr,sizeof(sockaddr_in))==SOCKET_ERROR)
-			{
-				PutError(u"连接HTTP服务器失败！\n");
-				closesocket(ThisSocket);
-				ThisSocket=-1;
-				return(false);
+				LOG_ERROR(U8_TEXT("连接HTTP服务器失败: ")+UTF8String(host_ip_str));
+				RETURN_FALSE;
 			}
 
 			//设定为非堵塞模式
-			unsigned long par=1;
-
-			ioctlsocket(ThisSocket,FIONBIO,&par);
+			tcp->SetBlock(false);
 
 			//发送HTTP GET请求
-			char sendinfo[HGL_SIZE_1MB]="GET ";
+            strcpy(http_header,HTTP_HEADER_BUFFER_SIZE,"GET ",4);
 
-			strcat(sendinfo,	filename);
-			strcat(sendinfo,	" HTTP/1.1\n"
-								"Host: ");
-			strcat(sendinfo,	host);
-			strcat(sendinfo,	"\n"
-								"Accept: */*\n"
-								"User-Agent: Mozilla/5.0\n"
-								"Connection: Keep-Alive\n\n");
+			strcat(http_header,HTTP_HEADER_BUFFER_SIZE,filename.c_str(),           filename.Length());
+			strcat(http_header,HTTP_HEADER_BUFFER_SIZE,HTTP_REQUEST_HEADER_BEGIN,  HTTP_REQUEST_HEADER_BEGIN_SIZE);
+			strcat(http_header,HTTP_HEADER_BUFFER_SIZE,host_ip_str,                strlen(host_ip_str));
+			strcat(http_header,HTTP_HEADER_BUFFER_SIZE,HTTP_REQUEST_HEADER_END,    HTTP_REQUEST_HEADER_END_SIZE);
 
-			if(send(ThisSocket,sendinfo,(int)strlen(sendinfo),0)==SOCKET_ERROR)
+            const uint sendinfo_length=strlen(http_header);
+
+            OutputStream *tcp_os=tcp->GetOutputStream();
+
+            if(tcp_os->WriteFully(http_header,sendinfo_length)!=sendinfo_length)
 			{
-				PutError(u"发送HTTP下载信息失败！\n");
-				closesocket(ThisSocket);
-				ThisSocket=-1;
-				return(false);
+				LOG_ERROR(U8_TEXT("发送HTTP下载信息失败:")+UTF8String(host_ip_str));
+				delete tcp;
+                tcp=nullptr;
+				RETURN_FALSE;
 			}
 
-			http_header=new char[HGL_SIZE_1MB];
-			memset(http_header,0,HGL_SIZE_1MB);
-			http_header_size=0;
+            *http_header=0;
 
+            tcp_is=tcp->GetInputStream();
 			return(true);
 		}
 
@@ -116,45 +102,48 @@ namespace hgl
 		*/
 		void HTTPInputStream::Close()
 		{
-			if(ThisSocket!=-1)
-			{
-				if(http_header)
-				{
-					delete[] http_header;
-					http_header=nullptr;
-				}
+            pos=0;
+            filelength=0;
 
-				CloseSocket(ThisSocket);
+            SAFE_CLEAR(tcp);
 
-				ThisSocket=-1;
-				pos=-1;
-				filelength=-1;
-			}
+            delete[] http_header;
+            http_header_size=0;
 		}
 
-		int HTTPInputStream::Parsehttp_header()
+		constexpr char HTTP_HEADER_SPLITE_STR[]="\r\n\r\n";
+        constexpr uint HTTP_HEADER_SPLITE_STR_SIZE=sizeof(HTTP_HEADER_SPLITE_STR)-1;
+
+        constexpr char HTTP_200_OK[]="200 OK";
+        constexpr uint HTTP_200_OK_SIZE=sizeof(HTTP_200_OK)-1;
+
+        constexpr char HTTP_CONTENT_LENGTH[]="Content-Length: ";
+        constexpr uint HTTP_CONTENT_LENGTH_SIZE=sizeof(HTTP_CONTENT_LENGTH)-1;
+
+		int HTTPInputStream::PraseHttpHeader()
 		{
 			char *offset;
 			int size;
 
-			offset=strstr(http_header,"\r\n\r\n");
+			offset=strstr(http_header,http_header_size,HTTP_HEADER_SPLITE_STR,HTTP_HEADER_SPLITE_STR_SIZE);
 
 			if(offset!=nullptr)
 			{
 				*offset=0;
 
-				size=http_header_size-(offset-http_header)-4;
+				size=http_header_size-(offset-http_header)-HTTP_HEADER_SPLITE_STR_SIZE;
 
-				if(strstr(http_header,"200 OK"))
+				if(strstr(http_header,http_header_size,HTTP_200_OK,HTTP_200_OK_SIZE))
 				{
-					offset=strstr(http_header,"Content-Length:");
+					offset=strstr(http_header,http_header_size,HTTP_CONTENT_LENGTH,HTTP_CONTENT_LENGTH_SIZE);
 
 					if(offset)
 					{
-						offset+=16;
-						filelength=atoi(offset);
+						offset+=HTTP_CONTENT_LENGTH_SIZE;
+						stou(offset,filelength);
 
-						return(pos=size);
+                        pos=size;
+						return(pos);
 					}
 					else	//有些HTTP下载不提供文件长度
 					{
@@ -163,7 +152,7 @@ namespace hgl
 				}
 				else
 				{
-					ErrorHint(ccpGBK,"HTTP服务器返回错误信息：\n%s",http_header);
+					LOG_ERROR(U8_TEXT("HTTP服务器返回错误信息: ")+UTF8String(http_header_str));
 					return(-1);
 				}
 			}
@@ -178,46 +167,50 @@ namespace hgl
 		* @return >=0 实际读取出来的数据长度
 		* @return -1 读取失败
 		*/
-		int HTTPInputStream::_Read(void *buf,int bufsize)
+		int64 HTTPInputStream::Read(void *buf,int64 bufsize)
 		{
-			int num;
-			int readsize;
+			if(!tcp)
+                RETURN_ERROR(-1);
 
-			if(ThisSocket==-1)return(-1);
+			int readsize;
 
 			if(filelength==-1)    //HTTP头尚未解析完成
 			{
-				num=recv(ThisSocket,http_header+http_header_size,1024-http_header_size,0);
-				if(num==-1)
-				{
-					int error=GetLastSocketError();
+                readsize=tcp_is->Read(http_header+http_header_size,HTTP_HEADER_BUFFER_SIZE-http_header_size);
 
-					if(error!=10035&&error!=0)
+				if(readsize<0)
+				{
+					const int error=GetLastSocketError();
+
+					if(error!=10035        //windows 不能立即完成
+                     &&error!=0)
 					{
-						ErrorHint(u"网络错误编号:%d",error);
+						LOG_ERROR(OS_TEXT("网络错误编号: ")+GetSocketErrorString(error));
 
 						Close();
-						return(-1);
+                        RETURN_ERROR(-2);
 					}
 
 					return(0);
 				}
 
-				http_header_size+=num;
+				http_header_size+=readsize;
 
-				readsize=Parsehttp_header();
+				readsize=PraseHttpHeader();
 				if(readsize==-1)
 				{
 					Close();
-					return(-1);
+                    RETURN_ERROR(-3);
 				}
 
-				memcpy(buf,http_header+http_header_size-pos,pos);
+				if(pos>0)
+                    memcpy(buf,http_header+http_header_size-pos,pos);
+
 				return(pos);
 			}
 			else
 			{
-				readsize=recv(ThisSocket,(char *)buf,bufsize,0);
+				readsize=tcp_is->Read((char *)buf,bufsize);
 
 				if(readsize==-1)
 				{
@@ -226,10 +219,10 @@ namespace hgl
 					if(error!=10035
 					 &&error!=0)
 					{
-						ErrorHint(u"网络错误编号:%d",error);
+						LOG_ERROR(OS_TEXT("网络错误编号: ")+GetSocketErrorString(error));
 
 						Close();
-						return(-1);
+                        RETURN_ERROR(-2);
 					}
 
 					return(0);
