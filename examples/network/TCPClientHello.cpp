@@ -22,11 +22,11 @@ HGL_CONSOLE_MAIN(sii,app,args)
         InitWinSocket();
     #endif//
 
-    IPAddress *ip=CreateIPv4TCP("127.0.0.1",10240);
+    SharedPtr<IPAddress> ip=CreateIPv4TCP("127.0.0.1",10240);
 
     TCPClient client;
 
-    if(!client.Connect(ip))
+    if(!client.CreateConnect(ip))
     {
         cout<<"connect error"<<endl;
         return(-2);

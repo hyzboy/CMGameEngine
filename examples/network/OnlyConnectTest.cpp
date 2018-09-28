@@ -1,7 +1,7 @@
 ﻿#include<hgl/Console.h>
 #include<hgl/thread/Thread.h>
 #include<hgl/thread/Semaphore.h>
-#include<hgl/network/TCPSocket.h>
+#include<hgl/network/TCPClient.h>
 
 #include<iostream>
 
@@ -26,20 +26,22 @@ public:
 
     bool Execute() override
     {
-        int sock=CreateTCPConnect(server_ip);
+        TCPClient *tcp=CreateTCPClient(server_ip);
 
         double wait_time;
 
-        if(sock>0)
+        if(tcp)
         {
-            CloseSocket(sock);
+            delete tcp;
             std::cout<<"Connect to server OK!"<<std::endl;
 
             wait_time=CONNECT_TIME_GAP;
         }
         else
         {
-            std::cout<<"Connect to server failed,return "<<sock<<",errno: "<<errno<<std::endl;
+            const int err=GetLastSocketError();
+
+            std::cout<<"Connect to server failed,return errno: "<<err<<std::endl;
 
             wait_time=CONNECT_TIME_GAP_ERROR;
         }
@@ -62,10 +64,6 @@ public:
 
     TestObject()
     {
-    #if HGL_OS == HGL_OS_Windows
-        InitWinSocket();
-    #endif//
-
         server_ip=CreateIPv4TCP("127.0.0.1",10240);
 
         for(uint i=0;i<CONNECT_THREAD_COUNT;i++)

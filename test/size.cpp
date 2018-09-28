@@ -4,7 +4,7 @@
 template<typename T>
 void test(T &t)
 {
-	printf("struct sizeof=%d\n",sizeof(T));
+	printf("struct sizeof=%lu\n",sizeof(T));
 }
 
 int main(int argc,char **argv)

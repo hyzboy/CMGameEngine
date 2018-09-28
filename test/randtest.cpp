@@ -1,8 +1,8 @@
 ﻿#include<iostream>
 #include<time.h>
-#include<hgl/Other.h>
 #include<random>
-#include <bits/random.h>
+#include<bits/random.h>
+#include<hgl/Time.h>
 
 using namespace hgl;
 using namespace std;

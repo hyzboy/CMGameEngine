@@ -1,10 +1,10 @@
 ﻿#include<curl/curl.h>
-#include<hgl/ut/Hash.h>
+#include<hgl/algorithm/Hash.h>
 #include<hgl/Str.h>
 #include<hgl/type/BaseString.h>
 
 using namespace hgl;
-using namespace hgl::util;
+using namespace hgl::algorithm;
 
 namespace
 {
@@ -59,7 +59,7 @@ bool Recharge5EBO(const UTF8String &username,const int money,const int type,cons
 {
 	UTF8String check_str=username+UTF8String(money)+recharge_key;
 
-	MD5Code md5;
+	HashCodeMD5 md5;
 	CountMD5(check_str.c_str(),check_str.Length(),md5);
 
 	char check_code_str[33];

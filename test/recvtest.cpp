@@ -1,4 +1,4 @@
-#include<sys/time.h>
+﻿#include<sys/time.h>
 #include<errno.h>
 #include<iostream>
 #include<hgl/network/TCPClient.h>
@@ -24,11 +24,17 @@ int main(int argc,char **argv)
 
 	stoi(argv[2],port);
 
-	tcp.Connect(argv[1],port);
+    SharedPtr<IPAddress> ip=CreateIPv4TCP(argv[1],port);
+
+	if(!tcp.CreateConnect(ip))
+    {
+        std::cerr<<"create connect failed.";
+        return(1);
+    }
 
 	tcp.SetBlock(true,1.0);
 
-	InputStream *is=tcp.GetInputStream();
+	InputStream *is=tcp.GetInputStream();      //这个不需要delete
 
 	while(true)
 	{
@@ -45,4 +51,6 @@ int main(int argc,char **argv)
 
 		std::cout<<"ReadFully(1024) time:"<<et-st<<",errno:"<<err<<std::endl;
 	}
+
+	return 0;
 }
