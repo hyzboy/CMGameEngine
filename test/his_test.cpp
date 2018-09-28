@@ -24,17 +24,19 @@ void out_response(HTTPInputStream *his)
 
         cout<<key.c_str()<<": "<<value.c_str()<<endl;
     }
+
+    cout<<endl<<endl;
 }
 
 int main(int,char **)
 {
     HTTPInputStream his;
 
-    const UTF8String host=U8_TEXT("cmake.org");
+    const UTF8String host=U8_TEXT("www.hyzgame.com.cn");
 
     SharedPtr<IPAddress> ip=CreateIPv4TCP(host,80);
 
-    if(!his.Open(ip,host,U8_TEXT("/cmake/help/v3.3/command/function.html")))
+    if(!his.Open(ip,host,U8_TEXT("/?page_id=203")))
     {
         cerr<<"http open error"<<endl;
         return 0;
@@ -48,20 +50,24 @@ int main(int,char **)
     {
         size=his.Read(buf,1023);
 
+        if(!response)
+        {
+            uint code=his.GetResponseCode();
+
+            if(code)
+            {
+                response=true;
+                out_response(&his);
+
+                if(his.GetResponseCode()!=200)
+                    break;
+            }
+        }
+
         if(size>0)
         {
             buf[size]=0;
             cout<<buf;
-        }
-
-        if(!response&&his.GetResponseCode()!=0)
-        {
-            response=true;
-
-            out_response(&his);
-
-            if(his.GetResponseCode()!=200)
-                break;
         }
     }while(size>=0);
 

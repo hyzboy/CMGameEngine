@@ -20,7 +20,7 @@ namespace hgl
 
             constexpr uint HTTP_REQUEST_HEADER_END_SIZE=sizeof(HTTP_REQUEST_HEADER_END)-1;
 
-            constexpr uint HTTP_HEADER_BUFFER_SIZE=HGL_SIZE_1KB*4;
+            constexpr uint HTTP_HEADER_BUFFER_SIZE=HGL_SIZE_1KB;
         }
 
 		HTTPInputStream::HTTPInputStream()
@@ -194,14 +194,12 @@ namespace hgl
                 {
                     offset+=HTTP_CONTENT_LENGTH_SIZE;
                     stou(offset,filelength);
+                }
 
-                    pos=size;
-                    return(pos);
-                }
-                else	//有些HTTP下载不提供文件长度
-                {
-                    return(-1);//这里还没有正确处理，有待增加
-                }
+                //有些HTTP下载就是不提供文件长度
+
+                pos=size;
+                return(pos);
             }
             else
             {
@@ -214,16 +212,13 @@ namespace hgl
         {
             const int err=GetLastSocketError();
 
-            if(err!=10035        //windows 不能立即完成
-             &&err!=0)
-            {
-                LOG_ERROR(OS_TEXT("网络错误编号: ")+GetSocketErrorString(err));
+            if(err==nseWouldBlock)return(0);      //不能立即完成
+            if(err==0)return(0);
 
-                Close();
-                RETURN_ERROR(-2);
-            }
+            LOG_ERROR(OS_TEXT("网络错误编号: ")+GetSocketErrorString(err));
 
-            return(0);
+            Close();
+            RETURN_ERROR(-2);
         }
 
 		/**
@@ -240,11 +235,11 @@ namespace hgl
 
 			int readsize;
 
-			if(filelength==-1)    //HTTP头尚未解析完成
+			if(response_code==0)    //HTTP头尚未解析完成
 			{
                 readsize=tcp_is->Read(http_header+http_header_size,HTTP_HEADER_BUFFER_SIZE-http_header_size);
 
-				if(readsize<0)
+				if(readsize<=0)
                     return ReturnError();
 
 				http_header_size+=readsize;
@@ -265,7 +260,7 @@ namespace hgl
 			{
 				readsize=tcp_is->Read((char *)buf,bufsize);
 
-				if(readsize==-1)
+				if(readsize<=0)
                     return ReturnError();
 
 				pos+=readsize;
