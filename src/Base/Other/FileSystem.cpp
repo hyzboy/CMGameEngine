@@ -296,8 +296,10 @@ namespace hgl
             if(file_state.st_mode&S_IFDIR)
                 fi.is_directory=true;
 
+#if HGL_OS != HGL_OS_Windows
             if(file_state.st_mode&S_IFLNK)
                 fi.is_link=true;
+#endif//HGL_OS != HGL_OS_Windows
 
             fi.size=file_state.st_size;
             return(true);
