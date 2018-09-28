@@ -26,7 +26,7 @@ namespace hgl
             constexpr uint SEC_WEBSOCKET_VERSION_SIZE=sizeof(SEC_WEBSOCKET_VERSION)-1;
 
             if(!data||size<40)return(false);
-            
+
             const char *end;
 
             {
@@ -96,7 +96,7 @@ namespace hgl
 
             if(!sec_websocket_protocol.IsEmpty())
                 result+="\r\nSec-WebSocket-Protocol: "+sec_websocket_protocol;
-            
+
             result+="\r\n\r\n";
         }
     }//namespace network

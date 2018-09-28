@@ -12,62 +12,6 @@ namespace hgl
     namespace network
     {
         /**
-         * 创建一个TCP连接
-         */
-        int CreateTCPConnect(IPAddress *addr)
-        {
-            if(!addr)return(-1);
-            if(addr->GetSocketType()!=SOCK_STREAM)return(-1);
-            if(addr->GetProtocol()!=IPPROTO_TCP)return(-1);
-
-            int sock=socket(addr->GetFamily(),SOCK_STREAM,IPPROTO_TCP);
-
-            if(sock<0)return(-1);
-
-            if(connect(sock,addr->GetSockAddr(),addr->GetSockAddrInSize()))
-            {
-                CloseSocket(sock);
-                return(-1);
-            }
-
-            return sock;
-        }
-    }//namespace network
-
-    namespace network
-    {
-        void TCPSocket::InitPrivate()
-        {
-            socket_protocols=IPPROTO_TCP;
-            ThisAddr=nullptr;
-        }
-
-        /**
-        * 构造函数
-        */
-        TCPSocket::TCPSocket()
-        {
-            InitPrivate();
-        }
-
-        /**
-        * 构造函数
-        * @param sock socket号
-        * @param addr socket地址
-        */
-        TCPSocket::TCPSocket(int sock,IPAddress *addr)
-        {
-            InitPrivate();
-
-            UseSocket(sock,addr);
-        }
-
-        TCPSocket::~TCPSocket()
-        {
-            SAFE_CLEAR(ThisAddr);
-        }
-
-        /**
         * 设置是否使用无延迟模式(注：无延迟模式也无缓冲，有利于小包高响应应用，大包或无高响应需要求应用不要设置)
         * @param no_delay 是否无延迟
         */
@@ -107,24 +51,30 @@ namespace hgl
 #endif//HGL_OS_Windows
         }
 
+        void TCPSocket::ResetConnect()
+        {
+            FD_ZERO(&local_set);
+            FD_SET(ThisSocket,&local_set);
+        }
+
         /**
         * 使用指定socket
         * @param sock 指定socket编号
         * @param addr socket地址
         */
-        void TCPSocket::UseSocket(int sock,IPAddress *addr)
+        bool TCPSocket::UseSocket(int sock,const IPAddress *addr)
         {
-            if(sock==-1)return;
-            if(!addr)return;
+            if(sock<0)
+                RETURN_FALSE;
 
-            ThisSocket=sock;
+            if(!addr->IsTCP())
+                RETURN_FALSE;
 
-            SAFE_CLEAR(ThisAddr);
+            if(!Socket::UseSocket(sock,addr))
+                RETURN_FALSE;
 
-            ThisAddr=addr;
-
-            FD_ZERO(&local_set);
-            FD_SET(sock,&local_set);
+            ResetConnect();
+            return(true);
         }
 
         /**
@@ -133,15 +83,6 @@ namespace hgl
         bool TCPSocket::IsConnect()
         {
             return(ThisSocket!=-1);
-        }
-
-        bool TCPSocket::ReConnect()
-        {
-            this->CloseSocket();
-
-            ThisSocket=CreateTCPConnect(ThisAddr);
-
-            return(ThisSocket>=0);
         }
 
         /**

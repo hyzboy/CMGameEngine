@@ -87,7 +87,10 @@ namespace hgl
 
 	namespace network
 	{
+        int CreateSocket(const IPAddress *);                                                        ///<创建Socket
 		void CloseSocket(int);																		///<关闭socket
+
+        bool Connect(int,IPAddress *);                                                              ///<连接一个地址
 		void SetSocketBlock(int ThisSocket,bool block,double send_time_out=HGL_NETWORK_TIME_OUT,
 													double recv_time_out=HGL_NETWORK_TIME_OUT);		///<设置socket是否使用阻塞方式
 
@@ -107,11 +110,9 @@ namespace hgl
 		{
 		protected:
 
-			int socket_domain;																			///<Socket域
-			int socket_type;																			///<Socket类型
-			int socket_protocols;																		///<Socket协议
+            IPAddress *ThisAddress;                                                                     ///<本Socket地址
 
-			bool CreateSocket(int,int,int);																///<创建Socket
+			bool InitSocket(const IPAddress *);														    ///<创建Socket
 
 		public: //属性
 
@@ -120,11 +121,14 @@ namespace hgl
 		public: //方法
 
 			Socket();
+            Socket(int,const IPAddress *);
 			virtual ~Socket();
 
-			const	int		GetSocketDomain()const{return socket_domain;}								///<取得Socket
-			const	int		GetSocketType()const{return socket_type;}									///<取得Socket类型
-			const	int		GetSocketProtocols()const{return socket_protocols;}							///<取得Socket协议
+            const   IPAddress *GetAddress()const{return ThisAddress;}                                   ///<取得当前Socket的IP地址
+
+            virtual bool    UseSocket(int,const IPAddress *);                                           ///<使用这个Socket与地址
+
+            virtual bool    ReCreateSocket();                                                           ///<使用现有地址重新创建Socket
 
 			virtual void	CloseSocket();																///<关闭连接
 
