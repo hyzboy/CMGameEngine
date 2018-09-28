@@ -168,7 +168,9 @@ namespace hgl
 
                     bool is_hiddle:1;               ///<是否隐藏文件
 
+#if HGL_OS != HGL_OS_Windows
                     bool is_link:1;                 ///<是否是链接
+#endif//HGL_OS != HGL_OS_Windows
 
                     bool can_read:1;				///<可以读
                     bool can_write:1;				///<可以写
