@@ -16,8 +16,8 @@ namespace hgl
          */
         bool GetWebSocketInfo(UTF8String &sec_websocket_key,UTF8String &sec_websocket_protocol,uint &sec_websocket_version,const char *data,const uint size)
         {
-            constexpr char SEC_WEBSOCKET_KEY_STR[]="Sec-WebSocket-Key: ";
-            constexpr uint SEC_WEBSOCKET_KEY_STR_SIZE=sizeof(SEC_WEBSOCKET_KEY_STR)-1;      //sizeof的带\0所以要-1
+            constexpr char SEC_WEBSOCKET_KEY[]="Sec-WebSocket-Key: ";
+            constexpr uint SEC_WEBSOCKET_KEY_SIZE=sizeof(SEC_WEBSOCKET_KEY)-1;      //sizeof的带\0所以要-1
 
             constexpr char SEC_WEBSOCKET_PROTOCOL[]="Sec-WebSocket-Protocol: ";
             constexpr uint SEC_WEBSOCKET_PROTOCOL_SIZE=sizeof(SEC_WEBSOCKET_PROTOCOL)-1;
@@ -30,11 +30,11 @@ namespace hgl
             const char *end;
 
             {
-                const char *key=hgl::strstr(data,size,SEC_WEBSOCKET_KEY_STR,SEC_WEBSOCKET_KEY_STR_SIZE);
+                const char *key=hgl::strstr(data,size,SEC_WEBSOCKET_KEY,SEC_WEBSOCKET_KEY_SIZE);
 
                 if(!key)return(false);
 
-                key+=SEC_WEBSOCKET_KEY_STR_SIZE;
+                key+=SEC_WEBSOCKET_KEY_SIZE;
 
                 end=key;
                 while(*end!='\r')++end;
