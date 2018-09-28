@@ -1,10 +1,16 @@
 ﻿#include<hgl/type/BaseString.h>
 #include<windows.h>
+#include<shlobj.h>
 
 namespace hgl
 {
     namespace filesystem
     {
+		void GetLocalAppdataPath(os_char fn[HGL_MAX_PATH])
+		{
+			SHGetFolderPathW(nullptr, CSIDL_LOCAL_APPDATA, nullptr, 0, fn);
+		}
+
         /**
          * 取得当前程序完整路径名称
          */

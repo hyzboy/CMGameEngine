@@ -144,6 +144,7 @@ namespace hgl
         bool GetCurrentPath(OSString &);																///<取得当前路径
         bool GetCurrentProgram(OSString &);																///<取得当前程序全路径名称
         bool GetCurrentProgramPath(OSString &);															///<取得当前程序所在路径
+		void GetLocalAppdataPath(os_char fn[HGL_MAX_PATH]);												///<取得当前用户应用程序数据存放路径
 
         //使用int64而不是__int64是因为不是所有编译器都支持__int64的写法，必须使用DataType.H中引入的定义
 

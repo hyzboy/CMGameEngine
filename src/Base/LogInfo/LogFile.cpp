@@ -7,9 +7,10 @@
 
 namespace hgl
 {
+	using namespace filesystem;
+
     namespace logger
     {
-        void GetLocalAppdataPath(os_char fn[HGL_MAX_PATH]);
         io::TextOutputStream *CreateTextOutputStream(io::OutputStream *);
 
         class LogFile:public Logger
