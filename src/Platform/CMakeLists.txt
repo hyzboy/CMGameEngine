@@ -1,4 +1,4 @@
-﻿IF(APPLE)
+IF(APPLE)
     add_library(OSXGUI Clipboard.cpp)
 ENDIF(APPLE)
 
@@ -18,8 +18,7 @@ ENDIF()
 IF(UNIX)
     SET(PLATFORM_FILE_SOURCE            UNIX/File.cpp
                                         UNIX/FileAccess.cpp
-                                        UNIX/EnumFile.cpp
-                                        UNIX/ProgramPath.cpp)
+                                        UNIX/EnumFile.cpp)
 
     SET(PLATFORM_CODEPAGE_SOURCE        UNIX/CodePage.cpp)
 
@@ -35,10 +34,12 @@ IF(UNIX)
 
     IF(APPLE)
         SET(PLATFORM_MULTI_THREAD_SOURCE    ${PLATFORM_MULTI_THREAD_SOURCE}
-                                            Apple/Semaphore.cpp)
+                                            Apple/Semaphore.cpp
+                                            Apple/ProgramPath.cpp)
     ELSE()
         SET(PLATFORM_MULTI_THREAD_SOURCE    ${PLATFORM_MULTI_THREAD_SOURCE}
-                                            UNIX/Semaphore.cpp)
+                                            UNIX/Semaphore.cpp
+                                            UNIX/ProgramPath.cpp)
     ENDIF()
 
     SET(PLATFORM_MULTI_PROCESS_SOURCE   UNIX/ProcMutex.cpp
