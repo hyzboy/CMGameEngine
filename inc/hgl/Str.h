@@ -263,27 +263,30 @@ namespace hgl
      * @param dst 目标字符串
      * @param count 目标字符串最大多少个字符
      * @param src 源字符串
+     * @return 字符串长度(<0表示出错)
      */
     template<typename T>
-    void strcpy(T *dst,int count,const T *src)
+    int strcpy(T *dst,int count,const T *src)
     {
-        if(!dst)return;
+        if(!dst)return(-1);
 
         if(!src||!(*src)||count<=0)
         {
             //没什么好复制的
             *dst=0;
-            return;
+            return(0);
         }
 
         if(dst==src)
-            return;
+            return(-1);
 
         if(!src||!(*src))
         {
             *dst=0;
-            return;
+            return(-2);
         }
+
+        T *start=dst;
 
         while(*src&&count)
         {
@@ -293,8 +296,10 @@ namespace hgl
             --count;
         }
 
-        if(count)
+        if(count>0)
             *dst=0;
+
+        return(dst-start);
     }
 
     /**
@@ -303,21 +308,24 @@ namespace hgl
      * @param dst_count 目标字符串最大多少个字符
      * @param src 源字符串
      * @param count 最多复制多少个字符
+     * @return 字符串长度(<0表示出错)
      */
     template<typename T>
-    void strcpy(T *dst,int dst_count,const T *src,int count)
+    int strcpy(T *dst,int dst_count,const T *src,int count)
     {
-        if(!dst)return;
+        if(!dst)return(-1);
 
         if(!src||!(*src)||dst_count<=0||count<=0)
         {
             //没什么好复制的
             *dst=0;
-            return;
+            return(0);
         }
 
         if(dst==src)
-            return;
+            return(-1);
+
+        T *start=dst;
 
         while(*src&&dst_count&&count)
         {
@@ -328,8 +336,10 @@ namespace hgl
             --count;
         }
 
-        if(dst_count&&count)
+        if(dst_count)
             *dst=0;
+
+        return(dst-start);
     }
 
     /**
@@ -493,17 +503,20 @@ namespace hgl
      * @param max_count 目标字符串最大长度
      * @param src 要追加的源字符串
      * @param count 源字符串最大长度
+     * @return 字符串长度(<0表示出错)
      */
     template<typename T>
-    void strcat(T *dst,int max_count,const T *src,int count)
+    int strcat(T *dst,int max_count,const T *src,int count)
     {
-        if(!dst||!src||!(*src)||count<=0)return;
+        if(!dst||!src||!(*src)||count<=0)return(-1);
+
+        T *start=dst;
 
         while(*dst&&max_count)
         {
             ++dst;          //找到结束
             --max_count;
-        };
+        }
 
         while(*src&&max_count&&count)
         {
@@ -514,8 +527,10 @@ namespace hgl
             --max_count;
         }
 
-        if(count>=0)
+        if(max_count>=0)
             *dst=0;
+
+        return(dst-start);
     }
 
     /**
