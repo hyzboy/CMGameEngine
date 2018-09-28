@@ -1,29 +1,27 @@
-#include<hgl/type/BaseString.h>
+﻿#include<hgl/type/BaseString.h>
 #import <Foundation/Foundation.h>
 
 namespace hgl
 {
     namespace filesystem
     {
-        void GetLocalAppdataPath(os_char fn[HGL_MAX_PATH])
+        void GetLocalAppdataPath(char fn[HGL_MAX_PATH])
         {
             NSFileManager *dfm=[NSFileManager defaultManager];
 
-            NSString *ns_string=[[dfm homeDirectoryForCurrentUser] path];
+            char *str=[[[dfm homeDirectoryForCurrentUser] path] cStringUsingEncoding:NSUTF8StringEncoding];
 
-            hgl::strcpy(fn,HGL_MAX_PATH,[ns_string cStringUsingEncoding:NSUTF8StringEncoding],[ns_string length]);
+            hgl::strcpy(fn,HGL_MAX_PATH,str,strlen(str));
         }
 
         /**
         * 取得当前程序完整路径名称
         */
-        bool GetCurrentProgram(OSString &result)
+        bool GetCurrentProgram(UTF8String &result)
         {
-            NSURL *url = [[[NSBundle mainBundle] bundleURL] URLByDeletingPathExtension];
+            NSString *ns_string = [[[[NSBundle mainBundle] bundleURL] URLByDeletingPathExtension] url];
 
-            NSString *ns_string=[url path];
-
-            result.Set([ns_string cStringUsingEncoding:NSUTF8StringEncoding],[ns_string length]);
+            result.Set([ns_string cStringUsingEncoding:NSUTF8StringEncoding]);
 
             return(true);
         }
@@ -31,13 +29,11 @@ namespace hgl
         /**
          * 取得当前程序所在路径
          */
-        bool GetCurrentProgramPath(OSString &result)
+        bool GetCurrentProgramPath(UTF8String &result)
         {
-            NSURL *url = [[[NSBundle mainBundle] bundleURL] URLByDeletingLastPathComponent];
+            NSString *ns_string = [[[[NSBundle mainBundle] bundleURL] URLByDeletingLastPathComponent] path];
 
-            NSString *ns_string=[url path];
-
-            result.Set([ns_string cStringUsingEncoding:NSUTF8StringEncoding],[ns_string length]);
+            result.Set([ns_string cStringUsingEncoding:NSUTF8StringEncoding]);
 
             return(true);
         }
