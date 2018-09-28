@@ -14,7 +14,7 @@ namespace hgl
                                                         float(double(blue)/255.0f),  \
                                                         float((double(red)*0.299+double(green)*0.587+double(blue)*0.114)/255.0f),\
                                                         \
-                                                        U8_TEXT(#eng_name), \
+                                                        #eng_name, \
                                                         U16_TEXT(chs_name)  \
                                                     },
 

@@ -23,7 +23,7 @@ namespace hgl
 
 		public: //方法
 
-            using Socket::Socket;
+			TCPSocket() :Socket() {}
             TCPSocket(int sock,const IPAddress *addr):Socket(sock,addr){ResetConnect();}
 			virtual ~TCPSocket()=default;															///<本类析构函数
 
