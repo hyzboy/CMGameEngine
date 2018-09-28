@@ -58,19 +58,6 @@ namespace hgl
     }
 
     /**
-    * (线程外部调用)关闭当前线程.不推荐使用此函数，正在执行的线程被强制关闭会引起无法预知的错误。
-    */
-    bool Thread::ForceClose()
-    {
-        if(!tp)return(false);
-
-        TerminateThread(tp,0);
-        CloseHandle(tp);
-        tp=nullptr;
-        return(true);
-    }
-
-    /**
     * 是否是当前线程
     */
     bool Thread::IsCurThread()
