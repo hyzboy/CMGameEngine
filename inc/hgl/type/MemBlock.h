@@ -25,7 +25,10 @@ namespace hgl
         const	size_t GetBytes		()const{return cur_size*sizeof(T);}								///<取得内存块字节数
         const	size_t GetMaxBytes	()const{return buf_size*sizeof(T);}								///<取得内存块最大字节数
 
-        void SetLength(size_t size)																	///<设置内存块长度(注：非字节数)
+        /**
+         * 分配指定空间出来，供未来使用
+         */
+        void Malloc(size_t size)
         {
             if(size<=buf_size)
                 return;
@@ -36,7 +39,14 @@ namespace hgl
                 buf=(T *)hgl_malloc(buf_size*sizeof(T));
             else
                 buf=(T *)hgl_realloc(buf,buf_size*sizeof(T));
+        }
 
+        /**
+         * 设置当前数据长度
+         */
+        void SetLength(size_t size)																	///<设置内存块长度(注：非字节数)
+        {
+            Malloc(size);
 
             cur_size=size;
         }
@@ -187,7 +197,7 @@ namespace hgl
 
         if(size<=0)return(true);
 
-        return(SaveMemoryToFile(filename,mb.data(),mb.bytes())==size);
+        return(hgl::filesystem::SaveMemoryToFile(filename,mb.data(),mb.bytes())==size);
     }
 }//namespace hgl
 #endif//HGL_MEM_BLOCK_INCLUDE
