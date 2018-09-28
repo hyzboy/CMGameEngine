@@ -18,7 +18,8 @@ ENDIF()
 IF(UNIX)
     SET(PLATFORM_FILE_SOURCE            UNIX/File.cpp
                                         UNIX/FileAccess.cpp
-                                        UNIX/EnumFile.cpp)
+                                        UNIX/EnumFile.cpp
+                                        UNIX/ProgramPath.cpp)
 
     SET(PLATFORM_CODEPAGE_SOURCE        UNIX/CodePage.cpp)
 
@@ -55,7 +56,8 @@ ENDIF()
 IF(WIN32)
     SET(PLATFORM_FILE_SOURCE            Win/File.cpp
                                         Win/FileAccess.cpp
-                                        Win/EnumFile.cpp)
+                                        Win/EnumFile.cpp
+                                        Win/ProgramPath.cpp)
 
     SET(PLATFORM_CODEPAGE_SOURCE        Win/CodePage.cpp)
 
