@@ -147,18 +147,25 @@ namespace hgl
             int socktype;
             int protocol;
 
+            const char *protocol_name;
+
+            void RefreshProtocolName();
+
         public:
 
             IPAddress()
             {
                 socktype=0;
                 protocol=0;
+                protocol_name=nullptr;
             }
 
             IPAddress(int s,int p)
             {
                 socktype=s;
                 protocol=p;
+
+                RefreshProtocolName();
             }
 
             virtual ~IPAddress()=default;
@@ -171,6 +178,8 @@ namespace hgl
             virtual const uint GetIPStringMaxSize()const=0;                                                 ///<取得IP字符串最大长度
 
             virtual const bool IsBoradcast()const=0;                                                        ///<是否为广播
+
+            virtual const char *GetProtocolName()const{return protocol_name;}                               ///<取得协议名称
 
             /**
              * 设置IP地址
@@ -185,6 +194,11 @@ namespace hgl
                     bool SetUDP     (const char *_name,ushort _port){return Set(_name,_port,SOCK_DGRAM,     IPPROTO_UDP     );}
                     bool SetUDPLite (const char *_name,ushort _port){return Set(_name,_port,SOCK_DGRAM,     IPPROTO_UDPLITE );}
                     bool SetSCTP    (const char *_name,ushort _port){return Set(_name,_port,SOCK_SEQPACKET, IPPROTO_SCTP    );}
+
+            const   bool IsTCP      ()const{if(socktype!=SOCK_STREAM    )return(false);if(protocol!=IPPROTO_TCP     )return(false);return(true);}
+            const   bool IsUDP      ()const{if(socktype!=SOCK_DGRAM     )return(false);if(protocol!=IPPROTO_UDP     )return(false);return(true);}
+            const   bool IsUDPLite  ()const{if(socktype!=SOCK_DGRAM     )return(false);if(protocol!=IPPROTO_UDPLITE )return(false);return(true);}
+            const   bool IsSCTP     ()const{if(socktype!=SOCK_SEQPACKET )return(false);if(protocol!=IPPROTO_SCTP    )return(false);return(true);}
 
             /**
              * 设置一个仅有端口号的地址，一般用于服务器监听本机所有地址
@@ -221,6 +235,19 @@ namespace hgl
              * 转换当前地址到一个可视字符串,字符串所需长度请使用GetIPStringMaxSize()获取
              */
             virtual void ToString(char *,int)const=0;
+
+            /**
+             * 创建一个可视字符串地址，需自行delete[]
+             */
+            virtual char *CreateString()const
+            {
+                const int max_size=GetIPStringMaxSize();
+                char *ipstr=new char[max_size+1];
+
+                ToString(ipstr,max_size);
+
+                return ipstr;
+            }
 
             /**
              * 创建一个当前地址的副本

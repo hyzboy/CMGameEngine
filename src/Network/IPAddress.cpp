@@ -231,6 +231,24 @@ namespace hgl
 
             return CheckIPSupport(ips_list,family,socktype,protocol);
         }
+
+        namespace
+        {
+            const char *protocol_name_tcp="TCP";
+            const char *protocol_name_udp="UDP";
+            const char *protocol_name_udp_lite="UDPLite";
+            const char *protocol_name_sctp="SCTP";
+            const char *protocol_name_unknow="unknow protocol";
+        }
+
+        void IPAddress::RefreshProtocolName()
+        {
+            if(IsTCP    ())protocol_name=protocol_name_tcp;else
+            if(IsUDP    ())protocol_name=protocol_name_udp;else
+            if(IsUDPLite())protocol_name=protocol_name_udp_lite;else
+            if(IsSCTP   ())protocol_name=protocol_name_sctp;else
+                           protocol_name=protocol_name_unknow;
+        }
     }//namespace network
 
     namespace network
@@ -244,6 +262,7 @@ namespace hgl
                 RETURN_FALSE;
 
             addr.sin_port=htons(port);
+            RefreshProtocolName();
             return(true);
         }
 
@@ -333,6 +352,7 @@ namespace hgl
                 RETURN_FALSE;
 
             addr.sin6_port=htons(port);
+            RefreshProtocolName();
             return(true);
         }
 
