@@ -60,7 +60,7 @@
         }
     #endif//HGL_OS == HGL_OS_FreeBSD
 
-    #if HGL_OS == HGL_OS_macOS
+    #if (HGL_OS == HGL_OS_macOS)||(HGL_OS == HGL_OS_iOS)
         #ifndef IPPROTO_UDPLITE
         #define IPPROTO_UDPLITE     136
         #endif//IPPROTO_UDPLITE
