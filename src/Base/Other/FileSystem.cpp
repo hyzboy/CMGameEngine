@@ -182,7 +182,9 @@ namespace hgl
                 else
                 {
                     if(!fi.is_directory)        //不是目录
+#if HGL_OS != HGL_OS_Windows
                         if(!fi.is_link)         //还不是链接
+#endif//HGL_OS != HGL_OS_Windows
                             return(false);
                 }
 
