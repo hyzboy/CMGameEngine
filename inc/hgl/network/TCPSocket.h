@@ -24,6 +24,7 @@ namespace hgl
 		public: //方法
 
             using Socket::Socket;
+            TCPSocket(int sock,const IPAddress *addr):Socket(sock,addr){ResetConnect();}
 			virtual ~TCPSocket()=default;															///<本类析构函数
 
 			bool SetNodelay(bool);																	///<设置是否使用无延迟方式

@@ -37,12 +37,12 @@ namespace hgl
 {
     namespace network
     {
-        void TCPClient::InitPrivate()
+        void TCPClient::InitPrivate(int sock)
         {
             TimeOut=HGL_NETWORK_TIME_OUT;
 
-            sis=new SocketInputStream();
-            sos=new SocketOutputStream();
+            sis=new SocketInputStream(sock);
+            sos=new SocketOutputStream(sock);
 
             ipstr = nullptr;
         }
@@ -52,12 +52,12 @@ namespace hgl
         */
         TCPClient::TCPClient():TCPSocket()
         {
-            InitPrivate();
+            InitPrivate(-1);
         }
 
         TCPClient::TCPClient(int sock,const IPAddress *addr):TCPSocket(sock,addr)
         {
-            InitPrivate();
+            InitPrivate(sock);
         }
 
         TCPClient::~TCPClient()

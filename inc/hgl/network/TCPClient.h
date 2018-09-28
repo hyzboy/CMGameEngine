@@ -18,7 +18,7 @@ namespace hgl
 
 			char *ipstr;
 
-            virtual void InitPrivate();
+            virtual void InitPrivate(int);
 
 		public:
 

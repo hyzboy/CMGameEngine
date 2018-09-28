@@ -9,14 +9,14 @@ namespace hgl
 	{
         namespace
         {
-            constexpr char HTTP_REQUEST_HEADER_BEGIN[]= " HTTP/1.1\n"
+            constexpr char HTTP_REQUEST_HEADER_BEGIN[]= " HTTP/1.1\r\n"
                                                         "Host: ";
             constexpr uint HTTP_REQUEST_HEADER_BEGIN_SIZE=sizeof(HTTP_REQUEST_HEADER_BEGIN)-1;
 
-            constexpr char HTTP_REQUEST_HEADER_END[]=   "\n"
-                                                        "Accept: */*\n"
-                                                        "User-Agent: Mozilla/5.0\n"
-                                                        "Connection: Keep-Alive\n\n";
+            constexpr char HTTP_REQUEST_HEADER_END[]=   "\r\n"
+                                                        "Accept: */*\r\n"
+                                                        "User-Agent: Mozilla/5.0\r\n"
+                                                        "Connection: Keep-Alive\r\n\r\n";
 
             constexpr uint HTTP_REQUEST_HEADER_END_SIZE=sizeof(HTTP_REQUEST_HEADER_END)-1;
 
@@ -34,11 +34,14 @@ namespace hgl
 
             http_header=new char[HTTP_HEADER_BUFFER_SIZE];
             http_header_size=0;
+
+            response_code=0;
 		}
 
 		HTTPInputStream::~HTTPInputStream()
 		{
 			Close();
+            delete[] http_header;
 		}
 
 		/**
@@ -47,9 +50,13 @@ namespace hgl
 		* @param filename 路径及文件名 /download/hgl.rar 之类
 		* @return 打开文件是否成功
 		*/
-		bool HTTPInputStream::Open(IPAddress *host_ip,const UTF8String &filename)
+		bool HTTPInputStream::Open(IPAddress *host_ip,const UTF8String &host_name,const UTF8String &filename)
 		{
 			Close();
+
+            response_code=0;
+            response_info.Clear();
+            response_list.Clear();
 
             if(!host_ip)
                 RETURN_FALSE;
@@ -72,18 +79,17 @@ namespace hgl
 			tcp->SetBlock(false);
 
 			//发送HTTP GET请求
-            strcpy(http_header,HTTP_HEADER_BUFFER_SIZE,"GET ",4);
+            int len=0;
 
-			strcat(http_header,HTTP_HEADER_BUFFER_SIZE,filename.c_str(),           filename.Length());
-			strcat(http_header,HTTP_HEADER_BUFFER_SIZE,HTTP_REQUEST_HEADER_BEGIN,  HTTP_REQUEST_HEADER_BEGIN_SIZE);
-			strcat(http_header,HTTP_HEADER_BUFFER_SIZE,host_ip_str,                strlen(host_ip_str));
-			strcat(http_header,HTTP_HEADER_BUFFER_SIZE,HTTP_REQUEST_HEADER_END,    HTTP_REQUEST_HEADER_END_SIZE);
-
-            const uint sendinfo_length=strlen(http_header);
+            len =strcpy(http_header    ,HTTP_HEADER_BUFFER_SIZE    ,"GET ",4);
+			len+=strcpy(http_header+len,HTTP_HEADER_BUFFER_SIZE-len,filename.c_str(),           filename.Length());
+			len+=strcpy(http_header+len,HTTP_HEADER_BUFFER_SIZE-len,HTTP_REQUEST_HEADER_BEGIN,  HTTP_REQUEST_HEADER_BEGIN_SIZE);
+			len+=strcpy(http_header+len,HTTP_HEADER_BUFFER_SIZE-len,host_name.c_str(),          host_name.Length());
+            len+=strcpy(http_header+len,HTTP_HEADER_BUFFER_SIZE-len,HTTP_REQUEST_HEADER_END,    HTTP_REQUEST_HEADER_END_SIZE);
 
             OutputStream *tcp_os=tcp->GetOutputStream();
 
-            if(tcp_os->WriteFully(http_header,sendinfo_length)!=sendinfo_length)
+            if(tcp_os->WriteFully(http_header,len)!=len)
 			{
 				LOG_ERROR(U8_TEXT("发送HTTP下载信息失败:")+UTF8String(host_ip_str));
 				delete tcp;
@@ -103,19 +109,63 @@ namespace hgl
 		void HTTPInputStream::Close()
 		{
             pos=0;
-            filelength=0;
+            filelength=-1;
 
             SAFE_CLEAR(tcp);
 
-            delete[] http_header;
+            *http_header=0;
             http_header_size=0;
 		}
 
-		constexpr char HTTP_HEADER_SPLITE_STR[]="\r\n\r\n";
-        constexpr uint HTTP_HEADER_SPLITE_STR_SIZE=sizeof(HTTP_HEADER_SPLITE_STR)-1;
+		constexpr char HTTP_HEADER_SPLITE[]="\r\n";
+        constexpr uint HTTP_HEADER_SPLITE_SIZE=sizeof(HTTP_HEADER_SPLITE)-1;
 
-        constexpr char HTTP_200_OK[]="200 OK";
-        constexpr uint HTTP_200_OK_SIZE=sizeof(HTTP_200_OK)-1;
+        void HTTPInputStream::ParseHttpResponse()
+        {
+            char *offset=strstr(http_header,http_header_size,HTTP_HEADER_SPLITE,HTTP_HEADER_SPLITE_SIZE);
+
+            if(!offset)
+                return;
+
+            response_info.Set(http_header,offset-http_header);
+
+            char *first=strchr(http_header,' ');
+
+            if(!first)
+                return;
+
+            ++first;
+            char *second=strchr(first,' ');
+
+            stou(first,second-first,response_code);
+
+            while(true)
+            {
+                first=offset+HTTP_HEADER_SPLITE_SIZE;
+
+                second=strchr(first,':',http_header_size-(first-http_header));
+
+                if(!second)break;
+
+                UTF8String key;
+                UTF8String value;
+
+                key.Set(first,second-first);
+
+                first=second+2;
+                second=strstr(first,http_header_size-(first-http_header),HTTP_HEADER_SPLITE,HTTP_HEADER_SPLITE_SIZE);
+
+                if(!second)break;
+
+                value.Set(first,second-first);
+                offset=second;
+
+                response_list.Add(key,value);
+            }
+        }
+
+		constexpr char HTTP_HEADER_FINISH[]="\r\n\r\n";
+        constexpr uint HTTP_HEADER_FINISH_SIZE=sizeof(HTTP_HEADER_FINISH)-1;
 
         constexpr char HTTP_CONTENT_LENGTH[]="Content-Length: ";
         constexpr uint HTTP_CONTENT_LENGTH_SIZE=sizeof(HTTP_CONTENT_LENGTH)-1;
@@ -125,40 +175,56 @@ namespace hgl
 			char *offset;
 			int size;
 
-			offset=strstr(http_header,http_header_size,HTTP_HEADER_SPLITE_STR,HTTP_HEADER_SPLITE_STR_SIZE);
+			offset=strstr(http_header,http_header_size,HTTP_HEADER_FINISH,HTTP_HEADER_FINISH_SIZE);
 
-			if(offset!=nullptr)
-			{
-				*offset=0;
+			if(!offset)
+                return 0;
 
-				size=http_header_size-(offset-http_header)-HTTP_HEADER_SPLITE_STR_SIZE;
+            ParseHttpResponse();
 
-				if(strstr(http_header,http_header_size,HTTP_200_OK,HTTP_200_OK_SIZE))
-				{
-					offset=strstr(http_header,http_header_size,HTTP_CONTENT_LENGTH,HTTP_CONTENT_LENGTH_SIZE);
+            *offset=0;
 
-					if(offset)
-					{
-						offset+=HTTP_CONTENT_LENGTH_SIZE;
-						stou(offset,filelength);
+            size=http_header_size-(offset-http_header)-HTTP_HEADER_FINISH_SIZE;
 
-                        pos=size;
-						return(pos);
-					}
-					else	//有些HTTP下载不提供文件长度
-					{
-						return(-1);//这里还没有正确处理，有待增加
-					}
-				}
-				else
-				{
-					LOG_ERROR(U8_TEXT("HTTP服务器返回错误信息: ")+UTF8String(http_header_str));
-					return(-1);
-				}
-			}
+            if(response_code==200)
+            {
+                offset=strstr(http_header,http_header_size,HTTP_CONTENT_LENGTH,HTTP_CONTENT_LENGTH_SIZE);
 
-			return(0);
+                if(offset)
+                {
+                    offset+=HTTP_CONTENT_LENGTH_SIZE;
+                    stou(offset,filelength);
+
+                    pos=size;
+                    return(pos);
+                }
+                else	//有些HTTP下载不提供文件长度
+                {
+                    return(-1);//这里还没有正确处理，有待增加
+                }
+            }
+            else
+            {
+                LOG_ERROR(U8_TEXT("HTTP服务器返回错误信息: ")+UTF8String(http_header_str));
+                return(-1);
+            }
 		}
+
+        int HTTPInputStream::ReturnError()
+        {
+            const int err=GetLastSocketError();
+
+            if(err!=10035        //windows 不能立即完成
+             &&err!=0)
+            {
+                LOG_ERROR(OS_TEXT("网络错误编号: ")+GetSocketErrorString(err));
+
+                Close();
+                RETURN_ERROR(-2);
+            }
+
+            return(0);
+        }
 
 		/**
 		* 从HTTP流中读取数据,但实际读取出来的数据长度不固定
@@ -179,20 +245,7 @@ namespace hgl
                 readsize=tcp_is->Read(http_header+http_header_size,HTTP_HEADER_BUFFER_SIZE-http_header_size);
 
 				if(readsize<0)
-				{
-					const int error=GetLastSocketError();
-
-					if(error!=10035        //windows 不能立即完成
-                     &&error!=0)
-					{
-						LOG_ERROR(OS_TEXT("网络错误编号: ")+GetSocketErrorString(error));
-
-						Close();
-                        RETURN_ERROR(-2);
-					}
-
-					return(0);
-				}
+                    return ReturnError();
 
 				http_header_size+=readsize;
 
@@ -213,20 +266,7 @@ namespace hgl
 				readsize=tcp_is->Read((char *)buf,bufsize);
 
 				if(readsize==-1)
-				{
-					int error=GetLastSocketError();
-
-					if(error!=10035
-					 &&error!=0)
-					{
-						LOG_ERROR(OS_TEXT("网络错误编号: ")+GetSocketErrorString(error));
-
-						Close();
-                        RETURN_ERROR(-2);
-					}
-
-					return(0);
-				}
+                    return ReturnError();
 
 				pos+=readsize;
 				return(readsize);

@@ -34,6 +34,8 @@ add_executable(check_error_char check_error_char.cpp)
 
 ADD_EXECUTABLE(dt dt.cpp ${HGL_CONSOLE_MAIN_SOURCE})
 
+add_executable(his_test his_test.cpp)
+
 TARGET_LINK_LIBRARIES(dt ${HGL_CONSOLE_LIB})
 
 TARGET_LINK_LIBRARIES(memblock ${HGL_CONSOLE_LIB})
@@ -60,3 +62,5 @@ target_link_libraries(recvtest ${HGL_CONSOLE_LIB})
 target_link_libraries(RechargeTest ${HGL_CONSOLE_LIB} curl)
 
 target_link_libraries(check_error_char ${HGL_CONSOLE_LIB})
+
+target_link_libraries(his_test ${HGL_CONSOLE_LIB})

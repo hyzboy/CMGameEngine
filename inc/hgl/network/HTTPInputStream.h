@@ -2,7 +2,7 @@
 #define HGL_NETWORK_HTTP_INPUT_STREAM_INCLUDE
 
 #include<hgl/io/InputStream.h>
-#include<hgl/type/BaseString.h>
+#include<hgl/ut/PList.h>
 #include<hgl/network/IP.h>
 namespace hgl
 {
@@ -26,20 +26,32 @@ namespace hgl
 			char *http_header;
             uint http_header_size;
 
+            void ParseHttpResponse();
 			int PraseHttpHeader();
+
+            int ReturnError();
 
 		protected:
 
 			int64 pos;
 			int64 filelength;
 
+            uint response_code;                 //HTTP响应代码
+            UTF8String response_info;           //HTTP响应信息
+
+            UTF8PList response_list;            //响应信息
+
 		public:
 
 			HTTPInputStream();
 			~HTTPInputStream();
 
-            bool    Open(IPAddress *,const UTF8String &);                                           ///<打开一个网址
+            bool    Open(IPAddress *,const UTF8String &,const UTF8String &);                        ///<打开一个网址
             void    Close() override;																///<
+
+            uint                GetResponseCode()const{return response_code;}                       ///<返回HTTP响应代码
+            const UTF8String &  GetResponseInfo()const{return response_info;}                       ///<返回HTTP响应信息
+            const UTF8PList &   GetResponseList()const{return response_list;}                       ///<返回HTTP响应信息列表
 
 			int64	Read(void *,int64) override;													///<读取数据
 			int64	Peek(void *,int64) override{return 0;}											///<预览数据
