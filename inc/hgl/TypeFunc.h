@@ -11,7 +11,31 @@ namespace hgl
 	#define NULL 0
 	#endif//
 
-    template<class T>
+    template<typename T>
+    inline T *zero_new(const int count)
+    {
+        T *result=new T[count];
+
+        if(!result)
+            return(nullptr);
+
+        memset(result,0,count*sizeof(T));
+        return result;
+    }
+
+    template<typename T>
+    inline T *zero_malloc(const int count)
+    {
+        T *result=hgl_malloc(count*sizeof(T));
+
+        if(!result)
+            return(nullptr);
+
+        memset(result,0,count*sizeof(T));
+        return result;
+    }
+
+    template<typename T>
     inline void hgl_call_construct(T *obj)      //呼叫构造函数
     {
         new (static_cast<void *>(obj)) T();
