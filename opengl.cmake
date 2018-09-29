@@ -3,7 +3,8 @@
 OPTION(SUPPORT_SOFTWARE_RENDER  "Support Software Render"               ON)
 OPTION(SUPPORT_GLCORE_RENDER    "Support OpenGL Core profile Render"    OFF)
 OPTION(SUPPORT_GLES_RENDER      "Support OpenGL ES2/3 profile Render"   OFF)
-OPTION(SUPPORT_VULKAN_RENDER    "Support Vulkan profile Render"         OFF)
+OPTION(SUPPORT_VULKAN_RENDER    "Support Vulkan Render"                 OFF)
+# OPTION(SUPPORT_ORBIS_RENDER     "Support Orbis Render"                  OFF)
 
 IF(SUPPORT_GLCORE_RENDER OR SUPPORT_GLES_RENDER OR SUPPORT_VULKAN_RENDER)
     SET(USE_OPENGL ON)

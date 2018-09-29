@@ -1,3 +1,5 @@
+﻿add_subdirectory(Noop)
+
 IF(BUILD_RENDER_DEVICE_OPENGL_CORE_LIB)
     add_subdirectory(GLCore)
 ENDIF()
