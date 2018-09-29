@@ -160,7 +160,9 @@ namespace hgl
         {
             if(::CreateDirectoryW(name,nullptr))return(true);
 
-            LOG_PROBLEM(OS_TEXT("Create Directory <")+OSString(name)+OS_TEXT("> failed,errno: ")+OSString(GetLastError()));
+            const uint win_error=GetLastError();
+
+            LOG_PROBLEM(OS_TEXT("Create Directory <")+OSString(name)+OS_TEXT("> failed,errno: ")+OSString(win_error));
             return(false);
         }
 
