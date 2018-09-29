@@ -9,7 +9,7 @@ namespace hgl
         {
             NSFileManager *dfm=[NSFileManager defaultManager];
 
-            char *str=[[[dfm homeDirectoryForCurrentUser] path] cStringUsingEncoding:NSUTF8StringEncoding];
+            const char *str=[[[dfm homeDirectoryForCurrentUser] path] cStringUsingEncoding:NSUTF8StringEncoding];
 
             hgl::strcpy(fn,HGL_MAX_PATH,str,strlen(str));
         }
@@ -19,7 +19,7 @@ namespace hgl
         */
         bool GetCurrentProgram(UTF8String &result)
         {
-            NSString *ns_string = [[[[NSBundle mainBundle] bundleURL] URLByDeletingPathExtension] url];
+            NSString *ns_string = [[[[NSBundle mainBundle] bundleURL] URLByDeletingPathExtension] path];
 
             result.Set([ns_string cStringUsingEncoding:NSUTF8StringEncoding]);
 
