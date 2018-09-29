@@ -12,6 +12,10 @@ namespace hgl
          */
         class NoopDevice:public RenderDevice
         {
+        public:
+
+            const   List<MonitorInfo *> *   GetMonitorList()override{return nullptr;}               ///<获取显示器列表
+                    RenderWindow *          CreateWindow(const WindowConfig *)override;             ///<创建窗口
         };//class NoopDevice:public RenderDevice
     }//namespace graph
 }//namespace hgl
