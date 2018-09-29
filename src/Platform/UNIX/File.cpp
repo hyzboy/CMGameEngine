@@ -166,11 +166,11 @@ namespace hgl
             return S_ISLNK(buf.st_mode);
         }
 
-        bool MakeDirectory(const OSString &name)
+        bool MakeDirectory(const os_char *name)
         {
             if(!mkdir(name,S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH))return(true);
 
-            LOG_PROBLEM(OS_TEXT("Create Directory <")+name+OS_TEXT("> failed,errno: ")+OSString(errno));
+            LOG_PROBLEM(OS_TEXT("Create Directory <")+OSString(name)+OS_TEXT("> failed,errno: ")+OSString(errno));
             return(false);
         }
 

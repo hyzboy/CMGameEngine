@@ -1,4 +1,4 @@
-#include<hgl/io/FileSystem.h>
+﻿#include<hgl/io/FileSystem.h>
 #include<hgl/LogInfo.h>
 #include<hgl/io/FileInputStream.h>
 #include<hgl/io/FileOutputStream.h>
@@ -156,11 +156,11 @@ namespace hgl
             return attrib&FILE_ATTRIBUTE_DIRECTORY;
         }
 
-        bool MakeDirectory(const OSString &name)
+        bool MakeDirectory(const os_char *name)
         {
             if(::CreateDirectoryW(name,nullptr))return(true);
 
-            LOG_PROBLEM(OS_TEXT("创建目录<")+name+OS_TEXT(">失败！"));
+            LOG_PROBLEM(OS_TEXT("Create Directory <")+OSString(name)+OS_TEXT("> failed,errno: ")+OSString(GetLastError()));
             return(false);
         }
 

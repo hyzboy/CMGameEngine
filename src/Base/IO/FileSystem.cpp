@@ -143,7 +143,7 @@ namespace hgl
 		}
 
         os_char *GetRootPath(os_char *str);
-        bool MakeDirectory(const OSString &name);
+        bool MakeDirectory(const os_char *name);
 
         /**
         * 创建一个子目录,该函数可自动创建多级目录。
