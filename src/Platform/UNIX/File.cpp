@@ -1,4 +1,4 @@
-#include<hgl/io/FileSystem.h>
+﻿#include<hgl/io/FileSystem.h>
 #include<hgl/LogInfo.h>
 #include<hgl/io/FileInputStream.h>
 #include<hgl/io/FileOutputStream.h>
@@ -10,6 +10,7 @@
 
 #include <sys/types.h>
 #include <string.h>
+#include <errno.h>
 
 namespace hgl
 {
@@ -169,7 +170,7 @@ namespace hgl
         {
             if(!mkdir(name,S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH))return(true);
 
-            LOG_PROBLEM(OS_TEXT("创建目录<")+name+OS_TEXT(">失败！"));
+            LOG_PROBLEM(OS_TEXT("Create Directory <")+name+OS_TEXT("> failed,errno: ")+OSString(errno));
             return(false);
         }
 
@@ -215,4 +216,3 @@ namespace hgl
         }
     }//namespace filesystem
 }//namespace hgl
-

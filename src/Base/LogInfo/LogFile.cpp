@@ -1,4 +1,4 @@
-#include<hgl/Logger.h>
+﻿#include<hgl/Logger.h>
 #include<hgl/io/FileSystem.h>
 #include<hgl/thread/ThreadMutex.h>
 #include<hgl/io/FileOutputStream.h>
@@ -42,7 +42,8 @@ namespace hgl
 
                 strcat(fn,HGL_MAX_PATH,HGL_DIRECTORY_SEPARATOR);
                 strcat(fn,HGL_MAX_PATH,OS_TEXT(".cmgdk"),6);
-                filesystem::MakePath(fn);
+                if(!filesystem::MakePath(fn))
+                    return(false);
 
                 strcat(fn,HGL_MAX_PATH,HGL_DIRECTORY_SEPARATOR);
 

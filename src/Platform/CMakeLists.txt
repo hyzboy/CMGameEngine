@@ -1,4 +1,4 @@
-IF(APPLE)
+﻿IF(APPLE)
     add_library(OSXGUI Clipboard.cpp)
 ENDIF(APPLE)
 
@@ -6,40 +6,48 @@ IF(BUILD_QT5_SUPPORT_LIB)
     add_subdirectory(QT)
 ENDIF()
 
-IF(ANDROID)
-    SET(PLATFORM_LOG_SOURCE             Android/LogConsole.cpp
-                                        Android/LogFile.cpp)
-
-    SET(PLATFORM_APPLICATION_SOURCE     ${PLATFORM_APPLICATION_SOURCE}
-                                        Android/JNISupport.cpp
-                                        Android/NativeActivitySupport.cpp)
-ENDIF()
-
 IF(UNIX)
     SET(PLATFORM_FILE_SOURCE            UNIX/File.cpp
                                         UNIX/FileAccess.cpp
                                         UNIX/EnumFile.cpp)
 
-    SET(PLATFORM_CODEPAGE_SOURCE        UNIX/CodePage.cpp)
-
     SET(PLATFORM_APPLICATION_SOURCE     UNIX/SystemInfo.cpp)
 
-    SET(PLATFORM_LOG_SOURCE             UNIX/LogConsole.cpp
-                                        UNIX/LogFile.cpp)
+    SET(PLATFORM_LOG_SOURCE             UNIX/LogFile.cpp)
 
     SET(PLATFORM_MULTI_THREAD_SOURCE    UNIX/CondVar.cpp
                                         UNIX/RWLock.cpp
                                         UNIX/Thread.cpp
                                         UNIX/ThreadMutex.cpp)
 
-    IF(APPLE)
-        SET(PLATFORM_MULTI_THREAD_SOURCE    ${PLATFORM_MULTI_THREAD_SOURCE}
-                                            Apple/Semaphore.cpp
-                                            Apple/ProgramPath.cpp)
+    IF(ANDROID)
+        SET(PLATFORM_LOG_SOURCE             Android/LogConsole.cpp)
+
+        SET(PLATFORM_APPLICATION_SOURCE     ${PLATFORM_APPLICATION_SOURCE}
+                                            Android/JNISupport.cpp
+                                            Android/NativeActivitySupport.cpp)
+
+        SET(PLATFORM_FILE_SOURCE            ${PLATFORM_FILE_SOURCE}
+                                            Android/ProgramPath.cpp)
+
     ELSE()
-        SET(PLATFORM_MULTI_THREAD_SOURCE    ${PLATFORM_MULTI_THREAD_SOURCE}
-                                            UNIX/Semaphore.cpp
-                                            UNIX/ProgramPath.cpp)
+
+        SET(PLATFORM_CODEPAGE_SOURCE        UNIX/CodePage.cpp)
+        SET(PLATFORM_LOG_SOURCE             UNIX/LogConsole.cpp)
+
+        IF(APPLE)
+            SET(PLATFORM_MULTI_THREAD_SOURCE    ${PLATFORM_MULTI_THREAD_SOURCE}
+                                                Apple/Semaphore.cpp)
+
+            SET(PLATFORM_FILE_SOURCE            ${PLATFORM_FILE_SOURCE}
+                                                Apple/ProgramPath.mm)
+        ELSE()
+            SET(PLATFORM_MULTI_THREAD_SOURCE    ${PLATFORM_MULTI_THREAD_SOURCE}
+                                                UNIX/Semaphore.cpp)
+
+            SET(PLATFORM_FILE_SOURCE            ${PLATFORM_FILE_SOURCE}
+                                                UNIX/ProgramPath.cpp)
+        ENDIF()
     ENDIF()
 
     SET(PLATFORM_MULTI_PROCESS_SOURCE   UNIX/ProcMutex.cpp
