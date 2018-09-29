@@ -24,10 +24,7 @@ IF(BUILD_NETWORK_LIB)
 ENDIF(BUILD_NETWORK_LIB)
 
 add_subdirectory(SceneGraph)
-
-IF(BUILD_OPENGL_LIB)
-	add_subdirectory(RenderDevice)
-ENDIF(BUILD_OPENGL_LIB)
+add_subdirectory(RenderDevice)
 
 IF(BUILD_OPENAL_LIB)
 	add_subdirectory(OpenALEE)
