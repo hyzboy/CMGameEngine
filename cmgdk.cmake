@@ -167,10 +167,6 @@ IF(UNIX)
 
 	SET(HGL_CONSOLE_LIB ${HGL_BASE_LIB} ${HGL_NETWORK_LIB} CM.SceneGraph CM.Platform MathGeoLib expat)
 	SET(HGL_GRAPHICS_LIB ${HGL_BASE_LIB} ${HGL_NETWORK_LIB} CM.SceneGraphRender CM.RenderDevice CM.PlatformRender ${HGL_OpenGL_LIB} MathGeoLib X11 Xxf86vm Xrandr Xcursor Xinerama Xi expat)
-
-	IF(OPENGL_USE_GLFW)
-        SET(HGL_GRAPHICS_LIB ${HGL_GRAPHICS_LIB} glfw)
-    ENDIF(OPENGL_USE_GLFW)
 ELSE(UNIX)
 	MESSAGE("Host OS don't is UNIX")
 ENDIF(UNIX)
