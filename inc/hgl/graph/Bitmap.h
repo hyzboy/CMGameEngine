@@ -1,9 +1,9 @@
-﻿#ifndef HGL_GRAPH_BITMAP_INCLUDE
+#ifndef HGL_GRAPH_BITMAP_INCLUDE
 #define HGL_GRAPH_BITMAP_INCLUDE
 
 #include<hgl/graph/TextureSourceFormat.h>
 #include<hgl/type/BaseString.h>
-#include<hgl/FileSystem.h>
+#include<hgl/io/FileSystem.h>
 #include<hgl/LogInfo.h>
 namespace hgl
 {

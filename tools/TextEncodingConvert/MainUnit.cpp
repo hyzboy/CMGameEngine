@@ -1,6 +1,6 @@
-﻿#include<hgl/Console.h>
+#include<hgl/Console.h>
 #include<hgl/type/StringList.h>
-#include<hgl/FileSystem.h>
+#include<hgl/io/FileSystem.h>
 #include<hgl/io/FileOutputStream.h>
 #include<hgl/io/TextOutputStream.h>
 

@@ -1,6 +1,6 @@
-﻿#include<hgl/platform/SystemInfo.h>
+#include<hgl/platform/SystemInfo.h>
 #include<hgl/platform/ConsoleSystemInitInfo.h>
-#include<hgl/FileSystem.h>
+#include<hgl/io/FileSystem.h>
 #include<pwd.h>
 #include<unistd.h>
 #include<signal.h>

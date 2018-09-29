@@ -1,8 +1,8 @@
-﻿//取名为XMLParseClass是为了避免与expat的xmlparse.c编译造成obj冲突
+//取名为XMLParseClass是为了避免与expat的xmlparse.c编译造成obj冲突
 
 #include<hgl/ut/XMLParse.h>
 #include<hgl/io/FileInputStream.h>
-#include<hgl/FileSystem.h>
+#include<hgl/io/FileSystem.h>
 #include<expat.h>
 
 namespace hgl

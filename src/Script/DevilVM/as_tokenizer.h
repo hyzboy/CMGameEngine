@@ -40,7 +40,7 @@
 #ifndef AS_TOKENIZER_H
 #define AS_TOKENIZER_H
 
-#include <hgl/type/DataType.h>
+#include<hgl/type/DataType.h>
 #include "as_tokendef.h"
 
 using namespace hgl;

@@ -1,8 +1,8 @@
-﻿#include"../project/GameCommon/AttackValue.h"
+#include"../project/GameCommon/AttackValue.h"
 #include<sys/time.h>
 #include<iostream>
 
-#include <hgl/TypeFunc.h>
+#include<hgl/TypeFunc.h>
 #include <math.h>
 
 namespace hgl

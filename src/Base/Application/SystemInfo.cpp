@@ -1,7 +1,7 @@
-﻿#include<hgl/platform/SystemInfo.h>
+#include<hgl/platform/SystemInfo.h>
 #include<hgl/LogInfo.h>
 #include<hgl/PlugIn.h>
-#include<hgl/FileSystem.h>
+#include<hgl/io/FileSystem.h>
 #include<hgl/Info.h>
 
 namespace hgl

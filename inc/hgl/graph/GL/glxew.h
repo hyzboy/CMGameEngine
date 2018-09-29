@@ -1,4 +1,4 @@
-﻿/*
+/*
 ** The OpenGL Extension Wrangler Library
 ** Copyright (C) 2008-2017, Nigel Stewart <nigels[]users sourceforge net>
 ** Copyright (C) 2002-2008, Milan Ikits <milan ikits[]ieee org>
@@ -98,7 +98,7 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xmd.h>
-#include <hgl/graph/GL/glew.h>
+#include<hgl/graph/GL/glew.h>
 
 #ifdef __cplusplus
 extern "C" {

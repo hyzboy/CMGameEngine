@@ -1,4 +1,4 @@
-﻿#include<hgl/EnumFile.h>
+#include<hgl/io/EnumFile.h>
 #include<iostream>
 
 using namespace hgl;

@@ -1,4 +1,4 @@
-﻿#include <hgl/graph/Light.h>
+#include<hgl/graph/Light.h>
 
 namespace hgl
 {

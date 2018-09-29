@@ -1,5 +1,5 @@
-﻿#include <hgl/LogInfo.h>
-#include <hgl/network/UdpSocket.h>
+#include<hgl/LogInfo.h>
+#include<hgl/network/UdpSocket.h>
 #include <string.h>
 
 #if HGL_OS != HGL_OS_Windows

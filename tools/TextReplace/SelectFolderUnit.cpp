@@ -2,7 +2,7 @@
 
 #include <vcl.h>
 #include <dir.h>
-#include <hgl/Other.H>
+#include<hgl/Other.H>
 
 #include "SelectFolderUnit.h"
 //---------------------------------------------------------------------------
@@ -55,7 +55,7 @@ void __fastcall TSelectFolderForm::Button3Click(TObject *Sender)
 {
 	WideString folder_name;
 
-	folder_name=InputBox(L"ÊäÈëÃû³Æ",L"ÇëÊäÈëÄ¿Â¼Ãû³Æ",L"");
+	folder_name=InputBox(L"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",L"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿Â¼ï¿½ï¿½ï¿½ï¿½",L"");
 
 	if(folder_name=="")return;
 

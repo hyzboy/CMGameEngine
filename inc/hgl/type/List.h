@@ -1,4 +1,4 @@
-﻿#ifndef HGL_LIST_INCLUDE
+#ifndef HGL_LIST_INCLUDE
 #define HGL_LIST_INCLUDE
 
 #include<hgl/LogInfo.h>
@@ -184,5 +184,5 @@ namespace hgl
 		}
 	};//class ObjectList
 }//namespace hgl
-#include <hgl/type/ObjectList.cpp>
+#include<hgl/type/ObjectList.cpp>
 #endif//HGL_LIST_INCLUDE

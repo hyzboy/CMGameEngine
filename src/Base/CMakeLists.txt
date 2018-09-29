@@ -10,7 +10,6 @@ SOURCE_GROUP("Object"    FILES ${BASE_OBJECT_SOURCE})
 
 SET(BASE_OTHER_SOURCE
     Other/ExpendString.cpp
-    Other/FileSystem.cpp
     Other/TimeCount.cpp
 	Other/TimeVal.cpp
     Other/DateTime.cpp
@@ -51,6 +50,7 @@ SET(BASE_IO_SOURCE
     IO/FileInputStream.cpp
     IO/DataInputStream.cpp
     IO/FileAccess.cpp
+    IO/FileSystem.cpp
     IO/TextOutputStream.cpp
     IO/DataDistribute.cpp
     IO/IOType.cpp)

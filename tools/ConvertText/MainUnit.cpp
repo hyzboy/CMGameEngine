@@ -1,11 +1,11 @@
 //---------------------------------------------------------------------------
 
 #include <vcl.h>
-#include <hgl/vcl.h>
-#include <hgl/Other.H>
-#include <hgl/Str.H>
-#include <hgl/StringList.H>
-#include <hgl/ut/PList.H>
+#include<hgl/vcl.h>
+#include<hgl/Other.H>
+#include<hgl/Str.H>
+#include<hgl/StringList.H>
+#include<hgl/ut/PList.H>
 #pragma hdrstop
 
 #include "MainUnit.h"

@@ -1,4 +1,4 @@
-﻿#ifndef HGL_STACK_INCLUDE
+#ifndef HGL_STACK_INCLUDE
 #define HGL_STACK_INCLUDE
 
 #include<hgl/type/DataType.h>
@@ -55,5 +55,5 @@ namespace hgl
 		void Clear();
 	};//template<typename T> class StackObject
 }//namespace hgl
-#include <hgl/type/Stack.cpp>
+#include<hgl/type/Stack.cpp>
 #endif//HGL_STACK_INCLUDE

@@ -1,8 +1,8 @@
 //---------------------------------------------------------------------------
 
 #include <vcl.h>
-#include <hgl/StringList.H>
-#include <hgl/File.H>
+#include<hgl/StringList.H>
+#include<hgl/File.H>
 
 #include "MainUnit.h"
 //---------------------------------------------------------------------------
