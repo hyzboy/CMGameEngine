@@ -34,7 +34,7 @@ namespace hgl
 
     AudioFileType CheckAudioFileType(const OSString &filename)
     {
-        const os_char *ext;
+        os_char *ext;
         os_char extname[16];
 
         ext=filename.strrchr('.');

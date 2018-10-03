@@ -172,7 +172,7 @@ namespace hgl
         T *strchr(T ch)const
         {
             // 			if(!this)return(nullptr);
-            if(!data.valud())return(nullptr);
+            if(!data.valid())return(nullptr);
 
             const int result=FindChar(ch);
 
@@ -187,7 +187,7 @@ namespace hgl
         T *strrchr(T ch)const
         {
             // 			if(!this)return(nullptr);
-            if(!data.valud())return(nullptr);
+            if(!data.valid())return(nullptr);
 
             const int result=FindRightChar(ch);
 

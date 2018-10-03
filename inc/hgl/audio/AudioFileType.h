@@ -1,7 +1,7 @@
 ﻿#ifndef HGL_AUDIO_FILE_TYPE_INCLUDE
 #define HGL_AUDIO_FILE_TYPE_INCLUDE
 
-#include<hgl/platform/Platform.h>
+#include<hgl/type/BaseString.h>
 namespace hgl
 {
     /**
@@ -19,6 +19,6 @@ namespace hgl
     };//enum AudioFileType
 
     AudioFileType CheckAudioExtName(const os_char *ext_name);
-    AudioFileType CheckAudioFileType(const os_char *filename);
+    AudioFileType CheckAudioFileType(const OSString &filename);
 }//namespace hgl
 #endif//HGL_AUDIO_FILE_TYPE_INCLUDE

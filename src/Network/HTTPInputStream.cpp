@@ -71,7 +71,7 @@ namespace hgl
 
             if(!tcp)
 			{
-				LOG_ERROR(U8_TEXT("连接HTTP服务器失败: ")+UTF8String(host_ip_str));
+				LOG_ERROR(U8_TEXT("Connect to HTTPServer failed: ")+UTF8String(host_ip_str));
 				RETURN_FALSE;
 			}
 
@@ -91,7 +91,7 @@ namespace hgl
 
             if(tcp_os->WriteFully(http_header,len)!=len)
 			{
-				LOG_ERROR(U8_TEXT("发送HTTP下载信息失败:")+UTF8String(host_ip_str));
+				LOG_ERROR(U8_TEXT("Send HTTP Get Info failed:")+UTF8String(host_ip_str));
 				delete tcp;
                 tcp=nullptr;
 				RETURN_FALSE;
@@ -203,7 +203,7 @@ namespace hgl
             }
             else
             {
-                LOG_ERROR(U8_TEXT("HTTP服务器返回错误信息: ")+UTF8String(http_header_str));
+                LOG_ERROR(U8_TEXT("HTTPServer error info: ")+UTF8String(http_header));
                 return(-1);
             }
 		}
@@ -215,7 +215,7 @@ namespace hgl
             if(err==nseWouldBlock)return(0);      //不能立即完成
             if(err==0)return(0);
 
-            LOG_ERROR(OS_TEXT("网络错误编号: ")+GetSocketErrorString(err));
+            LOG_ERROR(OSString("Socket Error: ")+GetSocketString(err));
 
             Close();
             RETURN_ERROR(-2);
