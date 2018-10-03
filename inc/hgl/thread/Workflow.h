@@ -16,6 +16,10 @@ namespace hgl
 	 */
 	namespace workflow
 	{
+        /**
+         * 工作处理基类模板
+         * @param W 工作对象
+         */
 		template<typename W> class WorkProc
 		{
 		public:
