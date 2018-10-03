@@ -32,6 +32,16 @@ namespace hgl
             Set(str);
         }
 
+        BaseString(const T ch)
+        {
+            T *str=new T[2];
+
+            str[0]=ch;
+            str[1]=0;
+
+            Set(str,1,true);
+        }
+
         /**
         * 根据一个C指针风格字符串设置当前字符串内容
         * @param str 字符串内容，在len<0的情况下，需以0为结尾
@@ -57,17 +67,21 @@ namespace hgl
             Set(bs);
         }
 
-#define BASE_STRING_NUMBER_CONSTRUCT(type,func)	BaseString(const type num)	\
-        {	\
-            Set(func(new T[8*sizeof(type)],8*sizeof(type),num),-1,true);	\
+        #define BASE_STRING_NUMBER_CONSTRUCT(type,func) \
+        \
+        explicit BaseString(const type);  \
+        \
+        static BaseString<T> valueOf(const type num)  \
+        {   \
+            return BaseString<T>(func(new T[8*sizeof(type)],8*sizeof(type),num),-1,true);    \
         }
 
-        BASE_STRING_NUMBER_CONSTRUCT(int,	itos);
-        BASE_STRING_NUMBER_CONSTRUCT(uint,	utos);
-        BASE_STRING_NUMBER_CONSTRUCT(int64,	itos);
+        BASE_STRING_NUMBER_CONSTRUCT(int,   itos);
+        BASE_STRING_NUMBER_CONSTRUCT(uint,  utos);
+        BASE_STRING_NUMBER_CONSTRUCT(int64, itos);
         BASE_STRING_NUMBER_CONSTRUCT(uint64,utos);
 
-        BASE_STRING_NUMBER_CONSTRUCT(float,	ftos);
+        BASE_STRING_NUMBER_CONSTRUCT(float, ftos);
         BASE_STRING_NUMBER_CONSTRUCT(double,ftos);
 
 #undef BASE_STRING_NUMBER_CONSTRUCT
