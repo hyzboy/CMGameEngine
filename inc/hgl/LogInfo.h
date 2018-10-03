@@ -29,12 +29,12 @@ namespace hgl
 
 		inline	void DebugLog(LogLevel ll,const UTF16String &str,const char *filename,int line,const char *funcname)
 		{
-			Log(ll,str+U16_TEXT(">>LogFrom(\"")+to_u16(filename)+U16_TEXT("\", ")+UTF16String(line)+U16_TEXT(" line,func:\"")+to_u16(funcname)+U16_TEXT("\")"));
+            Log(ll,str+U16_TEXT(">>LogFrom(\"")+to_u16(filename)+U16_TEXT("\", ")+UTF16String::valueOf(line)+U16_TEXT(" line,func:\"")+to_u16(funcname)+U16_TEXT("\")"));
 		}
 
 		inline	void DebugLog(LogLevel ll,const UTF8String &str,const char *filename,int line,const char *funcname)
 		{
-			Log(ll,str+U8_TEXT(">>LogFrom(\"")+UTF8String(filename)+U8_TEXT("\", ")+UTF8String(line)+U8_TEXT(" line,func:\"")+UTF8String(funcname)+U8_TEXT("\")"));
+			Log(ll,str+U8_TEXT(">>LogFrom(\"")+UTF8String(filename)+U8_TEXT("\", ")+UTF8String::valueOf(line)+U8_TEXT(" line,func:\"")+UTF8String(funcname)+U8_TEXT("\")"));
 		}
 
 		#ifdef LOG_INFO_SOURCE
@@ -49,9 +49,9 @@ namespace hgl
 			#define LOG_ERROR(str)		{Log(llError,	str);}
 		#endif//LOG_INFO_SOURCE
 
-		#define RETURN_FALSE		{DebugLog(llLog,OS_TEXT("return(false)"							),__FILE__,__LINE__,__HGL_FUNC__);return(false);}
-		#define RETURN_ERROR(v)		{DebugLog(llLog,OS_TEXT("return error(")+OSString(v)+OS_TEXT(")"),__FILE__,__LINE__,__HGL_FUNC__);return(v);}
-		#define RETURN_ERROR_NULL	{DebugLog(llLog,OS_TEXT("return error(nullptr)"					),__FILE__,__LINE__,__HGL_FUNC__);return(nullptr);}
+        #define RETURN_FALSE        {DebugLog(llLog,OS_TEXT("return(false)")                                    ,__FILE__,__LINE__,__HGL_FUNC__);return(false);}
+        #define RETURN_ERROR(v)     {DebugLog(llLog,OS_TEXT("return error(")+OSString::valueOf(v)+OS_TEXT(")")  ,__FILE__,__LINE__,__HGL_FUNC__);return(v);}
+        #define RETURN_ERROR_NULL   {DebugLog(llLog,OS_TEXT("return error(nullptr)")                            ,__FILE__,__LINE__,__HGL_FUNC__);return(nullptr);}
 
 		#define RETURN_BOOL(proc)	{if(proc)return(true);RETURN_FALSE}
 #else

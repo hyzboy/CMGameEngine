@@ -57,12 +57,12 @@ namespace hgl
             t.Sync();
 
             const OSString str= OS_TEXT("Create Log Date/Time: ")+
-                                OSString(d.GetYear  ())+OS_TEXT("-")+
-                                OSString(d.GetMonth ())+OS_TEXT("-")+
-                                OSString(d.GetDay   ())+OS_TEXT(" ")+
-                                OSString(t.GetHour  ())+OS_TEXT(":")+
-                                OSString(t.GetMinute())+OS_TEXT(":")+
-                                OSString(t.GetSecond())+OS_TEXT("\n");
+                                OSString::valueOf(d.GetYear  ())+OS_TEXT("-")+
+                                OSString::valueOf(d.GetMonth ())+OS_TEXT("-")+
+                                OSString::valueOf(d.GetDay   ())+OS_TEXT(" ")+
+                                OSString::valueOf(t.GetHour  ())+OS_TEXT(":")+
+                                OSString::valueOf(t.GetMinute())+OS_TEXT(":")+
+                                OSString::valueOf(t.GetSecond())+OS_TEXT("\n");
 
             WriteLog(llLog,str.c_str(),str.Length());
 

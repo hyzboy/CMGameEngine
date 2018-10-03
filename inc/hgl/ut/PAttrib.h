@@ -77,7 +77,7 @@ namespace hgl
 
         BaseString<C> MakeToString() const override
         {
-            return BaseString<C>(this->value);
+            return BaseString<C>::valueOf(this->value);
         }
     };//class PNumberAttrib:public PAttrib<C,uint>
 
@@ -92,7 +92,7 @@ namespace hgl
 
         using PAttrib<C,bool>::PAttrib;
 
-        const bool ParseFromString(const BaseString<C> &str) override
+        const bool ParseFromString(const BaseString<C> &str)
         {
             if(str.ToBool(this->value))
                 return(true);

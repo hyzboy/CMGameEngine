@@ -32,12 +32,12 @@ namespace hgl
         return(aftNone);
     }
 
-    AudioFileType CheckAudioFileType(const os_char *filename)
+    AudioFileType CheckAudioFileType(const OSString &filename)
     {
         const os_char *ext;
         os_char extname[16];
 
-        ext=hgl::strrchr(filename,'.');
+        ext=filename.strrchr('.');
 
         if(!ext)
             return(aftNone);

@@ -49,7 +49,7 @@ namespace hgl
                  )
                     return(0);
 
-                LOG_HINT(OS_TEXT("AcceptServer Accept error,errno=")+OSString(err));
+                LOG_HINT(OS_TEXT("AcceptServer Accept error,errno=")+OSString::valueOf(err));
 
                 if(err==nseTooManyLink)    //太多的人accept
                 {
@@ -67,7 +67,7 @@ namespace hgl
 
             addr->ToString(ipstr,IP_STR_MAX_SIZE);
 
-            LOG_INFO(U8_TEXT("AcceptServer Accept IP:")+UTF8String(ipstr)+U8_TEXT(" ,sock:")+UTF8String(new_sock));
+            LOG_INFO(U8_TEXT("AcceptServer Accept IP:")+UTF8String(ipstr)+U8_TEXT(" ,sock:")+UTF8String::valueOf(new_sock));
 
             return(new_sock);
         }
