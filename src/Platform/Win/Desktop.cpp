@@ -1,4 +1,4 @@
-#include<hgl/type/DataType.h>
+﻿#include<hgl/type/DataType.h>
 #include<hgl/type/BaseString.h>
 #include<hgl/io/FileSystem.h>
 #include<hgl/Desktop.h>
@@ -60,7 +60,7 @@ namespace hgl
                 return(false);
 
             hresult=psl->QueryInterface(IID_IPersistFile,(LPVOID*)&pPf);
-        
+
             if(hresult!=S_OK)
                 return(false);
 
