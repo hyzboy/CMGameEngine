@@ -170,7 +170,7 @@ namespace hgl
         {
             if(!mkdir(name,S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH))return(true);
 
-            LOG_PROBLEM(OS_TEXT("Create Directory <")+OSString(name)+OS_TEXT("> failed,errno: ")+OSString::valueOf(errno));
+            LOG_PROBLEM(OS_TEXT("Create Directory <")+OSString(name)+OS_TEXT("> failed,errno: ")+OSString(errno));
             return(false);
         }
 

@@ -35,13 +35,13 @@ namespace hgl
 			if(fom==fomReadWrite	)fp=hgl_open64(fn,O_RDWR	);else
 			if(fom==fomAppend		)fp=hgl_open64(fn,O_APPEND	);else
             {
-                LOG_ERROR(OS_TEXT("UNIX,FileAccess,OpenFile(")+OSString(fn)+OS_TEXT(" mode error: "+OSString::valueOf(fom)));
+                LOG_ERROR(OS_TEXT("UNIX,FileAccess,OpenFile(")+OSString(fn)+OS_TEXT(" mode error: "+OSString(fom)));
                 RETURN_ERROR(-1);
             }
 
             if(fp==-1)
             {
-                LOG_ERROR(OS_TEXT("UNIX,FileAccess,OpenFile(")+OSString(fn)+OS_TEXT(") open return error: "+OSString::valueOf(errno)));
+                LOG_ERROR(OS_TEXT("UNIX,FileAccess,OpenFile(")+OSString(fn)+OS_TEXT(") open return error: "+OSString(errno)));
             }
 
             return fp;
