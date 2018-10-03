@@ -77,7 +77,7 @@ namespace hgl
 
         BaseString<C> MakeToString() const override
         {
-            return BaseString<C>::valueOf(this->value);
+            return BaseString<C>(this->value);
         }
     };//class PNumberAttrib:public PAttrib<C,uint>
 

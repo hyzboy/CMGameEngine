@@ -232,7 +232,7 @@ namespace hgl
 
             if(offset+length>file_length)
             {
-                LOG_PROBLEM(OS_TEXT("读取文件<")+filename+OS_TEXT("><")+OSString::valueOf(offset)+OS_TEXT(",")+OSString::valueOf(length)+OS_TEXT(">超出了范围，文件长度为<")+OSString::valueOf(file_length));
+                LOG_PROBLEM(OS_TEXT("读取文件<")+filename+OS_TEXT("><")+OSString(offset)+OS_TEXT(",")+OSString(length)+OS_TEXT(">超出了范围，文件长度为<")+OSString(file_length));
                 return(nullptr);
             }
 
@@ -245,7 +245,7 @@ namespace hgl
 
             if(fs.Read(offset,fb,length)==length)
             {
-                LOG_INFO(OS_TEXT("加载文件<")+filename+OS_TEXT("><")+OSString::valueOf(offset)+OS_TEXT(",")+OSString::valueOf(length)+OS_TEXT(">到缓冲区成功."));
+                LOG_INFO(OS_TEXT("加载文件<")+filename+OS_TEXT("><")+OSString(offset)+OS_TEXT(",")+OSString(length)+OS_TEXT(">到缓冲区成功."));
 
                 return(buf);
             }

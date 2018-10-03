@@ -32,14 +32,16 @@ namespace hgl
             Set(str);
         }
 
-        BaseString(const T ch)
+		explicit BaseString(const T);
+
+        static BaseString<T> charOf(const T &ch)
         {
             T *str=new T[2];
 
             str[0]=ch;
             str[1]=0;
 
-            Set(str,1,true);
+            return BaseString<T>(str,1,true);
         }
 
         /**
@@ -68,12 +70,9 @@ namespace hgl
         }
 
         #define BASE_STRING_NUMBER_CONSTRUCT(type,func) \
-        \
-        explicit BaseString(const type);  \
-        \
-        static BaseString<T> valueOf(const type num)  \
+        BaseString(const type num)  \
         {   \
-            return BaseString<T>(func(new T[8*sizeof(type)],8*sizeof(type),num),-1,true);    \
+            Set(func(new T[8*sizeof(type)],8*sizeof(type),num),-1,true);    \
         }
 
         BASE_STRING_NUMBER_CONSTRUCT(int,   itos);

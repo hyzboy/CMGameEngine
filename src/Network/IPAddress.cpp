@@ -78,7 +78,7 @@ namespace hgl
 
             if (bind(ThisSocket, (SockAddr *)&addr, sizeof(SockAddrIn)))
             {
-                LOG_ERROR(OS_TEXT("Bind Socket Error! errno: ") + OSString::valueOf(GetLastSocketError()));
+                LOG_ERROR(OS_TEXT("Bind Socket Error! errno: ") + OSString(GetLastSocketError()));
                 return(false);
             }
 

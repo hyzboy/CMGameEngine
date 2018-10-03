@@ -57,16 +57,16 @@ namespace hgl
             {
                 const int sock_error=GetLastSocketError();      //在这里定义一个，是为了调试方便可以查看
 
-                LOG_ERROR(OS_TEXT("CreateSocket(domain=")+OSString::valueOf(addr->GetFamily())+
-                            OS_TEXT(",type=")+OSString::valueOf(addr->GetSocketType())+
-                            OS_TEXT(",protocol=")+OSString::valueOf(protocol)+
-                            OS_TEXT(") return ")+OSString::valueOf(s)+
-                            OS_TEXT("; errno ")+OSString::valueOf(sock_error));
+                LOG_ERROR(OS_TEXT("CreateSocket(domain=")+OSString(addr->GetFamily())+
+                            OS_TEXT(",type=")+OSString(addr->GetSocketType())+
+                            OS_TEXT(",protocol=")+OSString(protocol)+
+                            OS_TEXT(") return ")+OSString(s)+
+                            OS_TEXT("; errno ")+OSString(sock_error));
 
                 RETURN_ERROR(-3);
             }
 
-            LOG_INFO(U8_TEXT("Create ")+UTF8String(addr->GetProtocolName())+U8_TEXT(" Socket OK: ")+UTF8String::valueOf(s));
+            LOG_INFO(U8_TEXT("Create ")+UTF8String(addr->GetProtocolName())+U8_TEXT(" Socket OK: ")+UTF8String(s));
 
             return s;
         }
@@ -433,13 +433,13 @@ namespace hgl
 
                     result=close(ThisSocket);
 
-                    LOG_INFO(OS_TEXT("CloseSocket: ")+OSString::valueOf(ThisSocket)+OS_TEXT(",result:")+OSString::valueOf(result)+OS_TEXT(",errno: ")+OSString::valueOf(errno));
+                    LOG_INFO(OS_TEXT("CloseSocket: ")+OSString(ThisSocket)+OS_TEXT(",result:")+OSString(result)+OS_TEXT(",errno: ")+OSString(errno));
 
                     if(errno==EBADF)break;
                     if(errno==EINPROGRESS)continue;
                 }while(result);
 
-                LOG_INFO(OS_TEXT("CloseSocket: ") + OSString::valueOf(ThisSocket) + OS_TEXT(",result:") + OSString::valueOf(result));
+                LOG_INFO(OS_TEXT("CloseSocket: ") + OSString(ThisSocket) + OS_TEXT(",result:") + OSString(result));
             #endif//_WIN32
         }
 
