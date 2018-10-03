@@ -16,7 +16,7 @@ namespace hgl
             FormatMessageW(    FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_SYSTEM,nullptr,dw,
                             MAKELANGID(LANG_NEUTRAL,SUBLANG_DEFAULT),str,0,nullptr);
 
-            LOG_ERROR(OS_TEXT("LoadModule <")+OSString(filename)+OS_TEXT("> error! os info: ")+OSString(dw)+OSString(',')+str);
+            LOG_ERROR(OS_TEXT("LoadModule <")+OSString(filename)+OS_TEXT("> error! os info: ")+OSString(dw)+OSString::charOf(',')+str);
 
             return(nullptr);
         }
@@ -37,13 +37,13 @@ namespace hgl
 
         if(!fp)
         {
-            uint dw=GetLastError();
+            const uint dw=GetLastError();
             u16char *str=nullptr;
 
             FormatMessageW(    FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_SYSTEM,nullptr,dw,
                             MAKELANGID(LANG_NEUTRAL,SUBLANG_DEFAULT),str,0,nullptr);
 
-            LOG_ERROR(L"LoadModule <"+UTF16String(name)+L"> error! os info: "+UTF16String(dw)+UTF16String(L',')+str);
+            LOG_ERROR(L"LoadModule <"+UTF16String(name)+L"> error! os info: "+UTF16String(dw)+UTF16String::charOf(L',')+str);
 
             return(false);
         }

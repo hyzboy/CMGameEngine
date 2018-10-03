@@ -1,6 +1,6 @@
-#include<hgl/network/WinFireWall.h>
+﻿#include<hgl/network/WinFireWall.h>
 #include<hgl/type/BaseString.h>
-#include <netfw.h>
+#include<netfw.h>
 
 namespace hgl
 {
@@ -196,7 +196,7 @@ namespace hgl
             VARIANT_BOOL bFWEnabled;
             INetFwAuthorizedApplication* pFWApp = NULL;
             INetFwAuthorizedApplications* pFWApps = NULL;
-        
+
             bEnable = FALSE;
             try
             {
@@ -235,7 +235,7 @@ namespace hgl
             {
                 ret = nError;
             }
-        
+
             // Free the BSTR
             //SysFreeString( bstrFWProcessImageFileName );
 
@@ -313,7 +313,7 @@ namespace hgl
                     hr = pFWApp->put_Name( bstrRegisterName.c_str() );
                     if( FAILED( hr ))
                         throw FW_ERR_PUT_REGISTER_NAME;
-                
+
                     // Add the application to the collection
                     hr = pFWApps->Add( pFWApp );
                     if( FAILED( hr ))
@@ -496,7 +496,7 @@ namespace hgl
                     //if( SysStringLen( bstrRegisterName ) == 0)
                     if (bstrRegisterName.Length() == 0)
                         throw FW_ERR_SYS_ALLOC_STRING;
-            
+
                     // Set the registered name
                     hr = pFWOpenPort->put_Name( bstrRegisterName.c_str() );
                     if( FAILED( hr ))
@@ -582,10 +582,10 @@ namespace hgl
                 VARIANT_BOOL bExNotAllowed;
 
                 HRESULT hr = m_pFireWallProfile->get_ExceptionsNotAllowed( &bExNotAllowed );
-            
+
                 if( FAILED( hr ))
                     throw FW_ERR_EXCEPTION_NOT_ALLOWED;
-            
+
                 if( bExNotAllowed == VARIANT_TRUE )
                     bNotAllowed = TRUE;
                 else
@@ -634,7 +634,7 @@ namespace hgl
                 HRESULT hr = m_pFireWallProfile->get_NotificationsDisabled( &bNotifyDisable );
                 if( FAILED( hr ))
                     throw FW_ERR_NOTIFICATION_DISABLED;
-            
+
                 if( bNotifyDisable == VARIANT_TRUE )
                     bDisabled = TRUE;
                 else

@@ -1,4 +1,4 @@
-#include<hgl/LogInfo.h>
+﻿#include<hgl/LogInfo.h>
 #include<hgl/Info.h>
 #include<hgl/io/FileSystem.h>
 #include<hgl/audio/OpenAL.h>

@@ -1,4 +1,4 @@
-#include<hgl/type/Color3f.h>
+﻿#include<hgl/type/Color3f.h>
 namespace hgl
 {
     void Color3f::Use(COLOR_ENUM ce)

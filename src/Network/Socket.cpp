@@ -66,7 +66,7 @@ namespace hgl
                 RETURN_ERROR(-3);
             }
 
-            LOG_INFO(U8_TEXT("Create ")+UTF8String(GetProtocolName())+U8_TEXT(" Socket OK: ")+UTF8String(s));
+            LOG_INFO(U8_TEXT("Create ")+UTF8String(addr->GetProtocolName())+U8_TEXT(" Socket OK: ")+UTF8String(s));
 
             return s;
         }

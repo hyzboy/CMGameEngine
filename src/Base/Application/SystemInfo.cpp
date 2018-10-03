@@ -1,4 +1,4 @@
-#include<hgl/platform/SystemInfo.h>
+﻿#include<hgl/platform/SystemInfo.h>
 #include<hgl/LogInfo.h>
 #include<hgl/PlugIn.h>
 #include<hgl/io/FileSystem.h>

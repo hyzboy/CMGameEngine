@@ -92,7 +92,7 @@ namespace hgl
 
         using PAttrib<C,bool>::PAttrib;
 
-        const bool ParseFromString(const BaseString<C> &str) override
+        const bool ParseFromString(const BaseString<C> &str)
         {
             if(str.ToBool(this->value))
                 return(true);

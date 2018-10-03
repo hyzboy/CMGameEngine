@@ -11,8 +11,8 @@ using namespace hgl::algorithm;
 namespace hgl
 {
     /**
-    * 字符串基类
-    */
+     * 字符串基类
+     */
     template<typename T> class BaseString															///字符串基类
     {
     protected:
@@ -32,12 +32,24 @@ namespace hgl
             Set(str);
         }
 
+		explicit BaseString(const T);
+
+        static BaseString<T> charOf(const T &ch)
+        {
+            T *str=new T[2];
+
+            str[0]=ch;
+            str[1]=0;
+
+            return BaseString<T>(str,1,true);
+        }
+
         /**
-        * 根据一个C指针风格字符串设置当前字符串内容
-        * @param str 字符串内容，在len<0的情况下，需以0为结尾
-        * @param len 字符串长度，如果str以0为结尾，可以为负值，将启用自动计算长度
-        * @param one_instance 是否仅有这一份实例，如果是将不会产生复岓是而是直接使用此值，最终delete[]释放
-        */
+         * 根据一个C指针风格字符串设置当前字符串内容
+         * @param str 字符串内容，在len<0的情况下，需以0为结尾
+         * @param len 字符串长度，如果str以0为结尾，可以为负值，将启用自动计算长度
+         * @param one_instance 是否仅有这一份实例，如果是将不会产生复岓是而是直接使用此值，最终delete[]释放
+         */
         BaseString(const T *str,int len,bool one_instance=false)
         {
             Set(str,len,one_instance);
@@ -57,20 +69,21 @@ namespace hgl
             Set(bs);
         }
 
-#define BASE_STRING_NUMBER_CONSTRUCT(type,func)	BaseString(const type num)	\
-        {	\
-            Set(func(new T[8*sizeof(type)],8*sizeof(type),num),-1,true);	\
+        #define BASE_STRING_NUMBER_CONSTRUCT(type,func) \
+        BaseString(const type num)  \
+        {   \
+            Set(func(new T[8*sizeof(type)],8*sizeof(type),num),-1,true);    \
         }
 
-        BASE_STRING_NUMBER_CONSTRUCT(int,	itos);
-        BASE_STRING_NUMBER_CONSTRUCT(uint,	utos);
-        BASE_STRING_NUMBER_CONSTRUCT(int64,	itos);
+        BASE_STRING_NUMBER_CONSTRUCT(int,   itos);
+        BASE_STRING_NUMBER_CONSTRUCT(uint,  utos);
+        BASE_STRING_NUMBER_CONSTRUCT(int64, itos);
         BASE_STRING_NUMBER_CONSTRUCT(uint64,utos);
 
-        BASE_STRING_NUMBER_CONSTRUCT(float,	ftos);
+        BASE_STRING_NUMBER_CONSTRUCT(float, ftos);
         BASE_STRING_NUMBER_CONSTRUCT(double,ftos);
 
-#undef BASE_STRING_NUMBER_CONSTRUCT
+        #undef BASE_STRING_NUMBER_CONSTRUCT
 
         BaseString(const int *value,int N)
         {
@@ -127,55 +140,67 @@ namespace hgl
 
         const T GetEndChar()const																	///<取得当前字符串最后一个字符
         {
-// 			if(!this)return(0);
+            // 			if(!this)return(0);
             return(data.valid()?data->GetEndChar():0);
         }
 
         const int Length()const																		///<当前字符串长度
         {
-// 			if(!this)return(0);
+            // 			if(!this)return(0);
             return(data.valid()?data->GetLength():0);
         }
 
         const bool IsEmpty()const																	///<当前字符串是否空的
         {
-// 			if(!this)return(true);
+            // 			if(!this)return(true);
             return(data.valid()?data->GetLength()<=0:true);
         }
 
         /**
-        * 取得一个C风格的字符串指针,失败返回NULL
-        */
+         * 取得一个C风格的字符串指针,失败返回NULL
+         */
         T *c_str()const
         {
-// 			if(!this)return(nullptr);
+            // 			if(!this)return(nullptr);
             return(data.valid()?data->c_str():nullptr);
         }
 
         /**
-        * 找到指定字符，并返回一个C风格的字符串指针
-        */
+         * 找到指定字符，并返回一个C风格的字符串指针
+         */
         T *strchr(T ch)const
         {
-// 			if(!this)return(nullptr);
-            return(data.valid()?data->c_str()+FindChar(ch):nullptr);
+            // 			if(!this)return(nullptr);
+            if(!data.valid())return(nullptr);
+
+            const int result=FindChar(ch);
+
+            if(result<0)return(nullptr);
+
+            return data->c_str()+result;
         }
 
         /**
-        * 从末尾查找字符，并返回一个C风格的字符串指针
-        */
+         * 从末尾查找字符，并返回一个C风格的字符串指针
+         */
         T *strrchr(T ch)const
         {
-// 			if(!this)return(nullptr);
-            return(data.valid()?data->c_str()+FindRightChar(ch):nullptr);
+            // 			if(!this)return(nullptr);
+            if(!data.valid())return(nullptr);
+
+            const int result=FindRightChar(ch);
+
+            if(result<0)return(nullptr);
+
+            return data->c_str()+result;
         }
 
         /**
-        * 根据一个C指针风格字符串设置当前字符串内容
-        * @param str 字符串内容，在len<0的情况下，需以0为结尾
-        * @param len 字符串长度，如果str以0为结尾，可以为负值，将启用自动计算长度
-        * @param one_instance 是否仅有这一份实例，如果是将不会产生复岓是而是直接使用此值，最终delete[]释放
-        */
+         * 根据一个C指针风格字符串设置当前字符串内容
+         * @param str 字符串内容，在len<0的情况下，需以0为结尾
+         * @param len 字符串长度，如果str以0为结尾，可以为负值，将启用自动计算长度
+         * @param one_instance 是否仅有这一份实例，如果是将不会产生复岓是而是直接使用此值，最终delete[]释放
+         */
         void Set(const T *str,int len=-1,bool one_instance=false)
         {
             if(!str||!*str||!len)		//len=-1为自检测,为0不处理
@@ -193,9 +218,9 @@ namespace hgl
         }
 
         /**
-        * 设置当前字符串的内容
-        * @param bs 内容来源字符串
-        */
+         * 设置当前字符串的内容
+         * @param bs 内容来源字符串
+         */
         void Set(const SelfClass &bs)
         {
             if((&bs)==nullptr)
@@ -208,8 +233,8 @@ namespace hgl
         }
 
         /**
-        * 设置当前字符中的内容
-        */
+         * 设置当前字符中的内容
+         */
         void Set(const InstClass &si)
         {
             if((&si)==nullptr)
@@ -222,8 +247,8 @@ namespace hgl
         }
 
         /**
-        * 设置当前字符串中的内容
-        */
+         * 设置当前字符串中的内容
+         */
         void Set(const SharedClass &spsi)
         {
             if((&spsi)==nullptr)
@@ -236,8 +261,8 @@ namespace hgl
         }
 
         /**
-        * 设置字符串的内容
-        */
+         * 设置字符串的内容
+         */
         bool Set(const SelfClass &bs,int start,int count)
         {
             if(count<=0)return(false);
@@ -262,8 +287,8 @@ namespace hgl
         }
 
         /**
-        * 断开与其它BaseString共用的情况，创建一个独有的实例
-        */
+         * 断开与其它BaseString共用的情况，创建一个独有的实例
+         */
         bool Unlink()
         {
             if(!data.valid())
@@ -291,11 +316,11 @@ namespace hgl
         }
 
         /**
-        * 取指定索引处的字符
-        * @param n 索引偏移
-        * @param ch 字符存放变量
-        * @return 是否获取成功
-        */
+         * 取指定索引处的字符
+         * @param n 索引偏移
+         * @param ch 字符存放变量
+         * @return 是否获取成功
+         */
         bool GetChar(int n,T &ch)const
         {
             if(n<0)return(false);
@@ -307,11 +332,11 @@ namespace hgl
         }
 
         /**
-        * 设定指定索引处的字符
-        * @param n 索引偏移
-        * @param ch 字符
-        * @return 是否设置成功
-        */
+         * 设定指定索引处的字符
+         * @param n 索引偏移
+         * @param ch 字符
+         * @return 是否设置成功
+         */
         bool SetChar(int n,const T ch)
         {
             if(n<0)return(false);
@@ -323,11 +348,11 @@ namespace hgl
         }
 
         /**
-        * 在指定偏移处插入指定长度的字符串
-        * @param pos 要插入的位置
-        * @param str 要插入的字符串
-        * @param len 要插入的字符个数,如果为-1则自动检测字符串长度
-        */
+         * 在指定偏移处插入指定长度的字符串
+         * @param pos 要插入的位置
+         * @param str 要插入的字符串
+         * @param len 要插入的字符个数,如果为-1则自动检测字符串长度
+         */
         bool Insert(int pos,const T *str,int len=-1)
         {
             if(len==0)return(false);
@@ -347,10 +372,10 @@ namespace hgl
         }
 
         /**
-        * 在指定偏移处插入字符串
-        * @param pos 要插入的位置
-        * @param str 要插入的字符串
-        */
+         * 在指定偏移处插入字符串
+         * @param pos 要插入的位置
+         * @param str 要插入的字符串
+         */
         bool Insert(int pos,const SelfClass &str)
         {
             if((&str)==nullptr)
@@ -367,8 +392,8 @@ namespace hgl
         }
 
         /**
-        * 追加一个字符串到当前字符串后面
-        */
+         * 追加一个字符串到当前字符串后面
+         */
         bool Strcat(const SelfClass &bs)
         {
             if((&bs)==nullptr)
@@ -378,11 +403,11 @@ namespace hgl
         }
 
         /**
-        * 从指定位置删除指定个字符
-        * @param pos 要删除的起始位置
-        * @param num 要删除的字符个数
-        * @return 是否成功
-        */
+         * 从指定位置删除指定个字符
+         * @param pos 要删除的起始位置
+         * @param num 要删除的字符个数
+         * @return 是否成功
+         */
         bool Delete(int pos,int num)
         {
             if(pos<0||num<=0)return(false);
@@ -394,20 +419,20 @@ namespace hgl
         }
 
         /**
-        * 清除类中的字符串数据
-        */
+         * 清除类中的字符串数据
+         */
         void Clear()
         {
             data.unref();
         }
 
         /**
-        * 和一个字符串进行比较
-        * @param bs 比较字符串
-        * @return <0 自身小
-        * @return 0 等同
-        * @return >0 自身大
-        */
+         * 和一个字符串进行比较
+         * @param bs 比较字符串
+         * @return <0 自身小
+         * @return 0 等同
+         * @return >0 自身大
+         */
         int Comp(const SelfClass &bs)const
         {
             if(!data.valid())
@@ -420,12 +445,12 @@ namespace hgl
         }
 
         /**
-        * 和一个字符串进行比较
-        * @param str 比较字符串
-        * @return <0 自身小
-        * @return 0 等同
-        * @return >0 自身大
-        */
+         * 和一个字符串进行比较
+         * @param str 比较字符串
+         * @return <0 自身小
+         * @return 0 等同
+         * @return >0 自身大
+         */
         int Comp(const T *str)const
         {
             if(!data.valid())
@@ -440,13 +465,13 @@ namespace hgl
         }
 
         /**
-        * 和一个字符串进行比较
-        * @param pos 起始位置
-        * @param bs 比较字符串
-        * @return <0 自身小
-        * @return 0 等同
-        * @return >0 自身大
-        */
+         * 和一个字符串进行比较
+         * @param pos 起始位置
+         * @param bs 比较字符串
+         * @return <0 自身小
+         * @return 0 等同
+         * @return >0 自身大
+         */
         int Comp(const int pos,const SelfClass &bs)const
         {
             if(!data.valid())
@@ -459,12 +484,12 @@ namespace hgl
         }
 
         /**
-        * 和一个字符串进行比较
-        * @param str 比较字符串
-        * @return <0 自身小
-        * @return 0 等同
-        * @return >0 自身大
-        */
+         * 和一个字符串进行比较
+         * @param str 比较字符串
+         * @return <0 自身小
+         * @return 0 等同
+         * @return >0 自身大
+         */
         int Comp(const int pos,const T *str)const
         {
             if(!data.valid())
@@ -479,12 +504,12 @@ namespace hgl
         }
 
         /**
-        * 和那一个字符串进行比较,英文不区分大小写
-        * @param bs 比较字符串
-        * @return <0 自身小
-        * @return 0 等同
-        * @return >0 自身大
-        */
+         * 和那一个字符串进行比较,英文不区分大小写
+         * @param bs 比较字符串
+         * @return <0 自身小
+         * @return 0 等同
+         * @return >0 自身大
+         */
         int CaseComp(const SelfClass &bs)const
         {
             if(!data.valid())
@@ -497,12 +522,12 @@ namespace hgl
         }
 
         /**
-        * 和那一个字符串进行比较,英文不区分大小写
-        * @param str 比较字符串
-        * @return <0 自身小
-        * @return 0 等同
-        * @return >0 自身大
-        */
+         * 和那一个字符串进行比较,英文不区分大小写
+         * @param str 比较字符串
+         * @return <0 自身小
+         * @return 0 等同
+         * @return >0 自身大
+         */
         int CaseComp(const T *str)const
         {
             if(!data.valid())
@@ -517,13 +542,13 @@ namespace hgl
         }
 
         /**
-        * 和那一个字符串比较指字长度的字符
-        * @param bs 比较字符串
-        * @param num 比较字数
-        * @return <0 自身小
-        * @return 0 等同
-        * @return >0 自身大
-        */
+         * 和那一个字符串比较指字长度的字符
+         * @param bs 比较字符串
+         * @param num 比较字数
+         * @return <0 自身小
+         * @return 0 等同
+         * @return >0 自身大
+         */
         int Comp(const SelfClass &bs,const int num)const
         {
             if(!data.valid())
@@ -540,13 +565,13 @@ namespace hgl
         }
 
         /**
-        * 和那一个字符串比较指字长度的字符
-        * @param str 比较字符串
-        * @param num 比较字数
-        * @return <0 自身小
-        * @return 0 等同
-        * @return >0 自身大
-        */
+         * 和那一个字符串比较指字长度的字符
+         * @param str 比较字符串
+         * @param num 比较字数
+         * @return <0 自身小
+         * @return 0 等同
+         * @return >0 自身大
+         */
         int Comp(const T *str,const int num)const
         {
             if(!data.valid())
@@ -629,9 +654,9 @@ namespace hgl
         }
 
         /**
-        * 将当前字符串全部转为小写
-        * @return 转换后的当前字符串
-        */
+         * 将当前字符串全部转为小写
+         * @return 转换后的当前字符串
+         */
         SelfClass &LowerCase()																		    ///<将本类中的字母全部转为小写
         {
             if(data.valid()&&Unlink())
@@ -641,9 +666,9 @@ namespace hgl
         }
 
         /**
-        * 将当前字符串全部转为小写
-        * @return 转换后的字符串
-        */
+         * 将当前字符串全部转为小写
+         * @return 转换后的字符串
+         */
         SelfClass ToLowerCase()const																///<将本类中的字母全部转为小写
         {
             if(!data.valid())
@@ -653,9 +678,9 @@ namespace hgl
         }
 
         /**
-        * 将当前字符串全部转为大写
-        * @return 转换后的当前字符串
-        */
+         * 将当前字符串全部转为大写
+         * @return 转换后的当前字符串
+         */
         SelfClass &UpperCase()																		///<将本类中的字母全部转为大写
         {
             if(data.valid()&&Unlink())
@@ -665,9 +690,9 @@ namespace hgl
         }
 
         /**
-        * 将当前字符串全部转换为大写
-        * @return 转换后的字符串
-        */
+         * 将当前字符串全部转换为大写
+         * @return 转换后的字符串
+         */
         SelfClass ToUpperCase()const																///<将本类中的字母全部转为大写
         {
             if(!data.valid())
@@ -677,12 +702,12 @@ namespace hgl
         }
 
         /**
-        * 填充当前字符串的部分内容为指定字符
-        * @param ch 要填充的字符
-        * @param start 填充的起始位置
-        * @param len 填充的个数
-        * @return 是否成功
-        */
+         * 填充当前字符串的部分内容为指定字符
+         * @param ch 要填充的字符
+         * @param start 填充的起始位置
+         * @param len 填充的个数
+         * @return 是否成功
+         */
         bool FillChar(const T ch,int start=0,int len=-1)
         {
             if(!data.valid())
@@ -887,12 +912,12 @@ namespace hgl
         }
 
         /**
-        * 在整个字符串内，查找指定字符串
-        * @param str 要查找的字符串
-        * @param start 从第几个字符开始查找，默认0
-        * @return 指定子串所在的偏移
-        * @return -1 出错
-        */
+         * 在整个字符串内，查找指定字符串
+         * @param str 要查找的字符串
+         * @param start 从第几个字符开始查找，默认0
+         * @return 指定子串所在的偏移
+         * @return -1 出错
+         */
         int FindString(const SelfClass &str,int start=0)const										///<返回当前字符串中指定子串开始的索引
         {
             if(!data.valid())
@@ -913,11 +938,11 @@ namespace hgl
         }
 
         /**
-        * 在整个字符串内，清除指定字符串
-        * @param sub 要清除的字符串
-        * @return 总计清除的个数
-        * @return -1 出错
-        */
+         * 在整个字符串内，清除指定字符串
+         * @param sub 要清除的字符串
+         * @return 总计清除的个数
+         * @return -1 出错
+         */
         int ClearString(const SelfClass &sub)													    ///<清除当前字符串中指定子串
         {
             if(!Unlink())
@@ -945,11 +970,11 @@ namespace hgl
         }
 
         /**
-        * 在指定位置写入字符串
-        * @param pos 开始写入的位置
-        * @param str 要写入的字符串
-        * @return 是否成功
-        */
+         * 在指定位置写入字符串
+         * @param pos 开始写入的位置
+         * @param str 要写入的字符串
+         * @return 是否成功
+         */
         bool WriteString(int pos,const SelfClass &str)
         {
             if(!Unlink())
@@ -962,12 +987,12 @@ namespace hgl
         }
 
         /**
-        * 替换当前字符串中指定字符到另一个字符
-        * @param sch 要替换的字符
-        * @param tch 替换后的字符
-        * @return 总计替换个数
-        * @return <0 出错
-        */
+         * 替换当前字符串中指定字符到另一个字符
+         * @param sch 要替换的字符
+         * @param tch 替换后的字符
+         * @return 总计替换个数
+         * @return <0 出错
+         */
         int Replace(const T tch,const T sch)														///<替换字符
         {
             if(!Unlink())
@@ -976,105 +1001,105 @@ namespace hgl
             return replace(data->c_str(),tch,sch);
         }
 
-    public:	//操作符重载
+        public:	//操作符重载
 
-        operator const InstClass &()
-        {
-            return data;
-        }
-
-        const T &operator [](int index)
-        {
-            if(data.valid())
-                if(index>=0&&index<data->GetLength())
-                    return *(data->c_str()+index);
-
-            const static T zero_char=0;
-
-            return zero_char;	//this is error
-        }
-
-        operator 		T *()		{return c_str();}
-        operator const	T *()const	{return c_str();}
-
-        SelfClass &operator =	(const T *str		 ){Set(str);return(*this);}
-        SelfClass &operator	=	(const SelfClass &str){Set(str);return(*this);}
-        SelfClass &operator	+=	(const SelfClass &str){Strcat(str);return(*this);}
-        SelfClass &operator	<<	(const SelfClass &str){return(operator+=(str));}
-
-        static SelfClass ComboString(const T *str1,int len1,const T *str2,int len2)
-        {
-            if(!str1||len1<=0)
+            operator const InstClass &()
             {
-                if(!str2||len2<=0)
-                    return(SelfClass());
-
-                return SelfClass(str2,len2);
-            }
-            else
-            {
-                if(!str2||len2<=0)
-                    return(SelfClass(str1,len1));
+                return data;
             }
 
-            const int new_len=len1+len2;
+            const T &operator [](int index)
+            {
+                if(data.valid())
+                    if(index>=0&&index<data->GetLength())
+                        return *(data->c_str()+index);
 
-            T *ms=new T[new_len+1];
+                    const static T zero_char=0;
 
-            memcpy(ms,		str1,len1*sizeof(T));
-            memcpy(ms+len1,	str2,len2*sizeof(T));
+                return zero_char;	//this is error
+            }
 
-            ms[new_len]=0;
+            operator 		T *()		{return c_str();}
+            operator const	T *()const	{return c_str();}
 
-            return(SelfClass(ms,new_len,true));
-        }
+            SelfClass &operator =	(const T *str		 ){Set(str);return(*this);}
+            SelfClass &operator	=	(const SelfClass &str){Set(str);return(*this);}
+            SelfClass &operator	+=	(const SelfClass &str){Strcat(str);return(*this);}
+            SelfClass &operator	<<	(const SelfClass &str){return(operator+=(str));}
 
-        SelfClass  operator +	(const SelfClass &str) const
-        {
-            if(str.Length()<=0)		//如果对方为空
-                return(*this);
+            static SelfClass ComboString(const T *str1,int len1,const T *str2,int len2)
+            {
+                if(!str1||len1<=0)
+                {
+                    if(!str2||len2<=0)
+                        return(SelfClass());
 
-            if(!data.valid())		//如果我方为空
-                return(str);
+                    return SelfClass(str2,len2);
+                }
+                else
+                {
+                    if(!str2||len2<=0)
+                        return(SelfClass(str1,len1));
+                }
 
-            return ComboString(data->c_str(),data->GetLength(),str.c_str(),str.Length());
-        }
+                const int new_len=len1+len2;
 
-        SelfClass	operator +	(const T ch) const
-        {
-            if(!data.valid())
-                return(SelfClass(ch));
+                T *ms=new T[new_len+1];
 
-            return ComboString(data->c_str(),data->GetLength(),&ch,1);
-        }
+                memcpy(ms,		str1,len1*sizeof(T));
+                memcpy(ms+len1,	str2,len2*sizeof(T));
 
-        SelfClass	operator +	(const T *str) const
-        {
-            if(!data.valid())
-                return(SelfClass(str));
+                ms[new_len]=0;
 
-            return ComboString(data->c_str(),data->GetLength(),str,strlen(str));
-        }
+                return(SelfClass(ms,new_len,true));
+            }
 
-#define BASE_STRING_NUMBER_OPERATOR_ADD(type,func)	SelfClass	operator +	(const type &num) const	\
-        {	\
-            SharedPtr<T> vstr=func(new T[8*sizeof(type)],8*sizeof(type),num);	\
-            \
-            return operator+(vstr->data);	\
-        }
+            SelfClass  operator +	(const SelfClass &str) const
+            {
+                if(str.Length()<=0)		//如果对方为空
+                    return(*this);
 
-        BASE_STRING_NUMBER_OPERATOR_ADD(int,	itos);
-        BASE_STRING_NUMBER_OPERATOR_ADD(uint,	utos);
-        BASE_STRING_NUMBER_OPERATOR_ADD(int64,	itos);
-        BASE_STRING_NUMBER_OPERATOR_ADD(uint64,	utos);
+                if(!data.valid())		//如果我方为空
+                    return(str);
 
-        BASE_STRING_NUMBER_OPERATOR_ADD(float,	ftos);
-        BASE_STRING_NUMBER_OPERATOR_ADD(double,	dtos);
+                return ComboString(data->c_str(),data->GetLength(),str.c_str(),str.Length());
+            }
 
-#undef BASE_STRING_NUMBER_OPERATOR_ADD
+            SelfClass	operator +	(const T ch) const
+            {
+                if(!data.valid())
+                    return(SelfClass(ch));
 
-        CompOperator(const T *,Comp);
-        CompOperator(const SelfClass &,Comp);
+                return ComboString(data->c_str(),data->GetLength(),&ch,1);
+            }
+
+            SelfClass	operator +	(const T *str) const
+            {
+                if(!data.valid())
+                    return(SelfClass(str));
+
+                return ComboString(data->c_str(),data->GetLength(),str,strlen(str));
+            }
+
+            #define BASE_STRING_NUMBER_OPERATOR_ADD(type,func)	SelfClass	operator +	(const type &num) const	\
+            {	\
+                SharedPtr<T> vstr=func(new T[8*sizeof(type)],8*sizeof(type),num);	\
+                \
+                return operator+(vstr->data);	\
+            }
+
+            BASE_STRING_NUMBER_OPERATOR_ADD(int,	itos);
+            BASE_STRING_NUMBER_OPERATOR_ADD(uint,	utos);
+            BASE_STRING_NUMBER_OPERATOR_ADD(int64,	itos);
+            BASE_STRING_NUMBER_OPERATOR_ADD(uint64,	utos);
+
+            BASE_STRING_NUMBER_OPERATOR_ADD(float,	ftos);
+            BASE_STRING_NUMBER_OPERATOR_ADD(double,	dtos);
+
+            #undef BASE_STRING_NUMBER_OPERATOR_ADD
+
+            CompOperator(const T *,Comp);
+            CompOperator(const SelfClass &,Comp);
     };//template<typename T> class BaseString
 
     //这种重载用于value+str的情况

@@ -1,4 +1,4 @@
-#ifndef HGL_STRINGLIST_INCLUDE
+﻿#ifndef HGL_STRINGLIST_INCLUDE
 #define HGL_STRINGLIST_INCLUDE
 
 #include<hgl/type/List.h>
@@ -6,6 +6,7 @@
 #include<hgl/type/BaseString.h>
 #include<hgl/io/DataInputStream.h>
 #include<hgl/io/DataOutputStream.h>
+
 namespace hgl
 {
     class HAC;

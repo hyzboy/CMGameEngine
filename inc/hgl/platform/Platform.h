@@ -125,12 +125,12 @@
     #define HGL_ENDIAN					HGL_LITTLE_ENDIAN
 #elif defined(__wasm__)
 
-    #error can't support WebAssembly.please wait update......
+    #error not support WebAssembly.please wait update......
 
     #define HGL_OS          HGL_OS_Wasm
     #define HGL_COMPILER    HGL_COMPILER_Wasm
 #else
-	#error Can't not support the cpu.
+	#error not support the cpu.
 #endif
 
 #if HGL_ENDIAN == HGL_BIG_ENDIAN

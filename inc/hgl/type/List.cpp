@@ -21,7 +21,7 @@ namespace hgl
 	{
 		if(!items||index<0||index>=count)
 		{
-			LOG_ERROR(OS_TEXT("List<>::Get(index=")+OSString(index)+OS_TEXT(") error,DataCount=")+OSString(count));
+            LOG_ERROR(OS_TEXT("List<>::Get(index=")+OSString(index)+OS_TEXT(") error,DataCount=")+OSString(count));
 			return(false);
 		}
 
@@ -66,7 +66,7 @@ namespace hgl
 		{
 			static T *null_ptr=nullptr;
 
-			LOG_ERROR(OS_TEXT("List<>::operator(index=")+OSString(index)+OS_TEXT(") error,DataCount=")+OSString(count));
+            LOG_ERROR(OS_TEXT("List<>::operator(index=")+OSString(index)+OS_TEXT(") error,DataCount=")+OSString(count));
 
 			return(*null_ptr);
 		}
@@ -80,7 +80,7 @@ namespace hgl
 		#ifdef _DEBUG
 			if(!items||index<0||index>=count)
 			{
-				LOG_ERROR(OS_TEXT("List<>::Set(index=")+OSString(index)+OS_TEXT(",T &) error,DataCount=")+OSString(count));
+                LOG_ERROR(OS_TEXT("List<>::Set(index=")+OSString(index)+OS_TEXT(",T &) error,DataCount=")+OSString(count));
 			}
 			else
 				memcpy(items+index,&val,sizeof(T));//items[index]=val;

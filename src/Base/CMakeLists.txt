@@ -38,7 +38,7 @@ SET(BASE_TYPE_SOURCE
     DataType/Color.cpp
     DataType/Color3f.cpp
     DataType/Color4f.cpp
-    DataType/FontInfo.cpp
+#     DataType/FontInfo.cpp
     DataType/StringList.cpp)
 
 SOURCE_GROUP("DataType" FILES ${BASE_TYPE_SOURCE})
