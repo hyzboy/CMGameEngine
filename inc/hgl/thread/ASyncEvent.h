@@ -34,6 +34,9 @@ namespace hgl
          */
         inline void AddToEventQueue(MTEventProcQueue *queue,EventProc *event)
         {
+            if(!queue||!event)
+                return;
+
             MTEventProcPost post(queue);
 
             post->Push(event);
@@ -47,6 +50,9 @@ namespace hgl
          */
         inline void UpdateEventProcQueue(MTEventProcQueue *proc_queue,const double &cur_time,bool wait=false)
         {
+            if(!proc_queue)
+                return;
+
             if(wait)
             {
                 if(!proc_queue->WaitSemSwap())
@@ -86,6 +92,9 @@ namespace hgl
 
             bool Execute()
             {
+                if(!queue)
+                    return(false);
+
                 UpdateEventProcQueue(event_proc_queue,GetDoubleTime(),true);
 
                 return(true);
