@@ -23,8 +23,8 @@ IF(BUILD_NETWORK_LIB)
 	add_subdirectory(Network)
 ENDIF(BUILD_NETWORK_LIB)
 
-add_subdirectory(SceneGraph)
-add_subdirectory(RenderDevice)
+# add_subdirectory(SceneGraph)
+# add_subdirectory(RenderDevice)
 
 IF(BUILD_OPENAL_LIB)
 	add_subdirectory(OpenALEE)
