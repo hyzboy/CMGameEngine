@@ -57,9 +57,6 @@ SET(BASE_IO_SOURCE
 
 SOURCE_GROUP("IO" FILES ${BASE_IO_SOURCE})
 
-SET(THREAD_SOURCE   MultiThread/WorkThread.cpp
-                    MultiThread/WorkThreadTeam.cpp)
-
 SOURCE_GROUP("MultiThread" FILES ${THREAD_SOURCE})
 
 SET(BASE_PLUG_IN_SOURCE
