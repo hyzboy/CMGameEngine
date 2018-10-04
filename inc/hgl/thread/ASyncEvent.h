@@ -79,7 +79,7 @@ namespace hgl
         }
 
         /**
-         * 事件执行线程
+         * 异步事件执行线程
          */
         class EventThread:public Thread
         {
