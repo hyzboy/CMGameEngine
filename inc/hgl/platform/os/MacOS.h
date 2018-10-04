@@ -12,8 +12,13 @@ using os_char			=char;
 #define U16_TEXT(str)	u##str
 
 //--------------------------------------------------------------------------------------------------
-#define HGL_OS_NAME		OS_TEXT("macOS")
-#define HGL_LIB_OS		"mac"										            //库操作系统前缀
+#if HGL_OS == HGL_OS_iOS
+    #define HGL_OS_NAME		OS_TEXT("iOS")
+    #define HGL_LIB_OS		"iOS"										            //库操作系统前缀
+#else
+    #define HGL_OS_NAME		OS_TEXT("macOS")
+    #define HGL_LIB_OS		"mac"										            //库操作系统前缀
+#endif//HGL_OS == HGL_OS_iOS
 
 #define HGL_PLUGIN_FRONTNAME	"libCMP."										//插件文件名前缀
 #define HGL_PLUGIN_EXTNAME		OS_TEXT(".dylib")								//插件文件扩展名

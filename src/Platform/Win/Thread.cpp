@@ -21,7 +21,7 @@ namespace hgl
         if(!tp)
         {
             exit_lock.Unlock();
-            LOG_ERROR(OS_TEXT("创建线程失败，Windows错误码：")+OSString((uint)GetLastError()));
+            LOG_ERROR(OS_TEXT("Create Thread failed,Windows ErrorCode: ")+OSString((uint)GetLastError()));
             return(false);
         }
 
