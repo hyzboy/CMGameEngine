@@ -60,8 +60,6 @@ typedef HMODULE                 ExternalModulePointer;
 #define pi_get                  GetProcAddress
 #define pi_close                FreeLibrary
 
-typedef	CRITICAL_SECTION		hgl_thread_mutex;
-
 #define struct_stat64			struct _stat64
 //#define hgl_stat64				_stat64
 #define hgl_lseek64				_lseeki64
@@ -71,8 +69,9 @@ typedef	CRITICAL_SECTION		hgl_thread_mutex;
 #define hgl_read64				_read
 #define hgl_write64				_write
 
-using thread_ptr=HANDLE;
-using THREAD_FUNC=DWORD WINAPI;
+using hgl_thread_mutex  =CRITICAL_SECTION;
+using thread_ptr        =HANDLE;
+using THREAD_FUNC       =DWORD WINAPI;
 #define HGL_THREAD_DETACH_SELF
 //--------------------------------------------------------------------------------------------------
 #endif//HGL_OS_WIN_INCLUDE

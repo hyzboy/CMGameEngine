@@ -5,8 +5,10 @@
 
 namespace hgl
 {
-    using thread_ptr=pthread_t;
-    using THREAD_FUNC=void *;
+    using hgl_thread_mutex  =pthread_mutex_t;
+
+    using thread_ptr        =pthread_t;
+    using THREAD_FUNC       =void *;
 
     #define HGL_THREAD_DETACH_SELF  pthread_detach(pthread_self());
 }//namespace hgl
