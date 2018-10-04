@@ -7,12 +7,6 @@
 #include<hgl/thread/ThreadMutex.h>
 #include<hgl/LogInfo.h>
 
-#if HGL_OS == HGL_OS_Windows
-	using thread_ptr=void *;       //windows版是HANDLE，但HANDLE其实就是void *，这里为了减少#include<windows.h>所以直接写为void *
-#else
-	#include<pthread.h>
-	using thread_ptr=pthread_t;
-#endif//HGL_OS == HGL_Windows
 namespace hgl
 {
     void WaitThreadExit(thread_ptr tp,const double &time_out);
@@ -40,11 +34,7 @@ namespace hgl
         ThreadMutex live_lock;
         ThreadMutex exit_lock;
 
-#if HGL_OS != HGL_OS_Windows
-        friend void *ThreadFunc(Thread *tc);
-#else
-        friend DWORD WINAPI ThreadFunc(Thread *tc);
-#endif//HGL_OS != HGL_OS_Windows
+        friend THREAD_FUNC ThreadFunc(Thread *tc);
 
 #ifdef _DEBUG
         UTF8String thread_addr_string;                                                              ///<线程地址用字符串，调试使用

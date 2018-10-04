@@ -35,7 +35,7 @@ using os_char			=char;
 #define HGL_FMT_LONG_DOUBLE		    "%le"
 
 //--------------------------------------------------------------------------------------------------
-#include<pthread.h>
+#include<hgl/platform/os/PosixThread.h>
 #include<stdlib.h>
 
 #define hgl_malloc(size)		malloc(size)

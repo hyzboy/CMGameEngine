@@ -90,9 +90,9 @@ namespace hgl
             EventThread(MTEventProcQueue *queue):event_proc_queue(queue){}
             virtual ~EventThread()=default;
 
-            bool Execute()
+            bool Execute() override
             {
-                if(!queue)
+                if(!event_proc_queue)
                     return(false);
 
                 UpdateEventProcQueue(event_proc_queue,GetDoubleTime(),true);
@@ -100,6 +100,24 @@ namespace hgl
                 return(true);
             }
         };//class RepoManageThread:public Thread
+
+        /**
+         * 使攻范例
+         */
+/*
+        // 公用部分
+
+        MTEventProcQueue event_queue;               ///<事件队列
+
+        // 其它 thread
+
+        class MyEvent:public EventProc{...};        //自有事件
+
+        AddToEventQueue(&event_queue,new MyEvent);  //添加一个事件到事件队列
+
+        // 事件执行线程
+        EventThread *et=new EventThread(&event_queue);
+        et->Start();*/
     }//namespace async
 }//namespace hgl
 #endif//HGL_THREAD_ASYNC_EVENT_INCLUDE

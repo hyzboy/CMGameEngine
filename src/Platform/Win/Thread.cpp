@@ -1,38 +1,9 @@
 ﻿#include<hgl/thread/Thread.h>
 #include<hgl/LogInfo.h>
-#include<windows.h>
 
 namespace hgl
 {
-    DWORD WINAPI ThreadFunc(Thread *tc)
-	{
-        tc->live_lock.Lock();
-
-		if(tc->ProcStartThread())
-		{
-            while(tc->Execute())
-            {
-                if(tc->exit_lock.TryLock())
-                {
-                    tc->exit_lock.Unlock();
-                    break;
-                }
-            }
-
-			tc->ProcEndThread();
-		}
-
-
-		if(tc->IsExitDelete())
-        {
-            tc->live_lock.Unlock();
-			delete tc;
-        }
-        else
-            tc->live_lock.Unlock();
-
-		return(0);
-	}
+    extern THREAD_FUNC ThreadFunc(Thread *tc);
 
     /**
     * (线程外部调用)执行当前线程，线程优先级为tplevel

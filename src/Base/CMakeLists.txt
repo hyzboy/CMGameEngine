@@ -10,6 +10,7 @@ SOURCE_GROUP("Object"    FILES ${BASE_OBJECT_SOURCE})
 
 SET(BASE_OTHER_SOURCE
     Other/ExpendString.cpp
+    Other/ThreadFunc.cpp
     Other/TimeCount.cpp
 	Other/TimeVal.cpp
     Other/DateTime.cpp

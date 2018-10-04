@@ -27,7 +27,7 @@ using os_char			=wchar_t;
 
 #define HGL_DIRECTORY_SEPARATOR 		OS_TEXT('\\')									//目录分隔符
 #define HGL_DIRECTORY_SEPARATOR_STR     OS_TEXT("\\")									//目录分隔符
-#define HGL_DIRECTORY_SEPARATOR_U8STR   U8_TEXT("\\")	
+#define HGL_DIRECTORY_SEPARATOR_U8STR   U8_TEXT("\\")
 
 #define HGL_LINE_END					OS_TEXT("\r\n")									//换行符
 #define HGL_LINE_END_SIZE				2												//换行符长度
@@ -70,5 +70,9 @@ typedef	CRITICAL_SECTION		hgl_thread_mutex;
 #define hgl_lstat64				_wstat64
 #define hgl_read64				_read
 #define hgl_write64				_write
+
+using thread_ptr=HANDLE;
+using THREAD_FUNC=DWORD WINAPI;
+#define HGL_THREAD_DETACH_SELF
 //--------------------------------------------------------------------------------------------------
 #endif//HGL_OS_WIN_INCLUDE

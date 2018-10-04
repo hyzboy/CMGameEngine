@@ -1,48 +1,13 @@
 ﻿#include<hgl/thread/Thread.h>
 #include<hgl/thread/CondVar.h>
 #include<hgl/LogInfo.h>
-#include<pthread.h>
 #include<signal.h>
 #include<errno.h>
 #include<hgl/Str.h>
 
 namespace hgl
 {
-    /**
-      *  tips:	PTHREAD_CREATE_DETACHED 方式创建的线程，在退出时，自动清除线程。无法使用pthread_join函数获取运行状态,pthread_join会返回22号错误
-      *         PTHREAD_CREATE_JOINABLE 方式创建的线程，在退出时，不会清除线程，必使使用pthread_join函数获取。或是在退出时使用pthread_detach(pthread_self())。
-      */
-
-	void *ThreadFunc(Thread *tc)
-	{
-        tc->live_lock.Lock();
-
-		if(tc->ProcStartThread())
-		{
-			while(tc->Execute())
-            {
-                if(tc->exit_lock.TryLock())
-                {
-                    tc->exit_lock.Unlock();
-                    break;
-                }
-            }
-
-			tc->ProcEndThread();
-		}
-
-		if(tc->IsExitDelete())
-		{
-            tc->live_lock.Unlock();
-
-            pthread_detach(pthread_self());
-            delete tc;
-		}
-		else
-            tc->live_lock.Unlock();
-
-		return(0);
-	}
+    extern THREAD_FUNC ThreadFunc(Thread *tc);
 
 	/**
 	* (线程外部调用)执行当前线程
