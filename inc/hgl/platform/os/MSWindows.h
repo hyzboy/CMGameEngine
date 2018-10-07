@@ -4,6 +4,9 @@
 #include<malloc.h>
 #include<winsock2.h>        //winsock2必须在Windows.h前面，不然会报错
 #include<windows.h>
+
+#undef min
+#undef max
 //--------------------------------------------------------------------------------------------------
 using u32char           =char32_t;
 using u16char			=wchar_t;
@@ -71,7 +74,7 @@ typedef HMODULE                 ExternalModulePointer;
 
 using hgl_thread_mutex  =CRITICAL_SECTION;
 using thread_ptr        =HANDLE;
-using THREAD_FUNC       =DWORD WINAPI;
+#define THREAD_FUNC      DWORD WINAPI
 #define HGL_THREAD_DETACH_SELF
 //--------------------------------------------------------------------------------------------------
 #endif//HGL_OS_WIN_INCLUDE
