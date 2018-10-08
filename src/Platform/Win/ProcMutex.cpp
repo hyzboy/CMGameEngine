@@ -14,6 +14,12 @@ namespace hgl
 
         lock = CreateMutexW(NULL, FALSE, name);
 
+        if(GetLastError()==ERROR_ALREADY_EXISTS)
+        {
+            CloseHandle(lock);
+            lock=nullptr;
+        }
+
         return lock;
     }
 
