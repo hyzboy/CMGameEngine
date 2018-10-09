@@ -296,12 +296,19 @@ namespace hgl
             if(file_state.st_mode&S_IFDIR)
                 fi.is_directory=true;
 
+			if (file_state.st_mode&S_IREAD)
+				fi.can_read = true;
+
+			if (file_state.st_mode&S_IWRITE)
+				fi.can_write = true;
+
 #if HGL_OS != HGL_OS_Windows
             if(file_state.st_mode&S_IFLNK)
                 fi.is_link=true;
 #endif//HGL_OS != HGL_OS_Windows
 
             fi.size=file_state.st_size;
+
             return(true);
         }
     }//namespace filesystem
