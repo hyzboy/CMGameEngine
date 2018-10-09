@@ -49,30 +49,33 @@ namespace hgl
 
             LL_HOTPOT,      ///<性能记录热点
             LL_CODE,        ///<代码日志(引擎内部记录)
-            LL_USER_LOG,    ///<用户日志(开发人员的日志)
-            LL_RUN_LOG,     ///<运行日志(实际使用时的日志)
+            LL_USER,        ///<用户日志(开发人员的日志)
+            LL_RUN,         ///<运行日志(实际使用时的日志)
 
             LL_END          ///<日志级别结束定义
         };
 
-        enum ERROR_LEVEL
+        /**
+         * 影响级别
+         */
+        enum AFFECTOR_LEVEL
         {
-            EL_START=0,
+            AL_START=0,
 
-            EL_USER,        ///<用户级(无关仅要，正常程序逻辑报错)
-            EL_FUNC,        ///<函数级(当前函数报错)
-            EL_MODULE,      ///<模块级
-            EL_FULL,        ///<整体级(很严重，只能退出)
+            AL_USER,        ///<用户级(无关仅要，正常程序逻辑报错)
+            AL_FUNC,        ///<函数级(当前函数报错)
+            AL_MODULE,      ///<模块级
+            AL_FULL,        ///<整体级(很严重，只能退出)
 
-            EL_MUST_FIXED,  ///<必须修正的代码问题
+            AL_MUST_FIXED,  ///<必须修正的代码问题
 
-            EL_END
+            AL_END
         };
 
         /**
-         * 高级日志(未来删除旧的Logger后，改名为Logger)
+         * 日志输出基类
          */
-        class AdvLogger
+        class LoggerBase
         {
         protected:
 
@@ -81,9 +84,9 @@ namespace hgl
 
         protected:
 
-            uint source_file;                           ///<源代所在文件ID
-            uint source_line;                           ///<源代码所在行
-            uint function;                              ///<函数ID
+            uint32 source_file;                         ///<源代所在文件ID
+            uint32 source_line;                         ///<源代码所在行
+            uint32 function;                            ///<函数ID
             HGL_POINTER_UINT object_address;            ///<对象地址
             HGL_POINTER_UINT thread_id;                 ///<线程ID
 
@@ -107,6 +110,22 @@ namespace hgl
         class ObjectLogger
         {
         };
+
+        /**
+         * 时间追踪日志
+         * 针对同一数据记录每一次时间下的数值的日志输出模块
+         */
+        class TimeLogger
+        {
+        };
+
+        /**
+         * 图形日志<br>
+         * 用于记录碰撞信息，寻路信息，路线跟踪等等
+         */
+        class GraphicsLogger
+        {
+        };//
     }//namespace logger
 
     using namespace logger;
