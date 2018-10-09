@@ -281,7 +281,7 @@ namespace hgl
 
         void IPv4Address::ToString(char *str,const int max_size,const in_addr *ip_addr)
         {
-            inet_ntop(AF_INET,(void *)&ip_addr,str,INET_ADDRSTRLEN);
+            inet_ntop(AF_INET,(void *)&ip_addr,str,max_size);
         }
 
         void IPv4Address::ToString(char *str,const int max_size,const sockaddr_in *ip_addr)
@@ -371,7 +371,7 @@ namespace hgl
 
         void IPv6Address::ToString(char *str,const int max_size,const in6_addr *ip_addr)
         {
-            inet_ntop(AF_INET6, (void *)&ip_addr,str,INET6_ADDRSTRLEN);
+            inet_ntop(AF_INET6, (void *)&ip_addr,str,max_size);
         }
 
         void IPv6Address::ToString(char *str,const int max_size,const sockaddr_in6 *ip_addr)

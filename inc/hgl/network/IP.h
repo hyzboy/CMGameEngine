@@ -300,7 +300,7 @@ namespace hgl
             const int GetFamily()const override{return AF_INET;}
             const uint GetIPSize()const override{return sizeof(in_addr);}
             const uint GetSockAddrInSize()const override{return sizeof(sockaddr_in);}
-            const uint GetIPStringMaxSize()const override{return INET_ADDRSTRLEN;}
+            const uint GetIPStringMaxSize()const override{return INET_ADDRSTRLEN+6;}
 
             const bool IsBoradcast()const override{return(addr.sin_addr.s_addr==htonl(INADDR_BROADCAST));}
 
@@ -376,7 +376,7 @@ namespace hgl
             const int GetFamily()const override{return AF_INET6;}
             const uint GetIPSize()const override{return sizeof(in6_addr);}
             const uint GetSockAddrInSize()const override{return sizeof(sockaddr_in6);}
-            const uint GetIPStringMaxSize()const override{return INET6_ADDRSTRLEN;}
+            const uint GetIPStringMaxSize()const override{return INET6_ADDRSTRLEN+6;}
 
             const bool IsBoradcast()const override{return(false);}
 
