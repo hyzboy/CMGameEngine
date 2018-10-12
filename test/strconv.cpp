@@ -1,4 +1,4 @@
-#include<hgl/type/BaseString.h>
+﻿#include<hgl/type/BaseString.h>
 #include<hgl/type/DateTime.h>
 #include<iostream>
 
@@ -20,7 +20,10 @@ int main(int,char **)
 
 	d.Sync();
 
-	UTF8String str=UTF8String(d.GetYear())+'_'+UTF8String(d.GetMonth())+'_'+UTF8String(d.GetDay())+'_'+tn->GetTableName();
+    UTF8String str  =UTF8String(d.GetYear())+UTF8String::charOf('_')
+                    +UTF8String(d.GetMonth())+UTF8String::charOf('_')
+                    +UTF8String(d.GetDay())+UTF8String::charOf('_')
+                    +tn->GetTableName();
 
 	std::cout<<str.c_str()<<std::endl;
 	return(0);

@@ -52,7 +52,7 @@ namespace hgl
                         if(!GetChar(index,value))
                             return(false);
 
-                        str=UTF16String(value);
+                        str=UTF16String::charOf(value);
                     }
 
                     return(true);
@@ -71,7 +71,7 @@ namespace hgl
                         if(!GetChar(index,value))
                             return(false);
 
-                        str=UTF16String(value);
+                        str=UTF16String::charOf(value);
                     }
 
                     return(true);
@@ -97,12 +97,12 @@ namespace hgl
 
                 const T *p=data+Type.count*index;
 
-                str=UTF16String(*p++);
+                str=UTF16String::charOf(*p++);
 
                 for(int i=1;i<Type.count;i++)
                 {
-                    str += U16_TEXT(',');
-                    str+=UTF16String(*p++);
+                    str+=UTF16String::charOf(U16_TEXT(','));
+                    str+=UTF16String::charOf(*p++);
                 }
 
                 return(true);

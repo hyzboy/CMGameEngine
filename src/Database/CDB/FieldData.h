@@ -357,7 +357,7 @@ namespace hgl
 		public:
 
 			using FieldData::FieldData;
-            
+
 			FieldDataString(const FieldDesc *fd,const T *str,int len):FieldData(fd),string_value(str,len){}
 			FieldDataString(const FieldDesc *fd,const T *str):FieldData(fd),string_value(str){}
 			FieldDataString(const FieldDesc *fd,const BaseString<T> &str):FieldData(fd),string_value(str){}
@@ -453,7 +453,7 @@ namespace hgl
 
 			using FieldDataString<u16char>::FieldDataString;
 
-			const bool Set(const bool v)override{ this->string_value = (v ? U16_TEXT('1') : U16_TEXT('0')); return(true); }
+			const bool Set(const bool v)override{ this->string_value = UTF16String::charOf(v ? U16_TEXT('1') : U16_TEXT('0')); return(true); }
 
 			const bool Get(UTF8String &str)const override{str=to_u8(this->string_value);return(true);}
 			const int Get(char *str,int size)const override
@@ -482,7 +482,7 @@ namespace hgl
 
 			using FieldDataString<char>::FieldDataString;
 
-			const bool Set(const bool v		)override{this->string_value=(v?'1':'0');return(true);}
+			const bool Set(const bool v		)override{this->string_value=UTF8String::charOf(v?'1':'0');return(true);}
 
 			const bool Get(UTF16String &str)const override{str=to_u16(this->string_value);return(true);}
 			const int Get(u16char *str,int size)const override

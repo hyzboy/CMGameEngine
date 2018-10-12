@@ -12,9 +12,9 @@ namespace hgl
 
         namespace
         {
-            const uchar cdb_flag[11]="CDB Table\x1A";
-            const int cdb_flag_len=10;
-            const float cdb_ver=6.0;
+            constexpr uchar cdb_flag[]  ="CDB Table\x1A";
+            constexpr uint  cdb_flag_len=sizeof(cdb_flag)-1;
+            constexpr float cdb_ver     =6.0;
         }
 
         void CDBTable::InitPrivate()

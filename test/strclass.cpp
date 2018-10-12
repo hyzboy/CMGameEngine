@@ -22,7 +22,7 @@ int main(int,char **)
 
 	as3=as1+as2;
 
-	as3="123"+as1+'a';
+	as3="123"+as1+"a";
 
 	UTF16String ws;
 

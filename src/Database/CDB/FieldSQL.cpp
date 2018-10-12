@@ -1,4 +1,4 @@
-#include<hgl/db/Field.h>
+﻿#include<hgl/db/Field.h>
 #include"FieldData.h"
 
 namespace hgl
@@ -11,7 +11,7 @@ namespace hgl
 
             switch(field->GetBaseType())
             {
-                case fbtBool:        str=(((FieldDataBool *)field)->value?'1':'0');return(true);
+                case fbtBool:        str=UTF8String::charOf(((FieldDataBool *)field)->value?'1':'0');return(true);
 
                 case fbtInt8:        str=((FieldDataInteger<int8> *)field)->value;return(true);
                 case fbtInt16:        str=((FieldDataInteger<int16> *)field)->value;return(true);
@@ -26,12 +26,12 @@ namespace hgl
                 case fbtFloat:        str=((FieldDataFloat<float> *)field)->value;return(true);
                 case fbtDouble:        str=((FieldDataFloat<double> *)field)->value;return(true);
 
-                case fbtChar16le:    str='\''+to_u8(((FieldDataUTF16Chars *)field)->array_value.GetData(),field->GetCount())+'\'';return(true);
-                case fbtChar8:        str='\'';str.Strcat(((FieldDataUTF8Chars *)field)->array_value.GetData(),field->GetCount());str+='\'';return(true);
-                case fbtBinary:        str='\'';str.Strcat(((FieldDataBinary     *)field)->array_value.GetData(),field->GetCount());str+='\'';return(true);
+                case fbtChar16le:    str=UTF8String::charOf('\'')+to_u8(((FieldDataUTF16Chars *)field)->array_value.GetData(),field->GetCount())+UTF8String::charOf('\'');return(true);
+                case fbtChar8:        str=UTF8String::charOf('\'');str.Strcat(((FieldDataUTF8Chars *)field)->array_value.GetData(),field->GetCount());str+=UTF8String::charOf('\'');return(true);
+                case fbtBinary:        str=UTF8String::charOf('\'');str.Strcat(((FieldDataBinary     *)field)->array_value.GetData(),field->GetCount());str+=UTF8String::charOf('\'');return(true);
 
-                case fbtVarChar16le:str='\'';str+=to_u8(((FieldDataUTF16String *)field)->string_value);str+='\'';return(true);
-                case fbtVarChar8:    str='\'';str+=((FieldDataUTF8String *)field)->string_value;str+='\'';return(true);
+                case fbtVarChar16le:str=UTF8String::charOf('\'');str+=to_u8(((FieldDataUTF16String *)field)->string_value);str+=UTF8String::charOf('\'');return(true);
+                case fbtVarChar8:   str=UTF8String::charOf('\'');str+=((FieldDataUTF8String *)field)->string_value;str+=UTF8String::charOf('\'');return(true);
 
                 case fbtVarBinary:
                 {

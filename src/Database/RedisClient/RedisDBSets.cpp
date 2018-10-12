@@ -1,4 +1,4 @@
-#include<hgl/db/RedisDB.h>
+﻿#include<hgl/db/RedisDB.h>
 #include"RedisDBReply.h"
 
 namespace hgl
@@ -215,7 +215,7 @@ namespace hgl
 			for(int i=0;i<set_list.GetCount();i++)
 			{
 				str+=set_list[i];
-				str+=' ';
+				str+=UTF8String::charOf(' ');
 			}
 
 			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),str);
@@ -230,14 +230,14 @@ namespace hgl
 			UTF8String str="SINTERSTORE ";
 
 			str+=dst_set;
-			str+=' ';
+			str+=UTF8String::charOf(' ');
 
 			const int count=set_list.GetCount();
 
 			for(int i=0;i<set_list.GetCount();i++)
 			{
 				str+=set_list[i];
-				str+=' ';
+				str+=UTF8String::charOf(' ');
 			}
 
 			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),str);
@@ -255,7 +255,7 @@ namespace hgl
 			for(int i=0;i<set_list.GetCount();i++)
 			{
 				str+=set_list[i];
-				str+=' ';
+				str+=UTF8String::charOf(' ');
 			}
 
 			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),str);
@@ -270,14 +270,14 @@ namespace hgl
 			UTF8String str="SUNIONSTORE ";
 
 			str+=dst_set;
-			str+=' ';
+			str+=UTF8String::charOf(' ');
 
 			const int count=set_list.GetCount();
 
 			for(int i=0;i<set_list.GetCount();i++)
 			{
 				str+=set_list[i];
-				str+=' ';
+				str+=UTF8String::charOf(' ');
 			}
 
 			REPLY r(REDIS_REPLY_DEBUG_HEADER(con),str);
