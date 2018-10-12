@@ -7,6 +7,9 @@ namespace hgl
         template<> EndianTextOutputStream<bomUTF8>::EndianTextOutputStream(OutputStream *os):TextOutputStream(bomUTF8,new DirectDataOutputStream(os)){}
         template<> EndianTextOutputStream<bomUTF16LE>::EndianTextOutputStream(OutputStream *os):TextOutputStream(bomUTF16LE,new LEDataOutputStream(os)){}
         template<> EndianTextOutputStream<bomUTF16BE>::EndianTextOutputStream(OutputStream *os):TextOutputStream(bomUTF16BE,new BEDataOutputStream(os)){}
+
+        template<> TextOutputStream *CreateTextOutputStream<char>(OutputStream *os){return(new UTF8TextOutputStream(os));}
+        template<> TextOutputStream *CreateTextOutputStream<wchar_t>(OutputStream *os){return(new UTF16LETextOutputStream(os));}
     }//namespace io
 
     namespace io        //WriteChars函数

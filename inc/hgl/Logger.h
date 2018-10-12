@@ -80,7 +80,7 @@ namespace hgl
         protected:
 
             LOG_LEVEL log_level;
-            ERROR_LEVEL err_level;
+            AFFECTOR_LEVEL err_level;
 
         protected:
 

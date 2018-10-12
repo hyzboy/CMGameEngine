@@ -1,4 +1,4 @@
-#include<hgl/type/BaseString.h>
+﻿#include<hgl/type/BaseString.h>
 #include<hgl/type/Map.h>
 #include<hgl/Str.h>
 #include<hgl/io/DataInputStream.h>
@@ -303,6 +303,7 @@ public:
 	{
 		if(this->KeyExist(name))return(false);
 		this->Add(name,new PropertyItem<STR_TYPE,STR_TYPE>(value));
+        return(true);
 	}
 };
 

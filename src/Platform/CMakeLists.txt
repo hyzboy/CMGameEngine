@@ -13,8 +13,6 @@ IF(UNIX)
 
     SET(PLATFORM_APPLICATION_SOURCE     UNIX/SystemInfo.cpp)
 
-    SET(PLATFORM_LOG_SOURCE             UNIX/LogFile.cpp)
-
     SET(PLATFORM_MULTI_THREAD_SOURCE    UNIX/CondVar.cpp
                                         UNIX/RWLock.cpp
                                         UNIX/Thread.cpp
@@ -34,7 +32,6 @@ IF(UNIX)
                                             UNIX/Semaphore.cpp)
 
     ELSE()
-
         SET(PLATFORM_CODEPAGE_SOURCE        UNIX/CodePage.cpp)
         SET(PLATFORM_LOG_SOURCE             UNIX/LogConsole.cpp)
 
@@ -76,8 +73,7 @@ IF(WIN32)
     SET(PLATFORM_APPLICATION_SOURCE     Win/SystemInfo.cpp)
 
     SET(PLATFORM_LOG_SOURCE             Win/LogConsole.cpp
-                                        Win/LogDialog.cpp
-                                        Win/LogFile.cpp)
+                                        Win/LogDialog.cpp)
 
     SET(PLATFORM_MULTI_THREAD_SOURCE
                                         Win/CondVar.cpp

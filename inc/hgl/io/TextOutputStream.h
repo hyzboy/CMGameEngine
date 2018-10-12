@@ -169,6 +169,8 @@ namespace hgl
 		typedef EndianTextOutputStream<bomUTF8   > UTF8TextOutputStream;
         typedef EndianTextOutputStream<bomUTF16LE> UTF16LETextOutputStream;
         typedef EndianTextOutputStream<bomUTF16BE> UTF16BETextOutputStream;
+
+        template<typename T> TextOutputStream *CreateTextOutputStream(OutputStream *os);
 	}//namespace io
 }//namespace hgl
 #endif//HGL_IO_TEXT_OUTPUT_STREAM_INCLUDE
