@@ -1,4 +1,4 @@
-#ifndef HGL_MEM_BLOCK_INCLUDE
+﻿#ifndef HGL_MEM_BLOCK_INCLUDE
 #define HGL_MEM_BLOCK_INCLUDE
 
 #include<hgl/type/DataType.h>

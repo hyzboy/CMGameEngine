@@ -1,4 +1,4 @@
-#ifndef HGL_PROCESS_INCLUDE
+﻿#ifndef HGL_PROCESS_INCLUDE
 #define HGL_PROCESS_INCLUDE
 
 #include<hgl/type/StringList.h>

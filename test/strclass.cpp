@@ -9,7 +9,7 @@ int main(int,char **)
 	UTF8String as1,as2,as3;
 
 	char str[32];
-	u16char str16[32]=u"utf16 string";
+	u16char str16[32]=U16_TEXT("utf16 string");
 
 	std::cout<<str16<<std::endl;
 

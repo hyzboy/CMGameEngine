@@ -1,11 +1,11 @@
-#include<stdio.h>
+﻿#include<stdio.h>
 #include<iostream>
 #include<hgl/io/FileInputStream.h>
 #include<hgl/io/FileOutputStream.h>
 #include<hgl/io/DataInputStream.h>
 #include<hgl/io/DataOutputStream.h>
 #include<hgl/LogInfo.h>
-#include<hgl/io/EnumFile.h>
+#include<hgl/filesystem/EnumFile.h>
 
 using namespace hgl;
 using namespace hgl::io;
