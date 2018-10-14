@@ -64,6 +64,20 @@ namespace hgl
         }
 
         /**
+         * 截取完整文件名中的扩展名
+         */
+        template<typename T>
+        inline BaseString<T> ClipFileExtName(const BaseString<T> &fullname)
+        {
+            const int pos=fullname.FindRightChar(T('.'));
+
+            if(pos==-1)
+                return BaseString<T>();
+
+            return fullname.SubString(pos+1);
+        }
+
+        /**
          * 截取路径最后一个名字
          */
         template<typename T>
