@@ -2,7 +2,7 @@
 
 #include<hgl/ut/XMLParse.h>
 #include<hgl/io/FileInputStream.h>
-#include<hgl/io/FileSystem.h>
+#include<hgl/filesystem/FileSystem.h>
 #include<expat.h>
 
 namespace hgl

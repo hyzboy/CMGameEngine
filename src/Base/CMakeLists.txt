@@ -14,8 +14,7 @@ SET(BASE_OTHER_SOURCE
     Other/TimeCount.cpp
 	Other/TimeVal.cpp
     Other/DateTime.cpp
-    Other/CodePage.cpp
-    Other/EnumFile.cpp)
+    Other/CodePage.cpp)
 
 SOURCE_GROUP("Other"                FILES ${BASE_OTHER_SOURCE})
 
@@ -51,12 +50,17 @@ SET(BASE_IO_SOURCE
     IO/FileInputStream.cpp
     IO/DataInputStream.cpp
     IO/FileAccess.cpp
-    IO/FileSystem.cpp
     IO/TextOutputStream.cpp
     IO/DataDistribute.cpp
     IO/IOType.cpp)
 
 SOURCE_GROUP("IO" FILES ${BASE_IO_SOURCE})
+
+SET(BASE_FILE_SYSTEM_SOURCE
+    FileSystem/FileSystem.cpp
+    FileSystem/EnumFile.cpp)
+
+SOURCE_GROUP("FileSystem" FILES ${BASE_FILE_SYSTEM_SOURCE})
 
 SOURCE_GROUP("MultiThread" FILES ${THREAD_SOURCE})
 
@@ -74,6 +78,7 @@ SET(CM_BASE_ALL_SOURCE  ${BASE_COMMON_SOURCE}
                         ${BASE_APPLICATION_SOURCE}
                         ${BASE_TYPE_SOURCE}
                         ${BASE_IO_SOURCE}
+                        ${BASE_FILE_SYSTEM_SOURCE}
                         ${THREAD_SOURCE}
                         ${BASE_PLUG_IN_SOURCE})
 
