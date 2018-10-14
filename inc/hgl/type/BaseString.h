@@ -773,14 +773,14 @@ namespace hgl
          * 从字符串中取指定子串为新的内容
          * @param start 起始字符索引
          * @param n 字符数量,-1表示全部
-         * @return 成否成功
+         * @return 截取后的字符串
          */
-        bool SubString(int start,int n=-1)															///<取字符串指定段的字符
+        SelfClass SubString(int start,int n=-1)															///<取字符串指定段的字符
         {
             if(!Unlink())
                 return(false);
 
-            return data->SubString(start,n);
+            return SelfClass(data->c_str()+start,n);
         }
 
         /**

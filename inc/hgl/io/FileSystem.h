@@ -60,7 +60,7 @@ namespace hgl
             if(pos==-1)
                 return BaseString<T>(fullname);
 
-            return BaseString<T>();
+            return fullname.SubString(pos+1);
         }
 
         /**
