@@ -66,6 +66,7 @@ IF(WIN32)
     SET(PLATFORM_FILE_SOURCE            Win/File.cpp
                                         Win/FileAccess.cpp
                                         Win/EnumFile.cpp
+										Win/EnumVolume.cpp
                                         Win/ProgramPath.cpp)
 
     SET(PLATFORM_CODEPAGE_SOURCE        Win/CodePage.cpp)

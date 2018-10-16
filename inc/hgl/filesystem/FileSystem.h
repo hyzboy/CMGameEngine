@@ -198,56 +198,6 @@ namespace hgl
         bool GetFileInfo(const os_char *filename,struct FileInfo &);	///<取得文件信息
 
         int GetFileInfoList(List<FileInfo> &, const OSString &folder_name, bool proc_folder, bool proc_file, bool sub_folder);
-
-        /**
-         * 卷信息数据结构
-         */
-        struct VolumeInfo
-        {
-            enum DriverType
-            {
-                dtNone=0,				//未知类型
-
-                dtRemovable,			//可移动设备
-                dtFixed,				//固定设备
-                dtRemote,				//远程设备
-                dtCDROM,				//光盘驱动器
-                dtRamDisk,				//内存虚拟设备
-
-                dtEnd					//结束定义
-            };
-
-            u16char 			name[1024];			//卷名称
-
-            u16char 			path[1024];			//卷所对应的路径名(注意:不是所有卷都有对应路径)
-
-            DriverType 			driver_type;		//驱动器类型(注意:不是所有的卷都对应驱动器)
-
-            uint32 				serial;				//卷序列号
-
-            u16char				volume_label[256];	//卷标名称
-
-            u16char 			file_system[256];	//文件系统名称
-
-            uint32 				filename_max_length;//文件名最大长度
-
-            bool 				unicode;			//文件名支持UNICODE
-
-            uint64				available_space;	//有效容量
-            uint64				total_space;		//总空量
-            uint64				free_space;			//自由容量
-        };//struct VolumeInfo
-
-        /**
-         * 枚举当前计算机所有卷
-         * @param data 用户自定义回传信息
-         * @param func 回调函数
-         * @param check_removable 检测可移除设备
-         * @param check_remote 检测远程驱动器
-         * @param check_cd 检测光盘
-         * @return 查找到的卷数量，-1表示失败
-         */
-        // 	int EnumVolume(void *data,void (*func)(void *,hgl::VolumeInfo &),bool check_removable=false,bool check_remote=false,bool check_cd=false);
     }//namespace filesystem
 }//namespace hgl
 #endif//HGL_FILE_SYSTEM_INCLUDE
