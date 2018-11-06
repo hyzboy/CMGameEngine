@@ -9,14 +9,6 @@
 namespace hgl
 {
 	template<typename T>
-	List<T>::List()
-	{
-		count=0;
-		max_count=0;
-		items=0;
-	}
-
-	template<typename T>
 	bool List<T>::Get(int index,T &ti)const
 	{
 		if(!items||index<0||index>=count)

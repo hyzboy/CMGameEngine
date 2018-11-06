@@ -18,9 +18,9 @@ namespace hgl
 	{
 	protected:
 
-		int count;
-		int max_count;
-		T *items;
+		int count=0;
+		int max_count=0;
+		T *items=nullptr;
 
 	public:	//属性
 
@@ -32,8 +32,8 @@ namespace hgl
 
 	public: //方法
 
-		List();                                                                                     ///<本类构造函数
-		List(const List<T> &lt){operator=(lt);}														///<本类构造函数
+        List(){};                                                                                   ///<本类构造函数
+        List(const List<T> &lt){operator=(lt);}													    ///<本类构造函数
 		List(const std::initializer_list<T> &lt){operator=(lt);}
 
 		virtual ~List(){Clear();}                                                                   ///<本类析构函数
@@ -64,7 +64,7 @@ namespace hgl
 
 		virtual void operator += (const T &obj){Add(obj);}											///<操作符重载添加一个数据
 		virtual void operator << (const T &obj){Add(obj);}											///<操作符重载添加一个数据
-		virtual void operator -= (const T &obj){DeleteByValue(obj);}								///<操作符重载删除一个数据
+		virtual void operator -= (const T &obj){DeleteByValue(obj);}									///<操作符重载删除一个数据
 
 				bool Get(int,T &)const;																///<取得指定索引处的数据
 				void Set(int,const T &);															///<设置指定索引处的数据
