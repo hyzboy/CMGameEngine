@@ -43,6 +43,8 @@ namespace hgl
                 proc_file   =efc->proc_file;
                 sub_folder  =efc->sub_folder;
             }
+
+            virtual ~EnumFileConfig()=default;
         };//struct EnumFileConfig
 
         /**
