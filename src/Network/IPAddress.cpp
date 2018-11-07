@@ -1,4 +1,5 @@
 ﻿#include<hgl/network/IP.h>
+#include<hgl/network/Socket.h>
 
 namespace hgl
 {
@@ -15,8 +16,13 @@ namespace hgl
                 hints.ai_socktype=socktype;
                 hints.ai_protocol=protocol;
 
-                if (getaddrinfo(name, nullptr, &hints, &answer))         //此函数最低WindowsXP SP2
+                int rc=getaddrinfo(name,nullptr,&hints,&answer);         //此函数最低WindowsXP SP2
+
+                if(rc)
+                {
+                    LOG_ERROR(OS_TEXT("getaddrinfo return error,code [")+OSString(rc)+OS_TEXT("]")+GetSocketString(rc));
                     RETURN_FALSE;
+                }
 
                 memcpy(&addr,answer->ai_addr,sizeof(sockaddr_in));
                 freeaddrinfo(answer);
@@ -42,8 +48,13 @@ namespace hgl
                 hints.ai_socktype=socktype;
                 hints.ai_protocol=protocol;
 
-                if (getaddrinfo(name, nullptr, &hints, &answer))         //此函数最低WindowsXP SP2
+                int rc=getaddrinfo(name,nullptr,&hints,&answer);         //此函数最低WindowsXP SP2
+
+                if(rc)
+                {
+                    LOG_ERROR(OS_TEXT("getaddrinfo return error,code [")+OSString(rc)+OS_TEXT("]")+GetSocketString(rc));
                     RETURN_FALSE;
+                }
 
                 memcpy(&addr,answer->ai_addr,sizeof(sockaddr_in6));
                 freeaddrinfo(answer);
