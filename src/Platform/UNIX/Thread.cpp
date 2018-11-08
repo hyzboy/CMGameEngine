@@ -70,7 +70,7 @@ namespace hgl
 		int retval;
         void *res;
 
-#if !defined(__APPLE__)&&!defined(__ANDROID__)
+#if !defined(__ANDROID__)&&!defined(HGL_OS_BSD)
         if(time_out>0)
         {
             struct timespec ts;
@@ -80,7 +80,7 @@ namespace hgl
             retval=pthread_timedjoin_np(tp,&res,&ts);
         }
         else
-#endif//__APPLE__&&__ANDROID__
+#endif//__ANDROID__&&BSD
         {
             retval=pthread_join(tp,&res);
         }

@@ -1,4 +1,5 @@
-#include<hgl/type/DataType.h>
+﻿#include<hgl/type/DataType.h>
+#include<sys/time.h>
 
 namespace hgl
 {

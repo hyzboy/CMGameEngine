@@ -125,12 +125,12 @@
     #define HGL_ENDIAN					HGL_LITTLE_ENDIAN
 #elif defined(__wasm__)
 
-    #error not support WebAssembly.please wait update......
+    #error Not support WebAssembly.please wait update......
 
     #define HGL_OS          HGL_OS_Wasm
     #define HGL_COMPILER    HGL_COMPILER_Wasm
 #else
-	#error not support the cpu.
+	#error Not support the cpu.
 #endif
 
 #if HGL_ENDIAN == HGL_BIG_ENDIAN
@@ -142,13 +142,16 @@
 #if defined(__WIN32__)||defined(_WIN32)||defined(WIN32)||defined(__WINDOWS__)||defined(__WIN64__)||defined(_WIN64)||defined(WIN64)
 	#define HGL_OS 			HGL_OS_Windows
 #elif defined(__APPLE__)||defined(__MAC__)||defined(macintosh)||defined(__APPLE_CC__)
+    
+    #define HGL_OS_BSD  1
+    
 	#include "TargetConditionals.h"
 	#if TARGET_OS_IPHONE
-//		#if TARGET_IPHONE_SIMULATOR
-//			#define HGL_OS	HGL_OS_iOS_Simulator
-//		#else
+		#if TARGET_IPHONE_SIMULATOR
+			#define HGL_OS	HGL_OS_iOS_Simulator
+		#else
 			#define HGL_OS	HGL_OS_iOS
-//		#endif//TARGET_IPHONE_SIMULATOR
+		#endif//TARGET_IPHONE_SIMULATOR
 	#elif TARGET_OS_MAC
 		#define HGL_OS		HGL_OS_macOS
 	#endif//
@@ -156,10 +159,13 @@
     #define HGL_OS          HGL_OS_Android
 #elif defined(__FreeBSD)||defined(__FreeBSD__)
 	#define HGL_OS 			HGL_OS_FreeBSD
+    #define HGL_OS_BSD      1
 #elif defined(__NetBSD)||defined(__NetBSD__)
 	#define HGL_OS 			HGL_OS_NetBSD
+    #define HGL_OS_BSD      1
 #elif defined(__OPENBSD)||defined(__OpenBSD__)
 	#define HGL_OS 			HGL_OS_OpenBSD
+    #define HGL_OS_BSD      1
 #elif defined(__linux__)||defined(__LINUX__)||defined(linux)||defined(__linux)
 	#define HGL_OS			HGL_OS_Linux
 #elif defined(__CYGWIN__)

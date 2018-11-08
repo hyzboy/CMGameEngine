@@ -291,7 +291,7 @@ namespace hgl
             {EOWNERDEAD        ,OS_TEXT("Owner died")},
             {ENOTRECOVERABLE,OS_TEXT("State not recoverable")},
 
-    #if (HGL_OS != HGL_OS_macOS)&&(HGL_OS != HGL_OS_iOS)
+    #ifndef HGL_OS_BSD
             {ECHRNG            ,OS_TEXT("Channel number out of range")},
             {EL2NSYNC        ,OS_TEXT("Level 2 not synchronized")},
             {EL3HLT            ,OS_TEXT("Level 3 halted")},

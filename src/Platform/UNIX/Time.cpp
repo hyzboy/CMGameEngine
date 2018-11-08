@@ -21,10 +21,22 @@ namespace hgl
 
 namespace hgl
 {
+    /**
+     * get current timezone to GMT time offset
+     * @return time offset (second)
+     */
     long GetGMTOff()
     {
         tzset();
-        return(-timezone);
+        //return(-timezone);   // linux ok,but BSD don't support
+        
+        time_t rawtime;
+        struct tm *timeinfo;
+        
+        time(&rawtime);
+        timeinfo=localtime(&rawtime);
+        
+        return timeinfo->tm_gmtoff;
     }
 
 	/**
