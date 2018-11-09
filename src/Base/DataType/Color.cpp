@@ -206,6 +206,10 @@ namespace hgl
         DEF_COLOR(Snow,                   255,250,250,"雪白色")
         DEF_COLOR(SpringGreen,              0,255,127,"春绿色")
         DEF_COLOR(SteelBlue,               70,130,180,"钢兰色")
+
+        DEF_COLOR(SUSEBlack,               13, 44, 65,"SUSE黑")
+        DEF_COLOR(SUSEGreen,                2,211, 95,"SUSE绿")
+
         DEF_COLOR(Tan,                    210,180,140,"茶色")
         DEF_COLOR(Teal,                     0,128,128,"水鸭色")
         DEF_COLOR(Thistle,                216,191,216,"蓟色")
@@ -214,6 +218,12 @@ namespace hgl
 
         DEF_COLOR(Tomato,                 255, 99, 71,"西红柿色")
         DEF_COLOR(Turquoise,               64,224,208,"青绿色")
+
+        DEF_COLOR(ceUbuntuOrange,         233, 84, 32,"Ubuntu橙色")
+        DEF_COLOR(ceUbuntuLightAubergine, 119, 33,111,"Ubuntu亮茄色")
+        DEF_COLOR(ceUbuntuMidAubergine,    94, 39, 80,"Ubuntu茄色")
+        DEF_COLOR(ceUbuntuDarkAubergine,   44,  0, 30,"Ubuntu暗茄色")
+
         DEF_COLOR(Violet,                 238,130,238,"紫罗兰色")
         DEF_COLOR(Wheat,                  245,222,179,"浅黄色")
         DEF_COLOR(White,                  255,255,255,"白色")
