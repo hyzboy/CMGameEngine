@@ -121,19 +121,22 @@ namespace hgl
 
     /**
      * 测试当前字符串是否为16进制数用字符
+     * @param str 字符串
+     * @param length 字符串长度
      */
     template<typename T>
-    bool isxdigit(const T *str)
+    bool isxdigit(const T *str,int length)
     {
-        if(!str)
+        if(!str||length<=0)
             return(false);
 
-        while(*str)
+        while(*str&&length)
         {
             if(!isxdigit(*str))
                 return(false);
 
             ++str;
+            --length;
         }
 
         return(true);
