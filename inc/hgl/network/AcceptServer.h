@@ -1,4 +1,4 @@
-#ifndef HGL_NETWORK_ACCEPT_SERVER_INCLUDE
+﻿#ifndef HGL_NETWORK_ACCEPT_SERVER_INCLUDE
 #define HGL_NETWORK_ACCEPT_SERVER_INCLUDE
 
 #include<hgl/network/ServerSocket.h>
@@ -33,6 +33,8 @@ namespace hgl
 
                 FD_ZERO(&accept_set);
                 hgl_zero(accept_timeout);
+
+                SetTimeOut(HGL_NETWORK_TIME_OUT);
 			}
 
 			virtual ~AcceptServer(){SAFE_CLEAR(ipstr);}
