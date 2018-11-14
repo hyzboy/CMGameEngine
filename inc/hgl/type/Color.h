@@ -211,6 +211,10 @@ namespace hgl
 		ceSnow,					///<雪白色
 		ceSpringGreen,			///<春绿色
 		ceSteelBlue,			///<钢兰色
+
+        ceSUSEBlack,            ///<SUSE黑
+        ceSUSEGreen,            ///<SUSE绿
+
 		ceTan,					///<茶色
 		ceTeal,					///<水鸭色
 		ceThistle,				///<蓟色
@@ -219,6 +223,12 @@ namespace hgl
 
 		ceTomato,				///<西红柿色
 		ceTurquoise,			///<青绿色
+
+        ceUbuntuOrange,         ///<Ubuntu橙色
+        ceUbuntuLightAubergine,
+        ceUbuntuMidAubergine,
+        ceUbuntuDarkAubergine,
+
 		ceViolet,				///<紫罗兰色
 		ceWheat,				///<浅黄色
 		ceWhite,				///<白色
