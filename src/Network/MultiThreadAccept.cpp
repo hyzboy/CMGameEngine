@@ -1,5 +1,6 @@
 ﻿#include<hgl/network/MultiThreadAccept.h>
 #include<hgl/network/AcceptServer.h>
+#include<hgl/Time.h>
 
 namespace hgl
 {
@@ -19,9 +20,10 @@ namespace hgl
             }
         }//namespace
 
-        AcceptThread::AcceptThread(AcceptServer *as)
+        AcceptThread::AcceptThread(AcceptServer *as,Semaphore *sem)
         {
             server=as;
+            active_semaphore=sem;
 
             if(!server)
                 return;
@@ -49,9 +51,11 @@ namespace hgl
                 return(false);
             }
 
+            active_semaphore->Post();       //发一个信号证明自己活着
+
             if(client_sock>0)
             {
-                if(!OnAccept(client_sock,client_ip))     //这里需要改造成按时间进行批量提交，否则会因为每次来socket都进行线程安全访问性能极低
+                if(!OnAccept(client_sock,client_ip))
                     CloseSocket(client_sock);
             }
 
