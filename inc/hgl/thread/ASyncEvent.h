@@ -99,10 +99,10 @@ namespace hgl
 
                 return(true);
             }
-        };//class RepoManageThread:public Thread
+        };//class EventThread:public Thread
 
         /**
-         * 使攻范例
+         * 使用范例
          */
 /*
         // 公用部分
