@@ -4,9 +4,6 @@
 #include<hgl/type/StringInstance.h>
 #include<hgl/CompOperator.h>
 #include<hgl/Str.h>
-#include<hgl/algorithm/VectorMath.h>
-
-using namespace hgl::algorithm;
 
 namespace hgl
 {
@@ -126,10 +123,6 @@ namespace hgl
 
             Set(tmp_str);
         }
-
-        BaseString(const Vector2f &v,int n=2):BaseString((const float *)&v,n){}
-        BaseString(const Vector3f &v,int n=3):BaseString((const float *)&v,n){}
-        BaseString(const Vector4f &v,int n=4):BaseString((const float *)&v,n){}
 
         virtual ~BaseString()=default;
 
