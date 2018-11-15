@@ -768,10 +768,15 @@ namespace hgl
          * @param n 字符数量,-1表示全部
          * @return 截取后的字符串
          */
-        SelfClass SubString(int start,int n=-1)															///<取字符串指定段的字符
+        SelfClass SubString(int start,int n=-1) const												///<取字符串指定段的字符
         {
-            if(!Unlink())
-                return(false);
+            if(n==0)
+                return SelfClass();
+
+            int len=Length();
+
+            if(start>=len)
+                return SelfClass();
 
             return SelfClass(data->c_str()+start,n);
         }
