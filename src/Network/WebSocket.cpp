@@ -8,6 +8,8 @@ namespace hgl
 {
     namespace network
     {
+        using namespace hgl::algorithm;
+
         /**
          * 获取WebSocket信息
          * @param data 输入的信息头
