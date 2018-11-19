@@ -64,14 +64,20 @@ public:
 
     void ParseItemListJson(const char *str,const int size)
     {
-        Json::Reader reader;
-        Json::Value root;
+        Json::CharReaderBuilder builder;
+        Json::CharReader *reader=builder.newCharReader();
 
-        if(!reader.parse(std::string(str,size),root,false))
+        Json::Value root;
+        std::string error_info;
+
+        if(!reader->parse(str,str+size,&root,&error_info))
         {
-            LOG_ERROR("解晰JSON串失败");
+            LOG_ERROR(UTF8String("解晰JSON串失败: ")+UTF8String(error_info.c_str()));
+            delete reader;
             return;
         }
+
+        delete reader;
 
         Json::Value itemlist=root["mods"]["itemlist"]["data"]["auctions"];
 
@@ -103,13 +109,13 @@ public:
                 if(!detail_text)
                     continue;
 
-                const char *start=hgl::strstr(detail_text,tb_subtitle);
+                const char *start=hgl::strstr(detail_text,mos.GetSize(),tb_subtitle,tb_subtitle_size);
 
                 if(!start)
                     continue;
 
                 start+=tb_subtitle_size;
-                const char *end=hgl::strstr(start,"</p>");
+                const char *end=hgl::strstr(start,strlen(start),"</p>",4);
 
                 if(end<=start)
                     continue;
@@ -126,9 +132,7 @@ public:
                 {
                     char *u8str;
 
-
-
-                    int u8_len=ansi_to_utf8(ccpGBK,&u8str,start,end-start);
+                    int u8_len=to_utf8(ccpGBK,&u8str,start,end-start);
 
                     detail.Set(u8str,u8_len,true);
 
