@@ -23,4 +23,5 @@ HGL_CONSOLE_MAIN_FUNC()
 	const double new_time=FromDateTime(d,t);
 
 	cout<<"new_time="<<(uint)new_time<<endl;
+    return 0;
 }
