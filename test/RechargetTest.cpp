@@ -2,6 +2,7 @@
 #include<hgl/algorithm/Hash.h>
 #include<hgl/Str.h>
 #include<hgl/type/BaseString.h>
+#include<iostream>
 
 using namespace hgl;
 using namespace hgl::algorithm;
