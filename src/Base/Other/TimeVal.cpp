@@ -1,5 +1,8 @@
 ﻿#include<hgl/type/DataType.h>
+
+#if HGL_OS_BSD
 #include<sys/time.h>
+#endif//
 
 namespace hgl
 {
