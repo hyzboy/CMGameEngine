@@ -42,12 +42,20 @@ namespace hgl
     //	126	~
 
     /**
-     * 测试字符是否是emoji表情
+     * 测试字符是否是emoji表情<br>
+     * 参见https://unicode.org/Public/emoji/12.0/emoji-data.txt
      */
     template<typename T>
     bool isemoji(const T ch)
     {
-        return(ch>=0xE63E&&ch<=0xE757);
+        if(ch==0x23)return(true);           //#
+        if(ch==0x2A)return(true);           //*
+        if(ch>=0x30&&ch<=0x39)return(true); //0-9
+        if(ch==0xA9)return(true);           //©
+        if(ch==0xAE)return(true);           //®
+        if(ch>=0x203C&&ch<=0x1FFFD)return(true);
+
+        return(false);
     }
 
     /**
