@@ -40,8 +40,12 @@ int main(int,char **)
 
 	li={9,8,7,6,5,4,3,2,1};
 
+    int *p=li.GetData();
 	for(int i=0;i<li.GetCount();i++)
-		wcout<<U16_TEXT("List<int> items ")<<i<<U16_TEXT(" : ")<<li[i]<<endl;
+    {
+		wcout<<U16_TEXT("List<int> items ")<<i<<U16_TEXT(" : ")<<*p<<endl;
+        ++p;
+    }
 
 	char str[]="1.2";
 	float value;

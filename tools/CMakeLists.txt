@@ -25,3 +25,5 @@ ENDIF()
 IF(BUILD_OpenCart)
     add_subdirectory(OpenCart)
 ENDIF()
+
+add_subdirectory(NewsSpider)

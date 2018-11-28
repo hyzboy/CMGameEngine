@@ -3,8 +3,11 @@
 #include<hgl/audio/Listener.h>
 #include<hgl/al/al.h>
 #include<hgl/Time.h>
+
 namespace hgl
 {
+    using namespace algorithm;
+
     /**
      * 計算指定音源相對收聽者的音量
      */

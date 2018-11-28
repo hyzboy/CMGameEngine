@@ -1,6 +1,7 @@
 ﻿#ifndef HGL_AUDIO_SOURCE_INCLUDE
 #define HGL_AUDIO_SOURCE_INCLUDE
 
+#include<hgl/algorithm/VectorMath.h>
 #include<hgl/audio/ConeAngle.h>
 #include<hgl/audio/AudioBuffer.h>
 
