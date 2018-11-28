@@ -228,9 +228,9 @@ namespace hgl
 	template<typename F,typename T,typename DataPair>
 	bool _Map<F,T,DataPair>::Get(int index,F &f,T &t) const
 	{
-		if(index<0||index>=data_list.GetCount())return(false);
+		DataPair *ds=GetObject(data_list,index);
 
-		DataPair *ds=data_list[index];
+        if(!ds)return(false);
 
 		f=ds->left;
 		t=ds->right;
@@ -247,9 +247,9 @@ namespace hgl
 	template<typename F,typename T,typename DataPair>
 	bool _Map<F,T,DataPair>::GetKey(int index,F &f) const
 	{
-		if(index<0||index>=data_list.GetCount())return(false);
+        DataPair *ds=GetObject(data_list,index);
 
-		DataPair *ds=data_list[index];
+        if(!ds)return(false);
 
 		f=ds->left;
 
@@ -265,11 +265,9 @@ namespace hgl
 	template<typename F,typename T,typename DataPair>
 	bool _Map<F,T,DataPair>::GetValue(int index,T &t) const
 	{
-		if(index<0||index>=data_list.GetCount())return(false);
+        DataPair *ds=GetObject(data_list,index);
 
-		DataPair *ds=data_list[index];
-
-		if(!ds)return(false);
+        if(!ds)return(false);
 
 		t=ds->right;
 
@@ -284,9 +282,11 @@ namespace hgl
 	template<typename F,typename T,typename DataPair>
 	bool _Map<F,T,DataPair>::SetValueBySerial(int index,T &t)
 	{
-		if(index<0||index>=data_list.GetCount())return(false);
+        DataPair *ds=GetObject(data_list,index);
 
-		data_list[index]->right=t;
+        if(!ds)return(false);
+
+        ds->right=t;
 
 		return(true);
 	}
