@@ -70,7 +70,6 @@ namespace hgl
 				void Set(int,const T &);															///<设置指定索引处的数据
 				bool Rand(T &)const;																///<随机取得一个数据
 
-		virtual T &operator[](int n)const;															///<操作符重载取得指定索引处的数据
 		virtual bool Begin(T &)const;																///<取第一个数据
 		virtual bool End(T &)const;																	///<取最后一个数据
 

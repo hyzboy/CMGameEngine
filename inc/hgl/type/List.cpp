@@ -52,21 +52,6 @@ namespace hgl
 	}
 
 	template<typename T>
-	T &List<T>::operator[](int index)const															///<操作符重载取得指定索引处的数据
-	{
-		if(!items||index<0||index>=count)
-		{
-			static T *null_ptr=nullptr;
-
-            LOG_ERROR(OS_TEXT("List<>::operator(index=")+OSString(index)+OS_TEXT(") error,DataCount=")+OSString(count));
-
-			return(*null_ptr);
-		}
-
-		return items[index];
-	}
-
-	template<typename T>
 	void List<T>::Set(int index,const T &val)
 	{
 		#ifdef _DEBUG

@@ -1,4 +1,4 @@
-#ifndef HGL_POOL_INCLUDE
+﻿#ifndef HGL_POOL_INCLUDE
 #define HGL_POOL_INCLUDE
 
 #include<hgl/type/List.h>
@@ -47,8 +47,6 @@ namespace hgl
 
 		virtual void	ClearInactive();															///<清除所有空闲的
 		virtual void	ClearAll();																	///<清除所有的
-
-		virtual T operator[](int n){return Active[n];}
 	};//template<typename T> class Pool
 
 	template<typename T> class MTPool:public Pool<T>												///多线程数据池
@@ -188,6 +186,13 @@ namespace hgl
 
 		using Pool<T *>::Pool;
 		virtual ~_ObjectPool(){Pool<T *>::ClearAll();}
+
+        virtual bool Release(T *obj) override                                                       ///<释放一个数据
+        {
+            if(!obj)return(true);
+
+            return Pool<T *>::Release(obj);
+        }
 	};//template<typename T> class _ObjectPool
 
 	template<typename T> class ObjectPool:public _ObjectPool<T>										///对象池

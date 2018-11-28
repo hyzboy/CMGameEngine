@@ -57,11 +57,15 @@ namespace hgl
 
             ParseFieldType(field_type,field_list);        //将字段类型由字符串转换为程序用二进制数据
 
-            dis->ReadInt32(data_count);                        //数据数量
+            dis->ReadInt32(data_count);                   //数据数量
+
+            FieldType *ft=field_type.GetData();
 
             for(int i=0;i<field_list.GetCount();i++)
             {
-                CDBField *f=CreateCDBField(field_name[i],field_type[i],dis,data_count);
+                CDBField *f=CreateCDBField(field_name[i],*ft,dis,data_count);
+
+                ++ft;
 
                 if(f)
                     Fields.Add(field_name[i],f);

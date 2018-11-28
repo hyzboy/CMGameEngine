@@ -56,7 +56,7 @@ namespace hgl
 			FieldType(const FieldBaseType &bt,int c=1);
 		};//struct FieldType
 
-		typedef List<FieldType> FieldTypeList;
+		using FieldTypeList=List<FieldType>;
 
 		FieldType ParseFieldType(const char *str);
 		FieldType ParseFieldType(const u16char *str);

@@ -127,8 +127,13 @@ namespace hgl
 
 		{
 			int n=Active.GetCount();
+            T *p=Active.GetData();
+
 			while(n--)
-				Clear(Active[n]);
+            {
+				Clear(*p);
+                ++p;
+            }
 
 			Active.Clear();
 		}

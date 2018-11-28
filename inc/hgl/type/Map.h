@@ -4,7 +4,6 @@
 #include<hgl/type/List.h>
 #include<hgl/type/Pair.h>
 #include<hgl/type/Pool.h>
-#include<hgl/LogInfo.h>
 #include<hgl/thread/RWLock.h>
 namespace hgl
 {
@@ -93,7 +92,7 @@ namespace hgl
 					return count;
 				}
 
-				IDItem *GetItem(int n)const{return data_list[n];}									///<取指定序号的数据
+				IDItem *GetItem(int n)const{return GetObject(data_list,n);}							///<取指定序号的数据
 				bool 	Get(int,F &,T &)const;														///<取指定序号的数据
 				bool	GetKey(int,F &)const;														///<取指定序号的索引
 				bool	GetValue(int,T &)const;														///<取指定序号的数据
@@ -134,8 +133,16 @@ namespace hgl
 		typedef _Map<F,T *,DataPair> SuperClass;
 
 		virtual void	DeleteObject(const F &,T *)=0;												///<删除一个数据
-				void	DeleteObject(DataPair *ds){DeleteObject(ds->left,ds->right);}
-				void	DeleteObject(int index){DeleteObject(this->data_list[index]);}
+				void	DeleteObject(DataPair *ds)
+                {
+                    if(!ds)return;
+                    DeleteObject(ds->left,ds->right);
+                }
+
+				void	DeleteObject(int index)
+                {
+                    DeleteObject(GetObject(this->data_list,index));
+                }
 
 	public:
 
@@ -145,7 +152,7 @@ namespace hgl
 			if(SuperClass::GetCount()>0)
 			{
 				//LOG_ERROR(u"这是一个严重的程序设计错误，会产生纯虚函数调用，请在派生类的析构函数中调用Clear函数以清除数据。");
-				LOG_ERROR(OS_TEXT("This is a serious design errors, will produce the pure virtual function call, please call in the destructor of the derived class the <Clear> function to clear the data."));
+				//LOG_ERROR(OS_TEXT("This is a serious design errors, will produce the pure virtual function call, please call in the destructor of the derived class the <Clear> function to clear the data."));
 			}
 		}
 
@@ -252,7 +259,10 @@ namespace hgl
 			{
 				DeleteObject(index);
 
-				this->data_list[index]->second=data;
+                DataPair *dp=GetObject(this->data_list,index);
+
+                if(dp)
+                    dp->right=data;
 			}
 			else
 			{
@@ -274,8 +284,12 @@ namespace hgl
 			{
 				DeleteObject(index);
 
-				this->data_list[index]->second=data;
+                DataPair *dp=GetObject(this->data_list,index);
 
+                if(!dp)
+                    return(false);
+
+                dp->right=data;
 				return(true);
 			}
 			else
@@ -313,11 +327,12 @@ namespace hgl
 
 		T *operator[](const F &index)const
 		{
-			const int pos=this->Find(index);
+            auto *obj=GetObject(this->data_list,this->Find(index));
 
-			if(pos==-1)return(nullptr);
-
-			return this->data_list[pos]->right;
+            if(obj)
+                return obj->right;
+            else
+                return nullptr;
 		};
 	};//class MapObject
 }//namespace hgl

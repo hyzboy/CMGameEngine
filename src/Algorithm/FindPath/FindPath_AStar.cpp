@@ -60,14 +60,17 @@ namespace hgl
                 FindItem *fd = GetItem(pfd, x, y, comp_length(x, y));
 
                 int n = findlist.GetCount();
+                FindItem **ofd=findlist.GetData();
 
                 while (n--)
                 {
-                    if (fd->length <= findlist[n]->length)                    //按从远到近排序
+                    if (fd->length <= (*ofd)->length)                    //按从远到近排序
                     {
                         findlist.Insert(n, fd);
                         return(fd);
                     }
+
+                    --ofd;
                 }
 
                 findlist.Insert(0, fd);

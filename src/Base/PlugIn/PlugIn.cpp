@@ -76,8 +76,13 @@ namespace hgl
     {
         int n=plugin_manager_list.GetCount();
 
+        PIMClearFunc *pcf=plugin_manager_list.GetData();
+
         while(n--)
-            plugin_manager_list[n]();
+        {
+            (*pcf)();
+            ++pcf;
+        }
 
         plugin_manager_list.Clear();
         plugin_module.Clear();

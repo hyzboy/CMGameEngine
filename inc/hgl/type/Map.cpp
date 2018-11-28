@@ -208,9 +208,12 @@ namespace hgl
 	{
 		int index=Find(flag);
 
-		if(index==-1)return(false);
+        DataPair *obj=GetObject(data_list,index);
 
-		data=data_list[index]->right;
+        if(!obj)
+            return(false);
+
+        data=obj->right;
 
 		return(true);
 	}
@@ -299,9 +302,10 @@ namespace hgl
 	{
 		int index=Find(flag);
 
-		if(index==-1)return(false);
+		DataPair *dp=GetObject(data_list,index);
 
-		DataPair *dp=data_list[index];
+        if(!dp)
+            return(false);
 
 		data=dp->right;
 
@@ -319,14 +323,7 @@ namespace hgl
 	template<typename F,typename T,typename DataPair>
 	bool _Map<F,T,DataPair>::DeleteByKey(const F &flag)
 	{
-		int index=Find(flag);
-
-		if(index==-1)return(false);
-
-		data_pool.Release(data_list[index]);
-		data_list.DeleteMove(index);
-
-		return(true);
+        return DeleteBySerial(Find(flag));
 	}
 
 	/**
@@ -344,15 +341,8 @@ namespace hgl
 
 		for(int i=0;i<count;i++)
 		{
-			int index=Find(*fp);
-
-			if(index!=-1)
-			{
-				data_pool.Release(data_list[index]);
-				data_list.DeleteMove(index);
-
-				++total;
-			}
+            if(DeleteBySerial(Find(*fp)))
+                ++total;
 
 			++fp;
 		}
@@ -369,14 +359,7 @@ namespace hgl
 	template<typename F,typename T,typename DataPair>
 	bool _Map<F,T,DataPair>::DeleteByValue(const T &data)
 	{
-		int index=FindByValue(data);
-
-		if(index==-1)return(false);
-
-		data_pool.Release(data_list[index]);
-		data_list.DeleteMove(index);
-
-		return(true);
+        return DeleteBySerial(FindByValue(data));
 	}
 
 	/**
@@ -390,7 +373,7 @@ namespace hgl
 		if(index<0
 		 ||index>=data_list.GetCount())return(false);
 
-		data_pool.Release(data_list[index]);
+        data_pool.Release(GetObject(data_list,index));
 		data_list.DeleteMove(index);
 
 		return(true);
@@ -427,7 +410,12 @@ namespace hgl
 		int result;
 
 		if(FindPos(flag,result))
-			data_list[result]->right=data;
+        {
+            DataPair *dp=GetObject(data_list,result);
+
+            if(dp)
+                dp->right=data;
+        }
 		else
 		{
 			DataPair *ds=data_pool.Acquire();
@@ -448,14 +436,13 @@ namespace hgl
 	template<typename F,typename T,typename DataPair>
 	bool _Map<F,T,DataPair>::Change(const F &flag,const T &data)
 	{
-		int result=Find(flag);
+        DataPair *dp=GetObject(data_list,Find(flag));
 
-		if(result==-1)
-			return(false);
+        if(!dp)
+            return(false);
 
-		data_list[result]->right=data;
-
-		return(true);
+        dp->right=data;
+        return(true);
 	}
 
 	/**
