@@ -11,6 +11,8 @@
 #include<iostream>
 
 using namespace hgl;
+using namespace hgl::io;
+using namespace hgl::filesystem;
 
 const GumboAttribute *GetAttr(const GumboNode *node,const char *name)
 {
@@ -23,6 +25,32 @@ const GumboAttribute *GetAttr(const GumboNode *node,const char *name)
     }
 
     return nullptr;
+}
+
+bool CheckAttr(const GumboNode *node,const char *name,const char *value)
+{
+    for(int i=0;i<node->v.element.attributes.length;i++)
+    {
+        const GumboAttribute *attr=(const GumboAttribute *)(node->v.element.attributes.data[i]);
+
+        if(strcmp(attr->name,name)==0)
+            return(!strcmp(attr->value,value));
+    }
+
+    return false;
+}
+
+const char *GetSubText(const GumboNode *node,int index)
+{
+    if(index<0||index>=node->v.element.children.length)
+        return(nullptr);
+
+    const GumboNode *sub_node=(const GumboNode *)(node->v.element.children.data[index]);
+
+    if(sub_node->type!=GUMBO_NODE_TEXT)
+        return(nullptr);
+
+    return sub_node->v.text.text;
 }
 
 class HTMLParse
@@ -47,7 +75,7 @@ public:
 
     void Parse(const char *url)
     {
-        io::MemoryOutputStream mos;
+        MemoryOutputStream mos;
 
         network::http::get(&mos,url);
 
@@ -59,15 +87,125 @@ public:
     }
 };//class HTMLParse
 
-class SinaNewsPageParse
+/**
+ * 正文解晰
+ */
+class SinaNewsArticleParse:public HTMLParse
 {
+    TextOutputStream *tos;
+
 public:
 
-    void ParseNewsPage(const GumboNode *node)
+    SinaNewsArticleParse(TextOutputStream *os):HTMLParse()
     {
+        tos=os;
     }
 
+    void ParseNode(const GumboNode *node) override
+    {
+        if(node->type!=GUMBO_NODE_ELEMENT)return;       //没有子节点
+
+        if(node->v.element.tag==GUMBO_TAG_P)
+        {
+            if(CheckAttr(node,"class","show_author"))
+            {
+                const char *author=GetSubText(node,0);
+
+                if(!author)return;
+
+                tos->WriteLine(UTF8String("<p><b>Author:</b>")+author+UTF8String("</p>"));
+            }
+            else    //普通正文
+            {
+                const char *text=GetSubText(node,0);
+
+                if(!text)return;
+
+                tos->WriteLine(UTF8String("<p>")+text+UTF8String("</p>"));
+            }
+        }
+        else
+        if(node->v.element.tag==GUMBO_TAG_IMG)
+        {
+            const GumboAttribute *src=GetAttr(node,"src");
+
+            if(!src)return;
+
+            tos->WriteLine(UTF8String("<img src=\"https:")+src->value+UTF8String("\">"));
+        }
+    }
 };//
+
+constexpr char TAG_NEWS_SINA_COM_CN_HEADER[]="http://tags.news.sina.com.cn/";
+constexpr uint TAG_NEWS_SINA_COM_CN_HEADER_SIZE=sizeof(TAG_NEWS_SINA_COM_CN_HEADER)-1;
+
+/**
+ * 新闻页解晰
+ */
+class SinaNewsPageParse:public HTMLParse
+{
+    MemoryOutputStream mos;
+    TextOutputStream *tos;
+
+    OSString filename;
+
+public:
+
+    SinaNewsPageParse(const int index):HTMLParse()
+    {
+        tos=new UTF8TextOutputStream(&mos);
+
+        filename=OSString(index)+OS_TEXT(".html");
+
+        tos->WriteLine(UTF8String("<html><head><meta charset=\"utf-8\"/></head>"));
+    }
+
+    ~SinaNewsPageParse()
+    {
+        tos->WriteLine(UTF8String("</html>"));
+        SaveMemoryToFile(filename,mos.GetData(),mos.Tell());
+        delete tos;
+    }
+
+    void ParseNode(const GumboNode *node) override
+    {
+        if(node->type!=GUMBO_NODE_ELEMENT)return;       //没有子节点
+
+        if(node->v.element.tag==GUMBO_TAG_H1)
+        {
+            if(!CheckAttr(node,"class","main-title"))return;
+
+            const char *text=GetSubText(node,0);
+
+            if(!text)return;
+
+            tos->WriteLine(UTF8String("<p><h1>")+text+UTF8String("</h1></p>"));
+        }
+        else
+        if(node->v.element.tag==GUMBO_TAG_DIV)
+        {
+            if(CheckAttr(node,"id","article")           //正文
+             &&CheckAttr(node,"class","article"))
+            {
+                SinaNewsArticleParse ap(tos);
+
+                ap.Parse(node);
+            }
+        }
+        else
+        if(node->v.element.tag==GUMBO_TAG_A)
+        {
+            const GumboAttribute *href=GetAttr(node,"href");
+
+            if(!href)return;
+            if(strncmp(href->value,TAG_NEWS_SINA_COM_CN_HEADER,TAG_NEWS_SINA_COM_CN_HEADER_SIZE))return;
+
+            const char *text=GetSubText(node,0);
+
+            tos->WriteLine(UTF8String("<p><b>Tag:</b>")+text+UTF8String("</p>"));
+        }
+    }
+};//class SinaNewsPageParse:public HTMLParse
 
 constexpr char NEWS_SINA_COM_CN_HEADER[]="https://news.sina.com.cn/";
 constexpr uint NEWS_SINA_COM_CN_HEADER_SIZE=sizeof(NEWS_SINA_COM_CN_HEADER)-1;
@@ -84,6 +222,8 @@ constexpr uint NEWS_LINK_END_SIZE=sizeof(NEWS_LINK_END)-1;
  */
 class SinaNewsFirstPageParse:public HTMLParse
 {
+    int news_count=0;
+
 public:
 
     void ParseNode(const GumboNode *node) override
@@ -93,27 +233,28 @@ public:
         if(node->v.element.attributes.length<2)return;  //属性太少
         if(node->v.element.children.length!=1)return;   //子节点数量不对
 
-        const GumboAttribute *target=GetAttr(node,"target");
+        if(!CheckAttr(node,"target","_blank"))return;
+
         const GumboAttribute *href=GetAttr(node,"href");
 
-        if(!target)return;
         if(!href)return;
 
-        if(strcmp(target->value,"_blank"))return;
         if(strncmp(href->value,NEWS_SINA_COM_CN_HEADER,NEWS_SINA_COM_CN_HEADER_SIZE))return;
 
         const char *end_href=href->value+strlen(href->value)-NEWS_LINK_END_SIZE;
 
         if(strcmp(end_href,NEWS_LINK_END))return;
 
-        const GumboNode *sub_node=(const GumboNode *)(node->v.element.children.data[0]);
+        const char *text=GetSubText(node,0);
 
-        if(sub_node->type!=GUMBO_NODE_TEXT)return;
+        if(!text)return;
 
-        std::cout<<"news: "<<sub_node->v.text.text<<std::endl;
+        std::cout<<"news: "<<text<<std::endl;
         std::cout<<"link: "<<href->value<<std::endl;
 
-        //ParseNewsPage(href->value,sub_node->v.text.text);
+        SinaNewsPageParse news_page(++news_count);
+
+        news_page.Parse(href->value);
     }
 };//
 
