@@ -222,9 +222,26 @@ constexpr uint NEWS_LINK_END_SIZE=sizeof(NEWS_LINK_END)-1;
  */
 class SinaNewsFirstPageParse:public HTMLParse
 {
+    MemoryOutputStream mos;
+    TextOutputStream *tos;
+
     int news_count=0;
 
 public:
+
+    SinaNewsFirstPageParse():HTMLParse()
+    {
+        tos=new UTF8TextOutputStream(&mos);
+
+        tos->WriteLine(UTF8String("<html><head><meta charset=\"utf-8\"/></head><ul>"));
+    }
+
+    ~SinaNewsFirstPageParse()
+    {
+        tos->WriteLine(UTF8String("</ul></html>"));
+        SaveMemoryToFile(U8_TEXT("index.html"),mos.GetData(),mos.Tell());
+        delete tos;
+    }
 
     void ParseNode(const GumboNode *node) override
     {
@@ -252,7 +269,9 @@ public:
         std::cout<<"news: "<<text<<std::endl;
         std::cout<<"link: "<<href->value<<std::endl;
 
-        SinaNewsPageParse news_page(++news_count);
+        tos->WriteLine(UTF8String("<li><a href=\"")+UTF8String(news_count)+UTF8String(".html\">")+text+UTF8String("</a></li>"));
+
+        SinaNewsPageParse news_page(news_count++);
 
         news_page.Parse(href->value);
     }
