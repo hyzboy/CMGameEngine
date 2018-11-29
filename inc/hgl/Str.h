@@ -159,6 +159,20 @@ namespace hgl
         return(ch==' '||ch=='\t'||ch=='\r'||ch=='\f'||ch=='\v'||ch=='\n');
     }
 
+    template<typename T>
+    bool isSameCharString(const T *str,const T ch)
+    {
+        if(!str)return(false);
+
+        while(*str)
+        {
+            if(*str!=ch)return(false);
+            ++str;
+        }
+
+        return(true);
+    }
+
     /**
      * 测试当前字符是否为字母或数字
      */
