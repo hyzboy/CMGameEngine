@@ -52,6 +52,7 @@
 #endif
 
 #include <stddef.h>  /* For size_t */
+#include <malloc.h>
 
 #if defined(GLEW_EGL)
 #elif defined(GLEW_REGAL)
@@ -22812,11 +22813,60 @@ const GLubyte * GLEWAPIENTRY glewGetString (GLenum name)
 
 /* ------------------------------------------------------------------------ */
 
+static int opengl_core_ext_number = 0;
+static char **opengl_core_ext_string = 0;
+
+GLboolean glewGetExtension(const char *name)
+{
+    int i;
+
+    if (opengl_core_ext_number == 0)return(GL_FALSE);
+
+    for (i = 0; i < opengl_core_ext_number; i++)
+        if (!_glewExtensionCompare(opengl_core_ext_string[i], name))
+            return(GL_TRUE);
+
+        return(GL_FALSE);
+}
+
+void InitOpenGLCoreExtensions()
+{
+    int i;
+
+    PFNGLGETSTRINGIPROC getfunc;
+
+    getfunc = (PFNGLGETSTRINGIPROC)glewGetProcAddress((const GLubyte*)"glGetStringi");        //此函数opengl 3.0才有
+
+    glGetIntegerv(GL_NUM_EXTENSIONS, &opengl_core_ext_number);
+
+    opengl_core_ext_string = malloc(opengl_core_ext_number*sizeof(char *));
+
+    for (i = 0; i < opengl_core_ext_number; i++)
+        opengl_core_ext_string[i] = (char *)getfunc(GL_EXTENSIONS, i);
+}
+
+void GLEWAPIENTRY glewTerminate()
+{
+    if (opengl_core_ext_string)
+    {
+        free(opengl_core_ext_string);
+
+        opengl_core_ext_string = 0;
+    }
+
+    opengl_core_ext_number = 0;
+}
+
+/* ------------------------------------------------------------------------ */
+
 GLboolean glewExperimental = GL_FALSE;
 
 GLenum GLEWAPIENTRY glewInit (void)
 {
   GLenum r;
+
+  InitOpenGLCoreExtensions();
+
 #if defined(GLEW_EGL)
   PFNEGLGETCURRENTDISPLAYPROC getCurrentDisplay = NULL;
 #endif
@@ -22836,17 +22886,6 @@ GLenum GLEWAPIENTRY glewInit (void)
 #endif /* _WIN32 */
 }
 
-#if defined(_WIN32) && defined(GLEW_BUILD) && defined(__GNUC__)
-/* GCC requires a DLL entry point even without any standard library included. */
-/* Types extracted from windows.h to avoid polluting the rest of the file. */
-int __stdcall DllMainCRTStartup(void* instance, unsigned reason, void* reserved)
-{
-  (void) instance;
-  (void) reason;
-  (void) reserved;
-  return 1;
-}
-#endif
 GLboolean GLEWAPIENTRY glewIsSupported (const char* name)
 {
   const GLubyte* pos = (const GLubyte*)name;
