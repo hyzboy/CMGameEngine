@@ -429,8 +429,8 @@ void MakeSavePath()
 
 HGL_CONSOLE_MAIN_FUNC()
 {
-    sii.info.ProjectName=U8_TEXT("新闻爬虫");
-    sii.info.ProjectCode=OS_TEXT("NewsSpider");
+    sii.info.ProjectName=U8_TEXT("新浪新闻爬虫");
+    sii.info.ProjectCode=OS_TEXT("SinaSpider");
 
     if(!app.Init(&sii))
         return(-1);
