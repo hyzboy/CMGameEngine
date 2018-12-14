@@ -29,7 +29,7 @@ namespace hgl
 			 * @return 下载下来的数据长度
 			 * @return <0 出错
 			 */
-			int get(io::OutputStream *os,const char *url)
+			int get(io::OutputStream *os,const char *url,const char *user_agent)
 			{
 				LOG_INFO(U8_TEXT("http get,url:")+UTF8String(url));
 
@@ -43,6 +43,8 @@ namespace hgl
 				int cur=os->Tell();
 
 				curl_easy_setopt(curl,CURLOPT_URL,url);
+                if(user_agent)
+                curl_easy_setopt(curl,CURLOPT_USERAGENT,user_agent);
                 curl_easy_setopt(curl,CURLOPT_FOLLOWLOCATION,1);            //重定向支持
 				curl_easy_setopt(curl,CURLOPT_WRITEDATA,os);
 				curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,http_get_to_output_stream);
@@ -52,7 +54,7 @@ namespace hgl
 				return(os->Tell()-cur);
 			}
 
-			int post(io::OutputStream *os,const char *url,const void *post_data,const int post_data_size)
+			int post(io::OutputStream *os,const char *url,const void *post_data,const int post_data_size,const char *user_agent)
 			{
 				CURLcode res;
 
@@ -64,6 +66,8 @@ namespace hgl
 				int cur=os->Tell();
 
                 curl_easy_setopt(curl,CURLOPT_URL,url);
+                if(user_agent)
+                curl_easy_setopt(curl,CURLOPT_USERAGENT,user_agent);
                 curl_easy_setopt(curl,CURLOPT_FOLLOWLOCATION,1);            //重定向支持
 				curl_easy_setopt(curl,CURLOPT_POSTFIELDS,post_data);
 				curl_easy_setopt(curl,CURLOPT_POSTFIELDSIZE,post_data_size);
