@@ -37,3 +37,6 @@ target_link_libraries(Example.Network.TCPClientHello ${HGL_CONSOLE_LIB})
 
 add_executable(Example.Network.WebSocketHeaderParse WebSocketHeaderParse.cpp)
 target_link_libraries(Example.Network.WebSocketHeaderParse ${HGL_CONSOLE_LIB})
+
+add_executable(Example.Webapi.UserAgent UserAgent.cpp)
+target_link_libraries(Example.Webapi.UserAgent ${HGL_CONSOLE_LIB})
