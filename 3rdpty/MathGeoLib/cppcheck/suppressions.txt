@@ -1,2 +1,0 @@
-unusedPrivateFunction:Math/Quat.h
-invalidPrintfArgType_float:Math/Quat.cpp
