@@ -1,4 +1,13 @@
-﻿add_executable(ToutiaoSpider ${HGL_CONSOLE_MAIN_SOURCE} ToutiaoNews.cpp)
+﻿find_path(GUMBO_INCLUDE_DIR
+            NAMES gumbo.h)
+
+find_path(GUMBO_LIB_DIR
+            NAMES gumbo.lib)
+
+include_directories(${GUMBO_INCLUDE_DIR})
+link_directories(${GUMBO_LIB_DIR})
+
+add_executable(ToutiaoSpider ${HGL_CONSOLE_MAIN_SOURCE} ToutiaoNews.cpp)
 target_link_libraries(ToutiaoSpider ${HGL_CONSOLE_LIB} gumbo)
 
 add_executable(SinaSpider ${HGL_CONSOLE_MAIN_SOURCE} SinaNews.cpp)

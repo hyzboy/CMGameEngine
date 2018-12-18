@@ -7,7 +7,11 @@
 #include<hgl/type/StringList.h>
 #include<hgl/webapi/UserAgentString.h>
 
-#include<gumbo-parser/gumbo.h>      //google html5 解晰库
+#if HGL_OS == HGL_OS_Windows
+#include<gumbo.h>      
+#else
+#include<gumbo-parser/gumbo.h> 
+#endif//
 
 #include<iostream>
 
@@ -43,3 +47,4 @@ HGL_CONSOLE_MAIN_FUNC()
 
     return 0;
 }
+
