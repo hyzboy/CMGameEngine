@@ -3,6 +3,9 @@
 
 namespace
 {
+    constexpr char SPAR_CHAR[]=u8"：";
+    constexpr uint SPAR_CHAR_SIZE=sizeof(SPAR_CHAR)-1;
+
     class NewsPageParse:public HTMLParse
     {
         NewsStorage *storage;
@@ -16,13 +19,14 @@ namespace
 
     public:
 
-        NewsPageParse(NewsStorage *ns,const OSString &sp,const UTF8String &src_link)
+        NewsPageParse(NewsStorage *ns,const OSString &sp,const UTF8String &title,const UTF8String &src_link)
         {
             storage=ns;
 
             ni=new NewsInfo;
+            ni->title=title;
             ni->index=storage->GetMaxIndex();
-            ni->tags.Add(U8_TEXT("哈尔滨"));
+            ni->tags.Add(U8_TEXT("抚州"));
             ni->src_link=src_link;
 
             save_path=MergeFilename(sp,OSString(ni->index));
@@ -46,45 +50,34 @@ namespace
             std::cout<<ni->index<<" : "<<ni->title.c_str()<<std::endl;
         }
 
-        void ParseTitle(const GumboNode *node)
+        void ParseSourceNode(const GumboNode *node)
         {
-            if(!CheckAttr(node,"class","post-title"))return;
+            if(node->v.element.tag!=GUMBO_TAG_DIV)return;
 
-            ni->title=GetSubText(node);
-        }
+            const UTF8String text=GetSubText(node);
 
-        void ParseHeaderNode(const GumboNode *node)
-        {
-            if(node->v.element.tag==GUMBO_TAG_H1)
+            if(!text.IsEmpty())
             {
-                ParseTitle(node);
-                return;
+                int pos=text.FindString(SPAR_CHAR);
+
+                ni->post_time=text.SubString(pos+SPAR_CHAR_SIZE,16);
+
+                std::cout<<"post_time: "<<ni->post_time.c_str()<<std::endl;
+
+                pos=text.FindString(SPAR_CHAR,pos+SPAR_CHAR_SIZE+16);
+
+                ni->source=text.SubString(pos+SPAR_CHAR_SIZE);
+
+                ni->source.Trim();
+
+                std::cout<<"post source: "<<ni->source.c_str()<<std::endl;
             }
-
-            if(node->v.element.tag==GUMBO_TAG_SPAN)
-            {
-                if(!CheckAttr(node,"class","time"))return;
-
-                ni->post_time=GetSubText(node);
-            }
-
-            if(node->v.element.tag==GUMBO_TAG_A)
-            {
-                if(!CheckAttr(node,"rel","category tag"))return;
-
-                ni->source=GetSubText(node);
-
-                return;
-            }
-
-            if(node->type!=GUMBO_NODE_ELEMENT)return;       //没有子节点
-
-            for(int i=0;i<node->v.element.children.length;i++)
-                ParseHeaderNode((const GumboNode *)(node->v.element.children.data[i]));
         }
 
         void ParseInnerNode(const GumboNode *node)
         {
+            if(node->type!=GUMBO_NODE_ELEMENT)return;       //没有子节点
+
             if(node->v.element.tag==GUMBO_TAG_P)
             {
                 const UTF8String text=GetSubText(node);
@@ -138,26 +131,33 @@ namespace
 
         void ParseNode(const GumboNode *node) override
         {
-            if(node->v.element.tag==GUMBO_TAG_HEADER
-             &&CheckAttr(node,"class","entry-header"))
+            if(node->v.element.tag==GUMBO_TAG_DIV)
             {
-                for(int i=0;i<node->v.element.children.length;i++)
-                    ParseHeaderNode((const GumboNode *)(node->v.element.children.data[i]));
-            }
-            else
-            if(node->v.element.tag==GUMBO_TAG_DIV
-             &&CheckAttr(node,"class","entry-inner"))
-            {
-                for(int i=0;i<node->v.element.children.length;i++)
-                    ParseInnerNode((const GumboNode *)(node->v.element.children.data[i]));
+                const GumboAttribute *id=GetAttr(node,"id");
+
+                if(!id)
+                    return;
+
+                if(strcmp(id->value,"w-text-aabh")==0)
+                {
+                    for(int i=0;i<node->v.element.children.length;i++)
+                        ParseSourceNode((const GumboNode *)(node->v.element.children.data[i]));
+                }
+
+                if(strcmp(id->value,"w-text-aabi")==0)
+                {
+                    for(int i=0;i<node->v.element.children.length;i++)
+                        ParseInnerNode((const GumboNode *)(node->v.element.children.data[i]));
+                }
             }
         }
-    };//
+    };
 
     class ListPageParse:public HTMLParse
     {
         NewsStorage *storage;
         OSString save_path;
+        UTF8String next_page_url;
 
     public:
 
@@ -170,35 +170,53 @@ namespace
         void ParseNewsNode(const GumboNode *node)
         {
             if(node->v.element.tag!=GUMBO_TAG_A)return;
-            if(node->v.element.attributes.length<=2)return;
+            if(node->v.element.attributes.length<=1)return;
 
             const GumboAttribute *href=GetAttr(node,"href");
-            const GumboAttribute *title=GetAttr(node,"title");
+
+            if(!href)return;
 
             if(storage->CheckSourceLink(href->value))
                 return;
 
-            std::cout<<"link: "<<href->value<<std::endl;
-            std::cout<<"title: "<<title->value<<std::endl;
+            const UTF8String title=GetSubText(node);
 
-            NewsPageParse npp(storage,save_path,href->value);
+            std::cout<<"link: "<<href->value<<std::endl;
+            std::cout<<"title: "<<title.c_str()<<std::endl;
+
+            NewsPageParse npp(storage,save_path,title,href->value);
 
             npp.Parse(href->value,user_agent);
         }
 
         void ParseNode(const GumboNode *node) override
         {
-            if(node->v.element.tag!=GUMBO_TAG_H3)return;
+            if(node->v.element.tag==GUMBO_TAG_A)
+            {
+                if(CheckAttr(node,"class","next"))
+                {
+                    const GumboAttribute *href=GetAttr(node,"href");
+
+                    next_page_url=href->value;
+                }
+            }
+
+            if(node->v.element.tag!=GUMBO_TAG_DIV)return;
             if(node->v.element.children.length<=0)return;
-            if(!CheckAttr(node,"class","post-title"))return;
+            if(!CheckAttr(node,"id","w-text-aabf"))return;
 
             for(int i=0;i<node->v.element.children.length;i++)
                 ParseNewsNode((const GumboNode *)(node->v.element.children.data[i]));
         }
+
+        bool GetNextPageURL(UTF8String &url)
+        {
+            url=next_page_url;
+        }
     };//class ListPageParse:public HTMLParse
 }//namespace
 
-void news_heb(const UTF8String &user_agent,const OSString &save_path)
+void news_fz(const UTF8String &user_agent,const OSString &save_path)
 {
     MakePath(save_path);
 
@@ -207,18 +225,19 @@ void news_heb(const UTF8String &user_agent,const OSString &save_path)
 
     storage.Load(json_filename);
 
-    ListPageParse fpp(&storage,save_path);
+    UTF8String url="http://www.zgfznews.com/shehui/";
 
-    UTF8String url="http://www.xjchuju.com/list-1.html";
-
-    fpp.Parse(url,user_agent);
-
-    for(int i=2;i<=15;i++)
+    do
     {
-        url="http://www.xjchuju.com/list-1-400-"+UTF8String(i)+".html";
+        std::cout<<"--------parse: "<<url.c_str()<<std::endl;
+
+        ListPageParse fpp(&storage,save_path);
 
         fpp.Parse(url,user_agent);
-    }
+
+        fpp.GetNextPageURL(url);
+    }while(!url.IsEmpty());
 
     storage.Save(json_filename);
 }
+

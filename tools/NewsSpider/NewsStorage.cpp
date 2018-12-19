@@ -31,6 +31,32 @@ void NewsInfo::Make(Json::Value &node)
 void NewsInfo::Parse(const Json::Value &node)
 {
     index   =node["index"].asInt();
+    title   =node["title"].asCString();
+
+    if(node.isMember("post_time"))
+        post_time=node["post_time"].asCString();
+
+    if(node.isMember("source"))
+        source=node["source"].asCString();
+
+    if(node.isMember("author"))
+        author=node["author"].asCString();
+
+    if(node.isMember("tags"))
+    {
+        const Json::Value &jv_tags=node["tags"];
+
+        for(int i=0;i<jv_tags.size();i++)
+            tags.Add(jv_tags[i].asCString());
+    }
+
+    if(node.isMember("first_image"))
+        first_image=node["first_image"].asCString();
+
+    if(node.isMember("first_line"))
+        first_line=node["first_line"].asCString();
+
+    img_count=node["img_count"].asInt();
     src_link=node["src_link"].asCString();
 }
 

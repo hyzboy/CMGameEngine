@@ -20,7 +20,8 @@ const UTF8String InitUserAgent()
     return FirefoxUserAgent(cfg);
 }
 
-void news_hrb(const UTF8String &,const OSString &);
+void news_heb(const UTF8String &user_agent,const OSString &save_path);
+void news_fz(const UTF8String &user_agent,const OSString &save_path);
 
 HGL_CONSOLE_MAIN_FUNC()
 {
@@ -31,7 +32,11 @@ HGL_CONSOLE_MAIN_FUNC()
     GetCurrentPath(cur_path);
     OSString save_doc_path=MergeFilename(cur_path,OS_TEXT("news"));
 
-    news_hrb(user_agent,MergeFilename(save_doc_path,"heb"));     //哈尔滨
+//     std::cout<<std::endl<<"哈尔滨"<<std::endl;
+//     news_heb(user_agent,MergeFilename(save_doc_path,"heb"));
+
+    std::cout<<std::endl<<"抚州"<<std::endl;
+    news_fz(user_agent,MergeFilename(save_doc_path,"fz"));
 
     return 0;
 }

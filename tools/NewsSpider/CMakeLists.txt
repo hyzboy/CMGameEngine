@@ -21,6 +21,7 @@ target_link_libraries(SinaAreaNews ${HGL_CONSOLE_LIB} gumbo)
 add_executable(NewsSpider   ${HGL_CONSOLE_MAIN_SOURCE}
                             NewsSpider.cpp
                             NewsStorage.cpp
-                            news_heb.cpp)
+                            news_heb.cpp
+                            news_fz.cpp)
 
 target_link_libraries(NewsSpider ${HGL_CONSOLE_LIB} gumbo jsoncpp)

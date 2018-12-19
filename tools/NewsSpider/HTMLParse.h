@@ -23,7 +23,7 @@ using namespace hgl::io;
 using namespace hgl::filesystem;
 using namespace hgl::webapi;
 
-const GumboAttribute *GetAttr(const GumboNode *node,const char *name)
+inline const GumboAttribute *GetAttr(const GumboNode *node,const char *name)
 {
     for(int i=0;i<node->v.element.attributes.length;i++)
     {
@@ -36,7 +36,7 @@ const GumboAttribute *GetAttr(const GumboNode *node,const char *name)
     return nullptr;
 }
 
-bool CheckAttr(const GumboNode *node,const char *name,const char *value)
+inline bool CheckAttr(const GumboNode *node,const char *name,const char *value)
 {
     for(int i=0;i<node->v.element.attributes.length;i++)
     {
