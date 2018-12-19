@@ -27,7 +27,7 @@ void InitUserAgent()
 {
     FirefoxUserAgentConfig cfg;
 
-    cfg.os              =OS_iPad;
+    cfg.os              =OS_iPhone;
 
     cfg.os_ver.major    =12;
     cfg.os_ver.minor    =1;
@@ -100,7 +100,7 @@ public:
     void Parse(const UTF8String &url)
     {
         web_url=url;
-        network::http::get(&mos,url.c_str());
+        network::http::get(&mos,url.c_str(),user_agent);
 
         SaveMemoryToFile("FirstPage.html",mos.GetData(),mos.Tell());
 
@@ -136,7 +136,7 @@ HGL_CONSOLE_MAIN_FUNC()
 
     FirstPageParse fpp;
 
-    const UTF8String url="https://m.toutiao.com/search/?keyword="+args[1];
+    const UTF8String url="http://newssearch.chinadaily.com.cn/cn/search?query="+args[1];
 
     fpp.Parse(url);
 

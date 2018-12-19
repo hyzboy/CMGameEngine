@@ -14,3 +14,12 @@ target_link_libraries(ToutiaoSpider ${HGL_CONSOLE_LIB} gumbo)
 
 add_executable(SinaSpider ${HGL_CONSOLE_MAIN_SOURCE} SinaNews.cpp)
 target_link_libraries(SinaSpider ${HGL_CONSOLE_LIB} gumbo)
+
+add_executable(SinaAreaNews ${HGL_CONSOLE_MAIN_SOURCE} SinaAreaNews.cpp)
+target_link_libraries(SinaAreaNews ${HGL_CONSOLE_LIB} gumbo)
+
+add_executable(NewsSpider   ${HGL_CONSOLE_MAIN_SOURCE}
+                            NewsSpider.cpp
+                            news_hrb.cpp)
+
+target_link_libraries(NewsSpider ${HGL_CONSOLE_LIB} gumbo)
