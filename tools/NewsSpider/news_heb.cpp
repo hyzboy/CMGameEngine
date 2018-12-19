@@ -23,7 +23,7 @@ namespace
             ni=new NewsInfo;
             ni->index=storage->GetMaxIndex();
             ni->tags.Add(U8_TEXT("哈尔滨"));
-            ni->source_link=src_link;
+            ni->src_link=src_link;
 
             save_path=MergeFilename(sp,OSString(ni->index));
             MakePath(save_path);
@@ -42,6 +42,8 @@ namespace
             tos->WriteLine(UTF8String("</html>"));
             SaveMemoryToFile(filename,mos.GetData(),mos.Tell());
             delete tos;
+
+            std::cout<<ni->index<<" : "<<ni->title.c_str()<<std::endl;
         }
 
         void ParseTitle(const GumboNode *node)
@@ -173,6 +175,9 @@ namespace
             const GumboAttribute *href=GetAttr(node,"href");
             const GumboAttribute *title=GetAttr(node,"title");
 
+            if(storage->CheckSourceLink(href->value))
+                return;
+
             std::cout<<"link: "<<href->value<<std::endl;
             std::cout<<"title: "<<title->value<<std::endl;
 
@@ -197,7 +202,11 @@ void news_hrb(const UTF8String &user_agent,const OSString &save_path)
 {
     MakePath(save_path);
 
+    const OSString json_filename=MergeFilename(save_path,"news.json");
     NewsStorage storage;
+
+    storage.Load(json_filename);
+
     ListPageParse fpp(&storage,save_path);
 
     UTF8String url="http://www.xjchuju.com/list-1.html";
@@ -211,5 +220,5 @@ void news_hrb(const UTF8String &user_agent,const OSString &save_path)
         fpp.Parse(url,user_agent);
     }
 
-    storage.Save(MergeFilename(save_path,"news.json"));
+    storage.Save(json_filename);
 }

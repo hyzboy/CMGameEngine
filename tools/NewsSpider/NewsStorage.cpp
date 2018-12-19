@@ -25,7 +25,13 @@ void NewsInfo::Make(Json::Value &node)
         node["first_line"]=first_line.c_str();
 
     node["img_count"]=img_count;
-    node["src_link"]=source_link.c_str();
+    node["src_link"]=src_link.c_str();
+}
+
+void NewsInfo::Parse(const Json::Value &node)
+{
+    index   =node["index"].asInt();
+    src_link=node["src_link"].asCString();
 }
 
 void NewsStorage::Save(const OSString &filename)
@@ -47,6 +53,26 @@ void NewsStorage::Save(const OSString &filename)
     SaveJson(root,filename);
 }
 
+void NewsStorage::Load(const OSString &filename)
+{
+    Json::Value root;
+
+    if(!LoadJson(root,filename))
+        return;
+
+    for(int i=0;i<root.size();i++)
+    {
+        NewsInfo *ni=new NewsInfo;
+
+        ni->Parse(root[i]);
+
+        news_list.Add(ni);
+
+        if(max_index<ni->index)
+            max_index=ni->index;
+    }
+}
+
 bool NewsStorage::Add(NewsInfo *ni)
 {
     if(!ni)
@@ -54,4 +80,23 @@ bool NewsStorage::Add(NewsInfo *ni)
 
     news_list.Add(ni);
     return(true);
+}
+
+bool NewsStorage::CheckSourceLink(const UTF8String &src_link)
+{
+    const int count=news_list.GetCount();
+
+    if(count<=0)return(false);
+
+    NewsInfo **ni=news_list.GetData();
+
+    for(int i=0;i<count;i++)
+    {
+        if((*ni)->src_link==src_link)
+            return(true);
+
+        ++ni;
+    }
+
+    return(false);
 }

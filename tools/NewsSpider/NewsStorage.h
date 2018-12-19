@@ -20,12 +20,12 @@ struct NewsInfo
 
     int img_count=0;
 
-    UTF8String source_link;
+    UTF8String src_link;
 
 public:
 
     void Make(Json::Value &);
-//    void Parse(const Json::Value &);
+    void Parse(const Json::Value &);
 };
 
 class NewsStorage
@@ -36,8 +36,10 @@ class NewsStorage
 
 public:
 
-//    void Load();
+    void Load(const OSString &);
     void Save(const OSString &);
+
+    bool CheckSourceLink(const UTF8String &);
 
     bool Add(NewsInfo *);
 
