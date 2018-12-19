@@ -1,0 +1,42 @@
+﻿#pragma once
+
+#include<hgl/type/StringList.h>
+#include<hgl/type/List.h>
+#include<json/json.h>
+
+using namespace hgl;
+
+struct NewsInfo
+{
+    int index=0;
+
+    UTF8String title;
+    UTF8String post_time;
+    UTF8String source;
+    UTF8String author;
+    UTF8StringList tags;
+    UTF8String first_image;
+
+    UTF8String link;
+
+    int img_count=0;
+
+public:
+
+    void Make(Json::Value &);
+//    void Parse(const Json::Value &);
+};
+
+class NewsStorage
+{
+    ObjectList<NewsInfo> news_list;
+
+    int max_index=0;
+
+public:
+
+//    void Load();
+    void Save(const OSString &);
+
+    int Add(NewsInfo *);
+};//class NewsStorage
