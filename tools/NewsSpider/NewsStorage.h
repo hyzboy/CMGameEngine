@@ -16,10 +16,11 @@ struct NewsInfo
     UTF8String author;
     UTF8StringList tags;
     UTF8String first_image;
-
-    UTF8String link;
+    UTF8String first_line;
 
     int img_count=0;
+
+    UTF8String source_link;
 
 public:
 
@@ -38,5 +39,7 @@ public:
 //    void Load();
     void Save(const OSString &);
 
-    int Add(NewsInfo *);
+    bool Add(NewsInfo *);
+
+    const int GetMaxIndex(){return ++max_index;}
 };//class NewsStorage

@@ -118,6 +118,8 @@ public:
         web_url=url;
         user_agent=ua;
 
+        mos.Restart();
+
         network::http::get(&mos,url.c_str(),user_agent);
 
 //         SaveMemoryToFile("FirstPage.html",mos.GetData(),mos.Tell());

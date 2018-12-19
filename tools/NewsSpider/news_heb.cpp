@@ -1,24 +1,54 @@
 ﻿#include"HTMLParse.h"
+#include"NewsStorage.h"
 
 namespace
 {
     class NewsPageParse:public HTMLParse
     {
-        UTF8String title;
-        UTF8String post_time;
-        UTF8String source;
+        NewsStorage *storage;
+        OSString save_path;
+
+        NewsInfo *ni;
+
+        MemoryOutputStream mos;
+        TextOutputStream *tos;
+        OSString filename;
 
     public:
 
-        using HTMLParse::HTMLParse;
+        NewsPageParse(NewsStorage *ns,const OSString &sp,const UTF8String &src_link)
+        {
+            storage=ns;
+
+            ni=new NewsInfo;
+            ni->index=storage->GetMaxIndex();
+            ni->tags.Add(U8_TEXT("哈尔滨"));
+            ni->source_link=src_link;
+
+            save_path=MergeFilename(sp,OSString(ni->index));
+            MakePath(save_path);
+
+            storage->Add(ni);
+
+            tos=new UTF8TextOutputStream(&mos);
+
+            filename=MergeFilename(save_path,OS_TEXT("index.html"));
+
+            tos->WriteLine(UTF8String("<html><head><meta charset=\"utf-8\"/></head>"));
+        }
+
+        ~NewsPageParse()
+        {
+            tos->WriteLine(UTF8String("</html>"));
+            SaveMemoryToFile(filename,mos.GetData(),mos.Tell());
+            delete tos;
+        }
 
         void ParseTitle(const GumboNode *node)
         {
             if(!CheckAttr(node,"class","post-title"))return;
 
-            title=GetSubText(node);
-
-            std::cout<<"title: "<<title.c_str()<<std::endl;
+            ni->title=GetSubText(node);
         }
 
         void ParseHeaderNode(const GumboNode *node)
@@ -33,18 +63,15 @@ namespace
             {
                 if(!CheckAttr(node,"class","time"))return;
 
-                post_time=GetSubText(node);
-
-                std::cout<<"post time: "<<post_time.c_str()<<std::endl;
+                ni->post_time=GetSubText(node);
             }
 
             if(node->v.element.tag==GUMBO_TAG_A)
             {
                 if(!CheckAttr(node,"rel","category tag"))return;
 
-                source=GetSubText(node);
+                ni->source=GetSubText(node);
 
-                std::cout<<"source: "<<source.c_str()<<std::endl;
                 return;
             }
 
@@ -61,15 +88,44 @@ namespace
                 const UTF8String text=GetSubText(node);
 
                 if(text.Length()>0)
-                    std::cout<<text.c_str()<<std::endl;
+                {
+                    tos->WriteLine(U8_TEXT("<p>")+text+U8_TEXT("</p>"));
+
+                    if(ni->first_line.IsEmpty())
+                        ni->first_line=text;
+                }
             }
 
             if(node->v.element.tag==GUMBO_TAG_IMG)
             {
-                const GumboAttribute *img=GetAttr(node,"src");
+                const GumboAttribute *src=GetAttr(node,"src");
 
-                if(img)
-                    std::cout<<"img: "<<img->value<<std::endl;
+                if(src)
+                {
+                    FileOutputStream fos;
+
+                    const UTF8String ext_name=UTF8String(".")+ClipFileExtName(UTF8String(src->value));
+
+                    const UTF8String img_filename=UTF8String(ni->img_count)+ext_name;
+
+                    if(fos.CreateTrunc(MergeFilename(save_path,ToOSString(img_filename))))
+                    {
+                        std::cout<<"download image: "<<src->value<<std::endl;
+
+                        network::http::get(&fos,UTF8String(src->value));
+
+                        fos.Close();
+                    }
+
+                    tos->WriteLine(UTF8String("<p><img src=\"")+img_filename+UTF8String("\"></p>"));
+
+                    if(ni->first_image.IsEmpty())
+                    {
+                        ni->first_image=img_filename;
+                    }
+
+                    ++ni->img_count;
+                }
             }
 
             if(node->type!=GUMBO_NODE_ELEMENT)return;       //没有子节点
@@ -98,9 +154,16 @@ namespace
 
     class ListPageParse:public HTMLParse
     {
+        NewsStorage *storage;
+        OSString save_path;
+
     public:
 
-        using HTMLParse::HTMLParse;
+        ListPageParse(NewsStorage *ns,const OSString &sp)
+        {
+            storage=ns;
+            save_path=sp;
+        }
 
         void ParseNewsNode(const GumboNode *node)
         {
@@ -113,7 +176,7 @@ namespace
             std::cout<<"link: "<<href->value<<std::endl;
             std::cout<<"title: "<<title->value<<std::endl;
 
-            NewsPageParse npp;
+            NewsPageParse npp(storage,save_path,href->value);
 
             npp.Parse(href->value,user_agent);
         }
@@ -130,11 +193,23 @@ namespace
     };//class ListPageParse:public HTMLParse
 }//namespace
 
-void news_hrb(const UTF8String &user_agent)
+void news_hrb(const UTF8String &user_agent,const OSString &save_path)
 {
-    ListPageParse fpp;
+    MakePath(save_path);
 
-    const UTF8String url="http://www.xjchuju.com/list-1.html";
+    NewsStorage storage;
+    ListPageParse fpp(&storage,save_path);
+
+    UTF8String url="http://www.xjchuju.com/list-1.html";
 
     fpp.Parse(url,user_agent);
+
+    for(int i=2;i<=15;i++)
+    {
+        url="http://www.xjchuju.com/list-1-400-"+UTF8String(i)+".html";
+
+        fpp.Parse(url,user_agent);
+    }
+
+    storage.Save(MergeFilename(save_path,"news.json"));
 }

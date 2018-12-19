@@ -7,9 +7,9 @@
 #include<hgl/type/StringList.h>
 
 #if HGL_OS == HGL_OS_Windows
-    #include<gumbo.h>      
+    #include<gumbo.h>
 #else
-    #include<gumbo-parser/gumbo.h> 
+    #include<gumbo-parser/gumbo.h>
 #endif//
 
 #include<iostream>

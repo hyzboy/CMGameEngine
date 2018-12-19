@@ -2,9 +2,10 @@
 #include<hgl/webapi/UserAgentString.h>
 
 using namespace hgl;
+using namespace hgl::filesystem;
 using namespace hgl::webapi;
 
-const UTF8String &InitUserAgent()
+const UTF8String InitUserAgent()
 {
     FirefoxUserAgentConfig cfg;
 
@@ -19,13 +20,18 @@ const UTF8String &InitUserAgent()
     return FirefoxUserAgent(cfg);
 }
 
-void news_hrb(const UTF8String &);
+void news_hrb(const UTF8String &,const OSString &);
 
 HGL_CONSOLE_MAIN_FUNC()
 {
-    const UTF8String &user_agent=InitUserAgent();
+    const UTF8String user_agent=InitUserAgent();
 
-    news_hrb(user_agent);     //哈尔滨
+    OSString cur_path;
+
+    GetCurrentPath(cur_path);
+    OSString save_doc_path=MergeFilename(cur_path,OS_TEXT("news"));
+
+    news_hrb(user_agent,MergeFilename(save_doc_path,"heb"));     //哈尔滨
 
     return 0;
 }

@@ -21,8 +21,11 @@ void NewsInfo::Make(Json::Value &node)
     if(!first_image.IsEmpty())
         node["first_image"]=first_image.c_str();
 
-    node["link"]=link.c_str();
+    if(!first_line.IsEmpty())
+        node["first_line"]=first_line.c_str();
+
     node["img_count"]=img_count;
+    node["src_link"]=source_link.c_str();
 }
 
 void NewsStorage::Save(const OSString &filename)
@@ -44,14 +47,11 @@ void NewsStorage::Save(const OSString &filename)
     SaveJson(root,filename);
 }
 
-int NewsStorage::Add(NewsInfo *ni)
+bool NewsStorage::Add(NewsInfo *ni)
 {
     if(!ni)
-        return(-1);
-
-    ++max_index;
-    ni->index=max_index;
+        return(false);
 
     news_list.Add(ni);
-    return max_index;
+    return(true);
 }
