@@ -2,6 +2,11 @@
 #include"NewsStorage.h"
 #include"NewsCreater.h"
 
+#include<hgl/Console.h>
+#include<hgl/webapi/UserAgentString.h>
+
+using namespace hgl::webapi;
+
 namespace
 {
     constexpr char SPAR_CHAR[]=u8"：";
@@ -24,23 +29,33 @@ namespace
 
             ni=new NewsInfo;
             ni->title=title;
-            ni->index=storage->GetMaxIndex();
             ni->tags.Add(U8_TEXT("抚州"));
             ni->src_link=src_link;
 
             save_path=MergeFilename(sp,OSString(ni->index));
             MakePath(save_path);
 
-            storage->Add(ni);
-
             creater=new NewsCreater(save_path);
         }
 
         ~NewsPageParse()
         {
-            ni->first_image =creater->first_image;
-            ni->first_line  =creater->first_line;
-            ni->img_count   =creater->img_count;
+            if(creater)
+            {
+                ni->first_image =creater->first_image;
+                ni->first_line  =creater->first_line;
+                ni->img_count   =creater->img_count;
+
+                ni->index=storage->GetMaxIndex();
+
+                creater->Save();
+
+                storage->Add(ni);
+            }
+            else
+            {
+                delete ni;
+            }
 
             delete creater;
             std::cout<<ni->index<<" : "<<ni->title.c_str()<<std::endl;
@@ -56,22 +71,25 @@ namespace
             {
                 int pos=text.FindString(SPAR_CHAR);
 
-                ni->post_time=text.SubString(pos+SPAR_CHAR_SIZE,16);
+                if(pos<=0)
+                    return;
 
-                std::cout<<"post_time: "<<ni->post_time.c_str()<<std::endl;
+                ni->post_time=text.SubString(pos+SPAR_CHAR_SIZE,16);
 
                 pos=text.FindString(SPAR_CHAR,pos+SPAR_CHAR_SIZE+16);
 
+                if(pos<=0)
+                    return;
+
                 ni->source=text.SubString(pos+SPAR_CHAR_SIZE);
-
                 ni->source.Trim();
-
-                std::cout<<"post source: "<<ni->source.c_str()<<std::endl;
             }
         }
 
         void ParseInnerNode(const GumboNode *node)
         {
+            if(!creater)return;
+
             if(node->type!=GUMBO_NODE_ELEMENT)return;       //没有子节点
 
             if(node->v.element.tag==GUMBO_TAG_P)
@@ -205,5 +223,35 @@ void news_fz(const UTF8String &user_agent,const OSString &save_path)
     }while(!url.IsEmpty());
 
     storage.Save(json_filename);
+}
+
+const UTF8String InitUserAgent()
+{
+    FirefoxUserAgentConfig cfg;
+
+    cfg.os              =OS_WindowsAMD64;
+
+    cfg.os_ver.major    =10;
+    cfg.os_ver.minor    =0;
+
+    cfg.ff_ver.major    =64;
+    cfg.ff_ver.minor    =0;
+
+    return FirefoxUserAgent(cfg);
+}
+
+HGL_CONSOLE_MAIN_FUNC()
+{
+    const UTF8String user_agent=InitUserAgent();
+
+    OSString cur_path;
+
+    GetCurrentPath(cur_path);
+    OSString save_doc_path=MergeFilename(cur_path,OS_TEXT("news"));
+
+    std::cout<<std::endl<<"抚州"<<std::endl;
+    news_fz(user_agent,MergeFilename(save_doc_path,"fz"));
+
+    return 0;
 }
 

@@ -61,11 +61,15 @@ public:
 
     ~NewsCreater()
     {
+        delete tos;
+    }
+
+    void Save()
+    {
         const OSString filename=MergeFilename(save_path,OS_TEXT("index.html"));
 
         tos->WriteLine(UTF8String("</body></html>"));
         SaveMemoryToFile(filename,mos.GetData(),mos.Tell());
-        delete tos;
     }
 
     /**

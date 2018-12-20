@@ -2,6 +2,10 @@
 #include"NewsStorage.h"
 #include"NewsCreater.h"
 
+#include<hgl/Console.h>
+#include<hgl/webapi/UserAgentString.h>
+using namespace hgl::webapi;
+
 namespace
 {
     class NewsPageParse:public HTMLParse
@@ -34,9 +38,14 @@ namespace
 
         ~NewsPageParse()
         {
-            ni->first_image =creater->first_image;
-            ni->first_line  =creater->first_line;
-            ni->img_count   =creater->img_count;
+            if(creater)
+            {
+                ni->first_image =creater->first_image;
+                ni->first_line  =creater->first_line;
+                ni->img_count   =creater->img_count;
+
+                creater->Save();
+            }
 
             delete creater;
             std::cout<<ni->index<<" : "<<ni->title.c_str()<<std::endl;
@@ -188,3 +197,34 @@ void news_heb(const UTF8String &user_agent,const OSString &save_path)
 
     storage.Save(json_filename);
 }
+
+const UTF8String InitUserAgent()
+{
+    FirefoxUserAgentConfig cfg;
+
+    cfg.os              =OS_WindowsAMD64;
+
+    cfg.os_ver.major    =10;
+    cfg.os_ver.minor    =0;
+
+    cfg.ff_ver.major    =64;
+    cfg.ff_ver.minor    =0;
+
+    return FirefoxUserAgent(cfg);
+}
+
+HGL_CONSOLE_MAIN_FUNC()
+{
+    const UTF8String user_agent=InitUserAgent();
+
+    OSString cur_path;
+
+    GetCurrentPath(cur_path);
+    OSString save_doc_path=MergeFilename(cur_path,OS_TEXT("news"));
+
+    std::cout<<std::endl<<"哈尔滨"<<std::endl;
+    news_heb(user_agent,MergeFilename(save_doc_path,"heb"));
+
+    return 0;
+}
+

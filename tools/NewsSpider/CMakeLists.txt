@@ -18,10 +18,13 @@ target_link_libraries(SinaSpider ${HGL_CONSOLE_LIB} gumbo)
 add_executable(SinaAreaNews ${HGL_CONSOLE_MAIN_SOURCE} SinaAreaNews.cpp)
 target_link_libraries(SinaAreaNews ${HGL_CONSOLE_LIB} gumbo)
 
-add_executable(NewsSpider   ${HGL_CONSOLE_MAIN_SOURCE}
-                            NewsSpider.cpp
-                            NewsStorage.cpp
-                            news_heb.cpp
-                            news_fz.cpp)
+add_executable(news_spider_heb  ${HGL_CONSOLE_MAIN_SOURCE}
+                                NewsStorage.cpp
+                                news_heb.cpp)
 
-target_link_libraries(NewsSpider ${HGL_CONSOLE_LIB} gumbo jsoncpp)
+add_executable(news_spider_fz   ${HGL_CONSOLE_MAIN_SOURCE}
+                                NewsStorage.cpp
+                                news_fz.cpp)
+
+target_link_libraries(news_spider_heb ${HGL_CONSOLE_LIB} gumbo jsoncpp)
+target_link_libraries(news_spider_fz ${HGL_CONSOLE_LIB} gumbo jsoncpp)
