@@ -78,10 +78,6 @@ namespace
             {
                 const UTF8String text=GetSubText(node);
 
-                if(text.Length()<=0)
-                {
-                }
-
                 creater->WriteText(text);
             }
 
