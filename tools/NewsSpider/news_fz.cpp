@@ -1,5 +1,6 @@
 ﻿#include"HTMLParse.h"
 #include"NewsStorage.h"
+#include"NewsCreater.h"
 
 namespace
 {
@@ -13,9 +14,7 @@ namespace
 
         NewsInfo *ni;
 
-        MemoryOutputStream mos;
-        TextOutputStream *tos;
-        OSString filename;
+        NewsCreater *creater;
 
     public:
 
@@ -34,19 +33,16 @@ namespace
 
             storage->Add(ni);
 
-            tos=new UTF8TextOutputStream(&mos);
-
-            filename=MergeFilename(save_path,OS_TEXT("index.html"));
-
-            tos->WriteLine(UTF8String("<html><head><meta charset=\"utf-8\"/></head>"));
+            creater=new NewsCreater(save_path);
         }
 
         ~NewsPageParse()
         {
-            tos->WriteLine(UTF8String("</html>"));
-            SaveMemoryToFile(filename,mos.GetData(),mos.Tell());
-            delete tos;
+            ni->first_image =creater->first_image;
+            ni->first_line  =creater->first_line;
+            ni->img_count   =creater->img_count;
 
+            delete creater;
             std::cout<<ni->index<<" : "<<ni->title.c_str()<<std::endl;
         }
 
@@ -82,13 +78,11 @@ namespace
             {
                 const UTF8String text=GetSubText(node);
 
-                if(text.Length()>0)
+                if(text.Length()<=0)
                 {
-                    tos->WriteLine(U8_TEXT("<p>")+text+U8_TEXT("</p>"));
-
-                    if(ni->first_line.IsEmpty())
-                        ni->first_line=text;
                 }
+
+                creater->WriteText(text);
             }
 
             if(node->v.element.tag==GUMBO_TAG_IMG)
@@ -96,31 +90,7 @@ namespace
                 const GumboAttribute *src=GetAttr(node,"src");
 
                 if(src)
-                {
-                    FileOutputStream fos;
-
-                    const UTF8String ext_name=UTF8String(".")+ClipFileExtName(UTF8String(src->value));
-
-                    const UTF8String img_filename=UTF8String(ni->img_count)+ext_name;
-
-                    if(fos.CreateTrunc(MergeFilename(save_path,ToOSString(img_filename))))
-                    {
-                        std::cout<<"download image: "<<src->value<<std::endl;
-
-                        network::http::get(&fos,UTF8String(src->value));
-
-                        fos.Close();
-                    }
-
-                    tos->WriteLine(UTF8String("<p><img src=\"")+img_filename+UTF8String("\"></p>"));
-
-                    if(ni->first_image.IsEmpty())
-                    {
-                        ni->first_image=img_filename;
-                    }
-
-                    ++ni->img_count;
-                }
+                    creater->WriteImage(src->value);
             }
 
             if(node->type!=GUMBO_NODE_ELEMENT)return;       //没有子节点
