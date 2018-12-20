@@ -19,6 +19,7 @@ public:
 
     int img_count;
     UTF8String first_image;
+    UTF8String first_line;
 
 public:
 
@@ -75,6 +76,9 @@ public:
         if(text.Length()<=0)return;
 
         tos->WriteLine(U8_TEXT("<p>")+text+U8_TEXT("</p>"));
+
+        if(first_line.IsEmpty())
+            first_line=text;
     }
 
     void WriteImage(const UTF8String &url)
