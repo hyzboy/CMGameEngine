@@ -23,6 +23,9 @@ using namespace hgl::io;
 using namespace hgl::filesystem;
 using namespace hgl::webapi;
 
+constexpr char CHARSET_ATTR[]="charset=";
+constexpr uint CHARSET_ATTR_SIZE=sizeof(CHARSET_ATTR)-1;
+
 inline const GumboAttribute *GetAttr(const GumboNode *node,const char *name)
 {
     for(int i=0;i<node->v.element.attributes.length;i++)
@@ -113,6 +116,19 @@ public:
     virtual void Parse(const GumboNode *node)
     {
         if(node->type!=GUMBO_NODE_ELEMENT)return;       //没有子节点
+
+        if(node->v.element.tag==GUMBO_TAG_META)
+        {
+            const GumboAttribute *content=GetAttr(node,"content");
+
+            if(!content)return;
+            const char *pos=strstr(content->value,CHARSET_ATTR);
+
+            if(pos)
+                page_charset=CharSet(pos+CHARSET_ATTR_SIZE);
+
+            return;
+        }
 
         ParseNode(node);
 
