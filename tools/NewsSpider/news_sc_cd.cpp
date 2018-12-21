@@ -65,8 +65,6 @@ namespace
                 ni->source=text;
                 ni->source.Trim();
 
-                std::cout<<"source: "<<text.c_str()<<std::endl;
-
                 if(ni->source.Length()>0)
                     ni->tags.Add(ni->source);
             }
@@ -90,7 +88,6 @@ namespace
                     const UTF8String text=GetSubText(node);
 
                     ni->post_time=text;
-                    std::cout<<"post time: "<<text.c_str()<<std::endl;
                 }
                 else
                 if(strcmp(id->value,"source_baidu")==0)
@@ -145,8 +142,6 @@ namespace
                     if(txt.Length()>0)
                     {
                         ni->author=txt;
-
-                        std::cout<<"author: "<<txt.c_str()<<std::endl;
 
                         ni->tags.Add(txt);
                     }
@@ -264,6 +259,8 @@ void news_sc_cd(const UTF8String &user_agent,const OSString &save_path,const UTF
 
     do
     {
+        url=main_url+np_url;
+
         std::cout<<"--------parse: "<<url.c_str()<<std::endl;
 
         ListPageParse fpp(&storage,save_path);
@@ -272,8 +269,7 @@ void news_sc_cd(const UTF8String &user_agent,const OSString &save_path,const UTF
 
         fpp.GetNextPageURL(np_url);
 
-        url=main_url+np_url;
-    }while(!url.IsEmpty());
+    }while(!np_url.IsEmpty());
 
     storage.Save(json_filename);
 }
@@ -302,14 +298,14 @@ HGL_CONSOLE_MAIN_FUNC()
     GetCurrentPath(cur_path);
     OSString save_doc_path=MergeFilename(cur_path,OS_TEXT("news"));
 
-    std::cout<<std::endl<<"四川成都-民生"<<std::endl;
-    news_sc_cd(user_agent,MergeFilename(save_doc_path,u8"四川成都-民生"),"ms");
+//     std::cout<<std::endl<<"四川成都-民生"<<std::endl;
+//     news_sc_cd(user_agent,MergeFilename(save_doc_path,u8"四川成都-民生"),"ms");
 
-    std::cout<<std::endl<<"四川成都-要闻"<<std::endl;
-    news_sc_cd(user_agent,MergeFilename(save_doc_path,u8"四川成都-要闻"),"cdyw");
+//     std::cout<<std::endl<<"四川成都-要闻"<<std::endl;
+//     news_sc_cd(user_agent,MergeFilename(save_doc_path,u8"四川成都-要闻"),"cdyw");
 
     std::cout<<std::endl<<"四川成都-城事"<<std::endl;
-    news_sc_cd(user_agent,MergeFilename(save_doc_path,u8"四川成都-民生"),"cs1");
+    news_sc_cd(user_agent,MergeFilename(save_doc_path,u8"四川成都-城事"),"cs1");
 
     return 0;
 }
