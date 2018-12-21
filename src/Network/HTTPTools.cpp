@@ -46,6 +46,7 @@ namespace hgl
                 if(user_agent)
                 curl_easy_setopt(curl,CURLOPT_USERAGENT,user_agent);
                 curl_easy_setopt(curl,CURLOPT_FOLLOWLOCATION,1);            //重定向支持
+                curl_easy_setopt(curl,CURLOPT_TIMEOUT,30);
 				curl_easy_setopt(curl,CURLOPT_WRITEDATA,os);
 				curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,http_get_to_output_stream);
 				curl_easy_perform(curl);
@@ -69,6 +70,7 @@ namespace hgl
                 if(user_agent)
                 curl_easy_setopt(curl,CURLOPT_USERAGENT,user_agent);
                 curl_easy_setopt(curl,CURLOPT_FOLLOWLOCATION,1);            //重定向支持
+                curl_easy_setopt(curl,CURLOPT_TIMEOUT,30);
 				curl_easy_setopt(curl,CURLOPT_POSTFIELDS,post_data);
 				curl_easy_setopt(curl,CURLOPT_POSTFIELDSIZE,post_data_size);
 				curl_easy_setopt(curl,CURLOPT_WRITEDATA,os);
