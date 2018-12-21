@@ -25,6 +25,7 @@ namespace
 
             ni=new NewsInfo;
             ni->index=storage->GetMaxIndex();
+            ni->tags.Add(U8_TEXT("黑龙江"));
             ni->tags.Add(U8_TEXT("哈尔滨"));
             ni->src_link=src_link;
 

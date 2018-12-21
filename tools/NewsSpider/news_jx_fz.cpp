@@ -30,6 +30,7 @@ namespace
             ni=new NewsInfo;
             ni->title=title;
             ni->index=storage->GetMaxIndex();
+            ni->tags.Add(U8_TEXT("江西"));
             ni->tags.Add(U8_TEXT("抚州"));
             ni->src_link=src_link;
 
@@ -75,6 +76,9 @@ namespace
 
                 ni->source=text.SubString(pos+SPAR_CHAR_SIZE);
                 ni->source.Trim();
+
+                if(ni->source.Length()>0)
+                    ni->tags.Add(ni->source);
             }
         }
 
