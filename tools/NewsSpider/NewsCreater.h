@@ -31,32 +31,32 @@ public:
 
         tos=new UTF8TextOutputStream(&mos);
 
-        tos->WriteLine(UTF8String(R"(
-<html>
-    <head>
-        <meta charset="utf-8" name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
-        <style>
-            *{
-                margin: 0px;
-                padding: 0px;
-            }
-
-            p{
-                margin: 10px 0px;
-            }
-
-            body{
-                padding: 10px;
-            }
-
-            .ImageLayout{
-                display: block;
-                width: 100%;
-            }
-        </style>
-    </head>
-    <body>
-)"));
+//         tos->WriteLine(UTF8String(R"(
+// <html>
+//     <head>
+//         <meta charset="utf-8" name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
+//         <style>
+//             *{
+//                 margin: 0px;
+//                 padding: 0px;
+//             }
+//
+//             p{
+//                 margin: 10px 0px;
+//             }
+//
+//             body{
+//                 padding: 10px;
+//             }
+//
+//             .ImageLayout{
+//                 display: block;
+//                 width: 100%;
+//             }
+//         </style>
+//     </head>
+//     <body>
+// )"));
     }
 
     ~NewsCreater()
@@ -68,7 +68,7 @@ public:
     {
         const OSString filename=MergeFilename(save_path,OS_TEXT("index.html"));
 
-        tos->WriteLine(UTF8String("</body></html>"));
+//         tos->WriteLine(UTF8String("</body></html>"));
         SaveMemoryToFile(filename,mos.GetData(),mos.Tell());
     }
 
@@ -104,7 +104,7 @@ public:
             fos.Close();
         }
 
-        tos->WriteLine(UTF8String("<img src=\"")+img_filename+UTF8String("\" class=\"ImageLayout\">"));
+        tos->WriteLine(UTF8String("<p><img src=\"")+img_filename+UTF8String("\" class=\"ImageLayout\"></p>"));
 
         if(first_image.IsEmpty())
             first_image=img_filename;
