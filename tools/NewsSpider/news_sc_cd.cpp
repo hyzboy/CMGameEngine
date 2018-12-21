@@ -9,6 +9,7 @@ using namespace hgl::webapi;
 
 namespace
 {
+    constexpr char HTTPS_CD_SCOL_COM_CN[]="https://cd.scol.com.cn";
     constexpr char SPAR_CHAR[]=u8"：";
     constexpr uint SPAR_CHAR_SIZE=sizeof(SPAR_CHAR)-1;
 
@@ -30,7 +31,8 @@ namespace
             ni=new NewsInfo;
             ni->title=title;
             ni->index=storage->GetMaxIndex();
-            ni->tags.Add(U8_TEXT("抚州"));
+            ni->tags.Add(U8_TEXT("四州"));
+            ni->tags.Add(U8_TEXT("成都"));
             ni->src_link=src_link;
 
             save_path=MergeFilename(sp,OSString(ni->index));
@@ -55,27 +57,51 @@ namespace
 
         void ParseSourceNode(const GumboNode *node)
         {
-            if(node->v.element.tag!=GUMBO_TAG_DIV)return;
-
-            const UTF8String text=GetSubText(node);
-
-            if(!text.IsEmpty())
+            if(node->type!=GUMBO_NODE_ELEMENT)return;       //没有子节点
+            if(node->v.element.tag==GUMBO_TAG_A)
             {
-                int pos=text.FindString(SPAR_CHAR);
+                const UTF8String text=GetSubText(node);
 
-                if(pos<=0)
-                    return;
-
-                ni->post_time=text.SubString(pos+SPAR_CHAR_SIZE,16);
-
-                pos=text.FindString(SPAR_CHAR,pos+SPAR_CHAR_SIZE+16);
-
-                if(pos<=0)
-                    return;
-
-                ni->source=text.SubString(pos+SPAR_CHAR_SIZE);
+                ni->source=text;
                 ni->source.Trim();
+
+                std::cout<<"source: "<<text.c_str()<<std::endl;
+
+                if(ni->source.Length()>0)
+                    ni->tags.Add(ni->source);
             }
+
+            for(int i=0;i<node->v.element.children.length;i++)
+                ParseSourceNode((const GumboNode *)(node->v.element.children.data[i]));
+        }
+
+        void ParseTimeSourceNode(const GumboNode *node)
+        {
+            if(node->type!=GUMBO_NODE_ELEMENT)return;       //没有子节点
+            if(node->v.element.tag==GUMBO_TAG_SPAN)
+            {
+                const GumboAttribute *id=GetAttr(node,"id");
+
+                if(!id)
+                    return;
+
+                if(strcmp(id->value,"pubtime_baidu")==0)
+                {
+                    const UTF8String text=GetSubText(node);
+
+                    ni->post_time=text;
+                    std::cout<<"post time: "<<text.c_str()<<std::endl;
+                }
+                else
+                if(strcmp(id->value,"source_baidu")==0)
+                {
+                    ParseSourceNode(node);
+                    return;
+                }
+            }
+
+            for(int i=0;i<node->v.element.children.length;i++)
+                ParseTimeSourceNode((const GumboNode *)(node->v.element.children.data[i]));
         }
 
         void ParseInnerNode(const GumboNode *node)
@@ -94,7 +120,12 @@ namespace
                 const GumboAttribute *src=GetAttr(node,"src");
 
                 if(src)
-                    creater->WriteImage(src->value);
+                {
+                    if(strncmp(src->value,"http",4)==0)
+                        creater->WriteImage(src->value);
+                    else
+                        creater->WriteImage(UTF8String(HTTPS_CD_SCOL_COM_CN)+UTF8String(src->value));
+                }
             }
 
             if(node->type!=GUMBO_NODE_ELEMENT)return;       //没有子节点
@@ -105,6 +136,23 @@ namespace
 
         void ParseNode(const GumboNode *node) override
         {
+            if(node->v.element.tag==GUMBO_TAG_SPAN)
+            {
+                if(CheckAttr(node,"id","editor_baidu"))
+                {
+                    const UTF8String txt=GetSubText(node);
+
+                    if(txt.Length()>0)
+                    {
+                        ni->author=txt;
+
+                        std::cout<<"author: "<<txt.c_str()<<std::endl;
+
+                        ni->tags.Add(txt);
+                    }
+                }
+            }
+
             if(node->v.element.tag==GUMBO_TAG_DIV)
             {
                 const GumboAttribute *id=GetAttr(node,"id");
@@ -112,13 +160,13 @@ namespace
                 if(!id)
                     return;
 
-                if(strcmp(id->value,"w-text-aabh")==0)
+                if(strcmp(id->value,"scol_time")==0)
                 {
                     for(int i=0;i<node->v.element.children.length;i++)
-                        ParseSourceNode((const GumboNode *)(node->v.element.children.data[i]));
+                        ParseTimeSourceNode((const GumboNode *)(node->v.element.children.data[i]));
                 }
 
-                if(strcmp(id->value,"w-text-aabi")==0)
+                if(strcmp(id->value,"scol_txt")==0)
                 {
                     for(int i=0;i<node->v.element.children.length;i++)
                         ParseInnerNode((const GumboNode *)(node->v.element.children.data[i]));
@@ -143,37 +191,48 @@ namespace
 
         void ParseNewsNode(const GumboNode *node)
         {
-            if(node->v.element.tag!=GUMBO_TAG_A)return;
-            if(node->v.element.attributes.length<=1)return;
+            if(node->v.element.tag==GUMBO_TAG_A)
+            {
+                if(node->type!=GUMBO_NODE_ELEMENT)return;       //没有子节点
 
-            const GumboAttribute *href=GetAttr(node,"href");
+                const GumboAttribute *href=GetAttr(node,"href");
 
-            if(!href)return;
+                if(!href)return;
 
-            if(storage->CheckSourceLink(href->value))
-                return;
+                const UTF8String title=GetSubText(node);
 
-            const UTF8String title=GetSubText(node);
+                UTF8String url=UTF8String(HTTPS_CD_SCOL_COM_CN)+href->value;
 
-            std::cout<<"link: "<<href->value<<std::endl;
-            std::cout<<"title: "<<title.c_str()<<std::endl;
+                if(storage->CheckSourceLink(url))
+                    return;
 
-//             NewsPageParse npp(storage,save_path,title,href->value);
-//
-//             npp.Parse(href->value,user_agent);
+                std::cout<<"link: "<<url.c_str()<<std::endl;
+                std::cout<<"title: "<<title.c_str()<<std::endl;
+
+                NewsPageParse npp(storage,save_path,title,url);
+
+                npp.Parse(url,user_agent);
+            }
+
+            if(node->type!=GUMBO_NODE_ELEMENT)return;       //没有子节点
+
+            for(int i=0;i<node->v.element.children.length;i++)
+                ParseNewsNode((const GumboNode *)(node->v.element.children.data[i]));
         }
 
         void ParseNode(const GumboNode *node) override
         {
-//             if(node->v.element.tag==GUMBO_TAG_A)
-//             {
-//                 if(CheckAttr(node,"class","next"))
-//                 {
-//                     const GumboAttribute *href=GetAttr(node,"href");
-//
-//                     next_page_url=href->value;
-//                 }
-//             }
+            if(node->v.element.tag==GUMBO_TAG_A)
+            {
+                const UTF8String txt=GetSubText(node);
+
+                if(txt==u8"下一页")
+                {
+                    const GumboAttribute *href=GetAttr(node,"href");
+
+                    next_page_url=UTF8String(href->value);
+                }
+            }
 
             if(node->v.element.tag!=GUMBO_TAG_DIV)return;
             if(node->v.element.children.length<=0)return;
@@ -190,7 +249,7 @@ namespace
     };//class ListPageParse:public HTMLParse
 }//namespace
 
-void news_sc_cd(const UTF8String &user_agent,const OSString &save_path)
+void news_sc_cd(const UTF8String &user_agent,const OSString &save_path,const UTF8String &sub_page)
 {
     MakePath(save_path);
 
@@ -199,7 +258,9 @@ void news_sc_cd(const UTF8String &user_agent,const OSString &save_path)
 
     storage.Load(json_filename);
 
-    UTF8String url="https://cd.scol.com.cn/ms/";
+    UTF8String main_url="https://cd.scol.com.cn/"+sub_page+"/";
+    UTF8String url=main_url;
+    UTF8String np_url;
 
     do
     {
@@ -209,7 +270,9 @@ void news_sc_cd(const UTF8String &user_agent,const OSString &save_path)
 
         fpp.Parse(url,user_agent);
 
-        fpp.GetNextPageURL(url);
+        fpp.GetNextPageURL(np_url);
+
+        url=main_url+np_url;
     }while(!url.IsEmpty());
 
     storage.Save(json_filename);
@@ -239,8 +302,14 @@ HGL_CONSOLE_MAIN_FUNC()
     GetCurrentPath(cur_path);
     OSString save_doc_path=MergeFilename(cur_path,OS_TEXT("news"));
 
-    std::cout<<std::endl<<"四川成都"<<std::endl;
-    news_sc_cd(user_agent,MergeFilename(save_doc_path,"四川成都"));
+    std::cout<<std::endl<<"四川成都-民生"<<std::endl;
+    news_sc_cd(user_agent,MergeFilename(save_doc_path,u8"四川成都-民生"),"ms");
+
+    std::cout<<std::endl<<"四川成都-要闻"<<std::endl;
+    news_sc_cd(user_agent,MergeFilename(save_doc_path,u8"四川成都-要闻"),"cdyw");
+
+    std::cout<<std::endl<<"四川成都-城事"<<std::endl;
+    news_sc_cd(user_agent,MergeFilename(save_doc_path,u8"四川成都-民生"),"cs1");
 
     return 0;
 }
