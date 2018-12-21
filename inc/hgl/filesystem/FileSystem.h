@@ -69,12 +69,17 @@ namespace hgl
         template<typename T>
         inline BaseString<T> ClipFileExtName(const BaseString<T> &fullname)
         {
-            const int pos=fullname.FindRightChar(T('.'));
+            int end=fullname.FindChar(T('?'));         //url的文件名，以?为结束
+
+            if(end==-1)
+                end=fullname.Length();
+
+            int pos=fullname.FindRightChar(fullname.Length()-end,T('.'));
 
             if(pos==-1)
                 return BaseString<T>();
 
-            return fullname.SubString(pos+1);
+            return fullname.SubString(pos+1,end-(pos+1));
         }
 
         /**
