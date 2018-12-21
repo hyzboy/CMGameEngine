@@ -29,6 +29,7 @@ namespace
 
             ni=new NewsInfo;
             ni->title=title;
+            ni->index=storage->GetMaxIndex();
             ni->tags.Add(U8_TEXT("抚州"));
             ni->src_link=src_link;
 
@@ -40,22 +41,13 @@ namespace
 
         ~NewsPageParse()
         {
-            if(creater)
-            {
-                ni->first_image =creater->first_image;
-                ni->first_line  =creater->first_line;
-                ni->img_count   =creater->img_count;
+            ni->first_image =creater->first_image;
+            ni->first_line  =creater->first_line;
+            ni->img_count   =creater->img_count;
 
-                ni->index=storage->GetMaxIndex();
+            creater->Save();
 
-                creater->Save();
-
-                storage->Add(ni);
-            }
-            else
-            {
-                delete ni;
-            }
+            storage->Add(ni);
 
             delete creater;
             std::cout<<ni->index<<" : "<<ni->title.c_str()<<std::endl;
@@ -88,8 +80,6 @@ namespace
 
         void ParseInnerNode(const GumboNode *node)
         {
-            if(!creater)return;
-
             if(node->type!=GUMBO_NODE_ELEMENT)return;       //没有子节点
 
             if(node->v.element.tag==GUMBO_TAG_P)
