@@ -173,7 +173,7 @@ namespace
     };//class ListPageParse:public HTMLParse
 }//namespace
 
-void news_heb(const UTF8String &user_agent,const OSString &save_path)
+void news_hlj_heb(const UTF8String &user_agent,const OSString &save_path)
 {
     MakePath(save_path);
 
@@ -222,8 +222,8 @@ HGL_CONSOLE_MAIN_FUNC()
     GetCurrentPath(cur_path);
     OSString save_doc_path=MergeFilename(cur_path,OS_TEXT("news"));
 
-    std::cout<<std::endl<<"哈尔滨"<<std::endl;
-    news_heb(user_agent,MergeFilename(save_doc_path,"heb"));
+    std::cout<<std::endl<<"黑龙江哈尔滨"<<std::endl;
+    news_hlj_heb(user_agent,MergeFilename(save_doc_path,"黑龙江哈尔滨"));
 
     return 0;
 }

@@ -158,26 +158,26 @@ namespace
             std::cout<<"link: "<<href->value<<std::endl;
             std::cout<<"title: "<<title.c_str()<<std::endl;
 
-            NewsPageParse npp(storage,save_path,title,href->value);
-
-            npp.Parse(href->value,user_agent);
+//             NewsPageParse npp(storage,save_path,title,href->value);
+//
+//             npp.Parse(href->value,user_agent);
         }
 
         void ParseNode(const GumboNode *node) override
         {
-            if(node->v.element.tag==GUMBO_TAG_A)
-            {
-                if(CheckAttr(node,"class","next"))
-                {
-                    const GumboAttribute *href=GetAttr(node,"href");
-
-                    next_page_url=href->value;
-                }
-            }
+//             if(node->v.element.tag==GUMBO_TAG_A)
+//             {
+//                 if(CheckAttr(node,"class","next"))
+//                 {
+//                     const GumboAttribute *href=GetAttr(node,"href");
+//
+//                     next_page_url=href->value;
+//                 }
+//             }
 
             if(node->v.element.tag!=GUMBO_TAG_DIV)return;
             if(node->v.element.children.length<=0)return;
-            if(!CheckAttr(node,"id","w-text-aabf"))return;
+            if(!CheckAttr(node,"id","txtlist"))return;
 
             for(int i=0;i<node->v.element.children.length;i++)
                 ParseNewsNode((const GumboNode *)(node->v.element.children.data[i]));
@@ -190,7 +190,7 @@ namespace
     };//class ListPageParse:public HTMLParse
 }//namespace
 
-void news_fz(const UTF8String &user_agent,const OSString &save_path)
+void news_sc_cd(const UTF8String &user_agent,const OSString &save_path)
 {
     MakePath(save_path);
 
@@ -199,7 +199,7 @@ void news_fz(const UTF8String &user_agent,const OSString &save_path)
 
     storage.Load(json_filename);
 
-    UTF8String url="http://www.zgfznews.com/shehui/";
+    UTF8String url="https://cd.scol.com.cn/ms/";
 
     do
     {
@@ -239,9 +239,10 @@ HGL_CONSOLE_MAIN_FUNC()
     GetCurrentPath(cur_path);
     OSString save_doc_path=MergeFilename(cur_path,OS_TEXT("news"));
 
-    std::cout<<std::endl<<"抚州"<<std::endl;
-    news_fz(user_agent,MergeFilename(save_doc_path,"fz"));
+    std::cout<<std::endl<<"四川成都"<<std::endl;
+    news_sc_cd(user_agent,MergeFilename(save_doc_path,"四川成都"));
 
     return 0;
 }
+
 

@@ -45,3 +45,5 @@ IF(WIN32)
 ELSE()
     ADD_LIBRARY(CM.UT SHARED ${ut_files})
 ENDIF()
+
+target_link_libraries(CM.UT PRIVATE jsoncpp)
