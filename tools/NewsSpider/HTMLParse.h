@@ -66,7 +66,7 @@ protected:
 
 protected:
 
-    const UTF8String GetSubText(const GumboNode *node)
+    const UTF8String GetSubText(const GumboNode *node) const
     {
         if(node->type!=GUMBO_NODE_ELEMENT)return UTF8String("");       //没有子节点
 
@@ -100,6 +100,59 @@ protected:
         }
 
         return UTF8String("");
+    }
+
+    void GetSubText(const GumboNode *node,UTF8String &text) const
+    {
+        if(node->type!=GUMBO_NODE_ELEMENT)return;       //没有子节点
+
+        for(int i=0;i<node->v.element.children.length;i++)
+        {
+            const GumboNode *sub_node=(const GumboNode *)(node->v.element.children.data[i]);
+
+            if(sub_node->type!=GUMBO_NODE_TEXT)
+            {
+                UTF8String str=GetSubText(sub_node);
+
+                if(str.Length()>0)
+                    text+=str;
+
+                continue;
+            }
+
+            if(page_charset.codepage==ccpUTF8)
+            {
+                text+=UTF8String(sub_node->v.text.text);
+            }
+            else
+            {
+                char *u8str;
+
+                int len=to_utf8(page_charset,
+                                &u8str,
+                                sub_node->v.text.original_text.data,
+                                sub_node->v.text.original_text.length);
+
+                text+=UTF8String(u8str,len,true);
+            }
+        }
+    }
+
+    const GumboNode *GetSubNode(const GumboNode *node,const uint tag) const
+    {
+        if(node->type!=GUMBO_NODE_ELEMENT)return nullptr;
+
+        for(int i=0;i<node->v.element.children.length;i++)
+        {
+            const GumboNode *sub_node=(const GumboNode *)(node->v.element.children.data[i]);
+
+            if(sub_node->v.element.tag==tag)
+                return sub_node;
+            else
+                return GetSubNode(sub_node,tag);
+        }
+
+        return nullptr;
     }
 
 public:

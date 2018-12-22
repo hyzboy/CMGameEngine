@@ -31,19 +31,4 @@ endfunction(NewsSpider)
 NewsSpider(hlj_heb)
 NewsSpider(jx_fz)
 NewsSpider(sc_cd)
-
-# add_executable(news_spider_hlj_heb  ${HGL_CONSOLE_MAIN_SOURCE}
-#                                     NewsStorage.cpp
-#                                     news_hlj_heb.cpp)
-#
-# add_executable(news_spider_jx_fz   ${HGL_CONSOLE_MAIN_SOURCE}
-#                                     NewsStorage.cpp
-#                                     news_jx_fz.cpp)
-#
-# add_executable(news_spider_sc_cd   ${HGL_CONSOLE_MAIN_SOURCE}
-#                                     NewsStorage.cpp
-#                                     news_sc_cd.cpp)
-#
-# target_link_libraries(news_spider_hlj_heb ${HGL_CONSOLE_LIB} gumbo jsoncpp)
-# target_link_libraries(news_spider_jx_fz ${HGL_CONSOLE_LIB} gumbo jsoncpp)
-# target_link_libraries(news_spider_sc_cd ${HGL_CONSOLE_LIB} gumbo jsoncpp)
+NewsSpider(yn_lj)
