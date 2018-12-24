@@ -66,7 +66,7 @@ protected:
 
 protected:
 
-    const UTF8String GetSubText(const GumboNode *node) const
+    const UTF8String GetSubText(const GumboNode *node,bool sub=true) const
     {
         if(node->type!=GUMBO_NODE_ELEMENT)return UTF8String("");       //没有子节点
 
@@ -76,6 +76,9 @@ protected:
 
             if(sub_node->type!=GUMBO_NODE_TEXT)
             {
+                if(!sub)
+                    return UTF8String("");
+
                 UTF8String str=GetSubText(sub_node);
 
                 if(str.Length()>0)
@@ -149,7 +152,12 @@ protected:
             if(sub_node->v.element.tag==tag)
                 return sub_node;
             else
-                return GetSubNode(sub_node,tag);
+            {
+                sub_node=GetSubNode(sub_node,tag);
+
+                if(sub_node)
+                    return sub_node;
+            }
         }
 
         return nullptr;
