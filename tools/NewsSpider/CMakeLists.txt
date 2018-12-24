@@ -32,3 +32,5 @@ NewsSpider(hlj_heb)
 NewsSpider(jx_fz)
 NewsSpider(sc_cd)
 NewsSpider(yn_lj)
+
+NewsSpider(gd_cc)

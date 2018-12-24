@@ -35,8 +35,8 @@ namespace
             ni=new NewsInfo;
             ni->title=title;
             ni->index=storage->GetMaxIndex();
-            ni->tags.Add(U8_TEXT("江西"));
-            ni->tags.Add(U8_TEXT("抚州"));
+            ni->tags.Add(U8_TEXT("云南"));
+            ni->tags.Add(U8_TEXT("丽江"));
             ni->src_link=src_link;
 
             save_path=MergeFilename(sp,OSString(ni->index));
