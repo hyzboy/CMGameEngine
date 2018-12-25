@@ -28,6 +28,8 @@ constexpr uint CHARSET_ATTR_SIZE=sizeof(CHARSET_ATTR)-1;
 
 inline const GumboAttribute *GetAttr(const GumboNode *node,const char *name)
 {
+    if(node->type!=GUMBO_NODE_ELEMENT)return(nullptr);
+
     for(int i=0;i<node->v.element.attributes.length;i++)
     {
         const GumboAttribute *attr=(const GumboAttribute *)(node->v.element.attributes.data[i]);
@@ -41,6 +43,8 @@ inline const GumboAttribute *GetAttr(const GumboNode *node,const char *name)
 
 inline bool CheckAttr(const GumboNode *node,const char *name,const char *value)
 {
+    if(node->type!=GUMBO_NODE_ELEMENT)return(false);
+
     for(int i=0;i<node->v.element.attributes.length;i++)
     {
         const GumboAttribute *attr=(const GumboAttribute *)(node->v.element.attributes.data[i]);
@@ -158,6 +162,27 @@ protected:
                 if(sub_node)
                     return sub_node;
             }
+        }
+
+        return nullptr;
+    }
+
+    const GumboNode *GetSubNode(const GumboNode *node,const uint tag,const UTF8String &key,const UTF8String &value)
+    {
+        if(node->type!=GUMBO_NODE_ELEMENT)return nullptr;
+
+        for(int i=0;i<node->v.element.children.length;i++)
+        {
+            const GumboNode *sub_node=(const GumboNode *)(node->v.element.children.data[i]);
+
+            if(sub_node->v.element.tag==tag
+             &&CheckAttr(sub_node,key,value))
+                return sub_node;
+
+            sub_node=GetSubNode(sub_node,tag,key,value);
+
+            if(sub_node)
+                return sub_node;
         }
 
         return nullptr;
