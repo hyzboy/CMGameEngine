@@ -35,3 +35,4 @@ NewsSpider(yn_lj)
 
 NewsSpider(gd_cc)
 NewsSpider(hb)
+NewsSpider(cq)
