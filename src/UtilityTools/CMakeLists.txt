@@ -29,7 +29,6 @@ ENDIF(WIN32)
 #    )
 #ENDIF(WIN32 OR APPLE)
 
-
 SET(ut_files
 
     ${XML_PARSE}
@@ -37,8 +36,13 @@ SET(ut_files
     TaskManager/TaskManager.cpp
     Timer/Timer.cpp
     Parse/CmdParse.cpp
-    Json/JsonTool.cpp
 )
+
+IF(BUILD_JSON_SUPPORT)
+    include_directories(${CMGDK_PATH}/3rdpty/jsoncpp/include)
+
+    SET(ut_files ${ut_files} Json/JsonTool.cpp)
+ENDIF(BUILD_JSON_SUPPORT)
 
 IF(WIN32)
     ADD_LIBRARY(CM.UT STATIC ${ut_files})
@@ -46,4 +50,3 @@ ELSE()
     ADD_LIBRARY(CM.UT SHARED ${ut_files})
 ENDIF()
 
-target_link_libraries(CM.UT PRIVATE jsoncpp)

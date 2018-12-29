@@ -5,7 +5,11 @@
 #include<hgl/io/TextOutputStream.h>
 #include<hgl/LogInfo.h>
 
-#include<gumbo-parser/gumbo.h>      //google html5 解晰库
+#if HGL_OS == HGL_OS_Windows
+#include<gumbo.h>
+#else
+#include<gumbo-parser/gumbo.h>
+#endif//
 #include<json/json.h>               //JSON 解晰库
 
 using namespace hgl;
