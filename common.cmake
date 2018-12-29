@@ -7,15 +7,6 @@ else()
 	set(CMGDK_BUILD_TYPE "Release")
 endif()
 
-IF(MSVC)
-
-    SET(X86_USE_CPU_COMMAND SSE2 CACHE STRING "Use Max CPU Ext command")
-
-    SET_PROPERTY(CACHE X86_USE_CPU_COMMAND PROPERTY STRINGS SSE2 AVX AVX2)
-
-	#visual c++ 2015没有sse3/4/41/42这几个选项
-ENDIF(MSVC)
-
 IF(CMAKE_COMPILER_IS_GNUCC OR MINGW)
 	OPTION(USE_CPP14				"Use C++ 14"							FALSE	)
 	OPTION(USE_ICE_CREAM			"Use IceCream(only openSUSE/SUSE)"		FALSE	)
@@ -32,10 +23,6 @@ IF(CMAKE_COMPILER_IS_GNUCC OR MINGW)
 	OPTION(USE_ALL_STATIC			"Use All Static"						FALSE	)
 	OPTION(USE_STATIC_GLIBC			"Use Static libgcc"						FALSE	)
 	OPTION(USE_STATIC_STDCXX		"Use Static libstdc++"					FALSE	)
-
-    SET(X86_USE_CPU_COMMAND SSE2 CACHE STRING "Use Max CPU Ext command")
-
-    SET_PROPERTY(CACHE X86_USE_CPU_COMMAND PROPERTY STRINGS SSE3 SSE4 SSE41 SSE42 AVX)
 ENDIF(CMAKE_COMPILER_IS_GNUCC OR MINGW)
 
 IF(USE_LLVM_CLANG)
@@ -185,30 +172,14 @@ IF(CMAKE_COMPILER_IS_GNUCC OR MINGW)
         SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
     ENDIF(NO_RTTI)
 
-    if(X86_USE_CPU_COMMAND STREQUAL AVX)
-        add_definitions("-DMATH_AVX")
-        add_compile_options(-mavx)
-    elseif(X86_USE_CPU_COMMAND STREQUAL SSE41)
-        add_definitions("-DMATH_SSE41")
-        add_compile_options(-msse4.1)
-    ELSE()
-        add_definitions("-DMATH_SSE3")
-        add_compile_options(-msse3)
-    endif()
+    add_definitions("-DMATH_AVX")
+    add_compile_options(-mavx)
 ENDIF()
 
 IF(MSVC)
 
     add_compile_options(/GR-)
 
-	if(X86_USE_CPU_COMMAND STREQUAL AVX2)
-		add_definitions("-DMATH_AVX2")
-        add_compile_options(/arch:AVX2)
-    elseif(X86_USE_CPU_COMMAND STREQUAL AVX)
-        add_definitions("-DMATH_AVX")
-        add_compile_options(/arch:AVX)
-    else()
-        add_definitions("-DMATH_SSE2")
-       	add_compile_options(/arch:SSE2)
-    endif()
+    add_definitions("-DMATH_AVX2")
+    add_compile_options(/arch:AVX2)
 ENDIF(MSVC)

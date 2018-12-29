@@ -64,3 +64,5 @@ target_link_libraries(RechargeTest ${HGL_CONSOLE_LIB} curl)
 target_link_libraries(check_error_char ${HGL_CONSOLE_LIB})
 
 target_link_libraries(his_test ${HGL_CONSOLE_LIB})
+
+add_executable(trim_test trim_test.cpp)

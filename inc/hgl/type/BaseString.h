@@ -718,36 +718,38 @@ namespace hgl
             return(false);
         }
 
-    protected:
-
-        typedef T *(*ConvFunc)(const T *,int &);
-
-        bool StrConv(ConvFunc conv)
-        {
-            if(!data.valid()||data->GetLength()<=0)
-                return(false);
-
-            int new_len=data->GetLength();
-
-            T *new_str=conv(data->c_str(),new_len);
-
-            if(new_len>0)
-            {
-                Set(new_str,new_len,true);
-                return(true);
-            }
-            else
-            {
-                Clear();
-                return(false);
-            }
+#define BASESTRING_STR_CONV(LNAME,SNAME)    \
+        bool LNAME()    \
+        {   \
+            if(!data.valid()||data->GetLength()<=0) \
+                return(false);  \
+\
+            int new_len=data->GetLength();  \
+\
+            T *new_str=SNAME(data->c_str(),new_len);    \
+\
+            if(new_len>0)   \
+            {   \
+                Set(new_str,new_len,true);  \
+                return(true);   \
+            }   \
+            else    \
+            {   \
+                Clear();    \
+                return(false);  \
+            }   \
         }
 
     public:
 
-        bool TrimLeft(){return StrConv(trimleft);}													///<删除字符串前端的空格、换行等不可视字符串
-        bool TrimRight(){return StrConv(trimright);}												///<删除字符串后端的空格、换行等不可视字符串
-        bool Trim(){return StrConv(trim);}															///<删除字符串两端的空格、换行等不可视字符串
+        BASESTRING_STR_CONV(TrimLeft,trimleft)
+        BASESTRING_STR_CONV(TrimRight,trimright)
+        BASESTRING_STR_CONV(Trim,trim)
+//         bool TrimLeft(){return StrConv<trimleft>();}													///<删除字符串前端的空格、换行等不可视字符串
+//         bool TrimRight(){return StrConv<trimright>();}												///<删除字符串后端的空格、换行等不可视字符串
+//         bool Trim(){return StrConv<trim>();}															///<删除字符串两端的空格、换行等不可视字符串
+
+#undef BASESTRING_STR_CONV
 
         bool TrimLeft(int n){return Delete(0,n);}													///<删除字符串前端的指定个字符
         bool TrimRight(int n){return Unlink()?data->TrimRight(n):false;}							///<删除字符串后端的指定个字符
@@ -927,7 +929,10 @@ namespace hgl
             if(start<0||start>data->GetLength()-str.Length())
                 return(-1);
 
-            const T *result=strstr(data->c_str()+start,str.c_str());
+            const T *result=strstr(data->c_str()+start,
+                                   data->GetLength()-start,
+                                   str.c_str(),
+                                   str.Length());
 
             if(result)
                 return result-(data->c_str());
