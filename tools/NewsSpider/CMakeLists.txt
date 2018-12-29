@@ -9,14 +9,8 @@
     link_directories(${GUMBO_LIB_DIR})
 endif()
 
-add_executable(ToutiaoSpider ${HGL_CONSOLE_MAIN_SOURCE} ToutiaoNews.cpp)
-target_link_libraries(ToutiaoSpider ${HGL_CONSOLE_LIB} gumbo)
-
 add_executable(SinaSpider ${HGL_CONSOLE_MAIN_SOURCE} SinaNews.cpp)
 target_link_libraries(SinaSpider ${HGL_CONSOLE_LIB} gumbo)
-
-add_executable(SinaAreaNews ${HGL_CONSOLE_MAIN_SOURCE} SinaAreaNews.cpp)
-target_link_libraries(SinaAreaNews ${HGL_CONSOLE_LIB} gumbo)
 
 function(NewsSpider name)
 
