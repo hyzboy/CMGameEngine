@@ -369,7 +369,7 @@ namespace angle_script
 			for( hgl::uint i = 0; i < numTokenWords; i++ )
 			{
 				//if( strcmp(test, tokenWords[i].word) == 0 )
-				if( strcmp(test, tokenWords[i].word) == 0 )
+				if( strcmp(test, tokenWords[i].word,tokenLength) == 0 )
 					return false;
 			}
 
@@ -381,73 +381,27 @@ namespace angle_script
 
 	bool asCTokenizer::IsKeyWord()
 	{
-		// Fill the list with all possible keywords
-		// Check each character against all the keywords in the list,
-		// remove keywords that don't match. When only one remains and
-		// it matches the source completely we have found a match.
-		int words[numTokenWords];
-		hgl::uint n;
-		for( n = 0; n < numTokenWords; n++ )
-			words[n] = n;
+        int index = -1;
 
-		int numWords = numTokenWords;
-		int lastPossible = -1;
+        for (unsigned int i = 0; i < numTokenWords; i++)
+        {
+            if (sourceLength>= tokenWords[i].wordLength
+              &&_wcsnicmp(source, tokenWords[i].word, tokenWords[i].wordLength) == 0)
+            {
+                if (index == -1)
+                    index = i;
+                else
+                if (tokenWords[index].wordLength < tokenWords[i].wordLength)        //找到最长的那个
+                    index = i;
+            }
+        }
 
-		n = 0;
-		while( n < sourceLength && numWords >= 0 )
-		{
-			for( int i = 0; i < numWords; i++ )
-			{
-				if( tokenWords[words[i]].word[n] == '\0' )
-				{
-					if( numWords > 1 )
-					{
-						lastPossible = words[i];
-						words[i--] = words[--numWords];
-						continue;
-					}
-					else
-					{
-						tokenType = tokenWords[words[i]].tokenType;
-						tokenLength = n;
-						return true;
-					}
-				}
+        if (index == -1)
+            return(false);
 
-				if( tokenWords[words[i]].word[n] != source[n] )
-				{
-					words[i--] = words[--numWords];
-				}
-			}
-			n++;
-		}
-
-		// The source length ended or there where no more matchable words
-		if( numWords )
-		{
-			// If any of the tokenWords also end at this
-			// position then we have found the matching token
-			for( int i = 0; i < numWords; i++ )
-			{
-				if( tokenWords[words[i]].word[n] == '\0' )
-				{
-					tokenType = tokenWords[words[i]].tokenType;
-					tokenLength = n;
-					return true;
-				}
-			}
-		}
-
-		// It is still possible that a shorter token was found
-		if( lastPossible > -1 )
-		{
-			tokenType = tokenWords[lastPossible].tokenType;
-			//tokenLength = strlen(tokenWords[lastPossible].word);
-			tokenLength = strlen(tokenWords[lastPossible].word);
-			return true;
-		}
-
-		return false;
+        tokenType = tokenWords[index].tokenType;
+        tokenLength = tokenWords[index].wordLength;
+        return(true);
 	}
 }
 
