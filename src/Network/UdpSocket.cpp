@@ -1,5 +1,5 @@
-﻿#include <hgl/LogInfo.h>
-#include <hgl/network/UdpSocket.h>
+#include<hgl/LogInfo.h>
+#include<hgl/network/UdpSocket.h>
 #include <string.h>
 
 #if HGL_OS != HGL_OS_Windows
@@ -41,42 +41,39 @@ namespace hgl
         {
             if(!addr)RETURN_FALSE;
 
-            if(addr->GetSocketType()!=SOCK_DGRAM)RETURN_FALSE;
-            if(addr->GetProtocol()!=IPPROTO_UDP)RETURN_FALSE;
+            if(!addr->IsUDP())RETURN_FALSE;
 
-            if(!CreateSocket(addr->GetFamily(),SOCK_DGRAM,IPPROTO_UDP))
+            if(!Socket::InitSocket(addr))
                 RETURN_FALSE;
 
-            socket_protocols=IPPROTO_UDP;
+            bind_addr=addr->CreateCopy();
 
-            if(!addr->Bind(ThisSocket))
+            if(!bind_addr->Bind(ThisSocket))
             {
                 hgl::CloseSocket(ThisSocket);
-                return(false);
+                RETURN_FALSE;
             }
 
             SetBlock(false);
             return(true);
         }
 
-        /**
-        * 创建一个UDP连接
-        */
-        bool UDPSocket::Create(int family)
-        {
-            if(family!=AF_INET&&family!=AF_INET6)RETURN_FALSE;
-
-            if((ThisSocket=socket(family,SOCK_DGRAM,IPPROTO_UDP))<0)
-            {
-                LOG_ERROR(U16_TEXT("创建Socket失败！errno:")+UTF16String(GetLastSocketError()));
-                return(false);
-            }
-
-            socket_protocols=IPPROTO_UDP;
-
-            SetBlock(false);
-            return(true);
-        }
+//         /**
+//         * 创建一个UDP连接
+//         */
+//         bool UDPSocket::Create(int family)
+//         {
+//             if(family!=AF_INET&&family!=AF_INET6)RETURN_FALSE;
+//
+//             if((ThisSocket=socket(family,SOCK_DGRAM,IPPROTO_UDP))<0)
+//             {
+//                 LOG_ERROR(U16_TEXT("创建Socket失败！errno:")+UTF16String(GetLastSocketError()));
+//                 RETURN_FALSE;
+//             }
+//
+//             SetBlock(false);
+//             return(true);
+//         }
 
         /**
         * 设定发送数据时，接收数据方的地址

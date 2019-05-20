@@ -1,4 +1,4 @@
-﻿#include<hgl/gui/ObjectControl.h>
+#include<hgl/gui/ObjectControl.h>
 #include<hgl/gui/RadioObject.h>
 #include<hgl/graph/Render.h>
 #include<hgl/LogInfo.h>
@@ -140,7 +140,7 @@ namespace hgl
 		*/
 		bool ObjectControl::Unlink(Object *obj)
 		{
-			if(all_object.Find(obj)==-1)
+			if(!all_object.IsExist(obj))
 			{
 				//有已被删除的对象存在，是已断开的，可能被再次断开，所以是正确的
 
@@ -384,10 +384,10 @@ namespace hgl
 
 				stack_obj.Pop(obj);
 
-				if(all_object.Find(obj)==-1)
+				if(!all_object.IsExist(obj))
 					return(nullptr);
 
-				if(destroy_obj.Find(obj)!=-1)
+				if(destroy_obj.IsExist(obj))
 					return(nullptr);
 
 				if(obj->is_key_focus())
@@ -413,14 +413,14 @@ namespace hgl
 				if(active_obj==obj)
 					active_obj->Active=false;
 
-				clas_object[ocUpdate	].DeleteByData(obj);    //不再刷新
-				clas_object[ocProcEvent	].DeleteByData(obj);   	//不再接收事件
-				clas_object[ocKeyFocus	].DeleteByData(obj);	//从键盘焦点列表中清除
+				clas_object[ocUpdate	].DeleteByValue(obj);    //不再刷新
+				clas_object[ocProcEvent	].DeleteByValue(obj);   	//不再接收事件
+				clas_object[ocKeyFocus	].DeleteByValue(obj);	//从键盘焦点列表中清除
 			}
 			else
 			{
 				#ifdef _DEBUG
-				if(all_object.Find(obj)==-1)
+				if(!all_object.IsExist(obj))
 				{
 					LOG_ERROR(OS_TEXT("一个被要求设置为显示属性的对象并不在这个对象控制器里"));
 				}
@@ -438,7 +438,7 @@ namespace hgl
 		{
 			if(!obj)return;
 
-			if(all_object.Find(obj)==-1)
+			if(!all_object.IsExist(obj))
 			{
 				LOG_ERROR(OS_TEXT("一个被要求设置刷新属性的对象并不在这个对象控制器里"));
 			}
@@ -447,7 +447,7 @@ namespace hgl
 				if(e)
 					clas_object[ocUpdate].Add(obj);
 				else
-					clas_object[ocUpdate].DeleteByData(obj);
+					clas_object[ocUpdate].DeleteByValue(obj);
 			}
 		}
 
@@ -458,14 +458,14 @@ namespace hgl
 				if(obj==active_obj)     //是活动对象
 					active_obj->Active=false;  //关闭活动状态,这个操作会将活动对象重新加到ProcEvent列表中
 
-				clas_object[ocProcEvent	].DeleteByData(obj);  	//从事件处理列表中清除
-				clas_object[ocVisual	].DeleteByData(obj);  	//从显示列表中清除
-				clas_object[ocKeyFocus	].DeleteByData(obj);	//从键盘焦点列表中清除
+				clas_object[ocProcEvent	].DeleteByValue(obj);  	//从事件处理列表中清除
+				clas_object[ocVisual	].DeleteByValue(obj);  	//从显示列表中清除
+				clas_object[ocKeyFocus	].DeleteByValue(obj);	//从键盘焦点列表中清除
 			}
 			else
 			{
 				#ifdef _DEBUG
-				if(all_object.Find(obj)==-1)
+				if(!all_object.IsExist(obj))
 				{
 					LOG_ERROR(OS_TEXT("一个被要求设置为显示属性的对象并不在这个对象控制器里"));
 				}
@@ -483,12 +483,12 @@ namespace hgl
 		{
 			if(!pe)
 			{
-				clas_object[ocProcEvent].DeleteByData(obj);
+				clas_object[ocProcEvent].DeleteByValue(obj);
 			}
 			else
 			{
 				#ifdef _DEBUG
-				if(all_object.Find(obj)==-1)
+				if(!all_object.IsExist(obj))
 				{
 					LOG_ERROR(OS_TEXT("一个被要求设置接收事件属性的对象并不在这个对象控制器里"));
 				}
@@ -530,7 +530,7 @@ namespace hgl
 					{
 						MoveToTopLevel(obj);
 
-						clas_object[ocProcEvent].DeleteByData(obj);   //将新活动对象从可处理事件列表中删除
+						clas_object[ocProcEvent].DeleteByValue(obj);   //将新活动对象从可处理事件列表中删除
 						active_obj=obj;
 
 	//					#ifdef _DEBUG
@@ -576,7 +576,7 @@ namespace hgl
 		void ObjectControl::SetAlignAttrib(GUIObject *obj,GuiAlign a)
 		{
 			#ifdef _DEBUG
-				if(all_object.Find((Object *)obj)==-1)
+				if(!all_object.IsExist((Object *)obj))
 				{
 					LOG_HINT(U16_TEXT("一个对象要被设置对齐属性，但它不在这个对象控制器里。"));
 					return;
@@ -598,7 +598,7 @@ namespace hgl
 			{
 				if(a<=alNone||a>=alEnd)     //从有对齐变为无对齐
 				{
-					clas_object[ocAlign].DeleteByData((Object *)obj);
+					clas_object[ocAlign].DeleteByValue((Object *)obj);
 				}
 
 				SetRefresh();
@@ -624,7 +624,7 @@ namespace hgl
 		{
 			if(!obj)return;
 
-			if(destroy_obj.Find(obj)==-1)
+			if(!destroy_obj.IsExist(obj))
 				destroy_obj.Add(obj);
 
 			if(active_obj==obj)

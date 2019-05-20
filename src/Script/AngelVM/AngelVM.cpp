@@ -280,7 +280,7 @@ namespace hgl
 	{
 		if(!engine||module_name.IsEmpty())return(nullptr);
 
-		if(MList.Find(module_name)!=-1)//重复添加
+		if(MList.KeyExist(module_name))//重复添加
 			return(nullptr);
 
 		asIScriptModule *module=engine->GetModule(module_name.c_str(),asGM_ALWAYS_CREATE);

@@ -4,11 +4,6 @@
 #include<hgl/type/Set.h>
 namespace hgl
 {
-	template<typename T>
-	Set<T>::Set()
-	{
-	}
-
 	/**
 	* 查找数据是否存在
 	* @param flag 数据
@@ -275,5 +270,96 @@ namespace hgl
 	{
 		return data_list.Rand(result);
 	}
+
+	/**
+     * 求当前合集与另一个数据集的交集
+     * @param result 结果存放合集
+     * @param list 要计算交集的数据集
+     * @return 交集数量
+     */
+	template<typename T>
+	int Set<T>::Intersection(Set<T> &result,const Set<T> &list)
+    {
+        if(data_list.GetCount()<=0)
+            return(0);
+
+        if(list.GetCount()<=0)
+            return(0);
+
+        data_list.Enum([&](T &obj)
+        {
+            if(list->IsMember(obj))
+                result.Add(obj);
+        });
+
+        return result.GetCount();
+    }
+
+    template<typename T>
+    int Set<T>::Intersection(const Set<T> &list)
+    {
+        if(data_list.GetCount()<=0)
+            return(0);
+
+        if(list.GetCount()<=0)
+            return(0);
+
+        int count=0;
+
+        T *obj=data_list.GetData();
+        for(int i=0;i<data_list.GetCount();i++)
+        {
+            if(list.IsMember(*obj))
+                ++count;
+
+            ++obj;
+        }
+
+        return count;
+    }
+
+    template<typename T>
+    int Set<T>::Intersection(Set<T> &result,const Set<T> &il,const Set<T> &cl)
+    {
+        if(data_list.GetCount()<=0)
+            return(0);
+
+        if(il.GetCount()<=0)
+            return(0);
+
+        T *obj=data_list.GetData();
+        for(int i=0;i<data_list.GetCount();i++)
+        {
+            if(il.IsMember(*obj))
+                if(!cl.IsMember(*obj))
+                    result.Add(*obj);
+            ++obj;
+        }
+
+        return result.GetCount();
+    }
+
+    template<typename T>
+    int Set<T>::Difference(const Set<T> &is)
+    {
+        if(data_list.GetCount()<=0)
+            return(is.GetCount());
+
+        if(is.GetCount()<=0)
+            return(data_list.GetCount());
+
+        int count=0;
+
+        T *obj=data_list.GetData();
+        for(int i=0;i<data_list.GetCount();i++)
+        {
+            if(!is.IsMember(*obj))
+                ++count;
+
+            ++obj;
+        }
+
+        return count;
+    }
 }//namespace hgl
 #endif//HGL_TYPE_SET_CPP

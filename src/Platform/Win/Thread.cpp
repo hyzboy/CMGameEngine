@@ -6,16 +6,31 @@ namespace hgl
 {
     DWORD WINAPI ThreadFunc(Thread *tc)
 	{
+        tc->live_lock.Lock();
+
 		if(tc->ProcStartThread())
 		{
-			while(tc->Execute());
+            while(tc->Execute())
+            {
+                if(tc->exit_lock.TryLock())
+                {
+                    tc->exit_lock.Unlock();
+                    break;
+                }
+            }
 
 			tc->ProcEndThread();
 		}
 
+
 		if(tc->IsExitDelete())
+        {
+            tc->live_lock.Unlock();
 			delete tc;
-			
+        }
+        else
+            tc->live_lock.Unlock();
+
 		return(0);
 	}
 
@@ -28,27 +43,18 @@ namespace hgl
     {
         unsigned long threadid;
 
+        exit_lock.Lock();
+
         tp=::CreateThread(0,0,(PTHREAD_START_ROUTINE)ThreadFunc,this,0,&threadid);
 
         if(!tp)
         {
+            exit_lock.Unlock();
             LOG_ERROR(OS_TEXT("创建线程失败，Windows错误码：")+OSString((uint)GetLastError()));
             return(false);
         }
 
         return(true);
-    }
-
-    /**
-    * (线程外部调用)关闭当前线程.不推荐使用此函数，正在执行的线程被强制关闭会引起无法预知的错误。
-    */
-    void Thread::Close()
-    {
-        if(!tp)return;
-
-        TerminateThread(tp,0);
-        CloseHandle(tp);
-        tp=nullptr;
     }
 
     /**
@@ -59,14 +65,11 @@ namespace hgl
         return(tp==GetCurrentThread());
     }
 
-    /**
-    * (线程外部调用)等待当前线程
-    * @param time_out 等待的时间，如果为0表示等到线程运行结束为止。默认为0
-    */
-    void Thread::Wait(const double time_out)
+    void WaitThreadExit(thread_ptr tp,const double &time_out)
     {
-        if(tp)
-            WaitForSingleObject(tp,time_out>0?time_out*1000:INFINITE);
+        if(!tp)return;
+
+        WaitForSingleObject(tp,time_out>0?time_out*1000:INFINITE);
     }
 
     /**

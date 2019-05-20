@@ -10,22 +10,18 @@
 #define HGL_MERGE32(a,b,c,d)		(a|b<<8|c<<16|d<<24)
 
 #define HGL_OS_Windows				HGL_MERGE32('W','i','n',' ')
-#define HGL_OS_XBOX360				HGL_MERGE32('X','3','6','0')
-#define HGL_OS_XBOX1				HGL_MERGE32('X','B','1',' ')
-#define HGL_OS_NetWare				HGL_MERGE32('N','e','t','W')
-#define HGL_OS_MacOSX				HGL_MERGE32('M','a','c','X')
+#define HGL_OS_macOS				HGL_MERGE32('m','a','c',' ')
 #define HGL_OS_iOS					HGL_MERGE32('i','O','S',' ')
 #define HGL_OS_FreeBSD				HGL_MERGE32('F','B','S','D')
 #define HGL_OS_NetBSD				HGL_MERGE32('N','B','S','D')
 #define HGL_OS_OpenBSD				HGL_MERGE32('O','B','S','D')
 #define HGL_OS_Linux				HGL_MERGE32('L','i','n','u')
 #define HGL_OS_Cygwin				HGL_MERGE32('C','y','g','w')
-#define HGL_OS_PSP					HGL_MERGE32('P','S','P',' ')
-#define HGL_OS_PS3					HGL_MERGE32('P','S','3',' ')
-#define HGL_OS_PS4					HGL_MERGE32('P','S','4',' ')
 #define HGL_OS_PSP2					HGL_MERGE32('P','S','P','2')
 #define HGL_OS_PS4					HGL_MERGE32('P','S','4',' ')
 #define HGL_OS_AIX					HGL_MERGE32('A','I','X',' ')
+#define HGL_OS_Android              HGL_MERGE32('A','n','d','r')
+#define HGL_OS_Wasm                 HGL_MERGE32('W','A','s','m')        //Web Assembly
 
 #define HGL_CPU_X86_32				HGL_MERGE32('8','6','3','2')
 #define HGL_CPU_X86_64				HGL_MERGE32('8','6','6','4')
@@ -35,12 +31,8 @@
 #define HGL_CPU_PowerPC				HGL_MERGE32('P','P','C',' ')
 #define HGL_CPU_PowerPC64           HGL_MERGE32('P','P','6','4')
 #define HGL_CPU_Cell				HGL_MERGE32('C','E','L','L')
-#define HGL_CPU_ARM5				HGL_MERGE32('A','R','M','5')
-#define HGL_CPU_ARM6                HGL_MERGE32('A','R','M','6')
-#define HGL_CPU_ARM7				HGL_MERGE32('A','R','M','7')
-#define HGL_CPU_ARM9				HGL_MERGE32('A','R','M','9')
-#define HGL_CPU_Sparc				HGL_MERGE32('S','P','A','R')
-#define HGL_CPU_Sparc64             HGL_MERGE32('S','P','6','4')
+#define HGL_CPU_ARM7                HGL_MERGE32('A','R','M','7')
+#define HGL_CPU_ARM64               HGL_MERGE32('A','R','6','4')
 
 #define HGL_COMPILER_Microsoft		HGL_MERGE32('M','S','C',' ')
 #define HGL_COMPILER_GNU			HGL_MERGE32('G','N','U',' ')
@@ -50,6 +42,7 @@
 #define HGL_COMPILER_DigitalMars	HGL_MERGE32('D','i','M','a')
 #define HGL_COMPILER_LLVM			HGL_MERGE32('L','L','V','M')
 #define HGL_COMPILER_PGI			HGL_MERGE32('P','G','I',' ')
+#define HGL_COMPILER_Wasm           HGL_MERGE32('W','A','s','m')        //Web Assembly
 
 #define HGL_BIG_ENDIAN		'B'
 #define HGL_LITTLE_ENDIAN	'L'
@@ -68,13 +61,7 @@
 	#define HGL_LIB_CPU_NAME			OS_TEXT("x86")
 	#define HGL_MIN_MEMORY_ALLOC_BYTES	4
 	#define HGL_ENDIAN					HGL_LITTLE_ENDIAN
-#elif defined(__ia64__) || defined(__ia64) || defined(_M_IA64)
-	#define	HGL_CPU						HGL_CPU_Itanium
-	#define HGL_CPU_NAME				OS_TEXT("Itanium IA64")
-	#define HGL_LIB_CPU_NAME			OS_TEXT("Itanium")
-	#define HGL_MIN_MEMORY_ALLOC_BYTES	8
-	#define HGL_ENDIAN					HGL_BIG_ENDIAN
-#elif defined(_M_MIPS)||defined(_MIPS_ARCH) || defined(__mips__) || defined(__mips)
+#elif defined(_M_MIPS)||defined(_MIPS_ARCH)||defined(__mips__)||defined(__mips)||defined(mips)||defined(__MIPS__)
 	#define HGL_MIN_MEMORY_ALLOC_BYTES	4
 	#ifdef __MIPSEL__
 		#define	HGL_CPU						HGL_CPU_MIPSel
@@ -94,6 +81,7 @@
         #define HGL_LIB_CPU_NAME            OS_TEXT("MIPS64")
         #define HGL_ENDIAN                  HGL_BIG_ENDIAN
 #elif defined(__powerpc__) || defined(__powerpc)    \
+     ||defined(__POWERPC__) \
      || defined(__ppc__) || defined(__PPC__) || defined(__ppc) \
      || defined(_M_PPC) ||defined(_M_MPPC) \
      || defined(_ARCH_PPC) || defined(_ARCH_PWR)
@@ -102,7 +90,8 @@
 		#define HGL_CPU_NAME		OS_TEXT("Cell")
 		#define HGL_LIB_CPU_NAME	OS_TEXT("Cell")
 	#else
-        #ifdef defined(__ppc64__) || defined(__powerpc64__) || defined(__64BIT__)
+        #ifdef defined(__ppc64__)||defined(__PPC64__)||defined(__powerpc64__)   \
+             ||defined(_ARCH_PPC64)||defined(__64BIT__)
             #define HGL_CPU             HGL_CPU_PowerPC64
             #define HGL_CPU_NAME        OS_TEXT("PowerPC64")
             #define HGL_LIB_CPU_NAME    OS_TEXT("PowerPC64")
@@ -115,26 +104,33 @@
 
 	#define HGL_MIN_MEMORY_ALLOC_BYTES	8
 	#define HGL_ENDIAN					HGL_BIG_ENDIAN
-#elif defined(_M_ARM)
-	#define	HGL_CPU						HGL_CPU_ARM
-	#define HGL_CPU_NAME				OS_TEXT("ARM")
-	#define HGL_LIB_CPU_NAME			OS_TEXT("ARM")
-	#define HGL_MIN_MEMORY_ALLOC_BYTES	4
-	#define HGL_ENDIAN					HGL_BIG_ENDIAN
-#elif defined(__sparc64__)||defined(sparc64)
-    #define HGL_CPU                     HGL_CPU_SPARC64
-    #define HGL_CPU_NAME                OS_TEXT("Sparc64")
-    #define HGL_LIB_CPU_NAME            OS_TEXT("Sparc64")
-    #define HGL_MIN_MEMORY_ALLOC_BYTES  8
-    #define HGL_ENDIAN                  HGL_BIG_ENDIAN
-#elif defined(__sparc__) || defined(__sparc) || defined(__sparcv8)
-	#define	HGL_CPU						HGL_CPU_SPARC
-	#define HGL_CPU_NAME				OS_TEXT("Sparc")
-	#define HGL_LIB_CPU_NAME			OS_TEXT("Sparc")
-	#define HGL_MIN_MEMORY_ALLOC_BYTES	8
-	#define HGL_ENDIAN					HGL_BIG_ENDIAN
+#elif defined(__arm__)||defined(__arm)  \
+    ||defined(_ARM) \
+    ||defined(_M_ARM)  \
+    ||defined(__ARM_ARCH__7__)  \
+    ||defined(__ARM_ARCH__7A__) \
+    ||defined(__ARM_ARCH__7R__) \
+    ||defined(__ARM_ARCH__7M__) \
+    ||defined(__ARM_ARCH__7S__)
+        #define	HGL_CPU						HGL_CPU_ARM7
+        #define HGL_CPU_NAME				OS_TEXT("ARM7")
+        #define HGL_LIB_CPU_NAME			OS_TEXT("ARM7")
+        #define HGL_MIN_MEMORY_ALLOC_BYTES	4
+        #define HGL_ENDIAN					HGL_LITTLE_ENDIAN
+#elif defined(__aarch64__)
+    #define	HGL_CPU						HGL_CPU_ARM64
+    #define HGL_CPU_NAME				OS_TEXT("ARM64")
+    #define HGL_LIB_CPU_NAME			OS_TEXT("ARM64")
+    #define HGL_MIN_MEMORY_ALLOC_BYTES	4
+    #define HGL_ENDIAN					HGL_LITTLE_ENDIAN
+#elif defined(__wasm__)
+
+    #error can not support WebAssembly.please wait update......
+
+    #define HGL_OS          HGL_OS_Wasm
+    #define HGL_COMPILER    HGL_COMPILER_Wasm
 #else
-	#error Can not support the cpu.
+	#error Can not not support the cpu.
 #endif
 
 #if HGL_ENDIAN == HGL_BIG_ENDIAN
@@ -145,12 +141,19 @@
 
 #if defined(__WIN32__)||defined(_WIN32)||defined(WIN32)||defined(__WINDOWS__)||defined(__WIN64__)||defined(_WIN64)||defined(WIN64)
 	#define HGL_OS 			HGL_OS_Windows
-#elif defined(_X360)
-	#define HGL_OS			HGL_OS_XBOX360
-#elif defined(NETWARE)
-	#define HGL_OS			HGL_OS_NetWare
 #elif defined(__APPLE__)||defined(__MAC__)||defined(macintosh)||defined(__APPLE_CC__)
-	#define HGL_OS			HGL_OS_MacOS
+	#include "TargetConditionals.h"
+	#if TARGET_OS_IPHONE
+//		#if TARGET_IPHONE_SIMULATOR
+//			#define HGL_OS	HGL_OS_iOS_Simulator
+//		#else
+			#define HGL_OS	HGL_OS_iOS
+//		#endif//TARGET_IPHONE_SIMULATOR
+	#elif TARGET_OS_MAC
+		#define HGL_OS		HGL_OS_macOS
+	#endif//
+#elif defined(__ANDROID__)
+    #define HGL_OS          HGL_OS_Android
 #elif defined(__FreeBSD)||defined(__FreeBSD__)
 	#define HGL_OS 			HGL_OS_FreeBSD
 #elif defined(__NetBSD)||defined(__NetBSD__)
@@ -161,37 +164,12 @@
 	#define HGL_OS			HGL_OS_Linux
 #elif defined(__CYGWIN__)
 	#define HGL_OS			HGL_OS_Cygwin
-#elif defined(__PSP__)||defined(__psp__)||defined(_PSP)
-	#define HGL_OS			HGL_OS_PSP
-#elif defined(SN_TARGET_PS3)||defined(SN_TARGET_PS3_SPU)||defined(__PS3__)||defined(__ps3__)||defined(_PS3)
-	#define HGL_OS			HGL_OS_PS3
 #elif defined(SN_TARGET_PSP2)||defined(__PSV__)||defined(__psv__)||defined(_PSV)||defined(__PSVita__)||defined(__PSVita)
 	#define HGL_OS			HGL_OS_PSP2
 #elif defined(SN_TARGET_ORBIS)
 	#define HGL_OS			HGL_OS_PS4
-#elif defined(__APPLE__)
-	#include "TargetConditionals.h"
-	#if TARGET_OS_IPHONE
-//		#if TARGET_IPHONE_SIMULATOR
-//			#define HGL_OS	HGL_OS_iOS_Simulator
-//		#else
-			#define HGL_OS	HGL_OS_iOS
-//		#endif//TARGET_IPHONE_SIMULATOR
-	#elif TARGET_OS_MAC
-		#define HGL_OS		HGL_OS_MacOSX
-	#endif//
 #elif defined(_AIX)||defined(__AIX)||defined(__AIX__)||defined(__aix)||defined(__aix__)
 	#define HGL_OS			HGL_OS_AIX
-#elif defined(__hpux__)||defined(__hpux)
-	#define HGL_OS			HGL_OS_HPUX
-#elif defined(__IRIX__)||defined(__irix__)||defined(__sgi)||defined(__sgi__)||defined(_SGI)
-	#define HGL_OS			HGL_OS_IRIX
-#elif defined(__BeOS)||defined(__BEOS__)||defined(_BEOS)
-	#define HGL_OS			HGL_OS_BeOS
-#elif defined(__HAIKU)||defined(__HAIKU__)||defined(_HAIKU)
-	#define HGL_OS			HGL_OS_Haiku
-#elif defined(__QNX__)||defined(__QNXNTO__)
-	#define HGL_OS			HGL_OS_QNX
 #endif//
 
 #if defined(__clang__)
@@ -288,18 +266,14 @@
 		#error Unrecognized compiler
 	#endif
 
-#elif HGL_OS == HGL_OS_MacOS
+#elif HGL_OS == HGL_OS_macOS
 
 	#include<hgl/platform/os/MacOS.h>
 
 	#if HGL_COMPILER == HGL_COMPILER_Intel
 		#include<hgl/platform/compiler/Intel.h>
-//	#elif HGL_COMPILER == HGL_COMPILER_IBM
-//		#include<hgl/platform/compiler/IBM.h>
 	#elif HGL_COMPILER == HGL_COMPILER_LLVM
 		#include<hgl/platform/compiler/LLVM.h>
-    #elif HGL_COMPILER == HGL_COMPILER_GNU
-		#include<hgl/platform/compiler/GNU.h>
 	#else
 		#error Unrecognized compiler
 	#endif
@@ -307,48 +281,7 @@
 #elif HGL_OS == HGL_OS_iOS
 
 	#include<hgl/platform/os/MacOS.h>
-
-	#if HGL_COMPILER == HGL_COMPILER_LLVM
-		#include<hgl/platform/compiler/LLVM.h>
-	#elif HGL_COMPILER == HGL_COMPILER_GNU
-		#include<hgl/platform/compiler/GNU.h>
-	#else
-		#error Unrecognized compiler
-	#endif
-
-#elif HGL_OS == HGL_OS_Solaris
-
-	#include<hgl/platform/os/Solaris.h>
-
-	#if HGL_COMPILER == HGL_COMPILER_SUN
-		#include<hgl/platform/compiler/SUN.h>
-	#elif HGL_COMPILER == HGL_COMPILER_GNU
-		#include<hgl/platform/compiler/GNU.h>
-	#else
-		#error Unrecognized compiler
-	#endif
-
-#elif HGL_OS == HGL_OS_PSP
-
-	#include<hgl/platform/os/psp.h>
-
-	#if HGL_COMPILER == HGL_COMPILER_GNU
-		#include<hgl/platform/compiler/GNU.h>
-	#else
-		#error Unrecognized compiler
-	#endif
-
-#elif HGL_OS == HGL_OS_PS3
-
-	#include<hgl/platform/os/ps3.h>
-
-	#if HGL_COMPILER == HGL_COMPILER_IBM
-		#include<hgl/platform/compiler/IBM.h>
-	#elif HGL_COMPILER == HGL_COMPILER_GNU
-		#include<hgl/platform/compiler/GNU.h>
-	#else
-		#error Unrecognized compiler
-	#endif
+	#include<hgl/platform/compiler/LLVM.h>
 
 #elif HGL_OS == HGL_OS_PSP2
 
@@ -374,7 +307,17 @@
 		#error Unrecognized compiler
 	#endif
 
-#elif (HGL_OS == HGL_OS_HPUX)||(HGL_OS == HGL_OS_IRIX)
+#elif HGL_OS == HGL_OS_Android
+
+	#include<hgl/platform/os/Android.h>
+
+	#if HGL_COMPILER == HGL_COMPILER_LLVM
+		#include<hgl/platform/compiler/LLVM.h>
+	#elif HGL_COMPILER == HGL_COMPILER_GNU
+		#include<hgl/platform/compiler/GNU.h>
+	#else
+		#error Unrecognized compiler
+	#endif//GNU
 #endif//HGL_OS
 
 namespace hgl
@@ -384,17 +327,13 @@ namespace hgl
 
     #define enum_int(name)	enum name:int
     #define enum_uint(name)	enum name:uint
-    
-	using uchar			=unsigned char;  	///< 无符号字符型
-	using ushort		=unsigned short;	///< 无符号短整型
-	using uint			=unsigned int;   	///< 无符号整型
-	using ulong			=unsigned long;		///< 无符号长整型
 
-#if HGL_COMPILER != HGL_COMPILER_Microsoft
-	using int128		=  signed __int128;	///<有符号128位整型
-	using uint128		=unsigned __int128;	///<无符号128位整型
-#endif//HGL_COMPILER == HGL_COMPILER_Microsoft
-
-	using void_pointer	=void *;
+	using void_pointer=void *;
 }//namespace hgl
+
+using uchar     = unsigned char;    ///< 无符号字符型
+using ushort    = unsigned short;   ///< 无符号短整型
+using uint      = unsigned int;     ///< 无符号整型
+using ulong     = unsigned long;    ///< 无符号长整型
+
 #endif//HGL_PLATFORM_INCLUDE

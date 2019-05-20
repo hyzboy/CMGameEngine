@@ -1,4 +1,5 @@
-#include<hgl/type/BaseString.h>
+﻿#include<hgl/type/BaseString.h>
+#include<hgl/CodePage.h>
 #include<iostream>
 
 using namespace hgl;

@@ -6,44 +6,6 @@
 #include<hgl/type/BaseString.h>
 namespace hgl
 {
-	/**
-	* Windows代码页枚举
-	* 全部Windows所支持代码页请参见 http://msdn.microsoft.com/en-us/library/dd317756
-	*/
-	enum CharCodePage										///代码页枚举
-	{
-		ccpNone=0,                                          ///<起始定义，无意义
-
-		//中文
-		ccpGBK                          =936,               ///<中国GBK标准中文
-		ccpBig5                         =950,               ///<中国台湾Big5标准繁体中文
-		ccpGB2312                       =20936,             ///<中国GB2312标准简体中文
-		ccpGB18030                      =54936,             ///<中国GB18030-2000标准中文
-
-		//日文
-		ccpShiftJIS                     =932,               ///<日文ShiftJIS
-		ccpJISX							=50222,				///<日文JIS X/ISO 2022
-
-		//韩文
-		ccpKorean						=949,				///<韩文
-
-		//苹果编码
-		ccpMacJanpan					=10001,				///<日文
-		ccpMacTraditionalChinese		=10002,				///<繁体中文
-		ccpMacSimplifiedChinese			=10008,				///<简体中文
-
-		//unicode
-		ccpUTF7							=65000,				///<utf-7
-		ccpUTF8							=65001,				///<utf-8
-
-		ccpUTF16LE						=1200,
-		ccpUTF16BE						=1201,
-		ccpUTF32LE						=12000,
-		ccpUTF32BE						=12001,
-
-		ccpEnd                          					///<结束定义，无意义
-	};//enum CharCodePage
-
 	struct CodePageAndCharSet
 	{
 		CharCodePage codepage;
@@ -161,7 +123,8 @@ namespace hgl
 			strcpy(charset,CharSetNameLength,cs.charset);
 		}
 
-        CompOperatorMemcmp(const CharSet &)
+	    int _Comp(const CharSet &data)const{return codepage-data.codepage;}	\
+        CompOperator(const CharSet &,_Comp)
 	};//struct CharacterSet
 
 	inline CharSet::CharSet(CharCodePage ccp)
@@ -172,9 +135,9 @@ namespace hgl
 
 	inline CharSet::CharSet(const char *cs)
 	{
-		strcpy(charset,CharSetNameLength,cs);
 		codepage=FindCodePage(cs);
-	}
+        strcpy(charset,CharSetNameLength,FindCharSet(codepage));
+    }
 
 	extern CharSet DefaultCharSet();
 
@@ -260,6 +223,22 @@ namespace hgl
 		return to_u8(ws.c_str(),ws.Length());
 	}
 
-	//utf32<->utf16互转请使用hgl_equcpy,代码在datatype.h
+#if HGL_OS == HGL_OS_Windows
+    inline OSString ToOSString(const char *str){return to_u16(str);}
+    inline OSString ToOSString(const UTF8String &str){return to_u16(str.c_str(), (int)(str.Length()));}
+
+    inline UTF8String ToUTF8String(const os_char *str){return to_u8(str,strlen(str));}
+    inline UTF8String ToUTF8String(const OSString &str){return to_u8(str);}
+#else
+    inline OSString ToOSString(const char *str){return OSString(str);}
+    inline OSString ToOSString(const UTF8String &str){return str;}
+
+    inline UTF8String ToUTF8String(const os_char *str){return UTF8String(str);}
+    inline UTF8String ToUTF8String(const OSString &str){return str;}
+#endif//
+
+    const BOMFileHeader *ParseBOM(const void *input);
+
+    bool BOM2CharSet(CharSet *cs,const BOMFileHeader *bom);
 }//namespace hgl
 #endif//HGL_CODE_PAGE_INCLUDE

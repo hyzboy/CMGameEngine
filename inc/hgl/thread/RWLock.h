@@ -26,10 +26,10 @@ namespace hgl
 		bool WriteLock();																			///<写(独占访问)锁定
 		bool WriteUnlock();																			///<写(独占访问)解锁
 
-#if HGL_OS != HGL_OS_Windows
+#if (HGL_OS != HGL_OS_Windows)&&(HGL_OS != HGL_OS_macOS)
 		bool WaitReadLock(double);																	///<等待读(共享访问)锁定
 		bool WaitWriteLock(double);																	///<等待写(独占访问)锁定
-#endif//HGL_OS != HGL_OS_Windows
+#endif//(HGL_OS != HGL_OS_Windows)&&(HGL_OS != HGL_OS_macOS)
 	};//class RWLock
 
 	#define HGL_RWLOCK(lock)				bool ReadLock()		{return lock.ReadLock();	}	\

@@ -22,14 +22,21 @@ namespace hgl
 
         VertexBufferControl *(*CreateVertexBufferControl)(uint)=nullptr;
 
+        void DeleteVertexBufferControlDSA(VertexBufferControl *);
+        void DeleteVertexBufferControlBind(VertexBufferControl *);
+
+        void (*DeleteVertexBufferControl)(VertexBufferControl *)=nullptr;
+
         void InitVertexBufferDSA()
         {
             CreateVertexBufferControl=CreateVertexBufferControlDSA;
+            DeleteVertexBufferControl=DeleteVertexBufferControlDSA;
         }
 
         void InitVertexBufferBind()
         {
-            CreateVertexBufferControl = CreateVertexBufferControlBind;
+            CreateVertexBufferControl=CreateVertexBufferControlBind;
+            DeleteVertexBufferControl=DeleteVertexBufferControlBind;
         }
 
         bool InitVertexBufferAPI()
@@ -81,12 +88,16 @@ namespace hgl
 
             hgl_free(mem_data);
 
-            SAFE_CLEAR(vbc);
+			if(vbc)
+				DeleteVertexBufferControl(vbc);
         }
 
         void VertexBufferBase::CloseVertexBuffer()
         {
-            SAFE_CLEAR(vbc);
+			if(!vbc)return;
+
+            DeleteVertexBufferControl(vbc);
+			vbc = nullptr;
         }
 
         void VertexBufferBase::ChangeVertexBuffer(int start, int size, void *data)
@@ -98,7 +109,7 @@ namespace hgl
 
         bool VertexBufferBase::CreateVertexBuffer(uint type)
         {
-            SAFE_CLEAR(vbc);
+            DeleteVertexBufferControl(vbc);
 
             vbc=CreateVertexBufferControl(type);
 

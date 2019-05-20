@@ -1,7 +1,7 @@
-﻿#include<hgl/platform/SystemInfo.h>
+#include<hgl/platform/SystemInfo.h>
 #include<hgl/LogInfo.h>
 #include<hgl/PlugIn.h>
-#include<hgl/FileSystem.h>
+#include<hgl/io/FileSystem.h>
 #include<hgl/Info.h>
 
 namespace hgl
@@ -27,14 +27,14 @@ namespace hgl
                         const OSString &cm,
                         const OSString &sub)
     {
-        MergeFilename(cur_path,work,sub);
+        cur_path=MergeFilename(work,sub);
 
         if(IsDirectory(cur_path))
             return(true);
 
         if(work!=start)
         {
-            MergeFilename(cur_path,start,sub);
+            cur_path=MergeFilename(start,sub);
 
             if(IsDirectory(cur_path))
                 return(true);
@@ -42,7 +42,7 @@ namespace hgl
 
         if(work!=cm)
         {
-            MergeFilename(cur_path,cm,sub);
+            cur_path=MergeFilename(cm,sub);
 
             if(IsDirectory(cur_path))
                 return(true);

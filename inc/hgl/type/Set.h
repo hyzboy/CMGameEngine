@@ -24,7 +24,7 @@ namespace hgl
 
 	public:
 
-		Set();
+		Set()=default;
 		virtual ~Set()=default;
 
 				void	SetCount		(int count){data_list.SetCount(count);}						///<指定数据数量，一般用于批量加载前的处理
@@ -43,9 +43,34 @@ namespace hgl
 				void	ClearData		();															///<清除数据，但不释放内存
             	void	DeleteClear		(){data_list.DeleteClear();}								///<清除所有数据并全部调用delete
 
-				T &		operator[]		(int n)const{return data_list[n];}							///<按序列号取得一个数据
+				bool    Get             (const int index,T &data)
+                {
+                    if(index<0||index>=data_list.GetCount())
+                        return(false);
 
-				bool	Rand			(T &)const;													///<随机取得一个
+                    data=*(data_list.GetData()+index);
+                    return(true);
+                }
+
+                int     Intersection    (Set<T> &result,const Set<T> &set);                         ///<取得与指定合集的交集
+                int     Intersection    (const Set<T> &set);                                        ///<取得与指定合集的交集数量
+
+                /**
+                 * 取得与指定交集is的合集，但排斥cs合集中的数据
+                 * @param result 结果合集
+                 * @param is 求交集的合集
+                 * @param cs 求排斥的合集
+                 * @return 结果数量
+                 */
+                int     Intersection    (Set<T> &result,const Set<T> &is,const Set<T> &cs);
+
+                int     Difference      (const Set<T> &is);                                         ///<求差集数量
+
+                void    operator       =(const Set<T> &set){data_list=set.data_list;}               ///<等号操作符重载
+
+                bool	Rand			(T &)const;													///<随机取得一个
+
+        virtual void    Enum            (void (*enum_func)(T &)){data_list.Enum(enum_func);}        ///<枚举所有数据成员
 	};//template<typename T> class Set
 }//namespace hgl
 #include<hgl/type/Set.cpp>

@@ -18,7 +18,7 @@ namespace hgl
 
             void Change(int start, int size, void *data)
             {
-                glNamedBufferSubData(this->index, start, size, data);                
+                glNamedBufferSubData(this->index, start, size, data);
             }
         };//class VertexBufferControlDSA
 
@@ -28,6 +28,11 @@ namespace hgl
 
             glCreateBuffers(1,&index);
             return(new VertexBufferControlDSA(type,index));
+        }
+
+        void DeleteVertexBufferControlDSA(VertexBufferControl *vbc)
+        {
+            SAFE_CLEAR(vbc);
         }
     }//namespace graph
 }//namespace hgl

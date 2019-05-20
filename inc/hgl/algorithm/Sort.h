@@ -1,4 +1,4 @@
-#ifndef HGL_ALGORITHM_SORT_INCLUDE
+﻿#ifndef HGL_ALGORITHM_SORT_INCLUDE
 #define HGL_ALGORITHM_SORT_INCLUDE
 
 #include<hgl/TypeFunc.h>
@@ -149,7 +149,7 @@ namespace hgl
 
 /*
 	//仅实现模拟虚拟成员函数即可，无需整个类重载
-	template<> int Comparator<BagCell>::compare(const BagCell &it1,const BagCell &it2)
+	template<> int Comparator<BagCell>::compare(const BagCell &it1,const BagCell &it2) const
 	{
 		int r=it1.GetItemID()-it2.GetItemID();
 

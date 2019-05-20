@@ -1,6 +1,6 @@
-﻿#include<hgl/platform/SystemInfo.h>
+#include<hgl/platform/SystemInfo.h>
 #include<hgl/platform/ConsoleSystemInitInfo.h>
-#include<hgl/FileSystem.h>
+#include<hgl/io/FileSystem.h>
 #include<pwd.h>
 #include<unistd.h>
 #include<signal.h>
@@ -9,7 +9,7 @@
 namespace hgl
 {
     using namespace filesystem;
-    
+
 	bool GetCMGDKPath(OSString &cmgdk_path)
 	{
 		constexpr char path_list[][18]=
@@ -102,6 +102,8 @@ namespace hgl
             LOG_ERROR(OS_TEXT("Set resource ")+OSString(resource)+OS_TEXT(" maximum value to ")+OSString((uint64)(rl.rlim_cur))+OS_TEXT(" failed."));
             return(false);
         }
+
+        return(true);
     }
 
     bool InitOSupport(ConsoleSystemInitInfo *sii)

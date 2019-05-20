@@ -26,10 +26,11 @@ namespace hgl
             {
                 int result;
 
-                do
-                {
-                    result=select(ThisSocket+1,&accept_set,nullptr,nullptr,&accept_timeout);
-                }while(result<0&&result==EINTR);
+                hgl_cpy(ato,accept_timeout);            //下面的select会将数据清0,所以必须是复制一份出来用
+
+                FD_ZERO(&accept_set);
+                FD_SET(ThisSocket,&accept_set);
+                result=select(ThisSocket+1,&accept_set,nullptr,nullptr,&ato);
 
                 if(result<=0)
                     return(0);
@@ -59,9 +60,12 @@ namespace hgl
                 return(-1);
             }
 
-            if(!ipstr)ipstr=new char[server_address->GetIPStringMaxSize() + 1];
+            const int IP_STR_MAX_SIZE=server_address->GetIPStringMaxSize();
 
-            addr->ToString(ipstr);
+            if(!ipstr)
+                ipstr=new char[IP_STR_MAX_SIZE+1];
+
+            addr->ToString(ipstr,IP_STR_MAX_SIZE);
 
             LOG_INFO(U8_TEXT("AcceptServer Accept IP:")+UTF8String(ipstr)+U8_TEXT(" ,sock:")+UTF8String(new_sock));
 
@@ -71,9 +75,6 @@ namespace hgl
         void AcceptServer::SetTimeOut(const double time_out)
         {
             SetTimeVal(accept_timeout,time_out);
-
-            FD_ZERO(&accept_set);
-            FD_SET(ThisSocket,&accept_set);
         }
     }//namespace network
 }//namespace hgl

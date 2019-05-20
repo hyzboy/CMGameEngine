@@ -1,7 +1,7 @@
-﻿#include <hgl/FileSystem.h>
-#include <hgl/LogInfo.h>
-#include <hgl/io/FileInputStream.h>
-#include <hgl/io/FileOutputStream.h>
+#include<hgl/io/FileSystem.h>
+#include<hgl/LogInfo.h>
+#include<hgl/io/FileInputStream.h>
+#include<hgl/io/FileOutputStream.h>
 
 #include <unistd.h>
 #include <stdlib.h>
@@ -102,7 +102,7 @@ namespace hgl
         * @param filename 要查找的文件名称
         * @return 这个文件是否存在
         */
-        bool FileConfirm(const OSString &filename)
+        bool FileExist(const OSString &filename)
         {
             return access(filename.c_str(),F_OK)>=0;
         }
@@ -144,10 +144,25 @@ namespace hgl
 
             memset(&buf,0,sizeof(struct_stat64));
 
-            if(lstat64(name,&buf)==-1)
+            if(hgl_lstat64(name,&buf)==-1)
                 return(false);				//错误，有可能是不能访问
 
             return S_ISDIR(buf.st_mode);
+        }
+
+        /**
+         * 判断当前名称是否是一个链接
+         */
+        bool IsLink(const os_char *name)
+        {
+            struct_stat64 buf;
+
+            memset(&buf,0,sizeof(struct_stat64));
+
+            if(hgl_lstat64(name,&buf)==-1)
+                return(false);				//错误，有可能是不能访问
+
+            return S_ISLNK(buf.st_mode);
         }
 
         bool MakeDirectory(const OSString &name)
@@ -197,161 +212,6 @@ namespace hgl
 
             path.Set(str,strlen(str),true);
             return(true);
-        }
-
-        /**
-        * 取得当前程序完整路径名称
-        */
-        bool GetCurrentProgram(OSString &result)
-        {
-            os_char *path=new os_char[HGL_MAX_PATH];
-
-            const int len=readlink("/proc/self/exe",path,HGL_MAX_PATH);
-
-            if(len<=0)
-            {
-                delete[] path;
-                return(false);
-            }
-
-            path[len]=0;
-            result.Set(path,len,true);
-
-            return(true);
-        }
-
-        /**
-        * 枚举一个目录内的所有文件
-        * @param config 枚举配置
-        * @return 查找到文件数据,<0表示失败
-        */
-        int EnumFile(EnumFileConfig *config)
-        {
-            if(!config)RETURN_ERROR(-1);
-
-//            if(config->proc_folder&&!config->cb_folder)RETURN_ERROR(-2);            //这一行是不需要的，确实存在proc_folder=true,但没有cb_folder的情况。但留在这里。以防删掉后，未来没注意自以为是的加上这样一行
-            if(config->proc_file&&!config->cb_file)RETURN_ERROR(-3);
-
-            if(config->folder_name.IsEmpty())RETURN_ERROR(-4);
-
-            OSString fullname;
-            int count=0;
-
-            if(config->folder_name.IsEmpty())
-            {
-                fullname='.';
-            }
-            else
-            {
-                fullname=config->folder_name;
-            }
-
-            DIR *dir;
-            struct_dirent64 *entry;
-            struct_stat64 statbuf;
-            FileInfo fi;
-            char path_buf[HGL_MAX_PATH]={0};
-            getcwd(path_buf,HGL_MAX_PATH);
-
-            chdir(fullname);
-            if((dir = opendir(fullname)) == NULL)
-                return(-1);
-            if((entry = readdir64(dir)) == NULL)
-                return(-1);
-
-            EnumFileConfig *sub_efc=nullptr;
-            int sub_count;
-
-            do
-            {
-                if(strcmp(entry->d_name,".")==0
-                ||strcmp(entry->d_name,"..")==0)
-                {
-                    continue;
-                }
-
-                memset(&statbuf,0,sizeof(struct_stat64));
-
-                if(lstat64(entry->d_name,&statbuf)==-1)
-                    continue;
-
-                memset(&fi,0,sizeof(FileInfo));
-                fi.size=statbuf.st_size;
-
-                if(S_ISDIR(statbuf.st_mode))
-                {
-                    fi.is_file=false;
-                    fi.is_directory=true;
-                }
-                else
-                {
-                    fi.is_file=true;
-                    fi.is_directory=false;
-                }
-
-                fi.can_read	=statbuf.st_mode&S_IROTH;
-                fi.can_write=statbuf.st_mode&S_IWOTH;
-
-                if(S_ISDIR(statbuf.st_mode))
-                {
-                    if(!config->proc_folder)continue;
-
-                    if(config->sub_folder)
-                    {
-                        sub_efc=config->CreateSubConfig(config,entry->d_name);
-
-                        if(!sub_efc)
-                            continue;
-
-                        sub_count=EnumFile(sub_efc);
-                        if(sub_count>0)count+=sub_count;
-                    }
-                }
-                else
-                {
-                    if(!config->proc_file)continue;
-
-                    ++count;
-                }
-
-                memset(&fi,0,sizeof(FileInfo));
-
-                strcpy(fi.name,HGL_MAX_PATH,entry->d_name);
-
-                if(config->folder_name.IsEmpty())
-                {
-                    strcpy(fi.fullname,HGL_MAX_PATH,fi.name);
-                }
-                else
-                {
-                    strcpy(fi.fullname,HGL_MAX_PATH,config->folder_name);
-
-                    if(config->folder_name.GetEndChar()!=HGL_DIRECTORY_SEPARATOR)
-                        strcat(fi.fullname,HGL_MAX_PATH,HGL_DIRECTORY_SEPARATOR);
-
-                    strcat(fi.fullname,HGL_MAX_PATH,fi.name,HGL_MAX_PATH);
-                }
-
-                if(fi.is_directory)
-                {
-                    if(config->cb_folder)
-                        config->cb_folder(config,sub_efc,fi);
-
-                    delete sub_efc;
-                    sub_efc=nullptr;
-                }
-                else
-                {
-                    if(config->cb_file)
-                        config->cb_file(config,fi);
-                }
-            }
-            while((entry=readdir64(dir)));
-
-            closedir(dir);
-
-            chdir(path_buf);
-            return(count);
         }
     }//namespace filesystem
 }//namespace hgl

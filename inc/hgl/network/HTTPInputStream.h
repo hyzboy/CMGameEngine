@@ -2,10 +2,13 @@
 #define HGL_NETWORK_HTTP_INPUT_STREAM_INCLUDE
 
 #include<hgl/io/InputStream.h>
+#include<hgl/ut/PList.h>
+#include<hgl/network/IP.h>
 namespace hgl
 {
 	namespace network
 	{
+        using namespace io;
 		class TCPClient;
 
 		/**
@@ -16,41 +19,55 @@ namespace hgl
 		{
 			TCPClient *tcp;
 
+            InputStream *tcp_is;
+
 		private:
 
 			char *http_header;
-			int http_header_size;
+            uint http_header_size;
 
+            void ParseHttpResponse();
 			int PraseHttpHeader();
+
+            int ReturnError();
 
 		protected:
 
 			int64 pos;
 			int64 filelength;
 
+            uint response_code;                 //HTTP响应代码
+            UTF8String response_info;           //HTTP响应信息
+
+            UTF8PList response_list;            //响应信息
+
 		public:
 
 			HTTPInputStream();
 			~HTTPInputStream();
 
-			bool Open(const UTF8String &,const UTF8String &);										///<打加一个网址
-			void Close();																			///<
+            bool    Open(IPAddress *,const UTF8String &,const UTF8String &);                        ///<打开一个网址
+            void    Close() override;																///<
 
-			int64	Read(void *,int64)=0;															///<读取数据
-			int64	Peek(void *,int64)=0;															///<预览数据
-			int64	ReadFully(void *buf,int64 buf_size){return Read(buf,buf_size);}					///<充分读取,保证读取到指定长度的数据(不计算超时)
+            uint                GetResponseCode()const{return response_code;}                       ///<返回HTTP响应代码
+            const UTF8String &  GetResponseInfo()const{return response_info;}                       ///<返回HTTP响应信息
+            const UTF8PList &   GetResponseList()const{return response_list;}                       ///<返回HTTP响应信息列表
 
-			bool	CanRestart()const{return false;}												///<是否可以复位
-			bool	CanSeek()const{return false;}													///<是否可以定位
-			bool	CanSize()const{return false;}													///<是否可以取得尺寸
-			bool	CanPeek()const{return false;}													///<是否可以预览数据
+			int64	Read(void *,int64) override;													///<读取数据
+			int64	Peek(void *,int64) override{return 0;}											///<预览数据
+			int64	ReadFully(void *buf,int64 buf_size)override{return Read(buf,buf_size);}			///<充分读取,保证读取到指定长度的数据(不计算超时)
 
-			bool	Restart(){return false;}														///<复位访问指针
-			int64	Skip(int64);																	///<跳过指定字节不访问
-			int64	Seek(int64,SeekOrigin=soBegin){return false;}									///<移动访问指针
-			int64	Tell()const;																	///<返回当前访问位置
-			int64	GetSize()const;																	///<取得流长度
-			int64	Available()const;																///<剩下的可以不受阻塞访问的字节数
+			bool	CanRestart()const override{return false;}										///<是否可以复位
+			bool	CanSeek()const override{return false;}											///<是否可以定位
+			bool	CanSize()const override{return false;}											///<是否可以取得尺寸
+			bool	CanPeek()const override{return false;}											///<是否可以预览数据
+
+			bool	Restart() override{return false;}												///<复位访问指针
+			int64	Skip(int64) override{return 0;}													///<跳过指定字节不访问
+			int64	Seek(int64,SeekOrigin=soBegin) override {return false;}							///<移动访问指针
+			int64	Tell()const override{return pos;}												///<返回当前访问位置
+			int64	GetSize()const override{return filelength;}										///<取得流长度
+			int64	Available()const override{return filelength-pos;}								///<剩下的可以不受阻塞访问的字节数
 		};//class HTTPInputStream
 	}//namespace network
 

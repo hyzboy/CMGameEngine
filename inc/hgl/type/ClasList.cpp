@@ -1,4 +1,4 @@
-﻿#ifndef HGL_CLASLIST_CPP
+#ifndef HGL_CLASLIST_CPP
 #define HGL_CLASLIST_CPP
 
 #include<hgl/type/ClasList.h>
@@ -19,9 +19,9 @@ namespace hgl
 		if(!obj)return(false);
 
 		for(int i=0;i<TypeCount;i++)
-			clas_object[i].DeleteByData(obj);
+			clas_object[i].DeleteByValue(obj);
 
-		return all_object.UnlinkByData(obj);
+		return all_object.UnlinkByValue(obj);
 	}
 
 	template<typename T,int TypeCount>
@@ -39,9 +39,9 @@ namespace hgl
 		if(!obj)return(false);
 
 		for(int i=0;i<TypeCount;i++)
-			clas_object[i].DeleteByData(obj);
+			clas_object[i].DeleteByValue(obj);
 
-		return all_object.DeleteByData(obj);
+		return all_object.DeleteByValue(obj);
 	}
 
 	template<typename T,int TypeCount>

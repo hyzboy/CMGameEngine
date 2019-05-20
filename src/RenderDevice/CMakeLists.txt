@@ -12,7 +12,7 @@ set(CM_OPENGL_TEXTURE_SOURCE        Texture.cpp
                                     Texture2DDSA.cpp
                                     SamplerObject.cpp)
 
-set(CM_OPENGL_RENDERABLE_SOURCE     glRenderable.cpp)    
+set(CM_OPENGL_RENDERABLE_SOURCE     glRenderable.cpp)
 
 set(CM_OPENGL_RENDER_TO_TEXTURE     glRenderToTexture.cpp)
 
@@ -21,8 +21,7 @@ set(CM_OPENGL_SOURCE                glDebug.cpp
                                     glCaps.cpp
                                     glFace.cpp
                                     glTexture.cpp
-                                    glViewport.cpp
-                                    OpenGLCoreExtensions.c)
+                                    glViewport.cpp)
 
 #set(CM_OPENGL_CORE_45_SOURCE        OpenGLCore45/Core45Texture1D.cpp
 #                                    OpenGLCore45/Core45Texture1DArray.cpp

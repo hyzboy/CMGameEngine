@@ -2,6 +2,8 @@
 #define HGL_TCP_CLIENT_INCLUDE
 
 #include<hgl/network/TCPSocket.h>
+#include<hgl/io/InputStream.h>
+#include<hgl/io/OutputStream.h>
 namespace hgl
 {
 	namespace network
@@ -16,6 +18,8 @@ namespace hgl
 
 			char *ipstr;
 
+            virtual void InitPrivate(int);
+
 		public:
 
 			double Heart;																				///<心跳间隔时间(单位:秒，默认参见HGL_TCP_HEART_TIME)
@@ -24,11 +28,15 @@ namespace hgl
 		public:
 
 			TCPClient();																				///<本类构造函数
+            TCPClient(int,const IPAddress *);                                                           ///<本类构造函数
 			virtual ~TCPClient();																		///<本类析构函数
 
-			virtual bool Connect(IPAddress *);													          ///<连接到服务器
+            virtual bool Connect();                                                                     ///<连接到服务器
+            virtual bool CreateConnect(const IPAddress *);                                              ///<创建一个连接
 			virtual void Disconnect();																	///<断开连接
-			virtual void UseSocket(int,IPAddress *addr=0);										         ///<使用指定socket
+            virtual bool UseSocket(int,const IPAddress *addr) override;                                 ///<使用指定socket
+
+            const char *GetIPString()const{return ipstr;}                                               ///<取得IP可视字符串
 
 		public:
 
@@ -36,7 +44,7 @@ namespace hgl
 			virtual io::OutputStream *GetOutputStream(){return sos;}									///<取得输出流
 		};//class TCPClient
 
-		int CreateTCPClient(const UTF8String &ip,const uint port);
+		TCPClient *CreateTCPClient(IPAddress *);
 	}//namespace network
 
 	using namespace network;

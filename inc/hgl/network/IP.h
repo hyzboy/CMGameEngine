@@ -59,6 +59,12 @@
             return sendfile(tfd,sfd,0,size,nullptr,nullptr,0);
         }
     #endif//HGL_OS == HGL_OS_FreeBSD
+
+    #if (HGL_OS == HGL_OS_macOS)||(HGL_OS == HGL_OS_iOS)
+        #ifndef IPPROTO_UDPLITE
+        #define IPPROTO_UDPLITE     136
+        #endif//IPPROTO_UDPLITE
+    #endif//
 #endif//HGL_OS == HGL_OS_Windows
 
 #include<hgl/type/DataType.h>
@@ -141,18 +147,25 @@ namespace hgl
             int socktype;
             int protocol;
 
+            const char *protocol_name;
+
+            void RefreshProtocolName();
+
         public:
 
             IPAddress()
             {
                 socktype=0;
                 protocol=0;
+                protocol_name=nullptr;
             }
 
             IPAddress(int s,int p)
             {
                 socktype=s;
                 protocol=p;
+
+                RefreshProtocolName();
             }
 
             virtual ~IPAddress()=default;
@@ -160,10 +173,13 @@ namespace hgl
             virtual const int GetFamily()const=0;                                                           ///<返回网络家族
                     const int GetSocketType()const{return socktype;}                                        ///<返回Socket类型
                     const int GetProtocol()const{return protocol;}                                          ///<返回协议类型
-            virtual const int GetSockAddrInSize()const=0;                                                   ///<取得SockAddrIn变量长度
-            virtual const int GetIPStringMaxSize()const=0;                                                  ///<取得IP字符串最大长度
+            virtual const uint GetIPSize()const=0;                                                          ///<取得IP地址的长度
+            virtual const uint GetSockAddrInSize()const=0;                                                  ///<取得SockAddrIn变量长度
+            virtual const uint GetIPStringMaxSize()const=0;                                                 ///<取得IP字符串最大长度
 
             virtual const bool IsBoradcast()const=0;                                                        ///<是否为广播
+
+            virtual const char *GetProtocolName()const{return protocol_name;}                               ///<取得协议名称
 
             /**
              * 设置IP地址
@@ -178,6 +194,11 @@ namespace hgl
                     bool SetUDP     (const char *_name,ushort _port){return Set(_name,_port,SOCK_DGRAM,     IPPROTO_UDP     );}
                     bool SetUDPLite (const char *_name,ushort _port){return Set(_name,_port,SOCK_DGRAM,     IPPROTO_UDPLITE );}
                     bool SetSCTP    (const char *_name,ushort _port){return Set(_name,_port,SOCK_SEQPACKET, IPPROTO_SCTP    );}
+
+            const   bool IsTCP      ()const{if(socktype!=SOCK_STREAM    )return(false);if(protocol!=IPPROTO_TCP     )return(false);return(true);}
+            const   bool IsUDP      ()const{if(socktype!=SOCK_DGRAM     )return(false);if(protocol!=IPPROTO_UDP     )return(false);return(true);}
+            const   bool IsUDPLite  ()const{if(socktype!=SOCK_DGRAM     )return(false);if(protocol!=IPPROTO_UDPLITE )return(false);return(true);}
+            const   bool IsSCTP     ()const{if(socktype!=SOCK_SEQPACKET )return(false);if(protocol!=IPPROTO_SCTP    )return(false);return(true);}
 
             /**
              * 设置一个仅有端口号的地址，一般用于服务器监听本机所有地址
@@ -198,6 +219,13 @@ namespace hgl
 
             virtual sockaddr *GetSockAddr()=0;
 
+            virtual void *GetIP()=0;
+
+            /**
+             * 获取当前地址的IP信息
+             */
+            virtual void GetIP(void *)=0;
+
             /**
              * 取得当前地址的端口号
              */
@@ -206,7 +234,20 @@ namespace hgl
             /**
              * 转换当前地址到一个可视字符串,字符串所需长度请使用GetIPStringMaxSize()获取
              */
-            virtual void ToString(char *)const=0;
+            virtual void ToString(char *,int)const=0;
+
+            /**
+             * 创建一个可视字符串地址，需自行delete[]
+             */
+            virtual char *CreateString()const
+            {
+                const int max_size=GetIPStringMaxSize();
+                char *ipstr=new char[max_size+1];
+
+                ToString(ipstr,max_size);
+
+                return ipstr;
+            }
 
             /**
              * 创建一个当前地址的副本
@@ -236,16 +277,17 @@ namespace hgl
             IPv4Address(){hgl_zero(addr);}
             IPv4Address(const uint32 _addr,ushort port,int _socktype,int _protocol):IPAddress(_socktype,_protocol)
             {
-                hgl_zero(addr);
-
-                addr.sin_family     =AF_INET;
-                addr.sin_addr.s_addr=_addr;
-                addr.sin_port       =port;
+                Set(_addr,port);
             }
 
             IPv4Address(const char *name,ushort port,int _socktype,int _protocol)
             {
                 Set(name,port,_socktype,_protocol);
+            }
+
+            IPv4Address(ushort port,int _socktype,int _protocol)
+            {
+                Set(nullptr,port,_socktype,_protocol);
             }
 
             IPv4Address(const IPv4Address *src)
@@ -255,32 +297,44 @@ namespace hgl
                 protocol=src->protocol;
             }
 
-            const int GetFamily()const{return AF_INET;}
-            const int GetSockAddrInSize()const{return sizeof(sockaddr_in);}
-            const int GetIPStringMaxSize()const{return INET_ADDRSTRLEN;}
+            const int GetFamily()const override{return AF_INET;}
+            const uint GetIPSize()const override{return sizeof(in_addr);}
+            const uint GetSockAddrInSize()const override{return sizeof(sockaddr_in);}
+            const uint GetIPStringMaxSize()const override{return INET_ADDRSTRLEN;}
 
-            const bool IsBoradcast()const{return(addr.sin_addr.s_addr==htonl(INADDR_BROADCAST));}
+            const bool IsBoradcast()const override{return(addr.sin_addr.s_addr==htonl(INADDR_BROADCAST));}
 
-            bool Set(const char *name,ushort port,int _socktype,int _protocol);
-            void Set(ushort port);
-            bool Bind(int ThisSocket,int reuse=1)const;
-            bool GetHostname(UTF8String &)const;
+            bool Set(const char *name,ushort port,int _socktype,int _protocol) override;
+            void Set(const uint32 _addr,ushort port)
+            {
+                hgl_zero(addr);
+                addr.sin_family     =AF_INET;
+                addr.sin_addr.s_addr=_addr;
+                addr.sin_port       =htons(port);
+            }
+            void Set(ushort port) override;
+            bool Bind(int ThisSocket,int reuse=1)const override;
+            bool GetHostname(UTF8String &)const override;
 
-            sockaddr *GetSockAddr(){return (sockaddr *)&addr;}
+            sockaddr *GetSockAddr()override{return (sockaddr *)&addr;}
 
-            const ushort GetPort()const;
+            void *GetIP() override {return &(addr.sin_addr);}
+            void GetIP(void *data) override { memcpy(data,&(addr.sin_addr),sizeof(in_addr)); }
 
-            void ToString(char *str)const;
+            const uint32 GetInt32IP()const{return addr.sin_addr.s_addr;}
+            const ushort GetPort()const override;
+
+            static void ToString(char *str,const int,const in_addr *);
+            static void ToString(char *str,const int,const sockaddr_in *);
+            void ToString(char *str,const int)const override;
 
             static int GetDomainIPList(List<in_addr> &addr_list,const char *domain,int _socktype,int _protocol);        ///<取得当指定域名的IPv4地址列表
             static int GetLocalIPList(List<in_addr> &addr_list,int _socktype,int _protocol);                            ///<取得本机的IPv4地址列表
 
-            static void ToString(char str[INET_ADDRSTRLEN],const in_addr &);                                            ///<转换一个IPv4地址到字符串
+            IPAddress *CreateCopy()const override{return(new IPv4Address(this));}
+            IPAddress *Create()const override{return(new IPv4Address());}
 
-            IPAddress *CreateCopy()const{return(new IPv4Address(this));}
-            IPAddress *Create()const{return(new IPv4Address());}
-
-            bool Comp(const IPAddress *ipa)const;
+            bool Comp(const IPAddress *ipa)const override;
         };//class IPv4Address
 
         /**
@@ -293,9 +347,23 @@ namespace hgl
         public:
 
             IPv6Address(){hgl_zero(addr);}
+            IPv6Address(const in6_addr *ip,ushort port,int _socktype,int _protocol):IPAddress(_socktype,_protocol)
+            {
+                hgl_zero(addr);
+
+                addr.sin6_family=AF_INET6;
+                memcpy(&(addr.sin6_addr),ip,sizeof(in6_addr));
+                addr.sin6_port=htons(port);
+            }
+
             IPv6Address(const char *name,ushort port,int _socktype,int _protocol)
             {
                 Set(name,port,_socktype,_protocol);
+            }
+
+            IPv6Address(ushort port,int _socktype,int _protocol)
+            {
+                Set(nullptr,port,_socktype,_protocol);
             }
 
             IPv6Address(const IPv6Address *src)
@@ -305,30 +373,36 @@ namespace hgl
                 protocol=src->protocol;
             }
 
-            const int GetFamily()const{return AF_INET6;}
-            const int GetSockAddrInSize()const{return sizeof(sockaddr_in6);}
-            const int GetIPStringMaxSize()const{return INET6_ADDRSTRLEN;}
+            const int GetFamily()const override{return AF_INET6;}
+            const uint GetIPSize()const override{return sizeof(in6_addr);}
+            const uint GetSockAddrInSize()const override{return sizeof(sockaddr_in6);}
+            const uint GetIPStringMaxSize()const override{return INET6_ADDRSTRLEN;}
 
-            const bool IsBoradcast()const{return(false);}
+            const bool IsBoradcast()const override{return(false);}
 
-            bool Set(const char *name,ushort port,int _socktype,int _protocol);
-            void Set(ushort port);
-            bool Bind(int ThisSocket,int reuse=1)const;
-            bool GetHostname(UTF8String &)const;
+            bool Set(const char *name,ushort port,int _socktype,int _protocol) override;
+            void Set(ushort port) override;
+            bool Bind(int ThisSocket,int reuse=1)const override;
+            bool GetHostname(UTF8String &)const override;
 
-            sockaddr *GetSockAddr(){return (sockaddr *)&addr;}
-            const ushort GetPort()const;
+            sockaddr *GetSockAddr() override{return (sockaddr *)&addr;}
 
-            void ToString(char *str)const;
+            void *GetIP() override {return &(addr.sin6_addr);}
+            void GetIP(void *data) override{memcpy(data,&(addr.sin6_addr),sizeof(in6_addr));}
+
+            const ushort GetPort()const override;
+
+            static void ToString(char *str,const int,const in6_addr *);
+            static void ToString(char *str,const int,const sockaddr_in6 *);
+            void ToString(char *str,const int)const override;
+
             static int GetDomainIPList(List<in6_addr> &addr_list,const char *domain,int _socktype,int _protocol);       ///<取得指定域名的IPv6地址列表
             static int GetLocalIPList(List<in6_addr> &addr_list,int _socktype,int _protocol);                           ///<取得本机的IPv6地址列表
 
-            static void ToString(char str[INET6_ADDRSTRLEN],const in6_addr &);                                          ///<转换一个IPv6地址到字符串
+            IPAddress *CreateCopy()const override{return(new IPv6Address(this));}
+            IPAddress *Create()const override{return(new IPv6Address());}
 
-            IPAddress *CreateCopy()const{return(new IPv6Address(this));}
-            IPAddress *Create()const{return(new IPv6Address());}
-
-            bool Comp(const IPAddress *ipa)const;
+            bool Comp(const IPAddress *ipa)const override;
         };//class IPv6Address
 
         inline IPv4Address *CreateIPv4TCP       (const char *name,ushort port){return(new IPv4Address(name,port,SOCK_STREAM,    IPPROTO_TCP));}
@@ -340,14 +414,24 @@ namespace hgl
         inline IPv4Address *CreateIPv4SCTP      (const char *name,ushort port){return(new IPv4Address(name,port,SOCK_SEQPACKET, IPPROTO_SCTP));}
         inline IPv6Address *CreateIPv6SCTP      (const char *name,ushort port){return(new IPv6Address(name,port,SOCK_SEQPACKET, IPPROTO_SCTP));}
 
-        inline IPv4Address *CreateIPv4TCP       (ushort port){return(new IPv4Address(nullptr,port,SOCK_STREAM,      IPPROTO_TCP));}
-        inline IPv6Address *CreateIPv6TCP       (ushort port){return(new IPv6Address(nullptr,port,SOCK_STREAM,      IPPROTO_TCP));}
-        inline IPv4Address *CreateIPv4UDP       (ushort port){return(new IPv4Address(nullptr,port,SOCK_DGRAM,       IPPROTO_UDP));}
-        inline IPv6Address *CreateIPv6UDP       (ushort port){return(new IPv6Address(nullptr,port,SOCK_DGRAM,       IPPROTO_UDP));}
-        inline IPv4Address *CreateIPv4UDPLite   (ushort port){return(new IPv4Address(nullptr,port,SOCK_DGRAM,       IPPROTO_UDPLITE));}
-        inline IPv6Address *CreateIPv6UDPLite   (ushort port){return(new IPv6Address(nullptr,port,SOCK_DGRAM,       IPPROTO_UDPLITE));}
-        inline IPv4Address *CreateIPv4SCTP      (ushort port){return(new IPv4Address(nullptr,port,SOCK_SEQPACKET,   IPPROTO_SCTP));}
-        inline IPv6Address *CreateIPv6SCTP      (ushort port){return(new IPv6Address(nullptr,port,SOCK_SEQPACKET,   IPPROTO_SCTP));}
+        inline IPv4Address *CreateIPv4TCP       (const uint32 &ip,ushort port){return(new IPv4Address(ip,port,SOCK_STREAM,    IPPROTO_TCP));}
+        inline IPv4Address *CreateIPv4UDP       (const uint32 &ip,ushort port){return(new IPv4Address(ip,port,SOCK_DGRAM,     IPPROTO_UDP));}
+        inline IPv4Address *CreateIPv4UDPLite   (const uint32 &ip,ushort port){return(new IPv4Address(ip,port,SOCK_DGRAM,     IPPROTO_UDPLITE));}
+        inline IPv4Address *CreateIPv4SCTP      (const uint32 &ip,ushort port){return(new IPv4Address(ip,port,SOCK_SEQPACKET, IPPROTO_SCTP));}
+
+        inline IPv6Address *CreateIPv6TCP       (const in6_addr *ip,ushort port){return(new IPv6Address(ip,port,SOCK_STREAM,    IPPROTO_TCP));}
+        inline IPv6Address *CreateIPv6UDP       (const in6_addr *ip,ushort port){return(new IPv6Address(ip,port,SOCK_DGRAM,     IPPROTO_UDP));}
+        inline IPv6Address *CreateIPv6UDPLite   (const in6_addr *ip,ushort port){return(new IPv6Address(ip,port,SOCK_DGRAM,     IPPROTO_UDPLITE));}
+        inline IPv6Address *CreateIPv6SCTP      (const in6_addr *ip,ushort port){return(new IPv6Address(ip,port,SOCK_SEQPACKET, IPPROTO_SCTP));}
+
+        inline IPv4Address *CreateIPv4TCP       (ushort port){return(new IPv4Address(port,SOCK_STREAM,      IPPROTO_TCP));}
+        inline IPv6Address *CreateIPv6TCP       (ushort port){return(new IPv6Address(port,SOCK_STREAM,      IPPROTO_TCP));}
+        inline IPv4Address *CreateIPv4UDP       (ushort port){return(new IPv4Address(port,SOCK_DGRAM,       IPPROTO_UDP));}
+        inline IPv6Address *CreateIPv6UDP       (ushort port){return(new IPv6Address(port,SOCK_DGRAM,       IPPROTO_UDP));}
+        inline IPv4Address *CreateIPv4UDPLite   (ushort port){return(new IPv4Address(port,SOCK_DGRAM,       IPPROTO_UDPLITE));}
+        inline IPv6Address *CreateIPv6UDPLite   (ushort port){return(new IPv6Address(port,SOCK_DGRAM,       IPPROTO_UDPLITE));}
+        inline IPv4Address *CreateIPv4SCTP      (ushort port){return(new IPv4Address(port,SOCK_SEQPACKET,   IPPROTO_SCTP));}
+        inline IPv6Address *CreateIPv6SCTP      (ushort port){return(new IPv6Address(port,SOCK_SEQPACKET,   IPPROTO_SCTP));}
 
         inline IPv4Address *CreateIPv4UDPBoradcast      (ushort port){return(new IPv4Address(htonl(INADDR_BROADCAST),port,SOCK_DGRAM,   IPPROTO_UDP));}
         inline IPv4Address *CreateIPv4UDPLiteBoradcast  (ushort port){return(new IPv4Address(htonl(INADDR_BROADCAST),port,SOCK_DGRAM,   IPPROTO_UDPLITE));}

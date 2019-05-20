@@ -17,7 +17,7 @@ namespace hgl
 		{
 			max_count=m;
 
-			items=(T *)hgl_malloc(max_count*sizeof(T));
+            items=hgl_aligned_malloc<T>(max_count);
 		}
 		else
 			max_count=0;
@@ -37,16 +37,36 @@ namespace hgl
 	template<typename T>
 	void Stack<T>::SetMax(int m)
 	{
-		if(max_count||(!max_count&&count))
-			items=(T *)hgl_realloc(items,m*sizeof(T));
-		else
-			items=(T *)hgl_malloc(m*sizeof(T));
+        if(m<=0)return;
+
+        if(mem_count==0)
+        {
+            mem_count=power_to_2(m);
+            items=hgl_aligned_malloc<T>(mem_count);
+        }
+        else
+        if(mem_count<m)
+        {
+            mem_count=power_to_2(m);
+            items=(T *)hgl_realloc(items,mem_count*sizeof(T));
+        }
 
 		max_count=m;
-		mem_count=m;
 
 		if(count>=max_count)count=max_count-1;
 	}
+
+	template<typename T>
+	bool Stack<T>::SetCount(int c)
+    {
+        if(c<0)return(false);
+
+        if(c>max_count)
+            return(false);
+
+        count=c;
+        return(true);
+    }
 
 	/**
 	* 清除堆栈中的所有数据
@@ -65,16 +85,17 @@ namespace hgl
 	}
 
 	template<typename T>
-	T &Stack<T>::GetItem(int n)
+	bool Stack<T>::GetItem(int n,T &data)
 	{
 		if(n<0||n>=count)
 		{
 			LOG_ERROR(OS_TEXT("从堆栈中按索引<") + OSString(n) + OS_TEXT(">取数据，超出正常范围<")+OSString(count) + OS_TEXT(">"));
 
-			return(*(T *)NULL);
+			return(false);
 		}
 
-		return(items[n]);
+		data=items[n];
+        return(true);
 	}
 
 	/**
@@ -153,7 +174,7 @@ namespace hgl
 			}
 			else
 			{
-				items=(T *)hgl_malloc(sizeof(T));
+                items=hgl_aligned_malloc<T>(1);
 
 				mem_count=1;
 			}
@@ -174,7 +195,7 @@ namespace hgl
 	* @return false 放入数据失败
 	*/
 	template<typename T>
-	bool Stack<T>::Push(T *data,int data_count)
+	bool Stack<T>::MultiPush(T *data,int data_count)
 	{
 		if(max_count)
 		{
@@ -193,7 +214,7 @@ namespace hgl
 			}
 			else
 			{
-				items=(T *)hgl_malloc(data_count*sizeof(T));
+                items=hgl_aligned_malloc<T>(data_count);
 
 				mem_count=data_count;
 			}
@@ -220,7 +241,7 @@ namespace hgl
 		else
 			mem_count=max_count;
 
-		items=(T *)hgl_malloc(mem_count*sizeof(T));
+        items=hgl_aligned_malloc<T>(mem_count);
 
 		memcpy(items,ori.items,mem_count*sizeof(T));
 	}

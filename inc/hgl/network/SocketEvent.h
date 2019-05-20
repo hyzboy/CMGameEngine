@@ -1,26 +1,24 @@
 ﻿#ifndef HGL_NETWORK_SOCKET_EVENT_INCLUDE
 #define HGL_NETWORK_SOCKET_EVENT_INCLUDE
+
+#include<hgl/platform/Platform.h>
+#include<hgl/type/List.h>
 namespace hgl
 {
-	namespace network
-	{
-		/**
-		 * Socket事件
-		 */
-		template<typename T> struct socket_event
-		{
-			T sock;			//socket号
+    namespace network
+    {
+        struct SocketEvent
+        {
+            int sock;
 
-			int size;		//数据长度,-1表示出错
-		};
+            union
+            {
+                int size;           //数据长度(此属性为BSD系统独有)
+                int error;          //错误号
+            };
+        };//struct SocketEvent
 
-		typedef socket_event<int> SocketEvent;
-
-		class Socket;
-		class IOSocket;
-
-		typedef socket_event<Socket *> SocketClassEvent;
-		typedef socket_event<IOSocket *> IOSocketClassEvent;
-	}//namespace network
+        using SocketEventList=List<SocketEvent>;
+    }//namespace network
 }//namespace hgl
 #endif//HGL_NETWORK_SOCKET_EVENT_INCLUDE

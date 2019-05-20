@@ -1,6 +1,6 @@
-﻿#include<hgl/platform/ConsoleSystemInitInfo.h>
+#include<hgl/platform/ConsoleSystemInitInfo.h>
 #include<hgl/proc/ProcMutex.h>
-#include<hgl/FileSystem.h>
+#include<hgl/io/FileSystem.h>
 
 namespace hgl
 {
@@ -10,27 +10,27 @@ namespace hgl
 
         hgl::filesystem::GetCurrentPath(ProjectPath);
 
-        RunMode=armSync;
+        RunMode         =armSync;
 
-        log.disable_log=false;
+        log.disable_log =false;
 
-        log.console    =llLog;
-        log.file    =llLog;
-        log.network    =llLog;
+        log.console     =llLog;
+        log.file        =llLog;
+        log.network     =llLog;
 
 #ifdef _DEBUG
-        log.dialog    =llHint;
+        log.dialog      =llHint;
 #else
-        log.dialog    =llProblem;
+        log.dialog      =llProblem;
 #endif//_DEBUG
 
-        sig.pipe    =false;
+        sig.pipe        =false;
 
-        CheckDebugger=false;
-        CheckSystem=false;
-        MultiStartup=true;
+        CheckDebugger   =false;
+        CheckSystem     =false;
+        MultiStartup    =true;
 
-        max_open_files=1024;
+        max_open_files  =1024;
     }
 
     /**

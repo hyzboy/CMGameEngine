@@ -12,11 +12,17 @@ namespace hgl
 	/**
 	* 属性列表,类似INI的管理类
 	*/
-    template<typename C,typename T> class PList:public Map<T,T>										///属性列表
-	{
-	protected:
+    template<typename C> class PList:public Map<BaseString<C>,BaseString<C>>                        ///属性列表
+    {
+    public:
 
-        void ReadData(const StringList<T> &sl)
+        using PString=BaseString<C>;
+        using PStringList=StringList<PString>;
+        using PMap=Map<PString,PString>;
+
+    protected:
+
+        void ReadData(const PStringList &sl)
         {
             int n=sl.GetCount();
 
@@ -24,21 +30,22 @@ namespace hgl
                 Add(sl[n]);
         }
 
-	public:
+    public:
 
-		virtual ~PList()=default;
+        virtual ~PList()=default;
 
-        virtual bool Add(const T &key)                                                              ///<向列表中增加一项
+        virtual bool Add(const PString &key)                                                  ///<向列表中增加一项
         {
-            T name;
+            PString name;
             C *value;
             int off;
 
             if(key.Length()<2)return(false);
 
             if(((off=key.FindChar(C('\t')))==-1)
-            && ((off=key.FindChar(C(' '))) ==-1)
-            && ((off=key.FindChar(C('='))) ==-1))
+             &&((off=key.FindChar(C(' '))) ==-1)
+             &&((off=key.FindChar(C('='))) ==-1)
+             &&((off=key.FindChar(C(':'))) ==-1))
                 return(false);
 
             name.Strcpy(key,off);
@@ -49,28 +56,32 @@ namespace hgl
             while(true)
             {
                 if(*value == C('\t')
-                || *value == C('=')
-                || *value == C(' '))
+                 ||*value == C('=')
+                 ||*value == C(' ')
+                 ||*value == C(':'))
                     value++;
                 else
                 {
-                    T str=value;
+                    PString str=value;
 
-                    Map<T,T>::Add(name,str);
+                    PMap::Add(name,str);
 
                     return(true);
                 }
             }
         }//bool PList::Add
 
-		virtual bool Add(const T &key,const T &value)									            ///<向列表中增加一项
+        virtual bool Add(const PString &key,const PString &value)                                   ///<向列表中增加一项
         {
-            return Map<T,T>::Add(key,value);
+            return PMap::Add(key,value);
         }
 
-        virtual bool LoadTxt(const OSString &filename)                                              ///<从文件中加载列表
+        /**
+         * 从文本文件中加载
+         */
+        virtual bool LoadFromTextFile(const OSString &filename)                                         ///<从文件中加载列表
         {
-            StringList<T> sl;
+            PStringList sl;
 
             if(LoadStringListFromTextFile(sl,filename)<=0)
                 return(false);
@@ -80,32 +91,36 @@ namespace hgl
             return(true);
         }
 
-		template<ByteOrderMask BOM>
-                bool SaveTxt(const OSString &filename,const T &gap_ch=C('\t'))					    ///<保存列表到文件
-		{
-			FileOutputStream fos;
-			TextOutputStream<BOM> tos(&fos);
+        /**
+         * 保存到文本文件中
+         */
+        template<ByteOrderMask BOM>
+        bool SaveToTextFile(const OSString &filename,const PString &gap_ch=PString("\t"))             ///<保存列表到文件
+        {
+            FileOutputStream fos;
+            EndianTextOutputStream<BOM> tos(&fos);
 
-			if(!fos.Create(filename))return(false);
+            if(!fos.CreateTrunc(filename))return(false);
 
-			int n=this->data_list.GetCount();
+            int n=this->data_list.GetCount();
 
-			tos.WriteBOM();
+            tos.WriteBOM();
 
-			while(n--)
-			{
-				T f,s;
+            while(n--)
+            {
+                PString f,s;
 
-				if(Get(n,f,s))
-					tos.WriteLine(f+gap_ch+s);
-			}
+                if(Get(n,f,s))
+                    tos.WriteLine(f+gap_ch+s);
+            }
 
-			return(true);
-		}
-	};//class PList
+            return(true);
+        }
+    };//class PList
 
-    using UTF8PList =PList<char,   UTF8String   >;
-    using UTF16PList=PList<u16char,UTF16String  >;
-    using WidePList =PList<wchar_t,WideString   >;
+    using UTF8PList =PList<char   >;
+    using UTF16PList=PList<u16char>;
+    using WidePList =PList<wchar_t>;
+    using OSPList   =PList<os_char>;
 }//namespace hgl
 #endif//HGL_PLIST_INCLUDE

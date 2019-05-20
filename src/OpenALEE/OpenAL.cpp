@@ -1,12 +1,12 @@
-﻿#include <hgl/LogInfo.h>
-#include <hgl/Info.h>
-#include <hgl/FileSystem.h>
-#include <hgl/audio/OpenAL.h>
-#include <hgl/type/Pair.h>
-#include <hgl/type/Stack.h>
-#include <hgl/type/BaseString.h>
-#include <hgl/type/StringList.h>
-#include <hgl/ExternalModule.h>
+#include<hgl/LogInfo.h>
+#include<hgl/Info.h>
+#include<hgl/io/FileSystem.h>
+#include<hgl/audio/OpenAL.h>
+#include<hgl/type/Pair.h>
+#include<hgl/type/Stack.h>
+#include<hgl/type/BaseString.h>
+#include<hgl/type/StringList.h>
+#include<hgl/ExternalModule.h>
 
 using namespace hgl;
 
@@ -14,16 +14,16 @@ namespace openal
 {
     static ALCchar AudioDeviceName[AL_DEVICE_NAME_MAX_LEN]={0};
 
-    static ExternalModule *AudioEM		=nullptr;        //OpenAL动态链接库指针
-    static ALCdevice *AudioDevice		=nullptr;        //OpenAL设备
-    static ALCcontext *AudioContext		=nullptr;        //OpenAL上下文
+    static ExternalModule *AudioEM      =nullptr;        //OpenAL动态链接库指针
+    static ALCdevice *AudioDevice       =nullptr;        //OpenAL设备
+    static ALCcontext *AudioContext     =nullptr;        //OpenAL上下文
 
     static UTF8StringList OpenALExt_List;
     static UTF8StringList OpenALContextExt_List;
 
-    static bool AudioFloat32			=false;         //是否支持float 32数据
-    static bool AudioEFX				=false;         //EFX是否可用
-    static bool AudioXRAM				=false;         //X-RAM是否可用
+    static bool AudioFloat32            =false;         //是否支持float 32数据
+    static bool AudioEFX                =false;         //EFX是否可用
+    static bool AudioXRAM               =false;         //X-RAM是否可用
 
     bool LoadALCFunc(ExternalModule *);
     bool LoadALFunc(ExternalModule *);
@@ -47,10 +47,11 @@ namespace openal
         const os_char oalfn[][HGL_MAX_PATH]=
         {
 #if HGL_OS == HGL_OS_Windows
-            OS_TEXT("\\OpenAL32.DLL"),
-            OS_TEXT("\\ct_oal.DLL"),
-            OS_TEXT("\\nvOpenAL.DLL"),
-            OS_TEXT("\\wrap_oal.DLL"),
+            OS_TEXT("\\OpenAL32.dll"),
+            OS_TEXT("\\ct_oal.dll"),
+            OS_TEXT("\\nvOpenAL.dll"),
+            OS_TEXT("\\soft_oal.dll"),
+            OS_TEXT("\\wrap_oal.dll"),
 #elif (HGL_OS == HGL_OS_Linux)||(HGL_OS == HGL_OS_FreeBSD)||(HGL_OS == HGL_OS_NetBSD)||(HGL_OS == HGL_OS_OpenBSD)
             OS_TEXT("/libopenal.so"),
             OS_TEXT("/libopenal.so.1"),
@@ -78,9 +79,9 @@ namespace openal
             hgl::strcat(pifn,HGL_MAX_PATH,HGL_DIRECTORY_SEPARATOR);
             hgl::strcat(pifn,HGL_MAX_PATH,filename,HGL_MAX_PATH);
 
-            if(filesystem::FileConfirm(filename ))final_filename=(os_char *)filename;else
-            if(filesystem::FileConfirm(dllfn    ))final_filename=dllfn;else
-            if(filesystem::FileConfirm(pifn        ))final_filename=pifn;
+            if(filesystem::FileExist(filename ))final_filename=(os_char *)filename;else
+            if(filesystem::FileExist(dllfn    ))final_filename=dllfn;else
+            if(filesystem::FileExist(pifn        ))final_filename=pifn;
 
             AudioEM=LoadExternalModule(final_filename);
         }
@@ -94,8 +95,8 @@ namespace openal
                 hgl::strcpy(dllfn,HGL_MAX_PATH,hgl::info::GetString(hgl::info::hfsOSLibraryPath).c_str());
                 hgl::strcat(dllfn,HGL_MAX_PATH,oalfn[count],HGL_MAX_PATH);
 
-                if(filesystem::FileConfirm(dllfn))final_filename=dllfn;else
-                if(filesystem::FileConfirm(pifn ))final_filename=pifn;else
+                if(filesystem::FileExist(dllfn))final_filename=dllfn;else
+                if(filesystem::FileExist(pifn ))final_filename=pifn;else
                     continue;
 
                 AudioEM=LoadExternalModule(final_filename);
@@ -114,12 +115,11 @@ namespace openal
         else
         {
         #if HGL_OS == HGL_OS_Windows
-            LOG_ERROR(  OS_TEXT("加载OpenAL动态链接库失败！OpenAL动态链接库可能是: OpenAL32.DLL、wrap_oal.DLL、ct_oal.DLL、nvOpenAL.DLL\n")
-                        OS_TEXT("软件实现的OpenAL32.DLL、wrap_oal可在http://www.openal.org上下载!\n")
-                        OS_TEXT("硬件实现的OpenAL32.DLL请到对应您声卡的厂商网站下载对应的驱动程序!\n")
-                        OS_TEXT("下载完成后可其放入Windows\\System32目录下或Plug-Ins目录下即可!"));
+            LOG_ERROR(  OS_TEXT("加载OpenAL动态链接库失败！OpenAL动态链接库可能是: OpenAL32.dll、soft_oal.dll、wrap_oal.dll、ct_oal.dll、nvOpenAL.dll\n")
+                        OS_TEXT("软件实现的OpenAL32.DLL、wrap_oal可在http://www.openal.org上下载、soft_oal.dll可在http://kcat.strangesoft.net/openal.html下载!\n")
+                        OS_TEXT("硬件实现的OpenAL32.DLL请到对应您声卡的厂商网站下载对应的驱动程序! 下载完成后可其放入Windows\\System32目录下或应用程序Plug-Ins目录下即可!"));
         #else
-            LOG_ERROR(    OS_TEXT("加载OpenAL动态链接库失败！"));
+            LOG_ERROR(  OS_TEXT("加载OpenAL动态链接库失败！"));
         #endif//#if HGL_OS == HGL_OS_Windows
             return (AL_FALSE);
         }
@@ -507,9 +507,9 @@ namespace openal
     }
     al_format_bytes[]=
     {
-        {AL_FORMAT_MONO8,            1},
-        {AL_FORMAT_MONO16,            2},
-        {AL_FORMAT_STEREO8,            2},
+        {AL_FORMAT_MONO8,           1},
+        {AL_FORMAT_MONO16,          2},
+        {AL_FORMAT_STEREO8,         2},
         {AL_FORMAT_STEREO16,        4},
 
 //         {AL_FORMAT_QUAD16,            8},
@@ -518,7 +518,7 @@ namespace openal
 //         {AL_FORMAT_71CHN16,            16},
 //
         {AL_FORMAT_MONO_FLOAT32,    4},
-        {AL_FORMAT_STEREO_FLOAT32,    8},
+        {AL_FORMAT_STEREO_FLOAT32,  8},
 //
 //         {AL_FORMAT_QUAD8,            4},
 //         {AL_FORMAT_QUAD16,            8},
@@ -635,23 +635,23 @@ namespace openal
 
         const char *result=nullptr;
 
-        const char al_error_invalid                []=U8_TEXT("invalid");
+        const char al_error_invalid             []=U8_TEXT("invalid");
         const char al_error_invalid_name        []=U8_TEXT("invalid name");
         const char al_error_invalid_enum        []=U8_TEXT("invalid enum");
-        const char al_error_invalid_value        []=U8_TEXT("invalid value");
-        const char al_error_invalid_operation    []=U8_TEXT("invalid operation");
-        const char al_error_out_of_memory        []=U8_TEXT("out of memory");
-        const char al_error_unknown_error        []=U8_TEXT("unknown error");
+        const char al_error_invalid_value       []=U8_TEXT("invalid value");
+        const char al_error_invalid_operation   []=U8_TEXT("invalid operation");
+        const char al_error_out_of_memory       []=U8_TEXT("out of memory");
+        const char al_error_unknown_error       []=U8_TEXT("unknown error");
 
         const ALenum error=alGetError();
 
-        if(error==AL_NO_ERROR            )result=nullptr;else
+        if(error==AL_NO_ERROR           )result=nullptr;else
         if(error==AL_INVALID            )result=al_error_invalid;else
-        if(error==AL_INVALID_NAME        )result=al_error_invalid_name;else
-        if(error==AL_INVALID_ENUM        )result=al_error_invalid_enum;else
-        if(error==AL_INVALID_VALUE        )result=al_error_invalid_value;else
-        if(error==AL_INVALID_OPERATION    )result=al_error_invalid_operation;else
-        if(error==AL_OUT_OF_MEMORY        )result=al_error_out_of_memory;else
+        if(error==AL_INVALID_NAME       )result=al_error_invalid_name;else
+        if(error==AL_INVALID_ENUM       )result=al_error_invalid_enum;else
+        if(error==AL_INVALID_VALUE      )result=al_error_invalid_value;else
+        if(error==AL_INVALID_OPERATION  )result=al_error_invalid_operation;else
+        if(error==AL_OUT_OF_MEMORY      )result=al_error_out_of_memory;else
                                          result=al_error_unknown_error;
 
         if(result)
@@ -672,14 +672,14 @@ namespace openal
         LOG_INFO(UTF8String(u8"　　　音频芯片制造商: ")+alGetString(AL_VENDOR    ));
         LOG_INFO(UTF8String(u8"　　支持的OpenAL版本: ")+alGetString(AL_VERSION   ));
         LOG_INFO(UTF8String(u8"　　　　音频芯片名称: ")+alGetString(AL_RENDERER  ));
-        LOG_INFO(OS_TEXT(            "　　　　　最大音源数: ")+OSString(GetMaxNumSources()));
-           LOG_INFO(AudioFloat32?OS_TEXT(    "    浮点音频数据支持: 是")
-                             :OS_TEXT(    "    浮点音频数据支持: 否"));
+        LOG_INFO(OS_TEXT(               "　　　　　最大音源数: ")+OSString(GetMaxNumSources()));
+        LOG_INFO(AudioFloat32?OS_TEXT(  "    浮点音频数据支持: 是")
+                             :OS_TEXT(  "    浮点音频数据支持: 否"));
 
-        LOG_INFO(AudioEFX?OS_TEXT(    "　　　　　   EFX支持: 是")
-                        :OS_TEXT(    "　　　　　   EFX支持: 否"));
-        LOG_INFO(AudioXRAM?OS_TEXT(    "           X-RAM支持: 是")
-                        :OS_TEXT(    "           X-RAM支持: 否"));
+        LOG_INFO(AudioEFX?OS_TEXT(  "　　　　　   EFX支持: 是")
+                         :OS_TEXT(  "　　　　　   EFX支持: 否"));
+        LOG_INFO(AudioXRAM?OS_TEXT( "           X-RAM支持: 是")
+                          :OS_TEXT( "           X-RAM支持: 否"));
 
         if(AudioXRAM)
         {

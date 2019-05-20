@@ -1,4 +1,4 @@
-#include<hgl/Logger.h>
+﻿#include<hgl/Logger.h>
 #include<hgl/CodePage.h>
 #include<hgl/thread/ThreadMutex.h>
 #include<unistd.h>
@@ -20,7 +20,7 @@ namespace hgl
 		class LogUnixConsole:public Logger
 		{
 			char endline;
-			char log_buf[HGL_MAX_PATH];
+			char log_buf[LOG_BUF_SIZE];
 
 #ifdef LOGINFO_THREAD_MUTEX
 			ThreadMutex mutex;
@@ -44,10 +44,9 @@ namespace hgl
 			void WriteThreadID()
 			{
 				memcpy(log_buf,"[Thread:",8);
-				int size;
 
 				htos(log_buf+8,128-9,pthread_self());
-				strcat(log_buf,HGL_MAX_PATH,']');
+				strcat(log_buf,LOG_BUF_SIZE,']');
 
 				write(STDOUT_FILENO,log_buf,strlen(log_buf));
 			}
@@ -59,7 +58,7 @@ namespace hgl
 				memcpy(log_buf,"[Time:",6);
 
 				ftos(log_buf+6,128-strlen(log_buf),GetDoubleTime());
-				strcat(log_buf,HGL_MAX_PATH,']');
+				strcat(log_buf,LOG_BUF_SIZE,']');
 
 				write(STDOUT_FILENO,log_buf,strlen(log_buf));
 			}
@@ -81,7 +80,7 @@ namespace hgl
 
 					int len;
 
-					len=u16_to_u8(log_buf,4096,str,size);
+					len=u16_to_u8(log_buf,LOG_BUF_SIZE,str,size);
 
 					if(len>0)
 					{

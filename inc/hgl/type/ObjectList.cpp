@@ -22,7 +22,7 @@ namespace hgl
 //		if(!this->items)
 //		{
 //			this->max_count=1;
-//			this->items=(T **)hgl_malloc(sizeof(T *));
+//			this->items=(T **)hgl_aligned_malloc<T *>(1);
 //		}
 //		else
 //		{
@@ -147,7 +147,7 @@ namespace hgl
 	* @return 是否成功
 	*/
 	template<typename T>
-	bool CusObjectList<T>::DeleteByData(const ItemPointer &obj)
+	bool CusObjectList<T>::DeleteByValue(const ItemPointer &obj)
 	{
 		int n=this->count;
 
@@ -175,7 +175,7 @@ namespace hgl
 	* @param n 要删除的对象个数
 	*/
 	template<typename T>
-	void CusObjectList<T>::DeleteByData(const ItemPointer *obj,int n)
+	void CusObjectList<T>::DeleteByValue(const ItemPointer *obj,int n)
 	{
 		while(n--)
 		{
@@ -238,7 +238,7 @@ namespace hgl
             }
 //            else
 //            {
-//				this->items=(T **)hgl_malloc(this->max_count*sizeof(T *));
+//				this->items=(T **)hgl_aligned_malloc<T *>(this->max_count);
 //
 //                while(new_count--)
 //					this->items[this->count++]=CreateObject();

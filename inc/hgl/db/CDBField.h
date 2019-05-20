@@ -74,8 +74,8 @@ namespace hgl
 
 			virtual	int		FindArray(const float *		){return -1;}
 			virtual	int		FindArray(const double *	){return -1;}
-			virtual int		FindArray(const char *		){return -1;}								///<查找utf8字符陈列，不处理0结尾
-			virtual int		FindArray(const u16char *	){return -1;}								///<查找utf16字符陈列，不处理0结尾
+			virtual int		FindArray(const char *		){return -1;}								///<查找utf8字符阵列，不处理0结尾
+			virtual int		FindArray(const u16char *	){return -1;}								///<查找utf16字符阵列，不处理0结尾
 
 			virtual int		FindCharArray(const char *){return -1;}									///<查找utf8字符阵列，处理0结尾
 			virtual int		FindCharArray(const u16char *){return -1;}								///<查找utf16字符阵列，处理0结尾

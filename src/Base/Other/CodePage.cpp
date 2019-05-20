@@ -224,4 +224,44 @@ namespace hgl
 
         return dst;
     }
+
+    /**
+     * 分析这个unicode文本文件的字节序
+     * @param input 输入数据
+     * @return 字节序
+     */
+    const BOMFileHeader *ParseBOM(const void *input)
+    {
+        if(!input)return(nullptr);
+
+        const BOMFileHeader *bfh=BOMData+bomUTF8;
+
+        for(uint i=bomUTF8;i<bomEnd;i++)
+        {
+            if(memcmp(input,bfh->data,bfh->size)==0)
+                return bfh;
+
+            ++bfh;
+        }
+
+        return nullptr;
+    }
+
+    /**
+     * 转换BOM数据到CharSet结构
+     * @param bom BOM数据
+     * @param cs 字符集数据结构
+     * @return 是否转换成功
+     */
+    bool BOM2CharSet(CharSet *cs,const BOMFileHeader *bom)
+    {
+        if(!cs)return(false);
+        if(!bom)return(false);
+
+        if(bom->bom<=bomNone||bom->bom>=bomEnd)return(false);
+
+        cs->codepage=bom->code_page;
+        memcpy(cs->charset,bom->char_set,sizeof(CharSetName));
+        return(true);
+    }
 }//namespace hgl

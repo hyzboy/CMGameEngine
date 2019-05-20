@@ -35,8 +35,7 @@ namespace hgl
 
 		size_t result;
 
-		iconv_str in;
-
+		char *in;
 		char *out;
 		T *out_str;
 		T *out_new;

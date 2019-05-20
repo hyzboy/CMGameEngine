@@ -6,6 +6,44 @@ namespace hgl
 {
 	namespace endian
 	{
+	    /**
+	    * Windows代码页枚举
+	    * 全部Windows所支持代码页请参见 http://msdn.microsoft.com/en-us/library/dd317756
+	    */
+	    enum CharCodePage										///代码页枚举
+	    {
+		    ccpNone=0,                                          ///<起始定义，无意义
+
+		    //中文
+		    ccpGBK                          =936,               ///<中国GBK标准中文
+		    ccpBig5                         =950,               ///<中国台湾Big5标准繁体中文
+		    ccpGB2312                       =20936,             ///<中国GB2312标准简体中文
+		    ccpGB18030                      =54936,             ///<中国GB18030-2000标准中文
+
+		    //日文
+		    ccpShiftJIS                     =932,               ///<日文ShiftJIS
+		    ccpJISX							=50222,				///<日文JIS X/ISO 2022
+
+		    //韩文
+		    ccpKorean						=949,				///<韩文
+
+		    //苹果编码
+		    ccpMacJanpan					=10001,				///<日文
+		    ccpMacTraditionalChinese		=10002,				///<繁体中文
+		    ccpMacSimplifiedChinese			=10008,				///<简体中文
+
+		    //unicode
+		    ccpUTF7							=65000,				///<utf-7
+		    ccpUTF8							=65001,				///<utf-8
+
+		    ccpUTF16LE						=1200,
+		    ccpUTF16BE						=1201,
+		    ccpUTF32LE						=12000,
+		    ccpUTF32BE						=12001,
+
+		    ccpEnd                          					///<结束定义，无意义
+	    };//enum CharCodePage
+
 		/**
 		 * 字节序类型枚举
 		 */
@@ -20,30 +58,8 @@ namespace hgl
 			bomEnd
 		};
 
-		/**
-		 * 字节序文件头数据结构
-		 */
-		struct BOMFileHeader
-		{
-			int size;					//字节序文件头长度
-			unsigned char data[4];		//字节序数据
-		};
-
-		/**
-		 * 字节序文件头定义
-		 */
-		constexpr BOMFileHeader BOMData[bomEnd]=
-		{
-			{0,{}},
-			{3,{0xEF,0xBB,0xBF}},
-			{2,{0xFF,0xFE}},
-			{2,{0xFE,0xFF}},
-			{4,{0xFF,0xFE,0x00,0x00}},
-			{4,{0x00,0x00,0xFE,0xFF}}
-		};
-
-        constexpr uint CharSetNameLength=32;
-        using CharSetName=char[CharSetNameLength];
+        constexpr uint CharSetNameLength=32;                                                            ///<字符集名称长度
+        using CharSetName=char[CharSetNameLength];                                                      ///<字符集名称类型定义
 
 		template<int,char> const CharSetName &GetCurCharSet();											///<取得当前程序编码字符集
 
@@ -62,6 +78,32 @@ namespace hgl
 		{
 			return GetCurCharSet<sizeof(T),HGL_ENDIAN>();
 		}
+
+		/**
+		 * 字节序文件头数据结构
+		 */
+		struct BOMFileHeader
+		{
+			int size;					///<字节序文件头长度
+			unsigned char data[4];		///<字节序数据
+
+            ByteOrderMask bom;          ///<字节序枚举
+            const CharSetName *char_set;///<字符集名称
+            CharCodePage code_page;     ///<代码页
+		};
+
+		/**
+		 * 字节序文件头定义
+		 */
+		constexpr BOMFileHeader BOMData[bomEnd]=
+		{
+			{0,{}                   ,bomNone,   nullptr            ,ccpNone     },
+			{3,{0xEF,0xBB,0xBF}     ,bomUTF8,   &utf8_charset      ,ccpUTF8     },
+			{2,{0xFF,0xFE}          ,bomUTF16LE,&utf16le_charset   ,ccpUTF16LE  },
+			{2,{0xFE,0xFF}          ,bomUTF16BE,&utf16be_charset   ,ccpUTF16BE  },
+			{4,{0xFF,0xFE,0x00,0x00},bomUTF32LE,&utf32le_charset   ,ccpUTF32LE  },
+			{4,{0x00,0x00,0xFE,0xFF},bomUTF32BE,&utf32be_charset   ,ccpUTF32BE  }
+		};
 
 		template<typename T>
 		inline T EndianSwap(const T value)
@@ -108,6 +150,8 @@ namespace hgl
                 |((value&0xFF000000000000)>>40)
                 |((value&0xFF00000000000000)>>56);
         }
+
+        template<> inline u16char EndianSwap(const u16char value){return EndianSwap(uint16(value));}
 
 		template<typename T>
 		inline void EndianSwap(T *value,const int64 count)
@@ -183,28 +227,14 @@ namespace hgl
 
 		#endif//HGL_BIG_ENDIAN
 
-		template<typename T>
-		T *swap_strcpy(const T *in_str,const int length)
-		{
-			if(length<=0||!in_str)return(nullptr);
-
-			T *out_str=new T[length+1];
-
-			EndianSwap<T>(out_str,in_str,length);
-
-			out_str[length]=0;
-
-			return out_str;
-		}
-
 		template<char> struct UTF16CharConvert;
 
 		template<> struct UTF16CharConvert<HGL_LITTLE_ENDIAN>
 		{
         #if HGL_ENDIAN == HGL_BIG_ENDIAN
-			static void convert(const u16char *str,const int length)
+			static void convert(u16char *str,const int length)
 			{
-					swap_strcpy<u16char>(str,length);
+					EndianSwap<u16char>(str,length);
 			}
         #else
             static void convert(const u16char *,const int){}
@@ -215,17 +245,17 @@ namespace hgl
 				#if HGL_ENDIAN == HGL_LITTLE_ENDIAN
 					memcpy(out_str,in_str,length*sizeof(u16char));
 				#else
-					swap_strcpy<u16char>(in_str,length);
+					EndianSwap<u16char>(in_str,length);
 				#endif//HGL_ENDIAN == HGL_LITTLE_ENDIAN
 			}
 		};//template<> struct UTF16CharConvert<HGL_LITTLE_ENDIAN>
 
 		template<> struct UTF16CharConvert<HGL_BIG_ENDIAN>
 		{
-			static void convert(const u16char *str,const int length)
+			static void convert(u16char *str,const int length)
 			{
 				#if HGL_ENDIAN == HGL_LITTLE_ENDIAN
-					swap_strcpy<u16char>(str,length);
+					EndianSwap<u16char>(str,length);
 				#endif//HGL_ENDIAN == HGL_LITTLE_ENDIAN
 			}
 
@@ -234,7 +264,7 @@ namespace hgl
 				#if HGL_ENDIAN == HGL_LITTLE_ENDIAN
 					memcpy(out_str,in_str,length*sizeof(u16char));
 				#else
-					swap_strcpy<u16char>(in_str,length);
+					EndianSwap<u16char>(in_str,length);
 				#endif//HGL_ENDIAN == HGL_LITTLE_ENDIAN
 			}
 		};//template<> struct UTF16ToWideChar<HGL_BIG_ENDIAN>

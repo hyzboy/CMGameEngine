@@ -231,6 +231,24 @@ namespace hgl
 
             return CheckIPSupport(ips_list,family,socktype,protocol);
         }
+
+        namespace
+        {
+            const char *protocol_name_tcp="TCP";
+            const char *protocol_name_udp="UDP";
+            const char *protocol_name_udp_lite="UDPLite";
+            const char *protocol_name_sctp="SCTP";
+            const char *protocol_name_unknow="unknow protocol";
+        }
+
+        void IPAddress::RefreshProtocolName()
+        {
+            if(IsTCP    ())protocol_name=protocol_name_tcp;else
+            if(IsUDP    ())protocol_name=protocol_name_udp;else
+            if(IsUDPLite())protocol_name=protocol_name_udp_lite;else
+            if(IsSCTP   ())protocol_name=protocol_name_sctp;else
+                           protocol_name=protocol_name_unknow;
+        }
     }//namespace network
 
     namespace network
@@ -244,6 +262,7 @@ namespace hgl
                 RETURN_FALSE;
 
             addr.sin_port=htons(port);
+            RefreshProtocolName();
             return(true);
         }
 
@@ -260,7 +279,25 @@ namespace hgl
 
         const ushort IPv4Address::GetPort()const{return addr.sin_port;}
 
-        void IPv4Address::ToString(char *str)const{inet_ntop(AF_INET,(void *)&(addr.sin_addr),str,INET_ADDRSTRLEN);}
+        void IPv4Address::ToString(char *str,const int max_size,const in_addr *ip_addr)
+        {
+            inet_ntop(AF_INET,(void *)&ip_addr,str,INET_ADDRSTRLEN);
+        }
+
+        void IPv4Address::ToString(char *str,const int max_size,const sockaddr_in *ip_addr)
+        {
+            ToString(str,max_size,&(ip_addr->sin_addr));
+
+            int size=strlen(str);
+            str[size]=':';
+
+            hgl::utos(str+size+1,max_size-1-size,ip_addr->sin_port);
+        }
+
+        void IPv4Address::ToString(char *str,int max_size)const
+        {
+            ToString(str,max_size,&addr);
+        }
 
         /**
         * 取得指定域名的IPv4地址列表
@@ -292,11 +329,6 @@ namespace hgl
             return GetDomainIPList(addr_list,hostname,_socktype,_protocol);
         }
 
-        void IPv4Address::ToString(char str[INET_ADDRSTRLEN],const in_addr &addr)
-        {
-            inet_ntop(AF_INET,(void *)&addr,str,INET_ADDRSTRLEN);
-        }
-
         bool IPv4Address::Comp(const IPAddress *ipa)const
         {
             if(this==ipa)return(true);
@@ -320,6 +352,7 @@ namespace hgl
                 RETURN_FALSE;
 
             addr.sin6_port=htons(port);
+            RefreshProtocolName();
             return(true);
         }
 
@@ -336,7 +369,25 @@ namespace hgl
 
         const ushort IPv6Address::GetPort()const{return addr.sin6_port;}
 
-        void IPv6Address::ToString(char *str)const{inet_ntop(AF_INET6, (void *)&(addr.sin6_addr),str,INET6_ADDRSTRLEN);}
+        void IPv6Address::ToString(char *str,const int max_size,const in6_addr *ip_addr)
+        {
+            inet_ntop(AF_INET6, (void *)&ip_addr,str,INET6_ADDRSTRLEN);
+        }
+
+        void IPv6Address::ToString(char *str,const int max_size,const sockaddr_in6 *ip_addr)
+        {
+            ToString(str,max_size,&(ip_addr->sin6_addr));
+
+            int size=strlen(str);
+            str[size]=':';
+
+            hgl::utos(str+size+1,max_size-1-size,ip_addr->sin6_port);
+        }
+
+        void IPv6Address::ToString(char *str,const int max_size)const
+        {
+            IPv6Address::ToString(str,max_size,&addr);
+        }
 
         /**
         * 取得指定域名的IPv6地址列表
@@ -366,11 +417,6 @@ namespace hgl
                 return(-1);
 
             return GetDomainIPList(addr_list,hostname,_socktype,_protocol);
-        }
-
-        void IPv6Address::ToString(char str[INET6_ADDRSTRLEN],const in6_addr &addr)
-        {
-            inet_ntop(AF_INET6, (void *)&addr,str,INET6_ADDRSTRLEN);
         }
 
         bool IPv6Address::Comp(const IPAddress *ipa)const

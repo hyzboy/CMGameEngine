@@ -59,10 +59,10 @@ namespace hgl
 														FREE_OBJECT_ARRAY(name,num);	\
 												}
 
-	#define SAFE_FREE_OBJECT(name)				{	\
-													if(name)	\
-														hgl_free(name);	\
-												}
+	#define SAFE_FREE(name)				{	\
+                                            if(name)	\
+                                                hgl_free(name);	\
+                                        }
 
 	#define SAFE_RECREATE(name,code)	{	\
 											if(name)	\

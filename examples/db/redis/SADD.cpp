@@ -1,4 +1,4 @@
-#include<iostream>
+﻿#include<iostream>
 #include<hgl/db/RedisDB.h>
 #include<hgl/Str.h>
 #include<hgl/type/StringList.h>
@@ -52,7 +52,7 @@ int main(int argc,char **argv)
 
     UTF8StringList sl;
 
-    LoadUTF8FileToStringList(sl,filename);
+    LoadStringListFromTextFile(sl,filename,UTF8CharSet);
 
     if(db)
         db->Multi();

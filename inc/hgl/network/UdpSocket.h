@@ -1,4 +1,4 @@
-#ifndef HGL_UDPSOCKET_INCLUDE
+﻿#ifndef HGL_UDPSOCKET_INCLUDE
 #define HGL_UDPSOCKET_INCLUDE
 
 #include<hgl/type/DataType.h>
@@ -26,7 +26,7 @@ namespace hgl
 			virtual ~UDPSocket();                                                                   ///<本类析构函数
 
 			virtual bool Create(const IPAddress *);                                                 ///<创建一个udp,并绑定一个IP地址与指定端口
-			virtual bool Create(int family);                                                        ///<创建一个udp
+//			virtual bool Create(int family);                                                        ///<创建一个udp
 
                     uint GetBindPort()const{return bind_addr->GetPort();}							///<取得绑定端口
 
@@ -47,7 +47,7 @@ namespace hgl
             virtual ~UDPLiteSocket()=default;
 
             bool Create(const IPAddress *)override;                                              ///<创建一个udp lite,并绑定一个IP地址与指定端口
-			bool Create(int family)override;                                                     ///<创建一个udp lite
+//			bool Create(int family)override;                                                     ///<创建一个udp lite
 
 			void SetChecksumCoverage(int send_val=20,int recv_val=20);                               ///<设定UDPLite检验位长度,最小20
         };//class UDPLiteSocket

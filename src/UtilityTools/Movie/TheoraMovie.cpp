@@ -557,12 +557,12 @@ namespace hgl
 	{
 		InitPrivate(key,mouse);
 
-		if(FileConfirm(filename+u".ogv"))
+		if(FileExist(filename+u".ogv"))
 			file=OpenFileStream(filename+u".ogv");
 		else
 			file=nullptr;
 
-        if(FileConfirm(filename+u".ogg"))
+        if(FileExist(filename+u".ogg"))
 			audio=new AudioPlayer(filename+u".ogg");
 		else
 			audio=nullptr;

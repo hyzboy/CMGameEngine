@@ -1,9 +1,9 @@
-﻿#ifndef HGL_GRAPH_BITMAP_INCLUDE
+#ifndef HGL_GRAPH_BITMAP_INCLUDE
 #define HGL_GRAPH_BITMAP_INCLUDE
 
-#include<hgl/graph/TextureFormat.h>
+#include<hgl/graph/TextureSourceFormat.h>
 #include<hgl/type/BaseString.h>
-#include<hgl/FileSystem.h>
+#include<hgl/io/FileSystem.h>
 #include<hgl/LogInfo.h>
 namespace hgl
 {
@@ -31,7 +31,7 @@ namespace hgl
 		struct TexCubeMapFileHeader		:public TexFileHeader{uint32 width,height,faces;		};
 		struct TexCubeMapArrayFileHeader:public TexFileHeader{uint32 width,height,faces,count;  };
 #pragma pack(pop)
-
+        
 		/**
 		* 位图数据文件格式基类
 		*/

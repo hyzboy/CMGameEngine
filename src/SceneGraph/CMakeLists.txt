@@ -46,6 +46,7 @@ IF(BUILD_OPENGL_LIB)
     #     HeightMapTerrain.cpp
         VertexBufferType.cpp
         VertexArray.cpp
+		InlineTexture.cpp
         InlineRenderable.cpp
         RenderList.cpp
         Material.cpp

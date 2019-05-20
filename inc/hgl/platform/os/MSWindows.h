@@ -27,6 +27,7 @@ using os_char			=wchar_t;
 
 #define HGL_DIRECTORY_SEPARATOR 		OS_TEXT('\\')									//目录分隔符
 #define HGL_DIRECTORY_SEPARATOR_STR     OS_TEXT("\\")									//目录分隔符
+#define HGL_DIRECTORY_SEPARATOR_U8STR   U8_TEXT("\\")	
 
 #define HGL_LINE_END					OS_TEXT("\r\n")									//换行符
 #define HGL_LINE_END_SIZE				2												//换行符长度
@@ -42,6 +43,12 @@ using os_char			=wchar_t;
     #define hgl_malloc(size)        _aligned_malloc(size,HGL_MEM_ALIGN)
     #define hgl_realloc(ptr,size)   _aligned_realloc(ptr,size,HGL_MEM_ALIGN)
     #define hgl_free                _aligned_free
+
+    template<typename T>
+    inline T *hgl_aligned_malloc(size_t n)
+    {
+        return (T *)_aligned_malloc(n*sizeof(T),alignof(T));
+    }
 #else
     #define hgl_malloc(size)        memalign(HGL_MEM_ALIGN,size)
     #define hgl_realloc(ptr,size)   realloc(ptr,size)
@@ -56,12 +63,12 @@ typedef HMODULE                 ExternalModulePointer;
 typedef	CRITICAL_SECTION		hgl_thread_mutex;
 
 #define struct_stat64			struct _stat64
-#define stat64					_stat64
-#define lseek64					_lseeki64
-#define tell64(fp)				_telli64(fp)
-#define fstat64					_fstati64
-#define lstat64					_wstat64
-#define read64					_read
-#define write64					_write
+//#define hgl_stat64				_stat64
+#define hgl_lseek64				_lseeki64
+#define hgl_tell64(fp)			_telli64(fp)
+#define hgl_fstat64				_fstati64
+#define hgl_lstat64				_wstat64
+#define hgl_read64				_read
+#define hgl_write64				_write
 //--------------------------------------------------------------------------------------------------
 #endif//HGL_OS_WIN_INCLUDE

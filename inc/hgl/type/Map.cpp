@@ -1,17 +1,8 @@
 ﻿#ifndef HGL_MAP_CPP
 #define HGL_MAP_CPP
 
-#include<hgl/io/FileInputStream.h>
-#include<hgl/io/FileOutputStream.h>
 namespace hgl
 {
-	template<typename F,typename T,typename DataPair>
-	_Map<F,T,DataPair>::_Map()
-	{
-		OnSaveToStream=nullptr;
-		OnLoadFromStream=nullptr;
-	}
-
 	/**
 	* 查找数据是否存在
 	* @param flag 数据标识
@@ -134,7 +125,7 @@ namespace hgl
 	}
 
 	template<typename F,typename T,typename DataPair>
-	int _Map<F,T,DataPair>::FindByData(const T &data)const
+	int _Map<F,T,DataPair>::FindByValue(const T &data)const
 	{
 		const int count=data_list.GetCount();
 
@@ -251,7 +242,7 @@ namespace hgl
 	* @return 是否取得成功
 	*/
 	template<typename F,typename T,typename DataPair>
-	bool _Map<F,T,DataPair>::GetIndex(int index,F &f) const
+	bool _Map<F,T,DataPair>::GetKey(int index,F &f) const
 	{
 		if(index<0||index>=data_list.GetCount())return(false);
 
@@ -269,7 +260,7 @@ namespace hgl
 	* @return 是否取得成功
 	*/
 	template<typename F,typename T,typename DataPair>
-	bool _Map<F,T,DataPair>::GetData(int index,T &t) const
+	bool _Map<F,T,DataPair>::GetValue(int index,T &t) const
 	{
 		if(index<0||index>=data_list.GetCount())return(false);
 
@@ -288,7 +279,7 @@ namespace hgl
 	 * @param t 数据
 	 */
 	template<typename F,typename T,typename DataPair>
-	bool _Map<F,T,DataPair>::SetDataBySerial(int index,T &t)
+	bool _Map<F,T,DataPair>::SetValueBySerial(int index,T &t)
 	{
 		if(index<0||index>=data_list.GetCount())return(false);
 
@@ -326,7 +317,7 @@ namespace hgl
 	* @return 是否成功
 	*/
 	template<typename F,typename T,typename DataPair>
-	bool _Map<F,T,DataPair>::DeleteByIndex(const F &flag)
+	bool _Map<F,T,DataPair>::DeleteByKey(const F &flag)
 	{
 		int index=Find(flag);
 
@@ -345,7 +336,7 @@ namespace hgl
 	* @return 是否成功
 	*/
 	template<typename F,typename T,typename DataPair>
-	int _Map<F,T,DataPair>::DeleteByIndex(const F *fp,const int count)
+	int _Map<F,T,DataPair>::DeleteByKey(const F *fp,const int count)
 	{
 		if(!fp||count<=0)return(0);
 
@@ -376,9 +367,9 @@ namespace hgl
 	* @return 是否成功
 	*/
 	template<typename F,typename T,typename DataPair>
-	bool _Map<F,T,DataPair>::DeleteByData(const T &data)
+	bool _Map<F,T,DataPair>::DeleteByValue(const T &data)
 	{
-		int index=FindByData(data);
+		int index=FindByValue(data);
 
 		if(index==-1)return(false);
 
@@ -487,102 +478,105 @@ namespace hgl
 		data_list.ClearData();
 	}
 
-	/**
-	* 保存整个列表到流中
-	* @param str 要保存的流
-	* @return 是否保存成功
-	*/
-	template<typename F,typename T,typename DataPair>
-	bool _Map<F,T,DataPair>::SaveToStream(io::DataOutputStream *str)
-	{
-		if(!str||OnSaveToStream==nullptr)return(false);
-
-		int n=data_list.GetCount();
-
-		str->WriteInt32(n);
-		for(int i=0;i<n;i++)
-		{
-			DataPair *obj=data_list[i];
-
-			if(OnSaveToStream(str,obj->left,obj->right)==false)
-            	return(false);
-		}
-
-		return(true);
-	}
-
-	/**
-	* 从流中加载整个列表
-	* @param str 要加载的流
-	* @return 是否加载成功
-	*/
-	template<typename F,typename T,typename DataPair>
-	bool _Map<F,T,DataPair>::LoadFromStream(io::DataInputStream *str)
-	{
-		Clear();
-
-		if(!str||OnLoadFromStream==nullptr)return(false);
-
-		int n;
-
-		if(!str->ReadInt32(n))
-			return(false);
-
-		if(n<0)
-			return(false);
-
-		for(int i=0;i<n;i++)
-		{
-			F flag;
-			T data;
-
-			if(OnLoadFromStream(str,flag,data))
-				Add(flag,data);
-			else
-				return(false);
-		}
-
-		return(true);
-	}
-
-	/**
-	* 保存整个列表到文件中
-	* @param filename 要保存的文件名
-	* @return 是否保存成功
-	*/
-	template<typename F,typename T,typename DataPair>
-	bool _Map<F,T,DataPair>::SaveToFile(const os_char *filename)
-	{
-		io::FileOutputStream fs;
-
-		if(fs.Create(filename))
-			return SaveToStream(&fs);
-		else
-			return(false);
-	}
-
-	/**
-	* 从流中加载整个列表
-	* @param str 要加载的文件
-	* @return 是否加载成功
-	*/
-	template<typename F,typename T,typename DataPair>
-	bool _Map<F,T,DataPair>::LoadFromFile(const os_char *filename)
-	{
-		io::FileInputStream fs;
-
-		if(fs.Open(filename))
-			return LoadFromStream(&fs);
-		else
-			return(false);
-	}
-
 	template<typename F,typename T,typename DataPair>
 	void _Map<F,T,DataPair>::operator=(const _Map<F,T,DataPair> &ftd)
 	{
 		Clear();
 
-		data_list=ftd.data_list;
+        data_pool.ClearAll();
+        data_list.ClearData();
+
+        const int count=ftd.data_list.GetCount();
+
+        if(count<=0)
+            return;
+
+        IDItem **obj=ftd.data_list.GetData();
+
+        for(int i=0;i<count;i++)
+        {
+            IDItem *new_obj=data_pool.Acquire();
+
+            new_obj->left=(*obj)->left;
+            new_obj->right=(*obj)->right;
+
+            data_list.Add(new_obj);
+
+            ++obj;
+        }
 	}
+
+	template<typename F,typename T,typename DataPair>
+    void _Map<F,T,DataPair>::Enum(void (*enum_func)(const F &,T))
+    {
+        const int count=data_list.GetCount();
+
+        if(count<=0)
+            return;
+
+        IDItem **idp=data_list.GetData();
+
+        for(int i=0;i<count;i++)
+        {
+            enum_func((*idp)->left,(*idp)->right);
+
+            ++idp;
+        }
+    }
+
+    template<typename F,typename T,typename DataPair>
+    void _Map<F,T,DataPair>::EnumKey(void (*enum_func)(const F &))const
+    {
+        const int count=data_list.GetCount();
+
+        if(count<=0)
+            return;
+
+        IDItem **idp=data_list.GetData();
+
+        for(int i=0;i<count;i++)
+        {
+            enum_func((*idp)->left);
+
+            ++idp;
+        }
+    }
+
+    template<typename F,typename T,typename DataPair>
+    void _Map<F,T,DataPair>::EnumValue(void (*enum_func)(T))
+    {
+        const int count=data_list.GetCount();
+
+        if(count<=0)
+            return;
+
+        IDItem **idp=data_list.GetData();
+
+        for(int i=0;i<count;i++)
+        {
+            enum_func((*idp)->right);
+
+            ++idp;
+        }
+    }
+
+    template<typename F,typename T,typename DataPair>
+    void _Map<F,T,DataPair>::EnumValue(bool (*enum_func)(T))
+    {
+        const int count=data_list.GetCount();
+
+        if(count<=0)
+            return;
+
+        IDItem **idp=data_list.GetData();
+
+        for(int i=0;i<count;i++)
+        {
+            if(!enum_func((*idp)->right))
+                return;
+
+            ++idp;
+        }
+    }
 }//namespace hgl
 #endif//HGL_MAP_CPP

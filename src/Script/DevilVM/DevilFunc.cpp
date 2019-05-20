@@ -69,7 +69,7 @@ namespace hgl
 
 	DevilValueInterface *DevilFunc::AddValue(eTokenType type,const UTF16String &name)
 	{
-		if(script_value_list.Find(name)!=-1)
+		if(script_value_list.KeyExist(name))
 		{
 			LOG_ERROR(u"添加变量失败，变量名称重复:"+name);
 
@@ -77,7 +77,7 @@ namespace hgl
 		}
 
 		if(type==ttBool		)return(new DevilScriptValue<bool		>(module,func_name,name,type));else
-		if(type==ttString	)return(new DevilScriptValue<UTF16String	>(module,func_name,name,type));else
+		if(type==ttString	)return(new DevilScriptValue<UTF16String>(module,func_name,name,type));else
 		if(type==ttInt		)return(new DevilScriptValue<int		>(module,func_name,name,type));else
 		if(type==ttUInt		)return(new DevilScriptValue<uint		>(module,func_name,name,type));else
 		if(type==ttInt8		)return(new DevilScriptValue<int8		>(module,func_name,name,type));else

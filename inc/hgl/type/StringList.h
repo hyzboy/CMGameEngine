@@ -1,8 +1,8 @@
-﻿#ifndef HGL_STRINGLIST_INCLUDE
+#ifndef HGL_STRINGLIST_INCLUDE
 #define HGL_STRINGLIST_INCLUDE
 
 #include<hgl/type/List.h>
-#include<hgl/FileSystem.h>
+#include<hgl/io/FileSystem.h>
 #include<hgl/type/BaseString.h>
 #include<hgl/io/DataInputStream.h>
 #include<hgl/io/DataOutputStream.h>
@@ -69,14 +69,6 @@ namespace hgl
         * @return 增加字符串成功后的索引
         */
         int Add(const T &str){return Items.Add(new T(str));}										///<添加字符串
-
-        /**
-        * 增加一行字符串到当前列表中
-        * @param str 要增加的字符串
-        * @param len 要增加的字符串的长度
-        * @return 增加字符串成功后的索引
-        */
-        int Add(const T &str,int len){return Items.Add(new T(str,len));}							///<添加字符串
 
         /**
         * 增加一个字符串列表到当前字符串列表中
@@ -239,7 +231,7 @@ namespace hgl
             {
                 if(p>sp)
                 {
-                    sl.Add(sp,p-sp);
+                    sl.Add(BaseString<T>(sp,p-sp));
                     ++count;
                 }
 
@@ -251,7 +243,7 @@ namespace hgl
             {
                 if(p>sp)
                 {
-                    sl.Add(sp,p-sp);
+                    sl.Add(BaseString<T>(sp,p-sp));
                     ++count;
                 }
 
@@ -264,7 +256,7 @@ namespace hgl
 
         if(p>sp)
         {
-            sl.Add(sp,p-sp);
+            sl.Add(BaseString<T>(sp,p-sp));
             ++count;
         }
 
@@ -294,7 +286,7 @@ namespace hgl
             {
                 if(p>sp)
                 {
-                    sl.Add(sp,p-sp);
+                    sl.Add(BaseString<T>(sp,p-sp));
                     ++count;
                 }
 
@@ -306,7 +298,7 @@ namespace hgl
             {
                 if(p>sp)
                 {
-                    sl.Add(sp,p-sp);
+                    sl.Add(BaseString<T>(sp,p-sp));
                     ++count;
                 }
 
@@ -319,14 +311,14 @@ namespace hgl
 
         if(p>sp)
         {
-            sl.Add(sp,p-sp);
+            sl.Add(BaseString<T>(sp,p-sp));
             ++count;
         }
 
         return count;
     }//int SplitToStringList
 
-    template<typename T> int SplitToStringList(StringList<BaseString<T> > &sl,const BaseString<T> &str,const T &split_char)
+    template<typename T> int SplitToStringListFromString(StringList<BaseString<T> > &sl,const BaseString<T> &str,const T &split_char)
     {
         return SplitToStringList<T>(sl,str.c_str(),str.Length(),split_char);
     }
@@ -355,7 +347,7 @@ namespace hgl
             {
                 if(p>sp)
                 {
-                    sl.Add(sp,p-sp);
+                    sl.Add(BaseString<T>(sp,p-sp));
                     ++count;
                 }
 
@@ -367,7 +359,7 @@ namespace hgl
             {
                 if(p>sp)
                 {
-                    sl.Add(sp,p-sp);
+                    sl.Add(BaseString<T>(sp,p-sp));
                     ++count;
                 }
 
@@ -378,7 +370,7 @@ namespace hgl
                     --size;
                     if(size > 0)
                     {
-                        sl.Add(sp,size);
+                        sl.Add(BaseString<T>(sp,size));
                         ++count;
                     }
 
@@ -392,7 +384,7 @@ namespace hgl
 
         if(p>sp)
         {
-            sl.Add(sp,p-sp);
+            sl.Add(BaseString<T>(sp,p-sp));
             ++count;
         }
 
@@ -426,7 +418,7 @@ namespace hgl
             {
                 if(p>sp)
                 {
-                    sl.Add(sp,p-sp);
+                    sl.Add(BaseString<T>(sp,p-sp));
                     ++count;
                 }
 
@@ -436,7 +428,7 @@ namespace hgl
 
             if(*p==0x0D)			// \r
             {
-                sl.Add(sp,p-sp);
+                sl.Add(BaseString<T>(sp,p-sp));
                 ++count;
 
                 ++p;
@@ -453,7 +445,7 @@ namespace hgl
             else
             if(*p==0x0A)			// \n
             {
-                sl.Add(sp,p-sp);
+                sl.Add(BaseString<T>(sp,p-sp));
                 ++count;
 
                 ++p;
@@ -470,7 +462,7 @@ namespace hgl
 
         if(p>sp)
         {
-            sl.Add(sp,p-sp);
+            sl.Add(BaseString<T>(sp,p-sp));
             ++count;
         }
 
@@ -507,7 +499,7 @@ namespace hgl
             {
                 if(p>sp)
                 {
-                    sl[index]->Add(sp,p-sp);
+                    sl[index]->Add(BaseString<T>(sp,p-sp));
                     if(++index==slc)index=0;
                     ++count;
                 }
@@ -518,7 +510,7 @@ namespace hgl
 
             if(*p==0x0D)			// \r
             {
-                sl[index]->Add(sp,p-sp);
+                sl[index]->Add(BaseString<T>(sp,p-sp));
                 if(++index==slc)index=0;
 
                 ++count;
@@ -537,7 +529,7 @@ namespace hgl
             else
             if(*p==0x0A)			// \n
             {
-                sl[index]->Add(sp,p-sp);
+                sl[index]->Add(BaseString<T>(sp,p-sp));
                 if(++index==slc)index=0;
 
                 ++count;
@@ -556,7 +548,7 @@ namespace hgl
 
         if(p>sp)
         {
-            sl[index]->Add(sp,p-sp);
+            sl[index]->Add(BaseString<T>(sp,p-sp));
             ++count;
         }
 

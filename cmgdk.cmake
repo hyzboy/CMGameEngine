@@ -1,24 +1,41 @@
 ﻿SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE)
 
-OPTION(BUILD_BASE_LIB 			"Build Base Library"						TRUE	)
-OPTION(BUILD_ALGORITHM          "Build Algorithm (Hash/Crypt)"              FALSE   )
+OPTION(BUILD_BASE_LIB 			"Build Base Library"						ON	)
 
-OPTION(BUILD_DATABASE           "Build Database support"                    FALSE   )
+OPTION(BUILD_DATABASE           "Build Database support"                    OFF   )
 
-OPTION(BUILD_NETWORK_LIB		"Build Network Library"						TRUE	)
+OPTION(BUILD_NETWORK_LIB		"Build Network Library"						ON	)
 
-OPTION(BUILD_SCRIPT_ANGEL       "Build Script AngelScript"                  FALSE   )
-OPTION(BUILD_SCRIPT_DEVIL       "Build Script DevilScript"                  FALSE   )
+OPTION(BUILD_SCRIPT_ANGEL       "Build Script AngelScript"                  OFF   )
+OPTION(BUILD_SCRIPT_DEVIL       "Build Script DevilScript"                  OFF   )
 
-OPTION(BUILD_NETWORK_SCTP		"Include SCTP Support"						FALSE	)
-OPTION(BUILD_NETWORK_UDP_LITE   "Include UDP-Lite Support"                  FALSE   )
-OPTION(BUILD_QT5_SUPPORT_LIB	"Build QT5 Support Library"					FALSE	)
-OPTION(BUILD_EXAMPLES_PROJECT	"Build Examples Project"					FALSE	)
-OPTION(BUILD_TEST_PROJECT		"Build Test Project"						FALSE	)
-OPTION(BUILD_GUI_TOOLS			"Build GUI Tools"							FALSE	)
+OPTION(BUILD_NETWORK_SCTP		"Include SCTP Support"						OFF	)
+OPTION(BUILD_NETWORK_UDP_LITE   "Include UDP-Lite Support"                  OFF   )
+OPTION(BUILD_NETWORK_WEBSOCKET  "Include WebSocket Support"                 OFF   )
 
-OPTION(BUILD_OpenCart           "Build OpenCart Tools"                      FALSE   )
-OPTION(LOG_CDB_LOADER_LOG		"Output CDBLoader log"						FALSE	)
+IF(BUILD_NETWORK_WEBSOCKET)
+    SET(BUILD_ALGORITHM          ON   )
+ELSE()
+    OPTION(BUILD_ALGORITHM          "Build Algorithm (Hash/Crypt)"              OFF   )
+ENDIF()
+
+OPTION(BUILD_QT5_SUPPORT_LIB	"Build QT5 Support Library"					OFF	)
+
+OPTION(BUILD_TOOLS              "Build Tools"                               OFF   )
+
+IF(BUILD_TOOLS)
+    OPTION(BUILD_GUI_TOOLS		"Build GUI Tools"							OFF	)
+
+    IF(BUILD_GUI_TOOLS)
+        SET(BUILD_QT5_SUPPORT_LIB ON)
+    ENDIF()
+ENDIF()
+
+OPTION(BUILD_EXAMPLES_PROJECT	"Build Examples Project"					OFF	)
+OPTION(BUILD_TEST_PROJECT		"Build Test Project"						OFF	)
+
+OPTION(BUILD_OpenCart           "Build OpenCart Tools"                      OFF   )
+OPTION(LOG_CDB_LOADER_LOG		"Output CDBLoader log"						OFF	)
 
 if(LOG_CDB_LOADER_LOG)
 	add_definitions("-DLOG_CDB_LOADER_LOG")
@@ -75,7 +92,7 @@ SET(HGL_BASE_LIB CM.Base CM.UT)
 
 IF(BUILD_ALGORITHM)
     SET(HGL_BASE_LIB ${HGL_BASE_LIB} CM.Algorithm)
-ENDIF(BUILD_ALGORITHM)
+ENDIF()
 
 IF(BUILD_DATABASE)
     SET(HGL_BASE_LIB ${HGL_BASE_LIB} CM.Database)
@@ -174,7 +191,7 @@ ENDIF(WIN32)
 IF (APPLE)
         SET(HGL_GUI_TYPE MACOSX_BUNDLE)
 ELSEIF(WIN32)
-        SET(HGL_GUI_TYPE WIN32)     
+        SET(HGL_GUI_TYPE WIN32)
 ELSEIF(UNIX)
         SET(HGL_GUI_TYPE)
 ENDIF()
@@ -182,6 +199,7 @@ ENDIF()
 message("")
 message("CMGDK_BUILD_TYPE: " ${CMGDK_BUILD_TYPE})
 message("CMAKE_SIZEOF_VOID_P = ${CMAKE_SIZEOF_VOID_P}")
+message("HGL_BITS = ${HGL_BITS}")
 message("")
 MESSAGE("HGL_BASE_LIB: " ${HGL_BASE_LIB})
 MESSAGE("HGL_NETWORK_LIB: " ${HGL_NETWORK_LIB})

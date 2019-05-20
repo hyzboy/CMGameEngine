@@ -1,6 +1,7 @@
 ﻿#include<hgl/Graphics.h>                //GraphicsApplication,SystemInitInfo
 #include<hgl/graph/Render.h>            //SetClearColor,ClearColorDepthBuffer
 #include<hgl/graph/Material.h>          //Material
+#include<hgl/graph/InlineTexture.h>
 #include<hgl/graph/InlineRenderable.h>  //CreateRenderableCube
 #include<hgl/graph/Renderable.h>        //Renderable
 #include<hgl/graph/Camera.h>            //WalkerCamera
@@ -16,7 +17,7 @@ const Vector3f  eye(100,70,80),
 
 class TestObject:public FlowObject
 {
-    VertexArray *cube_data;                ///<立方体顶点数据
+    VertexArray *cube_data;              ///<立方体顶点数据
     Material *mtl1,*mtl2;                ///<两个材质
     Renderable *cube1,*cube2;            ///<两个渲染对象
 
@@ -69,7 +70,6 @@ private:
         cube1->AutoCreateShader();        //默认参数是true,nullptr
         cube2->AutoCreateShader();
 #endif//_DEBUG
-
     }
 
 public:

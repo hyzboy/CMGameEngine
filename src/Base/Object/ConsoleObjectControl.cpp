@@ -1,4 +1,4 @@
-﻿#include<hgl/object/ConsoleObjectControl.h>
+#include<hgl/object/ConsoleObjectControl.h>
 #include<hgl/LogInfo.h>
 
 namespace hgl
@@ -39,7 +39,7 @@ namespace hgl
 	*/
 	bool ConsoleObjectControl::Unlink(Object *obj)
 	{
-		if(all_object.Find(obj)==-1)
+		if(!all_object.IsExist(obj))
 		{
 			//有已被删除的对象存在，是已断开的，可能被再次断开，所以是正确的
 
@@ -155,21 +155,16 @@ namespace hgl
 		return(nullptr);
 	}
 
-	bool ConsoleObjectControl::FindObject(Object *obj)
-	{
-		return(all_object.Find(obj)!=-1);
-    }
-
 	void ConsoleObjectControl::SetEnabledAttrib(Object *obj,bool e)
 	{
 		if(!e)
 		{
-			clas_object[ocUpdate	].DeleteByData(obj);    //不再刷新
+			clas_object[ocUpdate	].DeleteByValue(obj);    //不再刷新
 		}
 		else
 		{
 			#ifdef _DEBUG
-			if(all_object.Find(obj)==-1)
+			if(!all_object.IsExist(obj))
 			{
 				LOG_ERROR(OS_TEXT("一个被要求设置为显示属性的对象并不在这个对象控制器里"));
 			}
@@ -185,7 +180,7 @@ namespace hgl
 	{
 		if(!obj)return;
 
-		if(all_object.Find(obj)==-1)
+		if(!all_object.IsExist(obj))
 		{
 			LOG_ERROR(OS_TEXT("一个被要求设置刷新属性的对象并不在这个对象控制器里"));
 		}
@@ -194,7 +189,7 @@ namespace hgl
 			if(e)
 				clas_object[ocUpdate].Add(obj);
 			else
-				clas_object[ocUpdate].DeleteByData(obj);
+				clas_object[ocUpdate].DeleteByValue(obj);
 		}
 	}
 
@@ -202,7 +197,7 @@ namespace hgl
 	{
 		if(!obj)return;
 
-		if(destroy_obj.Find(obj)==-1)
+		if(!destroy_obj.IsExist(obj))
 			destroy_obj.Add(obj);
 	}
 }//namespace hgl

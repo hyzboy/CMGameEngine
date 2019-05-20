@@ -1,5 +1,5 @@
-﻿#include<hgl/type/StringList.h>
-#include<hgl/FileSystem.h>
+#include<hgl/type/StringList.h>
+#include<hgl/io/FileSystem.h>
 namespace hgl
 {
     /**
@@ -13,10 +13,10 @@ namespace hgl
         int char_count;
 
         if(size>=3&&data[0]==0xEF&&data[1]==0xBB&&data[2]==0xBF)            //utf8
-            line_count=SplitToStringList<char>(sl,(char *)(data+3),size-3);
+            line_count=SplitToStringListByEnter<char>(sl,(char *)(data+3),size-3);
         else
         if(cs==UTF8CharSet)
-            line_count=SplitToStringList<char>(sl,(char *)data,size);
+            line_count=SplitToStringListByEnter<char>(sl,(char *)data,size);
         else
         {
             if(size>=2)
@@ -63,9 +63,13 @@ namespace hgl
             }
 
             if(!str)
+#ifdef __ANDROID__
+                return 0;
+#else
                 char_count=to_utf8(cs,&str,(char *)data,size);
+#endif//
 
-            line_count=SplitToStringList<char>(sl,str,char_count);
+            line_count=SplitToStringListByEnter<char>(sl,str,char_count);
 
             delete[] str;
         }
@@ -119,7 +123,7 @@ namespace hgl
 
         if((uchar *)str>=data&&(uchar *)str<=data+size)                      //如果str的地址在data的范围内
         {
-            line_count=SplitToStringList<u16char>(sl,str,char_count);
+            line_count=SplitToStringListByEnter<u16char>(sl,str,char_count);
         }
         else
         {
@@ -129,9 +133,15 @@ namespace hgl
             if(cs==UTF8CharSet)
                 str=u8_to_u16((char *)data,size,char_count);
             else
+            {
+#ifdef __ANDROID__
+                return 0;
+#else
                 char_count=to_utf16(cs,&str,(char *)data,size);
+#endif//
+            }
 
-            line_count=SplitToStringList<u16char>(sl,str,char_count);
+            line_count=SplitToStringListByEnter<u16char>(sl,str,char_count);
 
             delete[] str;
         }
@@ -158,7 +168,7 @@ namespace hgl
       /**
      * 加载一个原始文本文件到UTF16StringList
      */
-    int LoadStringListFromText(UTF16StringList &sl,const OSString &filename,const CharSet &cs)
+    int LoadStringListFromTextFile(UTF16StringList &sl,const OSString &filename,const CharSet &cs)
     {
         uchar *data;
 

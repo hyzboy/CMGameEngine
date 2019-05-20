@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------------
 
 #include <vcl.h>         
-#include <hgl/vcl.h>
+#include<hgl/vcl.h>
 //---------------------------------------------------------------------------
 USEFORM("MainUnit.cpp", MainForm);
 USEFORM("SelectFolderUnit.cpp", SelectFolderForm);

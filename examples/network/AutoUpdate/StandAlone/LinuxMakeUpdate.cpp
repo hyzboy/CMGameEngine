@@ -293,7 +293,7 @@ void AppendFileToXML(struct EnumFileConfig *,FileInfo &fi)
         if(filesystem::SaveMemoryToFile(compress_filename,compress_data,compress_filelength)==compress_filelength)
         {
             GetMD5(compress_md5,compress_data,compress_filelength);
-            
+
             DataToHexStr(cmd5str,(uint8 *)&compress_md5,sizeof(MD5Code));
 
             xml<<"\t<file compress_size=\""<<compress_filelength<<"\" compress_md5=\""<<cmd5str<<"\" size=\""<<filelength<<"\" md5=\""<<md5str<<"\" name=\""<<short_filename.c_str()<<"\"/>\n";
@@ -306,12 +306,12 @@ void AppendFileToXML(struct EnumFileConfig *,FileInfo &fi)
     else
     {
         std::cout<<"compress data failed,use uncompress data!"<<std::endl;
-        
+
         //压缩失败，使用未压缩数据
-        
+
         xml<<"\t<file compress_size=\""<<filelength<<"\" compress_md5=\""<<md5str<<"\" size=\""<<filelength<<"\" md5=\""<<md5str<<"\" name=\""<<short_filename.c_str()<<"\"/>\n";
     }
-    
+
     delete[] compress_data;
     delete[] filedata;
 }

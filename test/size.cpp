@@ -1,10 +1,10 @@
-#include<stdio.h>
-#include<hgl/VectorMath.h>
+﻿#include<stdio.h>
+#include<hgl/algorithm/VectorMath.h>
 
 template<typename T>
 void test(T &t)
 {
-	printf("struct sizeof=%d\n",sizeof(T));
+	printf("struct sizeof=%lu\n",sizeof(T));
 }
 
 int main(int argc,char **argv)

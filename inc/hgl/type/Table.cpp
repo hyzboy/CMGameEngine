@@ -1,4 +1,4 @@
-#ifndef HGL_TABLE_CPP
+﻿#ifndef HGL_TABLE_CPP
 #define HGL_TABLE_CPP
 
 #include<hgl/type/Table.h>
@@ -47,7 +47,7 @@ namespace hgl
 		col_count=w;
 		row_count=h;
 
-		Data=(T **)hgl_malloc(row_count*sizeof(T *));
+        Data=hgl_aligned_malloc<T *>(row_count);
 
 		memset(Data,0,row_count*sizeof(T *));
 
@@ -324,7 +324,7 @@ namespace hgl
 		for(int row=0;row<row_count;row++)
 			if(src.Data[row])
 			{
-				Data[row]=(T *)hgl_malloc(col_count*sizeof(T));
+                Data[row]=hgl_aligned_malloc<T>(col_count);
 
 				memcpy(Data[row],src.Data[row],col_count*sizeof(T));
 			}
@@ -364,7 +364,7 @@ namespace hgl
 
 		if(!Data[r])
 		{
-			Data[r]=(T *)hgl_malloc(col_count*sizeof(T));
+            Data[r]=hgl_aligned_malloc<T>(col_count);
 
 			int n=col_count;
 			while(n--)
@@ -429,7 +429,7 @@ namespace hgl
 
 			if(size)
 			{
-				Data[row]=(T *)hgl_malloc(col_count*sizeof(T));
+                Data[row]=hgl_aligned_malloc<T>(col_count);
 
 				if(OnLoad==nullptr)
 				{

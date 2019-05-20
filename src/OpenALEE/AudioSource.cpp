@@ -372,11 +372,11 @@ namespace hgl
         loop=false;
 
         alGetSourcef    (index,AL_PITCH,                &pitch);
-        alGetSourcef	(index,AL_GAIN,                 &gain);
+        alGetSourcef    (index,AL_GAIN,                 &gain);
         alGetSourcef    (index,AL_CONE_OUTER_GAIN,      &cone_gain);
         alGetSourcefv   (index,AL_POSITION,             position);
         alGetSourcefv   (index,AL_VELOCITY,             velocity);
-        alGetSourcefv   (index,AL_DIRECTION,			direction);
+        alGetSourcefv   (index,AL_DIRECTION,            direction);
         alGetSourcef    (index,AL_MAX_DISTANCE,         &max_dist);
         alGetSourcef    (index,AL_REFERENCE_DISTANCE,   &ref_dist);
         alGetSourcef    (index,AL_ROLLOFF_FACTOR,       &rolloff_factor);

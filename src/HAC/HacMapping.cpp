@@ -43,7 +43,7 @@ namespace hgl
 			strcat(full_filename,filename);
 		}
 
-		return hgl::FileConfirm(full_filename);
+		return hgl::FileExist(full_filename);
 	}
 
 	bool HacMapping::FindFile(void *folder,const u16char *filename)

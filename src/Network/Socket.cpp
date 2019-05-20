@@ -20,34 +20,89 @@ namespace hgl
     namespace network
     {
 #if HGL_OS == HGL_OS_Windows
-    namespace
-    {
-        static bool winsocket_init=false;
-    }//namespace
+        namespace
+        {
+            static bool winsocket_init=false;
+        }//namespace
 
-    bool InitWinSocket()
-    {
-        if(winsocket_init)return(true);
+        bool InitWinSocket()
+        {
+            if(winsocket_init)return(true);
 
-        WSADATA wsa;
+            WSADATA wsa;
 
-        winsocket_init=(WSAStartup(MAKEWORD(2,2),&wsa)==NO_ERROR);
+            winsocket_init=(WSAStartup(MAKEWORD(2,2),&wsa)==NO_ERROR);
 
-        return(winsocket_init);
-    }
+            return(winsocket_init);
+        }
 #endif//HGL_OS == HGL_OS_Windows
+
+        int CreateSocket(const IPAddress *addr)
+        {
+            if(!addr)
+                RETURN_ERROR(-1);
+
+            #if HGL_OS == HGL_OS_Windows
+            if(!InitWinSocket())
+                RETURN_ERROR(-2);
+            #endif//HGL_OS == HGL_OS_Windows
+
+            const int protocol=addr->GetProtocol();
+
+            int s=socket(addr->GetFamily(),
+                         addr->GetSocketType(),
+                         addr->GetProtocol());
+
+            if(s<0)
+            {
+                const int sock_error=GetLastSocketError();      //在这里定义一个，是为了调试方便可以查看
+
+                LOG_ERROR(OS_TEXT("CreateSocket(domain=")+OSString(addr->GetFamily())+
+                            OS_TEXT(",type=")+OSString(addr->GetSocketType())+
+                            OS_TEXT(",protocol=")+OSString(protocol)+
+                            OS_TEXT(") return ")+OSString(s)+
+                            OS_TEXT("; errno ")+OSString(sock_error));
+
+                RETURN_ERROR(-3);
+            }
+
+            LOG_INFO(U8_TEXT("Create ")+UTF8String(GetProtocolName())+U8_TEXT(" Socket OK: ")+UTF8String(s));
+
+            return s;
+        }
+
+        /**
+         * 连接当前socket到指定地址
+         */
+        bool Connect(int sock,IPAddress *addr)
+        {
+            if(sock<0||!addr)
+                RETURN_FALSE;
+
+            if(connect(sock,addr->GetSockAddr(),addr->GetSockAddrInSize()))
+                RETURN_FALSE;
+
+            return(true);
+        }
 
 //        static atom_int socket_count=0;
 
         Socket::Socket()
         {
+            ThisAddress=nullptr;
             ThisSocket=-1;
 
-            socket_domain=-1;
-            socket_type=-1;
-            socket_protocols=-1;
-
 //            LOG_INFO(u8"Socket Count ++: "+UTF8String(++socket_count));
+        }
+
+        Socket::Socket(int sock,const IPAddress *addr)
+        {
+            ThisSocket=sock;
+
+            if(addr)
+                ThisAddress=addr->CreateCopy();
+            else
+                ThisAddress=nullptr;
         }
 
         Socket::~Socket()
@@ -57,41 +112,60 @@ namespace hgl
 //            LOG_INFO(u8"Socket Count --: "+UTF8String(--socket_count));
         }
 
-        bool Socket::CreateSocket(int d,int t,int p)
+        bool Socket::InitSocket(const IPAddress *addr)
         {
+            if(!addr)
+                RETURN_FALSE;
+
+            SAFE_CLEAR(ThisAddress);
+
             #if HGL_OS == HGL_OS_Windows
             if(!InitWinSocket())
                 RETURN_FALSE;
             #endif//HGL_OS == HGL_OS_Windows
 
-            int s=socket(d,t,p);
+            ThisSocket=CreateSocket(addr);
 
-            if(s<0)
-            {
-                LOG_ERROR(OS_TEXT("Socket::CreateSocket(domain=")+OSString(d)+
-                            OS_TEXT(",type=")+OSString(t)+
-                            OS_TEXT(",protocol=")+OSString(p)+
-                            OS_TEXT(") return ")+OSString(s)+
-                            OS_TEXT("; errno ")+OSString(GetLastSocketError()));
-
+            if(ThisSocket<0)
                 RETURN_FALSE;
-            }
 
-            if(p==IPPROTO_UDP){LOG_INFO(OS_TEXT("Create UDP Socket OK: ")+OSString(s));}else
-            if(p==IPPROTO_TCP){LOG_INFO(OS_TEXT("Create TCP Socket OK: ")+OSString(s));}else
-#if HGL_OS != HGL_OS_Windows
-            if(p==IPPROTO_SCTP){LOG_INFO(OS_TEXT("Create SCTP Socket OK: ")+OSString(s));}else
-#endif//HGL_OS != HGL_OS_Windows
-            {
-                LOG_INFO(OS_TEXT("Create Protocol[")+OSString(p)+OS_TEXT("] Socket OK: ")+OSString(s));
-            }
-
-            socket_domain=d;
-            socket_type=t;
-            socket_protocols=p;
-
-            ThisSocket=s;
+            ThisAddress=addr->CreateCopy();
             return(true);
+        }
+
+        /**
+         * 使用一个现有的Socket
+         */
+        bool Socket::UseSocket(int sock,const IPAddress *addr)
+        {
+            if(sock<0||!addr)
+                RETURN_FALSE;
+
+            SAFE_CLEAR(ThisAddress);
+
+            ThisSocket=sock;
+            ThisAddress=addr->CreateCopy();
+
+            return(true);
+        }
+
+        /**
+         * 使用现有的地址重新创建Socket
+         */
+        bool Socket::ReCreateSocket()
+        {
+            if(!ThisAddress)
+                RETURN_FALSE;
+
+            if(ThisSocket!=-1)
+                hgl::CloseSocket(ThisSocket);
+
+            ThisSocket=CreateSocket(ThisAddress);
+
+            if(ThisSocket!=-1)
+                return(true);
+
+            RETURN_FALSE;
         }
 
         /**
@@ -165,49 +239,21 @@ namespace hgl
 
             {ENOMSG            ,OS_TEXT("No message of desired type")},
             {EIDRM            ,OS_TEXT("Identifier removed")},
-            {ECHRNG            ,OS_TEXT("Channel number out of range")},
-            {EL2NSYNC        ,OS_TEXT("Level 2 not synchronized")},
-            {EL3HLT            ,OS_TEXT("Level 3 halted")},
-            {EL3RST            ,OS_TEXT("Level 3 reset")},
-            {ELNRNG            ,OS_TEXT("Link number out of range")},
-            {EUNATCH        ,OS_TEXT("Protocol driver not attached")},
-            {ENOCSI            ,OS_TEXT("No CSI structure available")},
-            {EL2HLT            ,OS_TEXT("Level 2 halted")},
-            {EBADE            ,OS_TEXT("Invalid exchange")},
-            {EBADR            ,OS_TEXT("Invalid request descriptor")},
-            {EXFULL            ,OS_TEXT("Exchange full")},
-            {ENOANO            ,OS_TEXT("No anode")},
-            {EBADRQC        ,OS_TEXT("Invalid request code")},
-            {EBADSLT        ,OS_TEXT("Invalid slot")},
 
-            {EBFONT            ,OS_TEXT("Bad font file format")},
             {ENOSTR            ,OS_TEXT("Device not a stream")},
             {ENODATA        ,OS_TEXT("No data available")},
             {ETIME            ,OS_TEXT("Timer expired")},
             {ENOSR            ,OS_TEXT("Out of streams resources")},
-            {ENONET            ,OS_TEXT("Machine is not on the network")},
-            {ENOPKG            ,OS_TEXT("Package not installed")},
+
             {EREMOTE        ,OS_TEXT("Object is remote")},
             {ENOLINK        ,OS_TEXT("Link has been severed")},
-            {EADV            ,OS_TEXT("Advertise error")},
-            {ESRMNT            ,OS_TEXT("Srmount error")},
-            {ECOMM            ,OS_TEXT("Communication error on send")},
+
             {EPROTO            ,OS_TEXT("Protocol error")},
             {EMULTIHOP        ,OS_TEXT("Multihop attempted")},
-            {EDOTDOT        ,OS_TEXT("RFS specific error")},
+
             {EBADMSG        ,OS_TEXT("Not a data message")},
             {EOVERFLOW        ,OS_TEXT("Value too large for defined data type")},
-            {ENOTUNIQ        ,OS_TEXT("Name not unique on network")},
-            {EBADFD            ,OS_TEXT("File descriptor in bad state")},
-            {EREMCHG        ,OS_TEXT("Remote address changed")},
-            {ELIBACC        ,OS_TEXT("Can not access a needed shared library")},
-            {ELIBBAD        ,OS_TEXT("Accessing a corrupted shared library")},
-            {ELIBSCN        ,OS_TEXT(".lib section in a.out corrupted")},
-            {ELIBMAX        ,OS_TEXT("Attempting to link in too many shared libraries")},
-            {ELIBEXEC        ,OS_TEXT("Cannot exec a shared library directly")},
             {EILSEQ            ,OS_TEXT("Illegal byte sequence")},
-            {ERESTART        ,OS_TEXT("Interrupted system call should be restarted")},
-            {ESTRPIPE        ,OS_TEXT("Streams pipe error")},
             {EUSERS            ,OS_TEXT("Too many users")},
             {ENOTSOCK        ,OS_TEXT("Socket operation on non-socket")},
             {EDESTADDRREQ    ,OS_TEXT("Destination address required")},
@@ -238,27 +284,66 @@ namespace hgl
             {EALREADY        ,OS_TEXT("Operation already in progress")},
             {EINPROGRESS    ,OS_TEXT("Operation now in progress")},
             {ESTALE            ,OS_TEXT("Stale NFS file handle")},
+            {EDQUOT            ,OS_TEXT("Quota exceeded")},
+
+            {ECANCELED        ,OS_TEXT("Operation Canceled")},
+
+            {EOWNERDEAD        ,OS_TEXT("Owner died")},
+            {ENOTRECOVERABLE,OS_TEXT("State not recoverable")},
+
+    #if (HGL_OS != HGL_OS_macOS)&&(HGL_OS != HGL_OS_iOS)
+            {ECHRNG            ,OS_TEXT("Channel number out of range")},
+            {EL2NSYNC        ,OS_TEXT("Level 2 not synchronized")},
+            {EL3HLT            ,OS_TEXT("Level 3 halted")},
+            {EL3RST            ,OS_TEXT("Level 3 reset")},
+            {ELNRNG            ,OS_TEXT("Link number out of range")},
+            {EUNATCH        ,OS_TEXT("Protocol driver not attached")},
+            {ENOCSI            ,OS_TEXT("No CSI structure available")},
+            {EL2HLT            ,OS_TEXT("Level 2 halted")},
+            {EBADE            ,OS_TEXT("Invalid exchange")},
+            {EBADR            ,OS_TEXT("Invalid request descriptor")},
+            {EXFULL            ,OS_TEXT("Exchange full")},
+            {ENOANO            ,OS_TEXT("No anode")},
+            {EBADRQC        ,OS_TEXT("Invalid request code")},
+            {EBADSLT        ,OS_TEXT("Invalid slot")},
+
+            {EBFONT            ,OS_TEXT("Bad font file format")},
+
+            {ENONET            ,OS_TEXT("Machine is not on the network")},
+            {ENOPKG            ,OS_TEXT("Package not installed")},
+            {EADV            ,OS_TEXT("Advertise error")},
+            {ESRMNT            ,OS_TEXT("Srmount error")},
+
+            {ECOMM            ,OS_TEXT("Communication error on send")},
+            {EDOTDOT        ,OS_TEXT("RFS specific error")},
+            {ENOTUNIQ        ,OS_TEXT("Name not unique on network")},
+            {EBADFD            ,OS_TEXT("File descriptor in bad state")},
+            {EREMCHG        ,OS_TEXT("Remote address changed")},
+            {ELIBACC        ,OS_TEXT("Can not access a needed shared library")},
+            {ELIBBAD        ,OS_TEXT("Accessing a corrupted shared library")},
+            {ELIBSCN        ,OS_TEXT(".lib section in a.out corrupted")},
+            {ELIBMAX        ,OS_TEXT("Attempting to link in too many shared libraries")},
+            {ELIBEXEC        ,OS_TEXT("Cannot exec a shared library directly")},
+            {ERESTART        ,OS_TEXT("Interrupted system call should be restarted")},
+            {ESTRPIPE        ,OS_TEXT("Streams pipe error")},
             {EUCLEAN        ,OS_TEXT("Structure needs cleaning")},
             {ENOTNAM        ,OS_TEXT("Not a XENIX named type file")},
             {ENAVAIL        ,OS_TEXT("No XENIX semaphores available")},
             {EISNAM            ,OS_TEXT("Is a named type file")},
             {EREMOTEIO        ,OS_TEXT("Remote I/O error")},
-            {EDQUOT            ,OS_TEXT("Quota exceeded")},
-
             {ENOMEDIUM        ,OS_TEXT("No medium found")},
             {EMEDIUMTYPE    ,OS_TEXT("Wrong medium type")},
-            {ECANCELED        ,OS_TEXT("Operation Canceled")},
+
             {ENOKEY            ,OS_TEXT("Required key not available")},
             {EKEYEXPIRED    ,OS_TEXT("Key has expired")},
             {EKEYREVOKED    ,OS_TEXT("Key has been revoked")},
             {EKEYREJECTED    ,OS_TEXT("Key was rejected by service")},
-
-            {EOWNERDEAD        ,OS_TEXT("Owner died")},
-            {ENOTRECOVERABLE,OS_TEXT("State not recoverable")},
-
             {ERFKILL        ,OS_TEXT("Operation not possible due to RF-kill")},
 
             {EHWPOISON        ,OS_TEXT("Memory page has hardware error")},
+
+    #endif//
+
 #else
             {10004, OS_TEXT("阻塞操作被函数WSACancelBlockingCall ()调用所中断")},
             {10013, OS_TEXT("试图使用被禁止的访问权限去访问套接字")},

@@ -71,5 +71,5 @@ namespace hgl
 		}
 	};//template<typename T> class QueueObject
 }//namespace hgl
-#include <hgl/type/Queue.cpp>
+#include<hgl/type/Queue.cpp>
 #endif//HGL_QUEUE_INCLUDE

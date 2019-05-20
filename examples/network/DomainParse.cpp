@@ -36,9 +36,13 @@ void parse(const UTF8String &type_string,const UTF8String &domain)
 
     ipa.GetDomainIPList(ip_list,domain,tp.left,tp.right);
 
+    T_IN_ADDR *ip=ip_list.GetData();
+
     for(int i=0;i<ip_list.GetCount();i++)
     {
-        ipa.ToString(addr_string,ip_list[i]);
+        T_IPADDRESS::ToString(addr_string,ADDRSTRLEN,ip);
+
+        ++ip;
 
         std::cout<<addr_string<<::std::endl;
     }

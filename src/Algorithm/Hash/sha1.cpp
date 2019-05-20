@@ -1,67 +1,70 @@
-#include<hgl/algorithm/Hash.h>
+﻿#include<hgl/algorithm/Hash.h>
 #include<hgl/endian/Endian.h>
 
 namespace hgl
 {
     namespace algorithm
     {
-        /* The SHA f()-functions */
-        #define f1(x,y,z)   ( ( x & y ) | ( ~x & z ) )              /* Rounds  0-19 */
-        #define f2(x,y,z)   ( x ^ y ^ z )                           /* Rounds 20-39 */
-        #define f3(x,y,z)   ( ( x & y ) | ( x & z ) | ( y & z ) )   /* Rounds 40-59 */
-        #define f4(x,y,z)   ( x ^ y ^ z )                           /* Rounds 60-79 */
+        namespace
+        {
+            /* The SHA f()-functions */
+            #define f1(x,y,z)   ( ( x & y ) | ( ~x & z ) )              /* Rounds  0-19 */
+            #define f2(x,y,z)   ( x ^ y ^ z )                           /* Rounds 20-39 */
+            #define f3(x,y,z)   ( ( x & y ) | ( x & z ) | ( y & z ) )   /* Rounds 40-59 */
+            #define f4(x,y,z)   ( x ^ y ^ z )                           /* Rounds 60-79 */
 
-        /* The SHA Mysterious Constants */
-        #define K1  0x5A827999L     /* Rounds  0-19 */
-        #define K2  0x6ED9EBA1L     /* Rounds 20-39 */
-        #define K3  0x8F1BBCDCL     /* Rounds 40-59 */
-        #define K4  0xCA62C1D6L     /* Rounds 60-79 */
+            /* The SHA Mysterious Constants */
+            #define K1  0x5A827999L     /* Rounds  0-19 */
+            #define K2  0x6ED9EBA1L     /* Rounds 20-39 */
+            #define K3  0x8F1BBCDCL     /* Rounds 40-59 */
+            #define K4  0xCA62C1D6L     /* Rounds 60-79 */
 
-        #define S(n,X)  ( ( ((uint32)X) << n ) | ( ((uint32)X) >> ( 32 - n ) ) )
+            #define S(n,X)  ( ( ((uint32)X) << n ) | ( ((uint32)X) >> ( 32 - n ) ) )
 
-        /* The initial expanding function */
-        #define expand(count)   W[ count ] = S(1,(W[ count - 3 ] ^ W[ count - 8 ] ^ W[ count - 14 ] ^ W[ count - 16 ]))    /* to make this SHA-1 */
+            /* The initial expanding function */
+            #define expand(count)   W[ count ] = S(1,(W[ count - 3 ] ^ W[ count - 8 ] ^ W[ count - 14 ] ^ W[ count - 16 ]))    /* to make this SHA-1 */
 
-        /* The four SHA sub-rounds */
-        #define subRound1(count)    \
-        { \
-            temp = S( 5, A ) + f1( B, C, D ) + E + W[ count ] + K1; \
-            E = D; \
-            D = C; \
-            C = S( 30, B ); \
-            B = A; \
-            A = temp; \
-        }
+            /* The four SHA sub-rounds */
+            #define subRound1(count)    \
+            { \
+                temp = S( 5, A ) + f1( B, C, D ) + E + W[ count ] + K1; \
+                E = D; \
+                D = C; \
+                C = S( 30, B ); \
+                B = A; \
+                A = temp; \
+            }
 
-        #define subRound2(count)    \
-        { \
-            temp = S( 5, A ) + f2( B, C, D ) + E + W[ count ] + K2; \
-            E = D; \
-            D = C; \
-            C = S( 30, B ); \
-            B = A; \
-            A = temp; \
-        }
+            #define subRound2(count)    \
+            { \
+                temp = S( 5, A ) + f2( B, C, D ) + E + W[ count ] + K2; \
+                E = D; \
+                D = C; \
+                C = S( 30, B ); \
+                B = A; \
+                A = temp; \
+            }
 
-        #define subRound3(count)    \
-        { \
-            temp = S( 5, A ) + f3( B, C, D ) + E + W[ count ] + K3; \
-            E = D; \
-            D = C; \
-            C = S( 30, B ); \
-            B = A; \
-            A = temp; \
-        }
+            #define subRound3(count)    \
+            { \
+                temp = S( 5, A ) + f3( B, C, D ) + E + W[ count ] + K3; \
+                E = D; \
+                D = C; \
+                C = S( 30, B ); \
+                B = A; \
+                A = temp; \
+            }
 
-        #define subRound4(count)    \
-        { \
-            temp = S( 5, A ) + f4( B, C, D ) + E + W[ count ] + K4; \
-            E = D; \
-            D = C; \
-            C = S( 30, B ); \
-            B = A; \
-            A = temp; \
-        }
+            #define subRound4(count)    \
+            { \
+                temp = S( 5, A ) + f4( B, C, D ) + E + W[ count ] + K4; \
+                E = D; \
+                D = C; \
+                C = S( 30, B ); \
+                B = A; \
+                A = temp; \
+            }
+        }//namespace
 
         class SHA1:public Hash
         {
@@ -77,18 +80,17 @@ namespace hgl
             uint32 data[16];  // SHA data buffer
             uint32 slop;      // # of bytes saved in data[]
 
+            uint32 W[80];
+
         private:
 
             void sha1_transform()
             {
-                uint32 W[80];
                 uint32 temp;
                 uint32 A, B, C, D, E;
-                int i;
 
                 /* Step A.  Copy the data buffer into the local work buffer */
-                for( i = 0; i < 16; i++ )
-                W[ i ] = data[ i ];
+                hgl_typecpy(W,data,16);
 
                 /* Step B.  Expand the 16 words into 64 temporary data words */
                 expand( 16 ); expand( 17 ); expand( 18 ); expand( 19 ); expand( 20 );
@@ -113,21 +115,24 @@ namespace hgl
                 E = digest[ 4 ];
 
                 /* Step D.  Serious mangling, divided into four sub-rounds */
-                subRound1( 0 ); subRound1( 1 ); subRound1( 2 ); subRound1( 3 );
-                subRound1( 4 ); subRound1( 5 ); subRound1( 6 ); subRound1( 7 );
-                subRound1( 8 ); subRound1( 9 ); subRound1( 10 ); subRound1( 11 );
+                subRound1(  0 ); subRound1(  1 ); subRound1(  2 ); subRound1(  3 );
+                subRound1(  4 ); subRound1(  5 ); subRound1(  6 ); subRound1(  7 );
+                subRound1(  8 ); subRound1(  9 ); subRound1( 10 ); subRound1( 11 );
                 subRound1( 12 ); subRound1( 13 ); subRound1( 14 ); subRound1( 15 );
                 subRound1( 16 ); subRound1( 17 ); subRound1( 18 ); subRound1( 19 );
+
                 subRound2( 20 ); subRound2( 21 ); subRound2( 22 ); subRound2( 23 );
                 subRound2( 24 ); subRound2( 25 ); subRound2( 26 ); subRound2( 27 );
                 subRound2( 28 ); subRound2( 29 ); subRound2( 30 ); subRound2( 31 );
                 subRound2( 32 ); subRound2( 33 ); subRound2( 34 ); subRound2( 35 );
                 subRound2( 36 ); subRound2( 37 ); subRound2( 38 ); subRound2( 39 );
+
                 subRound3( 40 ); subRound3( 41 ); subRound3( 42 ); subRound3( 43 );
                 subRound3( 44 ); subRound3( 45 ); subRound3( 46 ); subRound3( 47 );
                 subRound3( 48 ); subRound3( 49 ); subRound3( 50 ); subRound3( 51 );
                 subRound3( 52 ); subRound3( 53 ); subRound3( 54 ); subRound3( 55 );
                 subRound3( 56 ); subRound3( 57 ); subRound3( 58 ); subRound3( 59 );
+
                 subRound4( 60 ); subRound4( 61 ); subRound4( 62 ); subRound4( 63 );
                 subRound4( 64 ); subRound4( 65 ); subRound4( 66 ); subRound4( 67 );
                 subRound4( 68 ); subRound4( 69 ); subRound4( 70 ); subRound4( 71 );
@@ -165,7 +170,7 @@ namespace hgl
             void Update(const void *input,uint count)override
             {
                 const uint8 *buffer=(const uint8 *)input;
-                uint8* db = (uint8*) &data[0];
+                uint size;
 
                 /* Update bitcount */
                 if ((countLo + ((uint32) count << 3)) < countLo)
@@ -174,9 +179,18 @@ namespace hgl
                 countHi += ((uint32 ) count >> 29);
 
                 /* Process data in BLOCK_SIZE chunks */
-                while (count-- > 0)
+                while (count > 0)
                 {
-                    db[slop++] = *(buffer++);
+                    size=BLOCK_SIZE-slop;
+                    if(size>count)
+                        size=count;
+
+                    memcpy(data,buffer,size);
+
+                    slop+=size;
+                    buffer+=size;
+                    count-=size;
+
                     if (slop == BLOCK_SIZE)
                     {
                         /* transform this one block */

@@ -1,127 +1,153 @@
 ﻿#ifndef HGL_NETWORK_SOCKET_MANAGE_THREAD_INCLUDE
 #define HGL_NETWORK_SOCKET_MANAGE_THREAD_INCLUDE
 
+#include<hgl/network/SocketManage.h>
 #include<hgl/thread/Thread.h>
-#include<hgl/thread/SemLock.h>
-#include<hgl/type/Set.h>
-#include<hgl/type/List.h>
-#include<hgl/type/Map.h>
-#include<hgl/network/SocketEvent.h>
-#include<hgl/network/IOSocket.h>
+#include<hgl/thread/SwapData.h>
 namespace hgl
 {
-	namespace network
-	{
-		class Socket;
-		class OnewaySocketManageBase;
+    namespace network
+    {
+        /**
+         * 简单的Socket管理器线程
+         */
+        template<typename USER_ACCEPT> class SocketManageThread:public Thread
+        {
+        public:
 
-		OnewaySocketManageBase *CreateRecvSocketManage(int max_user);								///<创建一个只处理读取的Socket管理器
-		OnewaySocketManageBase *CreateSendSocketManage(int max_user);								///<创建一个只处理发送的Socket管理器
+            using AcceptSocketList=List<USER_ACCEPT *>;                           ///<工作对象列表定义
 
-		/**
-		 * Socket管理线程
-		 */
-		class SocketManageThread:public Thread
-		{
-		protected:
+        protected:
 
-			OnewaySocketManageBase *sock_manage;													///<Socket管理器
+            SocketManage *sock_manage;
 
-			ThreadMutexObject<Map<int,IOSocket *>> sock_set;										///<Socket合集
+        protected:
 
-			List<SocketEvent> event_list;															///<Socket事件列表
-			List<SocketEvent> error_list;															///<Socket错误列表
+            SemSwapData<AcceptSocketList> join_list;                            ///<待添加的Socket对象列表
+            SemSwapData<AcceptSocketList> unjoin_list;                          ///<待移出的Socket对象列表
 
-			List<IOSocket *> error_socket_list;
+            virtual void OnSocketClear(USER_ACCEPT *us){delete us;}             ///<Socket清理事件
+            virtual void OnSocketError(USER_ACCEPT *us){OnSocketClear(us);}     ///<Socket出错处理事件
 
-			Set<int> delete_list;
+            template<typename ST>
+            void ClearAcceptSocketList(ST &sl)
+            {
+                const int count=sl.GetCount();
+                USER_ACCEPT **us=sl.GetData();
 
-			virtual void ProcSocketDelete();														///<处理要被删除的Socket
+                for(int i=0;i<count;i++)
+                {
+                    OnSocketClear(*us);
+                    ++us;
+                }
 
-		protected:
+                sl.ClearData();
+            }
 
-			SemThreadMutex<Set<IOSocket *>> sock_join_set;											///<Socket加入合集
+            virtual bool Join(USER_ACCEPT *us){return sock_manage->Join(us);}     ///<单个工作对象接入处理函数
+            virtual bool Unjoin(USER_ACCEPT *us){return sock_manage->Unjoin(us);} ///<单个工作对象退出处理函数
+                        
+            /**
+             *处理要接入的工作对象列表
+             */
+            void ProcJoinList()
+            {
+                AcceptSocketList &usl=join_list.GetReceive();
 
-			virtual void ProcSocketJoin();															///<处理Socket加入
+                const int count=usl.GetCount();
+                USER_ACCEPT **us=usl.GetData();
 
-		public:
+                for(int i=0;i<count;i++)
+                {
+                    Join(*us);
+                    ++us;
+                }
 
-			double time_out;																		///<超时时间
+                usl.ClearData();
+            }
 
-		public:
+            /**
+             * 处理要退出的工作对象列表
+             */
+            void ProcUnjoinList()
+            {
+                AcceptSocketList &usl=unjoin_list.GetReceive();
 
-			SocketManageThread();
-			virtual ~SocketManageThread();
+                const int count=usl.GetCount();
+                USER_ACCEPT **us=usl.GetData();
 
-			virtual bool Execute()override;														    ///<本线程刷新函数
+                for(int i=0;i<count;i++)
+                {
+                    Unjoin(*us);
+                    ++us;
+                }
 
-			virtual bool ProcStartThread()override=0;
-			virtual void ProcError(IOSocket **,const int)=0;										///<处理错误Socket列表函数
-			virtual bool ProcEvent(IOSocket *,int)=0;												///<处理事件Socket列表函数(需使用者自行重载处理)
+                usl.ClearData();
+            }
 
-		public:
+        public:
 
-			virtual bool Join(IOSocket *);															///<加入一个Socket
-			virtual int Join(IOSocket **,const int);												///<加入一批Socket
-			virtual bool Unjoin(IOSocket *);														///<分离一个Socket
+            SocketManageThread(SocketManage *sm)
+            {
+                sock_manage=sm;
+            }
 
-			virtual int GetCount()const;															///<取得Socket数量
-			virtual void Clear();																	///<清除所有Socket
-		};//class SocketManageThread
+            virtual ~SocketManageThread()
+            {
+                SAFE_CLEAR(sock_manage);
+            }
 
-		/**
-		 * 接收数据Socket管理线程
-		 */
-		class RecvSocketManageThread:public SocketManageThread
-		{
-			int max_user;
+            virtual void ProcEndThread() override            
+            {
+                ClearAcceptSocketList(join_list.GetReceive());
+                join_list.Swap();
+                ClearAcceptSocketList(join_list.GetReceive());
 
-		public:
+                sock_manage->Clear();
 
-			RecvSocketManageThread(int _max_user):SocketManageThread(),max_user(_max_user){}
+                //unjoin_list中的理论上都已经在wo_list/join_list里了，所以不需要走Clear，直接清空列表
+                unjoin_list.GetReceive().ClearData();
+                unjoin_list.Swap();
+                unjoin_list.GetReceive().ClearData();
+            }
 
-			virtual bool ProcStartThread()
-			{
-				this->sock_manage=CreateRecvSocketManage(max_user);
+            virtual bool Execute() override
+            {
+                if(join_list.TrySemSwap())
+                    ProcJoinList();
 
-				return(this->sock_manage);
-			}
+                if(unjoin_list.TrySemSwap())
+                    ProcUnjoinList();
 
-			virtual bool ProcEvent(IOSocket *sock,int size)								            ///<处理Socket接收事件函数
-			{
-				return(sock->ProcRecv(size)>=0);
-			}
+                sock_manage->Update(0.1);         //这里写0.1秒，只是为了不卡住主轮循。这是个错误的设计，未来要将epoll(recv)完全独立一个线程跑
 
-			virtual void ProcError(IOSocket **,const int)=0;							            ///<处理Socket出错事件函数
-		};//class RecvSocketManageThread
+                const auto &error_set=sock_manage->GetErrorSocketSet();
+                USER_ACCEPT **us=(USER_ACCEPT **)error_set.GetData();
 
-		/**
-		 * 发送数据Socket管理线程
-		 */
-		class SendSocketManageThread:public SocketManageThread
-		{
-			int max_user;
+                for(int i=0;i<error_set.GetCount();i++)
+                {
+                    OnSocketError(*us);
+                    ++us;
+                }
+                return(true);
+            }
 
-		public:
+        public:
 
-			SendSocketManageThread(int _max_user):SocketManageThread(),max_user(_max_user){}
+            virtual AcceptSocketList &  JoinBegin(){return join_list.GetPost();}    ///<开始添加要接入的Socket对象
+            virtual void                JoinEnd()                                   ///<结束添加要接入的Socket对象
+            {
+                join_list.ReleasePost();
+                join_list.PostSem();
+            }
 
-			virtual bool ProcStartThread()
-			{
-				this->sock_manage=CreateSendSocketManage(max_user);
-
-				return(this->sock_manage);
-			}
-
-			virtual bool ProcEvent(IOSocket *sock,int size)                                         ///<处理Socket发送事件函数
-			{
-				int left_bytes;
-
-				return(sock->ProcSend(size,left_bytes)>=0);
-			}
-
-			virtual void ProcError(IOSocket **,const int)=0;							            ///<处理Socket出错事件函数
-		};//class SendSocketManageThread
-	}//namespace network
+            virtual AcceptSocketList &  UnjoinBegin(){return unjoin_list.GetPost();}///<开始添加要退出的Socket对象
+            virtual void                UnjoinEnd()                                 ///<结束添加要退出的Socket对象
+            {
+                unjoin_list.ReleasePost();
+                unjoin_list.PostSem();
+            }
+        };//template<typename USER_ACCEPT> class SocketManageThread:public Thread
+    }//namespace network
 }//namespace hgl
 #endif//HGL_NETWORK_SOCKET_MANAGE_THREAD_INCLUDE

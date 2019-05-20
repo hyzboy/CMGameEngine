@@ -20,7 +20,7 @@ namespace hgl
 
 		parse.GetToken(name);
 
-		if(prop_map.Find(name)!=-1)					//在已有记录找到同名的映射
+		if(prop_map.KeyExist(name))					//在已有记录找到同名的映射
 		{
             LOG_ERROR(u"重复属性名映射: "+UTF16String(intro));
 			return(false);
@@ -54,7 +54,7 @@ namespace hgl
 
 		parse.GetToken(func_name);						//取得函数名称
 
-		if(func_map.Find(func_name)!=-1)				//在已有记录找到同名的映射
+		if(func_map.KeyExist(func_name))				//在已有记录找到同名的映射
 		{
 			LOG_ERROR(u"repeat func name:"+UTF16String(intro));
 			return(false);
@@ -178,7 +178,7 @@ namespace hgl
 
 	bool DevilScriptModule::AddEnum(const u16char *enum_name,DevilEnum *script_enum)
 	{
-		if(enum_map.Find(enum_name)!=-1)
+		if(enum_map.KeyExist(enum_name))
 		{
             LOG_ERROR(u"枚举名称重复: "+UTF16String(enum_name));
 			return(false);
@@ -225,7 +225,7 @@ namespace hgl
 			{
 				parse.GetToken(name);							//取得函数名
 
-				if(script_func.Find(name)==-1)					//查找是否有同样的函数名存在
+				if(!script_func.KeyExist(name))					//查找是否有同样的函数名存在
 				{
 					DevilFunc *func=new DevilFunc(this,name);
 

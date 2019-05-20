@@ -7,9 +7,7 @@
 #if _MSC_VER < 1900                            //Visual C++ 2015(19)
     #error Please upgrade your compiler or development tools to Microsoft C/C++ 19.0 (Visual C++ 2015) or later.
 #else
-    #if _MSC_VER == 1911
-        #define HGL_LIB_COMPILER_VERSION    OS_TEXT("19.11")     //Visual C++ 2017
-    #elif _MSC_VER == 1910
+    #if _MSC_VER >= 1910
         #define HGL_LIB_COMPILER_VERSION    OS_TEXT("19.1")      //Visual C++ 2017
     #elif _MSC_VER == 1900
         #define HGL_LIB_COMPILER_VERSION    OS_TEXT("19")        //Visual C++ 2015
@@ -18,7 +16,7 @@
     #endif//_MSC_VER
 #endif//_MSC_VER
 
-#define HGL_ALIGNED(var) __declspec(align(32)) var
+#define HGL_THREAD_LOCAL_STORAGE        __declspec(thread)                              //线程本地储存
 //--------------------------------------------------------------------------------------------------
 #define HGL_FMT_I64            "%I64d"
 #define HGL_FMT_U64            "%I64u"
@@ -32,9 +30,6 @@
 #pragma warning(disable:4244)            // -> int 精度丢失警告
 #pragma warning(disable:4804)            // 不安全的类型比较
 #pragma warning(disable:4805)            // 不安全的类型比较
-
-#pragma warning(disable:4458)            // 类成员变量名与类函数参数名相同
-#pragma warning(disable:4459)            // 全局变量名与类函数参数名相同
 
 #ifndef _CRT_SECURE_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS
@@ -58,7 +53,8 @@
 
 #define HGL_LIB_END        ".LIB"
 //--------------------------------------------------------------------------------------------------
-#include<hgl/platform/compiler/DataTypeTypedef.h>
+#include<hgl/platform/compiler/DataTypeWin.h>
+#include<hgl/platform/compiler/DataTypeTiny.h>
 #include<hgl/platform/compiler/Property.h>
 //--------------------------------------------------------------------------------------------------
 #endif//HGL_COMPILER_MICROSOFT_INCLUDE

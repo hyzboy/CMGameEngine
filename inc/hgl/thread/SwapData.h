@@ -1,4 +1,4 @@
-#ifndef HGL_THREAD_SWAP_DATA_INCLUDE
+﻿#ifndef HGL_THREAD_SWAP_DATA_INCLUDE
 #define HGL_THREAD_SWAP_DATA_INCLUDE
 
 #include<hgl/thread/ThreadMutex.h>
@@ -88,6 +88,7 @@ namespace hgl
 			return(true);
 		}
 
+#ifndef __APPLE__
 		/**
 		 * 尝试交换双方数据
 		 */
@@ -101,6 +102,7 @@ namespace hgl
             lock.Unlock();
 			return(true);
 		}
+#endif//__APPLE__
     };//template<typename T> class SwapData
 
 	/**
@@ -149,5 +151,90 @@ namespace hgl
 			return(true);
 		}
 	};//template<typename T> class SemSwapData:public SwapData<T>
+
+	/**
+     * SwapData模板自动释放Post工具模板
+     */
+    template<typename T> class PostToSwapData
+    {
+        SwapData<T> *swap_data;
+        T *post;
+
+    public:
+
+        PostToSwapData(SwapData<T> *sd)
+        {
+            swap_data=sd;
+
+            if(swap_data)
+                post=&(swap_data->GetPost());
+            else
+                post=nullptr;
+        }
+
+        ~PostToSwapData()
+        {
+            if(swap_data)
+                swap_data->ReleasePost();
+        }
+
+        T *operator ->(){return post;}
+    };//template<typename T> class PostToSwapData
+
+    /**
+     * SemSwapData模板自动释放Post工具模板
+     */
+    template<typename T> class PostToSemSwapData
+    {
+        SemSwapData<T> *swap_data;
+        T *post;
+
+    public:
+
+        PostToSemSwapData(SemSwapData<T> *sd)
+        {
+            swap_data=sd;
+
+            if(swap_data)
+                post=&(swap_data->GetPost());
+            else
+                post=nullptr;
+        }
+
+        ~PostToSemSwapData()
+        {
+            if(swap_data)
+            {
+                swap_data->ReleasePost();
+                swap_data->PostSem();
+            }
+        }
+
+        T *operator ->(){return post;}
+    };//template<typename T> class PostToSemSwapData
+
+    /**
+     * 使用范例
+     *
+     * using EventQueue=Queue<int>;
+     * using MTEventQueue=SemSwapData<EventQueue>;
+     * using MTEventPost=PostToSemSwapData<EventQueue>;
+     *
+     * MTEventQueue mt_event_queue;
+     *
+     * 新方式:
+     * MTEventPost post(mt_event_queue);
+     *
+     * post.Push(1);
+     *
+     * 直接模式:
+     * EventQueue &eq=mt_event_queue.GetPost();
+     *
+     * eq->Push(1);
+     *
+     * mt_event_queue.ReleasePost();
+     * mt_event_queue.PostSem();
+     *
+     */
 }//namespace hgl
 #endif//HGL_THREAD_SWAP_DATA_INCLUDE

@@ -56,14 +56,19 @@ namespace hgl
 			{
 				fis=new FileInputStream();
 
-				fis->Open(filename);
+				if(!fis->Open(filename))
+                {
+                    delete fis;
+                    fis=nullptr;
+                }
 			}
 
 			~OpenFileInputStream()
 			{
-				if(fis)delete fis;
+				SAFE_CLEAR(fis);
 			}
 
+			const bool operator !(){return !fis;}
 			operator FileInputStream *(){return fis;}
 			FileInputStream *operator &(){return fis;}
 			FileInputStream *operator ->(){return fis;}

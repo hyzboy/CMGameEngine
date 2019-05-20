@@ -8,9 +8,9 @@ namespace hgl
         {
             if(!f)return(false);
 
-            if(field_list.Find(f)!=-1)return(false);
+            if(field_list.IsExist(f))return(false);
 
-            if(field_by_name.Find(f->name)!=-1)return(false);
+            if(field_by_name.KeyExist(f->name))return(false);
 
             if(f->primary)
             {

@@ -1,5 +1,6 @@
 ﻿#ifndef HGL_DATATYPE_GNU_INCLUDE
 #define HGL_DATATYPE_GNU_INCLUDE
+
 namespace hgl
 {
 	using  int8     =  signed char;  	    ///<有符号 8位整型
@@ -14,7 +15,7 @@ namespace hgl
 	using  int64    =  signed long long; 	///<有符号64位整型
 	using uint64    =unsigned long long; 	///<无符号64位整型
 
-    
-    using float128  =__float128;
+    using float32   =float;
+    using float64   =double;
 }//namespace hgl
 #endif//HGL_DATATYPE_GNU_INCLUDE

@@ -42,7 +42,7 @@
 #include <memory.h>
 #endif
 #include <assert.h> // assert()
-#include <hgl/Str.h> // strcmp()
+#include<hgl/Str.h> // strcmp()
 
 namespace angle_script
 {

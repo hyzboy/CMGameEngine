@@ -6,6 +6,8 @@ namespace hgl
 {
     namespace logger
     {
+        constexpr uint LOG_BUF_SIZE=4096;
+
         class LogWinConsole:public Logger
         {
         private:
@@ -14,7 +16,7 @@ namespace hgl
 
             void *console_handle;
 
-            u16char buf[4096];
+            u16char buf[LOG_BUF_SIZE];
 
         public:
 
@@ -46,7 +48,7 @@ namespace hgl
 
             void Write(const char *str,int size)
             {
-                const int len=u8_to_u16(buf,4096,str,size);
+                const int len=u8_to_u16(buf,LOG_BUF_SIZE,str,size);
 
                 if(len<=0)return;
 

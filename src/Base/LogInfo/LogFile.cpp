@@ -1,5 +1,5 @@
-﻿#include<hgl/Logger.h>
-#include<hgl/FileSystem.h>
+#include<hgl/Logger.h>
+#include<hgl/io/FileSystem.h>
 #include<hgl/thread/ThreadMutex.h>
 #include<hgl/io/FileOutputStream.h>
 #include<hgl/io/DataOutputStream.h>
@@ -7,9 +7,10 @@
 
 namespace hgl
 {
+	using namespace filesystem;
+
     namespace logger
     {
-        void GetLocalAppdataPath(os_char fn[HGL_MAX_PATH]);
         io::TextOutputStream *CreateTextOutputStream(io::OutputStream *);
 
         class LogFile:public Logger

@@ -61,7 +61,7 @@ namespace hgl
 			template<typename N>
 			bool WriteString(const BaseString<N> &str)												///<写入一个字符串
 			{
-				return WriteChars(str.c_str(),str.Length);
+				return WriteChars(str.c_str(),str.Length());
 			}
 
 			bool WriteLineEnd()																		///<写入一个换行符
@@ -90,15 +90,11 @@ namespace hgl
 			template<typename N>
 			bool WriteText(const StringList<N> &sl)
 			{
-				const int count=sl.Count;
+				const int count=sl.GetCount();
 
 				for(int i=0;i<count;i++)
-				{
-					const BaseString<N> &str=sl[i];
-
-					if(!WriteLine(str.c_str(),str.Length()))
+					if(!WriteLine(sl[i]))
 						return(false);
-				}
 
 				return(true);
 			}
@@ -110,7 +106,7 @@ namespace hgl
 			template<typename T>
 			bool Write(const StringList<T> &sl)
 			{
-				const int count=sl.Count;
+				const int count=sl.GetCount();
 
 				if(!out->WriteInt32(count))					//写入行数
 					return(false);
@@ -129,7 +125,7 @@ namespace hgl
 				{
 					const BaseString<T> &str=sl[i];
 
-					const int len=str.Length;
+					const int len=str.Length();
 
 					total+=len;
 
@@ -170,7 +166,7 @@ namespace hgl
 			bool WriteChars(const u16char *,int64);										    ///<写入一个字符串
 		};//template<ByteOrderMask BOM> class EndianTextOutputStream
 
-        typedef EndianTextOutputStream<bomUTF8   > UTF8TextOutputStream;
+		typedef EndianTextOutputStream<bomUTF8   > UTF8TextOutputStream;
         typedef EndianTextOutputStream<bomUTF16LE> UTF16LETextOutputStream;
         typedef EndianTextOutputStream<bomUTF16BE> UTF16BETextOutputStream;
 	}//namespace io

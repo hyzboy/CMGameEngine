@@ -7,12 +7,6 @@
 #include<hgl/graph/GL/glew.h>
 #include<hgl/platform/compiler/EventFunc.h>
 
-extern "C"
-{
-    void InitOpenGLCoreExtensions();
-    void ClearOpenGLCoreExtension();
-}
-
 namespace openal
 {
 //    bool InitOpenAL(const u16char *driver_name=0,const u16char *device_name=0,bool=false);     //初始化OpenAL,参数为设备名称,返回AL_TRUE或AL_FALSE
@@ -69,7 +63,7 @@ namespace hgl
 
             graph::CloseRender();
 
-            ClearOpenGLCoreExtension();
+            glewTerminate();
 
             SAFE_CLEAR(win);
             platform::CloseGraphicsPlatform();
@@ -146,8 +140,6 @@ namespace hgl
 
             win->MakeToCurrent();
 
-            InitOpenGLCoreExtensions();        //初始化OpenGL Core扩展管理
-                                            //GLEW(至少1.11版本还是)在OpenGL Core模式下的扩展检测是不可用的，所以不要使用原始的glew代码，并一定在glew初始化之前调用InitOpenGLCoreExtensions
             if(glewInit()!=GLEW_OK)
             {
                 LOG_ERROR(OS_TEXT("GLEW初始化失败！"));

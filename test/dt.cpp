@@ -1,5 +1,6 @@
 ﻿#include<hgl/Console.h>
 #include<hgl/type/DateTime.h>
+#include<hgl/Time.h>
 #include<iostream>
 
 using namespace hgl;

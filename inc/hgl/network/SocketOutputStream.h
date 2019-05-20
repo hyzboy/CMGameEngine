@@ -19,7 +19,7 @@ namespace hgl
 
 		public:
 
-			SocketOutputStream(int s=0)
+			SocketOutputStream(int s=-1)
 			{
 				SetSocket(s);
 			}

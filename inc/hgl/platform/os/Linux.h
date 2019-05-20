@@ -20,6 +20,7 @@ using os_char			=char;
 
 #define HGL_DIRECTORY_SEPARATOR     '/'								            //目录分隔符
 #define HGL_DIRECTORY_SEPARATOR_STR OS_TEXT("/")								//目录分隔符
+#define HGL_DIRECTORY_SEPARATOR_U8STR U8_TEXT("/")								//目录分隔符
 
 #define HGL_LINE_END			    "\n"										//换行符
 #define HGL_LINE_END_SIZE		    1											//换行符长度
@@ -42,6 +43,12 @@ using os_char			=char;
 #define hgl_realloc(ptr,size)	realloc(ptr,size)
 #define hgl_free				free
 
+template<typename T>
+inline T *hgl_aligned_malloc(size_t n)
+{
+    return (T *)aligned_alloc(alignof(T),n*sizeof(T));
+}
+
 #define OS_EXTERNAL_H           <dlfcn.h>
 typedef void *                  ExternalModulePointer;
 #define pi_get                  dlsym
@@ -49,14 +56,21 @@ typedef void *                  ExternalModulePointer;
 
 typedef pthread_mutex_t         hgl_thread_mutex;
 
-#define iconv_str				char *
+#define hgl_stat64				stat64
+#define hgl_open64				open64
+#define hgl_lseek64				lseek64
+#define hgl_tell64(fp)			lseek64(fp,0,SEEK_CUR)
+#define hgl_fstat64				fstat64
+#define hgl_lstat64				lstat64
+#define hgl_read64				read
+#define hgl_write64				write
+#define hgl_pread64				pread64
+#define hgl_pwrite64			pwrite64
 
 #define struct_stat64			struct stat64
-#define tell64(fp)				lseek64(fp,0,SEEK_CUR)
-#define read64					read
-#define write64					write
-
 #define struct_dirent64 		struct dirent64
+#define hgl_dirent64			dirent64
+#define hgl_readdir64			readdir64
 
 #define sprintf_s				snprintf
 //--------------------------------------------------------------------------------------------------

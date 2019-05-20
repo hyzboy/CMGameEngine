@@ -1,4 +1,4 @@
-#ifndef HGL_TCP_SERVER_INCLUDE
+﻿#ifndef HGL_TCP_SERVER_INCLUDE
 #define HGL_TCP_SERVER_INCLUDE
 
 #include<hgl/network/AcceptServer.h>
@@ -15,9 +15,9 @@ namespace hgl
 
 		public:
 
-#if HGL_OS != HGL_OS_Windows
+#if (HGL_OS != HGL_OS_Windows)&&(HGL_OS != HGL_OS_macOS)
 			void SetDeferAccept(const int);															///<设置推迟Accept
-#endif//HGL_OS != HGL_OS_Windows
+#endif//no windows&mac
 		};//class TCPServer
 	}//namespace network
 

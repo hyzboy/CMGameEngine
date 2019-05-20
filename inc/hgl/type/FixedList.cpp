@@ -50,22 +50,23 @@ namespace hgl
 		{
 			max_count=value;
 
-			items=(T *)hgl_malloc(sizeof(T)*max_count);
+            items=hgl_aligned_malloc<T>(max_count);
 
 			memset(items,0,max_count*sizeof(T));
 		}
 	}
 
 	template<typename T>
-	T &FixedList<T>::operator [](int n)
+	bool FixedList<T>::Get(int n,T &td)
 	{
 		if(n<0||n>=count)
 		{
-			LOG_ERROR(OS_TEXT("FixedList<T>::operator[] 数据索引超出正常范围：index=")+OSString(n)+OS_TEXT("count=")+OSString(count));
-			return(*(T *)NULL);
+			LOG_ERROR(OS_TEXT("FixedList<T>::Get 数据索引超出正常范围：index=")+OSString(n)+OS_TEXT("count=")+OSString(count));
+			return(false);
 		}
 
-		return(items[n]);
+		td=items[n];
+        return(true);
 	}
 
 	template<typename T>
@@ -170,7 +171,7 @@ namespace hgl
 	T *FixedList<T>::CreateCopy(int &c)
 	{
 		c=count;
-		T *copy=(T *)hgl_malloc(sizeof(T)*count);
+        T *copy=hgl_aligned_malloc<T>(count);
 		memcpy(copy,items,count*sizeof(T));
 
 		return copy;

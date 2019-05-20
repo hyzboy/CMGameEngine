@@ -1,4 +1,4 @@
-#include<hgl/type/BaseString.h>
+﻿#include<hgl/type/BaseString.h>
 #include<hgl/type/List.h>
 #include<iostream>
 
@@ -20,14 +20,14 @@ bool SplitName(UTF8String &table_name,UTF8String &file_name,const UTF8String &na
 int main(int,char **)
 {
 	UTF16String DBUserID=u8_to_u16("9");
-	UTF16String name=u"NAME";
+	UTF16String name=U16_TEXT("NAME");
 	bool sex=true;
 	int job=3;
 
-	UTF16String buf=u"insert into RoleBase(user_id,rolename,arm,job,sex,Head,Body) values("
+	UTF16String buf=U16_TEXT("insert into RoleBase(user_id,rolename,arm,job,sex,Head,Body) values(")
 					+DBUserID+u",'"+UTF16String(name)
-					+(sex?L"',1,":u"',0,")+UTF16String(job)
-					+u",0,0,0)";
+					+(sex?U16_TEXT("',1,"):U16_TEXT("',0,"))+UTF16String(job)
+					+U16_TEXT(",0,0,0)");
 
 	wcout<<buf.c_str()<<endl;
 
@@ -41,7 +41,7 @@ int main(int,char **)
 	li={9,8,7,6,5,4,3,2,1};
 
 	for(int i=0;i<li.GetCount();i++)
-		wcout<<L"List<int> items "<<i<<L" : "<<li[i]<<endl;
+		wcout<<U16_TEXT("List<int> items ")<<i<<U16_TEXT(" : ")<<li[i]<<endl;
 
 	char str[]="1.2";
 	float value;

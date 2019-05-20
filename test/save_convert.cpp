@@ -1,10 +1,11 @@
 #include<stdio.h>
 #include<iostream>
-#include<hgl/File.h>
 #include<hgl/io/FileInputStream.h>
 #include<hgl/io/FileOutputStream.h>
 #include<hgl/io/DataInputStream.h>
 #include<hgl/io/DataOutputStream.h>
+#include<hgl/LogInfo.h>
+#include<hgl/io/EnumFile.h>
 
 using namespace hgl;
 using namespace hgl::io;
@@ -37,79 +38,91 @@ public:
 	}
 };//struct RoleAppearance
 
-
-void Proc(void *,hgl::FileInfo &fi)
+class MyEnumFile:public hgl::filesystem::EnumFile
 {
-	std::cout<<fi.fullname<<std::endl;
+public:
 
-	uint32 weapon;
-	RoleAppearance ra[2];
-	int32 monster_id;
-	uint32 title;
-	uint32 offical;
-	int64 con_id;
-	UTF16String con_name;
-	uint32 appear_type;
-	int32 level;
+    void ProcFile(struct hgl::filesystem::EnumFileConfig *,hgl::filesystem::FileInfo &fi)
+    {
+        std::cout<<fi.fullname<<std::endl;
 
-	int32 sa_type,sa_level;
+        uint32 weapon;
+        RoleAppearance ra[2];
+        int32 monster_id;
+        uint32 title;
+        uint32 offical;
+        int64 con_id;
+        UTF16String con_name;
+        uint32 appear_type;
+        int32 level;
 
-	FileInputStream fis;
+        int32 sa_type,sa_level;
 
-	fis.Open(fi.fullname);
+        FileInputStream fis;
 
-	DataInputStream *dis=new LEDataInputStream(&fis);
+        fis.Open(fi.fullname);
 
-	dis->ReadUint32(weapon);	std::cout<<"weapon="<<weapon<<std::endl;
+        DataInputStream *dis=new LEDataInputStream(&fis);
 
-	ra[0].ReadFromDB(dis);
-	ra[1].ReadFromDB(dis);
+        dis->ReadUint32(weapon);	std::cout<<"weapon="<<weapon<<std::endl;
 
-	/*for(int i=0;i<8;i++)
-{
-	dis->ReadInt32(sa_type);
-	dis->ReadInt32(sa_level);
+        ra[0].ReadFromDB(dis);
+        ra[1].ReadFromDB(dis);
 
-	std::cout<<"sa["<<i<<"] type:"<<sa_type<<",level:"<<sa_level<<std::endl;
-}*/
+        /*for(int i=0;i<8;i++)
+    {
+        dis->ReadInt32(sa_type);
+        dis->ReadInt32(sa_level);
 
-	dis->Skip(8*8);
+        std::cout<<"sa["<<i<<"] type:"<<sa_type<<",level:"<<sa_level<<std::endl;
+    }*/
 
-	dis->ReadInt32(monster_id);			std::cout<<"monster_id:"<<monster_id<<std::endl;
-	dis->ReadUint32(title);				std::cout<<"title:"<<title<<std::endl;
-	dis->ReadUint32(offical);			std::cout<<"offical:"<<offical<<std::endl;
-	dis->ReadInt64(con_id);				std::cout<<"con_id:"<<con_id<<std::endl;
-	dis->ReadUTF16LEString(con_name);	//std::cout<<"con_name:"<<to_u8(con_name).c_str()<<std::endl;
-	dis->ReadUint32(appear_type);		std::cout<<"appear_type:"<<appear_type<<std::endl;
-	dis->ReadInt32(level);				std::cout<<"level:"<<level<<std::endl;
+        dis->Skip(8*8);
 
-	delete dis;
-	fis.Close();
+        dis->ReadInt32(monster_id);			std::cout<<"monster_id:"<<monster_id<<std::endl;
+        dis->ReadUint32(title);				std::cout<<"title:"<<title<<std::endl;
+        dis->ReadUint32(offical);			std::cout<<"offical:"<<offical<<std::endl;
+        dis->ReadInt64(con_id);				std::cout<<"con_id:"<<con_id<<std::endl;
+        dis->ReadUTF16LEString(con_name);	//std::cout<<"con_name:"<<to_u8(con_name).c_str()<<std::endl;
+        dis->ReadUint32(appear_type);		std::cout<<"appear_type:"<<appear_type<<std::endl;
+        dis->ReadInt32(level);				std::cout<<"level:"<<level<<std::endl;
 
-	FileOutputStream fos;
+        delete dis;
+        fis.Close();
 
-	fos.CreateTrunc(fi.fullname);
+        FileOutputStream fos;
 
-	DataOutputStream *dos=new LEDataOutputStream(&fos);
+        fos.CreateTrunc(fi.fullname);
 
-	dos->WriteInt32(weapon);
-	ra[0].WriteToDB(dos);
-	ra[1].WriteToDB(dos);
+        DataOutputStream *dos=new LEDataOutputStream(&fos);
 
-	dos->WriteInt32(monster_id);
-	dos->WriteUint32(title);
-	dos->WriteUint32(offical);
-	dos->WriteInt64(con_id);
-	dos->WriteUTF16LEString(con_name);
-	dos->WriteUint32(appear_type);
-	dos->WriteBool(false);
-	dos->WriteInt32(level);
+        dos->WriteInt32(weapon);
+        ra[0].WriteToDB(dos);
+        ra[1].WriteToDB(dos);
 
-	delete dos;
-	fos.Close();
-}
+        dos->WriteInt32(monster_id);
+        dos->WriteUint32(title);
+        dos->WriteUint32(offical);
+        dos->WriteInt64(con_id);
+        dos->WriteUTF16LEString(con_name);
+        dos->WriteUint32(appear_type);
+        dos->WriteBool(false);
+        dos->WriteInt32(level);
+
+        delete dos;
+        fos.Close();
+    }
+};//class MyEnumFile:public EnumFile
 
 int main(int,char **)
 {
-	return EnumFile(".",nullptr,false,true,false,Proc);
+    hgl::filesystem::EnumFileConfig efc(OS_TEXT("."));
+
+    MyEnumFile ef;
+
+    efc.proc_folder=false;
+    efc.proc_file=true;
+    efc.sub_folder=false;
+
+	return ef.Enum(&efc);
 }

@@ -75,14 +75,14 @@ namespace hgl
 					else time_out=to;
 			}
 
-			virtual void Post(W *w)																			///<投递一个工作
+			virtual void Post(W *w) override																///<投递一个工作
 			{
 				WorkList &wl=work_list.GetPost();
 					wl.Add(w);
 				work_list.ReleasePost();
 			}
 
-			virtual void Post(W **w,int count)																///<投递一批工作
+			virtual void Post(W **w,int count) override														///<投递一批工作
 			{
 				WorkList &wl=work_list.GetPost();
 					wl.Add(w,count);
@@ -166,7 +166,7 @@ namespace hgl
 					else time_out=to;
 			}
 
-			virtual void Post(W *w)																			///<投递一个工作
+			virtual void Post(W *w) override																///<投递一个工作
 			{
 				if(!w)return;
 
@@ -174,7 +174,7 @@ namespace hgl
 				work_list.PostSem(1);
 			}
 
-			virtual void Post(W **w,int count)																///<投递一批工作
+			virtual void Post(W **w,int count) override														///<投递一批工作
 			{
 				if(!w||count<=0)return;
 
@@ -216,7 +216,6 @@ namespace hgl
 
 			uint work_thread_index;
 
-            ThreadMutex exit_lock;
             bool force_close;
 
 		public:
@@ -233,20 +232,10 @@ namespace hgl
 #else
             virtual ~WorkThread()
             {
-                UTF8String thread_addr;
-
-                GetAddress(thread_addr);
-
-                LOG_INFO(U8_TEXT("WorkThread Destruct [")+thread_addr+U8_TEXT("]"));
+                LOG_INFO(U8_TEXT("WorkThread Destruct [")+thread_addr_string+U8_TEXT("]"));
             }
+
 #endif//_DEBUG
-
-            bool Start() override													  ///<开始运行当前线程
-            {
-                exit_lock.Lock();
-
-                return Thread::Start();
-            }
 
             bool IsExitDelete()const override{return false;}							///<返回在退出线程时，不删除本对象
 
@@ -258,36 +247,29 @@ namespace hgl
 			void ExitWork(const bool fc)
 			{
 				force_close=fc;
-                exit_lock.Unlock();
+                Thread::WaitExit();
 			}
+
+			virtual void ProcEndThread() override
+			{
+                if(!force_close)        //不是强退
+                    while(work_proc->OnExecuteWork(work_thread_index));     //把工作全部做完
+
+                #ifdef _DEBUG
+                {
+                    LOG_INFO(U8_TEXT("WorkThread Finish [")+thread_addr_string+U8_TEXT("]"));
+                }
+                #endif//_DEBUG
+            }
 
 			virtual bool Execute() override
 			{
 				if(!work_proc)
 					RETURN_FALSE;
 
-                bool result=work_proc->OnExecuteWork(work_thread_index);
+                work_proc->OnExecuteWork(work_thread_index);
 
-                if(!exit_lock.TryLock())
-                    return(true);
-
-                if(!force_close)        //不是强退
-                {
-                    while(work_proc->OnExecuteWork(work_thread_index));     //把工作全部做完
-                }
-
-#ifdef _DEBUG
-                {
-                    UTF8String thread_addr;
-
-                    GetAddress(thread_addr);
-
-                    LOG_INFO(U8_TEXT("WorkThread Finish [")+thread_addr+U8_TEXT("]"));
-                }
-#endif//_DEBUG
-
-                exit_lock.Unlock();
-                return(false);
+                return(true);
 			}
 		};//template<typename W> class WorkThread:public Thread
 
@@ -376,9 +358,6 @@ namespace hgl
 
 				for(int i=0;i<count;i++)
 					wt[i]->ExitWork(force_close);
-
-				for(int i=0;i<count;i++)
-					wt[i]->Wait();
 
                 run=false;
 			}

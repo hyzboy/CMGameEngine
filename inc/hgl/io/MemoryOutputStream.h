@@ -1,216 +1,236 @@
 ﻿#ifndef HGL_IO_MEMORY_OUTPUT_STREAM_INCLUDE
 #define HGL_IO_MEMORY_OUTPUT_STREAM_INCLUDE
 
-#include<hgl/MemBlock.h>
+#include<hgl/type/MemBlock.h>
 #include<hgl/io/OutputStream.h>
 namespace hgl
 {
-	namespace io
-	{
-		/**
-		 * 内存数据输出流，将数据输出到一个内存块中。
-		 */
-		class MemoryOutputStream:public OutputStream												///内存数据输出流
-		{
-		protected:
+    namespace io
+    {
+        /**
+         * 内存数据输出流，将数据输出到一个内存块中。
+         */
+        class MemoryOutputStream:public OutputStream                                                ///内存数据输出流
+        {
+        protected:
 
-			uint8 *buf;
+            uint8 *buf;
 
-			size_t max_size;
-			size_t buf_size;
-			size_t cur_pos;
+            size_t max_size;
+            size_t buf_size;
+            size_t cur_pos;
 
-			bool one;
+            bool one;
 
-		public:
+        public:
 
-			MemoryOutputStream()
-			{
-				buf=0;
-				max_size=0;
-				buf_size=0;
-				cur_pos=0;
-				one=false;
-			}
+            MemoryOutputStream()
+            {
+                buf=0;
+                max_size=0;
+                buf_size=0;
+                cur_pos=0;
+                one=false;
+            }
 
-			virtual ~MemoryOutputStream()
-			{
-				Close();
-			}
+            virtual ~MemoryOutputStream()
+            {
+                Close();
+            }
 
-			void *GetData()const{return buf;}
+            void *GetData()const{return buf;}
 
-			/**
-			 * 关联一个数据区到当前输出流
-			 * @param ptr 数据指针
-			 * @param size 数据长度字节数
-			 * @param one_instance 是否仅此一份实例(如果是，将由MemoryOutputStream类负责释放)
-			 * @return 是否成功
-			 */
-			bool Link(void *ptr,size_t size,bool one_instance=false)
-			{
-				if(!ptr||!size)
-					return(false);
+            /**
+             * 创建一个当前流数据的内存拷贝，此函数需用户自行delete[]
+             * @param len 存放数据长度的指针
+             * @return 创建好的内存拷贝
+             */
+            void *CreateCopyData(uint *len)const
+            {
+                if(buf_size<=0)
+                    return(nullptr);
 
-				buf=(uint8 *)ptr;
-				buf_size=size;
-				max_size=size;
-				cur_pos=0;
+                uint8 *data=new uint8[buf_size+1];
+                memcpy(data,buf,buf_size);
+                data[buf_size]=0;
 
-				one=one_instance;
+                if(len)
+                    *len=buf_size;
 
-				return(true);
-			}
+                return data;
+            }
 
-			/**
-			 * 更新关联的数据区长度，不复位cur_pos
-			 * @param ptr 数据指针
-			 * @param size 数据长度字节数
-			 * @return 是否成功
-			 */
-			bool Update(void *ptr,size_t size)
-			{
-				if(!ptr||!size)
-					return(false);
+            /**
+             * 关联一个数据区到当前输出流
+             * @param ptr 数据指针
+             * @param size 数据长度字节数
+             * @param one_instance 是否仅此一份实例(如果是，将由MemoryOutputStream类负责释放)
+             * @return 是否成功
+             */
+            bool Link(void *ptr,size_t size,bool one_instance=false)
+            {
+                if(!ptr||!size)
+                    return(false);
 
-				buf=(uint8 *)ptr;
-				buf_size=size;
-				max_size=0;
+                buf=(uint8 *)ptr;
+                buf_size=size;
+                max_size=size;
+                cur_pos=0;
 
-				return(true);
-			}
+                one=one_instance;
 
-			void Unlink()
-			{
-				buf=0;
-				buf_size=0;
-				max_size=0;
-			}
+                return(true);
+            }
 
-			bool Create(int64 size)
-			{
-				Close();
+            /**
+             * 更新关联的数据区长度，不复位cur_pos
+             * @param ptr 数据指针
+             * @param size 数据长度字节数
+             * @return 是否成功
+             */
+            bool Update(void *ptr,size_t size)
+            {
+                if(!ptr||!size)
+                    return(false);
 
-				if(size<=0)
-					return(false);
+                buf=(uint8 *)ptr;
+                buf_size=size;
+                max_size=0;
 
-				buf=(uint8 *)hgl_malloc(size);
+                return(true);
+            }
 
-				if(!buf)
-					return(false);
+            void Unlink()
+            {
+                buf=0;
+                buf_size=0;
+                max_size=0;
+            }
 
-				one=true;
-				cur_pos=0;
-				buf_size=size;
-				max_size=size;
+            bool Create(int64 size)
+            {
+                Close();
 
-				return(true);
-			}
+                if(size<=0)
+                    return(false);
 
-			void Close()
-			{
-				if(buf)
-				{
-					if(one)
-						hgl_free(buf);
+                buf=(uint8 *)hgl_malloc(size);
 
-					buf=0;
-				}
+                if(!buf)
+                    return(false);
 
-				buf_size=0;
-				max_size=0;
-			}
+                one=true;
+                cur_pos=0;
+                buf_size=size;
+                max_size=size;
 
-			void ClearData()
-			{
-				cur_pos=0;
-				buf_size=0;
-			}
+                return(true);
+            }
 
-			int64 Write(const void *ptr,int64 size)
-			{
-				if(!ptr||size<0)
-					return(-1);
+            void Close() override
+            {
+                if(buf)
+                {
+                    if(one)
+                        hgl_free(buf);
 
-				if(!buf)
-				{
-					if(!Create(size))
-						return(-1);
-				}
+                    buf=0;
+                }
 
-				if(cur_pos+size>buf_size)
-				{
-					if(one)
-					{
-						buf_size=cur_pos+size;
+                buf_size=0;
+                max_size=0;
+            }
 
-						if(buf_size>max_size)
-						{
-							max_size=power_to_2(buf_size);
+            void ClearData()
+            {
+                cur_pos=0;
+                buf_size=0;
+            }
 
-							buf=(uint8 *)hgl_realloc(buf,max_size);
-						}
-					}
-					else
-						size=buf_size-cur_pos;
-				}
+            int64 Write(const void *ptr,int64 size) override
+            {
+                if(!ptr||size<0)
+                    return(-1);
 
-				if(size<=0)
-					return(0);
+                if(!buf)
+                {
+                    if(!Create(size))
+                        return(-1);
+                }
 
-				memcpy(buf+cur_pos,ptr,size);
+                if(cur_pos+size>buf_size)
+                {
+                    if(one)
+                    {
+                        buf_size=cur_pos+size;
 
-				cur_pos+=size;
+                        if(buf_size>max_size)
+                        {
+                            max_size=power_to_2(buf_size);
 
-				return size;
-			}
+                            buf=(uint8 *)hgl_realloc(buf,max_size);
+                        }
+                    }
+                    else
+                        size=buf_size-cur_pos;
+                }
 
-			bool	CanRestart()const{return true;}
-			bool	CanSeek()const{return true;}
-			bool	CanSize()const{return true;}
+                if(size<=0)
+                    return(0);
 
-			bool	Restart()
-			{
-				cur_pos=0;
-				return(true);
-			}
+                memcpy(buf+cur_pos,ptr,size);
 
-			int64	Seek(int64 off,SeekOrigin so=soBegin)
-			{
-				if(!CanSeek())return(-1);
+                cur_pos+=size;
 
-				if(so==soCurrent)
-				{
-					off+=cur_pos;
-				}
-				else
-				if(so==soEnd)
-				{
-					off+=buf_size;
-				}
+                return size;
+            }
 
-				if(off<0||off>=buf_size)
-					return(-1);
+            bool    CanRestart()const override{return true;}
+            bool    CanSeek()const override{return true;}
+            bool    CanSize()const override{return true;}
 
-				cur_pos=off;
-				return cur_pos;
-			}
+            bool    Restart() override
+            {
+                cur_pos=0;
+                return(true);
+            }
 
-			int64	Tell()const
-			{
-				return cur_pos;
-			}
+            int64   Seek(int64 off,SeekOrigin so=soBegin) override
+            {
+                if(!CanSeek())return(-1);
 
-			int64	GetSize()const
-			{
-				return buf_size;
-			}
+                if(so==soCurrent)
+                {
+                    off+=cur_pos;
+                }
+                else
+                if(so==soEnd)
+                {
+                    off+=buf_size;
+                }
 
-			int64	Available()const
-			{
-				return buf_size-cur_pos;
-			}
-		};//class MemoryOutputStream
-	}//namespace io
+                if(off<0||off>=buf_size)
+                    return(-1);
+
+                cur_pos=off;
+                return cur_pos;
+            }
+
+            int64   Tell()const override
+            {
+                return cur_pos;
+            }
+
+            int64   GetSize()const override
+            {
+                return buf_size;
+            }
+
+            int64   Available()const override
+            {
+                return buf_size-cur_pos;
+            }
+        };//class MemoryOutputStream
+    }//namespace io
 }//namespace hgl
 #endif//HGL_IO_MEMORY_OUTPUT_STREAM_INCLUDE

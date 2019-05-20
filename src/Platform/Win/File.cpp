@@ -1,7 +1,7 @@
-﻿#include <hgl/FileSystem.h>
-#include <hgl/LogInfo.h>
-#include <hgl/io/FileInputStream.h>
-#include <hgl/io/FileOutputStream.h>
+#include<hgl/io/FileSystem.h>
+#include<hgl/LogInfo.h>
+#include<hgl/io/FileInputStream.h>
+#include<hgl/io/FileOutputStream.h>
 
 #include <windows.h>
 
@@ -62,7 +62,7 @@ namespace hgl
         * @param filename 要查找的文件名称
         * @return 这个文件是否存在
         */
-        bool FileConfirm(const OSString &filename)
+        bool FileExist(const OSString &filename)
         {
             WIN32_FIND_DATAW wfd;
             HANDLE hFind;
@@ -213,146 +213,6 @@ namespace hgl
         }
 
         /**
-         * 取得当前程序完整路径名称
-         */
-        bool GetCurrentProgram(OSString &result)
-        {
-            os_char *path=new os_char[HGL_MAX_PATH];
-
-            GetModuleFileNameW(nullptr,path,HGL_MAX_PATH);
-
-            result = path;
-            delete[] path;
-
-            return(true);
-        }
-
-        /**
-        * 枚举一个目录内的所有文件
-        * @param config 枚举配置
-        * @return 查找到文件数据,<0表示失败
-        */
-        int EnumFile(EnumFileConfig *config)
-        {
-            if(!config)RETURN_ERROR(-1);
-
-//            if(config->proc_folder&&!config->cb_folder)RETURN_ERROR(-2);            //这一行是不需要的，确实存在proc_folder=true,但没有cb_folder的情况。但留在这里。以防删掉后，未来没注意自以为是的加上这样一行
-            if(config->proc_file&&!config->cb_file)RETURN_ERROR(-3);
-
-            if(config->folder_name.IsEmpty()
-             &&config->find_name.IsEmpty())RETURN_ERROR(-4);
-
-            OSString full_findname;
-            int count=0;
-
-            if(config->folder_name.IsEmpty())
-            {
-                full_findname=config->find_name;
-            }
-            else
-            {
-                MergeFilename(full_findname,config->folder_name,config->find_name);
-            }
-
-            WIN32_FIND_DATAW FindFileData;
-            HANDLE hFind;
-
-            hFind = FindFirstFileW(full_findname, &FindFileData);
-            if (hFind == INVALID_HANDLE_VALUE)
-                return(-1);
-
-            FileInfo fi;
-            EnumFileConfig *sub_efc=nullptr;
-            int sub_count;
-
-            do
-            {
-                if(strcmp(FindFileData.cFileName,OS_TEXT("."))==0
-                || strcmp(FindFileData.cFileName,OS_TEXT(".."))==0)
-                {
-                    continue;
-                }
-
-                if(FindFileData.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY)
-                {
-                    if(!config->proc_folder)continue;
-
-                    if(config->sub_folder)
-                    {
-                        sub_efc=config->CreateSubConfig(config,FindFileData.cFileName);
-
-                        if(!sub_efc)
-                            continue;
-
-                        sub_count=EnumFile(sub_efc);
-                        if(sub_count>0)count+=sub_count;
-                    }
-                }
-                else
-                {
-                    if(!config->proc_file)continue;
-
-                    ++count;
-                }
-
-                memset(&fi,0,sizeof(FileInfo));
-
-                strcpy(fi.name,HGL_MAX_PATH,FindFileData.cFileName);
-
-                if(config->folder_name.IsEmpty())
-                {
-                    strcpy(fi.fullname, HGL_MAX_PATH, fi.name);
-                }
-                else
-                {
-                    strcpy(fi.fullname, HGL_MAX_PATH, config->folder_name);
-
-                    if(config->folder_name.GetEndChar()!=HGL_DIRECTORY_SEPARATOR)
-                        strcat(fi.fullname, HGL_MAX_PATH, HGL_DIRECTORY_SEPARATOR);
-
-                    const int rp =config->find_name.FindChar(HGL_DIRECTORY_SEPARATOR);//防止查询名称内仍有路径
-
-                    if(rp!=-1)
-                        strcat(fi.fullname, HGL_MAX_PATH,config->find_name.c_str(),rp);
-
-                    strcat(fi.fullname, HGL_MAX_PATH, fi.name, HGL_MAX_PATH);
-                }
-
-                fi.size =   FindFileData.nFileSizeHigh;
-                fi.size <<= 32;
-                fi.size |=  FindFileData.nFileSizeLow;
-
-                fi.can_read =true;
-                fi.can_write=!(FindFileData.dwFileAttributes&FILE_ATTRIBUTE_READONLY);
-
-                if(FindFileData.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY)
-                {
-                    fi.is_file=false;
-                    fi.is_directory=true;
-
-                    if(config->cb_folder)
-                        config->cb_folder(config,sub_efc,fi);
-
-                    delete sub_efc;
-                    sub_efc=nullptr;
-                }
-                else
-                {
-                    fi.is_file=true;
-                    fi.is_directory=false;
-
-                    if(config->cb_file)
-                        config->cb_file(config,fi);
-                }
-            }
-            while(FindNextFileW(hFind, &FindFileData));
-
-            FindClose(hFind);
-
-            return(count);
-        }
-
-        /**
         * 枚举当前计算机所有卷
         * @param data 用户自定义回传信息
         * @param func 回调函数
@@ -430,4 +290,3 @@ namespace hgl
         }
     }//namespace filesystem
 }//namespace hgl
-

@@ -1,4 +1,4 @@
-#include<hgl/thread/ThreadMutex.h>
+﻿#include<hgl/thread/ThreadMutex.h>
 #include<hgl/TypeFunc.h>
 #include<pthread.h>
 #include<sys/time.h>
@@ -41,6 +41,7 @@ namespace hgl
 		return(!pthread_mutex_trylock(&ptr));
 	}
 
+#if !defined(__APPLE__)&&!defined(__ANDROID__)
 	/**
 	* 等待并取得控制权
 	* @param time 等待的最大时间,时间为0表示尝试
@@ -54,6 +55,7 @@ namespace hgl
 
 		return !pthread_mutex_timedlock(&ptr, &abstime);
 	}
+#endif//__APPLE__
 
 	/**
 	* 放弃控制权

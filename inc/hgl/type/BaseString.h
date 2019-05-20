@@ -119,7 +119,7 @@ namespace hgl
         BaseString(const Vector4f &v,int n=4):BaseString((const float *)&v,n){}
 
         virtual ~BaseString()=default;
-        
+
         const T GetBeginChar()const                                                                 ///<取得当前字符串第一个字符
         {
             return(data.valid()?data->GetBeginChar():0);
@@ -732,7 +732,7 @@ namespace hgl
         bool Trim(){return StrConv(trim);}															///<删除字符串两端的空格、换行等不可视字符串
 
         bool TrimLeft(int n){return Delete(0,n);}													///<删除字符串前端的指定个字符
-        bool TrimRight(int n){return Unlink()?data->TrimRight(n):false;}							    ///<删除字符串后端的指定个字符
+        bool TrimRight(int n){return Unlink()?data->TrimRight(n):false;}							///<删除字符串后端的指定个字符
 
         bool ClipLeft(int n){return Unlink()?data->ClipLeft(n):false;}								///<截取字符串前端的指定个字符,等同TrimRight(lengths-n))
         bool ClipRight(int n){return Delete(0,Length()-n);}											///<截取字符串后端的指定个字符,等同TrimLeft(length-n)
@@ -747,10 +747,10 @@ namespace hgl
         /**
          * 从字符串中取指定子串为新的内容
          * @param start 起始字符索引
-         * @param n 字符数量
+         * @param n 字符数量,-1表示全部
          * @return 成否成功
          */
-        bool SubString(int start,int n)																///<取字符串指定段的字符
+        bool SubString(int start,int n=-1)															///<取字符串指定段的字符
         {
             if(!Unlink())
                 return(false);
@@ -804,13 +804,81 @@ namespace hgl
             return(-1);
         }
 
+        /**
+         * 在当前字符串中查找字符
+         * @param pos 起始查找位置
+         * @param ch 要查找的字符,可以是多个，找到任意一个就算
+         */
+        int FindChar(int pos,const BaseString<T> &ch)const                                          ///<返回当前字符串中指定字符中的任意一个开始的索引(从左至右)
+        {
+            if(!data.valid())
+                return(-1);
+
+            const T *result=hgl::strchr(data->c_str()+pos,ch.c_str(),ch.Length());
+
+            if(result)
+                return result-(data->c_str()+pos);
+
+            return(-1);
+        }
+
         int FindChar(const T ch)const{return FindChar(0,ch);}										///<返回当前字符串中指定字符开始的索引(从左至右)
+
         int FindRightChar(const T ch)const															///<返回当前字符串中指定字符开始的索引(从右至左)
         {
             if(!data.valid())
                 return(-1);
 
-            const T *result=hgl::strrchr(data->c_str(),ch);
+            const T *result=hgl::strrchr(data->c_str(),data->GetLength(),ch);
+
+            if(result)
+                return result-(data->c_str());
+
+            return(-1);
+        }
+
+        int FindRightChar(const BaseString<T> &ch)const												///<返回当前字符串中指定字符开始的索引(从右至左)
+        {
+            if(!data.valid())
+                return(-1);
+
+            const T *result=hgl::strrchr(data->c_str(),data->GetLength(),ch.c_str(),ch.Length());
+
+            if(result)
+                return result-(data->c_str());
+
+            return(-1);
+        }
+
+        /**
+         * 返回当前字符串中指定字符开始的索引(从右至左)
+         * @param off 从右至左跳过不查的字符个数
+         * @param ch 要查找的字符
+         */
+        int FindRightChar(const int off,const T ch)const
+        {
+            if(!data.valid())
+                return(-1);
+
+            const T *result=hgl::strrchr(data->c_str(),data->GetLength(),off,ch);
+
+            if(result)
+                return result-(data->c_str());
+
+            return(-1);
+        }
+
+        /**
+         * 返回当前字符串中指定字符开始的索引(从右至左)
+         * @param off 从右至左跳过不查的字符个数
+         * @param ch 要查找的字符
+         */
+        int FindRightChar(const int off,const BaseString<T> &ch)const
+        {
+            if(!data.valid())
+                return(-1);
+
+            const T *result=hgl::strrchr(data->c_str(),data->GetLength(),off,ch.c_str(),ch.Length());
 
             if(result)
                 return result-(data->c_str());
@@ -1026,6 +1094,11 @@ namespace hgl
     using OSString      =BaseString<os_char>;
     using UTF32String   =BaseString<char32_t>;
     using WideString    =BaseString<wchar_t>;
+
+    template<typename C> bool ToNumber(const BaseString<C> &str,int &value){return str.ToInt(value);}
+    template<typename C> bool ToNumber(const BaseString<C> &str,uint &value){return str.ToUint(value);}
+    template<typename C> bool ToNumber(const BaseString<C> &str,float &value){return str.ToFloat(value);}
+    template<typename C> bool ToNumber(const BaseString<C> &str,double &value){return str.ToFloat(value);}
 
     /**
      * 以累加的方式为一个字符串计算出一个hash码

@@ -11,7 +11,31 @@ namespace hgl
 	#define NULL 0
 	#endif//
 
-    template<class T>
+    template<typename T>
+    inline T *zero_new(const int count)
+    {
+        T *result=new T[count];
+
+        if(!result)
+            return(nullptr);
+
+        memset(result,0,count*sizeof(T));
+        return result;
+    }
+
+    template<typename T>
+    inline T *zero_malloc(const int count)
+    {
+        T *result=hgl_malloc(count*sizeof(T));
+
+        if(!result)
+            return(nullptr);
+
+        memset(result,0,count*sizeof(T));
+        return result;
+    }
+
+    template<typename T>
     inline void hgl_call_construct(T *obj)      //呼叫构造函数
     {
         new (static_cast<void *>(obj)) T();
@@ -93,16 +117,16 @@ namespace hgl
 	constexpr uint      HGL_SIZE_1KB	=1024;
 	constexpr uint      HGL_SIZE_1MB	=HGL_SIZE_1KB*1024;
 	constexpr uint      HGL_SIZE_1GB	=HGL_SIZE_1MB*1024;
-	constexpr uint64    HGL_SIZE_1TB	=HGL_SIZE_1GB*1024LL;
-	constexpr uint64    HGL_SIZE_1PB	=HGL_SIZE_1TB*1024LL;
-	constexpr uint64    HGL_SIZE_1EB	=HGL_SIZE_1PB*1024LL;
-//	constexpr uint128    HGL_SIZE_1ZB	=HGL_SIZE_1EB*1024LL;
-//	constexpr uint128    HGL_SIZE_1YB	=HGL_SIZE_1ZB*1024LL;
+	constexpr uint64    HGL_SIZE_1TB	=HGL_SIZE_1GB*1024ULL;
+	constexpr uint64    HGL_SIZE_1PB	=HGL_SIZE_1TB*1024ULL;
+	constexpr uint64    HGL_SIZE_1EB	=HGL_SIZE_1PB*1024ULL;
+//	constexpr uint128    HGL_SIZE_1ZB	=HGL_SIZE_1EB*1024ULL;
+//	constexpr uint128    HGL_SIZE_1YB	=HGL_SIZE_1ZB*1024ULL;
 
 	constexpr uint8		HGL_U8_MAX		=0xFF;
 	constexpr uint16	HGL_U16_MAX		=0xFFFF;
 	constexpr uint32	HGL_U32_MAX		=0xFFFFFFFF;
-	constexpr uint64	HGL_U64_MAX		=0xFFFFFFFFFFFFFFFFUL;
+	constexpr uint64	HGL_U64_MAX		=0xFFFFFFFFFFFFFFFFULL;
 
 	constexpr int8		HGL_S8_MAX		=0x7F;
 	constexpr int16		HGL_S16_MAX		=0x7FFF;
@@ -204,39 +228,102 @@ namespace hgl
 	constexpr char LowerHexChar[16]={'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};	///<小写16进制字符
 	constexpr char UpperHexChar[16]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};	///<大写16进制字符
 
-	constexpr long double HGL_E			    =2.7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274;		//欧拉数
-	constexpr long double HGL_LOG2E		    =1.44269504088896340736;
-	constexpr long double HGL_LOG10E		=0.434294481903251827651;
-	constexpr long double HGL_LN2			=0.693147180559945309417;
-	constexpr long double HGL_LN10		    =2.30258509299404568402;
-	constexpr long double HGL_PI			=3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117068;
-	constexpr long double HGL_PI_2		    =1.57079632679489661923;
-	constexpr long double HGL_PI_4		    =0.785398163397448309616;
-	constexpr long double HGL_SIZE_1_PI	    =0.318309886183790671538;
-	constexpr long double HGL_2_PI		    =0.636619772367581343076;
-	constexpr long double HGL_2_SQRTPI	    =1.12837916709551257390;
-	constexpr long double HGL_SQRT2		    =1.41421356237309504880;
-	constexpr long double HGL_SQRT1_2		=0.707106781186547524401;
+	constexpr double HGL_E			=2.7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274;		//欧拉数(自然对数的底数)
+	constexpr double HGL_LOG2E		=1.44269504088896340736;
+	constexpr double HGL_LOG10E		=0.434294481903251827651;
+	constexpr double HGL_LN2		=0.693147180559945309417;
+	constexpr double HGL_LN10		=2.30258509299404568402;
+	constexpr double HGL_PI			=3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117068;
+	constexpr double HGL_PI_2		=1.57079632679489661923;
+	constexpr double HGL_PI_4		=0.785398163397448309616;
+    constexpr double HGL_PI_3_4	    =2.356194490192344928938;
+	constexpr double HGL_1_PI	    =0.318309886183790671538;
+	constexpr double HGL_2_PI		=0.636619772367581343076;
+	constexpr double HGL_2_SQRTPI	=1.12837916709551257390;
+	constexpr double HGL_SQRT2		=1.41421356237309504880168872420969807;
+	constexpr double HGL_SQRT1_2	=0.707106781186547524401;
 
-	constexpr long double HGL_COS_ANG_0	    =1;
-	constexpr long double HGL_COS_ANG_45	=0.707106781187;
-	constexpr long double HGL_COS_ANG_90	=0;
-	constexpr long double HGL_COS_ANG_135	=-0.707106781187;
-	constexpr long double HGL_COS_ANG_180	=-1;
-	constexpr long double HGL_COS_ANG_225	=-0.707106781187;
-	constexpr long double HGL_COS_ANG_270	=0;
-	constexpr long double HGL_COS_ANG_315	=0.707106781187;
+	constexpr double HGL_COS_ANG_0	=1;
+	constexpr double HGL_COS_ANG_45	=0.707106781187;
+	constexpr double HGL_COS_ANG_90	=0;
+	constexpr double HGL_COS_ANG_135=-0.707106781187;
+	constexpr double HGL_COS_ANG_180=-1;
+	constexpr double HGL_COS_ANG_225=-0.707106781187;
+	constexpr double HGL_COS_ANG_270=0;
+	constexpr double HGL_COS_ANG_315=0.707106781187;
 
-	constexpr long double HGL_GOLDEN_RATIO				    =1.6180339887498948482;	//黄金比例
-	constexpr long double HGL_SILVER_RATIO				    =2.4142135623730950488;	//白银比例
+	constexpr double HGL_GOLDEN_RATIO				        =0.61803398874989484820458683436563811772030917980576;//黄金比例
+	constexpr double HGL_SILVER_RATIO				        =2.4142135623730950488;	//白银比例
 
-    constexpr long double HGL_SPEED_OF_SOUND                =331.3f;                //音速(米/秒)
-	constexpr long double HGL_SPEED_OF_LIGHT				=299792458;		        //光速(米/秒)
+    constexpr double HGL_SPEED_OF_SOUND                     =331.3f;                //音速(米/秒)
+	constexpr double HGL_SPEED_OF_LIGHT				        =299792458;		        //光速(米/秒)
 
-    constexpr long double HGL_ABSOLUTE_ZERO                 =-273.15f;              //绝对零度
+    constexpr double HGL_ABSOLUTE_ZERO                      =-273.15f;              //绝对零度
 
-	constexpr long double HGL_UNIVERSAL_GRAVITATION		    =6.6742e-11;	        //万有引力常数
-	constexpr long double HGL_GRAVITATIONAL_ACCELERATION	=9.80665;			    //重力加速度
+	constexpr double HGL_UNIVERSAL_GRAVITATION              =6.67384e-11;	        //万有引力常数
+
+	constexpr double HGL_EARTH_GRAVITATIONAL_ACCELERATION   =9.80665;			    //地球上的重力加速度(牛顿)
+	constexpr double HGL_EARTH_MASS                         =5.9722e+24;            //地球质量
+	constexpr double HGL_EARTH_RADIUS                       =6371000;               //地球半径(米)
+
+	/**
+     * 物体万有引力计算
+     * @param m1 星球质量
+     * @param m2 物体质量
+     * @param length 到星球中心的距离
+     */
+	template<typename T>
+	inline T UniversalGravitation(const T m1,const T m2,const T length)
+    {
+        return HGL_UNIVERSAL_GRAVITATION*((m1*m2)/(length*length));
+    }
+
+    /**
+     * 星球重力加速度计算<br>
+     * 理论上: (地球质量*万有引力常数)/(地球半径的平方)=地球上的重力加速度
+     * @param m 星球质量
+     * @param raidus 星球半径
+     * @return 星球的重力加速度(牛顿)
+     */
+    template<typename T>
+    inline T UniversalGravitation(const T m,const T radius)
+    {
+        return (HGL_UNIVERSAL_GRAVITATION*m)/(radius*radius);
+    }
+
+    /**
+     * 向心力计算
+     * @param m 质量
+     * @param v 速度
+     * @param r 距离
+     */
+    template<typename T>
+    inline T CentripetalForce(const T m,const T v,const T r)
+    {
+        return (m*v*v)/r;
+    }
+
+    /**
+     * 加速度计算
+     * @param power 推力
+     * @param weight 质量
+     */
+    template<typename T>
+    inline T AddSpeed(const T &power,const T &weight)
+    {
+        return power/weight;
+    }
+
+    /**
+     * 物体运动质量计算(物体运动越快，质量越大)
+     * @param m0 静止质量
+     * @param v 运动速度
+     */
+    template<typename T>
+    inline T RunWeight(const T &m0,const T &v)
+    {
+        return m0/sqrt(1-(v*v)/(HGL_SPEED_OF_LIGHT*HGL_SPEED_OF_LIGHT));
+    }
 
 	inline float half_to_float(const uint16 &h)
 	{
@@ -288,18 +375,6 @@ namespace hgl
 	{
 		return(x_radius*y_radius*z_radius*(HGL_PI*4.0f))/3.0f;
 	}
-
-#if HGL_OS == HGL_OS_Windows
-	inline uint64 pow10(const int p)
-	{
-		uint64 value = 10;
-
-		for (int i = 1; i < p; i++)
-			value *= 10;
-
-		return value;
-	}
-#endif//HGL_OS == HGL_OS_Windows
 
 	/**
 	 * 取适合正巧大于当前数的2次幂值

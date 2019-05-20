@@ -37,18 +37,27 @@ namespace hgl
 {
     namespace network
     {
-        /**
-        * TCP客户端连接类构造函数
-        * @param buffer_size 接收缓冲区大小
-        */
-        TCPClient::TCPClient():TCPSocket()
+        void TCPClient::InitPrivate(int sock)
         {
             TimeOut=HGL_NETWORK_TIME_OUT;
 
-            sis=new SocketInputStream();
-            sos=new SocketOutputStream();
+            sis=new SocketInputStream(sock);
+            sos=new SocketOutputStream(sock);
 
             ipstr = nullptr;
+        }
+
+        /**
+        * TCP客户端连接类构造函数
+        */
+        TCPClient::TCPClient():TCPSocket()
+        {
+            InitPrivate(-1);
+        }
+
+        TCPClient::TCPClient(int sock,const IPAddress *addr):TCPSocket(sock,addr)
+        {
+            InitPrivate(sock);
         }
 
         TCPClient::~TCPClient()
@@ -56,33 +65,24 @@ namespace hgl
             Disconnect();
             SAFE_CLEAR(sis);
             SAFE_CLEAR(sos);
+            SAFE_CLEAR_ARRAY(ipstr);
         }
 
         /**
          * 连接到服务器
-         * @param addr 服务器地址
          * @return 是否连接成功
          */
-        bool TCPClient::Connect(IPAddress *addr)
+        bool TCPClient::Connect()
         {
-            if(!addr)RETURN_FALSE;
-            Disconnect();
+            if(ThisSocket<0||!ThisAddress)RETURN_FALSE;
 
-            if(addr->GetSocketType()!=SOCK_STREAM)RETURN_FALSE;
-            if(addr->GetProtocol()!=IPPROTO_TCP)RETURN_FALSE;
-
-            if(!CreateSocket(addr->GetFamily(),SOCK_STREAM,IPPROTO_TCP))
-                RETURN_FALSE;
-
-            if(connect(ThisSocket,(sockaddr *)&addr,sizeof(addr)))
+            if(connect(ThisSocket,ThisAddress->GetSockAddr(),ThisAddress->GetSockAddrInSize()))
             {
                 SAFE_CLEAR(ipstr);
-                ipstr=new char[addr->GetIPStringMaxSize()+1];
-
-                addr->ToString(ipstr);
+                ipstr=ThisAddress->CreateString();
 
                 LOG_HINT(U8_TEXT("Don't Connect to TCPServer ")+UTF8String(ipstr));
-                CloseSocket();
+                this->CloseSocket();
                 return(false);
             }
 
@@ -90,9 +90,27 @@ namespace hgl
 
             SetBlock(true,TimeOut);    //阻塞模式
 
-            UseSocket(ThisSocket,addr);
+            ResetConnect();
 
             return(true);
+        }
+
+        /**
+         * 创建一个连接
+         * @param addr 服务器地址
+         */
+        bool TCPClient::CreateConnect(const IPAddress *addr)
+        {
+            if(!addr)
+                RETURN_FALSE;
+
+            if(!addr->IsTCP())
+                RETURN_FALSE;
+
+            if(!InitSocket(addr))
+                RETURN_FALSE;
+
+            return this->Connect();
         }
 
         /**
@@ -100,12 +118,12 @@ namespace hgl
         */
         void TCPClient::Disconnect()
         {
-            SAFE_CLEAR(ipstr);
+            SAFE_CLEAR_ARRAY(ipstr);
 
             if(ThisSocket==-1)
                 return;
 
-            CloseSocket();                    //两个线程会自动因为socket关闭而退出
+            this->CloseSocket();            //两个线程会自动因为socket关闭而退出
                                             //注：线程退出会调用ThreadExit，再次调用Disconnect
         }
 
@@ -114,12 +132,36 @@ namespace hgl
          * @param sock 指定socket编号
          * @param addr socket地址
          */
-        void TCPClient::UseSocket(int sock,IPAddress *addr)
+        bool TCPClient::UseSocket(int sock,const IPAddress *addr)
         {
-            TCPSocket::UseSocket(sock,addr);
+            if(!TCPSocket::UseSocket(sock,addr))
+                RETURN_FALSE;
 
             ((SocketInputStream *)sis)->SetSocket(sock);
             ((SocketOutputStream *)sos)->SetSocket(sock);
+
+            return(true);
+        }
+
+        TCPClient *CreateTCPClient(IPAddress *addr)
+        {
+            if(!addr)RETURN_ERROR_NULL;
+
+            if(!addr->IsTCP())
+                RETURN_ERROR_NULL;
+
+            int sock=CreateSocket(addr);
+
+            if(sock<0)
+                RETURN_ERROR_NULL;
+
+            if(!Connect(sock,addr))
+            {
+                CloseSocket(sock);
+                RETURN_ERROR_NULL;
+            }
+
+            return(new TCPClient(sock,addr));
         }
     }//namespace network
 }//namespace hgl

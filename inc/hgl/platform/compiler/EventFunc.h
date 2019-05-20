@@ -38,6 +38,14 @@ namespace hgl
 				ClearFunc();
 			}
 
+			EventFunc(void *t,void *f)
+            {
+                ClearFunc();
+
+                vp_this=t;
+                vp_func=f;
+            }
+
 			void ClearFunc()
             {
                 memset(this,0,sizeof(SelfClass));
@@ -119,6 +127,14 @@ namespace hgl
 			{
 				memset(this,0,sizeof(SelfClass));
 			}
+
+			EventFunc(void *t,void *f)
+            {
+                memset(this,0,sizeof(SelfClass));
+
+                vp_this=t;
+                vp_func=f;
+            }
 
 			bool operator !()const
 			{
@@ -223,6 +239,9 @@ namespace hgl
 
 				//现通用方式
 				CallEvent(exp->OnClick,(nullptr));
+
+				//C++11方式
+				exp->OnClick(nullptr);
 			}
 		}
 

@@ -11,8 +11,6 @@ using uint32    =unsigned int; 	        ///<无符号32位整型
 using  int64    =  signed long long; 	///<有符号64位整型
 using uint64    =unsigned long long; 	///<无符号64位整型
 
-using float128  =__float128;
-
 typedef unsigned long   ulong;
 typedef unsigned int    uint;
 typedef unsigned short  ushort;

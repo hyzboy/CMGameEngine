@@ -1,7 +1,7 @@
-﻿#include "CDBTableViewer.h"
-#include <hgl/db/CDBTable.h>
+#include "CDBTableViewer.h"
+#include<hgl/db/CDBTable.h>
 
-#include <hgl/QT.h>
+#include<hgl/QT.h>
 
 #include <QTableWidget>
 #include <QTableWidgetItem>

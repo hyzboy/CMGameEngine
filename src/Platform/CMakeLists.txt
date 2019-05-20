@@ -1,4 +1,4 @@
-﻿IF(APPLE)
+IF(APPLE)
     add_library(OSXGUI Clipboard.cpp)
 ENDIF(APPLE)
 
@@ -6,10 +6,19 @@ IF(BUILD_QT5_SUPPORT_LIB)
     add_subdirectory(QT)
 ENDIF()
 
-IF(UNIX)
+IF(ANDROID)
+    SET(PLATFORM_LOG_SOURCE             Android/LogConsole.cpp
+                                        Android/LogFile.cpp)
 
+    SET(PLATFORM_APPLICATION_SOURCE     ${PLATFORM_APPLICATION_SOURCE}
+                                        Android/JNISupport.cpp
+                                        Android/NativeActivitySupport.cpp)
+ENDIF()
+
+IF(UNIX)
     SET(PLATFORM_FILE_SOURCE            UNIX/File.cpp
-                                        UNIX/FileAccess.cpp)
+                                        UNIX/FileAccess.cpp
+                                        UNIX/EnumFile.cpp)
 
     SET(PLATFORM_CODEPAGE_SOURCE        UNIX/CodePage.cpp)
 
@@ -20,9 +29,18 @@ IF(UNIX)
 
     SET(PLATFORM_MULTI_THREAD_SOURCE    UNIX/CondVar.cpp
                                         UNIX/RWLock.cpp
-                                        UNIX/Semaphore.cpp
                                         UNIX/Thread.cpp
                                         UNIX/ThreadMutex.cpp)
+
+    IF(APPLE)
+        SET(PLATFORM_MULTI_THREAD_SOURCE    ${PLATFORM_MULTI_THREAD_SOURCE}
+                                            Apple/Semaphore.cpp
+                                            Apple/ProgramPath.cpp)
+    ELSE()
+        SET(PLATFORM_MULTI_THREAD_SOURCE    ${PLATFORM_MULTI_THREAD_SOURCE}
+                                            UNIX/Semaphore.cpp
+                                            UNIX/ProgramPath.cpp)
+    ENDIF()
 
     SET(PLATFORM_MULTI_PROCESS_SOURCE   UNIX/ProcMutex.cpp
                                         UNIX/Process.cpp
@@ -34,12 +52,13 @@ IF(UNIX)
                                         UNIX/DateTime.cpp)
 
     SET(PLATFORM_EXTERNAL_MODULE_SOURCE UNIX/ExternalModule.cpp)
-ENDIF(UNIX)
+ENDIF()
 
 IF(WIN32)
-
     SET(PLATFORM_FILE_SOURCE            Win/File.cpp
-                                        Win/FileAccess.cpp)
+                                        Win/FileAccess.cpp
+                                        Win/EnumFile.cpp
+                                        Win/ProgramPath.cpp)
 
     SET(PLATFORM_CODEPAGE_SOURCE        Win/CodePage.cpp)
 
@@ -111,11 +130,11 @@ IF(BUILD_OPENGL_LIB)
                                         ${GLFW_SOURCE})
         ENDIF(WIN32)
     ELSE(OPENGL_USE_GLFW)
-    
+
         IF(WIN32)
             SET(PLATFORM_INPUT_DEVICE_SOURCE    Win/KeyConvert.cpp)
         ENDIF(WIN32)
-    
+
         IF(UNIX)
             set(X11_PLATFORM_SOURCE X11/X11Window.cpp)
 
@@ -124,11 +143,11 @@ IF(BUILD_OPENGL_LIB)
             SET(PLATFORM_DESKTOP_SOURCE ${PLATFORM_DESKTOP_SOURCE}
                                         ${X11_PLATFORM_SOURCE})
         ENDIF(UNIX)
-        
+
         IF(APPLE)
         ENDIF(APPLE)
     ENDIF(OPENGL_USE_GLFW)
-    
+
     SOURCE_GROUP("InputDevice"  FILES ${PLATFORM_INPUT_DEVICE_SOURCE})
 ENDIF(BUILD_OPENGL_LIB)
 
@@ -159,11 +178,16 @@ IF(WIN32)
     add_library(CM.Platform STATIC ${PLATFORM_SOURCE})
     add_library(CM.Platform.Static STATIC ${PLATFORM_SOURCE} ${PLATFORM_RENDER_SOURCE})
     target_compile_options(CM.Platform.Static PRIVATE "/MT")
-    
-    add_library(CM.PlatformRender STATIC ${PLATFORM_SOURCE} ${PLATFORM_RENDER_SOURCE})
-    add_library(CM.PlatformRender.Static STATIC ${PLATFORM_SOURCE} ${PLATFORM_RENDER_SOURCE})    
-    target_compile_options(CM.PlatformRender.Static PRIVATE "/MT")
+
+    IF(BUILD_OPENGL_LIB)
+        add_library(CM.PlatformRender STATIC ${PLATFORM_SOURCE} ${PLATFORM_RENDER_SOURCE})
+        add_library(CM.PlatformRender.Static STATIC ${PLATFORM_SOURCE} ${PLATFORM_RENDER_SOURCE})
+        target_compile_options(CM.PlatformRender.Static PRIVATE "/MT")
+    ENDIF(BUILD_OPENGL_LIB)
 ELSE(WIN32)
     add_library(CM.Platform SHARED ${PLATFORM_SOURCE})
-    add_library(CM.PlatformRender SHARED ${PLATFORM_SOURCE} ${PLATFORM_RENDER_SOURCE})
+
+    IF(BUILD_OPENGL_LIB)
+        add_library(CM.PlatformRender SHARED ${PLATFORM_SOURCE} ${PLATFORM_RENDER_SOURCE})
+    ENDIF(BUILD_OPENGL_LIB)
 ENDIF(WIN32)

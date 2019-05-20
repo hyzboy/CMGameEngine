@@ -1,6 +1,6 @@
-﻿#include<hgl/type/DataType.h>
+#include<hgl/type/DataType.h>
 #include<hgl/type/BaseString.h>
-#include<hgl/FileSystem.h>
+#include<hgl/io/FileSystem.h>
 #include<hgl/Desktop.h>
 #include<shobjidl.h>
 
@@ -86,7 +86,7 @@ namespace hgl
                 return(false);
 
             if(!sc.icon_filename.IsEmpty())
-                if(filesystem::FileConfirm(sc.icon_filename))
+                if(filesystem::FileExist(sc.icon_filename))
                 {
                     hresult=psl->SetIconLocation(sc.icon_filename.c_str(),0);
 

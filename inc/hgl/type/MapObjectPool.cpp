@@ -65,7 +65,7 @@ namespace hgl
 		if(!idle_list.Get(flag,obj))															//尝试在闲置列表里取得这个对象
 			return(nullptr);
 
-		idle_list.DeleteByIndex(flag);															//从闲置列表中清除这个数据
+		idle_list.DeleteByKey(flag);															//从闲置列表中清除这个数据
 
 		active_list.Add(obj);																	//将数据添加到活动列表中
 

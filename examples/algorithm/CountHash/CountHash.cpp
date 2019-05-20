@@ -1,5 +1,6 @@
-﻿#include<hgl/algorithm/Hash.h>
-#include<hgl/FileSystem.h>
+#include<hgl/algorithm/Hash.h>
+#include<hgl/io/FileSystem.h>
+#include<hgl/Time.h>
 #include<iostream>
 
 using namespace std;
@@ -34,7 +35,9 @@ int main(int argc,char **argv)
     UTF8String hash_name;
     int hash_length;
     char *hash_code;
-    char hash_str[(32*2)+1];
+    char hash_str[256];
+
+    double start_time,end_time;
 
     for(int i=hashNone+1;i<hashEnd;i++)
     {
@@ -43,9 +46,13 @@ int main(int argc,char **argv)
 
         hash_code=new char[hash_length];
 
+        start_time=GetDoubleTime();
+
         h->Init();
         h->Update(file_data,file_length);
         h->Final(hash_code);
+
+        end_time=GetDoubleTime();
 
         ToLowerHexStr(hash_str,hash_code,hash_length);
 
@@ -53,7 +60,7 @@ int main(int argc,char **argv)
 
         h->GetName(hash_name);
 
-        cout<<hash_name.c_str()<<":"<<hash_str<<endl;
+        cout<<hash_name.c_str()<<":"<<hash_str<<",use time: "<<(end_time-start_time)<<endl;
 
         delete[] hash_code;
         delete h;

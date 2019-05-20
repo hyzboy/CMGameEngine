@@ -29,12 +29,12 @@ namespace hgl
 
 		inline	void DebugLog(LogLevel ll,const UTF16String &str,const char *filename,int line,const char *funcname)
 		{
-			Log(ll,str+U16_TEXT(" in \"")+to_u16(filename)+U16_TEXT("\", ")+UTF16String(line)+U16_TEXT(" line,func:")+to_u16(funcname));
+			Log(ll,str+U16_TEXT(">>LogFrom(\"")+to_u16(filename)+U16_TEXT("\", ")+UTF16String(line)+U16_TEXT(" line,func:\"")+to_u16(funcname)+U16_TEXT("\")"));
 		}
 
 		inline	void DebugLog(LogLevel ll,const UTF8String &str,const char *filename,int line,const char *funcname)
 		{
-			Log(ll,str+U8_TEXT(" in \"")+UTF8String(filename)+U8_TEXT("\", ")+UTF8String(line)+U8_TEXT(" line,func:")+UTF8String(funcname));
+			Log(ll,str+U8_TEXT(">>LogFrom(\"")+UTF8String(filename)+U8_TEXT("\", ")+UTF8String(line)+U8_TEXT(" line,func:\"")+UTF8String(funcname)+U8_TEXT("\")"));
 		}
 
 		#ifdef LOG_INFO_SOURCE

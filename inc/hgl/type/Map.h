@@ -6,8 +6,6 @@
 #include<hgl/type/Pool.h>
 #include<hgl/LogInfo.h>
 #include<hgl/thread/RWLock.h>
-#include<hgl/io/DataInputStream.h>
-#include<hgl/io/DataOutputStream.h>
 namespace hgl
 {
 	/**
@@ -17,23 +15,18 @@ namespace hgl
 	{
 	public:
 
-		typedef DataPair IDItem;
+        using IDItem=DataPair;
 
 	protected:
 
 		ObjectPool<IDItem> data_pool;
 		List<IDItem *> data_list;
 
-		typedef _Map<F,T,IDItem> this_calss;
-
-    public: //事件
-
-		bool (*OnSaveToStream)(io::DataOutputStream *,const F &,T &);								///<保存到流事件
-		bool (*OnLoadFromStream)(io::DataInputStream *,F &,T &);									///<从流加载事件
+        using this_calss=_Map<F,T,IDItem>;
 
 	public:	//方法
 
-		_Map();
+		_Map()=default;
 		virtual ~_Map()=default;
 
 		const	int		GetCount()const{return data_list.GetCount();}								///<取得数据总量
@@ -44,12 +37,14 @@ namespace hgl
 				bool	FindPos(const F &,int &)const;												///<查找数据如果插入后，会所在的位置，返回是否存在这个数据
 				int		FindPos(const F &flag)const{int pos;FindPos(flag,pos);return(pos);}			///<查找数据如果插入后，会所在的位置
 				int		Find(const F &)const;														///<查找数据是否存在，返回-1表示数据不存在
-				int		FindByData(const T &)const;													///<查找数据是否存在，返回-1表示数据不存在
+				int		FindByValue(const T &)const;												///<查找数据是否存在，返回-1表示数据不存在
+				bool    KeyExist(const F &key)const{return(Find(key)!=-1);}                         ///<确认这个数据是否存在
+				bool    ValueExist(const T &value)const{return(FindByValue(value)!=-1);}            ///<确认这个数据是否存在
 		virtual bool	Get(const F &,T &)const;													///<取得数据
-		virtual bool	Delete(const F &,T &);														///<将指定数据从列表中移除
-		virtual bool	DeleteByIndex(const F &);													///<根据索引将指定数据从列表中移除
-		virtual int		DeleteByIndex(const F *,const int);											///<根据索引将指定数据从列表中批量移除
-		virtual bool	DeleteByData(const T &);													///<根据数据将指定数据从列表中移除
+		virtual bool	Delete(const F &,T &);														///<将指定数据从列表中移除，并获得这个数据
+		virtual bool	DeleteByKey(const F &);													    ///<根据索引将指定数据从列表中移除
+		virtual int		DeleteByKey(const F *,const int);											///<根据索引将指定数据从列表中批量移除
+		virtual bool	DeleteByValue(const T &);													///<根据数据将指定数据从列表中移除
 		virtual bool	DeleteBySerial(int);														///<根据序号将指定数据从列表中移除
 		virtual bool	DeleteBySerial(int,int);													///<根据序号将指定数据从列表中移除
 		virtual void	Update(const F &,const T &);												///<更新一个数据的内容(如不存在则添加)
@@ -60,8 +55,8 @@ namespace hgl
 		List<IDItem *> &GetList(){return data_list;}												///<取得线性列表
 			IDItem **	GetDataList()const{return data_list.GetData();}								///<取得纯数据线性列表
 
-			template<typename IT>
-				int		GetAllIndex(IT &il_list)
+                template<typename IT>
+				int		GetKey(IT &il_list)                                                        ///<取得所有索引合集
 				{
 					const int count=data_list.GetCount();
 
@@ -72,7 +67,7 @@ namespace hgl
 
 					for(int i=0;i<count;i++)
 					{
-						il_list.Add((*idp)->first);
+						il_list.Add((*idp)->left);
 						++idp;
 					}
 
@@ -80,7 +75,7 @@ namespace hgl
 				}
 
 				template<typename IT>
-				int		GetAllData(IT &il_list)
+				int		GetValue(IT &il_list)                                                      ///<取得所有数值合集
 				{
 					const int count=data_list.GetCount();
 
@@ -91,7 +86,7 @@ namespace hgl
 
 					for(int i=0;i<count;i++)
 					{
-						il_list.Add((*idp)->second);
+						il_list.Add((*idp)->right);
 						++idp;
 					}
 
@@ -100,18 +95,18 @@ namespace hgl
 
 				IDItem *GetItem(int n)const{return data_list[n];}									///<取指定序号的数据
 				bool 	Get(int,F &,T &)const;														///<取指定序号的数据
-				bool	GetIndex(int,F &)const;														///<取指定序号的索引
-				bool	GetData(int,T &)const;														///<取指定序号的数据
+				bool	GetKey(int,F &)const;														///<取指定序号的索引
+				bool	GetValue(int,T &)const;														///<取指定序号的数据
 
-				bool	SetDataBySerial(int,T &);													///<根据序号设置数据
+				bool	SetValueBySerial(int,T &);													///<根据序号设置数据
 
-				bool	SaveToStream(io::DataOutputStream *);										///<保存到流
-				bool	LoadFromStream(io::DataInputStream *);										///<从流加载
+				void	operator=(const _Map<F,T,IDItem> &);									    ///<操作符重载，复制一个列表
 
-				bool	SaveToFile(const os_char *);												///<保存到文件
-				bool	LoadFromFile(const os_char *);                                         		///<从文件加载
+                void    Enum(void (*enum_func)(const F &,T));                                       ///<枚举所有数据项
+                void    EnumKey(void (*enum_func)(const F &))const;                                 ///<枚举所有索引
+                void    EnumValue(void (*enum_func)(T));                                            ///<枚举所有数值
 
-				void	operator=(const _Map<F,T,IDItem> &);									///<操作符重载，复制一个列表
+                void    EnumValue(bool (*enum_func)(T));                                            ///<枚举所有数值
 	};//class _Map
 
 	template<typename F,typename T> class Map:public _Map<F,T,Pair<F,T> >
@@ -150,7 +145,7 @@ namespace hgl
 			if(SuperClass::GetCount()>0)
 			{
 				//LOG_ERROR(u"这是一个严重的程序设计错误，会产生纯虚函数调用，请在派生类的析构函数中调用Clear函数以清除数据。");
-				LOG_ERROR(OS_TEXT("This is a serious design errors, will produce the pure virtual function call, please call in the destructor of the derived class the Clear function to clear the data."));
+				LOG_ERROR(OS_TEXT("This is a serious design errors, will produce the pure virtual function call, please call in the destructor of the derived class the <Clear> function to clear the data."));
 			}
 		}
 
@@ -159,7 +154,7 @@ namespace hgl
 		* @param flag 要断开的数据标识
 		* @return 是否断开成功
 		*/
-		bool UnlinkByIndex(const F &flag)
+		bool UnlinkByKey(const F &flag)
 		{
 			return UnlinkBySerial(SuperClass::Find(flag));
 		}
@@ -169,9 +164,9 @@ namespace hgl
 		* @param tp 要断开的数据
 		* @return 是否断开成功
 		*/
-		bool UnlinkByData(T *tp)
+		bool UnlinkByValue(T *tp)
 		{
-			return UnlinkBySerial(this->FindByData(tp));
+			return UnlinkBySerial(this->FindByValue(tp));
 		}
 
 		/**
@@ -201,7 +196,7 @@ namespace hgl
 		* @param flag 要删除的数据标识
 		* @return 是否删除成功
 		*/
-		bool DeleteByIndex(const F &flag)
+		bool DeleteByKey(const F &flag)
 		{
 			return DeleteBySerial(SuperClass::Find(flag));
 		}
@@ -211,9 +206,9 @@ namespace hgl
 		* @param tp 要删除的数据
 		* @return 是否删除成功
 		*/
-		bool DeleteByData(T *tp)
+		bool DeleteByValue(T *tp)
 		{
-			return DeleteBySerial(this->FindByData(tp));
+			return DeleteBySerial(this->FindByValue(tp));
 		}
 
 		/**

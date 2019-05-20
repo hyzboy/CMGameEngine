@@ -20,10 +20,14 @@ ENDIF()
 add_subdirectory(datatype)
 add_subdirectory(time)
 
+add_subdirectory(filesystem)
+
 IF(BUILD_DATABASE)
     add_subdirectory(database)
-    
+
     IF(UNIX)
-        add_subdirectory(db/redis)
+        IF(DATABASE_INCLUDE_Redis)
+            add_subdirectory(db/redis)
+        ENDIF()
     ENDIF()
 ENDIF()

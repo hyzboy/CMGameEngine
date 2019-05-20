@@ -23,13 +23,12 @@ namespace filesystem
         if(!size)return(nullptr);
 
         int fp;
-        int err;
 
         fp=open64(filename.c_str(),O_RDONLY);
 
         if(fp==-1)
         {
-            std::cout<<"openfile error("<<err<<") filename:"<<filename.c_str()<<std::endl;
+            std::cerr<<"openfile error("<<fp<<") filename:"<<filename.c_str()<<std::endl;
             return(nullptr);
         }
 
@@ -78,7 +77,7 @@ namespace filesystem
 
         if(fp==-1)
         {
-            std::cout<<"create file error("<<err<<") filename:"<<filename.c_str()<<std::endl;
+            std::cerr<<"create file error("<<err<<") filename:"<<filename.c_str()<<std::endl;
             return(-4);
         }
 
@@ -158,7 +157,7 @@ namespace filesystem
     * @param filename 要查找的文件名称
     * @return 这个文件是否存在
     */
-    bool FileConfirm(const std::string &filename)
+    bool FileExist(const std::string &filename)
     {
         return access(filename.c_str(),F_OK)>=0;
     }

@@ -34,9 +34,9 @@ struct FileCheck
 {
     std::string filename;
 
-    MD5Code md5;                    
+    MD5Code md5;
     int size;
-    
+
     MD5Code compress_md5;
     int compress_size;
 
@@ -103,13 +103,13 @@ private:
     bool DownloadFile(FileCheck &fc,const std::string &filename,std::string &compress_file_url)
     {
         long compress_filesize;
-            
-        if(!QueryFileLength(compress_file_url,compress_filesize)) 
+
+        if(!QueryFileLength(compress_file_url,compress_filesize))
             return(false);
-            
+
         if(compress_filesize!=fc.compress_size)
             return(false);
-                
+
         MemoryBlock<char> compress_data(compress_filesize);
 
         int download_size=Download(compress_file_url,compress_data,compress_filesize);
@@ -125,7 +125,7 @@ private:
             return(false);
 
         if(fc.size==fc.compress_size)       //如果文件是不压缩的
-        {            
+        {
             if(filesystem::SaveMemoryToFile(filename,compress_data.data(),fc.size)!=fc.size)
                 return(false);
         }
@@ -177,11 +177,11 @@ private:
 
         fullname=root_path+"/"+filename;
         compress_file_url=UPDATE_SERVER_URL_PATH+filename+COMPRESS_EXTNAME;
-        
+
         replace(fullname,'/','\\');
         replace(compress_file_url,'/','\\');
 
-        if(!filesystem::FileConfirm(fullname))                          //文件不存在，下载
+        if(!filesystem::FileExist(fullname))                          //文件不存在，下载
         {
             if(!CheckPath(fullname))                                    //检测目录，如果不存在则创建
                 return(false);
@@ -196,7 +196,7 @@ private:
         MD5Code md5;
 
         GetMD5(md5,data,size);
-        
+
         delete[] data;
 
         if(memcmp(md5,fc.md5,sizeof(MD5Code)))                          //MD5不一致，下载
@@ -228,17 +228,17 @@ public:
 
         long filesize;
         std::string url=UPDATE_SERVER_URL_PATH+"update.xml";
-        
+
         if(!QueryFileLength(url,filesize))      //查询XML文件长度
             return(false);
-        
+
         char *buffer=new char[filesize+1];
-        
+
         int download_result=Download(url,buffer,filesize);
-        
+
         if(download_result!=filesize)
             return(false);
-        
+
         buffer[filesize]=0;
 
         xml.Start();
@@ -292,7 +292,7 @@ bool AutoUpdate()
     std::string self_filename;
 
     if(!GetSelfFullname(self_fullname))return(false);   //取得自身文件名
-    
+
     const int off=self_fullname.find_last_of('/');
 
     self_workpath=self_fullname.substr(0,off);
@@ -303,7 +303,7 @@ bool AutoUpdate()
     {
        std::string backup_self=self_workpath+"/_"+self_filename;                   //创建一个下划线开头的版本
 
-       if(filesystem::FileConfirm(backup_self))
+       if(filesystem::FileExist(backup_self))
            if(!filesystem::FileDelete(backup_self))
            {
                std::cerr<<"delete \""<<backup_self<<"\" failed"<<std::endl;

@@ -1,5 +1,5 @@
-﻿#include <hgl/script/DevilVM.h>
-#include <hgl/LogInfo.h>
+#include<hgl/script/DevilVM.h>
+#include<hgl/LogInfo.h>
 
 /*
 	设计思想:

@@ -1,8 +1,8 @@
-﻿#ifndef CDBTableViewer_H
+#ifndef CDBTableViewer_H
 #define CDBTableViewer_H
 
 #include <QMainWindow>
-#include <hgl/type/BaseString.h>
+#include<hgl/type/BaseString.h>
 
 class CDBTableViewer : public QMainWindow
 {

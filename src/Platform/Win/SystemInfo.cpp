@@ -1,14 +1,14 @@
-﻿#include<hgl/platform/SystemInfo.h>
+#include<hgl/platform/SystemInfo.h>
 #include<hgl/platform/ConsoleSystemInitInfo.h>
 #include<hgl/LogInfo.h>
 #include<hgl/PlugIn.h>
-#include<hgl/FileSystem.h>
+#include<hgl/io/FileSystem.h>
 #include<wchar.h>
 #include<shlobj.h>
 
 namespace hgl
 {
-    bool GetTempPath(wchar_t *path,unsigned long s)
+    bool GetTempPath(WideString &temp_path,unsigned long s)
     {
         HKEY hKey;
         DWORD type;
@@ -26,7 +26,10 @@ namespace hgl
 
             if(result==ERROR_SUCCESS)
             {
+                wchar_t path[HGL_MAX_PATH];
+                
                 ExpandEnvironmentStringsW(temp,path,s);
+                temp_path=path;
                 return(true);
             }
         }

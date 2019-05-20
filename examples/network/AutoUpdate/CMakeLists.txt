@@ -7,7 +7,9 @@ add_executable(Example.Network.LinuxAutoUpdate  StandAlone/LinuxAutoUpdate.cpp
 target_link_libraries(Example.Network.LinuxAutoUpdate bz2 expat curl)
 
 add_executable(Example.Network.LinuxMakeUpdate  StandAlone/LinuxMakeUpdate.cpp
-                                StandAlone/md5.cpp
-                                StandAlone/FileSystem.cpp)
+                                                StandAlone/md5.cpp
+                                                StandAlone/FileSystem.cpp
+                                                StandAlone/FileFilterCheck.cpp
+                                                StandAlone/FileCompressCheck.cpp)
 
 target_link_libraries(Example.Network.LinuxMakeUpdate bz2)

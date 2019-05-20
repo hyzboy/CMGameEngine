@@ -1,4 +1,4 @@
-﻿#include <hgl/type/Color4f.h>
+#include<hgl/type/Color4f.h>
 namespace hgl
 {
     void Color4f::Use(COLOR_ENUM ce,float ta)
