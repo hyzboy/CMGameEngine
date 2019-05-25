@@ -23,7 +23,7 @@ namespace hgl
     {
     protected:
 
-        typedef RefFlagData<F,T> ResItem;
+        using ResItem=RefFlagData<F,T> ;
 
         _Map<F,T *,ResItem> items;
 
@@ -38,7 +38,7 @@ namespace hgl
         virtual ~ResManage();
 
         virtual void        Clear();                                            ///<清除所有数据
-        virtual void        ClearZero();                                        ///<清除所有没有用到的数据
+        virtual void        ClearFree();                                        ///<清除所有没有用到的数据
 
                 const int   GetCount()const{return items.GetCount();}           ///<取得数据数量
 
@@ -64,6 +64,7 @@ namespace hgl
 
         virtual F Add(T *value)
         {
+            if(!value)return(-1);
             if(!ResManage<F,T>::Add(id_count,value))
                 return(-1);
 

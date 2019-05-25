@@ -13,7 +13,7 @@ namespace hgl
         {
             hashNone=0,
 
-            hashAdler32,				///<一种较CRC32更为安全的快速HASH算法
+            hashAdler32,				///<一种较CRC32更为快速的HASH算法
             hashCRC32,					///<最快速的HASH算法，但最不安全，仅用于低安全性的简单验证
             hashMD4,					///<较MD5在安全性下稍弱。但仍未被攻破，且较MD5更快
             hashMD5,					///<最常用的HASH算法

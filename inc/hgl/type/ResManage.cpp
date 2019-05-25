@@ -1,4 +1,4 @@
-#ifndef HGL_RES_MANAGE_CPP
+﻿#ifndef HGL_RES_MANAGE_CPP
 #define HGL_RES_MANAGE_CPP
 
 #include<hgl/type/ResManage.h>
@@ -26,7 +26,7 @@ namespace hgl
     }
 
     template<typename F,typename T>
-    void ResManage<F,T>::ClearZero()
+    void ResManage<F,T>::ClearFree()
     {
         int n=items.GetCount();
 
