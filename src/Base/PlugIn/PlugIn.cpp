@@ -75,7 +75,6 @@ namespace hgl
     void ClearAllPlugIn()
     {
         int n=plugin_manager_list.GetCount();
-
         PIMClearFunc *pcf=plugin_manager_list.GetData();
 
         while(n--)

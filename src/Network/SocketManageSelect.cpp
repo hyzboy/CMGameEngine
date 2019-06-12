@@ -92,7 +92,7 @@ namespace hgl
                     
                 SocketEvent *p=sel.GetData();
 
-				for(int i=0;i<fs.fd_count;i++)
+				for(uint i=0;i<fs.fd_count;i++)
 				{   
 					p->sock=fs.fd_array[i];
 					p->size=-1;

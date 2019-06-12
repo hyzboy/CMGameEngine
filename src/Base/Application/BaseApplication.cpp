@@ -1,6 +1,7 @@
 ﻿#include<hgl/platform/BaseApplication.h>
 #include<hgl/platform/ConsoleSystemInitInfo.h>
 #include<hgl/Info.h>
+#include<hgl/LogInfo.h>
 #include<hgl/Time.h>
 
 namespace hgl

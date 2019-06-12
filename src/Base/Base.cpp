@@ -21,6 +21,9 @@ namespace hgl
         Logger *CreateLoggerDialog    (const OSString &,LogLevel);
 //        Logger *CreateLoggerNetwork    (const OSString &,LogLevel);
     }//namespace logger
+    
+    //Base/DataType/Endian.cpp
+    bool CheckSystemEndian();
 
      //Base/Other/MemoryPoll.CPP
     void InitMemoryPool();
@@ -46,15 +49,11 @@ namespace hgl
             InitLog();                    //初始化日志插件
         }
 
-        const uint16 db=0xABCD;
-        const uint8 *b=(const uint8 *)&db;
-
-    #if HGL_ENDIAN == HGL_BIG_ENDIAN
-        if(*b==0xCD)
-    #else
-        if(*b==0xAB)
-    #endif//HGL_BIG_ENDIAN
-            LOG_ERROR(OS_TEXT("cpu endian error,this library is bad.library macro Cpu=") HGL_CPU_NAME OS_TEXT(", Endian is ") HGL_CPU_ENDIAN);
+        if(!CheckSystemEndian())
+        {
+            LOG_ERROR(OS_TEXT("[[[FATAL ERROR]]] CPU Endian config error,this library is bad, CPU Endian is ") HGL_CPU_ENDIAN);
+            return(false);
+        }
 
         if(sii
 		 &&sii->info.ProjectCode.Length()<=0)

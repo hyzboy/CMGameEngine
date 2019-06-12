@@ -1,5 +1,5 @@
 ﻿#include<hgl/network/IP.h>
-#include<hgl/network/Socket.h>
+#include<hgl/LogInfo.h>
 
 namespace hgl
 {
@@ -16,13 +16,8 @@ namespace hgl
                 hints.ai_socktype=socktype;
                 hints.ai_protocol=protocol;
 
-                int rc=getaddrinfo(name,nullptr,&hints,&answer);         //此函数最低WindowsXP SP2
-
-                if(rc)
-                {
-                    LOG_ERROR(OS_TEXT("getaddrinfo return error,code [")+OSString(rc)+OS_TEXT("]")+GetSocketString(rc));
+                if (getaddrinfo(name, nullptr, &hints, &answer))         //此函数最低WindowsXP SP2
                     RETURN_FALSE;
-                }
 
                 memcpy(&addr,answer->ai_addr,sizeof(sockaddr_in));
                 freeaddrinfo(answer);
@@ -48,13 +43,8 @@ namespace hgl
                 hints.ai_socktype=socktype;
                 hints.ai_protocol=protocol;
 
-                int rc=getaddrinfo(name,nullptr,&hints,&answer);         //此函数最低WindowsXP SP2
-
-                if(rc)
-                {
-                    LOG_ERROR(OS_TEXT("getaddrinfo return error,code [")+OSString(rc)+OS_TEXT("]")+GetSocketString(rc));
+                if (getaddrinfo(name, nullptr, &hints, &answer))         //此函数最低WindowsXP SP2
                     RETURN_FALSE;
-                }
 
                 memcpy(&addr,answer->ai_addr,sizeof(sockaddr_in6));
                 freeaddrinfo(answer);
@@ -292,7 +282,7 @@ namespace hgl
 
         void IPv4Address::ToString(char *str,const int max_size,const in_addr *ip_addr)
         {
-            inet_ntop(AF_INET,(void *)&ip_addr,str,max_size);
+            inet_ntop(AF_INET,(void *)&ip_addr,str,INET_ADDRSTRLEN);
         }
 
         void IPv4Address::ToString(char *str,const int max_size,const sockaddr_in *ip_addr)
@@ -382,7 +372,7 @@ namespace hgl
 
         void IPv6Address::ToString(char *str,const int max_size,const in6_addr *ip_addr)
         {
-            inet_ntop(AF_INET6, (void *)&ip_addr,str,max_size);
+            inet_ntop(AF_INET6, (void *)&ip_addr,str,INET6_ADDRSTRLEN);
         }
 
         void IPv6Address::ToString(char *str,const int max_size,const sockaddr_in6 *ip_addr)

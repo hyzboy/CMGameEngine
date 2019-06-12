@@ -1,3 +1,5 @@
+*** 现有CMGameEngine除去bug修复以及ULRE连带更新，将不再有主动更新计划。请关注ULRE(https://github.com/hyzboy/ULRE)
+
 * 除去黑名单外，使用是免费的。包括所有商业和非商业环境，所有开源和闭源工程。但同样的，我们不会为出现的任何问题负责。
 * 对本工程的再开发或使用，必须有明确的名称标识。否则你将不会得到任何形式的支持，并被加入黑名单，即使你付费。
 
@@ -12,6 +14,7 @@
 * 最低支持OpenGL: Core 3.3+DSA (HD5xxx/GTX4xx) 或 Core 4.5
 
 --------------------------------------------------------------------------------------------------------------
+*** Existing remove bug fixes and ULRE associated updates, there will no longer be an active update plan. Please pay attention to ULRE(https://github.com/hyzboy/ULRE)
 
 * except in blacklist, use is free. Includes all commercial and non-commercial environment,
     all open source and closed source project. But again, we are not responsible for any problems that arise.

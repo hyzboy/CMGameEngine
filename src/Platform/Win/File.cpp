@@ -156,13 +156,11 @@ namespace hgl
             return attrib&FILE_ATTRIBUTE_DIRECTORY;
         }
 
-        bool MakeDirectory(const os_char *name)
+        bool MakeDirectory(const OSString &name)
         {
             if(::CreateDirectoryW(name,nullptr))return(true);
 
-            const uint win_error=GetLastError();
-
-            LOG_PROBLEM(OS_TEXT("Create Directory <")+OSString(name)+OS_TEXT("> failed,errno: ")+OSString(win_error));
+            LOG_PROBLEM(OS_TEXT("创建目录<")+name+OS_TEXT(">失败！"));
             return(false);
         }
 
@@ -212,6 +210,83 @@ namespace hgl
 
             delete[] dir;
             return(false);
+        }
+
+        /**
+        * 枚举当前计算机所有卷
+        * @param data 用户自定义回传信息
+        * @param func 回调函数
+        * @param check_cd 检测光盘
+        * @return 查找到的卷数量，-1表示失败
+        */
+        int EnumVolume(void *data,void (__cdecl *func)(void *,hgl::filesystem::VolumeInfo &),bool check_removable,bool check_remote,bool check_cd)
+        {
+            HANDLE handle;
+            u16char volume_name[HGL_MAX_PATH+1];
+            u16char path_name[HGL_MAX_PATH];
+            int count=0;
+
+            handle=FindFirstVolumeW(volume_name,HGL_MAX_PATH);
+
+            if(handle==INVALID_HANDLE_VALUE)return(-1);
+
+            do
+            {
+                hgl::filesystem::VolumeInfo vi;
+
+                memset(&vi,0,sizeof(hgl::filesystem::VolumeInfo));
+
+                DWORD length;
+
+                GetVolumePathNamesForVolumeNameW(volume_name,path_name,HGL_MAX_PATH,&length);                //这个函数要win xp/2003才能用
+
+                path_name[length]=0;
+
+                strcpy(vi.name, HGL_MAX_PATH,volume_name);
+                strcpy(vi.path, HGL_MAX_PATH,path_name);
+
+                UINT type=GetDriveTypeW(path_name);
+
+                if(type==DRIVE_REMOVABLE){if(!check_removable   )continue;vi.driver_type=hgl::filesystem::VolumeInfo::dtRemovable;}else
+                if(type==DRIVE_FIXED    ){                                vi.driver_type=hgl::filesystem::VolumeInfo::dtFixed;    }else
+                if(type==DRIVE_REMOTE   ){if(!check_remote      )continue;vi.driver_type=hgl::filesystem::VolumeInfo::dtRemote;   }else
+                if(type==DRIVE_RAMDISK  ){                                vi.driver_type=hgl::filesystem::VolumeInfo::dtRamDisk;  }else
+                if(type==DRIVE_CDROM    ){if(!check_cd          )continue;vi.driver_type=hgl::filesystem::VolumeInfo::dtCDROM;    }else
+                    vi.driver_type=hgl::filesystem::VolumeInfo::dtNone;
+
+                uint32 file_system_flags;
+
+                if(GetVolumeInformationW(path_name,
+                                        vi.volume_label,
+                                        255,
+                                        (unsigned long *)&vi.serial,
+                                        (unsigned long *)&vi.filename_max_length,
+                                        (unsigned long *)&file_system_flags,
+                                        vi.file_system,
+                                        255))
+                {
+                    vi.unicode=file_system_flags&FILE_UNICODE_ON_DISK;
+                }
+                else
+                    LOG_PROBLEM(U16_TEXT("取得卷<") + UTF16String(path_name) + U16_TEXT(">信息失败！Windows错误编号: ") + UTF16String((uint)GetLastError()));
+
+                if(GetDiskFreeSpaceExW( path_name,
+                                        (ULARGE_INTEGER *)&vi.available_space,
+                                        (ULARGE_INTEGER *)&vi.total_space,
+                                        (ULARGE_INTEGER *)&vi.free_space))
+                {
+                    func(data,vi);
+                }
+                else
+                    LOG_PROBLEM(U16_TEXT("取得驱动器<") + UTF16String(path_name) + U16_TEXT(">容量数据失败！"));
+
+                count++;
+
+            }while(FindNextVolumeW(handle,volume_name,HGL_MAX_PATH));
+
+            FindVolumeClose(handle);
+
+            return(count);
         }
     }//namespace filesystem
 }//namespace hgl

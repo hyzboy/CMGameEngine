@@ -1,7 +1,7 @@
 ﻿SET(BASE_COMMON_SOURCE
     Base.cpp)
-
-SOURCE_GROUP("Common" FILES ${BASE_COMMON_SOURCE})
+	
+SOURCE_GROUP("Common"    FILES ${BASE_COMMON_SOURCE})
 
 SET(BASE_OBJECT_SOURCE)
 #     Object/ConsoleObjectControl.cpp)
@@ -35,6 +35,7 @@ SOURCE_GROUP("Application" FILES ${BASE_APPLICATION_SOURCE})
 SET(BASE_TYPE_SOURCE
     DataType/Info.cpp
     DataType/BitArray.cpp
+    DataType/Endian.cpp
     DataType/Color.cpp
     DataType/Color3f.cpp
     DataType/Color4f.cpp
