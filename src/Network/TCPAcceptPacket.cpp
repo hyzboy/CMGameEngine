@@ -50,7 +50,7 @@ namespace hgl
 
                 if(recv_length<PACKET_SIZE_TYPE_BYTES)      //已经有头了
                     continue;
-                
+
                 PACKET_SIZE_TYPE pack_size=*(PACKET_SIZE_TYPE *)(recv_buffer.data());
 
                 recv_buffer.SetLength(PACKET_SIZE_TYPE_BYTES+pack_size);

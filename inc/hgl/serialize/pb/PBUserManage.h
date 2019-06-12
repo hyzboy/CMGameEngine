@@ -21,7 +21,7 @@ namespace hgl
             {
             public:
 
-                virtual bool Proc(int cmd){}							///<要准备处理消息了
+                virtual bool Proc(int cmd){}                            ///<要准备处理消息了
             };//class PBUserInfo
 
             /**

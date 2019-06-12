@@ -5,12 +5,12 @@
 
 using Stream    =void;
 using SeekFunc  =void   (*)(Stream *,int);
-using EofFunc	=bool   (*)(Stream *);
-using ReadFunc	=int    (*)(Stream *,void *,int);
+using EofFunc   =bool   (*)(Stream *);
+using ReadFunc  =int    (*)(Stream *,void *,int);
 //--------------------------------------------------------------------------------------------------
 class TheoraPlayer
 {
-	double GetDoubleTime();																		///<取得当前时间(双精度，单位秒)
+    double GetDoubleTime();                                                                     ///<取得当前时间(双精度，单位秒)
 
 private:
 
@@ -19,44 +19,44 @@ private:
     ogg_stream_state vo;
     ogg_stream_state to;
 
-	th_info			ti;
-	th_comment		tc;
-	th_setup_info	*tsi;
-	th_dec_ctx		*tdc;
+    th_info         ti;
+    th_comment      tc;
+    th_setup_info   *tsi;
+    th_dec_ctx      *tdc;
 
 private:
 
-	Stream *			in;
+    Stream *            in;
 
-	SeekFunc			Seek;
-	EofFunc				Eof;
-	ReadFunc			Read;
+    SeekFunc            Seek;
+    EofFunc             Eof;
+    ReadFunc            Read;
 
 private:
 
-    int					theora_p;
-    int					stateflag;
+    int                 theora_p;
+    int                 stateflag;
 
-    ogg_int64_t			videobuf_granulepos;
-    double				videobuf_time;
-	double				one_frame_time;
-	double				half_frame_time;
-    int					frameNr;
+    ogg_int64_t         videobuf_granulepos;
+    double              videobuf_time;
+    double              one_frame_time;
+    double              half_frame_time;
+    int                 frameNr;
 
-    ogg_packet			op;
+    ogg_packet          op;
 
-	th_ycbcr_buffer		yuv;
+    th_ycbcr_buffer     yuv;
 
-    int					fileVideoDataOffset;
-    bool				theoraLoaded;
-    double				startTime;
-    unsigned int		decodedFrames;
+    int                 fileVideoDataOffset;
+    bool                theoraLoaded;
+    double              startTime;
+    unsigned int        decodedFrames;
 
-	int					pp_level_max;
-	int					pp_level;
-	int					pp_inc;
+    int                 pp_level_max;
+    int                 pp_level;
+    int                 pp_inc;
 
-	double				currentTime;
+    double              currentTime;
 
 protected:
 
@@ -64,38 +64,38 @@ protected:
     int queue_page(ogg_page *);
 
     void DecodeToRGB(th_ycbcr_buffer &,unsigned char *);
-	void DecodeToBGR(th_ycbcr_buffer &,unsigned char *);
+    void DecodeToBGR(th_ycbcr_buffer &,unsigned char *);
 
-	void DecodeToRGBA(th_ycbcr_buffer &,unsigned char *);
-	void DecodeToBGRA(th_ycbcr_buffer &,unsigned char *);
+    void DecodeToRGBA(th_ycbcr_buffer &,unsigned char *);
+    void DecodeToBGRA(th_ycbcr_buffer &,unsigned char *);
 
     void StopTheora();
 
 public:
 
-	bool        	isOpen;
-	bool			isLoop;
-	bool           	isPlaying;
-	unsigned int    videoWidth;
-	unsigned int    videoHeight;
-	float       	videoFpS;
-	unsigned int	BufferSize;
+    bool            isOpen;
+    bool            isLoop;
+    bool            isPlaying;
+    unsigned int    videoWidth;
+    unsigned int    videoHeight;
+    float           videoFpS;
+    unsigned int    BufferSize;
 
 public:
 
-	TheoraPlayer();
-	~TheoraPlayer();
+    TheoraPlayer();
+    ~TheoraPlayer();
 
-	bool Open(Stream *,SeekFunc,EofFunc,ReadFunc);
+    bool Open(Stream *,SeekFunc,EofFunc,ReadFunc);
     void Close();
 
-	double			CheckUpdate();
-    void			DecodeToRGB(unsigned char *);
-	void			DecodeToBGR(unsigned char *);
-	void			DecodeToRGBA(unsigned char *);
-	void			DecodeToBGRA(unsigned char *);
-	th_img_plane *	DecodeToYUV(int &,int &);
-    void			Rewind();
+    double          CheckUpdate();
+    void            DecodeToRGB(unsigned char *);
+    void            DecodeToBGR(unsigned char *);
+    void            DecodeToRGBA(unsigned char *);
+    void            DecodeToBGRA(unsigned char *);
+    th_img_plane *  DecodeToYUV(int &,int &);
+    void            Rewind();
 };
 //--------------------------------------------------------------------------------------------------
 void InitTheoraDecode();

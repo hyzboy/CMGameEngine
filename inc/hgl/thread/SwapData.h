@@ -21,13 +21,13 @@ namespace hgl
 
         ThreadMutex lock;
 
-	protected:
+    protected:
 
-		void _Swap()
-		{
+        void _Swap()
+        {
             if(recv_index){recv_index=0;post_index=1;}
-					  else{recv_index=1;post_index=0;}
-		}
+                      else{recv_index=1;post_index=0;}
+        }
 
     public:
 
@@ -74,85 +74,85 @@ namespace hgl
             lock.Unlock();
         }
 
-		/**
-		 * 尝试交换双方数据
-		 */
-		bool TrySwap()
-		{
-			if(!lock.TryLock())
-				return(false);
+        /**
+         * 尝试交换双方数据
+         */
+        bool TrySwap()
+        {
+            if(!lock.TryLock())
+                return(false);
 
-			this->_Swap();
+            this->_Swap();
 
             lock.Unlock();
-			return(true);
-		}
+            return(true);
+        }
 
 #ifndef __APPLE__
-		/**
-		 * 尝试交换双方数据
-		 */
-		bool WaitSwap(const double time_out)
-		{
-			if(!lock.WaitLock(time_out))
-				return(false);
+        /**
+         * 尝试交换双方数据
+         */
+        bool WaitSwap(const double time_out)
+        {
+            if(!lock.WaitLock(time_out))
+                return(false);
 
-			this->_Swap();
+            this->_Swap();
 
             lock.Unlock();
-			return(true);
-		}
+            return(true);
+        }
 #endif//__APPLE__
     };//template<typename T> class SwapData
 
-	/**
-	* 信号自动交换数据访问模板
-	*/
-	template<typename T> class SemSwapData:public SwapData<T>
-	{
-		Semaphore sem;
+    /**
+    * 信号自动交换数据访问模板
+    */
+    template<typename T> class SemSwapData:public SwapData<T>
+    {
+        Semaphore sem;
 
-	public:
+    public:
 
-		using SwapData<T>::SwapData;
-		~SemSwapData()=default;
+        using SwapData<T>::SwapData;
+        ~SemSwapData()=default;
 
-		/**
-		* 释放接收信号
-		* @param count 信号个数
-		*/
-		void PostSem(int count=1)
-		{
-			sem.Post(count);
-		}
+        /**
+        * 释放接收信号
+        * @param count 信号个数
+        */
+        void PostSem(int count=1)
+        {
+            sem.Post(count);
+        }
 
-		/**
-		* 等待获取一个信号并交换前后台数据
-		* @param time_out 等待时长
-		*/
-		bool WaitSemSwap(const double time_out=5)
-		{
-			if(!sem.Acquire(time_out))
-				return(false);
+        /**
+        * 等待获取一个信号并交换前后台数据
+        * @param time_out 等待时长
+        */
+        bool WaitSemSwap(const double time_out=5)
+        {
+            if(!sem.Acquire(time_out))
+                return(false);
 
-			this->Swap();
-			return(true);
-		}
+            this->Swap();
+            return(true);
+        }
 
-		/**
-		* 尝试获取一个信号并交换前后台数据
-		*/
-		bool TrySemSwap()
-		{
-			if(!sem.TryAcquire())
-				return(false);
+        /**
+        * 尝试获取一个信号并交换前后台数据
+        */
+        bool TrySemSwap()
+        {
+            if(!sem.TryAcquire())
+                return(false);
 
-			this->Swap();
-			return(true);
-		}
-	};//template<typename T> class SemSwapData:public SwapData<T>
+            this->Swap();
+            return(true);
+        }
+    };//template<typename T> class SemSwapData:public SwapData<T>
 
-	/**
+    /**
      * SwapData模板自动释放Post工具模板
      */
     template<typename T> class PostToSwapData

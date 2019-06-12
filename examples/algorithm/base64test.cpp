@@ -22,7 +22,7 @@ int main(int,char **)
         return(-1);
     }
 
-    int len;
+    uint len;
     uchar *tmp;
 
     tmp=(uchar *)mos.CreateCopyData(&len);

@@ -44,7 +44,7 @@ namespace hgl
             }
         }
 
-        int64	FileInputStream::Read       (void *buf,int64 size)          {return file?file->Read(buf,size):-1;}
+        int64   FileInputStream::Read       (void *buf,int64 size)          {return file?file->Read(buf,size):-1;}
         int64   FileInputStream::Peek       (void *buf,int64 size)          {return file?file->Peek(buf,size):-1;}
 
         bool    FileInputStream::CanSeek    ()const                         {return file?file->CanSeek():false;}
@@ -58,8 +58,8 @@ namespace hgl
         bool    FileInputStream::Restart    ()                              {return file?file->Restart():false;}
         int64   FileInputStream::Seek       (int64 off,SeekOrigin so)       {return file?file->Seek(off,so):-1;}
 
-        int64   FileInputStream::Available  ()const							{return file?file->AvailableRead():-1;}
+        int64   FileInputStream::Available  ()const                         {return file?file->AvailableRead():-1;}
 
-        int64   FileInputStream::Read		(int64 off,void *buf,int64 size){return file?file->Read(off,buf,size):-1;}
+        int64   FileInputStream::Read       (int64 off,void *buf,int64 size){return file?file->Read(off,buf,size):-1;}
     }//namespace io
 }//namespace hgl

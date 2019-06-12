@@ -115,32 +115,32 @@ namespace hgl
         * @param filename 要保存的文件名称
         * @param buf_list 要保存的内存块指针列表
         * @param buf_size 要保存的内存块数据长度列表
-		* @param buf_count 要保存的内存块数量
+        * @param buf_count 要保存的内存块数量
         * @return 成功写入的字节数
         * @return -1 失败
         */
-		int64 SaveMemoryToFile(const OSString &filename,void **buf_list,const int64 *buf_size,const int &buf_count)
-		{
+        int64 SaveMemoryToFile(const OSString &filename,void **buf_list,const int64 *buf_size,const int &buf_count)
+        {
             io::FileOutputStream fs;
 
             if(!fs.CreateTrunc(filename))
                 return(-1);
 
-			int64 total=0;
-			int64 result;
+            int64 total=0;
+            int64 result;
 
-			for(int i=0;i<buf_count;i++)
-			{
-				result=fs.Write(buf_list[i],buf_size[i]);
+            for(int i=0;i<buf_count;i++)
+            {
+                result=fs.Write(buf_list[i],buf_size[i]);
 
-				if(result!=buf_size[i])
-					return -1;
+                if(result!=buf_size[i])
+                    return -1;
 
-				total+=result;
-			}
+                total+=result;
+            }
 
-			return total;
-		}
+            return total;
+        }
 
         os_char *GetRootPath(os_char *str);
         bool MakeDirectory(const os_char *name);
@@ -296,11 +296,11 @@ namespace hgl
             if(file_state.st_mode&S_IFDIR)
                 fi.is_directory=true;
 
-			if (file_state.st_mode&S_IREAD)
-				fi.can_read = true;
+            if (file_state.st_mode&S_IREAD)
+                fi.can_read = true;
 
-			if (file_state.st_mode&S_IWRITE)
-				fi.can_write = true;
+            if (file_state.st_mode&S_IWRITE)
+                fi.can_write = true;
 
 #if HGL_OS != HGL_OS_Windows
             if(file_state.st_mode&S_IFLNK)

@@ -5,8 +5,8 @@
 
 namespace hgl
 {
-	namespace network
-	{
+    namespace network
+    {
         namespace
         {
             constexpr char HTTP_REQUEST_HEADER_BEGIN[]= " HTTP/1.1\r\n"
@@ -23,12 +23,12 @@ namespace hgl
             constexpr uint HTTP_HEADER_BUFFER_SIZE=HGL_SIZE_1KB;
         }
 
-		HTTPInputStream::HTTPInputStream()
-		{
-			tcp=nullptr;
+        HTTPInputStream::HTTPInputStream()
+        {
+            tcp=nullptr;
 
-			pos=-1;
-			filelength=-1;
+            pos=-1;
+            filelength=-1;
 
             tcp_is=nullptr;
 
@@ -36,23 +36,23 @@ namespace hgl
             http_header_size=0;
 
             response_code=0;
-		}
+        }
 
-		HTTPInputStream::~HTTPInputStream()
-		{
-			Close();
+        HTTPInputStream::~HTTPInputStream()
+        {
+            Close();
             delete[] http_header;
-		}
+        }
 
-		/**
-		* 创建流并打开一个文件
-		* @param host 服务器地址 www.hyzgame.org.cn 或 127.0.0.1 之类
-		* @param filename 路径及文件名 /download/hgl.rar 之类
-		* @return 打开文件是否成功
-		*/
-		bool HTTPInputStream::Open(IPAddress *host_ip,const UTF8String &host_name,const UTF8String &filename)
-		{
-			Close();
+        /**
+        * 创建流并打开一个文件
+        * @param host 服务器地址 www.hyzgame.org.cn 或 127.0.0.1 之类
+        * @param filename 路径及文件名 /download/hgl.rar 之类
+        * @return 打开文件是否成功
+        */
+        bool HTTPInputStream::Open(IPAddress *host_ip,const UTF8String &host_name,const UTF8String &filename)
+        {
+            Close();
 
             response_code=0;
             response_info.Clear();
@@ -70,44 +70,44 @@ namespace hgl
             SharedArray<char> self_clear(host_ip_str);
 
             if(!tcp)
-			{
-				LOG_ERROR(U8_TEXT("Connect to HTTPServer failed: ")+UTF8String(host_ip_str));
-				RETURN_FALSE;
-			}
+            {
+                LOG_ERROR(U8_TEXT("Connect to HTTPServer failed: ")+UTF8String(host_ip_str));
+                RETURN_FALSE;
+            }
 
-			//设定为非堵塞模式
-			tcp->SetBlock(false);
+            //设定为非堵塞模式
+            tcp->SetBlock(false);
 
-			//发送HTTP GET请求
+            //发送HTTP GET请求
             int len=0;
 
             len =strcpy(http_header    ,HTTP_HEADER_BUFFER_SIZE    ,"GET ",4);
-			len+=strcpy(http_header+len,HTTP_HEADER_BUFFER_SIZE-len,filename.c_str(),           filename.Length());
-			len+=strcpy(http_header+len,HTTP_HEADER_BUFFER_SIZE-len,HTTP_REQUEST_HEADER_BEGIN,  HTTP_REQUEST_HEADER_BEGIN_SIZE);
-			len+=strcpy(http_header+len,HTTP_HEADER_BUFFER_SIZE-len,host_name.c_str(),          host_name.Length());
+            len+=strcpy(http_header+len,HTTP_HEADER_BUFFER_SIZE-len,filename.c_str(),           filename.Length());
+            len+=strcpy(http_header+len,HTTP_HEADER_BUFFER_SIZE-len,HTTP_REQUEST_HEADER_BEGIN,  HTTP_REQUEST_HEADER_BEGIN_SIZE);
+            len+=strcpy(http_header+len,HTTP_HEADER_BUFFER_SIZE-len,host_name.c_str(),          host_name.Length());
             len+=strcpy(http_header+len,HTTP_HEADER_BUFFER_SIZE-len,HTTP_REQUEST_HEADER_END,    HTTP_REQUEST_HEADER_END_SIZE);
 
             OutputStream *tcp_os=tcp->GetOutputStream();
 
             if(tcp_os->WriteFully(http_header,len)!=len)
-			{
-				LOG_ERROR(U8_TEXT("Send HTTP Get Info failed:")+UTF8String(host_ip_str));
-				delete tcp;
+            {
+                LOG_ERROR(U8_TEXT("Send HTTP Get Info failed:")+UTF8String(host_ip_str));
+                delete tcp;
                 tcp=nullptr;
-				RETURN_FALSE;
-			}
+                RETURN_FALSE;
+            }
 
             *http_header=0;
 
             tcp_is=tcp->GetInputStream();
-			return(true);
-		}
+            return(true);
+        }
 
-		/**
-		* 关闭HTTP流
-		*/
-		void HTTPInputStream::Close()
-		{
+        /**
+        * 关闭HTTP流
+        */
+        void HTTPInputStream::Close()
+        {
             pos=0;
             filelength=-1;
 
@@ -115,9 +115,9 @@ namespace hgl
 
             *http_header=0;
             http_header_size=0;
-		}
+        }
 
-		constexpr char HTTP_HEADER_SPLITE[]="\r\n";
+        constexpr char HTTP_HEADER_SPLITE[]="\r\n";
         constexpr uint HTTP_HEADER_SPLITE_SIZE=sizeof(HTTP_HEADER_SPLITE)-1;
 
         void HTTPInputStream::ParseHttpResponse()
@@ -164,20 +164,20 @@ namespace hgl
             }
         }
 
-		constexpr char HTTP_HEADER_FINISH[]="\r\n\r\n";
+        constexpr char HTTP_HEADER_FINISH[]="\r\n\r\n";
         constexpr uint HTTP_HEADER_FINISH_SIZE=sizeof(HTTP_HEADER_FINISH)-1;
 
         constexpr char HTTP_CONTENT_LENGTH[]="Content-Length: ";
         constexpr uint HTTP_CONTENT_LENGTH_SIZE=sizeof(HTTP_CONTENT_LENGTH)-1;
 
-		int HTTPInputStream::PraseHttpHeader()
-		{
-			char *offset;
-			int size;
+        int HTTPInputStream::PraseHttpHeader()
+        {
+            char *offset;
+            int size;
 
-			offset=strstr(http_header,http_header_size,HTTP_HEADER_FINISH,HTTP_HEADER_FINISH_SIZE);
+            offset=strstr(http_header,http_header_size,HTTP_HEADER_FINISH,HTTP_HEADER_FINISH_SIZE);
 
-			if(!offset)
+            if(!offset)
                 return 0;
 
             ParseHttpResponse();
@@ -206,7 +206,7 @@ namespace hgl
                 LOG_ERROR(U8_TEXT("HTTPServer error info: ")+UTF8String(http_header));
                 return(-1);
             }
-		}
+        }
 
         int HTTPInputStream::ReturnError()
         {
@@ -221,51 +221,51 @@ namespace hgl
             RETURN_ERROR(-2);
         }
 
-		/**
-		* 从HTTP流中读取数据,但实际读取出来的数据长度不固定
-		* @param buf 保存读出数据的缓冲区指针
-		* @param bufsize 缓冲区长度,最小1024
-		* @return >=0 实际读取出来的数据长度
-		* @return -1 读取失败
-		*/
-		int64 HTTPInputStream::Read(void *buf,int64 bufsize)
-		{
-			if(!tcp)
+        /**
+        * 从HTTP流中读取数据,但实际读取出来的数据长度不固定
+        * @param buf 保存读出数据的缓冲区指针
+        * @param bufsize 缓冲区长度,最小1024
+        * @return >=0 实际读取出来的数据长度
+        * @return -1 读取失败
+        */
+        int64 HTTPInputStream::Read(void *buf,int64 bufsize)
+        {
+            if(!tcp)
                 RETURN_ERROR(-1);
 
-			int readsize;
+            int readsize;
 
-			if(response_code==0)    //HTTP头尚未解析完成
-			{
+            if(response_code==0)    //HTTP头尚未解析完成
+            {
                 readsize=tcp_is->Read(http_header+http_header_size,HTTP_HEADER_BUFFER_SIZE-http_header_size);
 
-				if(readsize<=0)
+                if(readsize<=0)
                     return ReturnError();
 
-				http_header_size+=readsize;
+                http_header_size+=readsize;
 
-				readsize=PraseHttpHeader();
-				if(readsize==-1)
-				{
-					Close();
+                readsize=PraseHttpHeader();
+                if(readsize==-1)
+                {
+                    Close();
                     RETURN_ERROR(-3);
-				}
+                }
 
-				if(pos>0)
+                if(pos>0)
                     memcpy(buf,http_header+http_header_size-pos,pos);
 
-				return(pos);
-			}
-			else
-			{
-				readsize=tcp_is->Read((char *)buf,bufsize);
+                return(pos);
+            }
+            else
+            {
+                readsize=tcp_is->Read((char *)buf,bufsize);
 
-				if(readsize<=0)
+                if(readsize<=0)
                     return ReturnError();
 
-				pos+=readsize;
-				return(readsize);
-			}
-		}
-	}//namespace network
+                pos+=readsize;
+                return(readsize);
+            }
+        }
+    }//namespace network
 }//namespace hgl

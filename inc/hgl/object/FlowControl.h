@@ -5,25 +5,25 @@
 #include<hgl/object/_FlowControl.h>
 namespace hgl
 {
-	/**
-	* FlowControl是指流程控制器，它的作用是对一串FlowObject对象的流程进行控制。
-	*/
+    /**
+    * FlowControl是指流程控制器，它的作用是对一串FlowObject对象的流程进行控制。
+    */
     class FlowControl:public _FlowControl<FlowObject>                                               ///流程对象控制类
-	{
-		void InitPrivate(FlowObject *);
+    {
+        void InitPrivate(FlowObject *);
 
     protected:
 
         virtual void ChangeActiveObject(FlowObject *obj)override;
 
     public: //事件
-        
+
         virtual void OnClose        (               );                                              ///<窗口关闭事件
         virtual void OnResize       (int,int        );                                              ///<窗口尺寸调整事件
         virtual void OnRotate       (int            );                                              ///<屏幕旋转事件
 
         virtual bool OnMouseMove    (int,int        );                                              ///<鼠标移动事件
-        virtual bool OnMouseWheel   (double,double	);                                              ///<鼠标滚轮事件
+        virtual bool OnMouseWheel   (double,double  );                                              ///<鼠标滚轮事件
 
         virtual bool OnMouseDown    (MouseButton    );                                              ///<鼠标按键按下事件
         virtual bool OnMouseUp      (MouseButton    );                                              ///<鼠标按键弹起事件
@@ -35,12 +35,12 @@ namespace hgl
 
         virtual bool OnChar         (os_char        );                                              ///<字符输入
 
-	public: //方法
+    public: //方法
 
         using _FlowControl<FlowObject>::_FlowControl;
-        virtual ~FlowControl(){Clear();}															///<本类析构函数
+        virtual ~FlowControl(){Clear();}                                                            ///<本类析构函数
 
-		virtual void Draw(const Matrix4f *);
+        virtual void Draw(const Matrix4f *);
     };//class FlowControl
 }//namespace hgl
 #endif//HGL_FLOW_CONTROL_INCLUDE

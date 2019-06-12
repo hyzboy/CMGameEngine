@@ -30,10 +30,10 @@
 
 #include "asm_arm.h"
 #include <stdlib.h> /* for abs() */
-  
+
 #ifndef _V_WIDE_MATH
 #define _V_WIDE_MATH
-  
+
 #ifndef  _LOW_ACCURACY_
 /* 64 bit multiply */
 
@@ -49,7 +49,7 @@ union magic {
   } halves;
   ogg_int64_t whole;
 };
-#endif 
+#endif
 
 #if BYTE_ORDER==BIG_ENDIAN
 union magic {
@@ -88,7 +88,7 @@ STIN ogg_int32_t MULT31_SHIFT15(ogg_int32_t x, ogg_int32_t y) {
 
 /*
  * For MULT32 and MULT31: The second argument is always a lookup table
- * value already preshifted from 31 to 8 bits.  We therefore take the 
+ * value already preshifted from 31 to 8 bits.  We therefore take the
  * opportunity to save on text space and use unsigned char for those
  * tables in this case.
  */
@@ -126,37 +126,37 @@ STIN ogg_int32_t MULT31_SHIFT15(ogg_int32_t x, ogg_int32_t y) {
 
 #ifdef __i386__
 
-#define XPROD32(_a, _b, _t, _v, _x, _y)		\
-  { *(_x)=MULT32(_a,_t)+MULT32(_b,_v);		\
+#define XPROD32(_a, _b, _t, _v, _x, _y)     \
+  { *(_x)=MULT32(_a,_t)+MULT32(_b,_v);      \
     *(_y)=MULT32(_b,_t)-MULT32(_a,_v); }
-#define XPROD31(_a, _b, _t, _v, _x, _y)		\
-  { *(_x)=MULT31(_a,_t)+MULT31(_b,_v);		\
+#define XPROD31(_a, _b, _t, _v, _x, _y)     \
+  { *(_x)=MULT31(_a,_t)+MULT31(_b,_v);      \
     *(_y)=MULT31(_b,_t)-MULT31(_a,_v); }
-#define XNPROD31(_a, _b, _t, _v, _x, _y)	\
-  { *(_x)=MULT31(_a,_t)-MULT31(_b,_v);		\
+#define XNPROD31(_a, _b, _t, _v, _x, _y)    \
+  { *(_x)=MULT31(_a,_t)-MULT31(_b,_v);      \
     *(_y)=MULT31(_b,_t)+MULT31(_a,_v); }
 
 #else
 
 STIN void XPROD32(ogg_int32_t  a, ogg_int32_t  b,
-			   ogg_int32_t  t, ogg_int32_t  v,
-			   ogg_int32_t *x, ogg_int32_t *y)
+               ogg_int32_t  t, ogg_int32_t  v,
+               ogg_int32_t *x, ogg_int32_t *y)
 {
   *x = MULT32(a, t) + MULT32(b, v);
   *y = MULT32(b, t) - MULT32(a, v);
 }
 
 STIN void XPROD31(ogg_int32_t  a, ogg_int32_t  b,
-			   ogg_int32_t  t, ogg_int32_t  v,
-			   ogg_int32_t *x, ogg_int32_t *y)
+               ogg_int32_t  t, ogg_int32_t  v,
+               ogg_int32_t *x, ogg_int32_t *y)
 {
   *x = MULT31(a, t) + MULT31(b, v);
   *y = MULT31(b, t) - MULT31(a, v);
 }
 
 STIN void XNPROD31(ogg_int32_t  a, ogg_int32_t  b,
-			    ogg_int32_t  t, ogg_int32_t  v,
-			    ogg_int32_t *x, ogg_int32_t *y)
+                ogg_int32_t  t, ogg_int32_t  v,
+                ogg_int32_t *x, ogg_int32_t *y)
 {
   *x = MULT31(a, t) - MULT31(b, v);
   *y = MULT31(b, t) + MULT31(a, v);
@@ -179,15 +179,15 @@ STIN ogg_int32_t CLIP_TO_15(ogg_int32_t x) {
 #endif
 
 STIN ogg_int32_t VFLOAT_MULT(ogg_int32_t a,ogg_int32_t ap,
-				      ogg_int32_t b,ogg_int32_t bp,
-				      ogg_int32_t *p){
+                      ogg_int32_t b,ogg_int32_t bp,
+                      ogg_int32_t *p){
   if(a && b){
 #ifndef _LOW_ACCURACY_
     *p=ap+bp+32;
     return MULT32(a,b);
 #else
     *p=ap+bp+31;
-    return (a>>15)*(b>>16); 
+    return (a>>15)*(b>>16);
 #endif
   }else
     return 0;
@@ -196,16 +196,16 @@ STIN ogg_int32_t VFLOAT_MULT(ogg_int32_t a,ogg_int32_t ap,
 int _ilog(unsigned int);
 
 STIN ogg_int32_t VFLOAT_MULTI(ogg_int32_t a,ogg_int32_t ap,
-				      ogg_int32_t i,
-				      ogg_int32_t *p){
+                      ogg_int32_t i,
+                      ogg_int32_t *p){
 
   int ip=_ilog(abs(i))-31;
   return VFLOAT_MULT(a,ap,i<<-ip,ip,p);
 }
 
 STIN ogg_int32_t VFLOAT_ADD(ogg_int32_t a,ogg_int32_t ap,
-				      ogg_int32_t b,ogg_int32_t bp,
-				      ogg_int32_t *p){
+                      ogg_int32_t b,ogg_int32_t bp,
+                      ogg_int32_t *p){
 
   if(!a){
     *p=bp;
@@ -237,7 +237,7 @@ STIN ogg_int32_t VFLOAT_ADD(ogg_int32_t a,ogg_int32_t ap,
   }
 
   a+=b;
-  if((a&0xc0000000)==0xc0000000 || 
+  if((a&0xc0000000)==0xc0000000 ||
      (a&0xc0000000)==0){
     a<<=1;
     (*p)--;

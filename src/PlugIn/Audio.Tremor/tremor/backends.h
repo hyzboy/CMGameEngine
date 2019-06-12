@@ -34,12 +34,12 @@
 typedef struct{
   vorbis_info_floor     *(*unpack)(vorbis_info *,oggpack_buffer *);
   vorbis_look_floor     *(*look)  (vorbis_dsp_state *,vorbis_info_mode *,
-				   vorbis_info_floor *);
+                   vorbis_info_floor *);
   void (*free_info) (vorbis_info_floor *);
   void (*free_look) (vorbis_look_floor *);
   void *(*inverse1)  (struct vorbis_block *,vorbis_look_floor *);
   int   (*inverse2)  (struct vorbis_block *,vorbis_look_floor *,
-		     void *buffer,ogg_int32_t *);
+             void *buffer,ogg_int32_t *);
 } vorbis_func_floor;
 
 typedef struct{
@@ -68,8 +68,8 @@ typedef struct{
   int   class_subbook[VIF_CLASS][8]; /* [VIF_CLASS][subs] */
 
 
-  int   mult;                      /* 1 2 3 or 4 */ 
-  int   postlist[VIF_POSIT+2];    /* first two implicit */ 
+  int   mult;                      /* 1 2 3 or 4 */
+  int   postlist[VIF_POSIT+2];    /* first two implicit */
 
 } vorbis_info_floor1;
 
@@ -77,11 +77,11 @@ typedef struct{
 typedef struct{
   vorbis_info_residue *(*unpack)(vorbis_info *,oggpack_buffer *);
   vorbis_look_residue *(*look)  (vorbis_dsp_state *,vorbis_info_mode *,
-				 vorbis_info_residue *);
+                 vorbis_info_residue *);
   void (*free_info)    (vorbis_info_residue *);
   void (*free_look)    (vorbis_look_residue *);
   int  (*inverse)      (struct vorbis_block *,vorbis_look_residue *,
-			ogg_int32_t **,int *,int);
+            ogg_int32_t **,int *,int);
 } vorbis_func_residue;
 
 typedef struct vorbis_info_residue0{
@@ -102,7 +102,7 @@ typedef struct vorbis_info_residue0{
 typedef struct{
   vorbis_info_mapping *(*unpack)(vorbis_info *,oggpack_buffer *);
   vorbis_look_mapping *(*look)  (vorbis_dsp_state *,vorbis_info_mode *,
-				 vorbis_info_mapping *);
+                 vorbis_info_mapping *);
   void (*free_info)    (vorbis_info_mapping *);
   void (*free_look)    (vorbis_look_mapping *);
   int  (*inverse)      (struct vorbis_block *vb,vorbis_look_mapping *);
@@ -111,7 +111,7 @@ typedef struct{
 typedef struct vorbis_info_mapping0{
   int   submaps;  /* <= 16 */
   int   chmuxlist[256];   /* up to 256 channels in a Vorbis stream */
-  
+
   int   floorsubmap[16];   /* [mux] submap to floors */
   int   residuesubmap[16]; /* [mux] submap to residue */
 

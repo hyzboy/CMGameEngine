@@ -7,306 +7,306 @@
 //--------------------------------------------------------------------------------------------------
 namespace hgl
 {
-	HacMapping::HacMapping(const u16char *folder_name)
-	{                              
-		if(!folder_name||!*folder_name||IsDirectory(folder_name))
-		{
-			FolderName=folder_name;
-		}
-		else
-		{
-			PutError(u"初始化HAC所映射的子目录<%s>并不存在，请查证！",folder_name);
-		}
-	}
+    HacMapping::HacMapping(const u16char *folder_name)
+    {
+        if(!folder_name||!*folder_name||IsDirectory(folder_name))
+        {
+            FolderName=folder_name;
+        }
+        else
+        {
+            PutError(u"初始化HAC所映射的子目录<%s>并不存在，请查证！",folder_name);
+        }
+    }
 
-	HacMapping::~HacMapping()
-	{
-    	CloseThread();
-	}
+    HacMapping::~HacMapping()
+    {
+        CloseThread();
+    }
 
-	bool HacMapping::FindFile(const u16char *filename)
-	{
-//		if(FolderName.Length==0)
-//		{
-//			ErrorHint(u"子目录映射为空，不可查找！");
-//			return(false);
-//		}
+    bool HacMapping::FindFile(const u16char *filename)
+    {
+//      if(FolderName.Length==0)
+//      {
+//          ErrorHint(u"子目录映射为空，不可查找！");
+//          return(false);
+//      }
 
-		strcpy(full_filename,FolderName.wc_str());
+        strcpy(full_filename,FolderName.wc_str());
 
-		if(*filename==u'\\'||*filename==u'/')
-			strcat(full_filename,filename);
-		else
-		{
-			strcat(full_filename,HGL_DIRECTORY_SEPARATOR);
+        if(*filename==u'\\'||*filename==u'/')
+            strcat(full_filename,filename);
+        else
+        {
+            strcat(full_filename,HGL_DIRECTORY_SEPARATOR);
 
-			strcat(full_filename,filename);
-		}
+            strcat(full_filename,filename);
+        }
 
-		return hgl::FileExist(full_filename);
-	}
+        return hgl::FileExist(full_filename);
+    }
 
-	bool HacMapping::FindFile(void *folder,const u16char *filename)
-	{
-		if(folder)
-		{            
-			FolderMapping *fm=(FolderMapping *)folder;
+    bool HacMapping::FindFile(void *folder,const u16char *filename)
+    {
+        if(folder)
+        {
+            FolderMapping *fm=(FolderMapping *)folder;
 
-			int n=fm->File.Count;
+            int n=fm->File.Count;
 
-			while(n--)
-				if(fm->File[n]->filename==filename)
-					return true;
+            while(n--)
+                if(fm->File[n]->filename==filename)
+                    return true;
 
-			return(false);
-		}
-		else
-        	return this->FindFile(filename);
-	}
-	
-	bool HacMapping::LoadFilePart(void *file,uint start,uint length,void *data)
-	{
-    	if(!file||!data)return(false);
+            return(false);
+        }
+        else
+            return this->FindFile(filename);
+    }
 
-		FileMapping *fm=(FileMapping *)file;
+    bool HacMapping::LoadFilePart(void *file,uint start,uint length,void *data)
+    {
+        if(!file||!data)return(false);
 
-		if(start==0&&length==0)
-        	length=fm->filesize;
+        FileMapping *fm=(FileMapping *)file;
 
-		if(start+length>fm->filesize)
-			return(false);
-                             
-		UTF16String full_filename;
-		FileStream fp;
-		int result;
+        if(start==0&&length==0)
+            length=fm->filesize;
 
-		full_filename=fm->folder->full_filename+HGL_DIRECTORY_SEPARATOR+fm->filename;
+        if(start+length>fm->filesize)
+            return(false);
 
-		if(!fp.Open(full_filename,fomRead))
-			return(false);
+        UTF16String full_filename;
+        FileStream fp;
+        int result;
 
-		fp.Position=start;
-		result=fp.Read(data,length);
-		fp.Close();
+        full_filename=fm->folder->full_filename+HGL_DIRECTORY_SEPARATOR+fm->filename;
 
-		return(result==length);
-	}
+        if(!fp.Open(full_filename,fomRead))
+            return(false);
 
-	Stream *HacMapping::LoadFileFrom(void *folder,const u16char *filename,bool load_to_memory)
-	{
-		if(folder)
-		{           
-			FolderMapping *fm=(FolderMapping *)folder;
+        fp.Position=start;
+        result=fp.Read(data,length);
+        fp.Close();
 
-			UTF16String full_filename;
+        return(result==length);
+    }
 
-			full_filename=fm->full_filename+HGL_DIRECTORY_SEPARATOR;
-			full_filename+=filename;
+    Stream *HacMapping::LoadFileFrom(void *folder,const u16char *filename,bool load_to_memory)
+    {
+        if(folder)
+        {
+            FolderMapping *fm=(FolderMapping *)folder;
 
-			return this->LoadFile(full_filename,load_to_memory);        	
-		}
-		else
-        	return this->LoadFile(filename,load_to_memory);
-	}
+            UTF16String full_filename;
 
-	bool 	HacMapping::LoadFileFrom(void *folder,const u16char *filename,void **data,int *size)
-	{
-		if(folder)
-		{                        
-			FolderMapping *fm=(FolderMapping *)folder;
+            full_filename=fm->full_filename+HGL_DIRECTORY_SEPARATOR;
+            full_filename+=filename;
 
-			UTF16String full_filename;
+            return this->LoadFile(full_filename,load_to_memory);
+        }
+        else
+            return this->LoadFile(filename,load_to_memory);
+    }
 
-			full_filename=fm->full_filename+HGL_DIRECTORY_SEPARATOR;
-			full_filename+=filename;
+    bool    HacMapping::LoadFileFrom(void *folder,const u16char *filename,void **data,int *size)
+    {
+        if(folder)
+        {
+            FolderMapping *fm=(FolderMapping *)folder;
 
-			return this->LoadFile(full_filename,data,size);        
-		}
-		else
-        	return this->LoadFile(filename,data,size);
-	}
+            UTF16String full_filename;
 
-	Stream *HacMapping::LoadFile(const u16char *filename,bool load_to_memory)
-	{
-		if(this->FindFile(filename))
-		{
-			if(load_to_memory)
-			{
-				MemStream *ms=new MemStream;
+            full_filename=fm->full_filename+HGL_DIRECTORY_SEPARATOR;
+            full_filename+=filename;
 
-				ms->LoadFromFile(full_filename);
+            return this->LoadFile(full_filename,data,size);
+        }
+        else
+            return this->LoadFile(filename,data,size);
+    }
 
-				return(ms);
-			}
-			else
-			{				
-				return(OpenFileStream(full_filename));
-			}
-		}
-		else
-			return(nullptr);
-	}
+    Stream *HacMapping::LoadFile(const u16char *filename,bool load_to_memory)
+    {
+        if(this->FindFile(filename))
+        {
+            if(load_to_memory)
+            {
+                MemStream *ms=new MemStream;
 
-	bool HacMapping::LoadFile(const u16char *filename,void **data,int *size)
-	{
-		if(this->FindFile(filename))
-		{
-			*size=hgl::LoadFileToMemory(full_filename,data);
-			return(true);
-		}
-		else
-			return(false);
-	}
+                ms->LoadFromFile(full_filename);
 
-/*	bool HacMapping::OpenFile(const u16char *filename,FileStream **stream,int *offset,int *size)
-	{
-		if(this->FindFile(filename))
-		{
-			*stream=new FileStream(full_filename,fomOpenRead);
+                return(ms);
+            }
+            else
+            {
+                return(OpenFileStream(full_filename));
+            }
+        }
+        else
+            return(nullptr);
+    }
 
-			*offset=0;
-			*size=(*stream)->Size;
+    bool HacMapping::LoadFile(const u16char *filename,void **data,int *size)
+    {
+        if(this->FindFile(filename))
+        {
+            *size=hgl::LoadFileToMemory(full_filename,data);
+            return(true);
+        }
+        else
+            return(false);
+    }
 
-			return(true);
-		}
-		else
-			return(false);
-	}*/
+/*  bool HacMapping::OpenFile(const u16char *filename,FileStream **stream,int *offset,int *size)
+    {
+        if(this->FindFile(filename))
+        {
+            *stream=new FileStream(full_filename,fomOpenRead);
 
-	void __cdecl HacMappingEnumFile(void *fp,hgl::FileInfo &fi)
-	{
-		if(fi.directory)return;						//不添加目录
+            *offset=0;
+            *size=(*stream)->Size;
 
-		FolderMapping *folder=(FolderMapping *)fp;
+            return(true);
+        }
+        else
+            return(false);
+    }*/
 
-		ObjectList<FileMapping> *file=&(folder->File);
+    void __cdecl HacMappingEnumFile(void *fp,hgl::FileInfo &fi)
+    {
+        if(fi.directory)return;                     //不添加目录
 
-		FileMapping *fm=file->Append();
+        FolderMapping *folder=(FolderMapping *)fp;
 
-		fm->folder	=folder;
+        ObjectList<FileMapping> *file=&(folder->File);
 
-		fm->filename=fi.name;
-		fm->filesize=fi.size;
+        FileMapping *fm=file->Append();
 
-		fm->filename.LowerCase();
-	}
+        fm->folder  =folder;
 
-	void *HacMapping::GetFolder(const u16char *folder_name)
-	{
-//		if(FolderName.Length==0)
-//		{
-//			ErrorHint(u"子目录映射为空，不可查找！");
-//			return(false);
-//		}
+        fm->filename=fi.name;
+        fm->filesize=fi.size;
 
-		strcpy(full_filename,GetString(hfsStartPath));
-		strcat(full_filename,HGL_DIRECTORY_SEPARATOR);
+        fm->filename.LowerCase();
+    }
 
-		if(FolderName.Length)
-		strcat(full_filename,FolderName.wc_str());
+    void *HacMapping::GetFolder(const u16char *folder_name)
+    {
+//      if(FolderName.Length==0)
+//      {
+//          ErrorHint(u"子目录映射为空，不可查找！");
+//          return(false);
+//      }
 
-		if(!folder_name||!*folder_name)
-		{
-		}
-		else
-		if(*folder_name==HGL_DIRECTORY_SEPARATOR)
-			strcat(full_filename,folder_name);
-		else
-		{
-			strcat(full_filename,HGL_DIRECTORY_SEPARATOR);
-			strcat(full_filename,folder_name);
-		}
+        strcpy(full_filename,GetString(hfsStartPath));
+        strcat(full_filename,HGL_DIRECTORY_SEPARATOR);
+
+        if(FolderName.Length)
+        strcat(full_filename,FolderName.wc_str());
+
+        if(!folder_name||!*folder_name)
+        {
+        }
+        else
+        if(*folder_name==HGL_DIRECTORY_SEPARATOR)
+            strcat(full_filename,folder_name);
+        else
+        {
+            strcat(full_filename,HGL_DIRECTORY_SEPARATOR);
+            strcat(full_filename,folder_name);
+        }
 
         LowerString(full_filename);
 
-		int n=Folder.Count;
+        int n=Folder.Count;
 
-		while(n--)
-			if(Folder[n]->full_filename==full_filename)
-				return Folder[n];
+        while(n--)
+            if(Folder[n]->full_filename==full_filename)
+                return Folder[n];
 
-		FolderMapping *folder=Folder.Append();
+        FolderMapping *folder=Folder.Append();
 
-		folder->full_filename=full_filename;
+        folder->full_filename=full_filename;
 
-		EnumFile(full_filename,u"*.*",folder,HacMappingEnumFile);
+        EnumFile(full_filename,u"*.*",folder,HacMappingEnumFile);
 
-		return(folder);				
-	}
+        return(folder);
+    }
 
-	int HacMapping::GetFileCount(void *folder)
-	{
-		if(!folder)folder=GetFolder(nullptr);	//RootFolder
-		
-		FolderMapping *fm=(FolderMapping *)folder;
+    int HacMapping::GetFileCount(void *folder)
+    {
+        if(!folder)folder=GetFolder(nullptr);   //RootFolder
 
-		return fm->File.Count;
-	}
+        FolderMapping *fm=(FolderMapping *)folder;
 
-	bool HacMapping::GetFileInfo(void *folder,int index,UTF16String &filename,int &filesize)
-	{
-		if(index<0)return(false);
+        return fm->File.Count;
+    }
 
-		if(!folder)folder=GetFolder(nullptr);
+    bool HacMapping::GetFileInfo(void *folder,int index,UTF16String &filename,int &filesize)
+    {
+        if(index<0)return(false);
 
-		FolderMapping *fm=(FolderMapping *)folder;
+        if(!folder)folder=GetFolder(nullptr);
 
-		if(index>=fm->File.Count)return(false);
+        FolderMapping *fm=(FolderMapping *)folder;
 
-		filename=fm->File[index]->filename;
-		filesize=fm->File[index]->filesize;
+        if(index>=fm->File.Count)return(false);
 
-		return(true);
-	}
+        filename=fm->File[index]->filename;
+        filesize=fm->File[index]->filesize;
 
-	void *HacMapping::GetFile(void *folder,const u16char *filename,int *filesize)
-	{
-		if(!filename||!(*filename))return(nullptr);
-		      
-		if(!folder)folder=GetFolder(nullptr);
-                                         
-		FolderMapping *fm=(FolderMapping *)folder;
-		
-		int n=fm->File.Count;
-		UTF16String fn=filename;
+        return(true);
+    }
 
-		fn.LowerCase();
+    void *HacMapping::GetFile(void *folder,const u16char *filename,int *filesize)
+    {
+        if(!filename||!(*filename))return(nullptr);
 
-		while(n--)
-		{
-			if(fm->File[n]->filename==fn)
-			{
-				if(filesize)
-					*filesize=fm->File[n]->filesize;
-					
-				return fm->File[n];
-			}
-		}
+        if(!folder)folder=GetFolder(nullptr);
 
-		return(nullptr);    	
-	}
+        FolderMapping *fm=(FolderMapping *)folder;
 
-	void *HacMapping::GetFile(const u16char *filename,int *filesize)
-	{               
-		if(!filename||!(*filename))return(nullptr);
+        int n=fm->File.Count;
+        UTF16String fn=filename;
 
-		const u16char *end=strrchr(filename,HGL_DIRECTORY_SEPARATOR);
+        fn.LowerCase();
+
+        while(n--)
+        {
+            if(fm->File[n]->filename==fn)
+            {
+                if(filesize)
+                    *filesize=fm->File[n]->filesize;
+
+                return fm->File[n];
+            }
+        }
+
+        return(nullptr);
+    }
+
+    void *HacMapping::GetFile(const u16char *filename,int *filesize)
+    {
+        if(!filename||!(*filename))return(nullptr);
+
+        const u16char *end=strrchr(filename,HGL_DIRECTORY_SEPARATOR);
         void *folder=nullptr;
 
-		if(end)
-		{
-			u16char *pathname=new u16char[end-filename+1];
+        if(end)
+        {
+            u16char *pathname=new u16char[end-filename+1];
 
-			strcpy(pathname,filename,end-filename);
+            strcpy(pathname,filename,end-filename);
 
-			folder=GetFolder(pathname);
+            folder=GetFolder(pathname);
 
-			return(GetFile(folder,end+1,filesize));
-		}
-		else
-		{
-			return(GetFile(nullptr,filename,filesize));
-		}
-	}
+            return(GetFile(folder,end+1,filesize));
+        }
+        else
+        {
+            return(GetFile(nullptr,filename,filesize));
+        }
+    }
 }//namespace hgl
 

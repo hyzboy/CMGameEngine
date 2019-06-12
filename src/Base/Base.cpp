@@ -21,7 +21,7 @@ namespace hgl
         Logger *CreateLoggerDialog    (const OSString &,LogLevel);
 //        Logger *CreateLoggerNetwork    (const OSString &,LogLevel);
     }//namespace logger
-    
+
     //Base/DataType/Endian.cpp
     bool CheckSystemEndian();
 
@@ -36,13 +36,13 @@ namespace hgl
     bool InitCore(SystemInfo &si,ConsoleSystemInitInfo *sii)
     {
         if(sii
-		 &&sii->log.disable_log==false)
+         &&sii->log.disable_log==false)
         {
-            AddLogger(CreateLoggerConsole   (sii->info.ProjectCode,(logger::LogLevel)sii->log.console	));
-            AddLogger(CreateLoggerFile		(sii->info.ProjectCode,(logger::LogLevel)sii->log.file		));
+            AddLogger(CreateLoggerConsole   (sii->info.ProjectCode,(logger::LogLevel)sii->log.console   ));
+            AddLogger(CreateLoggerFile      (sii->info.ProjectCode,(logger::LogLevel)sii->log.file      ));
 
 #if HGL_OS==HGL_OS_Windows
-            AddLogger(CreateLoggerDialog	(sii->info.ProjectCode,(logger::LogLevel)sii->log.dialog	));
+            AddLogger(CreateLoggerDialog    (sii->info.ProjectCode,(logger::LogLevel)sii->log.dialog    ));
 #endif//HGL_OS==HGL_OS_Windows
             //AddLogger(CreateLoggerNetwork    (sii->info.ProjectCode,sii->log.network    ));
 
@@ -56,7 +56,7 @@ namespace hgl
         }
 
         if(sii
-		 &&sii->info.ProjectCode.Length()<=0)
+         &&sii->info.ProjectCode.Length()<=0)
         {
             LOG_PROBLEM(OS_TEXT("please set ProjectCode,use in Registry,Filename,Network Name,Code,....."));
             return(false);
@@ -75,12 +75,12 @@ namespace hgl
         LOG_INFO(OS_TEXT("Powered by ")+GetString(hfsName)+OS_TEXT(" ")+GetString(hfsVersion));
         LOG_INFO("Build Time: " __DATE__ "," __TIME__);
         LOG_INFO(OS_TEXT("Build Platform: ") HGL_COMPILE_PLATFORM);
-		LOG_INFO(OS_TEXT("Build Toolsets: ") HGL_COMPILE_TOOLSET);
+        LOG_INFO(OS_TEXT("Build Toolsets: ") HGL_COMPILE_TOOLSET);
 
         GetCMGDKPath(si.path);        //取得CMGDK路径
 
         if(sii
-		 &&sii->CheckSystem)
+         &&sii->CheckSystem)
             SystemCheck(&si);
 
         return(true);

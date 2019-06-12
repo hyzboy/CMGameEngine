@@ -4,19 +4,19 @@
 #include<hgl/type/BaseString.h>
 namespace hgl
 {
-	class DevilEngine;
+    class DevilEngine;
 
-	class DevilVariable
-	{
-		DevilEngine *vm;
+    class DevilVariable
+    {
+        DevilEngine *vm;
 
-	public:
+    public:
 
-    	UTF16String var_name;
+        UTF16String var_name;
 
-	public:
+    public:
 
-		DevilVariable(DevilEngine *dvm,const UTF16String &name){vm=dvm;var_name=name;}
-	};//class DevilVariable
+        DevilVariable(DevilEngine *dvm,const UTF16String &name){vm=dvm;var_name=name;}
+    };//class DevilVariable
 }//namespace hgl
 #endif//DevilVariableH

@@ -1,6 +1,7 @@
 ﻿#include<hgl/db/CDBTable.h>
 #include<hgl/io/DataInputStream.h>
 #include<hgl/io/FileInputStream.h>
+#include<hgl/LogInfo.h>
 
 namespace hgl
 {

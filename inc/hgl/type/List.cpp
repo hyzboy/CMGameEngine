@@ -1,5 +1,6 @@
 ﻿#ifndef HGL_LIST_CPP
 #define HGL_LIST_CPP
+#include<hgl/LogInfo.h>
 
 //--------------------------------------------------------------------------------------------------
 // 代码中的部分memcpy可替换为memmove,但这样会引起CodeGuard/Valgrind之类的内存调试器报错

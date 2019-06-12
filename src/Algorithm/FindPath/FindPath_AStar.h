@@ -52,14 +52,14 @@ namespace hgl
             {
             private:
 
-                FindItem ***find;				//标记于每一个格子上的查找项，用以标记已经查过了
+                FindItem ***find;               //标记于每一个格子上的查找项，用以标记已经查过了
 
-                List<FindItem *> findlist;		//要查找的队列
+                List<FindItem *> findlist;      //要查找的队列
                 //findlist 是仍可优先的重点，由于在每次查找中都需要动态的调整大小，重分配内容，将会耗费大量CPU时间。
                 //最为理想的方式是更换为链表
 
-                FindItem *find_buffer;			//放入结果队列用的数据，提前分配以提升效能
-                int find_buffer_index;			//缓冲索引
+                FindItem *find_buffer;          //放入结果队列用的数据，提前分配以提升效能
+                int find_buffer_index;          //缓冲索引
 
             private:
 

@@ -2,23 +2,23 @@
    AngelCode Scripting Library
    Copyright (c) 2003-2013 Andreas Jonsson
 
-   This software is provided 'as-is', without any express or implied 
-   warranty. In no event will the authors be held liable for any 
+   This software is provided 'as-is', without any express or implied
+   warranty. In no event will the authors be held liable for any
    damages arising from the use of this software.
 
-   Permission is granted to anyone to use this software for any 
-   purpose, including commercial applications, and to alter it and 
+   Permission is granted to anyone to use this software for any
+   purpose, including commercial applications, and to alter it and
    redistribute it freely, subject to the following restrictions:
 
-   1. The origin of this software must not be misrepresented; you 
+   1. The origin of this software must not be misrepresented; you
       must not claim that you wrote the original software. If you use
-      this software in a product, an acknowledgment in the product 
+      this software in a product, an acknowledgment in the product
       documentation would be appreciated but is not required.
 
-   2. Altered source versions must be plainly marked as such, and 
+   2. Altered source versions must be plainly marked as such, and
       must not be misrepresented as being the original software.
 
-   3. This notice may not be removed or altered from any source 
+   3. This notice may not be removed or altered from any source
       distribution.
 
    The original version of this library can be located at:
@@ -52,28 +52,28 @@ class asCThreadLocalData;
 class asCThreadManager : public asIThreadManager
 {
 public:
-	static asCThreadLocalData *GetLocalData();
-	static int CleanupLocalData();
+    static asCThreadLocalData *GetLocalData();
+    static int CleanupLocalData();
 
-	static int  Prepare(asIThreadManager *externalThreadMgr);
-	static void Unprepare();
+    static int  Prepare(asIThreadManager *externalThreadMgr);
+    static void Unprepare();
 
-	// This read/write lock can be used by the application to provide simple synchronization
-	DECLAREREADWRITELOCK(appRWLock)
+    // This read/write lock can be used by the application to provide simple synchronization
+    DECLAREREADWRITELOCK(appRWLock)
 
 protected:
-	asCThreadManager();
-	~asCThreadManager();
+    asCThreadManager();
+    ~asCThreadManager();
 
-	// No need to use the atomic int here, as it will only be
-	// updated within the thread manager's critical section
-	int refCount;
+    // No need to use the atomic int here, as it will only be
+    // updated within the thread manager's critical section
+    int refCount;
 
 #ifndef AS_NO_THREADS
-	asDWORD tlsKey;
-	DECLARECRITICALSECTION(criticalSection);
+    asDWORD tlsKey;
+    DECLARECRITICALSECTION(criticalSection);
 #else
-	asCThreadLocalData *tld;
+    asCThreadLocalData *tld;
 #endif
 };
 
@@ -84,14 +84,14 @@ class asIScriptContext;
 class asCThreadLocalData
 {
 public:
-	asCArray<asIScriptContext *> activeContexts;
-	asCString string;
+    asCArray<asIScriptContext *> activeContexts;
+    asCString string;
 
 protected:
-	friend class asCThreadManager;
+    friend class asCThreadManager;
 
-	asCThreadLocalData();
-	~asCThreadLocalData();
+    asCThreadLocalData();
+    ~asCThreadLocalData();
 };
 
 END_AS_NAMESPACE

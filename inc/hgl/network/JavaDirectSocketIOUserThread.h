@@ -7,11 +7,11 @@
 
 namespace hgl
 {
-	using namespace hgl::io;
+    using namespace hgl::io;
 
-	namespace network
-	{
-		typedef DirectSocketIOUserThread<JavaInputStream,JavaOutputStream> JavaDirectSocketIOUserThread;
-	}//namespace network
+    namespace network
+    {
+        typedef DirectSocketIOUserThread<JavaInputStream,JavaOutputStream> JavaDirectSocketIOUserThread;
+    }//namespace network
 }//namespace hgl
 #endif//HGL_NETWORK_JAVA_DIRECT_SOCKET_IO_USER_THREAD_INCLUDE

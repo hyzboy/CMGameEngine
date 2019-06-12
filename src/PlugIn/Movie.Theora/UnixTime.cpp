@@ -2,7 +2,7 @@
 #include<hgl/type/DataType.h>
 #include"TheoraPlayer.h"
 
-double TheoraPlayer::GetDoubleTime()																		///<取得当前时间(双精度，单位秒)
+double TheoraPlayer::GetDoubleTime()                                                                        ///<取得当前时间(双精度，单位秒)
 {
     struct timeval tv;
     gettimeofday(&tv, nullptr);

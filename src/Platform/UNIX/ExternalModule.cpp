@@ -8,36 +8,36 @@ namespace hgl
 {
     ExternalModule *LoadExternalModule(const os_char *filename)
     {
-		ExternalModulePointer fp=dlopen(filename,RTLD_LAZY);
+        ExternalModulePointer fp=dlopen(filename,RTLD_LAZY);
 
-		if(!fp)
-		{
-			LOG_ERROR(OS_TEXT("Load Module <")+OSString(filename)+OS_TEXT("> error! os info: ")+OSString(dlerror()));
+        if(!fp)
+        {
+            LOG_ERROR(OS_TEXT("Load Module <")+OSString(filename)+OS_TEXT("> error! os info: ")+OSString(dlerror()));
 
-			return(nullptr);
-		}
+            return(nullptr);
+        }
 
-		return(new ExternalModule(fp));
+        return(new ExternalModule(fp));
     }
 
-	/**
-	* 加载一个外部模块
-	* @param name 模块文件名称
-	* @return 是否加载成功
-	*/
-	bool ExternalModule::Load(const os_char *name)
-	{
-		Clear();
+    /**
+    * 加载一个外部模块
+    * @param name 模块文件名称
+    * @return 是否加载成功
+    */
+    bool ExternalModule::Load(const os_char *name)
+    {
+        Clear();
 
-		fp=dlopen(name,RTLD_LAZY);
+        fp=dlopen(name,RTLD_LAZY);
 
-		if(!fp)
-		{
-			LOG_ERROR(OS_TEXT("Load Module <")+OSString(name)+OS_TEXT("> error! os info: ")+OSString(dlerror()));
+        if(!fp)
+        {
+            LOG_ERROR(OS_TEXT("Load Module <")+OSString(name)+OS_TEXT("> error! os info: ")+OSString(dlerror()));
 
-			return(false);
-		}
+            return(false);
+        }
 
-		return(true);
-	}
+        return(true);
+    }
 }//namespace hgl

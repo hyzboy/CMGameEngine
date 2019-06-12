@@ -6,60 +6,60 @@
 #include<hgl/platform/Window.h>
 namespace hgl
 {
-	class FlowObject;
+    class FlowObject;
 
-	class WinWindow:public Window
-	{
-	protected:
+    class WinWindow:public Window
+    {
+    protected:
 
-		UTF16String class_name;
-		UTF16String icon_name;
-		UTF16String cursor_name;
+        UTF16String class_name;
+        UTF16String icon_name;
+        UTF16String cursor_name;
 
-		bool edge,resize,min,max,topmost,sysmenu,right,apptaskbar;
-		uint32 Style,ExStyle;
-		int win_width,win_height;
-		int win_left,win_top;
+        bool edge,resize,min,max,topmost,sysmenu,right,apptaskbar;
+        uint32 Style,ExStyle;
+        int win_width,win_height;
+        int win_left,win_top;
 
-	protected:
+    protected:
 
-		bool Registry();
-		bool Create();
+        bool Registry();
+        bool Create();
 
-		void GetCaption();
-		void SetCaption();
+        void GetCaption();
+        void SetCaption();
 
-		void SetSystemCursor(bool);
+        void SetSystemCursor(bool);
 
-		bool CreateToWindow(int,int);
+        bool CreateToWindow(int,int);
 
-	public:
+    public:
 
-		HINSTANCE hInstance;
-		HWND hWnd;
-		HDC hDC;
+        HINSTANCE hInstance;
+        HWND hWnd;
+        HDC hDC;
 
-		MSG msg;
+        MSG msg;
 
-		DefEvent(bool,OnWinMessage,(HWND,UINT,WPARAM,LPARAM));										///<Windows消息处理事件
+        DefEvent(bool,OnWinMessage,(HWND,UINT,WPARAM,LPARAM));                                      ///<Windows消息处理事件
 
-	public:
+    public:
 
-		WinWindow();
-		virtual ~WinWindow();
+        WinWindow();
+        virtual ~WinWindow();
 
-		bool InitToFullScreen(int,int,bool);
-		bool InitToWindow(int,int,GraphicsSystemInitInfo::WindowSetup &);
+        bool InitToFullScreen(int,int,bool);
+        bool InitToWindow(int,int,GraphicsSystemInitInfo::WindowSetup &);
 
-		void Close();
+        void Close();
 
-		bool ToMinWindow();
-		bool ToMaxWindow();
+        bool ToMinWindow();
+        bool ToMaxWindow();
 
-		void Show();
-		void Hide();
+        void Show();
+        void Hide();
 
-		virtual void SetViewport(int,int,int,int)=0;												///<设定可视范围
-	};//class WinWindow
+        virtual void SetViewport(int,int,int,int)=0;                                                ///<设定可视范围
+    };//class WinWindow
 }//namespace hgl
 #endif//WinWindowH

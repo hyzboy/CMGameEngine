@@ -5,7 +5,7 @@
 // string type must be registered with the engine before registering the
 // dictionary type
 
-#ifndef ANGELSCRIPT_H 
+#ifndef ANGELSCRIPT_H
 // Avoid having to inform include path if header is already include before
 #include <angelscript.h>
 #endif
@@ -59,8 +59,8 @@ public:
 
     // Returns true if the key is set
     bool Exists(const std::string &key) const;
-	bool IsEmpty() const;
-	asUINT GetSize() const;
+    bool IsEmpty() const;
+    asUINT GetSize() const;
 
     // Deletes the key
     void Delete(const std::string &key);
@@ -68,18 +68,18 @@ public:
     // Deletes all keys
     void DeleteAll();
 
-	// Get an array of all keys
-	CScriptArray *GetKeys() const;
+    // Get an array of all keys
+    CScriptArray *GetKeys() const;
 
-	// Garbage collections behaviours
-	int GetRefCount();
-	void SetGCFlag();
-	bool GetGCFlag();
-	void EnumReferences(asIScriptEngine *engine);
-	void ReleaseAllReferences(asIScriptEngine *engine);
+    // Garbage collections behaviours
+    int GetRefCount();
+    void SetGCFlag();
+    bool GetGCFlag();
+    void EnumReferences(asIScriptEngine *engine);
+    void ReleaseAllReferences(asIScriptEngine *engine);
 
 protected:
-	// The structure for holding the values
+    // The structure for holding the values
     struct valueStruct
     {
         union
@@ -90,19 +90,19 @@ protected:
         };
         int   typeId;
     };
-    
-	// We don't want anyone to call the destructor directly, it should be called through the Release method
-	virtual ~CScriptDictionary();
 
-	// Helper methods
+    // We don't want anyone to call the destructor directly, it should be called through the Release method
+    virtual ~CScriptDictionary();
+
+    // Helper methods
     void FreeValue(valueStruct &value);
-	
-	// Our properties
+
+    // Our properties
     asIScriptEngine *engine;
     mutable int refCount;
-	mutable bool gcFlag;
+    mutable bool gcFlag;
 
-	// TODO: optimize: Use C++11 std::unordered_map instead
+    // TODO: optimize: Use C++11 std::unordered_map instead
     std::map<std::string, valueStruct> dict;
 };
 

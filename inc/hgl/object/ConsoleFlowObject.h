@@ -4,11 +4,11 @@
 #include<hgl/object/_FlowObject.h>
 namespace hgl
 {
-	/**
-	* 流程对象是指可以放在流程控制器里的一种特殊对象
-	*/
+    /**
+    * 流程对象是指可以放在流程控制器里的一种特殊对象
+    */
     class ConsoleFlowObject:public _FlowObject<ConsoleFlowObject>                                   ///流程对象基类
-	{
+    {
         bool is_back=false;
 
     public:
@@ -19,7 +19,7 @@ namespace hgl
         virtual void OnResume()override{is_back=false;}
         virtual bool CanUpdate(){return !is_back;}
 
-		virtual void Update(){}																		///<刷新函数
-	};//class ConsoleFlowObject
+        virtual void Update(){}                                                                     ///<刷新函数
+    };//class ConsoleFlowObject
 }//namespace hgl
 #endif//HGL_CONSOLE_FLOW_OBJECT_INCLUDE

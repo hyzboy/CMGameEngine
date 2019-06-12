@@ -9,7 +9,7 @@
 #include<windows.h>
 
 #if defined(_MSC_VER)&&defined(_DEBUG)
-#define _CRTDBG_MAP_ALLOC 
+#define _CRTDBG_MAP_ALLOC
 #include<crtdbg.h>
 #endif//_MSC_VER&&_DEBUG
 
@@ -23,7 +23,7 @@ extern "C" int WINAPI wWinMain(HINSTANCE,HINSTANCE,wchar_t *cmd_line,int)
 #ifdef _MSC_VER
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif//_MSC_VER
-    
+
     try
     {
 #endif//_DEBUG

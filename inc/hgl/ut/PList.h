@@ -7,11 +7,11 @@
 #include<hgl/io/TextOutputStream.h>
 namespace hgl
 {
-	using namespace io;
+    using namespace io;
 
-	/**
-	* 属性列表,类似INI的管理类
-	*/
+    /**
+    * 属性列表,类似INI的管理类
+    */
     template<typename C> class PList:public Map<BaseString<C>,BaseString<C>>                        ///属性列表
     {
     public:

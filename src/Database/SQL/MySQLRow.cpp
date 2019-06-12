@@ -2,19 +2,19 @@
 
 namespace hgl
 {
-	namespace sql
-	{
-		namespace mysql
-		{
-			MySQLRow::MySQLRow(MYSQL_ROW mr)
-			{
-				row=mr;
-			}
+    namespace sql
+    {
+        namespace mysql
+        {
+            MySQLRow::MySQLRow(MYSQL_ROW mr)
+            {
+                row=mr;
+            }
 
-			char *MySQLRow::GetString( int index )
-			{
-				return row[index];
-			}
-		}//namespace mysql
-	}//namespace sql
+            char *MySQLRow::GetString( int index )
+            {
+                return row[index];
+            }
+        }//namespace mysql
+    }//namespace sql
 }//namespace hgl

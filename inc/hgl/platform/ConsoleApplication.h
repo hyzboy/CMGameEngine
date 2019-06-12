@@ -6,48 +6,48 @@
 #include<hgl/type/StringList.h>
 namespace hgl
 {
-	/**
-	* 控制台应用程序基类<br>
-	* 控制台应用程序基类被设计为必须输出日志
-	*/
-	class ConsoleApplication:public BaseApplication
-	{
-	protected:
+    /**
+    * 控制台应用程序基类<br>
+    * 控制台应用程序基类被设计为必须输出日志
+    */
+    class ConsoleApplication:public BaseApplication
+    {
+    protected:
 
-		ConsoleFlowControl *flow;                                                       			///<流程控制器
+        ConsoleFlowControl *flow;                                                                   ///<流程控制器
 
-	public:
+    public:
 
-		ConsoleApplication(ConsoleFlowControl *cus_control=nullptr);
-		virtual ~ConsoleApplication();
+        ConsoleApplication(ConsoleFlowControl *cus_control=nullptr);
+        virtual ~ConsoleApplication();
 
-		virtual bool Init(ConsoleSystemInitInfo *);													///<初始化当前应用程序
+        virtual bool Init(ConsoleSystemInitInfo *);                                                 ///<初始化当前应用程序
 
-		virtual void SetStart(ConsoleFlowObject *fo){flow->SetStart(fo);}							///<设定起始流程对象
+        virtual void SetStart(ConsoleFlowObject *fo){flow->SetStart(fo);}                           ///<设定起始流程对象
 
         virtual void Frame()                                                                        ///<更新一帧
         {
-            UpdateTime();				//更新时间
+            UpdateTime();               //更新时间
 
             flow->Update();             //流程刷新
             flow->ProcCurState();       //处理流程状态
         }
 
-		virtual int Run()																		    ///<运行当前应用程序
+        virtual int Run()                                                                           ///<运行当前应用程序
         {
-			if(!flow)return(-1);
+            if(!flow)return(-1);
 
             do
             {
                 Frame();                                                                            ///<调用一帧刷新
             }
-		    while(flow->GetState()!=fosExitApp);
+            while(flow->GetState()!=fosExitApp);
 
-			return(0);
+            return(0);
         }
 
-		virtual void ExitApp(){if(flow)flow->ExitApp();}											///<退出游戏
-	};//class ConsoleApplication
+        virtual void ExitApp(){if(flow)flow->ExitApp();}                                            ///<退出游戏
+    };//class ConsoleApplication
 }//namespace hgl
 
 /**

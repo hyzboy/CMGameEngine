@@ -3,8 +3,8 @@
 
 namespace hgl
 {
-	namespace logger
-	{
+    namespace logger
+    {
         void SetLocalAppdataPath(const char *fn);
     }//namespace logger
 

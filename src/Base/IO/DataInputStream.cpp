@@ -53,7 +53,7 @@ namespace hgl
                 *buf=0;
                 return(true);
             }
-            
+
             if(max_len>=str_len)
             {
                 if(dis->ReadArrays<char>(buf,str_len)!=str_len)
@@ -64,25 +64,25 @@ namespace hgl
 
                 return(true);
             }
-            
+
             if(dis->ReadArrays<char>(buf,max_len)!=max_len)
                 return(false);
 
             dis->Skip(str_len-max_len);
 
             return(true);
-        }   
+        }
 
         bool DataInputStream::ReadUTF8String        (char *u8str,uint max_len){return hgl::io::ReadUTF8String<uint32>(u8str,max_len,this);}
         bool DataInputStream::ReadUTF8ShortString   (char *u8str,uint max_len){return hgl::io::ReadUTF8String<uint16>(u8str,max_len,this);}
         bool DataInputStream::ReadUTF8TinyString    (char *u8str,uint max_len){return hgl::io::ReadUTF8String<uint8 >(u8str,max_len,this);}
-        
+
         template<typename T>
         bool ReadUTF8String(UTF8String &u8str,uint max_len,DataInputStream *dis)
         {
             if(!max_len||!dis)
                 return(false);
-            
+
             T str_len;
 
             if(!dis->ReadNumber<T>(str_len))
@@ -111,13 +111,13 @@ namespace hgl
         bool DataInputStream::ReadUTF8String        (UTF8String &u8str,uint max_len){return hgl::io::ReadUTF8String<uint32>(u8str,max_len,this);}
         bool DataInputStream::ReadUTF8ShortString   (UTF8String &u8str,uint max_len){return hgl::io::ReadUTF8String<uint16>(u8str,max_len,this);}
         bool DataInputStream::ReadUTF8TinyString    (UTF8String &u8str,uint max_len){return hgl::io::ReadUTF8String<uint8 >(u8str,max_len,this);}
-        
+
         template<typename T>
         bool ReadUTF8String(UTF16String &u16str,uint max_len,DataInputStream *dis)
         {
             if(!max_len||!dis)
                 return(false);
-            
+
             T str_len;
 
             if(!dis->ReadNumber<T>(str_len))
@@ -206,7 +206,7 @@ namespace hgl
             if(!dis||!max_len)return(false);
 
             T count;
-            
+
             if(!dis->ReadNumber<T>(count))
                 return(false);
 

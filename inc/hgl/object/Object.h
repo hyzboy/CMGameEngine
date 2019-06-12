@@ -5,22 +5,22 @@
 #include<hgl/type/BaseString.h>
 namespace hgl
 {
-	/**
-	* Object类是HGL类库中所有游戏对象类的基类,它提供对象该具备的所有基本要素。
-	*/
-	class Object:public _Object                                                                     ///对象基类
-	{
+    /**
+    * Object类是HGL类库中所有游戏对象类的基类,它提供对象该具备的所有基本要素。
+    */
+    class Object:public _Object                                                                     ///对象基类
+    {
     protected:  //私有属性
 
         bool enabled=false;                                                                         ///<是否可以刷新
         bool visible=false;                                                                         ///<是否可以显示
         bool give_event=false;                                                                      ///<是否接收事件
 
-	public:	//属性
+    public: //属性
 
         UTF16String Name;                                                                           ///<对象名称
 
-	public:
+    public:
 
         Object(){}                                                                                  ///<本类构造函数
         Object(const UTF16String &n){Name=n;}                                                       ///<本类构造函数
@@ -36,6 +36,6 @@ namespace hgl
 
         virtual void Update(){enabled=false;}
         virtual void Draw(){visible=false;}
-	};//class Object
+    };//class Object
 }//namespace hgl
 #endif//HGL_OBJECT_INCLUDE

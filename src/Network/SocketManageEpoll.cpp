@@ -31,12 +31,12 @@ namespace hgl
 
                 hgl_zero(ev);
 
-                ev.data.fd=	sock;
-                ev.events=	user_event  //要处理的事件
+                ev.data.fd= sock;
+                ev.events=  user_event  //要处理的事件
                             |EPOLLET    //边缘模式(即读/写时，需要一直读/写直到出错为止；相对LT模式是只要有数据就会一直通知)
-                            |EPOLLERR	//出错
-                            |EPOLLRDHUP	//对方挂断
-                            |EPOLLHUP;	//挂断
+                            |EPOLLERR   //出错
+                            |EPOLLRDHUP //对方挂断
+                            |EPOLLHUP;  //挂断
 
                 return(epoll_ctl(epoll_fd,EPOLL_CTL_ADD,sock,&ev)==0);
             }
@@ -197,9 +197,9 @@ namespace hgl
 
                 for(int i=0;i<event_count;i++)
                 {
-                    if(ee->events&(	EPOLLERR|			//出错了
-                                    EPOLLRDHUP|			//对方关了
-                                    EPOLLHUP))			//我方强制关了
+                    if(ee->events&( EPOLLERR|           //出错了
+                                    EPOLLRDHUP|         //对方关了
+                                    EPOLLHUP))          //我方强制关了
                     {
                         LOG_ERROR("SocketManageEpoll Error,socket:"+OSString(ee->data.fd)+",epoll event:"+OSString(ee->events));
 
@@ -209,7 +209,7 @@ namespace hgl
                         ++error_num;
                     }
                     else
-                    if(ee->events&EPOLLIN)				//可以读数据
+                    if(ee->events&EPOLLIN)              //可以读数据
                     {
                         rp->sock=ee->data.fd;
                         rp->size=0;
@@ -217,7 +217,7 @@ namespace hgl
                         ++recv_num;
                     }
                     else
-                    if(ee->events&EPOLLOUT)				//可以发数据
+                    if(ee->events&EPOLLOUT)             //可以发数据
                     {
                         sp->sock=ee->data.fd;
                         sp->size=0;

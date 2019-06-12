@@ -9,38 +9,38 @@
 #undef max
 //--------------------------------------------------------------------------------------------------
 using u32char           =char32_t;
-using u16char			=wchar_t;
-using os_char			=wchar_t;
-#define to_oschar		to_u16
-#define OS_TEXT(str)	L##str
-#define U8_TEXT(str)	u8##str
-#define U16_TEXT(str)	L##str
+using u16char           =wchar_t;
+using os_char           =wchar_t;
+#define to_oschar       to_u16
+#define OS_TEXT(str)    L##str
+#define U8_TEXT(str)    u8##str
+#define U16_TEXT(str)   L##str
 
-#define HGL_OS_NAME				OS_TEXT("Windows")
+#define HGL_OS_NAME             OS_TEXT("Windows")
 
 #if HGL_CPU == HGL_CPU_X86_32
-	#define HGL_LIB_OS					"Win32"											//库操作系统前缀
+    #define HGL_LIB_OS                  "Win32"                                         //库操作系统前缀
 #elif HGL_CPU == HGL_CPU_X86_64
-	#define HGL_LIB_OS					"Win64"											//库操作系统前缀
+    #define HGL_LIB_OS                  "Win64"                                         //库操作系统前缀
 #endif//HGL_CPU
 //--------------------------------------------------------------------------------------------------
-#define HGL_PLUGIN_FRONTNAME			OS_TEXT("CMP.")									//插件文件名前缀
-#define HGL_PLUGIN_EXTNAME	    		OS_TEXT(".DLL")									//插件文件扩展名
-#define HGL_PLUGIN_FUNC					extern "C" __declspec(dllexport)				//插件函数定义
+#define HGL_PLUGIN_FRONTNAME            OS_TEXT("CMP.")                                 //插件文件名前缀
+#define HGL_PLUGIN_EXTNAME              OS_TEXT(".DLL")                                 //插件文件扩展名
+#define HGL_PLUGIN_FUNC                 extern "C" __declspec(dllexport)                //插件函数定义
 
-#define HGL_DIRECTORY_SEPARATOR 		OS_TEXT('\\')									//目录分隔符
-#define HGL_DIRECTORY_SEPARATOR_STR     OS_TEXT("\\")									//目录分隔符
+#define HGL_DIRECTORY_SEPARATOR         OS_TEXT('\\')                                   //目录分隔符
+#define HGL_DIRECTORY_SEPARATOR_STR     OS_TEXT("\\")                                   //目录分隔符
 #define HGL_DIRECTORY_SEPARATOR_U8STR   U8_TEXT("\\")
 
-#define HGL_LINE_END					OS_TEXT("\r\n")									//换行符
-#define HGL_LINE_END_SIZE				2												//换行符长度
+#define HGL_LINE_END                    OS_TEXT("\r\n")                                 //换行符
+#define HGL_LINE_END_SIZE               2                                               //换行符长度
 
-#define HGL_MAX_PATH					MAX_PATH
+#define HGL_MAX_PATH                    MAX_PATH
 
-#define HGL_MEM_ALIGN					16												//内存对齐字节数
+#define HGL_MEM_ALIGN                   16                                              //内存对齐字节数
 
-#define HGL_GL_WINDOW_INCLUDE_FILE		<hgl/platform/WinOpenGL.h>						//指定OpenGL窗口引用头文件
-#define HGL_GL_WINDOW_CLASS				WinGLWindow										//指定OpenGL窗口类名称
+#define HGL_GL_WINDOW_INCLUDE_FILE      <hgl/platform/WinOpenGL.h>                      //指定OpenGL窗口引用头文件
+#define HGL_GL_WINDOW_CLASS             WinGLWindow                                     //指定OpenGL窗口类名称
 //--------------------------------------------------------------------------------------------------
 #if HGL_COMPILER == HGL_COMPILER_Microsoft
     #define hgl_malloc(size)        _aligned_malloc(size,HGL_MEM_ALIGN)
@@ -63,14 +63,14 @@ typedef HMODULE                 ExternalModulePointer;
 #define pi_get                  GetProcAddress
 #define pi_close                FreeLibrary
 
-#define struct_stat64			struct _stat64
-//#define hgl_stat64				_stat64
-#define hgl_lseek64				_lseeki64
-#define hgl_tell64(fp)			_telli64(fp)
-#define hgl_fstat64				_fstati64
-#define hgl_lstat64				_wstat64
-#define hgl_read64				_read
-#define hgl_write64				_write
+#define struct_stat64           struct _stat64
+//#define hgl_stat64                _stat64
+#define hgl_lseek64             _lseeki64
+#define hgl_tell64(fp)          _telli64(fp)
+#define hgl_fstat64             _fstati64
+#define hgl_lstat64             _wstat64
+#define hgl_read64              _read
+#define hgl_write64             _write
 
 using hgl_thread_mutex  =CRITICAL_SECTION;
 using thread_ptr        =HANDLE;

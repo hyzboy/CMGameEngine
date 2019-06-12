@@ -276,7 +276,7 @@ namespace hgl
 
         return(!alLastError());
     }
-    
+
     /**
      * 播放当前音源，并指定是否循环播放
      * @param _loop 是否循环播放

@@ -5,100 +5,100 @@
 #include<hgl/network/Socket.h>
 namespace hgl
 {
-	namespace network
-	{
-		/**
-		* 这个类提供使用UDP协议的通信，但它并不提供可靠数据传输的支持。
-		*/
-		class UDPSocket:public Socket                                                               ///UDP通信类
-		{
+    namespace network
+    {
+        /**
+        * 这个类提供使用UDP协议的通信，但它并不提供可靠数据传输的支持。
+        */
+        class UDPSocket:public Socket                                                               ///UDP通信类
+        {
             IPAddress *bind_addr;
-			IPAddress *tar_addr;
+            IPAddress *tar_addr;
 
-		public:	//事件函数
+        public: //事件函数
 
-			virtual int ProcRecv(int=-1){return -1;}
-			virtual int ProcSend(int,int &left_bytes){return -1;}
+            virtual int ProcRecv(int=-1){return -1;}
+            virtual int ProcSend(int,int &left_bytes){return -1;}
 
-		public:
+        public:
 
-			UDPSocket();                                                                            ///<本类构造函数
-			virtual ~UDPSocket();                                                                   ///<本类析构函数
+            UDPSocket();                                                                            ///<本类构造函数
+            virtual ~UDPSocket();                                                                   ///<本类析构函数
 
-			virtual bool Create(const IPAddress *);                                                 ///<创建一个udp,并绑定一个IP地址与指定端口
-//			virtual bool Create(int family);                                                        ///<创建一个udp
+            virtual bool Create(const IPAddress *);                                                 ///<创建一个udp,并绑定一个IP地址与指定端口
+//          virtual bool Create(int family);                                                        ///<创建一个udp
 
-                    uint GetBindPort()const{return bind_addr->GetPort();}							///<取得绑定端口
+                    uint GetBindPort()const{return bind_addr->GetPort();}                           ///<取得绑定端口
 
                     bool SetSendAddr(const IPAddress *);                                            ///<设定发送地址
 
                     int SendPacket(const void *,int);                                               ///<发送数据包
                     int SendPacket(IPAddress *,const void *,int);                                   ///<向指定地址发送数据包
                     int RecvPacket(void *,int,IPAddress *);                                         ///<接收数据包
-		};//class UDPSocket
+        };//class UDPSocket
 
-		/**
+        /**
          * UDPLite协议封装使用
          */
-		class UDPLiteSocket:public UDPSocket
-		{
+        class UDPLiteSocket:public UDPSocket
+        {
         public:
 
             virtual ~UDPLiteSocket()=default;
 
             bool Create(const IPAddress *)override;                                              ///<创建一个udp lite,并绑定一个IP地址与指定端口
-//			bool Create(int family)override;                                                     ///<创建一个udp lite
+//          bool Create(int family)override;                                                     ///<创建一个udp lite
 
-			void SetChecksumCoverage(int send_val=20,int recv_val=20);                               ///<设定UDPLite检验位长度,最小20
+            void SetChecksumCoverage(int send_val=20,int recv_val=20);                               ///<设定UDPLite检验位长度,最小20
         };//class UDPLiteSocket
 
-		/**
-		 * 使用回呼事件机制的UDPSocket
-		 */
+        /**
+         * 使用回呼事件机制的UDPSocket
+         */
         template<typename BASE> class _UDPSocketCB:public BASE
-		{
-		public:	//事件函数
+        {
+        public: //事件函数
 
-			DefEvent(void,	OnDisconnect,	(BASE *));
-			DefEvent(int,	OnRecv,			(BASE *,int));
-			DefEvent(int,	OnSend,			(BASE *,int,int &));
+            DefEvent(void,  OnDisconnect,   (BASE *));
+            DefEvent(int,   OnRecv,         (BASE *,int));
+            DefEvent(int,   OnSend,         (BASE *,int,int &));
 
-			virtual void ClearEvent()
-			{
-				OnDisconnect=nullptr;
-				OnRecv		=nullptr;
-				OnSend		=nullptr;
-			}
+            virtual void ClearEvent()
+            {
+                OnDisconnect=nullptr;
+                OnRecv      =nullptr;
+                OnSend      =nullptr;
+            }
 
-		public:
+        public:
 
-			_UDPSocketCB(){ClearEvent();}															///<本类构造函数
-			virtual ~_UDPSocketCB()=default;
+            _UDPSocketCB(){ClearEvent();}                                                           ///<本类构造函数
+            virtual ~_UDPSocketCB()=default;
 
-			virtual void ProcDisconnect()
-			{
-				SafeCallEvent(OnDisconnect,(this));
-			}
+            virtual void ProcDisconnect()
+            {
+                SafeCallEvent(OnDisconnect,(this));
+            }
 
-			virtual int ProcRecv(int size)
-			{
-				if(OnRecv==nullptr)return(-1);
+            virtual int ProcRecv(int size)
+            {
+                if(OnRecv==nullptr)return(-1);
 
-				return OnRecv(this,size);
-			}
+                return OnRecv(this,size);
+            }
 
-			virtual int ProcSend(int size,int &left_bytes)
-			{
-				if(OnSend==nullptr)return(-1);
+            virtual int ProcSend(int size,int &left_bytes)
+            {
+                if(OnSend==nullptr)return(-1);
 
-				return OnSend(this,size,left_bytes);
-			}
-		};//class _UDPSocketCB
+                return OnSend(this,size,left_bytes);
+            }
+        };//class _UDPSocketCB
 
-		using UDPSocketCB     =_UDPSocketCB<UDPSocket>;
+        using UDPSocketCB     =_UDPSocketCB<UDPSocket>;
         using UDPLiteSocketCB =_UDPSocketCB<UDPLiteSocket>;
-	}//namespace network
+    }//namespace network
 
-	using namespace network;
+    using namespace network;
 }//namespace hgl
 #endif//HGL_UDPSOCKET_INCLUDE

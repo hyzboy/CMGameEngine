@@ -3,8 +3,8 @@
 
 namespace hgl
 {
-	namespace db
-	{
+    namespace db
+    {
 
-	}//namespace db
+    }//namespace db
 }//namespace hgl

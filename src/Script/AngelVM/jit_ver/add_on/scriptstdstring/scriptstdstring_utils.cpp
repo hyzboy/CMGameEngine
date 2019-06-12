@@ -27,8 +27,8 @@ static CScriptArray *StringSplit(const string &delim, const string &str)
     asIScriptEngine *engine = ctx->GetEngine();
 
     // TODO: This should only be done once
-	// TODO: This assumes that CScriptArray was already registered
-	asIObjectType *arrayType = engine->GetObjectTypeById(engine->GetTypeIdByDecl("array<string>"));
+    // TODO: This assumes that CScriptArray was already registered
+    asIObjectType *arrayType = engine->GetObjectTypeById(engine->GetTypeIdByDecl("array<string>"));
 
     // Create the array object
     CScriptArray *array = new CScriptArray(0, arrayType);
@@ -50,7 +50,7 @@ static CScriptArray *StringSplit(const string &delim, const string &str)
     array->Resize(array->GetSize()+1);
     ((string*)array->At(count))->assign(&str[prev]);
 
-	return array;
+    return array;
 }
 
 static void StringSplit_Generic(asIScriptGeneric *gen)
@@ -82,20 +82,20 @@ static string StringJoin(const CScriptArray &array, const string &delim)
 {
     // Create the new string
     string str = "";
-	if( array.GetSize() )
-	{
-		int n;
-		for( n = 0; n < (int)array.GetSize() - 1; n++ )
-		{
-			str += *(string*)array.At(n);
-			str += delim;
-		}
+    if( array.GetSize() )
+    {
+        int n;
+        for( n = 0; n < (int)array.GetSize() - 1; n++ )
+        {
+            str += *(string*)array.At(n);
+            str += delim;
+        }
 
-		// Add the last part
-		str += *(string*)array.At(n);
-	}
+        // Add the last part
+        str += *(string*)array.At(n);
+    }
 
-	return str;
+    return str;
 }
 
 static void StringJoin_Generic(asIScriptGeneric *gen)
@@ -112,18 +112,18 @@ static void StringJoin_Generic(asIScriptGeneric *gen)
 // The string type must have been registered first.
 void RegisterStdStringUtils(asIScriptEngine *engine)
 {
-	int r;
+    int r;
 
-	if( strstr(asGetLibraryOptions(), "AS_MAX_PORTABILITY") )
-	{
-		r = engine->RegisterObjectMethod("string", "array<string>@ split(const string &in) const", asFUNCTION(StringSplit_Generic), asCALL_GENERIC); assert(r >= 0);
-		r = engine->RegisterGlobalFunction("string join(const array<string> &in, const string &in)", asFUNCTION(StringJoin_Generic), asCALL_GENERIC); assert(r >= 0);
-	}
-	else
-	{
-		r = engine->RegisterObjectMethod("string", "array<string>@ split(const string &in) const", asFUNCTION(StringSplit), asCALL_CDECL_OBJLAST); assert(r >= 0);
-		r = engine->RegisterGlobalFunction("string join(const array<string> &in, const string &in)", asFUNCTION(StringJoin), asCALL_CDECL); assert(r >= 0);
-	}
+    if( strstr(asGetLibraryOptions(), "AS_MAX_PORTABILITY") )
+    {
+        r = engine->RegisterObjectMethod("string", "array<string>@ split(const string &in) const", asFUNCTION(StringSplit_Generic), asCALL_GENERIC); assert(r >= 0);
+        r = engine->RegisterGlobalFunction("string join(const array<string> &in, const string &in)", asFUNCTION(StringJoin_Generic), asCALL_GENERIC); assert(r >= 0);
+    }
+    else
+    {
+        r = engine->RegisterObjectMethod("string", "array<string>@ split(const string &in) const", asFUNCTION(StringSplit), asCALL_CDECL_OBJLAST); assert(r >= 0);
+        r = engine->RegisterGlobalFunction("string join(const array<string> &in, const string &in)", asFUNCTION(StringJoin), asCALL_CDECL); assert(r >= 0);
+    }
 }
 
 END_AS_NAMESPACE

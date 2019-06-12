@@ -11,8 +11,8 @@
         #define HGL_LIB_COMPILER_VERSION    OS_TEXT("19.1")      //Visual C++ 2017
     #elif _MSC_VER == 1900
         #define HGL_LIB_COMPILER_VERSION    OS_TEXT("19")        //Visual C++ 2015
-	#else
-		#define HGL_LIB_COMPILER_VERSION    OS_TEXT("Unknow")
+    #else
+        #define HGL_LIB_COMPILER_VERSION    OS_TEXT("Unknow")
     #endif//_MSC_VER
 #endif//_MSC_VER
 

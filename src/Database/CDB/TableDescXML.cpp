@@ -1,6 +1,7 @@
 ﻿#include<hgl/ut/XMLParse.h>
 #include<hgl/db/TableDesc.h>
 #include<hgl/type/Map.h>
+#include<hgl/LogInfo.h>
 
 namespace hgl
 {

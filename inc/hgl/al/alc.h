@@ -33,68 +33,68 @@
 
 namespace openal
 {
-	typedef struct ALCdevice_struct ALCdevice;
-	typedef struct ALCcontext_struct ALCcontext;
-	typedef char ALCboolean;
-	typedef char ALCchar;
-	typedef char ALCbyte;
-	typedef unsigned char ALCubyte;
-	typedef short ALCshort;
-	typedef unsigned short ALCushort;
-	typedef int ALCint;
-	typedef unsigned int ALCuint;
-	typedef int ALCsizei;
-	typedef int ALCenum;
-	typedef float ALCfloat;
-	typedef double ALCdouble;
-	typedef void ALCvoid;
+    typedef struct ALCdevice_struct ALCdevice;
+    typedef struct ALCcontext_struct ALCcontext;
+    typedef char ALCboolean;
+    typedef char ALCchar;
+    typedef char ALCbyte;
+    typedef unsigned char ALCubyte;
+    typedef short ALCshort;
+    typedef unsigned short ALCushort;
+    typedef int ALCint;
+    typedef unsigned int ALCuint;
+    typedef int ALCsizei;
+    typedef int ALCenum;
+    typedef float ALCfloat;
+    typedef double ALCdouble;
+    typedef void ALCvoid;
 }
 
 namespace openal
 {
-	typedef ALCcontext *     (*alcCreateContextPROC)( ALCdevice *device, const ALCint* attrlist );
-	typedef ALCboolean       (*alcMakeContextCurrentPROC)( ALCcontext *context );
-	typedef void             (*alcProcessContextPROC)( ALCcontext *context );
-	typedef void             (*alcSuspendContextPROC)( ALCcontext *context );
-	typedef void             (*alcDestroyContextPROC)( ALCcontext *context );
-	typedef ALCcontext *     (*alcGetCurrentContextPROC)( void );
-	typedef ALCdevice*       (*alcGetContextsDevicePROC)( ALCcontext *context );
-	typedef ALCdevice *      (*alcOpenDevicePROC)( const ALCchar *devicename );
-	typedef ALCboolean       (*alcCloseDevicePROC)( ALCdevice *device );
-	typedef ALCenum          (*alcGetErrorPROC)( ALCdevice *device );
-	typedef ALCboolean       (*alcIsExtensionPresentPROC)( ALCdevice *device, const ALCchar *extname );
-	typedef void  *          (*alcGetProcAddressPROC)( ALCdevice *device, const ALCchar *funcname );
-	typedef ALCenum          (*alcGetEnumValuePROC)( ALCdevice *device, const ALCchar *enumname );
-	typedef const ALCchar *  (*alcGetStringPROC)( ALCdevice *device, ALCenum param );
-	typedef void             (*alcGetIntegervPROC)( ALCdevice *device, ALCenum param, ALCsizei size, ALCint *data );
-	typedef ALCdevice*       (*alcCaptureOpenDevicePROC)( const ALCchar *devicename, ALCuint frequency, ALCenum format, ALCsizei buffersize );
-	typedef ALCboolean       (*alcCaptureCloseDevicePROC)( ALCdevice *device );
-	typedef void             (*alcCaptureStartPROC)( ALCdevice *device );
-	typedef void             (*alcCaptureStopPROC)( ALCdevice *device );
-	typedef void             (*alcCaptureSamplesPROC)( ALCdevice *device, ALCvoid *buffer, ALCsizei samples );
+    typedef ALCcontext *     (*alcCreateContextPROC)( ALCdevice *device, const ALCint* attrlist );
+    typedef ALCboolean       (*alcMakeContextCurrentPROC)( ALCcontext *context );
+    typedef void             (*alcProcessContextPROC)( ALCcontext *context );
+    typedef void             (*alcSuspendContextPROC)( ALCcontext *context );
+    typedef void             (*alcDestroyContextPROC)( ALCcontext *context );
+    typedef ALCcontext *     (*alcGetCurrentContextPROC)( void );
+    typedef ALCdevice*       (*alcGetContextsDevicePROC)( ALCcontext *context );
+    typedef ALCdevice *      (*alcOpenDevicePROC)( const ALCchar *devicename );
+    typedef ALCboolean       (*alcCloseDevicePROC)( ALCdevice *device );
+    typedef ALCenum          (*alcGetErrorPROC)( ALCdevice *device );
+    typedef ALCboolean       (*alcIsExtensionPresentPROC)( ALCdevice *device, const ALCchar *extname );
+    typedef void  *          (*alcGetProcAddressPROC)( ALCdevice *device, const ALCchar *funcname );
+    typedef ALCenum          (*alcGetEnumValuePROC)( ALCdevice *device, const ALCchar *enumname );
+    typedef const ALCchar *  (*alcGetStringPROC)( ALCdevice *device, ALCenum param );
+    typedef void             (*alcGetIntegervPROC)( ALCdevice *device, ALCenum param, ALCsizei size, ALCint *data );
+    typedef ALCdevice*       (*alcCaptureOpenDevicePROC)( const ALCchar *devicename, ALCuint frequency, ALCenum format, ALCsizei buffersize );
+    typedef ALCboolean       (*alcCaptureCloseDevicePROC)( ALCdevice *device );
+    typedef void             (*alcCaptureStartPROC)( ALCdevice *device );
+    typedef void             (*alcCaptureStopPROC)( ALCdevice *device );
+    typedef void             (*alcCaptureSamplesPROC)( ALCdevice *device, ALCvoid *buffer, ALCsizei samples );
 }
 
 namespace openal
 {
-	extern alcCreateContextPROC alcCreateContext;
-	extern alcMakeContextCurrentPROC alcMakeContextCurrent;
-	extern alcProcessContextPROC alcProcessContext;
-	extern alcSuspendContextPROC alcSuspendContext;
-	extern alcDestroyContextPROC alcDestroyContext;
-	extern alcGetCurrentContextPROC alcGetCurrentContext;
-	extern alcGetContextsDevicePROC alcGetContextsDevice;
-	extern alcOpenDevicePROC alcOpenDevice;
-	extern alcCloseDevicePROC alcCloseDevice;
-	extern alcGetErrorPROC alcGetError;
-	extern alcIsExtensionPresentPROC alcIsExtensionPresent;
-	extern alcGetProcAddressPROC alcGetProcAddress;
-	extern alcGetEnumValuePROC alcGetEnumValue;
-	extern alcGetStringPROC alcGetString;
-	extern alcGetIntegervPROC alcGetIntegerv;
-	extern alcCaptureOpenDevicePROC alcCaptureOpenDevice;
-	extern alcCaptureCloseDevicePROC alcCaptureCloseDevice;
-	extern alcCaptureStartPROC alcCaptureStart;
-	extern alcCaptureStopPROC alcCaptureStop;
-	extern alcCaptureSamplesPROC alcCaptureSamples;
+    extern alcCreateContextPROC alcCreateContext;
+    extern alcMakeContextCurrentPROC alcMakeContextCurrent;
+    extern alcProcessContextPROC alcProcessContext;
+    extern alcSuspendContextPROC alcSuspendContext;
+    extern alcDestroyContextPROC alcDestroyContext;
+    extern alcGetCurrentContextPROC alcGetCurrentContext;
+    extern alcGetContextsDevicePROC alcGetContextsDevice;
+    extern alcOpenDevicePROC alcOpenDevice;
+    extern alcCloseDevicePROC alcCloseDevice;
+    extern alcGetErrorPROC alcGetError;
+    extern alcIsExtensionPresentPROC alcIsExtensionPresent;
+    extern alcGetProcAddressPROC alcGetProcAddress;
+    extern alcGetEnumValuePROC alcGetEnumValue;
+    extern alcGetStringPROC alcGetString;
+    extern alcGetIntegervPROC alcGetIntegerv;
+    extern alcCaptureOpenDevicePROC alcCaptureOpenDevice;
+    extern alcCaptureCloseDevicePROC alcCaptureCloseDevice;
+    extern alcCaptureStartPROC alcCaptureStart;
+    extern alcCaptureStopPROC alcCaptureStop;
+    extern alcCaptureSamplesPROC alcCaptureSamples;
 }
 #endif//HGL_ALC_INCLUDE

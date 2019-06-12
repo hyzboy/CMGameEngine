@@ -10,7 +10,7 @@ namespace hgl
     /**
      * 字符串基类
      */
-    template<typename T> class BaseString															///字符串基类
+    template<typename T> class BaseString                                                           ///字符串基类
     {
     protected:
 
@@ -18,7 +18,7 @@ namespace hgl
         using InstClass     =StringInstance<T>;
         using SharedClass   =SharedPtr<InstClass>;
 
-        SharedClass data;																			///<字符串数据实例
+        SharedClass data;                                                                           ///<字符串数据实例
 
     public:
 
@@ -29,7 +29,7 @@ namespace hgl
             Set(str);
         }
 
-		explicit BaseString(const T);
+        explicit BaseString(const T);
 
         static BaseString<T> charOf(const T &ch)
         {
@@ -131,21 +131,21 @@ namespace hgl
             return(data.valid()?data->GetBeginChar():0);
         }
 
-        const T GetEndChar()const																	///<取得当前字符串最后一个字符
+        const T GetEndChar()const                                                                   ///<取得当前字符串最后一个字符
         {
-            // 			if(!this)return(0);
+            //          if(!this)return(0);
             return(data.valid()?data->GetEndChar():0);
         }
 
-        const int Length()const																		///<当前字符串长度
+        const int Length()const                                                                     ///<当前字符串长度
         {
-            // 			if(!this)return(0);
+            //          if(!this)return(0);
             return(data.valid()?data->GetLength():0);
         }
 
-        const bool IsEmpty()const																	///<当前字符串是否空的
+        const bool IsEmpty()const                                                                   ///<当前字符串是否空的
         {
-            // 			if(!this)return(true);
+            //          if(!this)return(true);
             return(data.valid()?data->GetLength()<=0:true);
         }
 
@@ -154,7 +154,7 @@ namespace hgl
          */
         T *c_str()const
         {
-            // 			if(!this)return(nullptr);
+            //          if(!this)return(nullptr);
             return(data.valid()?data->c_str():nullptr);
         }
 
@@ -163,7 +163,7 @@ namespace hgl
          */
         T *strchr(T ch)const
         {
-            // 			if(!this)return(nullptr);
+            //          if(!this)return(nullptr);
             if(!data.valid())return(nullptr);
 
             const int result=FindChar(ch);
@@ -178,7 +178,7 @@ namespace hgl
          */
         T *strrchr(T ch)const
         {
-            // 			if(!this)return(nullptr);
+            //          if(!this)return(nullptr);
             if(!data.valid())return(nullptr);
 
             const int result=FindRightChar(ch);
@@ -196,7 +196,7 @@ namespace hgl
          */
         void Set(const T *str,int len=-1,bool one_instance=false)
         {
-            if(!str||!*str||!len)		//len=-1为自检测,为0不处理
+            if(!str||!*str||!len)       //len=-1为自检测,为0不处理
             {
                 Clear();
                 return;
@@ -287,7 +287,7 @@ namespace hgl
             if(!data.valid())
                 return(false);
 
-            if(data.only())		//自己独有
+            if(data.only())     //自己独有
                 return(true);
 
             data=data->CreateCopy();
@@ -623,25 +623,25 @@ namespace hgl
         }
     public:
 
-        bool ToBool(bool &result)const																///<将本类中的字符串转换成布尔数值并返回
+        bool ToBool(bool &result)const                                                              ///<将本类中的字符串转换成布尔数值并返回
         {
             return data.valid()?stob(data->c_str(),result):false;
         }
 
         template<typename I>
-        bool ToInt(I &result)const																	///<将本类中的字符串转换成整型数值并返回
+        bool ToInt(I &result)const                                                                  ///<将本类中的字符串转换成整型数值并返回
         {
             return data.valid()?etof(data->c_str(),result):false;
         }
 
         template<typename U>
-        bool ToUint(U &result)const																	///<将本类中的字符串转换成整型数值并返回
+        bool ToUint(U &result)const                                                                 ///<将本类中的字符串转换成整型数值并返回
         {
             return data.valid()?etof(data->c_str(),result):false;
         }
 
         template<typename F>
-        bool ToFloat(F &result)const																///<将本类中的字符串转换成浮点数值并返回
+        bool ToFloat(F &result)const                                                                ///<将本类中的字符串转换成浮点数值并返回
         {
             return data.valid()?etof(data->c_str(),result):false;
         }
@@ -650,7 +650,7 @@ namespace hgl
          * 将当前字符串全部转为小写
          * @return 转换后的当前字符串
          */
-        SelfClass &LowerCase()																		    ///<将本类中的字母全部转为小写
+        SelfClass &LowerCase()                                                                          ///<将本类中的字母全部转为小写
         {
             if(data.valid()&&Unlink())
                 tolower(data->c_str());
@@ -662,7 +662,7 @@ namespace hgl
          * 将当前字符串全部转为小写
          * @return 转换后的字符串
          */
-        SelfClass ToLowerCase()const																///<将本类中的字母全部转为小写
+        SelfClass ToLowerCase()const                                                                ///<将本类中的字母全部转为小写
         {
             if(!data.valid())
                 return SelfClass();
@@ -674,7 +674,7 @@ namespace hgl
          * 将当前字符串全部转为大写
          * @return 转换后的当前字符串
          */
-        SelfClass &UpperCase()																		///<将本类中的字母全部转为大写
+        SelfClass &UpperCase()                                                                      ///<将本类中的字母全部转为大写
         {
             if(data.valid()&&Unlink())
                 toupper(data->c_str());
@@ -686,7 +686,7 @@ namespace hgl
          * 将当前字符串全部转换为大写
          * @return 转换后的字符串
          */
-        SelfClass ToUpperCase()const																///<将本类中的字母全部转为大写
+        SelfClass ToUpperCase()const                                                                ///<将本类中的字母全部转为大写
         {
             if(!data.valid())
                 return SelfClass();
@@ -745,18 +745,18 @@ namespace hgl
         BASESTRING_STR_CONV(TrimLeft,trimleft)
         BASESTRING_STR_CONV(TrimRight,trimright)
         BASESTRING_STR_CONV(Trim,trim)
-//         bool TrimLeft(){return StrConv<trimleft>();}													///<删除字符串前端的空格、换行等不可视字符串
-//         bool TrimRight(){return StrConv<trimright>();}												///<删除字符串后端的空格、换行等不可视字符串
-//         bool Trim(){return StrConv<trim>();}															///<删除字符串两端的空格、换行等不可视字符串
+//         bool TrimLeft(){return StrConv<trimleft>();}                                                 ///<删除字符串前端的空格、换行等不可视字符串
+//         bool TrimRight(){return StrConv<trimright>();}                                               ///<删除字符串后端的空格、换行等不可视字符串
+//         bool Trim(){return StrConv<trim>();}                                                         ///<删除字符串两端的空格、换行等不可视字符串
 
 #undef BASESTRING_STR_CONV
 
-        bool TrimLeft(int n){return Delete(0,n);}													///<删除字符串前端的指定个字符
-        bool TrimRight(int n){return Unlink()?data->TrimRight(n):false;}							///<删除字符串后端的指定个字符
+        bool TrimLeft(int n){return Delete(0,n);}                                                   ///<删除字符串前端的指定个字符
+        bool TrimRight(int n){return Unlink()?data->TrimRight(n):false;}                            ///<删除字符串后端的指定个字符
 
-        bool ClipLeft(int n){return Unlink()?data->ClipLeft(n):false;}								///<截取字符串前端的指定个字符,等同TrimRight(lengths-n))
-        bool ClipRight(int n){return Delete(0,Length()-n);}											///<截取字符串后端的指定个字符,等同TrimLeft(length-n)
-        bool Clip(int pos,int num)																	///<从指定位置删除指定个字符
+        bool ClipLeft(int n){return Unlink()?data->ClipLeft(n):false;}                              ///<截取字符串前端的指定个字符,等同TrimRight(lengths-n))
+        bool ClipRight(int n){return Delete(0,Length()-n);}                                         ///<截取字符串后端的指定个字符,等同TrimLeft(length-n)
+        bool Clip(int pos,int num)                                                                  ///<从指定位置删除指定个字符
         {
             if(!Unlink())
                 return(false);
@@ -770,7 +770,7 @@ namespace hgl
          * @param n 字符数量,-1表示全部
          * @return 截取后的字符串
          */
-        SelfClass SubString(int start,int n=-1) const												///<取字符串指定段的字符
+        SelfClass SubString(int start,int n=-1) const                                               ///<取字符串指定段的字符
         {
             if(n==0)
                 return SelfClass();
@@ -790,7 +790,7 @@ namespace hgl
          * @param n 字符数量
          * @return 成否成功
          */
-        bool SubString(SelfClass &sc,int start,int n) const											///<取字符串指定段的字符
+        bool SubString(SelfClass &sc,int start,int n) const                                         ///<取字符串指定段的字符
         {
             if(Length()<start+n)
                 return(false);
@@ -813,10 +813,10 @@ namespace hgl
             return data->Resize(n);
         }
 
-        int StatChar(const T ch)const{return data.valid()?StatChar(data->c_str(),ch):-1;}			///<统计字符串中某个字符的个数
-        int StatLine()const{return data.valid()?StatLine(data->c_str()):-1;}						///<统计字符串行数
+        int StatChar(const T ch)const{return data.valid()?StatChar(data->c_str(),ch):-1;}           ///<统计字符串中某个字符的个数
+        int StatLine()const{return data.valid()?StatLine(data->c_str()):-1;}                        ///<统计字符串行数
 
-        int FindChar(int pos,const T ch)const														///<返回当前字符串中指定字符开始的索引(从左至右)
+        int FindChar(int pos,const T ch)const                                                       ///<返回当前字符串中指定字符开始的索引(从左至右)
         {
             if(!data.valid())
                 return(-1);
@@ -847,9 +847,9 @@ namespace hgl
             return(-1);
         }
 
-        int FindChar(const T ch)const{return FindChar(0,ch);}										///<返回当前字符串中指定字符开始的索引(从左至右)
+        int FindChar(const T ch)const{return FindChar(0,ch);}                                       ///<返回当前字符串中指定字符开始的索引(从左至右)
 
-        int FindRightChar(const T ch)const															///<返回当前字符串中指定字符开始的索引(从右至左)
+        int FindRightChar(const T ch)const                                                          ///<返回当前字符串中指定字符开始的索引(从右至左)
         {
             if(!data.valid())
                 return(-1);
@@ -862,7 +862,7 @@ namespace hgl
             return(-1);
         }
 
-        int FindRightChar(const BaseString<T> &ch)const												///<返回当前字符串中指定字符开始的索引(从右至左)
+        int FindRightChar(const BaseString<T> &ch)const                                             ///<返回当前字符串中指定字符开始的索引(从右至左)
         {
             if(!data.valid())
                 return(-1);
@@ -918,7 +918,7 @@ namespace hgl
          * @return 指定子串所在的偏移
          * @return -1 出错
          */
-        int FindString(const SelfClass &str,int start=0)const										///<返回当前字符串中指定子串开始的索引
+        int FindString(const SelfClass &str,int start=0)const                                       ///<返回当前字符串中指定子串开始的索引
         {
             if(!data.valid())
                 return(-1);
@@ -946,7 +946,7 @@ namespace hgl
          * @return 总计清除的个数
          * @return -1 出错
          */
-        int ClearString(const SelfClass &sub)													    ///<清除当前字符串中指定子串
+        int ClearString(const SelfClass &sub)                                                       ///<清除当前字符串中指定子串
         {
             if(!Unlink())
                 return(-1);
@@ -996,7 +996,7 @@ namespace hgl
          * @return 总计替换个数
          * @return <0 出错
          */
-        int Replace(const T tch,const T sch)														///<替换字符
+        int Replace(const T tch,const T sch)                                                        ///<替换字符
         {
             if(!Unlink())
                 return(-1);
@@ -1004,7 +1004,7 @@ namespace hgl
             return replace(data->c_str(),tch,sch);
         }
 
-        public:	//操作符重载
+        public: //操作符重载
 
             operator const InstClass &()
             {
@@ -1019,16 +1019,16 @@ namespace hgl
 
                     const static T zero_char=0;
 
-                return zero_char;	//this is error
+                return zero_char;   //this is error
             }
 
-            operator 		T *()		{return c_str();}
-            operator const	T *()const	{return c_str();}
+            operator        T *()       {return c_str();}
+            operator const  T *()const  {return c_str();}
 
-            SelfClass &operator =	(const T *str		 ){Set(str);return(*this);}
-            SelfClass &operator	=	(const SelfClass &str){Set(str);return(*this);}
-            SelfClass &operator	+=	(const SelfClass &str){Strcat(str);return(*this);}
-            SelfClass &operator	<<	(const SelfClass &str){return(operator+=(str));}
+            SelfClass &operator =   (const T *str        ){Set(str);return(*this);}
+            SelfClass &operator =   (const SelfClass &str){Set(str);return(*this);}
+            SelfClass &operator +=  (const SelfClass &str){Strcat(str);return(*this);}
+            SelfClass &operator <<  (const SelfClass &str){return(operator+=(str));}
 
             static SelfClass ComboString(const T *str1,int len1,const T *str2,int len2)
             {
@@ -1049,26 +1049,26 @@ namespace hgl
 
                 T *ms=new T[new_len+1];
 
-                memcpy(ms,		str1,len1*sizeof(T));
-                memcpy(ms+len1,	str2,len2*sizeof(T));
+                memcpy(ms,      str1,len1*sizeof(T));
+                memcpy(ms+len1, str2,len2*sizeof(T));
 
                 ms[new_len]=0;
 
                 return(SelfClass(ms,new_len,true));
             }
 
-            SelfClass  operator +	(const SelfClass &str) const
+            SelfClass  operator +   (const SelfClass &str) const
             {
-                if(str.Length()<=0)		//如果对方为空
+                if(str.Length()<=0)     //如果对方为空
                     return(*this);
 
-                if(!data.valid())		//如果我方为空
+                if(!data.valid())       //如果我方为空
                     return(str);
 
                 return ComboString(data->c_str(),data->GetLength(),str.c_str(),str.Length());
             }
 
-            SelfClass	operator +	(const T ch) const
+            SelfClass   operator +  (const T ch) const
             {
                 if(!data.valid())
                     return(SelfClass(ch));
@@ -1076,7 +1076,7 @@ namespace hgl
                 return ComboString(data->c_str(),data->GetLength(),&ch,1);
             }
 
-            SelfClass	operator +	(const T *str) const
+            SelfClass   operator +  (const T *str) const
             {
                 if(!data.valid())
                     return(SelfClass(str));
@@ -1084,20 +1084,20 @@ namespace hgl
                 return ComboString(data->c_str(),data->GetLength(),str,strlen(str));
             }
 
-            #define BASE_STRING_NUMBER_OPERATOR_ADD(type,func)	SelfClass	operator +	(const type &num) const	\
-            {	\
-                SharedPtr<T> vstr=func(new T[8*sizeof(type)],8*sizeof(type),num);	\
+            #define BASE_STRING_NUMBER_OPERATOR_ADD(type,func)  SelfClass   operator +  (const type &num) const \
+            {   \
+                SharedPtr<T> vstr=func(new T[8*sizeof(type)],8*sizeof(type),num);   \
                 \
-                return operator+(vstr->data);	\
+                return operator+(vstr->data);   \
             }
 
-            BASE_STRING_NUMBER_OPERATOR_ADD(int,	itos);
-            BASE_STRING_NUMBER_OPERATOR_ADD(uint,	utos);
-            BASE_STRING_NUMBER_OPERATOR_ADD(int64,	itos);
-            BASE_STRING_NUMBER_OPERATOR_ADD(uint64,	utos);
+            BASE_STRING_NUMBER_OPERATOR_ADD(int,    itos);
+            BASE_STRING_NUMBER_OPERATOR_ADD(uint,   utos);
+            BASE_STRING_NUMBER_OPERATOR_ADD(int64,  itos);
+            BASE_STRING_NUMBER_OPERATOR_ADD(uint64, utos);
 
-            BASE_STRING_NUMBER_OPERATOR_ADD(float,	ftos);
-            BASE_STRING_NUMBER_OPERATOR_ADD(double,	dtos);
+            BASE_STRING_NUMBER_OPERATOR_ADD(float,  ftos);
+            BASE_STRING_NUMBER_OPERATOR_ADD(double, dtos);
 
             #undef BASE_STRING_NUMBER_OPERATOR_ADD
 

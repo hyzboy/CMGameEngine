@@ -46,129 +46,129 @@ BEGIN_AS_NAMESPACE
 
 asCTypeInfo::asCTypeInfo()
 {
-	isTemporary           = false;
-	stackOffset           = 0;
-	isConstant            = false;
-	isVariable            = false;
-	isExplicitHandle      = false;
-	qwordValue            = 0;
-	isLValue              = false;
-	isVoidExpression      = false;
-	isRefToLocal          = false;
+    isTemporary           = false;
+    stackOffset           = 0;
+    isConstant            = false;
+    isVariable            = false;
+    isExplicitHandle      = false;
+    qwordValue            = 0;
+    isLValue              = false;
+    isVoidExpression      = false;
+    isRefToLocal          = false;
 }
 
 void asCTypeInfo::Set(const asCDataType &dt)
 {
-	dataType         = dt;
+    dataType         = dt;
 
-	isTemporary      = false;
-	stackOffset      = 0;
-	isConstant       = false;
-	isVariable       = false;
-	isExplicitHandle = false;
-	qwordValue       = 0;
-	isLValue         = false;
-	isVoidExpression = false;
-	isRefToLocal     = false;
+    isTemporary      = false;
+    stackOffset      = 0;
+    isConstant       = false;
+    isVariable       = false;
+    isExplicitHandle = false;
+    qwordValue       = 0;
+    isLValue         = false;
+    isVoidExpression = false;
+    isRefToLocal     = false;
 }
 
 void asCTypeInfo::SetVariable(const asCDataType &dt, int stackOffset, bool isTemporary)
 {
-	Set(dt);
+    Set(dt);
 
-	this->isVariable  = true;
-	this->isTemporary = isTemporary;
-	this->stackOffset = (short)stackOffset;
+    this->isVariable  = true;
+    this->isTemporary = isTemporary;
+    this->stackOffset = (short)stackOffset;
 }
 
 void asCTypeInfo::SetConstantQW(const asCDataType &dt, asQWORD value)
 {
-	Set(dt);
+    Set(dt);
 
-	isConstant = true;
-	qwordValue = value;
+    isConstant = true;
+    qwordValue = value;
 }
 
 void asCTypeInfo::SetConstantDW(const asCDataType &dt, asDWORD value)
 {
-	Set(dt);
+    Set(dt);
 
-	isConstant = true;
-	dwordValue = value;
+    isConstant = true;
+    dwordValue = value;
 }
 
 void asCTypeInfo::SetConstantB(const asCDataType &dt, asBYTE value)
 {
-	Set(dt);
+    Set(dt);
 
-	isConstant = true;
-	byteValue = value;
+    isConstant = true;
+    byteValue = value;
 }
 
 void asCTypeInfo::SetConstantF(const asCDataType &dt, float value)
 {
-	Set(dt);
+    Set(dt);
 
-	isConstant = true;
-	floatValue = value;
+    isConstant = true;
+    floatValue = value;
 }
 
 void asCTypeInfo::SetConstantD(const asCDataType &dt, double value)
 {
-	Set(dt);
+    Set(dt);
 
-	isConstant = true;
-	doubleValue = value;
+    isConstant = true;
+    doubleValue = value;
 }
 
 void asCTypeInfo::SetUndefinedFuncHandle(asCScriptEngine *engine)
 {
-	// This is used for when the expression evaluates to a 
-	// function, but it is not yet known exactly which. The
-	// owner expression will hold the name of the function
-	// to determine the exact function when the signature is
-	// known.
-	Set(asCDataType::CreateObjectHandle(&engine->functionBehaviours, true));
-	isConstant       = true;
-	isExplicitHandle = false;
-	qwordValue       = 1; // Set to a different value than 0 to differentiate from null constant
-	isLValue         = false;
+    // This is used for when the expression evaluates to a
+    // function, but it is not yet known exactly which. The
+    // owner expression will hold the name of the function
+    // to determine the exact function when the signature is
+    // known.
+    Set(asCDataType::CreateObjectHandle(&engine->functionBehaviours, true));
+    isConstant       = true;
+    isExplicitHandle = false;
+    qwordValue       = 1; // Set to a different value than 0 to differentiate from null constant
+    isLValue         = false;
 }
 
 void asCTypeInfo::SetNullConstant()
 {
-	Set(asCDataType::CreateNullHandle());
-	isConstant       = true;
-	isExplicitHandle = false;
-	qwordValue       = 0;
-	isLValue         = false;
+    Set(asCDataType::CreateNullHandle());
+    isConstant       = true;
+    isExplicitHandle = false;
+    qwordValue       = 0;
+    isLValue         = false;
 }
 
 bool asCTypeInfo::IsNullConstant() const
 {
-	// We can't check the actual object type, because the null constant may have been cast to another type
-	if( isConstant && dataType.IsObjectHandle() && qwordValue == 0 )
-		return true;
+    // We can't check the actual object type, because the null constant may have been cast to another type
+    if( isConstant && dataType.IsObjectHandle() && qwordValue == 0 )
+        return true;
 
-	return false;
+    return false;
 }
 
 void asCTypeInfo::SetVoidExpression()
 {
-	Set(asCDataType::CreatePrimitive(ttVoid, false));
-	isLValue = false;
-	isConstant = false;
-	isVoidExpression = true;
+    Set(asCDataType::CreatePrimitive(ttVoid, false));
+    isLValue = false;
+    isConstant = false;
+    isVoidExpression = true;
 }
 
 bool asCTypeInfo::IsVoidExpression() const
 {
-	return isVoidExpression;
+    return isVoidExpression;
 }
 
 void asCTypeInfo::SetDummy()
 {
-	SetConstantQW(asCDataType::CreatePrimitive(ttInt, true), 0);
+    SetConstantQW(asCDataType::CreatePrimitive(ttInt, true), 0);
 }
 
 
