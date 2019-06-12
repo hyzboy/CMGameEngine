@@ -1,6 +1,7 @@
-#include<hgl/platform/ConsoleSystemInitInfo.h>
+﻿#include<hgl/platform/ConsoleSystemInitInfo.h>
 #include<hgl/proc/ProcMutex.h>
 #include<hgl/io/FileSystem.h>
+#include<hgl/LogInfo.h>
 
 namespace hgl
 {

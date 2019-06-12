@@ -86,7 +86,7 @@ namespace hgl
         }
     };//template <typename T> class List
 
-    template<typename T> T *GetObject(const List<T *> &list,const int index)
+    template<typename T> T *GetListObject(const List<T *> &list,const int index)
     {
         T *obj;
 

@@ -1,4 +1,5 @@
 ﻿#include<hgl/network/IP.h>
+#include<hgl/LogInfo.h>
 
 namespace hgl
 {

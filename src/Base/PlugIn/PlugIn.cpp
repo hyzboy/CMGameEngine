@@ -1,4 +1,4 @@
-#include<hgl/type/List.h>
+﻿#include<hgl/type/List.h>
 #include<hgl/Info.h>
 #include<hgl/io/FileSystem.h>
 #include<hgl/PlugIn.h>
@@ -75,9 +75,13 @@ namespace hgl
     void ClearAllPlugIn()
     {
         int n=plugin_manager_list.GetCount();
+        PIMClearFunc *pcf=plugin_manager_list.GetData();
 
         while(n--)
-            plugin_manager_list[n]();
+        {
+            (*pcf)();
+            ++pcf;
+        }
 
         plugin_manager_list.Clear();
         plugin_module.Clear();

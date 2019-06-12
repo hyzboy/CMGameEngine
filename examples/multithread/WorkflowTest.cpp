@@ -122,7 +122,8 @@ HGL_CONSOLE_MAIN_FUNC()
 {
     sii.info.ProjectCode=OS_TEXT("WorkflowTest");
 
-    app.Init(&sii);
+    if(!app.Init(&sii))
+        return(0xff);
 
 	MyWorkGroup group;	//工作组
 

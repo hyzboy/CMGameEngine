@@ -2,6 +2,7 @@
 #include<hgl/network/WebSocket.h>
 #include<hgl/network/SocketInputStream.h>
 #include<hgl/network/SocketOutputStream.h>
+#include<hgl/LogInfo.h>
 
 namespace hgl
 {

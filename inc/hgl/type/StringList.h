@@ -1,4 +1,4 @@
-#ifndef HGL_STRINGLIST_INCLUDE
+﻿#ifndef HGL_STRINGLIST_INCLUDE
 #define HGL_STRINGLIST_INCLUDE
 
 #include<hgl/type/List.h>

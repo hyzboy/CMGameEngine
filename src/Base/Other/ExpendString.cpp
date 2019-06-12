@@ -1,6 +1,7 @@
 ﻿#include<hgl/type/BaseString.h>
 #include<hgl/type/Map.h>
 #include<hgl/Info.h>
+#include<hgl/LogInfo.h>
 
 namespace hgl
 {
