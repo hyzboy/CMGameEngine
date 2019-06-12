@@ -13,36 +13,36 @@ namespace hgl
         {
             enum DriverType
             {
-                dtNone=0,				///<未知类型
+                dtNone=0,               ///<未知类型
 
-                dtRemovable,			///<可移动设备
-                dtFixed,				///<固定设备
-                dtRemote,				///<远程设备
-                dtCDROM,				///<光盘驱动器
-                dtRamDisk,				///<内存虚拟设备
+                dtRemovable,            ///<可移动设备
+                dtFixed,                ///<固定设备
+                dtRemote,               ///<远程设备
+                dtCDROM,                ///<光盘驱动器
+                dtRamDisk,              ///<内存虚拟设备
 
-                dtEnd					///<结束定义
+                dtEnd                   ///<结束定义
             };
 
-            u16char 			name[HGL_MAX_PATH];			///<卷名称
+            u16char             name[HGL_MAX_PATH];         ///<卷名称
 
-            u16char 			path[HGL_MAX_PATH];			///<卷所对应的路径名(注意:不是所有卷都有对应路径)
+            u16char             path[HGL_MAX_PATH];         ///<卷所对应的路径名(注意:不是所有卷都有对应路径)
 
-            DriverType 			driver_type;		        ///<驱动器类型(注意:不是所有的卷都对应驱动器)
+            DriverType          driver_type;                ///<驱动器类型(注意:不是所有的卷都对应驱动器)
 
-            uint32 				serial;				        ///<卷序列号
+            uint32              serial;                     ///<卷序列号
 
-            u16char				volume_label[HGL_MAX_PATH];	///<卷标名称
+            u16char             volume_label[HGL_MAX_PATH]; ///<卷标名称
 
-            u16char 			file_system[HGL_MAX_PATH];	///<文件系统名称
+            u16char             file_system[HGL_MAX_PATH];  ///<文件系统名称
 
-            uint32 				filename_max_length;        ///<文件名最大长度
+            uint32              filename_max_length;        ///<文件名最大长度
 
-            bool 				unicode;			        ///<文件名支持UNICODE
+            bool                unicode;                    ///<文件名支持UNICODE
 
-            uint64				available_space;	        ///<有效容量
-            uint64				total_space;		        ///<总空量
-            uint64				free_space;			        ///<自由容量
+            uint64              available_space;            ///<有效容量
+            uint64              total_space;                ///<总空量
+            uint64              free_space;                 ///<自由容量
         };//struct VolumeInfo
 
 #if HGL_OS == HGL_OS_Windows
@@ -52,7 +52,7 @@ namespace hgl
          */
         struct VolumeCheckConfig
         {
-            bool removable  =false;         
+            bool removable  =false;
             bool fixed      =false;
             bool remote     =false;
             bool cdrom      =false;
@@ -64,7 +64,7 @@ namespace hgl
             /**
              * 设置为全部检测
              */
-            void SetFullCheck() 
+            void SetFullCheck()
             {
                 memset(this,0xff,sizeof(VolumeCheckConfig));
             }

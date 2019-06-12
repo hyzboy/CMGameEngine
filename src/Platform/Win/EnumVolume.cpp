@@ -1,5 +1,4 @@
 ﻿#include<hgl/filesystem/EnumVolume.h>
-#include<hgl/Str.h>
 #include<hgl/type/BaseString.h>
 #include<hgl/LogInfo.h>
 #include<windows.h>
@@ -34,8 +33,8 @@ namespace hgl
 
                 path_name[length]=0;
 
-                strcpy(vi.name,HGL_MAX_PATH,volume_name);
-                strcpy(vi.path,HGL_MAX_PATH,path_name);
+                hgl::strcpy(vi.name,HGL_MAX_PATH,volume_name);
+                hgl::strcpy(vi.path,HGL_MAX_PATH,path_name);
 
                 UINT type=GetDriveTypeW(path_name);
 
