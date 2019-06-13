@@ -24,7 +24,7 @@ HGL_CONSOLE_MAIN(sii,app,args)
     UTF8String hostname;
 
     os_char ip_ver=args[1].GetBeginChar();
-    
+
     if(ip_ver=='4')ip=new network::IPv4Address;else
     if(ip_ver=='6')ip=new network::IPv6Address;else
         return(-1);

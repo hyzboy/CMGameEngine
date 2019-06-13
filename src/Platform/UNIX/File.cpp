@@ -145,7 +145,7 @@ namespace hgl
             memset(&buf,0,sizeof(struct_stat64));
 
             if(hgl_lstat64(name,&buf)==-1)
-                return(false);				//错误，有可能是不能访问
+                return(false);              //错误，有可能是不能访问
 
             return S_ISDIR(buf.st_mode);
         }
@@ -160,7 +160,7 @@ namespace hgl
             memset(&buf,0,sizeof(struct_stat64));
 
             if(hgl_lstat64(name,&buf)==-1)
-                return(false);				//错误，有可能是不能访问
+                return(false);              //错误，有可能是不能访问
 
             return S_ISLNK(buf.st_mode);
         }

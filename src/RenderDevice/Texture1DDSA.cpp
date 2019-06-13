@@ -12,11 +12,11 @@ namespace hgl
             using Texture1D::Texture1D;
 
             bool _SetImage(Texture1DData *tex)
-            {    
-				glTextureStorage1D(texture_id, 1, tex->video_format, tex->length);            
-				
+            {
+                glTextureStorage1D(texture_id, 1, tex->video_format, tex->length);
+
                 if(!tex->bitmap)
-					return(true);
+                    return(true);
 
                 if(tex->source_format->compress)      //原本就是压缩格式
                     glCompressedTextureSubImage1D(texture_id, 0, 0, tex->length, tex->video_format, tex->bitmap_bytes, tex->bitmap);
@@ -61,7 +61,7 @@ namespace hgl
 
                 return(bytes);
             }
-            
+
             bool _ChangeImage(uint s, uint l, void *data, uint bytes, TSF sf)
             {
                 const TextureFormat *sfmt = TextureFormatInfoList + sf;       //原始数据格式

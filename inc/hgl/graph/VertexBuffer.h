@@ -21,10 +21,10 @@ namespace hgl
         {
         protected:
 
-            T *mem_type;																				///<符合当前类型的地址
-            T *access;																					///<当前访问地址
+            T *mem_type;                                                                                ///<符合当前类型的地址
+            T *access;                                                                                  ///<当前访问地址
 
-            T *start;																					///<访问起始地址
+            T *start;                                                                                   ///<访问起始地址
 
         public:
 
@@ -84,7 +84,7 @@ namespace hgl
             void *Begin(int offset=0)
             {
                 if(access)
-                {                    
+                {
                     LOG_HINT(OS_TEXT("VertexBuffer::Begin() access!=0,offset:")+OSString(offset));
                     return(nullptr);
                 }
@@ -102,7 +102,7 @@ namespace hgl
             */
             void End()
             {
-                ChangeVertexBuffer(	((char *)start )-((char *)mem_type),
+                ChangeVertexBuffer( ((char *)start )-((char *)mem_type),
                                     ((char *)access)-((char *)start),
                                     start);
 
@@ -141,7 +141,7 @@ namespace hgl
             using VertexBuffer<T,1>::VertexBuffer;
             virtual ~VertexBuffer1()=default;
 
-            uint	GetDataType()const;
+            uint    GetDataType()const;
 
             bool Write(const T v1)
             {
@@ -184,7 +184,7 @@ namespace hgl
             using VertexBuffer<T,2>::VertexBuffer;
             virtual ~VertexBuffer2()=default;
 
-            uint	GetDataType()const;
+            uint    GetDataType()const;
 
             bool Write(const T v1,const T v2)
             {
@@ -348,10 +348,10 @@ namespace hgl
             */
             bool WriteRect(const T left,const T top,const T width,const T height)
             {
-                const Vector2f lt(left		,top);
+                const Vector2f lt(left      ,top);
                 const Vector2f rt(left+width,top);
                 const Vector2f rb(left+width,top+height);
-                const Vector2f lb(left		,top+height);
+                const Vector2f lb(left      ,top+height);
 
                 return WriteQuad(lt,rt,rb,lb);
             }
@@ -367,7 +367,7 @@ namespace hgl
             using VertexBuffer<T,3>::VertexBuffer;
             virtual ~VertexBuffer3()=default;
 
-            uint	GetDataType()const;
+            uint    GetDataType()const;
 
             /**
             * 计算绑定盒
@@ -614,9 +614,9 @@ namespace hgl
             using VertexBuffer<T,4>::VertexBuffer;
             virtual ~VertexBuffer4()=default;
 
-            uint	GetDataType()const;
+            uint    GetDataType()const;
 
-			/**
+            /**
             * 计算绑定盒
             * @param min_vertex 最小值坐标
             * @param max_vertex 最大值坐标
@@ -837,12 +837,12 @@ namespace hgl
                 return(true);
             }
 
-			/**
-			* 写入2D矩形,注:这个函数会依次写入Left,Top,Width,Height四个值
-			*/
-			template<typename V>
-			bool WriteRectangle2D(const RectScope2<V> &rect)
-			{
+            /**
+            * 写入2D矩形,注:这个函数会依次写入Left,Top,Width,Height四个值
+            */
+            template<typename V>
+            bool WriteRectangle2D(const RectScope2<V> &rect)
+            {
                 if(!this->access||this->access+4>this->mem_end)
                 {
                     LOG_HINT(OS_TEXT("VertexBuffer4::WriteRectangle2D(RectScope2 ) out"));
@@ -854,71 +854,71 @@ namespace hgl
                 *this->access++=rect.Width;
                 *this->access++=rect.Height;
 
-				return(true);
-			}
+                return(true);
+            }
 
-			/**
-			* 写入2D矩形,注:这个函数会依次写入Left,Top,Width,Height四个值
-			*/
-			template<typename V>
-			bool WriteRectangle2D(const RectScope2<V> *rect,const int count)
-			{
+            /**
+            * 写入2D矩形,注:这个函数会依次写入Left,Top,Width,Height四个值
+            */
+            template<typename V>
+            bool WriteRectangle2D(const RectScope2<V> *rect,const int count)
+            {
                 if(!this->access||this->access+(4*count)>this->mem_end)
                 {
                     LOG_HINT(OS_TEXT("VertexBuffer4::WriteRectangle2D(RectScope2 *,count) out"));
                     return(false);
                 }
 
-				for(int i=0;i<count;i++)
-				{
-					*this->access++=rect->Left;
-					*this->access++=rect->Top;
-					*this->access++=rect->Width;
-					*this->access++=rect->Height;
+                for(int i=0;i<count;i++)
+                {
+                    *this->access++=rect->Left;
+                    *this->access++=rect->Top;
+                    *this->access++=rect->Width;
+                    *this->access++=rect->Height;
 
-					++rect;
-				}
+                    ++rect;
+                }
 
-				return(true);
-			}
+                return(true);
+            }
         };//class VertexBuffer4
 
         //缓冲区具体数据类型定义
- 		typedef VertexBuffer1<int8	>	VB1i8	,VB1b;	template<> inline uint VertexBuffer1<int8	>::GetDataType()const{return HGL_BYTE;			}
-        typedef VertexBuffer1<int16	>	VB1i16	,VB1s;	template<> inline uint VertexBuffer1<int16	>::GetDataType()const{return HGL_SHORT;			}
-        typedef VertexBuffer1<int32	>	VB1i32	,VB1i;	template<> inline uint VertexBuffer1<int32	>::GetDataType()const{return HGL_INT;			}
- 		typedef VertexBuffer1<uint8	>	VB1u8	,VB1ub;	template<> inline uint VertexBuffer1<uint8	>::GetDataType()const{return HGL_UNSIGNED_BYTE;	}
-        typedef VertexBuffer1<uint16>	VB1u16	,VB1us;	template<> inline uint VertexBuffer1<uint16	>::GetDataType()const{return HGL_UNSIGNED_SHORT;}
-        typedef VertexBuffer1<uint32>	VB1u32	,VB1ui;	template<> inline uint VertexBuffer1<uint32	>::GetDataType()const{return HGL_UNSIGNED_INT;	}
-        typedef VertexBuffer1<float	>	VB1f;			template<> inline uint VertexBuffer1<float	>::GetDataType()const{return HGL_FLOAT;			}
-        typedef VertexBuffer1<double>	VB1d;			template<> inline uint VertexBuffer1<double	>::GetDataType()const{return HGL_DOUBLE;		}
+        typedef VertexBuffer1<int8  >   VB1i8   ,VB1b;  template<> inline uint VertexBuffer1<int8   >::GetDataType()const{return HGL_BYTE;          }
+        typedef VertexBuffer1<int16 >   VB1i16  ,VB1s;  template<> inline uint VertexBuffer1<int16  >::GetDataType()const{return HGL_SHORT;         }
+        typedef VertexBuffer1<int32 >   VB1i32  ,VB1i;  template<> inline uint VertexBuffer1<int32  >::GetDataType()const{return HGL_INT;           }
+        typedef VertexBuffer1<uint8 >   VB1u8   ,VB1ub; template<> inline uint VertexBuffer1<uint8  >::GetDataType()const{return HGL_UNSIGNED_BYTE; }
+        typedef VertexBuffer1<uint16>   VB1u16  ,VB1us; template<> inline uint VertexBuffer1<uint16 >::GetDataType()const{return HGL_UNSIGNED_SHORT;}
+        typedef VertexBuffer1<uint32>   VB1u32  ,VB1ui; template<> inline uint VertexBuffer1<uint32 >::GetDataType()const{return HGL_UNSIGNED_INT;  }
+        typedef VertexBuffer1<float >   VB1f;           template<> inline uint VertexBuffer1<float  >::GetDataType()const{return HGL_FLOAT;         }
+        typedef VertexBuffer1<double>   VB1d;           template<> inline uint VertexBuffer1<double >::GetDataType()const{return HGL_DOUBLE;        }
 
-		typedef VertexBuffer2<int8	>	VB2i8	,VB2b;	template<> inline uint VertexBuffer2<int8	>::GetDataType()const{return HGL_BYTE;			}
-        typedef VertexBuffer2<int16	>	VB2i16	,VB2s;	template<> inline uint VertexBuffer2<int16	>::GetDataType()const{return HGL_SHORT;			}
-        typedef VertexBuffer2<int32	>	VB2i32	,VB2i;	template<> inline uint VertexBuffer2<int32	>::GetDataType()const{return HGL_INT;			}
-		typedef VertexBuffer2<uint8	>	VB2u8	,VB2ub;	template<> inline uint VertexBuffer2<uint8	>::GetDataType()const{return HGL_UNSIGNED_BYTE;	}
-        typedef VertexBuffer2<uint16>	VB2u16	,VB2us;	template<> inline uint VertexBuffer2<uint16	>::GetDataType()const{return HGL_UNSIGNED_SHORT;}
-        typedef VertexBuffer2<uint32>	VB2u32	,VB2ui;	template<> inline uint VertexBuffer2<uint32	>::GetDataType()const{return HGL_UNSIGNED_INT;	}
-        typedef VertexBuffer2<float	>	VB2f;			template<> inline uint VertexBuffer2<float	>::GetDataType()const{return HGL_FLOAT;			}
-        typedef VertexBuffer2<double>	VB2d;			template<> inline uint VertexBuffer2<double	>::GetDataType()const{return HGL_DOUBLE;		}
+        typedef VertexBuffer2<int8  >   VB2i8   ,VB2b;  template<> inline uint VertexBuffer2<int8   >::GetDataType()const{return HGL_BYTE;          }
+        typedef VertexBuffer2<int16 >   VB2i16  ,VB2s;  template<> inline uint VertexBuffer2<int16  >::GetDataType()const{return HGL_SHORT;         }
+        typedef VertexBuffer2<int32 >   VB2i32  ,VB2i;  template<> inline uint VertexBuffer2<int32  >::GetDataType()const{return HGL_INT;           }
+        typedef VertexBuffer2<uint8 >   VB2u8   ,VB2ub; template<> inline uint VertexBuffer2<uint8  >::GetDataType()const{return HGL_UNSIGNED_BYTE; }
+        typedef VertexBuffer2<uint16>   VB2u16  ,VB2us; template<> inline uint VertexBuffer2<uint16 >::GetDataType()const{return HGL_UNSIGNED_SHORT;}
+        typedef VertexBuffer2<uint32>   VB2u32  ,VB2ui; template<> inline uint VertexBuffer2<uint32 >::GetDataType()const{return HGL_UNSIGNED_INT;  }
+        typedef VertexBuffer2<float >   VB2f;           template<> inline uint VertexBuffer2<float  >::GetDataType()const{return HGL_FLOAT;         }
+        typedef VertexBuffer2<double>   VB2d;           template<> inline uint VertexBuffer2<double >::GetDataType()const{return HGL_DOUBLE;        }
 
-		typedef VertexBuffer3<int8	>	VB3i8	,VB3b;	template<> inline uint VertexBuffer3<int8	>::GetDataType()const{return HGL_BYTE;			}
-        typedef VertexBuffer3<int16	>	VB3i16	,VB3s;	template<> inline uint VertexBuffer3<int16	>::GetDataType()const{return HGL_SHORT;			}
-        typedef VertexBuffer3<int32	>	VB3i32	,VB3i;	template<> inline uint VertexBuffer3<int32	>::GetDataType()const{return HGL_INT;			}
-		typedef VertexBuffer3<uint8	>	VB3u8	,VB3ub;	template<> inline uint VertexBuffer3<uint8	>::GetDataType()const{return HGL_UNSIGNED_BYTE;	}
-        typedef VertexBuffer3<uint16>	VB3u16	,VB3us;	template<> inline uint VertexBuffer3<uint16	>::GetDataType()const{return HGL_UNSIGNED_SHORT;}
-        typedef VertexBuffer3<uint32>	VB3u32	,VB3ui;	template<> inline uint VertexBuffer3<uint32	>::GetDataType()const{return HGL_UNSIGNED_INT;	}
-        typedef VertexBuffer3<float	>	VB3f;			template<> inline uint VertexBuffer3<float	>::GetDataType()const{return HGL_FLOAT;			}
-        typedef VertexBuffer3<double>	VB3d;			template<> inline uint VertexBuffer3<double	>::GetDataType()const{return HGL_DOUBLE;		}
+        typedef VertexBuffer3<int8  >   VB3i8   ,VB3b;  template<> inline uint VertexBuffer3<int8   >::GetDataType()const{return HGL_BYTE;          }
+        typedef VertexBuffer3<int16 >   VB3i16  ,VB3s;  template<> inline uint VertexBuffer3<int16  >::GetDataType()const{return HGL_SHORT;         }
+        typedef VertexBuffer3<int32 >   VB3i32  ,VB3i;  template<> inline uint VertexBuffer3<int32  >::GetDataType()const{return HGL_INT;           }
+        typedef VertexBuffer3<uint8 >   VB3u8   ,VB3ub; template<> inline uint VertexBuffer3<uint8  >::GetDataType()const{return HGL_UNSIGNED_BYTE; }
+        typedef VertexBuffer3<uint16>   VB3u16  ,VB3us; template<> inline uint VertexBuffer3<uint16 >::GetDataType()const{return HGL_UNSIGNED_SHORT;}
+        typedef VertexBuffer3<uint32>   VB3u32  ,VB3ui; template<> inline uint VertexBuffer3<uint32 >::GetDataType()const{return HGL_UNSIGNED_INT;  }
+        typedef VertexBuffer3<float >   VB3f;           template<> inline uint VertexBuffer3<float  >::GetDataType()const{return HGL_FLOAT;         }
+        typedef VertexBuffer3<double>   VB3d;           template<> inline uint VertexBuffer3<double >::GetDataType()const{return HGL_DOUBLE;        }
 
-	    typedef VertexBuffer4<int8	>	VB4i8	,VB4b;	template<> inline uint VertexBuffer4<int8	>::GetDataType()const{return HGL_BYTE;			}
-        typedef VertexBuffer4<int16	>	VB4i16	,VB4s;	template<> inline uint VertexBuffer4<int16	>::GetDataType()const{return HGL_SHORT;			}
-        typedef VertexBuffer4<int32	>	VB4i32	,VB4i;	template<> inline uint VertexBuffer4<int32	>::GetDataType()const{return HGL_INT;			}
-		typedef VertexBuffer4<uint8	>	VB4u8	,VB4ub;	template<> inline uint VertexBuffer4<uint8	>::GetDataType()const{return HGL_UNSIGNED_BYTE;	}
-        typedef VertexBuffer4<uint16>	VB4u16	,VB4us;	template<> inline uint VertexBuffer4<uint16	>::GetDataType()const{return HGL_UNSIGNED_SHORT;}
-        typedef VertexBuffer4<uint32>	VB4u32	,VB4ui;	template<> inline uint VertexBuffer4<uint32	>::GetDataType()const{return HGL_UNSIGNED_INT;	}
-        typedef VertexBuffer4<float	>	VB4f;			template<> inline uint VertexBuffer4<float	>::GetDataType()const{return HGL_FLOAT;			}
-        typedef VertexBuffer4<double>	VB4d;			template<> inline uint VertexBuffer4<double	>::GetDataType()const{return HGL_DOUBLE;		}
+        typedef VertexBuffer4<int8  >   VB4i8   ,VB4b;  template<> inline uint VertexBuffer4<int8   >::GetDataType()const{return HGL_BYTE;          }
+        typedef VertexBuffer4<int16 >   VB4i16  ,VB4s;  template<> inline uint VertexBuffer4<int16  >::GetDataType()const{return HGL_SHORT;         }
+        typedef VertexBuffer4<int32 >   VB4i32  ,VB4i;  template<> inline uint VertexBuffer4<int32  >::GetDataType()const{return HGL_INT;           }
+        typedef VertexBuffer4<uint8 >   VB4u8   ,VB4ub; template<> inline uint VertexBuffer4<uint8  >::GetDataType()const{return HGL_UNSIGNED_BYTE; }
+        typedef VertexBuffer4<uint16>   VB4u16  ,VB4us; template<> inline uint VertexBuffer4<uint16 >::GetDataType()const{return HGL_UNSIGNED_SHORT;}
+        typedef VertexBuffer4<uint32>   VB4u32  ,VB4ui; template<> inline uint VertexBuffer4<uint32 >::GetDataType()const{return HGL_UNSIGNED_INT;  }
+        typedef VertexBuffer4<float >   VB4f;           template<> inline uint VertexBuffer4<float  >::GetDataType()const{return HGL_FLOAT;         }
+        typedef VertexBuffer4<double>   VB4d;           template<> inline uint VertexBuffer4<double >::GetDataType()const{return HGL_DOUBLE;        }
     }//namespace graph
 }//namespace hgl
 #endif//HGL_VERTEX_BUFFER_OBJECT_INCLUDE

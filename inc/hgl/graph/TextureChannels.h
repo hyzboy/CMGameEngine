@@ -10,24 +10,24 @@ namespace hgl
         */
         enum MaterialTextureChannels
         {
-			mtcNone=-1,
+            mtcNone=-1,
 
             mtcDiffuse=0,               ///<漫反射
             mtcAmbient,                 ///<环境光
             mtcSpecular,                ///<镜面光
-			mtcEmissive,				///<
-			mtcShininess,				///<
-			mtcReflection,				///<
+            mtcEmissive,                ///<
+            mtcShininess,               ///<
+            mtcReflection,              ///<
             mtcNormal,                  ///<法线
             mtcTangent,                 ///<切线
             mtcBiNormal,                ///<副法线
             mtcBiTangent=mtcBiNormal,   ///<副切线
             mtcLight,                   ///<光照贴图
             mtcAlpha,                   ///<透明度贴图
-			mtcDepth,
+            mtcDepth,
             mtcShadow,                  ///<阴影
 
-			mtcDisplacement,			///<置换贴图
+            mtcDisplacement,            ///<置换贴图
 
             mtcPalette,                 ///<调色板
 
@@ -38,14 +38,14 @@ namespace hgl
             mtcNormalHeight,            ///<法线+高度
             mtcNormalTangent,           ///<法线+切线
 
-			mtcGBuffer,					///<延迟渲染用GBuffer
+            mtcGBuffer,                 ///<延迟渲染用GBuffer
 
             mtcMax                      ///<最大贴图通道
         };//enum MaterialTextureChannels
 
-		const int MATERIAL_TEXTURE_CHANNEL_NAME_MAX_SIZE=32;
+        const int MATERIAL_TEXTURE_CHANNEL_NAME_MAX_SIZE=32;
 
-		using MATERIAL_TEXTURE_CHANNEL_NAME=char[MATERIAL_TEXTURE_CHANNEL_NAME_MAX_SIZE];
+        using MATERIAL_TEXTURE_CHANNEL_NAME=char[MATERIAL_TEXTURE_CHANNEL_NAME_MAX_SIZE];
 
         bool GetMaterialTextureName(MATERIAL_TEXTURE_CHANNEL_NAME &,int);  ///<获取贴图通道名称
     }//namespace graph

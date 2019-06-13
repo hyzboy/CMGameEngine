@@ -9,14 +9,14 @@ namespace hgl
     /**
      * 字符串实例类
      */
-    template<typename T> class StringInstance														///字符串实例类
+    template<typename T> class StringInstance                                                       ///字符串实例类
     {
     protected:
 
         typedef StringInstance<T> SelfClass;
 
-        int length;																					///<字符串长度
-        int malloc_length;																			///<空间实际分配长度
+        int length;                                                                                 ///<字符串长度
+        int malloc_length;                                                                          ///<空间实际分配长度
 
         T *buffer;
 
@@ -50,7 +50,7 @@ namespace hgl
             {
                 length=hgl::strlen(str,len);
 
-                while(length&&!str[length-1])				//清除后面的0
+                while(length&&!str[length-1])               //清除后面的0
                     length--;
             }
 
@@ -64,7 +64,7 @@ namespace hgl
                 return;
             }
 
-            if(one_instance&&str[length]==0)							//如果最后不是0，则需要重新分配内存创建带0结尾的字串
+            if(one_instance&&str[length]==0)                            //如果最后不是0，则需要重新分配内存创建带0结尾的字串
             {
                 malloc_length=len;
                 buffer=(T *)str;
@@ -103,15 +103,15 @@ namespace hgl
 
         virtual ~StringInstance()
         {
-            delete[] buffer;		//delete[] NULL; don't is error
+            delete[] buffer;        //delete[] NULL; don't is error
         }
 
-        const bool isEmpty()const																	///<是否为空
+        const bool isEmpty()const                                                                   ///<是否为空
         {
             return !buffer;
         }
 
-        SelfClass *CreateCopy()																		///<创建一份自身的拷贝
+        SelfClass *CreateCopy()                                                                     ///<创建一份自身的拷贝
         {
             if(!buffer)return(0);
 
@@ -136,12 +136,12 @@ namespace hgl
             return result;
         }
 
-        T * c_str()																					///<取得字符串C指针
+        T * c_str()                                                                                 ///<取得字符串C指针
         {
             return buffer;
         }
 
-        const int GetLength()const																	///<取得字符串长度
+        const int GetLength()const                                                                  ///<取得字符串长度
         {
             return length;
         }
@@ -324,7 +324,7 @@ namespace hgl
             return hgl::stricmp(buffer,length,str,num);
         }
 
-        bool Insert(int pos,const T *istr,int len)													///<插入一个字符串
+        bool Insert(int pos,const T *istr,int len)                                                  ///<插入一个字符串
         {
             if(!istr||!*istr)
                 return(false);
@@ -370,16 +370,16 @@ namespace hgl
             return(true);
         }
 
-        bool Insert(int pos,const T &ch			){return Insert(pos,	&ch,		1				);}
-        bool Insert(int pos,const T *str		){return Insert(pos,	str,		hgl::strlen(str));}
-        bool Insert(int pos,const SelfClass &str){return Insert(pos,	str.c_str(),str.GetLength()	);}
+        bool Insert(int pos,const T &ch         ){return Insert(pos,    &ch,        1               );}
+        bool Insert(int pos,const T *str        ){return Insert(pos,    str,        hgl::strlen(str));}
+        bool Insert(int pos,const SelfClass &str){return Insert(pos,    str.c_str(),str.GetLength() );}
 
-        bool Append(const T &ch					){return Insert(length,	&ch,		1				);}
-        bool Append(const T *str,const int len	){return Insert(length,	str,		len				);}
-        bool Append(const T *str				){return Insert(length,	str,		hgl::strlen(str));}
-        bool Append(const SelfClass &str		){return Insert(length,	str.c_str(),str.GetLength()	);}
+        bool Append(const T &ch                 ){return Insert(length, &ch,        1               );}
+        bool Append(const T *str,const int len  ){return Insert(length, str,        len             );}
+        bool Append(const T *str                ){return Insert(length, str,        hgl::strlen(str));}
+        bool Append(const SelfClass &str        ){return Insert(length, str.c_str(),str.GetLength() );}
 
-        bool Delete(int pos,int num)																///<删除指定字符
+        bool Delete(int pos,int num)                                                                ///<删除指定字符
         {
             if(pos<0||pos>=length||num<0)return(false);
 

@@ -11,12 +11,12 @@ int ParseField(UTF16StringList *sl,const UTF16String &str,const u16char ch,bool 
 
 inline int ParseFieldName(UTF16StringList *sl,const UTF16String &str)
 {
-	return ParseField(sl,str,u'\t',true);
+    return ParseField(sl,str,u'\t',true);
 }
 
 inline int ParseFieldData(UTF16StringList *sl,const UTF16String &str)
 {
-	return ParseField(sl,str,u'\t',false);
+    return ParseField(sl,str,u'\t',false);
 }
 
 bool WriteFieldData(const db::FieldType &ct,void *buf,UTF16String &str);

@@ -4,31 +4,31 @@
 #include<hgl/platform/Platform.h>
 namespace hgl
 {
-	namespace io
-	{
-		class DataInputStream;
-		class DataOutputStream;
+    namespace io
+    {
+        class DataInputStream;
+        class DataOutputStream;
 
-		template<typename T> struct io_type
-		{
-			T value;
+        template<typename T> struct io_type
+        {
+            T value;
 
-		public:
+        public:
 
-			io_type()=default;
-			io_type(const T &v){value=v;}
+            io_type()=default;
+            io_type(const T &v){value=v;}
 
-			bool Read(DataInputStream *);
-			bool Write(DataOutputStream *)const;
+            bool Read(DataInputStream *);
+            bool Write(DataOutputStream *)const;
 
-			void operator = (const T &v)
-			{
-				value=v;
-			}
+            void operator = (const T &v)
+            {
+                value=v;
+            }
 
-			operator T (){return value;}
-			operator const T ()const{return value;}
-		};//template<typename T> struct io_type
-	}//namespace io
+            operator T (){return value;}
+            operator const T ()const{return value;}
+        };//template<typename T> struct io_type
+    }//namespace io
 }//namespace hgl
 #endif//HGL_IO_TYPE_INCLUDE

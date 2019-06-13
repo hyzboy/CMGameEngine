@@ -57,12 +57,12 @@
 extern void mdct_backward(int n, DATA_TYPE *in);
 extern void mdct_shift_right(int n, DATA_TYPE *in, DATA_TYPE *right);
 extern void mdct_unroll_lap(int n0,int n1,
-			    int lW,int W,
-			    DATA_TYPE *in,DATA_TYPE *right,
-			    LOOKUP_T *w0,LOOKUP_T *w1,
-			    ogg_int16_t *out,
-			    int step,
-			    int start,int end /* samples, this frame */);
+                int lW,int W,
+                DATA_TYPE *in,DATA_TYPE *right,
+                LOOKUP_T *w0,LOOKUP_T *w1,
+                ogg_int16_t *out,
+                int step,
+                int start,int end /* samples, this frame */);
 
 #endif
 

@@ -192,7 +192,7 @@ namespace filesystem
         memset(&buf,0,sizeof(struct stat64));
 
         if(lstat64(name.c_str(),&buf)==-1)
-            return(false);				//错误，有可能是不能访问
+            return(false);              //错误，有可能是不能访问
 
         return S_ISDIR(buf.st_mode);
     }

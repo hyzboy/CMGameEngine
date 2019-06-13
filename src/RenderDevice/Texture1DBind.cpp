@@ -4,8 +4,8 @@
 
 namespace hgl
 {
-	namespace graph
-	{
+    namespace graph
+    {
         class TextureBind1D:public Texture1D
         {
         public:

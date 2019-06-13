@@ -4,18 +4,18 @@
 
 int main(void)
 {
-	int uid=getuid();
+    int uid=getuid();
 
-	struct passwd *pwd=getpwuid(uid);
+    struct passwd *pwd=getpwuid(uid);
 
-	printf("uid=%d\n",uid);
-	printf("name=%s\n",pwd->pw_name);
-	printf("pass=%s\n",pwd->pw_passwd);
+    printf("uid=%d\n",uid);
+    printf("name=%s\n",pwd->pw_name);
+    printf("pass=%s\n",pwd->pw_passwd);
 
-	printf("dir=%s\n",pwd->pw_dir);
+    printf("dir=%s\n",pwd->pw_dir);
 
-	free(pwd);
+    free(pwd);
 
-	return(0);
+    return(0);
 }
 

@@ -40,38 +40,38 @@ namespace hgl
 
             vbtAmbient,                                 ///<环境光颜色
             vbtSpecular,                                ///<镜面光颜色
-			vbtEmissive,
-			vbtShininess,
-			vbtReflection,
+            vbtEmissive,
+            vbtShininess,
+            vbtReflection,
 
             vbtDiffuseTexCoord,                         ///<漫反射纹理坐标
             vbtAmbientTexCoord,                         ///<环境光颜色纹理坐标
             vbtSpecularTexCoord,                        ///<镜面光颜色纹理坐标
-			vbtEmissiveTexCoord,
-			vbtShininessTexCoord,
-			vbtReflectionTexCoord,
+            vbtEmissiveTexCoord,
+            vbtShininessTexCoord,
+            vbtReflectionTexCoord,
             vbtNormalTexCoord,                          ///<法线纹理坐标
             vbtTangentTexCoord,                         ///<切线纹理坐标
             vbtBiNormalTexCoord,                        ///<副法线纹理坐标
             vbtBiTangentTexCoord=vbtBiNormalTexCoord,   ///<副切线纹理坐标
-			vbtLightTexCoord,							///<光照纹理坐标
+            vbtLightTexCoord,                           ///<光照纹理坐标
             vbtAlphaTexCoord,                           ///<透明度纹理坐标
-			vbtDepthTexCoord,							///<深度纹理坐标
-			vbtShadowTexCoord,							///<阴影纹理坐标
-			vbtDisplacementTexCoord,					///<
+            vbtDepthTexCoord,                           ///<深度纹理坐标
+            vbtShadowTexCoord,                          ///<阴影纹理坐标
+            vbtDisplacementTexCoord,                    ///<
 
-			vbtGBufferTexCoord,		                    ///<延迟渲染最终混合用纹理坐标
+            vbtGBufferTexCoord,                         ///<延迟渲染最终混合用纹理坐标
 
             vbtEnd
         };//enum VertexBufferType
 
         extern int HGL_MAX_VERTEX_ATTRIBS;                  ///<最大顶点属性数量
 
-		const int VERTEX_BUFFER_NAME_MAX_SIZE=32;
+        const int VERTEX_BUFFER_NAME_MAX_SIZE=32;
 
-		using VERTEX_BUFFER_NAME=char[VERTEX_BUFFER_NAME_MAX_SIZE];
+        using VERTEX_BUFFER_NAME=char[VERTEX_BUFFER_NAME_MAX_SIZE];
 
-		bool GetVertexBufferName(VERTEX_BUFFER_NAME &,int);		///<获取顶点缓冲区类型名称字串
+        bool GetVertexBufferName(VERTEX_BUFFER_NAME &,int);     ///<获取顶点缓冲区类型名称字串
     }//namespace graph
 }//namespace hgl
 #endif//HGL_GRAPH_VERTEX_BUFFER_TYPE_INCLUDE

@@ -5,9 +5,9 @@
 
 extern "C"
 {
-	struct XML_ParserStruct;
+    struct XML_ParserStruct;
 
-	using XML_Parser=struct XML_ParserStruct *;
+    using XML_Parser=struct XML_ParserStruct *;
 }
 
 /**
@@ -25,7 +25,7 @@ public:
 
     XMLParse();
     ~XMLParse();
-    
+
     virtual void StartElement(const char *element_name,const char **atts)=0;
     virtual void CharData(const char *str,int str_length){};
     virtual void EndElement(const char *element_name){};
@@ -38,19 +38,19 @@ public:
 
 bool XMLParseFile(XMLParse *xml,const std::wstring &filename);
 
-#define XML_START_PARSE(name)	while(*name)	\
-								{	\
-									const char *flag=*name;++name;	\
-									const char *info=*name;++name;
+#define XML_START_PARSE(name)   while(*name)    \
+                                {   \
+                                    const char *flag=*name;++name;  \
+                                    const char *info=*name;++name;
 
-#define XML_END_PARSE				std::cout<<__FILE__<<":"<<__LINE__<<" can't parse atts \""<<flag<<"\" , info \""<<info<<"\"."<<std::endl;  \
-								}
+#define XML_END_PARSE               std::cout<<__FILE__<<":"<<__LINE__<<" can't parse atts \""<<flag<<"\" , info \""<<info<<"\"."<<std::endl;  \
+                                }
 
 #define XML_END_PARSE_SKIP()    ;}
 
-#define xml_parse_skip(name)		        if(std::strcmp(flag,#name)==0)continue;else
-#define xml_parse_string_u16(name)	        if(std::strcmp(flag,#name)==0)name=to_u16(info);else
-#define xml_parse_string_u8(name)	        if(std::strcmp(flag,#name)==0)name=info;else
+#define xml_parse_skip(name)                if(std::strcmp(flag,#name)==0)continue;else
+#define xml_parse_string_u16(name)          if(std::strcmp(flag,#name)==0)name=to_u16(info);else
+#define xml_parse_string_u8(name)           if(std::strcmp(flag,#name)==0)name=info;else
 #define xml_parse_int(name)                 if(std::strcmp(flag,#name)==0)name=atoi(info);else
 #define xml_parse_md5(name)                 if(std::strcmp(flag,#name)==0)ToMD5(name,info);else
 
@@ -59,12 +59,12 @@ bool XMLParseFile(XMLParse *xml,const std::wstring &filename);
 /** 使用范例:
 
     <update>
-        <file name="Hello.exe" 
+        <file name="Hello.exe"
                 md5="BFBE152A7F2CE8ACFE69A8A3624CB0D6" size="83456"
                 compress_md5="173226395464F435B67DFE2BD7251F1C" compress_size="41458"/>
     </update>
 
-	void StartElement(const char *element_name,const char **atts) override
+    void StartElement(const char *element_name,const char **atts) override
     {
         if(strcmp(element_name,"file")==0)
         {

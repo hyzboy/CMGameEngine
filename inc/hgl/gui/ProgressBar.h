@@ -6,64 +6,64 @@
 #include<hgl/VectorMath.h>
 namespace hgl
 {
-	namespace graph
-	{
-		class Renderable;
-		class Material;
+    namespace graph
+    {
+        class Renderable;
+        class Material;
 
-		namespace gui
-		{
-			/**
-			* 进度条控件
-			*/
-			class ProgressBar:public GUIObject
-			{
-			protected:
+        namespace gui
+        {
+            /**
+            * 进度条控件
+            */
+            class ProgressBar:public GUIObject
+            {
+            protected:
 
-				Matrix4f edge_mat;
-				Matrix4f bar_mat;
+                Matrix4f edge_mat;
+                Matrix4f bar_mat;
 
-			protected:
+            protected:
 
-				int min_value,max_value;
-				int progress;
+                int min_value,max_value;
+                int progress;
 
-				bool refresh_matrix;
+                bool refresh_matrix;
 
-				void InitPrivate();
+                void InitPrivate();
 
-				void SetViewScope(const RectScope2i &rs){GUIObject::SetViewScope(rs);refresh_matrix=true;}
+                void SetViewScope(const RectScope2i &rs){GUIObject::SetViewScope(rs);refresh_matrix=true;}
 
-			protected:
+            protected:
 
-				virtual bool Proc_MouseButton(int,bool);
+                virtual bool Proc_MouseButton(int,bool);
 
-			public:	//属性
+            public: //属性
 
-				Color4f BackColor;																		///<底色
-				Color4f ProgressBarColor;																///<进度条色
+                Color4f BackColor;                                                                      ///<底色
+                Color4f ProgressBarColor;                                                               ///<进度条色
 
-			public:	//事件
+            public: //事件
 
-				DefEvent(void,OnProgressClick,(ProgressBar *,int));										///<点击事件
+                DefEvent(void,OnProgressClick,(ProgressBar *,int));                                     ///<点击事件
 
-			public:
+            public:
 
-				ProgressBar();
-				ProgressBar(int,int,int,int,int=0,int=99,int=0);
-				virtual ~ProgressBar();
+                ProgressBar();
+                ProgressBar(int,int,int,int,int=0,int=99,int=0);
+                virtual ~ProgressBar();
 
-				void Draw(const Matrix4f *);
+                void Draw(const Matrix4f *);
 
-				int GetMinValue()const{return min_value;}
-				int GetMaxValue()const{return max_value;}
-				int GetProgress()const{return progress;}
+                int GetMinValue()const{return min_value;}
+                int GetMaxValue()const{return max_value;}
+                int GetProgress()const{return progress;}
 
-				void SetMinValue(int);
-				void SetMaxValue(int);
-				void SetProgress(int);
-			};//class ProgressBar
-		}//namespace gui
-	}//namespace graph
+                void SetMinValue(int);
+                void SetMaxValue(int);
+                void SetProgress(int);
+            };//class ProgressBar
+        }//namespace gui
+    }//namespace graph
 }//namespace hgl
 #endif//HGL_GUI_PROGRESS_BAR_INCLUDE

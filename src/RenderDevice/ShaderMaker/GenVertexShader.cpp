@@ -190,10 +190,10 @@ namespace hgl
                 sun_light=sl;
 
                 if(light_mode==HGL_VERTEX_LIGHT&&sun_light)
-                {                    
+                {
                     add_uniform_vec3(HGL_SUN_LIGHT_DIRECTION);
                     add_out_float(HGL_SUN_LIGHT_INTENSITY);
-                }   
+                }
             }
 
             /**
@@ -326,7 +326,7 @@ namespace hgl
                 {
  //                    add("\n\tVP=normalize(" HGL_VS_LIGHT_POSITION "-Position*" HGL_VS_NORMAL_MATRIX ");\n");
  //                    add("\tMVNormal=normalize(" HGL_VS_NORMAL "*" HGL_VS_NORMAL_MATRIX ");\n\n");
- 
+
                     add("\t" HGL_FS_NORMAL "=normalize(" HGL_VS_NORMAL "*" HGL_VS_NORMAL_MATRIX ");\n");
 
                     //灯光

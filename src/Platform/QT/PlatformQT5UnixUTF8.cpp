@@ -6,15 +6,15 @@ using namespace hgl;
 
 int main(int argc,char **argv)
 {
-	QApplication qt_app(argc,argv);
+    QApplication qt_app(argc,argv);
 
-	StringList<UTF8String> sl;
+    StringList<UTF8String> sl;
 
-	for(int i=0;i<argc;i++)
-		sl.Add(argv[i]);
+    for(int i=0;i<argc;i++)
+        sl.Add(argv[i]);
 
-	ConsoleSystemInitInfo sii;
-	QT5GuiApplication app(&qt_app);
+    ConsoleSystemInitInfo sii;
+    QT5GuiApplication app(&qt_app);
 
-	return QT5AppMain(sii,app,sl);
+    return QT5AppMain(sii,app,sl);
 }

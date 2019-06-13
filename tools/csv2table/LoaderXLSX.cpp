@@ -252,7 +252,7 @@ public:
                     record.Add(row_data);
                 else
                     delete row_data;
-                
+
                 row_count++;
             }
 

@@ -9,157 +9,157 @@
 
 namespace hgl
 {
-	class AngelByteCodeStream:public asIBinaryStream
-	{
-		io::InputStream *in;
-		io::OutputStream *out;
+    class AngelByteCodeStream:public asIBinaryStream
+    {
+        io::InputStream *in;
+        io::OutputStream *out;
 
-	public:
+    public:
 
-		AngelByteCodeStream(io::InputStream *is)
-		{
-			in=is;
-		}
+        AngelByteCodeStream(io::InputStream *is)
+        {
+            in=is;
+        }
 
-		AngelByteCodeStream(io::OutputStream *os)
-		{
-			out=os;
-		}
+        AngelByteCodeStream(io::OutputStream *os)
+        {
+            out=os;
+        }
 
-		void Read(void *ptr,asUINT size)
-		{
-			in->Read(ptr,size);
-		}
+        void Read(void *ptr,asUINT size)
+        {
+            in->Read(ptr,size);
+        }
 
-		void Write(const void *ptr,asUINT size)
-		{
-			out->Write(ptr,size);
-		}
-	};//class AngelByteCodeStream
+        void Write(const void *ptr,asUINT size)
+        {
+            out->Write(ptr,size);
+        }
+    };//class AngelByteCodeStream
 }//namespace hgl
 
 namespace hgl
 {
-	AngelModule::~AngelModule()
-	{
-		//engine->DiscardModule(module->GetName());
-	}
+    AngelModule::~AngelModule()
+    {
+        //engine->DiscardModule(module->GetName());
+    }
 
-	const char *AngelModule::GetName()
-	{
-		if(!module)return(nullptr);
+    const char *AngelModule::GetName()
+    {
+        if(!module)return(nullptr);
 
-		return module->GetName();
-	}
+        return module->GetName();
+    }
 
-	/**
-	 * 增加脚本
-	 * @param section_name 片断名称(用于查错和调试)
-	 * @param script_section 脚本内容
-	 * @param script_length 脚本长度(-1表示自行strlen取长度)
-	 * @return 是否添加成功
-	 */
-	bool AngelModule::AddScript(const char *section_name,const char *script_section,int script_length)
-	{
-		if(!script_section||!(*script_section)||script_length==0)
-			return(false);
+    /**
+     * 增加脚本
+     * @param section_name 片断名称(用于查错和调试)
+     * @param script_section 脚本内容
+     * @param script_length 脚本长度(-1表示自行strlen取长度)
+     * @return 是否添加成功
+     */
+    bool AngelModule::AddScript(const char *section_name,const char *script_section,int script_length)
+    {
+        if(!script_section||!(*script_section)||script_length==0)
+            return(false);
 
-		if(script_length==-1)
-			script_length=strlen(script_section);
+        if(script_length==-1)
+            script_length=strlen(script_section);
 
-		const int result=module->AddScriptSection(section_name,script_section,script_length);
+        const int result=module->AddScriptSection(section_name,script_section,script_length);
 
-		if(result>=asSUCCESS)
-			return(true);
+        if(result>=asSUCCESS)
+            return(true);
 
-		LOG_ERROR(UTF8String("add script section \"")+section_name+UTF8String("\" return ")+UTF8String(result));
+        LOG_ERROR(UTF8String("add script section \"")+section_name+UTF8String("\" return ")+UTF8String(result));
 
-		return(false);
-	}
+        return(false);
+    }
 
-	bool AngelModule::Build()
-	{
-		if(!module)
-			return(false);
+    bool AngelModule::Build()
+    {
+        if(!module)
+            return(false);
 
-		const int result=module->Build();
+        const int result=module->Build();
 
-		if(result>=asSUCCESS)
-		{
-			#ifdef USE_ANGEL_SCRIPT_JIT
-			jit->finalizePages();
-			#endif//USE_ANGEL_SCRIPT_JIT
-			return(true);
-		}
+        if(result>=asSUCCESS)
+        {
+            #ifdef USE_ANGEL_SCRIPT_JIT
+            jit->finalizePages();
+            #endif//USE_ANGEL_SCRIPT_JIT
+            return(true);
+        }
 
-		LOG_ERROR(UTF8String("build script module \"")+module->GetName()+UTF8String("\" return ")+UTF8String(result));
+        LOG_ERROR(UTF8String("build script module \"")+module->GetName()+UTF8String("\" return ")+UTF8String(result));
 
-		return(false);
-	}
+        return(false);
+    }
 
-	/**
-	 * 创建一个运行控制上下文件
-	 */
-	AngelContext *AngelModule::CreateContext()
-	{
-		asIScriptContext *ctx=engine->CreateContext();
+    /**
+     * 创建一个运行控制上下文件
+     */
+    AngelContext *AngelModule::CreateContext()
+    {
+        asIScriptContext *ctx=engine->CreateContext();
 
-		if(!ctx)
-			return(nullptr);
+        if(!ctx)
+            return(nullptr);
 
-		return(new AngelContext(module,ctx));
-	}
+        return(new AngelContext(module,ctx));
+    }
 
-	bool AngelModule::RunScript(const char *code)
-	{
-		UTF8String func_code="void ExecuteString()\n{\n";
+    bool AngelModule::RunScript(const char *code)
+    {
+        UTF8String func_code="void ExecuteString()\n{\n";
 
-		func_code+=code;
-		func_code+=";\n}";
+        func_code+=code;
+        func_code+=";\n}";
 
-		asIScriptFunction *func=nullptr;
+        asIScriptFunction *func=nullptr;
 
-		if(module->CompileFunction("ExecuteString",func_code.c_str(),func_code.Length(),0,&func)<0)
-			return(false);
+        if(module->CompileFunction("ExecuteString",func_code.c_str(),func_code.Length(),0,&func)<0)
+            return(false);
 
-		asIScriptContext *exec_ctx=engine->CreateContext();
+        asIScriptContext *exec_ctx=engine->CreateContext();
 
-		if(!exec_ctx)
-		{
-			func->Release();
-			return(false);
-		}
+        if(!exec_ctx)
+        {
+            func->Release();
+            return(false);
+        }
 
-		if(exec_ctx->Prepare(func)<0)
-		{
-			func->Release();
-			exec_ctx->Release();
-			return(false);
-		}
+        if(exec_ctx->Prepare(func)<0)
+        {
+            func->Release();
+            exec_ctx->Release();
+            return(false);
+        }
 
-		exec_ctx->Execute();
+        exec_ctx->Execute();
 
-		func->Release();
-		exec_ctx->Release();
+        func->Release();
+        exec_ctx->Release();
 
-		return(true);
-	}
+        return(true);
+    }
 
-	int AngelModule::SaveByteCode(io::OutputStream *os)
-	{
-		if(!os)return(-1);
+    int AngelModule::SaveByteCode(io::OutputStream *os)
+    {
+        if(!os)return(-1);
 
-		AngelByteCodeStream aos(os);
+        AngelByteCodeStream aos(os);
 
-		return module->SaveByteCode(&aos);
-	}
+        return module->SaveByteCode(&aos);
+    }
 
-	int AngelModule::LoadByteCode(io::InputStream *is)
-	{
-		if(!is)return(-1);
+    int AngelModule::LoadByteCode(io::InputStream *is)
+    {
+        if(!is)return(-1);
 
-		AngelByteCodeStream ais(is);
+        AngelByteCodeStream ais(is);
 
-		return module->LoadByteCode(&ais);
-	}
+        return module->LoadByteCode(&ais);
+    }
 }//namespace hgl

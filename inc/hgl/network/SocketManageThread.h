@@ -46,7 +46,7 @@ namespace hgl
 
             virtual bool Join(USER_ACCEPT *us){return sock_manage->Join(us);}     ///<单个工作对象接入处理函数
             virtual bool Unjoin(USER_ACCEPT *us){return sock_manage->Unjoin(us);} ///<单个工作对象退出处理函数
-                        
+
             /**
              *处理要接入的工作对象列表
              */
@@ -97,7 +97,7 @@ namespace hgl
                 SAFE_CLEAR(sock_manage);
             }
 
-            virtual void ProcEndThread() override            
+            virtual void ProcEndThread() override
             {
                 ClearAcceptSocketList(join_list.GetReceive());
                 join_list.Swap();

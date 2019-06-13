@@ -4,42 +4,42 @@
 #include<hgl/platform/OpenGLApplication.h>
 namespace hgl
 {
-	class WinGLWindow;
-	class GraphicsSystemInitInfo;
+    class WinGLWindow;
+    class GraphicsSystemInitInfo;
 
-	/**
-	* 标准Windows OpenGL图形应用程序类
-	*/
-	class WinOpenGLApplication:public OpenGLApplication
-	{
-		WinGLWindow *glwin;
+    /**
+    * 标准Windows OpenGL图形应用程序类
+    */
+    class WinOpenGLApplication:public OpenGLApplication
+    {
+        WinGLWindow *glwin;
 
-		double prev_time;
+        double prev_time;
 
-		bool InitVideoMode();
-		bool InitOpenGLforWindows();
+        bool InitVideoMode();
+        bool InitOpenGLforWindows();
 
-		void RunSync();
-		void RunASync();
-		void RunFast();
+        void RunSync();
+        void RunASync();
+        void RunFast();
 
-	public:
+    public:
 
-		AppRunMode  RunMode;                                                                        ///<运行模式
+        AppRunMode  RunMode;                                                                        ///<运行模式
 
-		bool        BackNotDraw;                                                                    ///<当程序位于后台不刷新画面
-		bool        WaitActive;                                                                     ///<等待程序被切换至活动状态
+        bool        BackNotDraw;                                                                    ///<当程序位于后台不刷新画面
+        bool        WaitActive;                                                                     ///<等待程序被切换至活动状态
 
-	public:
+    public:
 
-		WinOpenGLApplication();
-		~WinOpenGLApplication();
+        WinOpenGLApplication();
+        ~WinOpenGLApplication();
 
-		bool 			Init(GraphicsSystemInitInfo *);												///<初始化系统
-		WinGLWindow *	GetOpenGLWindow(){return glwin;}											///<取得Windows OpenGL窗口
+        bool            Init(GraphicsSystemInitInfo *);                                             ///<初始化系统
+        WinGLWindow *   GetOpenGLWindow(){return glwin;}                                            ///<取得Windows OpenGL窗口
 
-        void			ProcMessage();                                                              ///<处理Windows消息
-        void			SwapBuffer();																///<交换Windows OpenGL缓冲区
+        void            ProcMessage();                                                              ///<处理Windows消息
+        void            SwapBuffer();                                                               ///<交换Windows OpenGL缓冲区
 
         virtual void Frame()
         {
@@ -48,9 +48,9 @@ namespace hgl
             ProcMessage();                                  //处理Windows消息
         }
 
-		virtual int Run()
+        virtual int Run()
         {
-			if(!flow)return(-1);
+            if(!flow)return(-1);
 
             do
             {
@@ -59,13 +59,13 @@ namespace hgl
                 ProcMessage();                              //处理Windows消息
                                                             //调用相应的运行处理函数
                 if(RunMode==armASync)RunASync();else
-                if(RunMode==armFast	)RunFast();else
+                if(RunMode==armFast )RunFast();else
                     RunSync();
             }
             while(flow->ObjectState!=fosExitApp);
 
-			return(0);
+            return(0);
         }
-	};//class WinOpenGLApplication
+    };//class WinOpenGLApplication
 }//namespace hgl
 #endif//HGL_WIN_OPENGL_APPLICATION_INCLUDE

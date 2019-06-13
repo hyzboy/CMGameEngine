@@ -2,25 +2,25 @@
 
 const char *abc()
 {
-	const char *str="abc";
+    const char *str="abc";
 
-	return str;
+    return str;
 }
 
 const char *hex()
 {
-	const char *str="hex";
+    const char *str="hex";
 
-	return str;
+    return str;
 }
 
 template<typename func> void out()
 {
-	printf("%s\n",func());
+    printf("%s\n",func());
 }
 
 int main()
 {
-	out<abc>();
-	out<hex>();
+    out<abc>();
+    out<hex>();
 }

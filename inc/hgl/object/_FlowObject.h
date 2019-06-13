@@ -6,11 +6,11 @@
 namespace hgl
 {
     /**
-	* 流程对象是指可以放在流程控制器里的一种特殊对象
-	*/
+    * 流程对象是指可以放在流程控制器里的一种特殊对象
+    */
     template<typename T> class _FlowObject                                                          ///流程对象基类
-	{
-	protected:
+    {
+    protected:
 
         T *NextObject;                                                                              ///<下一个对象
 
@@ -22,7 +22,7 @@ namespace hgl
         virtual void OnResume(){}                                                                   ///<将当前流恢复到前台
         virtual void OnDestroy(){/*重载此处理本对象销毁事件*/}                                         ///<当前对象销毁事件
 
-	public: //方法
+    public: //方法
 
         _FlowObject()                                                                               ///<本类构造函数
         {
@@ -82,6 +82,6 @@ namespace hgl
             fos=fosOK;
             NextObject=nullptr;
         }
-	};//template<typename T> class _FlowObject
+    };//template<typename T> class _FlowObject
 }//namespace hgl
 #endif//HGL__FLOW_OBJECT_INCLUDE

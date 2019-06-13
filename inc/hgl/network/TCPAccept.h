@@ -64,13 +64,13 @@ namespace hgl
             uint            recv_length=0;
 
             uint64          recv_total=0;
-            
+
         protected:
 
             virtual int OnSocketRecv(int) override;                             ///<Socket接收处理函数
 
         public:
-            
+
             TCPAcceptPacket();                                                  ///<本类构造函数
             TCPAcceptPacket(int,IPAddress *);                                   ///<本类构造函数
             virtual ~TCPAcceptPacket()=default;

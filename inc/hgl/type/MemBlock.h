@@ -20,10 +20,10 @@ namespace hgl
 
     public:
 
-                size_t GetLength	()const{return cur_size;}										///<取得内存块长度(注：非字节数)
-        const	size_t GetMaxLength	()const{return buf_size;}										///<取得内存块最大长度(注：非字节数)
-        const	size_t GetBytes		()const{return cur_size*sizeof(T);}								///<取得内存块字节数
-        const	size_t GetMaxBytes	()const{return buf_size*sizeof(T);}								///<取得内存块最大字节数
+                size_t GetLength    ()const{return cur_size;}                                       ///<取得内存块长度(注：非字节数)
+        const   size_t GetMaxLength ()const{return buf_size;}                                       ///<取得内存块最大长度(注：非字节数)
+        const   size_t GetBytes     ()const{return cur_size*sizeof(T);}                             ///<取得内存块字节数
+        const   size_t GetMaxBytes  ()const{return buf_size*sizeof(T);}                             ///<取得内存块最大字节数
 
         /**
          * 分配指定空间出来，供未来使用
@@ -44,7 +44,7 @@ namespace hgl
         /**
          * 设置当前数据长度
          */
-        void SetLength(size_t size)																	///<设置内存块长度(注：非字节数)
+        void SetLength(size_t size)                                                                 ///<设置内存块长度(注：非字节数)
         {
             Malloc(size);
 
@@ -178,8 +178,8 @@ namespace hgl
 
         if(!fis.Open(filename))return(nullptr);
 
-        const size_t file_size	=fis.GetSize();
-        const size_t size		=(file_size+sizeof(T)-1)/sizeof(T);
+        const size_t file_size  =fis.GetSize();
+        const size_t size       =(file_size+sizeof(T)-1)/sizeof(T);
 
         MemBlock<T> *mb=new MemBlock<T>(size);
 

@@ -3,6 +3,6 @@
 
 namespace hgl
 {
-	// x11-x.org
+    // x11-x.org
 }//namespace hgl
 #endif//HGL_PLATFORM_DESKTOP_X11_INCLUDE

@@ -13,22 +13,22 @@ namespace hgl
         {
         protected:
 
-            ::Display *	disp;
-            int			default_screen;
-            ::Window *	win;
-            GLXContext	ctx;
+            ::Display * disp;
+            int         default_screen;
+            ::Window *  win;
+            GLXContext  ctx;
 
-            Atom		atomFullscreen;
-            Atom		atomState;
-            Atom		atomDeleteWindow;
+            Atom        atomFullscreen;
+            Atom        atomState;
+            Atom        atomDeleteWindow;
 
         protected:
 
-            XEvent		event,next_event;
+            XEvent      event,next_event;
 
             XWindowAttributes win_attr;
 
-            KeySym		sym;
+            KeySym      sym;
 
         protected:
 

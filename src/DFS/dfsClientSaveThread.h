@@ -7,56 +7,56 @@
 #include<hgl/type/Queue.h>
 namespace hgl
 {
-	namespace io
-	{
-		class MemoryOutputStream;
-	}//namespace io
+    namespace io
+    {
+        class MemoryOutputStream;
+    }//namespace io
 
-	using namespace io;
+    using namespace io;
 
-	namespace dfs
-	{
-		class dfsClientConnect;
+    namespace dfs
+    {
+        class dfsClientConnect;
 
-		struct dfsClientSaveItem
-		{
-			FileBlock *block;
-			MemoryOutputStream *mos;
-			uint32 attrib;
+        struct dfsClientSaveItem
+        {
+            FileBlock *block;
+            MemoryOutputStream *mos;
+            uint32 attrib;
 
-		public:
+        public:
 
-			bool operator == (const struct dfsClientSaveItem &csi)const
-			{
-				return(block==csi.block);		//只比较block
-			}
-		};//struct dfsClientSaveItem
+            bool operator == (const struct dfsClientSaveItem &csi)const
+            {
+                return(block==csi.block);       //只比较block
+            }
+        };//struct dfsClientSaveItem
 
-		class dfsClientSaveThread:public Thread
-		{
-			UTF8String group_name;
+        class dfsClientSaveThread:public Thread
+        {
+            UTF8String group_name;
 
-			IPAddress *addr;
-			uint64 node_id;
+            IPAddress *addr;
+            uint64 node_id;
 
-			dfsClientConnect *con;
+            dfsClientConnect *con;
 
-		private:
+        private:
 
-			Semaphore *fb_sem;
-			ThreadMutexObject<Queue<dfsClientSaveItem> > fb_list;
+            Semaphore *fb_sem;
+            ThreadMutexObject<Queue<dfsClientSaveItem> > fb_list;
 
-			dfs::ErrorCode SaveTo(DataInputStream *dis,DataOutputStream *dos,FileBlock *fb,MemoryOutputStream *mos,uint32);
+            dfs::ErrorCode SaveTo(DataInputStream *dis,DataOutputStream *dos,FileBlock *fb,MemoryOutputStream *mos,uint32);
 
-		public:
+        public:
 
-			dfsClientSaveThread(const UTF8String &g,const IPAddress *,const uint64);
-			~dfsClientSaveThread();
+            dfsClientSaveThread(const UTF8String &g,const IPAddress *,const uint64);
+            ~dfsClientSaveThread();
 
-			void Add(dfsClientSaveItem &);
+            void Add(dfsClientSaveItem &);
 
-			bool Execute();
-		};//class dfsClientSaveThread
-	}//namespace dfs
+            bool Execute();
+        };//class dfsClientSaveThread
+    }//namespace dfs
 }//namespace hgl
 #endif//HGL_DFS_CLIENT_SAVE_THREAD_INCLUDE

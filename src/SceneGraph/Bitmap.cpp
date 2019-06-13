@@ -250,13 +250,13 @@ namespace hgl
             uint16 width;
             uint16 height;
             uint8 bit;
-			
-			uint8 image_desc;
+
+            uint8 image_desc;
         };
-		
+
         union TGA_IMAGE_DESC
         {
-			//不要把此union放到上面的struct中，否则Visual C++会将此union编译成4字节。GCC无此问题
+            //不要把此union放到上面的struct中，否则Visual C++会将此union编译成4字节。GCC无此问题
             uint8 image_desc;
             struct
             {
@@ -269,25 +269,25 @@ namespace hgl
 
         bool SaveToTGA(const OSString &filename,void *data,const uint16 width,const uint16 height,const uint8 bit,const bool v_flip)
         {
-			TGAHeader header;
+            TGAHeader header;
 
-			memset(&header,0,sizeof(TGAHeader));
+            memset(&header,0,sizeof(TGAHeader));
 
-			TGA_IMAGE_DESC tid;
+            TGA_IMAGE_DESC tid;
 
-			if(bit==8)
-				header.image_type=3;
-			else
-				header.image_type=2;
+            if(bit==8)
+                header.image_type=3;
+            else
+                header.image_type=2;
 
-			header.width=width;
-			header.height=height;
-			header.bit=bit;
+            header.width=width;
+            header.height=height;
+            header.bit=bit;
 
-			tid.alpha_depth=8;
-			tid.direction=v_flip?1:0;
+            tid.alpha_depth=8;
+            tid.direction=v_flip?1:0;
 
-			header.image_desc=tid.image_desc;
+            header.image_desc=tid.image_desc;
 
             io::FileOutputStream fs;
 

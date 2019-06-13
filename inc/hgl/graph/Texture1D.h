@@ -18,7 +18,7 @@ namespace hgl
             uint length;
 
         protected:
-        
+
             virtual bool    _SetImage   (Texture1DData *)=0;
             virtual int     _GetImage   (void *data_pointer, TSF fmt, int level)=0;
             virtual bool    _ChangeImage(uint s, uint l, void *data, uint bytes, TSF sf)=0;

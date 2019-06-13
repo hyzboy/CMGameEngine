@@ -45,112 +45,112 @@ BEGIN_AS_NAMESPACE
 
 asCTypeInfo::asCTypeInfo()
 {
-	isTemporary           = false;
-	stackOffset           = 0;
-	isConstant            = false;
-	isVariable            = false;
-	isExplicitHandle      = false;
-	qwordValue            = 0;
-	isLValue              = false;
-	isVoidExpression      = false;
+    isTemporary           = false;
+    stackOffset           = 0;
+    isConstant            = false;
+    isVariable            = false;
+    isExplicitHandle      = false;
+    qwordValue            = 0;
+    isLValue              = false;
+    isVoidExpression      = false;
 }
 
 void asCTypeInfo::Set(const asCDataType &dt)
 {
-	dataType         = dt;
+    dataType         = dt;
 
-	isTemporary      = false;
-	stackOffset      = 0;
-	isConstant       = false;
-	isVariable       = false;
-	isExplicitHandle = false;
-	qwordValue       = 0;
-	isLValue         = false;
-	isVoidExpression = false;
+    isTemporary      = false;
+    stackOffset      = 0;
+    isConstant       = false;
+    isVariable       = false;
+    isExplicitHandle = false;
+    qwordValue       = 0;
+    isLValue         = false;
+    isVoidExpression = false;
 }
 
 void asCTypeInfo::SetVariable(const asCDataType &dt, int stackOffset, bool isTemporary)
 {
-	Set(dt);
+    Set(dt);
 
-	this->isVariable  = true;
-	this->isTemporary = isTemporary;
-	this->stackOffset = (short)stackOffset;
+    this->isVariable  = true;
+    this->isTemporary = isTemporary;
+    this->stackOffset = (short)stackOffset;
 }
 
 void asCTypeInfo::SetConstantQW(const asCDataType &dt, asQWORD value)
 {
-	Set(dt);
+    Set(dt);
 
-	isConstant = true;
-	qwordValue = value;
+    isConstant = true;
+    qwordValue = value;
 }
 
 void asCTypeInfo::SetConstantDW(const asCDataType &dt, asDWORD value)
 {
-	Set(dt);
+    Set(dt);
 
-	isConstant = true;
-	dwordValue = value;
+    isConstant = true;
+    dwordValue = value;
 }
 
 void asCTypeInfo::SetConstantB(const asCDataType &dt, asBYTE value)
 {
-	Set(dt);
+    Set(dt);
 
-	isConstant = true;
-	byteValue = value;
+    isConstant = true;
+    byteValue = value;
 }
 
 void asCTypeInfo::SetConstantF(const asCDataType &dt, float value)
 {
-	Set(dt);
+    Set(dt);
 
-	isConstant = true;
-	floatValue = value;
+    isConstant = true;
+    floatValue = value;
 }
 
 void asCTypeInfo::SetConstantD(const asCDataType &dt, double value)
 {
-	Set(dt);
+    Set(dt);
 
-	isConstant = true;
-	doubleValue = value;
+    isConstant = true;
+    doubleValue = value;
 }
 
 void asCTypeInfo::SetNullConstant()
 {
-	Set(asCDataType::CreateNullHandle());
-	isConstant       = true;
-	isExplicitHandle = false;
-	qwordValue       = 0;
-	isLValue         = false;
+    Set(asCDataType::CreateNullHandle());
+    isConstant       = true;
+    isExplicitHandle = false;
+    qwordValue       = 0;
+    isLValue         = false;
 }
 
 bool asCTypeInfo::IsNullConstant() const
 {
-	if( isConstant && dataType.IsObjectHandle() )
-		return true;
+    if( isConstant && dataType.IsObjectHandle() )
+        return true;
 
-	return false;
+    return false;
 }
 
 void asCTypeInfo::SetVoidExpression()
 {
-	Set(asCDataType::CreatePrimitive(ttVoid, false));
-	isLValue = false;
-	isConstant = false;
-	isVoidExpression = true;
+    Set(asCDataType::CreatePrimitive(ttVoid, false));
+    isLValue = false;
+    isConstant = false;
+    isVoidExpression = true;
 }
 
 bool asCTypeInfo::IsVoidExpression() const
 {
-	return isVoidExpression;
+    return isVoidExpression;
 }
 
 void asCTypeInfo::SetDummy()
 {
-	SetConstantQW(asCDataType::CreatePrimitive(ttInt, true), 0);
+    SetConstantQW(asCDataType::CreatePrimitive(ttInt, true), 0);
 }
 
 

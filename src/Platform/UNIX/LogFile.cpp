@@ -2,11 +2,11 @@
 
 namespace hgl
 {
-	namespace logger
-	{
+    namespace logger
+    {
         io::TextOutputStream *CreateTextOutputStream(io::OutputStream *os)
         {
             return(new io::UTF8TextOutputStream(os));
         }
-	}//namespace logger
+    }//namespace logger
 }//namespace hgl

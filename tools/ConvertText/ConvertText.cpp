@@ -9,32 +9,32 @@ USEFORM("..\Common\SelectFolderUnit.cpp", SelectFolderForm);
 //---------------------------------------------------------------------------
 WINAPI wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
 {
-	hgl::InitSystem(true,false);
+    hgl::InitSystem(true,false);
 
-	try
-	{
-		Application->Initialize();
-		SetApplicationMainFormOnTaskBar(Application, true);
-		Application->CreateForm(__classid(TMainForm), &MainForm);
-		Application->Run();
-	}
-	catch (Exception &exception)
-	{
-		Application->ShowException(&exception);
-	}
-	catch (...)
-	{
-		try
-		{
-			throw Exception("");
-		}
-		catch (Exception &exception)
-		{
-			Application->ShowException(&exception);
-		}
-	}
+    try
+    {
+        Application->Initialize();
+        SetApplicationMainFormOnTaskBar(Application, true);
+        Application->CreateForm(__classid(TMainForm), &MainForm);
+        Application->Run();
+    }
+    catch (Exception &exception)
+    {
+        Application->ShowException(&exception);
+    }
+    catch (...)
+    {
+        try
+        {
+            throw Exception("");
+        }
+        catch (Exception &exception)
+        {
+            Application->ShowException(&exception);
+        }
+    }
 
-	hgl::CloseSystem();
-	return 0;
+    hgl::CloseSystem();
+    return 0;
 }
 //---------------------------------------------------------------------------

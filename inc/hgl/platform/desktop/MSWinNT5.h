@@ -3,7 +3,7 @@
 
 namespace hgl
 {
-	//windows 2000/xp/2003
+    //windows 2000/xp/2003
 
 }//namespace hgl
 #endif//HGL_PLATFORM_DESKTOP_MICROSOFT_WINDOWS_NT_5_INCLUDE

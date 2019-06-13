@@ -9,51 +9,51 @@
 
 namespace hgl
 {
-	class Semaphore;
+    class Semaphore;
 
-	namespace network
-	{
-		class SocketManageCB;
-		class TCPSocketRB;
+    namespace network
+    {
+        class SocketManageCB;
+        class TCPSocketRB;
 
-		/**
-		* TCPSocketRB数据收发管理线程
-		*/
-		class TCPSocketRBThread:public Thread																///TCPSocketRB数据收发管理线程
-		{
-		protected:
+        /**
+        * TCPSocketRB数据收发管理线程
+        */
+        class TCPSocketRBThread:public Thread                                                               ///TCPSocketRB数据收发管理线程
+        {
+        protected:
 
-			RWLock sock_lock;
+            RWLock sock_lock;
 
-			SocketManageCB *sock_manage;
+            SocketManageCB *sock_manage;
 
-			Set<TCPSocketRB *> sock_set;
+            Set<TCPSocketRB *> sock_set;
 
-		protected:
+        protected:
 
-			ThreadMutexObject<List<TCPSocketRB *> > join_list;
-			Semaphore *join_sem;
+            ThreadMutexObject<List<TCPSocketRB *> > join_list;
+            Semaphore *join_sem;
 
-			virtual void ProcJoin();
+            virtual void ProcJoin();
 
-		protected:
+        protected:
 
-			ThreadMutexObject<Set<TCPSocketRB *> > unjoin_set;
+            ThreadMutexObject<Set<TCPSocketRB *> > unjoin_set;
 
-			virtual void ProcUnjoin();
+            virtual void ProcUnjoin();
 
-		public:
+        public:
 
-			TCPSocketRBThread(int _max_user=1024,const double _time_out=0.25f);
-			virtual ~TCPSocketRBThread();
+            TCPSocketRBThread(int _max_user=1024,const double _time_out=0.25f);
+            virtual ~TCPSocketRBThread();
 
-			virtual bool Execute();
+            virtual bool Execute();
 
-		public:
+        public:
 
-			virtual bool Join(TCPSocketRB **,int);															///<加入一批连接
-			virtual bool Unjoin(TCPSocketRB **,int);														///<断开一批连接
-		};//class TCPSocketRBThread
-	}//namespace network
+            virtual bool Join(TCPSocketRB **,int);                                                          ///<加入一批连接
+            virtual bool Unjoin(TCPSocketRB **,int);                                                        ///<断开一批连接
+        };//class TCPSocketRBThread
+    }//namespace network
 }//hgl
 #endif//HGL_NETWORK_TCP_SOCKET_RB_THREAD_INCLUDE

@@ -6,22 +6,22 @@ using namespace hgl;
 
 class TableName
 {
-	UTF8String table_name;
+    UTF8String table_name;
 
 public:
 
-	const UTF8String &	GetTableName()const{return table_name;}								///<取得表名
+    const UTF8String &  GetTableName()const{return table_name;}                             ///<取得表名
 };
 
 int main(int,char **)
 {
-	Date d;
-	TableName *tn=nullptr;
+    Date d;
+    TableName *tn=nullptr;
 
-	d.Sync();
+    d.Sync();
 
-	UTF8String str=UTF8String(d.GetYear())+'_'+UTF8String(d.GetMonth())+'_'+UTF8String(d.GetDay())+'_'+tn->GetTableName();
+    UTF8String str=UTF8String(d.GetYear())+'_'+UTF8String(d.GetMonth())+'_'+UTF8String(d.GetDay())+'_'+tn->GetTableName();
 
-	std::cout<<str.c_str()<<std::endl;
-	return(0);
+    std::cout<<str.c_str()<<std::endl;
+    return(0);
 }

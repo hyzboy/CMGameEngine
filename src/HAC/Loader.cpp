@@ -3,133 +3,133 @@
 
 namespace hgl
 {
-	Loader::Loader()
-	{
-		loader_hac=0;
-		loader_filename.Clear();
-		loader_pointer=0;
-		loader_data=0;
-		loader_size=0;
+    Loader::Loader()
+    {
+        loader_hac=0;
+        loader_filename.Clear();
+        loader_pointer=0;
+        loader_data=0;
+        loader_size=0;
 
-		status=lsNone;
+        status=lsNone;
 
-		OnError=0;
-		OnEnd=0;
-	}
-                      
-	Loader::LoaderStatus Loader::GetStatus()
-	{
-		LoaderStatus ls;
+        OnError=0;
+        OnEnd=0;
+    }
 
-		ThreadMutex::Lock();
-			ls=status;
-		ThreadMutex::Unlock();
+    Loader::LoaderStatus Loader::GetStatus()
+    {
+        LoaderStatus ls;
 
-		return ls;
-	}
+        ThreadMutex::Lock();
+            ls=status;
+        ThreadMutex::Unlock();
 
-	void Loader::SetStatus(LoaderStatus ls)
-	{
-		ThreadMutex::Lock();
-			status=ls;
-		ThreadMutex::Unlock();
-	}
+        return ls;
+    }
 
-	bool Loader::Load(HAC *hac,const u16char *filename)
-	{
-		loader_hac=hac;
-		loader_filename=filename;
+    void Loader::SetStatus(LoaderStatus ls)
+    {
+        ThreadMutex::Lock();
+            status=ls;
+        ThreadMutex::Unlock();
+    }
 
-		loader_pointer=hac->LoadAcquire(filename);
+    bool Loader::Load(HAC *hac,const u16char *filename)
+    {
+        loader_hac=hac;
+        loader_filename=filename;
 
-		SetStatus(lsLoad);
+        loader_pointer=hac->LoadAcquire(filename);
 
-		return loader_pointer;
-	}
+        SetStatus(lsLoad);
 
-	bool Loader::Execute()
-	{
-		LoaderStatus ls=GetStatus();
+        return loader_pointer;
+    }
 
-		if(ls==lsProc)
-		{
-			loader_data=loader_hac->GetData(loader_pointer);
-			loader_size=loader_hac->GetSize(loader_pointer);
+    bool Loader::Execute()
+    {
+        LoaderStatus ls=GetStatus();
 
-			if(loader_data&&loader_size>0)
-				ProcFinish();
+        if(ls==lsProc)
+        {
+            loader_data=loader_hac->GetData(loader_pointer);
+            loader_size=loader_hac->GetSize(loader_pointer);
 
-			SetStatus(lsProcFinish);
-		}
-		else
-		if(ls==lsClear)
-		{
-			ProcClear();
+            if(loader_data&&loader_size>0)
+                ProcFinish();
 
-			SetStatus(lsClearFinish);
-		}
+            SetStatus(lsProcFinish);
+        }
+        else
+        if(ls==lsClear)
+        {
+            ProcClear();
 
-		return(false);
-	}
+            SetStatus(lsClearFinish);
+        }
 
-	void Loader::Update()
-	{
-		if(!ThreadMutex::TryLock())return;
+        return(false);
+    }
 
-		LoaderStatus ls=status;
+    void Loader::Update()
+    {
+        if(!ThreadMutex::TryLock())return;
 
-		ThreadMutex::Unlock();
+        LoaderStatus ls=status;
 
-    	if(ls==lsNone)
-		{
-			Destroy();
-			return;
-		}
+        ThreadMutex::Unlock();
 
-		if(ls==lsLoad)
-		{
-			HacStatus hs;
+        if(ls==lsNone)
+        {
+            Destroy();
+            return;
+        }
 
-			hs=loader_hac->GetStatus(loader_pointer);
+        if(ls==lsLoad)
+        {
+            HacStatus hs;
 
-			if(hs==hsNotFind
-			 ||hs==hsOpenError
-			 ||hs==hsReadError)
-			{
-				SafeCallEvent(OnError,(this));
+            hs=loader_hac->GetStatus(loader_pointer);
 
-				Destroy();
-			}
-			else
-			if(hs==hsEnd)
-			{
-				SetStatus(lsProc);
+            if(hs==hsNotFind
+             ||hs==hsOpenError
+             ||hs==hsReadError)
+            {
+                SafeCallEvent(OnError,(this));
 
-				Thread::Start();		//启动线程在另一线程处理数据
-			}
-		}
-		else
-		if(ls==lsProcFinish)
-		{
-			ProcEnd();
+                Destroy();
+            }
+            else
+            if(hs==hsEnd)
+            {
+                SetStatus(lsProc);
 
-			SafeCallEvent(OnEnd,(this));
+                Thread::Start();        //启动线程在另一线程处理数据
+            }
+        }
+        else
+        if(ls==lsProcFinish)
+        {
+            ProcEnd();
 
-			SetStatus(lsClear);
+            SafeCallEvent(OnEnd,(this));
 
-			Thread::Start();
-		}
-		else
-		if(ls==lsClearFinish)
-		{
-			loader_hac->Clear(loader_pointer);
+            SetStatus(lsClear);
 
-			loader_pointer=0;
-			loader_data=0;
+            Thread::Start();
+        }
+        else
+        if(ls==lsClearFinish)
+        {
+            loader_hac->Clear(loader_pointer);
 
-			status=lsEnd;
+            loader_pointer=0;
+            loader_data=0;
 
-			Destroy();
-		}
-	}
+            status=lsEnd;
+
+            Destroy();
+        }
+    }
 }

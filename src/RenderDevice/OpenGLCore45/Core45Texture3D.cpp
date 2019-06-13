@@ -9,7 +9,7 @@ namespace hgl
         Texture3D::Texture3D()
         {
             type=HGL_TEXTURE_3D;
-			width=height=depth=wrap_s=wrap_t=wrap_r=0;
+            width=height=depth=wrap_s=wrap_t=wrap_r=0;
             glCreateTextures(GL_TEXTURE_3D,1,&texture_id);
         }
 
@@ -37,7 +37,7 @@ namespace hgl
 
             width=w;
             height=h;
-			depth=d;
+            depth=d;
 
             const TextureFormat *sfmt=TextureFormatInfoList+sf;       //原始数据格式
 
@@ -48,14 +48,14 @@ namespace hgl
 
             if(sfmt->compress)      //原本就是压缩格式
             {
-				if(data)
-					glCompressedTextureSubImage3D(texture_id,0,0,0,0,w,h,d,vf,image_size,data);
+                if(data)
+                    glCompressedTextureSubImage3D(texture_id,0,0,0,0,w,h,d,vf,image_size,data);
             }
             else                    //正常非压缩格式
             {
                 glTextureStorage3D(texture_id, 1, vf, w, h,d);
 
-				if(data)
+                if(data)
                 glTextureSubImage3D(texture_id, 0,0,0,0, w,h,d, sfmt->color_format, sfmt->data_type, data);
             }
 
@@ -75,14 +75,14 @@ namespace hgl
 
                 wrap_s=GL_REPEAT;
                 wrap_t=GL_REPEAT;
-				wrap_r=GL_REPEAT;
+                wrap_r=GL_REPEAT;
 
                 //未来使用Sampler Object，则不再需要以下部分
                 glTextureParameteri(texture_id,GL_TEXTURE_MIN_FILTER,min_filter);
                 glTextureParameteri(texture_id,GL_TEXTURE_MAG_FILTER,mag_filter);
                 glTextureParameteri(texture_id,GL_TEXTURE_WRAP_S,wrap_s);
                 glTextureParameteri(texture_id,GL_TEXTURE_WRAP_T,wrap_t);
-				glTextureParameteri(texture_id,GL_TEXTURE_WRAP_R,wrap_r);
+                glTextureParameteri(texture_id,GL_TEXTURE_WRAP_R,wrap_r);
             }
 
             return(true);
@@ -125,12 +125,12 @@ namespace hgl
 
         bool Texture3D::ChangeImage(uint l,uint t,uint s,uint w,uint h,uint d,void *data,uint bytes,TSF sf)
         {
-            if(	l>width||t>height||s>depth
-				||w>width-l
-				||h>height-t
-				||d>depth-s
-				||!data
-				||!TextureSourceFormatCheck(sf))
+            if( l>width||t>height||s>depth
+                ||w>width-l
+                ||h>height-t
+                ||d>depth-s
+                ||!data
+                ||!TextureSourceFormatCheck(sf))
                 RETURN_FALSE;
 
             const TextureFormat *sfmt=TextureFormatInfoList+sf;       //原始数据格式

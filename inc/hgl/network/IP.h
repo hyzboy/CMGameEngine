@@ -15,21 +15,21 @@
 
     #define GetLastSocketError() WSAGetLastError()
 
-	#ifndef SOCK_DCCP
-	#define SOCK_DCCP 6
-	#endif//SOCK_DCCP
+    #ifndef SOCK_DCCP
+    #define SOCK_DCCP 6
+    #endif//SOCK_DCCP
 
-	#ifndef SOCK_PACKET
-	#define SOCK_PACKET 10
-	#endif//SOCK_PACKET
+    #ifndef SOCK_PACKET
+    #define SOCK_PACKET 10
+    #endif//SOCK_PACKET
 
-	#ifndef IPPROTO_DCCP
-	#define IPPROTO_DCCP 33
-	#endif//IPPROTO_DCCP
+    #ifndef IPPROTO_DCCP
+    #define IPPROTO_DCCP 33
+    #endif//IPPROTO_DCCP
 
-	#ifndef IPPROTO_UDPLITE
-	#define IPPROTO_UDPLITE     136
-	#endif//IPPROTO_UDPLITE
+    #ifndef IPPROTO_UDPLITE
+    #define IPPROTO_UDPLITE     136
+    #endif//IPPROTO_UDPLITE
 #else
     #include<errno.h>
     #include<sys/types.h>
@@ -74,8 +74,8 @@
 
 namespace hgl
 {
-	namespace network
-	{
+    namespace network
+    {
         /**
          * IP类型枚举
          */
@@ -137,11 +137,11 @@ namespace hgl
         inline bool CheckIPv6SupportUDPLite (){return CheckIPSupport(AF_INET6,SOCK_DGRAM,    IPPROTO_UDPLITE );}
         inline bool CheckIPv6SupportSCTP    (){return CheckIPSupport(AF_INET6,SOCK_SEQPACKET,IPPROTO_SCTP    );}
 
-		/**
+        /**
          * IP地址类
          */
-		class IPAddress
-		{
+        class IPAddress
+        {
         protected:
 
             int socktype;
@@ -435,6 +435,6 @@ namespace hgl
 
         inline IPv4Address *CreateIPv4UDPBoradcast      (ushort port){return(new IPv4Address(htonl(INADDR_BROADCAST),port,SOCK_DGRAM,   IPPROTO_UDP));}
         inline IPv4Address *CreateIPv4UDPLiteBoradcast  (ushort port){return(new IPv4Address(htonl(INADDR_BROADCAST),port,SOCK_DGRAM,   IPPROTO_UDPLITE));}
-	}//namespace network
+    }//namespace network
 }//namespace hgl
 #endif//HGL_NETWORK_IP_TOOL_INCLUDE

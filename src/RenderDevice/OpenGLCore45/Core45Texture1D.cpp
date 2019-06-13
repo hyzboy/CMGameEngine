@@ -8,8 +8,8 @@ namespace hgl
     {
         Texture1D::Texture1D()
         {
-			type=HGL_TEXTURE_1D;
-			length=wrap=0;
+            type=HGL_TEXTURE_1D;
+            length=wrap=0;
             glCreateTextures(GL_TEXTURE_1D,1,&texture_id);
         }
 
@@ -28,7 +28,7 @@ namespace hgl
 
             if(data)        //无DATA数据时不用关心源格式
             {
-				if(!TextureSourceFormatCheck(sf))
+                if(!TextureSourceFormatCheck(sf))
                 {
                     LOG_ERROR(OS_TEXT("sf error =")+OSString(sf));
                     return(false);
@@ -81,7 +81,7 @@ namespace hgl
 
         int Texture1D::GetImage(void *data_pointer,TSF fmt,int level)
         {
-			if(!TextureSourceFormatCheck(fmt))
+            if(!TextureSourceFormatCheck(fmt))
             {
                 LOG_ERROR(OS_TEXT("glTexture1D::GetImage,fmt error =")+OSString(fmt));
                 return(-1);
@@ -117,9 +117,9 @@ namespace hgl
         bool Texture1D::ChangeImage(uint s,uint l,void *data,uint bytes,TSF sf)
         {
             if(s>=length
-			||l>length-s
-			||!data
-			||!TextureSourceFormatCheck(sf))
+            ||l>length-s
+            ||!data
+            ||!TextureSourceFormatCheck(sf))
             {
                 LOG_ERROR(OS_TEXT("fmt error =")+OSString(sf));
                 return(false);

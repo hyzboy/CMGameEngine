@@ -27,7 +27,7 @@ namespace hgl
             if(result==ERROR_SUCCESS)
             {
                 wchar_t path[HGL_MAX_PATH];
-                
+
                 ExpandEnvironmentStringsW(temp,path,s);
                 temp_path=path;
                 return(true);
@@ -80,7 +80,7 @@ namespace hgl
         GET_FOLDER(mydata       ,CSIDL_APPDATA          );
         GET_FOLDER(myprogram    ,CSIDL_STARTMENU        );
         GET_FOLDER(mydesktop    ,CSIDL_DESKTOPDIRECTORY );
-        
+
         GET_FOLDER(desktop      ,CSIDL_COMMON_DESKTOPDIRECTORY );
 
         #undef GET_FOLDER

@@ -68,7 +68,7 @@
 
 /* Chorus Parameters */
 #define AL_CHORUS_WAVEFORM                                 0x0001
-#define	AL_CHORUS_PHASE                                    0x0002
+#define AL_CHORUS_PHASE                                    0x0002
 #define AL_CHORUS_RATE                                     0x0003
 #define AL_CHORUS_DEPTH                                    0x0004
 #define AL_CHORUS_FEEDBACK                                 0x0005
@@ -197,7 +197,7 @@
 
 /* Filter type definitions to be used with AL_FILTER_TYPE. */
 #define AL_FILTER_NULL                                     0x0000  /* Can also be used as a Filter Object ID */
-#define	AL_FILTER_LOWPASS                                  0x0001
+#define AL_FILTER_LOWPASS                                  0x0001
 #define AL_FILTER_HIGHPASS                                 0x0002
 #define AL_FILTER_BANDPASS                                 0x0003
 
@@ -439,8 +439,8 @@
 #define AL_VOCAL_MORPHER_MAX_PHONEMEA                      29
 #define AL_VOCAL_MORPHER_DEFAULT_PHONEMEA                  0
 
-#define AL_VOCAL_MORPHER_MIN_PHONEMEA_COARSE_TUNING	       (-24)
-#define AL_VOCAL_MORPHER_MAX_PHONEMEA_COARSE_TUNING	       24
+#define AL_VOCAL_MORPHER_MIN_PHONEMEA_COARSE_TUNING        (-24)
+#define AL_VOCAL_MORPHER_MAX_PHONEMEA_COARSE_TUNING        24
 #define AL_VOCAL_MORPHER_DEFAULT_PHONEMEA_COARSE_TUNING    0
 
 #define AL_VOCAL_MORPHER_MIN_PHONEMEB                      0
@@ -635,137 +635,137 @@
 
 namespace openal
 {
-	/**
-	 * Effect object functions.
-	 */
+    /**
+     * Effect object functions.
+     */
 
-	/* Create Effect objects. */
-	typedef void (AL_APIENTRY *LPALGENEFFECTS)( ALsizei n, ALuint* effects );
+    /* Create Effect objects. */
+    typedef void (AL_APIENTRY *LPALGENEFFECTS)( ALsizei n, ALuint* effects );
 
-	/* Delete Effect objects. */
-	typedef void (AL_APIENTRY *LPALDELETEEFFECTS)( ALsizei n, ALuint* effects );
+    /* Delete Effect objects. */
+    typedef void (AL_APIENTRY *LPALDELETEEFFECTS)( ALsizei n, ALuint* effects );
 
-	/* Verify a handle is a valid Effect. */
-	typedef ALboolean (AL_APIENTRY *LPALISEFFECT)( ALuint eid );
+    /* Verify a handle is a valid Effect. */
+    typedef ALboolean (AL_APIENTRY *LPALISEFFECT)( ALuint eid );
 
-	/* Set an integer parameter for an Effect object. */
-	typedef void (AL_APIENTRY *LPALEFFECTI)( ALuint eid, ALenum param, ALint value);
-	typedef void (AL_APIENTRY *LPALEFFECTIV)( ALuint eid, ALenum param, ALint* values );
+    /* Set an integer parameter for an Effect object. */
+    typedef void (AL_APIENTRY *LPALEFFECTI)( ALuint eid, ALenum param, ALint value);
+    typedef void (AL_APIENTRY *LPALEFFECTIV)( ALuint eid, ALenum param, ALint* values );
 
-	/* Set a floating point parameter for an Effect object. */
-	typedef void (AL_APIENTRY *LPALEFFECTF)( ALuint eid, ALenum param, ALfloat value);
-	typedef void (AL_APIENTRY *LPALEFFECTFV)( ALuint eid, ALenum param, ALfloat* values );
+    /* Set a floating point parameter for an Effect object. */
+    typedef void (AL_APIENTRY *LPALEFFECTF)( ALuint eid, ALenum param, ALfloat value);
+    typedef void (AL_APIENTRY *LPALEFFECTFV)( ALuint eid, ALenum param, ALfloat* values );
 
-	/* Get an integer parameter for an Effect object. */
-	typedef void (AL_APIENTRY *LPALGETEFFECTI)( ALuint eid, ALenum pname, ALint* value );
-	typedef void (AL_APIENTRY *LPALGETEFFECTIV)( ALuint eid, ALenum pname, ALint* values );
+    /* Get an integer parameter for an Effect object. */
+    typedef void (AL_APIENTRY *LPALGETEFFECTI)( ALuint eid, ALenum pname, ALint* value );
+    typedef void (AL_APIENTRY *LPALGETEFFECTIV)( ALuint eid, ALenum pname, ALint* values );
 
-	/* Get a floating point parameter for an Effect object. */
-	typedef void (AL_APIENTRY *LPALGETEFFECTF)( ALuint eid, ALenum pname, ALfloat* value );
-	typedef void (AL_APIENTRY *LPALGETEFFECTFV)( ALuint eid, ALenum pname, ALfloat* values );
-
-
-	/**
-	 * Filter object functions
-	 */
-
-	/* Create Filter objects. */
-	typedef void (AL_APIENTRY *LPALGENFILTERS)( ALsizei n, ALuint* filters );
-
-	/* Delete Filter objects. */
-	typedef void (AL_APIENTRY *LPALDELETEFILTERS)( ALsizei n, ALuint* filters );
-
-	/* Verify a handle is a valid Filter. */
-	typedef ALboolean (AL_APIENTRY *LPALISFILTER)( ALuint fid );
-
-	/* Set an integer parameter for a Filter object. */
-	typedef void (AL_APIENTRY *LPALFILTERI)( ALuint fid, ALenum param, ALint value );
-	typedef void (AL_APIENTRY *LPALFILTERIV)( ALuint fid, ALenum param, ALint* values );
-
-	/* Set a floating point parameter for an Filter object. */
-	typedef void (AL_APIENTRY *LPALFILTERF)( ALuint fid, ALenum param, ALfloat value);
-	typedef void (AL_APIENTRY *LPALFILTERFV)( ALuint fid, ALenum param, ALfloat* values );
-
-	/* Get an integer parameter for a Filter object. */
-	typedef void (AL_APIENTRY *LPALGETFILTERI)( ALuint fid, ALenum pname, ALint* value );
-	typedef void (AL_APIENTRY *LPALGETFILTERIV)( ALuint fid, ALenum pname, ALint* values );
-
-	/* Get a floating point parameter for a Filter object. */
-	typedef void (AL_APIENTRY *LPALGETFILTERF)( ALuint fid, ALenum pname, ALfloat* value );
-	typedef void (AL_APIENTRY *LPALGETFILTERFV)( ALuint fid, ALenum pname, ALfloat* values );
+    /* Get a floating point parameter for an Effect object. */
+    typedef void (AL_APIENTRY *LPALGETEFFECTF)( ALuint eid, ALenum pname, ALfloat* value );
+    typedef void (AL_APIENTRY *LPALGETEFFECTFV)( ALuint eid, ALenum pname, ALfloat* values );
 
 
-	/**
-	 * Auxiliary Slot object functions
-	 */
+    /**
+     * Filter object functions
+     */
 
-	/* Create Auxiliary Slot objects. */
-	typedef void (AL_APIENTRY *LPALGENAUXILIARYEFFECTSLOTS)( ALsizei n, ALuint* slots );
+    /* Create Filter objects. */
+    typedef void (AL_APIENTRY *LPALGENFILTERS)( ALsizei n, ALuint* filters );
 
-	/* Delete Auxiliary Slot objects. */
-	typedef void (AL_APIENTRY *LPALDELETEAUXILIARYEFFECTSLOTS)( ALsizei n, ALuint* slots );
+    /* Delete Filter objects. */
+    typedef void (AL_APIENTRY *LPALDELETEFILTERS)( ALsizei n, ALuint* filters );
 
-	/* Verify a handle is a valid Auxiliary Slot. */
-	typedef ALboolean (AL_APIENTRY *LPALISAUXILIARYEFFECTSLOT)( ALuint slot );
+    /* Verify a handle is a valid Filter. */
+    typedef ALboolean (AL_APIENTRY *LPALISFILTER)( ALuint fid );
 
-	/* Set an integer parameter for a Auxiliary Slot object. */
-	typedef void (AL_APIENTRY *LPALAUXILIARYEFFECTSLOTI)( ALuint asid, ALenum param, ALint value );
-	typedef void (AL_APIENTRY *LPALAUXILIARYEFFECTSLOTIV)( ALuint asid, ALenum param, ALint* values );
+    /* Set an integer parameter for a Filter object. */
+    typedef void (AL_APIENTRY *LPALFILTERI)( ALuint fid, ALenum param, ALint value );
+    typedef void (AL_APIENTRY *LPALFILTERIV)( ALuint fid, ALenum param, ALint* values );
 
-	/* Set a floating point parameter for an Auxiliary Slot object. */
-	typedef void (AL_APIENTRY *LPALAUXILIARYEFFECTSLOTF)( ALuint asid, ALenum param, ALfloat value );
-	typedef void (AL_APIENTRY *LPALAUXILIARYEFFECTSLOTFV)( ALuint asid, ALenum param, ALfloat* values );
+    /* Set a floating point parameter for an Filter object. */
+    typedef void (AL_APIENTRY *LPALFILTERF)( ALuint fid, ALenum param, ALfloat value);
+    typedef void (AL_APIENTRY *LPALFILTERFV)( ALuint fid, ALenum param, ALfloat* values );
 
-	/* Get an integer parameter for a Auxiliary Slot object. */
-	typedef void (AL_APIENTRY *LPALGETAUXILIARYEFFECTSLOTI)( ALuint asid, ALenum pname, ALint* value );
-	typedef void (AL_APIENTRY *LPALGETAUXILIARYEFFECTSLOTIV)( ALuint asid, ALenum pname, ALint* values );
+    /* Get an integer parameter for a Filter object. */
+    typedef void (AL_APIENTRY *LPALGETFILTERI)( ALuint fid, ALenum pname, ALint* value );
+    typedef void (AL_APIENTRY *LPALGETFILTERIV)( ALuint fid, ALenum pname, ALint* values );
 
-	/* Get a floating point parameter for a Auxiliary Slot object. */
-	typedef void (AL_APIENTRY *LPALGETAUXILIARYEFFECTSLOTF)( ALuint asid, ALenum pname, ALfloat* value );
-	typedef void (AL_APIENTRY *LPALGETAUXILIARYEFFECTSLOTFV)( ALuint asid, ALenum pname, ALfloat* values );
+    /* Get a floating point parameter for a Filter object. */
+    typedef void (AL_APIENTRY *LPALGETFILTERF)( ALuint fid, ALenum pname, ALfloat* value );
+    typedef void (AL_APIENTRY *LPALGETFILTERFV)( ALuint fid, ALenum pname, ALfloat* values );
+
+
+    /**
+     * Auxiliary Slot object functions
+     */
+
+    /* Create Auxiliary Slot objects. */
+    typedef void (AL_APIENTRY *LPALGENAUXILIARYEFFECTSLOTS)( ALsizei n, ALuint* slots );
+
+    /* Delete Auxiliary Slot objects. */
+    typedef void (AL_APIENTRY *LPALDELETEAUXILIARYEFFECTSLOTS)( ALsizei n, ALuint* slots );
+
+    /* Verify a handle is a valid Auxiliary Slot. */
+    typedef ALboolean (AL_APIENTRY *LPALISAUXILIARYEFFECTSLOT)( ALuint slot );
+
+    /* Set an integer parameter for a Auxiliary Slot object. */
+    typedef void (AL_APIENTRY *LPALAUXILIARYEFFECTSLOTI)( ALuint asid, ALenum param, ALint value );
+    typedef void (AL_APIENTRY *LPALAUXILIARYEFFECTSLOTIV)( ALuint asid, ALenum param, ALint* values );
+
+    /* Set a floating point parameter for an Auxiliary Slot object. */
+    typedef void (AL_APIENTRY *LPALAUXILIARYEFFECTSLOTF)( ALuint asid, ALenum param, ALfloat value );
+    typedef void (AL_APIENTRY *LPALAUXILIARYEFFECTSLOTFV)( ALuint asid, ALenum param, ALfloat* values );
+
+    /* Get an integer parameter for a Auxiliary Slot object. */
+    typedef void (AL_APIENTRY *LPALGETAUXILIARYEFFECTSLOTI)( ALuint asid, ALenum pname, ALint* value );
+    typedef void (AL_APIENTRY *LPALGETAUXILIARYEFFECTSLOTIV)( ALuint asid, ALenum pname, ALint* values );
+
+    /* Get a floating point parameter for a Auxiliary Slot object. */
+    typedef void (AL_APIENTRY *LPALGETAUXILIARYEFFECTSLOTF)( ALuint asid, ALenum pname, ALfloat* value );
+    typedef void (AL_APIENTRY *LPALGETAUXILIARYEFFECTSLOTFV)( ALuint asid, ALenum pname, ALfloat* values );
 }
 
 namespace openal
 {
-	// EFX Extension function pointer variables
+    // EFX Extension function pointer variables
 
-	// Effect objects
-	extern LPALGENEFFECTS alGenEffects;
-	extern LPALDELETEEFFECTS alDeleteEffects;
-	extern LPALISEFFECT alIsEffect;
-	extern LPALEFFECTI alEffecti;
-	extern LPALEFFECTIV alEffectiv;
-	extern LPALEFFECTF alEffectf;
-	extern LPALEFFECTFV alEffectfv;
-	extern LPALGETEFFECTI alGetEffecti;
-	extern LPALGETEFFECTIV alGetEffectiv;
-	extern LPALGETEFFECTF alGetEffectf;
-	extern LPALGETEFFECTFV alGetEffectfv;
+    // Effect objects
+    extern LPALGENEFFECTS alGenEffects;
+    extern LPALDELETEEFFECTS alDeleteEffects;
+    extern LPALISEFFECT alIsEffect;
+    extern LPALEFFECTI alEffecti;
+    extern LPALEFFECTIV alEffectiv;
+    extern LPALEFFECTF alEffectf;
+    extern LPALEFFECTFV alEffectfv;
+    extern LPALGETEFFECTI alGetEffecti;
+    extern LPALGETEFFECTIV alGetEffectiv;
+    extern LPALGETEFFECTF alGetEffectf;
+    extern LPALGETEFFECTFV alGetEffectfv;
 
-	// Filter objects
-	extern LPALGENFILTERS alGenFilters;
-	extern LPALDELETEFILTERS alDeleteFilters;
-	extern LPALISFILTER alIsFilter;
-	extern LPALFILTERI alFilteri;
-	extern LPALFILTERIV alFilteriv;
-	extern LPALFILTERF alFilterf;
-	extern LPALFILTERFV alFilterfv;
-	extern LPALGETFILTERI alGetFilteri;
-	extern LPALGETFILTERIV alGetFilteriv;
-	extern LPALGETFILTERF alGetFilterf;
-	extern LPALGETFILTERFV alGetFilterfv;
+    // Filter objects
+    extern LPALGENFILTERS alGenFilters;
+    extern LPALDELETEFILTERS alDeleteFilters;
+    extern LPALISFILTER alIsFilter;
+    extern LPALFILTERI alFilteri;
+    extern LPALFILTERIV alFilteriv;
+    extern LPALFILTERF alFilterf;
+    extern LPALFILTERFV alFilterfv;
+    extern LPALGETFILTERI alGetFilteri;
+    extern LPALGETFILTERIV alGetFilteriv;
+    extern LPALGETFILTERF alGetFilterf;
+    extern LPALGETFILTERFV alGetFilterfv;
 
-	// Auxiliary slot object
-	extern LPALGENAUXILIARYEFFECTSLOTS alGenAuxiliaryEffectSlots;
-	extern LPALDELETEAUXILIARYEFFECTSLOTS alDeleteAuxiliaryEffectSlots;
-	extern LPALISAUXILIARYEFFECTSLOT alIsAuxiliaryEffectSlot;
-	extern LPALAUXILIARYEFFECTSLOTI alAuxiliaryEffectSloti;
-	extern LPALAUXILIARYEFFECTSLOTIV alAuxiliaryEffectSlotiv;
-	extern LPALAUXILIARYEFFECTSLOTF alAuxiliaryEffectSlotf;
-	extern LPALAUXILIARYEFFECTSLOTFV alAuxiliaryEffectSlotfv;
-	extern LPALGETAUXILIARYEFFECTSLOTI alGetAuxiliaryEffectSloti;
-	extern LPALGETAUXILIARYEFFECTSLOTIV alGetAuxiliaryEffectSlotiv;
-	extern LPALGETAUXILIARYEFFECTSLOTF alGetAuxiliaryEffectSlotf;
-	extern LPALGETAUXILIARYEFFECTSLOTFV alGetAuxiliaryEffectSlotfv;
+    // Auxiliary slot object
+    extern LPALGENAUXILIARYEFFECTSLOTS alGenAuxiliaryEffectSlots;
+    extern LPALDELETEAUXILIARYEFFECTSLOTS alDeleteAuxiliaryEffectSlots;
+    extern LPALISAUXILIARYEFFECTSLOT alIsAuxiliaryEffectSlot;
+    extern LPALAUXILIARYEFFECTSLOTI alAuxiliaryEffectSloti;
+    extern LPALAUXILIARYEFFECTSLOTIV alAuxiliaryEffectSlotiv;
+    extern LPALAUXILIARYEFFECTSLOTF alAuxiliaryEffectSlotf;
+    extern LPALAUXILIARYEFFECTSLOTFV alAuxiliaryEffectSlotfv;
+    extern LPALGETAUXILIARYEFFECTSLOTI alGetAuxiliaryEffectSloti;
+    extern LPALGETAUXILIARYEFFECTSLOTIV alGetAuxiliaryEffectSlotiv;
+    extern LPALGETAUXILIARYEFFECTSLOTF alGetAuxiliaryEffectSlotf;
+    extern LPALGETAUXILIARYEFFECTSLOTFV alGetAuxiliaryEffectSlotfv;
 }
 #endif//HGL_EFX_INCLUDE

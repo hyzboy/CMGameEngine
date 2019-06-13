@@ -80,17 +80,17 @@ extern vorbis_info_floor *floor0_info_unpack(vorbis_info *,oggpack_buffer *);
 extern void floor0_free_info(vorbis_info_floor *);
 extern int floor0_memosize(vorbis_info_floor *);
 extern ogg_int32_t *floor0_inverse1(struct vorbis_dsp_state *,
-				    vorbis_info_floor *,ogg_int32_t *);
+                    vorbis_info_floor *,ogg_int32_t *);
 extern int floor0_inverse2 (struct vorbis_dsp_state *,vorbis_info_floor *,
-			    ogg_int32_t *buffer,ogg_int32_t *);
+                ogg_int32_t *buffer,ogg_int32_t *);
 
 extern vorbis_info_floor *floor1_info_unpack(vorbis_info *,oggpack_buffer *);
 extern void floor1_free_info(vorbis_info_floor *);
 extern int floor1_memosize(vorbis_info_floor *);
 extern ogg_int32_t *floor1_inverse1(struct vorbis_dsp_state *,
-				    vorbis_info_floor *,ogg_int32_t *);
+                    vorbis_info_floor *,ogg_int32_t *);
 extern int floor1_inverse2 (struct vorbis_dsp_state *,vorbis_info_floor *,
-			    ogg_int32_t *buffer,ogg_int32_t *);
+                ogg_int32_t *buffer,ogg_int32_t *);
 
 typedef struct{
   int   order;
@@ -146,9 +146,9 @@ typedef struct vorbis_info_residue{
 
 extern void res_clear_info(vorbis_info_residue *info);
 extern int res_unpack(vorbis_info_residue *info,
-		      vorbis_info *vi,oggpack_buffer *opb);
+              vorbis_info *vi,oggpack_buffer *opb);
 extern int res_inverse(vorbis_dsp_state *,vorbis_info_residue *info,
-		       ogg_int32_t **in,int *nonzero,int ch);
+               ogg_int32_t **in,int *nonzero,int ch);
 
 /* mode ************************************************************/
 typedef struct {
@@ -178,7 +178,7 @@ typedef struct vorbis_info_mapping{
 } vorbis_info_mapping;
 
 extern int mapping_info_unpack(vorbis_info_mapping *,vorbis_info *,
-			       oggpack_buffer *);
+                   oggpack_buffer *);
 extern void mapping_clear_info(vorbis_info_mapping *);
 extern int mapping_inverse(struct vorbis_dsp_state *,vorbis_info_mapping *);
 
@@ -220,13 +220,13 @@ extern void     vorbis_dsp_clear(vorbis_dsp_state *v);
 extern vorbis_dsp_state *vorbis_dsp_create(vorbis_info *vi);
 extern void     vorbis_dsp_destroy(vorbis_dsp_state *v);
 extern int      vorbis_dsp_headerin(vorbis_info *vi,vorbis_comment *vc,
-				    ogg_packet *op);
+                    ogg_packet *op);
 
 extern int      vorbis_dsp_restart(vorbis_dsp_state *v);
 extern int      vorbis_dsp_synthesis(vorbis_dsp_state *vd,
-				     ogg_packet *op,int decodep);
+                     ogg_packet *op,int decodep);
 extern int      vorbis_dsp_pcmout(vorbis_dsp_state *v,
-				  ogg_int16_t *pcm,int samples);
+                  ogg_int16_t *pcm,int samples);
 extern int      vorbis_dsp_read(vorbis_dsp_state *v,int samples);
 extern long     vorbis_packet_blocksize(vorbis_info *vi,ogg_packet *op);
 

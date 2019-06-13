@@ -10,40 +10,40 @@ using namespace hgl::graph;
 
 class CameraControlFlowObject:public FlowObject
 {
-private:    
+private:
 
-	bool mouse_down[mbEnd];
-	Vector2f mouse_coord;
-	Vector2f push_coord[mbEnd];
-	
-	Vector3f push_center[mbEnd];
-	Vector3f push_eye[mbEnd];
+    bool mouse_down[mbEnd];
+    Vector2f mouse_coord;
+    Vector2f push_coord[mbEnd];
+
+    Vector3f push_center[mbEnd];
+    Vector3f push_eye[mbEnd];
 
 protected:
 
-	WalkerCamera cam;
-	float step;
+    WalkerCamera cam;
+    float step;
 
-	Matrix4f proj;
-	Matrix4f mv;
+    Matrix4f proj;
+    Matrix4f mv;
 
 public:
-   
-	virtual void OnResize       (int,int);
-    
-	virtual bool OnMouseMove    (int,int);
-	virtual bool OnMouseWheel   (double,double);
 
-	virtual bool OnMouseDown    (MouseButton);
+    virtual void OnResize       (int,int);
+
+    virtual bool OnMouseMove    (int,int);
+    virtual bool OnMouseWheel   (double,double);
+
+    virtual bool OnMouseDown    (MouseButton);
     virtual bool OnMouseUp      (MouseButton);
-    
+
     virtual bool OnKeyDown      (KeyboardButton);
     virtual bool OnKeyRepeat    (KeyboardButton kb){return OnKeyDown(kb);}
 
 public:
 
-	CameraControlFlowObject();
+    CameraControlFlowObject();
 
-	virtual void Update();
+    virtual void Update();
 };//class CameraControl
 #endif//CAMERA_CONTROL_INCLUDE

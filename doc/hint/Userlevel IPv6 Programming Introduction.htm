@@ -434,99 +434,99 @@ const char *inet_ntop (int af, const void *cp, char *buf, socklen_t len);
 
       <thead>
         <tr>
-	  <th>Obsolete Interface</th>
-	  <th>Protocol Independent Interface</th>
-	</tr>
+      <th>Obsolete Interface</th>
+      <th>Protocol Independent Interface</th>
+    </tr>
       </thead>
 
       <tbody>
         <tr>
-	  <td><tt>struct sockaddr_in</tt> (when used to store addresses)</td>
-	  <td><tt>struct sockaddr_storage</tt></td>
+      <td><tt>struct sockaddr_in</tt> (when used to store addresses)</td>
+      <td><tt>struct sockaddr_storage</tt></td>
         </tr>
 
         <tr>
-	  <td><tt>gethostbyname</tt></td>
-	  <td rowspan="3"><tt>getaddrinfo</tt></td>
+      <td><tt>gethostbyname</tt></td>
+      <td rowspan="3"><tt>getaddrinfo</tt></td>
         </tr>
 
         <tr>
-	  <td><tt>gethostbyname2</tt></td>
+      <td><tt>gethostbyname2</tt></td>
         </tr>
 
         <tr>
-	  <td><tt>getservbyname</tt> when filling in port number</td>
+      <td><tt>getservbyname</tt> when filling in port number</td>
         </tr>
 
         <tr>
-	  <td><tt>gethostbyaddr</tt></td>
-	  <td rowspan="2"><tt>getnameinfo</tt></td>
+      <td><tt>gethostbyaddr</tt></td>
+      <td rowspan="2"><tt>getnameinfo</tt></td>
         </tr>
 
         <tr>
-	  <td><tt>getservbyport</tt> when handling socket address</td>
+      <td><tt>getservbyport</tt> when handling socket address</td>
         </tr>
 
         <tr>
-	  <td><tt>inet_addr</tt></td>
-	  <td rowspan="3"><tt>getaddrinfo</tt> with <tt>AI_NUMERICHOST</tt> flag</td>
+      <td><tt>inet_addr</tt></td>
+      <td rowspan="3"><tt>getaddrinfo</tt> with <tt>AI_NUMERICHOST</tt> flag</td>
         </tr>
 
         <tr>
-	  <td><tt>inet_aton</tt></td>
+      <td><tt>inet_aton</tt></td>
         </tr>
 
         <tr>
-	  <td><tt>inet_nsap_addr</tt></td>
+      <td><tt>inet_nsap_addr</tt></td>
         </tr>
 
         <tr>
-	  <td><tt>inet_ntoa</tt></td>
-	  <td rowspan="2"><tt>getnameinfo</tt> with <tt>NI_NUMERICHOST</tt> flag</td>
+      <td><tt>inet_ntoa</tt></td>
+      <td rowspan="2"><tt>getnameinfo</tt> with <tt>NI_NUMERICHOST</tt> flag</td>
         </tr>
 
         <tr>
-	  <td><tt>inet_nsap_ntoa</tt></td>
+      <td><tt>inet_nsap_ntoa</tt></td>
         </tr>
 
         <tr>
-	  <td><tt>inet_makeaddr</tt></td>
-	  <td rowspan="6">Avoid completely, we don't have this concept anymore</td>
+      <td><tt>inet_makeaddr</tt></td>
+      <td rowspan="6">Avoid completely, we don't have this concept anymore</td>
         </tr>
 
         <tr>
-	  <td><tt>inet_netof</tt></td>
+      <td><tt>inet_netof</tt></td>
         </tr>
 
         <tr>
-	  <td><tt>inet_network</tt></td>
+      <td><tt>inet_network</tt></td>
         </tr>
 
         <tr>
-	  <td><tt>inet_neta</tt></td>
+      <td><tt>inet_neta</tt></td>
         </tr>
 
         <tr>
-	  <td><tt>inet_net_ntop</tt></td>
+      <td><tt>inet_net_ntop</tt></td>
         </tr>
 
         <tr>
-	  <td><tt>inet_net_pton</tt></td>
+      <td><tt>inet_net_pton</tt></td>
         </tr>
 
         <tr>
-	  <td><tt>rcmd</tt></td>
-	  <td><tt>rcmd_af</tt></td>
+      <td><tt>rcmd</tt></td>
+      <td><tt>rcmd_af</tt></td>
         </tr>
 
         <tr>
-	  <td><tt>rexec</tt></td>
-	  <td><tt>rexec_af</tt></td>
+      <td><tt>rexec</tt></td>
+      <td><tt>rexec_af</tt></td>
         </tr>
 
         <tr>
-	  <td><tt>rresvport</tt></td>
-	  <td><tt>rresvport_af</tt></td>
+      <td><tt>rresvport</tt></td>
+      <td><tt>rresvport_af</tt></td>
         </tr>
       </tbody>
     </table>
@@ -1151,6 +1151,6 @@ const char *inet_ntop (int af, const void *cp, char *buf, socklen_t len);
     <tt>getifaddrs()</tt>.  <tt>getaddrinfo()</tt> can still be called
     to get the port number for the service.</p>
 
-  
+
 
 </body></html>

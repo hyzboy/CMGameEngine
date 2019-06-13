@@ -232,9 +232,9 @@ namespace hgl
         {
             Material *mat=able->GetMaterial();
 
-            int tex_binding_point=0;						//纹理绑定点，必须按顺序递增排列，与纹理id无关
+            int tex_binding_point=0;                        //纹理绑定点，必须按顺序递增排列，与纹理id无关
 
-            if(mat->GetTextureNumber())						//如果有贴图
+            if(mat->GetTextureNumber())                     //如果有贴图
             {
                 MATERIAL_TEXTURE_CHANNEL_NAME mtc_name;
 
@@ -248,7 +248,7 @@ namespace hgl
 
                     GetMaterialTextureName(mtc_name,i);
 
-                    if(!glsl->SetUniform1i(mtc_name,tex_binding_point))			//设定贴图对应索引
+                    if(!glsl->SetUniform1i(mtc_name,tex_binding_point))         //设定贴图对应索引
                     {
                         LOG_PROBLEM(u8"attach Shader sampler \""+UTF8String(mtc_name)+u8"\" to texture "+UTF8String(tex_binding_point)+u8" error!");
                         return(false);
@@ -394,8 +394,8 @@ namespace hgl
 
             //绘制
             {
-				if(draw_prim==HGL_PRIM_RECTANGLE)
-					draw_prim=GL_POINTS;
+                if(draw_prim==HGL_PRIM_RECTANGLE)
+                    draw_prim=GL_POINTS;
 
                 if(vb_index)
                     glDrawElements(draw_prim,draw_count,vb_index->GetDataType(),(const void *)(draw_start*vb_index->GetDataBytes()));

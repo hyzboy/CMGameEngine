@@ -4,42 +4,42 @@
 #include<hgl/TypeFunc.h>
 namespace hgl
 {
-    //	32	空格
-    //	33	!
-    //	34	"
-    //	35	#
-    //	36	$
-    //	37	%
-    //	38	&
-    //	39	'
-    //	40	(
-    //	41	)
-    //	42	*
-    //	43	+
-    //	44	,
-    //	45	-
-    //	46	.
-    //	47	/
-    //	48	0123456789
-    //	58	:
-    //	59	;
-    //	60	<
-    //	61	=
-    //	62	>
-    //	63	?
-    //	64	@
-    //	65	ABCDEFGHIJKLMNOPQRSTUVWXYZ
-    //	91	[
-    //	92	\
-    //	93	]
-    //	94	^
-    //	95	_
-    //	96	`
-    //	97	abcdefghijklmnopqrstuvwxyz
-    //	123	{
-    //	124	|
-    //	125	}
-    //	126	~
+    //  32  空格
+    //  33  !
+    //  34  "
+    //  35  #
+    //  36  $
+    //  37  %
+    //  38  &
+    //  39  '
+    //  40  (
+    //  41  )
+    //  42  *
+    //  43  +
+    //  44  ,
+    //  45  -
+    //  46  .
+    //  47  /
+    //  48  0123456789
+    //  58  :
+    //  59  ;
+    //  60  <
+    //  61  =
+    //  62  >
+    //  63  ?
+    //  64  @
+    //  65  ABCDEFGHIJKLMNOPQRSTUVWXYZ
+    //  91  [
+    //  92  \
+    //  93  ]
+    //  94  ^
+    //  95  _
+    //  96  `
+    //  97  abcdefghijklmnopqrstuvwxyz
+    //  123 {
+    //  124 |
+    //  125 }
+    //  126 ~
 
     /**
      * 测试字符是否是emoji表情
@@ -486,7 +486,7 @@ namespace hgl
 
         while(*dst&&max_count)
         {
-            ++dst;			//找到结束
+            ++dst;          //找到结束
             --max_count;
         }
 
@@ -1521,7 +1521,7 @@ namespace hgl
             return(true);
         }
 
-        ++str;	//跳过小数点
+        ++str;  //跳过小数点
 
         R pos=0.1f;
 
@@ -1583,7 +1583,7 @@ namespace hgl
             return(true);
         }
 
-        ++str;	//跳过小数点
+        ++str;  //跳过小数点
         --size;
 
         R pos=0.1f;
@@ -1656,10 +1656,10 @@ namespace hgl
             return(false);
         }
 
-        if(*str=='T'||*str=='t'			//true/false
-            ||*str=='Y'||*str=='y'			//yes/no
-        ||*str=='M'||*str=='m'			//male/women
-        ||*str=='1')					//1/0
+        if(*str=='T'||*str=='t'         //true/false
+            ||*str=='Y'||*str=='y'          //yes/no
+        ||*str=='M'||*str=='m'          //male/women
+        ||*str=='1')                    //1/0
         {
             value=true;
             return(true);
@@ -1859,11 +1859,11 @@ namespace hgl
     template<typename T,typename F>
     T *ftos(T *str,int size,int fsize,F value)
     {
-        const long integer=(long)value;		//整数部分
+        const long integer=(long)value;     //整数部分
 
         T *p=str;
 
-        if(integer==0&&value<0)				//如果为-0.xx这种，integer会为0所以不增加-号
+        if(integer==0&&value<0)             //如果为-0.xx这种，integer会为0所以不增加-号
             *p++='-';
 
         itos(p,size,integer);
@@ -1875,7 +1875,7 @@ namespace hgl
 
         p=str+len;
 
-        value-=integer;						//保留小数部分
+        value-=integer;                     //保留小数部分
 
         if(value<0)
             value=-value;
@@ -1888,15 +1888,15 @@ namespace hgl
             return(str);
         }
 
-        *p++='.';							//加小数点
+        *p++='.';                           //加小数点
         ++len;
 
         while(value>min_value&&len<size&&fsize--)
         {
-            value*=10;						//让最上一位变成个位数
+            value*=10;                      //让最上一位变成个位数
             *p++='0'+int(value);
 
-            value-=int(value);				//减去整数部分
+            value-=int(value);              //减去整数部分
             ++len;
         }
 
@@ -1933,7 +1933,7 @@ namespace hgl
             new_value/=1024;
 
             if(name[pos]==0)
-                return(false);	//太大了
+                return(false);  //太大了
         }
 
         const float f=new_value;
@@ -2028,10 +2028,10 @@ namespace hgl
         return(count);
     }
 
-    template<typename T,typename I> inline int parse_float_array(const T *str,I *result,int max_count,const T end_char=0,const T **end_pointer=0){return parse_number_array<T,I,hgl::isfloat,	hgl::etof>(str,result,max_count,end_char,end_pointer);}
-    template<typename T,typename I> inline int parse_int_array	(const T *str,I *result,int max_count,const T end_char=0,const T **end_pointer=0){return parse_number_array<T,I,hgl::isinteger,	hgl::stoi>(str,result,max_count,end_char,end_pointer);}
-    template<typename T,typename I> inline int parse_uint_array	(const T *str,I *result,int max_count,const T end_char=0,const T **end_pointer=0){return parse_number_array<T,I,hgl::isdigit,	hgl::stou>(str,result,max_count,end_char,end_pointer);}
-    template<typename T,typename I> inline int parse_xint_array	(const T *str,I *result,int max_count,const T end_char=0,const T **end_pointer=0){return parse_number_array<T,I,hgl::isxdigit,	hgl::xtou>(str,result,max_count,end_char,end_pointer);}
+    template<typename T,typename I> inline int parse_float_array(const T *str,I *result,int max_count,const T end_char=0,const T **end_pointer=0){return parse_number_array<T,I,hgl::isfloat,   hgl::etof>(str,result,max_count,end_char,end_pointer);}
+    template<typename T,typename I> inline int parse_int_array  (const T *str,I *result,int max_count,const T end_char=0,const T **end_pointer=0){return parse_number_array<T,I,hgl::isinteger, hgl::stoi>(str,result,max_count,end_char,end_pointer);}
+    template<typename T,typename I> inline int parse_uint_array (const T *str,I *result,int max_count,const T end_char=0,const T **end_pointer=0){return parse_number_array<T,I,hgl::isdigit,   hgl::stou>(str,result,max_count,end_char,end_pointer);}
+    template<typename T,typename I> inline int parse_xint_array (const T *str,I *result,int max_count,const T end_char=0,const T **end_pointer=0){return parse_number_array<T,I,hgl::isxdigit,  hgl::xtou>(str,result,max_count,end_char,end_pointer);}
 
     /**
      * 解析数值阵列字符串到数组,如"1,2,3"或"1 2 3"
@@ -2088,10 +2088,10 @@ namespace hgl
         return(count);
     }
 
-    template<typename T,typename I,typename SET> inline int parse_float_array	(const T *str,const int len,SET &result_list){return parse_number_array<T,I,SET,hgl::isfloat,	hgl::etof>(str,len,result_list);}
-    template<typename T,typename I,typename SET> inline int parse_int_array		(const T *str,const int len,SET &result_list){return parse_number_array<T,I,SET,hgl::isinteger,	hgl::stoi>(str,len,result_list);}
-    template<typename T,typename I,typename SET> inline int parse_uint_array	(const T *str,const int len,SET &result_list){return parse_number_array<T,I,SET,hgl::isdigit,	hgl::stou>(str,len,result_list);}
-    template<typename T,typename I,typename SET> inline int parse_xint_array	(const T *str,const int len,SET &result_list){return parse_number_array<T,I,SET,hgl::isxdigit,	hgl::xtou>(str,len,result_list);}
+    template<typename T,typename I,typename SET> inline int parse_float_array   (const T *str,const int len,SET &result_list){return parse_number_array<T,I,SET,hgl::isfloat,   hgl::etof>(str,len,result_list);}
+    template<typename T,typename I,typename SET> inline int parse_int_array     (const T *str,const int len,SET &result_list){return parse_number_array<T,I,SET,hgl::isinteger, hgl::stoi>(str,len,result_list);}
+    template<typename T,typename I,typename SET> inline int parse_uint_array    (const T *str,const int len,SET &result_list){return parse_number_array<T,I,SET,hgl::isdigit,   hgl::stou>(str,len,result_list);}
+    template<typename T,typename I,typename SET> inline int parse_xint_array    (const T *str,const int len,SET &result_list){return parse_number_array<T,I,SET,hgl::isxdigit,  hgl::xtou>(str,len,result_list);}
 
     /**
      * 按指定分隔符拆分字符串为多个字符串
@@ -2172,12 +2172,12 @@ namespace hgl
     {
         if(!str)return(false);
 
-        if((!isalpha(*str))&&(*str!='_'))		//不是字母或下划线
+        if((!isalpha(*str))&&(*str!='_'))       //不是字母或下划线
             return(false);
 
         ++str;
 
-        if(!(*str))								//不能仅一个字符
+        if(!(*str))                             //不能仅一个字符
             return(false);
 
         while(*str)

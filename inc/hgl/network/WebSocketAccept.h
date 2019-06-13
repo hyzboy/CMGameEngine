@@ -8,7 +8,7 @@ namespace hgl
     namespace network
     {
         /**
-         * WebSocket接入管理 
+         * WebSocket接入管理
          */
         class WebSocketAccept:public TCPAccept
         {
@@ -56,7 +56,7 @@ namespace hgl
             }
 
         public:
-            
+
             WebSocketAccept();                                                  ///<本类构造函数
             WebSocketAccept(int,IPAddress *);                                   ///<本类构造函数
             virtual ~WebSocketAccept()=default;

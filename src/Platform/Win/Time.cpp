@@ -58,7 +58,7 @@ namespace hgl
 
         return(result);
     }
-    
+
     /**
     * 取得当前时间
     * @return 当前时间(单位：千分之一秒)

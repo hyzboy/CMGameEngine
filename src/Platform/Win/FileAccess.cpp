@@ -28,13 +28,13 @@ namespace hgl
 
             errno_t result;
 
-            if(fom==fomCreate       )result=_wsopen_s(&fp,fn,_O_BINARY|_O_WRONLY|_O_CREAT				,_SH_DENYNO,S_IREAD|_S_IWRITE);else
-            if(fom==fomCreateTrunc  )result=_wsopen_s(&fp,fn,_O_BINARY|_O_WRONLY|_O_CREAT|_O_TRUNC		,_SH_DENYNO,S_IREAD|_S_IWRITE);else
-//			if(fom==fomCreateTemp	)result=_wsopen_s(&fp,fn,_O_BINARY|_O_WRONLY|_O_CREAT|_O_TEMPORARY  ,_SH_DENYNO,S_IREAD|_S_IWRITE);else	//某些平台不支持，所以全都不使用fomCreateTemp,统一使用CreateTemp
-            if(fom==fomOnlyRead     )result=_wsopen_s(&fp,fn,_O_BINARY|_O_RDONLY						,_SH_DENYNO,S_IREAD|_S_IWRITE);else
-            if(fom==fomOnlyWrite    )result=_wsopen_s(&fp,fn,_O_BINARY|_O_WRONLY						,_SH_DENYNO,S_IREAD|_S_IWRITE);else
-            if(fom==fomReadWrite    )result=_wsopen_s(&fp,fn,_O_BINARY|_O_RDWR							,_SH_DENYNO,S_IREAD|_S_IWRITE);else
-            if(fom==fomAppend       )result=_wsopen_s(&fp,fn,_O_BINARY|_O_APPEND						,_SH_DENYNO,S_IREAD|_S_IWRITE);else
+            if(fom==fomCreate       )result=_wsopen_s(&fp,fn,_O_BINARY|_O_WRONLY|_O_CREAT               ,_SH_DENYNO,S_IREAD|_S_IWRITE);else
+            if(fom==fomCreateTrunc  )result=_wsopen_s(&fp,fn,_O_BINARY|_O_WRONLY|_O_CREAT|_O_TRUNC      ,_SH_DENYNO,S_IREAD|_S_IWRITE);else
+//          if(fom==fomCreateTemp   )result=_wsopen_s(&fp,fn,_O_BINARY|_O_WRONLY|_O_CREAT|_O_TEMPORARY  ,_SH_DENYNO,S_IREAD|_S_IWRITE);else //某些平台不支持，所以全都不使用fomCreateTemp,统一使用CreateTemp
+            if(fom==fomOnlyRead     )result=_wsopen_s(&fp,fn,_O_BINARY|_O_RDONLY                        ,_SH_DENYNO,S_IREAD|_S_IWRITE);else
+            if(fom==fomOnlyWrite    )result=_wsopen_s(&fp,fn,_O_BINARY|_O_WRONLY                        ,_SH_DENYNO,S_IREAD|_S_IWRITE);else
+            if(fom==fomReadWrite    )result=_wsopen_s(&fp,fn,_O_BINARY|_O_RDWR                          ,_SH_DENYNO,S_IREAD|_S_IWRITE);else
+            if(fom==fomAppend       )result=_wsopen_s(&fp,fn,_O_BINARY|_O_APPEND                        ,_SH_DENYNO,S_IREAD|_S_IWRITE);else
                 RETURN_ERROR(-1);
 
             return(fp);

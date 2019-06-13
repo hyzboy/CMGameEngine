@@ -60,7 +60,7 @@ namespace hgl
                 return(false);
 
             hresult=psl->QueryInterface(IID_IPersistFile,(LPVOID*)&pPf);
-        
+
             if(hresult!=S_OK)
                 return(false);
 

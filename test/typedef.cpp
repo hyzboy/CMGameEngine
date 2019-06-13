@@ -6,14 +6,14 @@ typedef void (__cdecl *InitPROC)();
 
 void __cdecl Init()
 {
-	cout<<"hello,world"<<endl;
+    cout<<"hello,world"<<endl;
 }
 
 int main(int,char **)
 {
-	InitPROC func=Init;
+    InitPROC func=Init;
 
-	func();
+    func();
 
 
 }

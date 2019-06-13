@@ -23,7 +23,7 @@ namespace hgl
                 glGetTextureParameteriv(texture_id,GL_TEXTURE_MAX_LEVEL,&max_level);
             }
         };//class TextureBaseControlDSA
-        
+
         TextureBaseControl *TextureBaseControlCreateDSA(uint t,uint bt)
         {
             uint id;

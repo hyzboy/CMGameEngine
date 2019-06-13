@@ -9,7 +9,7 @@ namespace hgl
         TextureCubeMap::TextureCubeMap()
         {
             type=HGL_TEXTURE_CUBE_MAP;
-			width=height=0;
+            width=height=0;
             glCreateTextures(GL_TEXTURE_CUBE_MAP,1,&texture_id);
         }
 
@@ -26,11 +26,11 @@ namespace hgl
                 return(false);
             }
 
-			if(!TextureSourceFormatCheck(sf))
-			{
-				LOG_ERROR(OS_TEXT("sf error =")+OSString(sf));
-				return(false);
-			}
+            if(!TextureSourceFormatCheck(sf))
+            {
+                LOG_ERROR(OS_TEXT("sf error =")+OSString(sf));
+                return(false);
+            }
 
             width=w;
             height=h;
@@ -44,18 +44,18 @@ namespace hgl
 
             if(sfmt->compress)      //原本就是压缩格式
             {
-				for(int i=0;i<6;i++)
-					if(data[i])
-						glCompressedTextureSubImage2D(texture_id,i,0,0,w,h,vf,image_size,data[i]);
+                for(int i=0;i<6;i++)
+                    if(data[i])
+                        glCompressedTextureSubImage2D(texture_id,i,0,0,w,h,vf,image_size,data[i]);
             }
             else                    //正常非压缩格式
             {
-				for(int i=0;i<6;i++)
-					glTextureStorage2D(texture_id, i, vf, w, h);
+                for(int i=0;i<6;i++)
+                    glTextureStorage2D(texture_id, i, vf, w, h);
 
-				for(int i=0;i<6;i++)
-					if(data[i])
-						glTextureSubImage2D(texture_id, i, 0, 0, w, h, sfmt->color_format, sfmt->data_type, data[i]);
+                for(int i=0;i<6;i++)
+                    if(data[i])
+                        glTextureSubImage2D(texture_id, i, 0, 0, w, h, sfmt->color_format, sfmt->data_type, data[i]);
             }
 
             video_format=vf;
@@ -77,7 +77,7 @@ namespace hgl
                 glTextureParameteri(texture_id,GL_TEXTURE_MAG_FILTER,mag_filter);
                 glTextureParameteri(texture_id,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
                 glTextureParameteri(texture_id,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
-				glTextureParameteri(texture_id,GL_TEXTURE_WRAP_R,GL_CLAMP_TO_EDGE);
+                glTextureParameteri(texture_id,GL_TEXTURE_WRAP_R,GL_CLAMP_TO_EDGE);
             }
 
             return(true);
@@ -120,11 +120,11 @@ namespace hgl
 
         bool TextureCubeMap::ChangeImage(uint face,uint l,uint t,uint w,uint h,void *data,uint bytes,TSF sf)
         {
-            if(	l>width||t>height
-				||w>width-l
-				||h>height-t
-				||!data
-				||!TextureSourceFormatCheck(sf))
+            if( l>width||t>height
+                ||w>width-l
+                ||h>height-t
+                ||!data
+                ||!TextureSourceFormatCheck(sf))
                 RETURN_FALSE;
 
             const TextureFormat *sfmt=TextureFormatInfoList+sf;       //原始数据格式

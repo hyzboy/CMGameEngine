@@ -5,11 +5,11 @@
 namespace hgl
 {
     DWORD WINAPI ThreadFunc(Thread *tc)
-	{
+    {
         tc->live_lock.Lock();
 
-		if(tc->ProcStartThread())
-		{
+        if(tc->ProcStartThread())
+        {
             while(tc->Execute())
             {
                 if(tc->exit_lock.TryLock())
@@ -19,20 +19,20 @@ namespace hgl
                 }
             }
 
-			tc->ProcEndThread();
-		}
+            tc->ProcEndThread();
+        }
 
 
-		if(tc->IsExitDelete())
+        if(tc->IsExitDelete())
         {
             tc->live_lock.Unlock();
-			delete tc;
+            delete tc;
         }
         else
             tc->live_lock.Unlock();
 
-		return(0);
-	}
+        return(0);
+    }
 
     /**
     * (线程外部调用)执行当前线程，线程优先级为tplevel

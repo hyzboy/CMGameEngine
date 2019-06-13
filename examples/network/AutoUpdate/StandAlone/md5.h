@@ -1,7 +1,7 @@
 #pragma once
 
 #include"DataType.h"
-    
+
 using MD5Code=char[16];
 
 class MD5

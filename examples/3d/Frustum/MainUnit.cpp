@@ -35,15 +35,15 @@ HGL_CONSOLE_MAIN_FUNC()
 
     app.Init(&sii);
 
-	Camera cam;
-	Frustum f;
+    Camera cam;
+    Frustum f;
 
-	Matrix4f c_proj,c_mv;
+    Matrix4f c_proj,c_mv;
 
-	SetCamera(cam);
+    SetCamera(cam);
 
-	MakeCameraMatrix(&c_proj,&c_mv,&cam);
-	CameraToFrustum(&f,&cam);
+    MakeCameraMatrix(&c_proj,&c_mv,&cam);
+    CameraToFrustum(&f,&cam);
 
-	return 0;
+    return 0;
 }

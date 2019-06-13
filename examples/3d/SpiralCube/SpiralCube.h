@@ -3,16 +3,16 @@
 
 #include<hgl/algorithm/VectorMath.h>
 
-#define CUBE_NUMBER	360
+#define CUBE_NUMBER 360
 
 namespace hgl
 {
-	namespace graph
-	{
-		class VertexArray;
-		class Material;
-		class Renderable;
-	}//namespace graph
+    namespace graph
+    {
+        class VertexArray;
+        class Material;
+        class Renderable;
+    }//namespace graph
 }//namespace hgl
 
 using namespace hgl;
@@ -20,17 +20,17 @@ using namespace hgl::graph;
 
 class SpiralCube
 {
-	VertexArray *cube_data;
-	Material *cube_mtl[CUBE_NUMBER];
+    VertexArray *cube_data;
+    Material *cube_mtl[CUBE_NUMBER];
 
 public:
 
-	Renderable *cube_obj[CUBE_NUMBER];
-	Matrix4f cube_matrix[CUBE_NUMBER];
+    Renderable *cube_obj[CUBE_NUMBER];
+    Matrix4f cube_matrix[CUBE_NUMBER];
 
 public:
 
-	SpiralCube(const Vector3f &);
-	~SpiralCube();
+    SpiralCube(const Vector3f &);
+    ~SpiralCube();
 };//class SpiralCube
 #endif//HGL_EXAMPLE_3D_SPIRAL_CUBE_INCLUDE

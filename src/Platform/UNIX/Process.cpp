@@ -7,79 +7,79 @@
 namespace hgl
 {
     using namespace filesystem;
-    
-	bool Process::SetWorkPath(const OSString &wp)
-	{
-		if(!IsDirectory(wp))
-			return(false);
 
-		work_path=wp;
-		return(true);
-	}
+    bool Process::SetWorkPath(const OSString &wp)
+    {
+        if(!IsDirectory(wp))
+            return(false);
 
-	bool Process::SetExecFile(const OSString &ef)
-	{
-		if(!FileCanExec(ef))
-			return(false);
+        work_path=wp;
+        return(true);
+    }
 
-		filename=ef;
-		return(true);
-	}
+    bool Process::SetExecFile(const OSString &ef)
+    {
+        if(!FileCanExec(ef))
+            return(false);
 
-	bool Process::Execute()
-	{
-		pid=fork();
+        filename=ef;
+        return(true);
+    }
 
-		if(pid<0)
-			_exit(72);		//为啥是72，我也不清楚，反正是要退出，多少无所谓。抄的poco
+    bool Process::Execute()
+    {
+        pid=fork();
 
-		if(pid==0)
-		{	//fork会复制出一个子进程并从这里开始执行
-			if(chdir(work_path.c_str())!=0)
-				_exit(72);
+        if(pid<0)
+            _exit(72);      //为啥是72，我也不清楚，反正是要退出，多少无所谓。抄的poco
 
-			char **argv=new char *[args.GetCount()+2];
+        if(pid==0)
+        {   //fork会复制出一个子进程并从这里开始执行
+            if(chdir(work_path.c_str())!=0)
+                _exit(72);
 
-			argv[0]=filename;
-			for(int i=0;i<args.GetCount();i++)
-				argv[i+1]=args[i].c_str();
-			argv[args.GetCount()+1]=0;
+            char **argv=new char *[args.GetCount()+2];
 
-			execvp(filename.c_str(),argv);
-			_exit(72);
-		}
-		else	//原本的父进程
-		{
-		}
+            argv[0]=filename;
+            for(int i=0;i<args.GetCount();i++)
+                argv[i+1]=args[i].c_str();
+            argv[args.GetCount()+1]=0;
 
-		return(true);
-	}
+            execvp(filename.c_str(),argv);
+            _exit(72);
+        }
+        else    //原本的父进程
+        {
+        }
 
-	bool Process::Wait()
-	{
-		if(pid<0)return(false);
-		int status;
-		int rc;
+        return(true);
+    }
 
-		do
-		{
-			rc=waitpid(pid,&status,0);
-		}while(rc<0&&errno==EINTR);
+    bool Process::Wait()
+    {
+        if(pid<0)return(false);
+        int status;
+        int rc;
 
-		return(true);
-	}
+        do
+        {
+            rc=waitpid(pid,&status,0);
+        }while(rc<0&&errno==EINTR);
 
-	bool Process::Kill()
-	{
-		if(pid<0)return(false);
+        return(true);
+    }
 
-		return !kill(pid,SIGKILL);
-	}
+    bool Process::Kill()
+    {
+        if(pid<0)return(false);
 
-	bool Process::RequestTerminate()
-	{
-		if(pid<0)return(false);
+        return !kill(pid,SIGKILL);
+    }
 
-		return !kill(pid,SIGINT);
-	}
+    bool Process::RequestTerminate()
+    {
+        if(pid<0)return(false);
+
+        return !kill(pid,SIGINT);
+    }
 }//namespace hgl

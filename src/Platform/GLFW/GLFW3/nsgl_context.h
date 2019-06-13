@@ -36,7 +36,7 @@
 typedef struct _GLFWcontextNSGL
 {
     id           pixelFormat;
-    id	         object;
+    id           object;
 
 } _GLFWcontextNSGL;
 

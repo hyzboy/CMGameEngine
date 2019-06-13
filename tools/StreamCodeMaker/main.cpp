@@ -4,7 +4,7 @@ using namespace angle_script;
 
 int main()
 {
-	asCTokenizer parse;
+    asCTokenizer parse;
 
-	return 0;
+    return 0;
 }

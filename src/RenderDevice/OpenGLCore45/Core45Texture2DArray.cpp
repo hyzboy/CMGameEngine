@@ -9,7 +9,7 @@ namespace hgl
         Texture2DArray::Texture2DArray()
         {
             type=HGL_TEXTURE_2D_ARRAY;
-			width=height=layer=wrap_s=wrap_t=0;
+            width=height=layer=wrap_s=wrap_t=0;
             glCreateTextures(GL_TEXTURE_2D_ARRAY,1,&texture_id);
         }
 
@@ -37,7 +37,7 @@ namespace hgl
 
             width=w;
             height=h;
-			layer=l;
+            layer=l;
 
             const TextureFormat *sfmt=TextureFormatInfoList+sf;       //原始数据格式
 
@@ -48,14 +48,14 @@ namespace hgl
 
             if(sfmt->compress)      //原本就是压缩格式
             {
-				if(data)
-					glCompressedTextureSubImage3D(texture_id,0,0,0,0,w,h,l,vf,image_size,data);
+                if(data)
+                    glCompressedTextureSubImage3D(texture_id,0,0,0,0,w,h,l,vf,image_size,data);
             }
             else                    //正常非压缩格式
             {
                 glTextureStorage3D(texture_id, 1, vf, w, h,l);
 
-				if(data)
+                if(data)
                 glTextureSubImage3D(texture_id, 0,0,0,0, w,h,l, sfmt->color_format, sfmt->data_type, data);
             }
 
@@ -123,12 +123,12 @@ namespace hgl
 
         bool Texture2DArray::ChangeImage(uint l,uint t,uint s,uint w,uint h,uint d,void *data,uint bytes,TSF sf)
         {
-            if(	l>width||t>height||s>layer
-				||w>width-l
-				||h>height-t
-				||d>layer-s
-				||!data
-				||!TextureSourceFormatCheck(sf))
+            if( l>width||t>height||s>layer
+                ||w>width-l
+                ||h>height-t
+                ||d>layer-s
+                ||!data
+                ||!TextureSourceFormatCheck(sf))
                 RETURN_FALSE;
 
             const TextureFormat *sfmt=TextureFormatInfoList+sf;       //原始数据格式

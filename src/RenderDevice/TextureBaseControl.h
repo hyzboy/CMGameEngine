@@ -4,12 +4,12 @@
 #include<hgl/type/DataType.h>
 namespace hgl
 {
-	namespace graph
-	{       
+    namespace graph
+    {
         class TextureBaseControl
         {
         public:
-        
+
             uint type,binding_type,texture_id;
 
         public:
@@ -24,12 +24,12 @@ namespace hgl
         public:     //mipmaps
 
             virtual void    GenMipmaps      ()=0;                                                   ///<生成mipmaps
-            virtual void	GetMipmapLevel	(int &,int &)=0;										///<取得贴图mipmaps级别
+            virtual void    GetMipmapLevel  (int &,int &)=0;                                        ///<取得贴图mipmaps级别
         };//class TextureBaseControl
 
         using HGL_TBC_CREATE=TextureBaseControl * (*)(uint t,uint bt);
 
         extern HGL_TBC_CREATE TextureBaseControlCreate;
-	}//namespace graph
+    }//namespace graph
 }//namespace hgl
 #endif//HGL_GRAPH_TEXTURE_BASE_CONTROL_INCLUDE

@@ -32,7 +32,7 @@ namespace hgl
             uint texture_id;                                                                        ///<纹理ID
 
             uint pixel_format;                                                                      ///<象素格式(如RED,RG,RGB,RGBA,SRGB,SRGBA之类)
-            uint video_format;        
+            uint video_format;
 
             TextureBaseControl *tbc;                                                                ///<纹理基本控制
 
@@ -52,7 +52,7 @@ namespace hgl
         public:
 
                     void    GenMipmaps      ();                                                     ///<生成mipmaps
-                    void    GetMipmapLevel  (int &base_level,int &max_level);                       ///<取得贴图mipmaps级别    
+                    void    GetMipmapLevel  (int &base_level,int &max_level);                       ///<取得贴图mipmaps级别
         };//class Texture
     }//namespace graph
 }//namespace hgl

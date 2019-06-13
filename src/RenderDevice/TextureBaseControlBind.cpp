@@ -7,7 +7,7 @@ namespace hgl
         class TextureBind
         {
             uint type;
-            int old_id;            
+            int old_id;
 
         public:
 
@@ -46,7 +46,7 @@ namespace hgl
                 glGetTexParameteriv(type,GL_TEXTURE_MAX_LEVEL,&max_level);
             }
         };//class TextureBaseControlBind
-        
+
         TextureBaseControl *TextureBaseControlCreateBind(uint t,uint bt)
         {
             uint id;

@@ -45,7 +45,7 @@ static inline ogg_int32_t MULT32(ogg_int32_t x, ogg_int32_t y) {
   asm volatile("smull\t%0, %1, %2, %3"
                : "=&r"(lo),"=&r"(hi)
                : "%r"(x),"r"(y)
-	       : "cc");
+           : "cc");
   return(hi);
 }
 
@@ -55,30 +55,30 @@ static inline ogg_int32_t MULT31(ogg_int32_t x, ogg_int32_t y) {
 
 static inline ogg_int32_t MULT31_SHIFT15(ogg_int32_t x, ogg_int32_t y) {
   int lo,hi;
-  asm volatile("smull	%0, %1, %2, %3\n\t"
-	       "movs	%0, %0, lsr #15\n\t"
-	       "adc	%1, %0, %1, lsl #17\n\t"
+  asm volatile("smull   %0, %1, %2, %3\n\t"
+           "movs    %0, %0, lsr #15\n\t"
+           "adc %1, %0, %1, lsl #17\n\t"
                : "=&r"(lo),"=&r"(hi)
                : "%r"(x),"r"(y)
-	       : "cc");
+           : "cc");
   return(hi);
 }
 
 #define MB() asm volatile ("" : : : "memory")
 
 static inline void XPROD32(ogg_int32_t  a, ogg_int32_t  b,
-			   ogg_int32_t  t, ogg_int32_t  v,
-			   ogg_int32_t *x, ogg_int32_t *y)
+               ogg_int32_t  t, ogg_int32_t  v,
+               ogg_int32_t *x, ogg_int32_t *y)
 {
   int x1, y1, l;
-  asm(	"smull	%0, %1, %4, %6\n\t"
-	"smlal	%0, %1, %5, %7\n\t"
-	"rsb	%3, %4, #0\n\t"
-	"smull	%0, %2, %5, %6\n\t"
-	"smlal	%0, %2, %3, %7"
-	: "=&r" (l), "=&r" (x1), "=&r" (y1), "=r" (a)
-	: "3" (a), "r" (b), "r" (t), "r" (v)
-	: "cc" );
+  asm(  "smull  %0, %1, %4, %6\n\t"
+    "smlal  %0, %1, %5, %7\n\t"
+    "rsb    %3, %4, #0\n\t"
+    "smull  %0, %2, %5, %6\n\t"
+    "smlal  %0, %2, %3, %7"
+    : "=&r" (l), "=&r" (x1), "=&r" (y1), "=r" (a)
+    : "3" (a), "r" (b), "r" (t), "r" (v)
+    : "cc" );
   *x = x1;
   MB();
   *y = y1;
@@ -86,18 +86,18 @@ static inline void XPROD32(ogg_int32_t  a, ogg_int32_t  b,
 
 /* x = (a*t + b*v)>>31,    y = (b*t - a*v)>>31 */
 static inline void XPROD31(ogg_int32_t  a, ogg_int32_t  b,
-			   ogg_int32_t  t, ogg_int32_t  v,
-			   ogg_int32_t *x, ogg_int32_t *y)
+               ogg_int32_t  t, ogg_int32_t  v,
+               ogg_int32_t *x, ogg_int32_t *y)
 {
   int x1, y1, l;
-  asm(	"smull	%0, %1, %4, %6\n\t"
-	"smlal	%0, %1, %5, %7\n\t"
-	"rsb	%3, %4, #0\n\t"
-	"smull	%0, %2, %5, %6\n\t"
-	"smlal	%0, %2, %3, %7"
-	: "=&r" (l), "=&r" (x1), "=&r" (y1), "=r" (a)
-	: "3" (a), "r" (b), "r" (t), "r" (v)
-	: "cc" );
+  asm(  "smull  %0, %1, %4, %6\n\t"
+    "smlal  %0, %1, %5, %7\n\t"
+    "rsb    %3, %4, #0\n\t"
+    "smull  %0, %2, %5, %6\n\t"
+    "smlal  %0, %2, %3, %7"
+    : "=&r" (l), "=&r" (x1), "=&r" (y1), "=r" (a)
+    : "3" (a), "r" (b), "r" (t), "r" (v)
+    : "cc" );
   *x = x1 << 1;
   MB();
   *y = y1 << 1;
@@ -105,18 +105,18 @@ static inline void XPROD31(ogg_int32_t  a, ogg_int32_t  b,
 
 /* x = (a*t - b*v)>>31,     y = (b*t + a*v)>>31 */
 static inline void XNPROD31(ogg_int32_t  a, ogg_int32_t  b,
-			    ogg_int32_t  t, ogg_int32_t  v,
-			    ogg_int32_t *x, ogg_int32_t *y)
+                ogg_int32_t  t, ogg_int32_t  v,
+                ogg_int32_t *x, ogg_int32_t *y)
 {
   int x1, y1, l;
-  asm(	"rsb	%2, %4, #0\n\t"
-	"smull	%0, %1, %3, %5\n\t"
-	"smlal	%0, %1, %2, %6\n\t"
-	"smull	%0, %2, %4, %5\n\t"
-	"smlal	%0, %2, %3, %6"
-	: "=&r" (l), "=&r" (x1), "=&r" (y1)
-	: "r" (a), "r" (b), "r" (t), "r" (v)
-	: "cc" );
+  asm(  "rsb    %2, %4, #0\n\t"
+    "smull  %0, %1, %3, %5\n\t"
+    "smlal  %0, %1, %2, %6\n\t"
+    "smull  %0, %2, %4, %5\n\t"
+    "smlal  %0, %2, %3, %6"
+    : "=&r" (l), "=&r" (x1), "=&r" (y1)
+    : "r" (a), "r" (b), "r" (t), "r" (v)
+    : "cc" );
   *x = x1 << 1;
   MB();
   *y = y1 << 1;
@@ -129,14 +129,14 @@ static inline void XNPROD31(ogg_int32_t  a, ogg_int32_t  b,
 
 static inline ogg_int32_t CLIP_TO_15(ogg_int32_t x) {
   int tmp;
-  asm volatile("subs	%1, %0, #32768\n\t"
-	       "movpl	%0, #0x7f00\n\t"
-	       "orrpl	%0, %0, #0xff\n"
-	       "adds	%1, %0, #32768\n\t"
-	       "movmi	%0, #0x8000"
-	       : "+r"(x),"=r"(tmp)
-	       :
-	       : "cc");
+  asm volatile("subs    %1, %0, #32768\n\t"
+           "movpl   %0, #0x7f00\n\t"
+           "orrpl   %0, %0, #0xff\n"
+           "adds    %1, %0, #32768\n\t"
+           "movmi   %0, #0x8000"
+           : "+r"(x),"=r"(tmp)
+           :
+           : "cc");
   return(x);
 }
 
@@ -146,9 +146,9 @@ static inline ogg_int32_t CLIP_TO_15(ogg_int32_t x) {
 #define _V_LSP_MATH_ASM
 
 static inline void lsp_loop_asm(ogg_uint32_t *qip,ogg_uint32_t *pip,
-				ogg_int32_t *qexpp,
-				ogg_int32_t *ilsp,ogg_int32_t wi,
-				ogg_int32_t m){
+                ogg_int32_t *qexpp,
+                ogg_int32_t *ilsp,ogg_int32_t wi,
+                ogg_int32_t m){
 
   ogg_uint32_t qi=*qip,pi=*pip;
   ogg_int32_t qexp=*qexpp;

@@ -6,17 +6,17 @@ class QApplication;
 
 namespace hgl
 {
-	class QT5GuiApplication:public ConsoleApplication
-	{
-		QApplication *qt_app;
+    class QT5GuiApplication:public ConsoleApplication
+    {
+        QApplication *qt_app;
 
-	public:
+    public:
 
-		QT5GuiApplication(QApplication *);
-		~QT5GuiApplication();
+        QT5GuiApplication(QApplication *);
+        ~QT5GuiApplication();
 
-		int exec();
-	};//class QT5GuiApplication
+        int exec();
+    };//class QT5GuiApplication
 }//namespace hgl
 
 /**

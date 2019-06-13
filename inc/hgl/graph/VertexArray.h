@@ -18,10 +18,10 @@ namespace hgl
 
             uint primitive;                                                                                                         ///<绘制的图元类型
 
-            ObjectFixedArray<VertexBufferBase,vbtEnd> vertex_buffer;                                                              	///<顶点数据缓冲区
+            ObjectFixedArray<VertexBufferBase,vbtEnd> vertex_buffer;                                                                ///<顶点数据缓冲区
 
-			AABB aabb;                                                                                                      		///<AABB绑定盒
-			OBB obb;																												///<OBB绑定盒
+            AABB aabb;                                                                                                              ///<AABB绑定盒
+            OBB obb;                                                                                                                ///<OBB绑定盒
 
             PixelCompoment vb_pixel_compoment;                                                                                      ///<颜色顶点属性格式
 
@@ -40,8 +40,8 @@ namespace hgl
 
             bool                        SetVertexBuffer     (VertexBufferType,VertexBufferBase *);                                  ///<设置顶点缓冲区数据
             VertexBufferBase *          GetVertexBuffer     (VertexBufferType vbt){return vertex_buffer[vbt];}                      ///<取得顶点缓冲区数据
-            bool                        ClearVertexBuffer   (VertexBufferType vbt){return vertex_buffer.Clear(vbt);}				///<清除顶点缓冲区数据
-            void						ClearAllVertexBuffer(){vertex_buffer.ClearAll();}											///<清除所有顶点缓冲区数据
+            bool                        ClearVertexBuffer   (VertexBufferType vbt){return vertex_buffer.Clear(vbt);}                ///<清除顶点缓冲区数据
+            void                        ClearAllVertexBuffer(){vertex_buffer.ClearAll();}                                           ///<清除所有顶点缓冲区数据
 
         public: //顶点格式相关
 
@@ -74,26 +74,26 @@ namespace hgl
 
         public: //绑定盒相关
 
-			void						SetBoundingBox		(const Vector3f &min_v,Vector3f &max_v)
-			{
-				aabb.minPoint=POINT_VEC(min_v);
-				aabb.maxPoint=POINT_VEC(max_v);
+            void                        SetBoundingBox      (const Vector3f &min_v,Vector3f &max_v)
+            {
+                aabb.minPoint=POINT_VEC(min_v);
+                aabb.maxPoint=POINT_VEC(max_v);
 
-				obb.SetFrom(aabb);
-			}
+                obb.SetFrom(aabb);
+            }
 
-            const AABB &				GetAABB				()const{return aabb;}													///<取得AABB绑定盒
-            const OBB &					GetOBB				()const{return obb;}													///<取得OBB绑定盒
+            const AABB &                GetAABB             ()const{return aabb;}                                                   ///<取得AABB绑定盒
+            const OBB &                 GetOBB              ()const{return obb;}                                                    ///<取得OBB绑定盒
 
             const Vector3f              GetCenter           ()const                                                                 ///<取得中心点
             {
-				return POINT_TO_FLOAT3(obb.CenterPoint());
+                return POINT_TO_FLOAT3(obb.CenterPoint());
             }
 
-            void                        GetBoundIngBox		(Vector3f &min_v,Vector3f &max_v)                                       ///<取得最小顶点和最大顶点
+            void                        GetBoundIngBox      (Vector3f &min_v,Vector3f &max_v)                                       ///<取得最小顶点和最大顶点
             {
-				min_v=POINT_TO_FLOAT3(aabb.minPoint);
-				max_v=POINT_TO_FLOAT3(aabb.maxPoint);
+                min_v=POINT_TO_FLOAT3(aabb.minPoint);
+                max_v=POINT_TO_FLOAT3(aabb.maxPoint);
             }
 
         public:

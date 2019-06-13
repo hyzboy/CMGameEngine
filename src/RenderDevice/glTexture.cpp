@@ -51,7 +51,7 @@ namespace hgl
 
             void InitStateTexture(int max_num)
             {
-                glGetIntegerv(GL_ACTIVE_TEXTURE,&current_active_texture);			//取得活动贴图
+                glGetIntegerv(GL_ACTIVE_TEXTURE,&current_active_texture);           //取得活动贴图
 
                 memset(texture_state_format,0,sizeof(uint)*max_num);
                 memset(texture_index,0,sizeof(uint)*max_num);
@@ -67,7 +67,7 @@ namespace hgl
                         if(!value)
                             continue;
 
-                        texture_state_format[i]=tex_format_list[j];					//如果是绑定了这种贴图
+                        texture_state_format[i]=tex_format_list[j];                 //如果是绑定了这种贴图
                         texture_index[i]=value;
                         break;
                     }
@@ -86,8 +86,8 @@ namespace hgl
         {
             if(active<0||active>=HGL_MAX_TEXTURE_UNITS)return(false);
 
-            if(type	==texture_state_format[active]						//本身就是这个格式
-             &&index==texture_index[active])							//也绑定的是这个贴图
+            if(type ==texture_state_format[active]                      //本身就是这个格式
+             &&index==texture_index[active])                            //也绑定的是这个贴图
                     return(true);
 
 #ifdef HGL_OPENGL_USE_DSA

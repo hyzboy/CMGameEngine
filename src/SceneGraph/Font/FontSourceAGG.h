@@ -14,47 +14,47 @@
 
 namespace hgl
 {
-	namespace graph
-	{
-		using namespace agg;
+    namespace graph
+    {
+        using namespace agg;
 
-		typedef font_engine_win32_tt_int32 font_engine_type;
-		typedef font_cache_manager<font_engine_type> font_manager_type;
+        typedef font_engine_win32_tt_int32 font_engine_type;
+        typedef font_cache_manager<font_engine_type> font_manager_type;
 
-		//typedef pixfmt_gray8 font_pixfmt;
-		typedef pixfmt_bgra32 font_pixfmt;
+        //typedef pixfmt_gray8 font_pixfmt;
+        typedef pixfmt_bgra32 font_pixfmt;
 
-		#define font_pixel_bytes	4
+        #define font_pixel_bytes    4
 
-		class AGGBitmapFont:public FontSource
-		{
-    		HDC fnt_hdc;
+        class AGGBitmapFont:public FontSource
+        {
+            HDC fnt_hdc;
 
-			int fnt_size;
+            int fnt_size;
 
-			int8u *data;
+            int8u *data;
 
-			rendering_buffer *buf;
+            rendering_buffer *buf;
 
-			font_pixfmt *fmt;
-			renderer_base<font_pixfmt> *base;
+            font_pixfmt *fmt;
+            renderer_base<font_pixfmt> *base;
 
-			font_engine_type *	fnt_engine;		//字符引擎
-			font_manager_type *	fnt_manage;		//字符管理缓冲
+            font_engine_type *  fnt_engine;     //字符引擎
+            font_manager_type * fnt_manage;     //字符管理缓冲
 
-		protected:
+        protected:
 
-			int LineHeight;
-			int LineDistance;
+            int LineHeight;
+            int LineDistance;
 
-		public:
+        public:
 
-			AGGBitmapFont(const FontInfo &fnt);
-			~AGGBitmapFont();
+            AGGBitmapFont(const FontInfo &fnt);
+            ~AGGBitmapFont();
 
-			bool MakeCharBitmap(wchar_t ch);				///<产生字体数据
-			int GetLineHeight()const{return LineHeight;}	///<取得行高
-		};//class AGGBitmapFont
-	}//namespace graph
+            bool MakeCharBitmap(wchar_t ch);                ///<产生字体数据
+            int GetLineHeight()const{return LineHeight;}    ///<取得行高
+        };//class AGGBitmapFont
+    }//namespace graph
 }//namespace hgl
 #endif//HGL_GRAPH_FONT_SOURCE_AGG_INCLUDE

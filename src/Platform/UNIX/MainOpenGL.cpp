@@ -8,23 +8,23 @@ using namespace hgl::graph;
 int main(int argc,char **argv)
 {
 #ifdef _DEBUG
-	try
-	{
+    try
+    {
 #endif//_DEBUG
-		OSStringList sl;
+        OSStringList sl;
 
-		for(int i=0;i<argc;i++)
-			sl.Add(argv[i]);
+        for(int i=0;i<argc;i++)
+            sl.Add(argv[i]);
 
-		GraphicsSystemInitInfo sii;
-		GraphicsApplication app;
+        GraphicsSystemInitInfo sii;
+        GraphicsApplication app;
 
-		return GraphicsAppMain(sii,app,sl);
+        return GraphicsAppMain(sii,app,sl);
 #ifdef _DEBUG
-	}
-	catch(...)
-	{
-		return(-1);
-	}
+    }
+    catch(...)
+    {
+        return(-1);
+    }
 #endif//_DEBUG
 }

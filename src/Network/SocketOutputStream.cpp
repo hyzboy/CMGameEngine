@@ -44,7 +44,7 @@ namespace hgl
                 return(-3);
             }
 
-			if(!buf)
+            if(!buf)
             {
                 LOG_ERROR(OS_TEXT("SocketOutputStream::Write() fatal error,buf=nullptr,sock=")+OSString(sock));
                 return(-2);
@@ -165,14 +165,14 @@ namespace hgl
             return(p-(char *)buf);
         }
 
-		int64 SocketOutputStream::Available()const
-		{
-			int send_buf_size=0;
-			socklen_t len=sizeof(int);
+        int64 SocketOutputStream::Available()const
+        {
+            int send_buf_size=0;
+            socklen_t len=sizeof(int);
 
-			getsockopt(sock,SOL_SOCKET,SO_SNDBUF,(char *)&send_buf_size,&len);		//这个函数会出错，但我们不理会
+            getsockopt(sock,SOL_SOCKET,SO_SNDBUF,(char *)&send_buf_size,&len);      //这个函数会出错，但我们不理会
 
-			return send_buf_size;
-		}
+            return send_buf_size;
+        }
     }//namespace network
 }//namespace hgl

@@ -5,43 +5,43 @@
 #include<hgl/graph/TileFont.h>
 namespace hgl
 {
-	namespace graph
-	{
-		namespace gui
-		{
-			/**
-			* 标签控件
-			*/
-			class Label:public GUIObject
-			{
-			protected:
+    namespace graph
+    {
+        namespace gui
+        {
+            /**
+            * 标签控件
+            */
+            class Label:public GUIObject
+            {
+            protected:
 
-				UTF16String caption;
+                UTF16String caption;
 
-				Makeup makeup;
+                Makeup makeup;
 
-			protected:
+            protected:
 
-				void InitPrivate();
+                void InitPrivate();
 
-				virtual void SetCaption(const UTF16String &);
+                virtual void SetCaption(const UTF16String &);
 
-			public:	//属性
+            public: //属性
 
-				PropertyString	Caption;											///<标签标题
+                PropertyString  Caption;                                            ///<标签标题
 
-				Color4f			Color;												///<标签字符绘制颜色
+                Color4f         Color;                                              ///<标签字符绘制颜色
 
-			public:
+            public:
 
-				Label();
-				Label(int,int,int,int);
-				Label(int,int,const UTF16String &);
-				virtual ~Label();
+                Label();
+                Label(int,int,int,int);
+                Label(int,int,const UTF16String &);
+                virtual ~Label();
 
-				virtual void Draw(const Matrix4f *);
-			};//class Label
-		}//namespace gui
-	}//namespace graph
+                virtual void Draw(const Matrix4f *);
+            };//class Label
+        }//namespace gui
+    }//namespace graph
 }//namespace hgl
 #endif//HGL_GUI_LABEL_INCLUDE

@@ -9,7 +9,7 @@ namespace hgl
         Texture2D::Texture2D()
         {
             type=HGL_TEXTURE_2D;
-			width=height=wrap_s=wrap_t=0;
+            width=height=wrap_s=wrap_t=0;
             glCreateTextures(GL_TEXTURE_2D,1,&texture_id);
         }
 
@@ -47,14 +47,14 @@ namespace hgl
 
             if(sfmt->compress)      //原本就是压缩格式
             {
-				if(data)
+                if(data)
                 glCompressedTextureSubImage2D(texture_id,0,0,0,w,h,vf,image_size,data);
             }
             else                    //正常非压缩格式
             {
                 glTextureStorage2D(texture_id, 1, vf, w, h);
 
-				if(data)
+                if(data)
                 glTextureSubImage2D(texture_id, 0, 0, 0, w, h, sfmt->color_format, sfmt->data_type, data);
             }
 
@@ -122,11 +122,11 @@ namespace hgl
 
         bool Texture2D::ChangeImage(uint l,uint t,uint w,uint h,void *data,uint bytes,TSF sf)
         {
-            if(	l>width||t>height
-				||w>width-l
-				||h>height-t
-				||!data
-				||!TextureSourceFormatCheck(sf))
+            if( l>width||t>height
+                ||w>width-l
+                ||h>height-t
+                ||!data
+                ||!TextureSourceFormatCheck(sf))
                 RETURN_FALSE;
 
             const TextureFormat *sfmt=TextureFormatInfoList+sf;       //原始数据格式

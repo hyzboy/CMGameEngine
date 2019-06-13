@@ -76,7 +76,7 @@ namespace hgl
                 memset(&fi,0,sizeof(FileInfo));
                 fi.size=statbuf.st_size;
 
-                fi.can_read	=statbuf.st_mode&S_IROTH;
+                fi.can_read =statbuf.st_mode&S_IROTH;
                 fi.can_write=statbuf.st_mode&S_IWOTH;
 
                 fi.is_hiddle=(entry->d_name[0]=='.');

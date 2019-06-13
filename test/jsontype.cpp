@@ -13,45 +13,45 @@ template<typename STR_TYPE> struct PropertyValue
 {
 // public:
 //
-// 	virtual bool toString(STR_TYPE &)=0;
-// 	virtual bool fromString(const STR_TYPE &)=0;
+//  virtual bool toString(STR_TYPE &)=0;
+//  virtual bool fromString(const STR_TYPE &)=0;
 //
-// 	virtual bool Write(DataOutputStream *)const=0;
-// 	virtual bool Read(DataInputStream *)=0;
+//  virtual bool Write(DataOutputStream *)const=0;
+//  virtual bool Read(DataInputStream *)=0;
 };
 
 template<typename STR_TYPE,typename DATA_TYPE> struct PropertyItem:public PropertyValue<STR_TYPE>
 {
 protected:
 
-	DATA_TYPE data;
+    DATA_TYPE data;
 
 // public:
 //
-// 	virtual bool toString(STR_TYPE &)=0;
-// 	virtual bool fromString(const STR_TYPE &)=0;
+//  virtual bool toString(STR_TYPE &)=0;
+//  virtual bool fromString(const STR_TYPE &)=0;
 //
-// 	virtual bool Write(DataOutputStream *)const=0;
-// 	virtual bool Read(DataInputStream *)=0;
+//  virtual bool Write(DataOutputStream *)const=0;
+//  virtual bool Read(DataInputStream *)=0;
 
 public:
 
-	PropertyItem(const DATA_TYPE &d)
-	{
-		data=d;
-	}
+    PropertyItem(const DATA_TYPE &d)
+    {
+        data=d;
+    }
 
-	operator DATA_TYPE &(){return data;}
-	operator const DATA_TYPE &()const{return data;}
+    operator DATA_TYPE &(){return data;}
+    operator const DATA_TYPE &()const{return data;}
 
-	DATA_TYPE &operator = (DATA_TYPE &dt){data=dt;return data;}
+    DATA_TYPE &operator = (DATA_TYPE &dt){data=dt;return data;}
 };
 
 template<typename STR_TYPE,typename DATA_TYPE> struct PropertyItemNumber:PropertyItem<STR_TYPE,DATA_TYPE>
 {
 public:
 
-	PropertyItemNumber(const DATA_TYPE &d):PropertyItem<STR_TYPE,DATA_TYPE>(d){}
+    PropertyItemNumber(const DATA_TYPE &d):PropertyItem<STR_TYPE,DATA_TYPE>(d){}
 };//struct PropertyItemNumber
 
 // template<int S> bool WriteInteger(DataOutputStream *dos,const void *value);
@@ -72,31 +72,31 @@ public:
 // {
 // public:
 //
-// 	PropertyInteger(const DATA_TYPE &dt)
-// 	{
-// 		this->data=dt;
-// 	}
+//  PropertyInteger(const DATA_TYPE &dt)
+//  {
+//      this->data=dt;
+//  }
 //
-// // 	bool Write(DataOutputStream *dos)const
-// // 	{
-// // 		return WriteInteger<sizeof(DATA_TYPE)>(dos,&(this->data));
-// // 	}
+// //   bool Write(DataOutputStream *dos)const
+// //   {
+// //       return WriteInteger<sizeof(DATA_TYPE)>(dos,&(this->data));
+// //   }
 // //
-// // 	bool Read(DataInputStream *dis)
-// // 	{
-// // 		return ReadInteger<sizeof(DATA_TYPE)>(dis,&(this->data));
-// // 	}
+// //   bool Read(DataInputStream *dis)
+// //   {
+// //       return ReadInteger<sizeof(DATA_TYPE)>(dis,&(this->data));
+// //   }
 // //
-// // 	bool toString(STR_TYPE &str)
-// // 	{
-// // 		str=this->data;
-// // 		return(true);
-// // 	}
+// //   bool toString(STR_TYPE &str)
+// //   {
+// //       str=this->data;
+// //       return(true);
+// //   }
 // //
-// // 	bool fromString(const STR_TYPE &str)
-// // 	{
-// // 		return str.ToInt(this->data);
-// // 	}
+// //   bool fromString(const STR_TYPE &str)
+// //   {
+// //       return str.ToInt(this->data);
+// //   }
 // };
 //
 // // template<int S> bool WriteUnsignedInteger(DataOutputStream *dos,const void *value);
@@ -117,31 +117,31 @@ public:
 // {
 // public:
 //
-// 	PropertyUnsignedInteger(const DATA_TYPE &dt)
-// 	{
-// 		this->data=dt;
-// 	}
+//  PropertyUnsignedInteger(const DATA_TYPE &dt)
+//  {
+//      this->data=dt;
+//  }
 //
-// // 	bool Write(DataOutputStream *dos)const
-// // 	{
-// // 		return WriteUnsignedInteger<sizeof(DATA_TYPE)>(dos,&(this->data));
-// // 	}
+// //   bool Write(DataOutputStream *dos)const
+// //   {
+// //       return WriteUnsignedInteger<sizeof(DATA_TYPE)>(dos,&(this->data));
+// //   }
 // //
-// // 	bool Read(DataInputStream *dis)
-// // 	{
-// // 		return ReadUnsignedInteger<sizeof(DATA_TYPE)>(dis,&(this->data));
-// // 	}
+// //   bool Read(DataInputStream *dis)
+// //   {
+// //       return ReadUnsignedInteger<sizeof(DATA_TYPE)>(dis,&(this->data));
+// //   }
 // //
-// // 	bool toString(STR_TYPE &str)
-// // 	{
-// // 		str=this->data;
-// // 		return(true);
-// // 	}
+// //   bool toString(STR_TYPE &str)
+// //   {
+// //       str=this->data;
+// //       return(true);
+// //   }
 // //
-// // 	bool fromString(const STR_TYPE &str)
-// // 	{
-// // 		return str.ToUint(this->data);
-// // 	}
+// //   bool fromString(const STR_TYPE &str)
+// //   {
+// //       return str.ToUint(this->data);
+// //   }
 // };
 //
 // // template<typename T> bool WriteFloat(DataOutputStream *dos,const T &value);
@@ -158,80 +158,80 @@ public:
 // {
 // public:
 //
-// 	PropertyFloat(const DATA_TYPE &dt)
-// 	{
-// 		this->data=dt;
-// 	}
+//  PropertyFloat(const DATA_TYPE &dt)
+//  {
+//      this->data=dt;
+//  }
 //
-// // 	bool Write(DataOutputStream *dos)const
-// // 	{
-// // 		return WriteFloat<DATA_TYPE>::Write(dos,this->data);
-// // 	}
+// //   bool Write(DataOutputStream *dos)const
+// //   {
+// //       return WriteFloat<DATA_TYPE>::Write(dos,this->data);
+// //   }
 // //
-// // 	bool Read(DataInputStream *dis)
-// // 	{
-// // 		return ReadFloat<DATA_TYPE>::Read(dis,this->data);
-// // 	}
+// //   bool Read(DataInputStream *dis)
+// //   {
+// //       return ReadFloat<DATA_TYPE>::Read(dis,this->data);
+// //   }
 // //
-// // 	bool toString(STR_TYPE &str)
-// // 	{
-// // 		str=this->data;
-// // 		return(true);
-// // 	}
+// //   bool toString(STR_TYPE &str)
+// //   {
+// //       str=this->data;
+// //       return(true);
+// //   }
 // //
-// // 	bool fromString(const STR_TYPE &str)
-// // 	{
-// // 		return str.ToFloat(this->data);
-// // 	}
+// //   bool fromString(const STR_TYPE &str)
+// //   {
+// //       return str.ToFloat(this->data);
+// //   }
 // };
 //
 // template<typename STR_TYPE> struct PropertyBool:public PropertyItem<STR_TYPE,bool>
 // {
 // public:
 //
-// 	PropertyBool(const bool dt)
-// 	{
-// 		this->data=dt;
-// 	}
+//  PropertyBool(const bool dt)
+//  {
+//      this->data=dt;
+//  }
 //
-// // 	bool Write(DataOutputStream *dos)const{return dos->WriteBool(this->data);}
-// // 	bool Read(DataInputStream *dis){return dis->ReadBool(this->data);}
+// //   bool Write(DataOutputStream *dos)const{return dos->WriteBool(this->data);}
+// //   bool Read(DataInputStream *dis){return dis->ReadBool(this->data);}
 // //
-// // 	bool toString(STR_TYPE &str)
-// // 	{
-// // 		str=this->data;
-// // 		return(true);
-// // 	}
+// //   bool toString(STR_TYPE &str)
+// //   {
+// //       str=this->data;
+// //       return(true);
+// //   }
 // //
-// // 	bool fromString(const STR_TYPE &str)
-// // 	{
-// // 		return str.ToBool(this->data);
-// // 	}
+// //   bool fromString(const STR_TYPE &str)
+// //   {
+// //       return str.ToBool(this->data);
+// //   }
 // };
 //
 // template<typename STR_TYPE> struct PropertyString:public PropertyItem<STR_TYPE,STR_TYPE>
 // {
 // public:
 //
-// 	PropertyString(const STR_TYPE &dt)
-// 	{
-// 		this->data=dt;
-// 	}
+//  PropertyString(const STR_TYPE &dt)
+//  {
+//      this->data=dt;
+//  }
 //
-// // 	bool Write(DataOutputStream *)const;
-// // 	bool Read(DataInputStream *);
+// //   bool Write(DataOutputStream *)const;
+// //   bool Read(DataInputStream *);
 // //
-// // 	bool toString(STR_TYPE &str)
-// // 	{
-// // 		str=this->data;
-// // 		return(true);
-// // 	}
+// //   bool toString(STR_TYPE &str)
+// //   {
+// //       str=this->data;
+// //       return(true);
+// //   }
 // //
-// // 	bool fromString(const STR_TYPE &str)
-// // 	{
-// // 		this->data=str;
-// // 		return(true);
-// // 	}
+// //   bool fromString(const STR_TYPE &str)
+// //   {
+// //       this->data=str;
+// //       return(true);
+// //   }
 // };
 //
 // // template<> bool PropertyString<UTF8String>::Write(DataOutputStream *dos)const{return dos->WriteUTF8String(this->data);}
@@ -244,66 +244,66 @@ public:
 // {
 // protected:
 //
-// 	List<DATA_TYPE> data_list;
+//  List<DATA_TYPE> data_list;
 //
 // public:
 //
-// // 	bool toString(STR_TYPE &str)
-// // 	{
-// // 		const int count=data_list.GetCount();
+// //   bool toString(STR_TYPE &str)
+// //   {
+// //       const int count=data_list.GetCount();
 // //
-// // 		if(count<=0)return(true);
+// //       if(count<=0)return(true);
 // //
-// // 		DATA_TYPE *p=data_list.GetData();
+// //       DATA_TYPE *p=data_list.GetData();
 // //
-// // 		for(int i=1;i<count;i++)
-// // 		{
+// //       for(int i=1;i<count;i++)
+// //       {
 // //
-// // 		}
-// // 	}
+// //       }
+// //   }
 // //
-// // 	bool fromString(const STR_TYPE &)
-// // 	{
-// // 	}
+// //   bool fromString(const STR_TYPE &)
+// //   {
+// //   }
 // };
 
 template<typename STR_TYPE> class PropertyList:public MapObject<STR_TYPE,PropertyValue<STR_TYPE> >
 {
 public:
 
-	template<typename DATA_TYPE> bool AddInteger(const STR_TYPE &name,const DATA_TYPE &value)
-	{
-		if(this->KeyExist(name))return(false);
-		this->Add(name,new PropertyItemNumber<STR_TYPE,DATA_TYPE>(value));
-		return(true);
-	}
+    template<typename DATA_TYPE> bool AddInteger(const STR_TYPE &name,const DATA_TYPE &value)
+    {
+        if(this->KeyExist(name))return(false);
+        this->Add(name,new PropertyItemNumber<STR_TYPE,DATA_TYPE>(value));
+        return(true);
+    }
 
-	template<typename DATA_TYPE> bool AddUInteger(const STR_TYPE &name,const DATA_TYPE &value)
-	{
-		if(this->KeyExist(name))return(false);
-		this->Add(name,new PropertyItemNumber<STR_TYPE,DATA_TYPE>(value));
-		return(true);
-	}
+    template<typename DATA_TYPE> bool AddUInteger(const STR_TYPE &name,const DATA_TYPE &value)
+    {
+        if(this->KeyExist(name))return(false);
+        this->Add(name,new PropertyItemNumber<STR_TYPE,DATA_TYPE>(value));
+        return(true);
+    }
 
-	template<typename DATA_TYPE> bool AddFloat(const STR_TYPE &name,const DATA_TYPE &value)
-	{
-		if(this->KeyExist(name))return(false);
-		this->Add(name,new PropertyItemNumber<STR_TYPE,DATA_TYPE>(value));
-		return(true);
-	}
+    template<typename DATA_TYPE> bool AddFloat(const STR_TYPE &name,const DATA_TYPE &value)
+    {
+        if(this->KeyExist(name))return(false);
+        this->Add(name,new PropertyItemNumber<STR_TYPE,DATA_TYPE>(value));
+        return(true);
+    }
 
-	template<typename DATA_TYPE> bool AddBool(const STR_TYPE &name,const DATA_TYPE &value)
-	{
-		if(this->KeyExist(name))return(false);
-		this->Add(name,new PropertyItem<STR_TYPE,bool>(value));
-		return(true);
-	}
+    template<typename DATA_TYPE> bool AddBool(const STR_TYPE &name,const DATA_TYPE &value)
+    {
+        if(this->KeyExist(name))return(false);
+        this->Add(name,new PropertyItem<STR_TYPE,bool>(value));
+        return(true);
+    }
 
-	bool AddString(const STR_TYPE &name,const STR_TYPE &value)
-	{
-		if(this->KeyExist(name))return(false);
-		this->Add(name,new PropertyItem<STR_TYPE,STR_TYPE>(value));
-	}
+    bool AddString(const STR_TYPE &name,const STR_TYPE &value)
+    {
+        if(this->KeyExist(name))return(false);
+        this->Add(name,new PropertyItem<STR_TYPE,STR_TYPE>(value));
+    }
 };
 
 typedef PropertyList<UTF8String> UTF8PropertyList;
@@ -311,12 +311,12 @@ typedef PropertyList<UTF16String> WidePropertyList;
 
 int main(int,char **)
 {
-	UTF8PropertyList pl;
+    UTF8PropertyList pl;
 
-	pl.AddString	("name","HuYingzhuo");
-	pl.AddInteger	("age",	32);
-	pl.AddBool		("sex",	true);
-	pl.AddFloat		("high",1.72);
+    pl.AddString    ("name","HuYingzhuo");
+    pl.AddInteger   ("age", 32);
+    pl.AddBool      ("sex", true);
+    pl.AddFloat     ("high",1.72);
 
-	return 0;
+    return 0;
 }

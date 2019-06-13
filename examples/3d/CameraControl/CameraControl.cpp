@@ -8,21 +8,21 @@ const Vector3f  eye(100,100,80),
 
 CameraControlFlowObject::CameraControlFlowObject()
 {
-	cam.fov=45.0f;
-	cam.znear=4.0f;
-	cam.zfar=1000.0f;
-    
+    cam.fov=45.0f;
+    cam.znear=4.0f;
+    cam.zfar=1000.0f;
+
     cam.width=GetScreenWidth();
     cam.height=GetScreenHeight();
 
-	cam.eye=eye;
-	cam.center=center;
-	cam.up_vector=up_vector;
+    cam.eye=eye;
+    cam.center=center;
+    cam.up_vector=up_vector;
     cam.forward_vector=forward_vector;
 
-	step=0.01f;
+    step=0.01f;
 
-	memset(mouse_down,0,sizeof(mouse_down));
+    memset(mouse_down,0,sizeof(mouse_down));
 }
 
 void CameraControlFlowObject::OnResize(int w,int h)
@@ -33,50 +33,50 @@ void CameraControlFlowObject::OnResize(int w,int h)
 
 bool CameraControlFlowObject::OnMouseMove(int x,int y)
 {
-	mouse_coord.Set(x,y);
+    mouse_coord.Set(x,y);
 
-	if(mouse_down[mbRight])
-	{
-		const Vector2f move=(mouse_coord-push_coord[mbRight])/500.0;
+    if(mouse_down[mbRight])
+    {
+        const Vector2f move=(mouse_coord-push_coord[mbRight])/500.0;
 
-		cam.center=push_center[mbRight];
-		cam.eye=push_eye[mbRight];
+        cam.center=push_center[mbRight];
+        cam.eye=push_eye[mbRight];
 
-		cam.Forward(move[1]);
-		cam.Left(move[0]);
-	}
-	else
-	if(mouse_down[mbLeft])
-	{
-		const Vector2f move=(mouse_coord-push_coord[mbLeft])/10;
+        cam.Forward(move[1]);
+        cam.Left(move[0]);
+    }
+    else
+    if(mouse_down[mbLeft])
+    {
+        const Vector2f move=(mouse_coord-push_coord[mbLeft])/10;
 
-		cam.center=push_center[mbLeft];
-		cam.eye=push_eye[mbLeft];
+        cam.center=push_center[mbLeft];
+        cam.eye=push_eye[mbLeft];
 
-		cam.CenterRightRotate(move[0]);
-		cam.CenterUpRotate(move[1]);
-	}
+        cam.CenterRightRotate(move[0]);
+        cam.CenterUpRotate(move[1]);
+    }
 
-	return(true);
+    return(true);
 }
 
 bool CameraControlFlowObject::OnMouseWheel(double x_wheel,double y_wheel)
 {
-	cam.Distance(y_wheel>0?0.9f:1.1f);
+    cam.Distance(y_wheel>0?0.9f:1.1f);
 
-	return(true);
+    return(true);
 }
 
 bool CameraControlFlowObject::OnMouseDown(MouseButton index)
 {
-	mouse_down[index]=true;
+    mouse_down[index]=true;
 
-	push_coord[index]=mouse_coord;
+    push_coord[index]=mouse_coord;
 
-	push_center[index]=cam.center;
-	push_eye[index]=cam.eye;
+    push_center[index]=cam.center;
+    push_eye[index]=cam.eye;
 
-	return(true);
+    return(true);
 }
 
 bool CameraControlFlowObject::OnMouseUp(MouseButton index)
@@ -87,42 +87,42 @@ bool CameraControlFlowObject::OnMouseUp(MouseButton index)
 
 bool CameraControlFlowObject::OnKeyDown(KeyboardButton key)
 {
-	if(key==kbPageUp	)cam.Distance(0.9f);	else	//拉近
-	if(key==kbPageDown	)cam.Distance(1.1f);	else	//拉远
-	
-	if(key==kbInsert	)cam.BackwardRotate();	else	//以自身为中心向后旋转
-	if(key==kbDelete	)cam.ForwardRotate();	else	//以自身为中心向前旋转
-	if(key==kbUp		)cam.UpRotate();		else	//以自身为中心向上旋转
-	if(key==kbDown		)cam.DownRotate();		else	//以自身为中心向下旋转
-	if(key==kbLeft		)cam.LeftRotate();		else	//以自身为中心向左旋转
-	if(key==kbRight		)cam.RightRotate();		else	//以自身为中心向右旋转
+    if(key==kbPageUp    )cam.Distance(0.9f);    else    //拉近
+    if(key==kbPageDown  )cam.Distance(1.1f);    else    //拉远
 
-	if(key==kbNum8		)cam.CenterUpRotate();		else	//以目标点为中心向上旋转
-	if(key==kbNum2		)cam.CenterDownRotate();	else	//以目标点为中心向下旋转
-	if(key==kbNum4		)cam.CenterLeftRotate();	else	//以目标点为中心向左旋转
-	if(key==kbNum6		)cam.CenterRightRotate();	else	//以目标点为中心向右旋转
+    if(key==kbInsert    )cam.BackwardRotate();  else    //以自身为中心向后旋转
+    if(key==kbDelete    )cam.ForwardRotate();   else    //以自身为中心向前旋转
+    if(key==kbUp        )cam.UpRotate();        else    //以自身为中心向上旋转
+    if(key==kbDown      )cam.DownRotate();      else    //以自身为中心向下旋转
+    if(key==kbLeft      )cam.LeftRotate();      else    //以自身为中心向左旋转
+    if(key==kbRight     )cam.RightRotate();     else    //以自身为中心向右旋转
 
-	if(key==kbEnter		)								//复位
-	{
-		cam.eye=eye;
-		cam.center=center;
-		cam.up_vector=up_vector;
+    if(key==kbNum8      )cam.CenterUpRotate();      else    //以目标点为中心向上旋转
+    if(key==kbNum2      )cam.CenterDownRotate();    else    //以目标点为中心向下旋转
+    if(key==kbNum4      )cam.CenterLeftRotate();    else    //以目标点为中心向左旋转
+    if(key==kbNum6      )cam.CenterRightRotate();   else    //以目标点为中心向右旋转
+
+    if(key==kbEnter     )                               //复位
+    {
+        cam.eye=eye;
+        cam.center=center;
+        cam.up_vector=up_vector;
         cam.forward_vector=forward_vector;
-	}
-	else
-	if(key==kbMinus		)step*=0.9f;else				//-号，减速
-	if(key==kbEquals	)step*=1.1f;else				//=号，加速
+    }
+    else
+    if(key==kbMinus     )step*=0.9f;else                //-号，减速
+    if(key==kbEquals    )step*=1.1f;else                //=号，加速
 
-	if(key==kbW         )cam.Forward(step);else
-	if(key==kbS         )cam.Backward(step);else
-	if(key==kbA         )cam.Left(step);else
-	if(key==kbD         )cam.Right(step);else
-		return(false);
+    if(key==kbW         )cam.Forward(step);else
+    if(key==kbS         )cam.Backward(step);else
+    if(key==kbA         )cam.Left(step);else
+    if(key==kbD         )cam.Right(step);else
+        return(false);
 
-	return(true);
+    return(true);
 }
 
 void CameraControlFlowObject::Update()
 {
-	MakeCameraMatrix(&proj,&mv,&cam);					//根据象机设置生成proj/look矩阵
+    MakeCameraMatrix(&proj,&mv,&cam);                   //根据象机设置生成proj/look矩阵
 }

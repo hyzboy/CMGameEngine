@@ -2,14 +2,14 @@
 
 #include<string>
 
-using  int8     =  signed char;  	    ///<有符号 8位整型
-using uint8     =unsigned char;  	    ///<无符号 8位整型
-using  int16    =  signed short; 	    ///<有符号16位整型
-using uint16    =unsigned short; 	    ///<无符号16位整型
-using  int32    =  signed int; 	        ///<有符号32位整型
-using uint32    =unsigned int; 	        ///<无符号32位整型
-using  int64    =  signed long long; 	///<有符号64位整型
-using uint64    =unsigned long long; 	///<无符号64位整型
+using  int8     =  signed char;         ///<有符号 8位整型
+using uint8     =unsigned char;         ///<无符号 8位整型
+using  int16    =  signed short;        ///<有符号16位整型
+using uint16    =unsigned short;        ///<无符号16位整型
+using  int32    =  signed int;          ///<有符号32位整型
+using uint32    =unsigned int;          ///<无符号32位整型
+using  int64    =  signed long long;    ///<有符号64位整型
+using uint64    =unsigned long long;    ///<无符号64位整型
 
 typedef unsigned long   ulong;
 typedef unsigned int    uint;
@@ -58,7 +58,7 @@ inline void replace(std::string &str,const char new_char,const char old_char)
 */
 inline void DataToHexStr(char *str,const uint8 *src,const int size)
 {
-    constexpr char hexstr[16]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};	///<大写16进制字符
+    constexpr char hexstr[16]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};    ///<大写16进制字符
 
     int i;
 

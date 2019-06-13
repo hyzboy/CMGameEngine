@@ -17,15 +17,15 @@ class SpiralSphereInstance:public SpiralSphere
 {
 public:
 
-	SpiralSphereInstance(const Vector3f &v3):SpiralSphere(v3)
+    SpiralSphereInstance(const Vector3f &v3):SpiralSphere(v3)
     {
     }
 
-	~SpiralSphereInstance()
+    ~SpiralSphereInstance()
     {
     }
 
-	void Render(const Matrix4f *proj,const Matrix4f *mv)
+    void Render(const Matrix4f *proj,const Matrix4f *mv)
     {
     }
 };//class SpiralSphereInstance:public SpiralSphere

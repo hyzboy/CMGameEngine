@@ -8,27 +8,27 @@
 #include<hgl/graph/RenderState.h>
 namespace hgl
 {
-	namespace graph
-	{
-		class ShaderManage;
+    namespace graph
+    {
+        class ShaderManage;
 
-		/**
-		* 可渲染对象
-		*/
-		class Renderable
-		{
+        /**
+        * 可渲染对象
+        */
+        class Renderable
+        {
             void Init();
             void Clear();
 
-		protected:
+        protected:
 
-            VertexArray *va;                                                                                           		///<顶点数据
+            VertexArray *va;                                                                                                ///<顶点数据
 
-			Material *material;																							    ///<材质
+            Material *material;                                                                                             ///<材质
 
-			VertexBufferType TextureChannels[mtcMax];																	    ///<贴图通道对应表
+            VertexBufferType TextureChannels[mtcMax];                                                                       ///<贴图通道对应表
 
-			int DrawStart,DrawCount;																					    ///<可绘制数量
+            int DrawStart,DrawCount;                                                                                        ///<可绘制数量
 
         protected:
 
@@ -41,28 +41,28 @@ namespace hgl
 
             bool        MakeRenderState(bool);                                                                              ///<生成渲染状态
 
-		public:
+        public:
 
             Renderable(VertexArray *,Material *mtl=nullptr);
-			~Renderable();
+            ~Renderable();
 
-		public:
+        public:
 
-			uint				GetPrimitive		()const					{return va?va->GetPrimitive():0;}				///<取得要绘制的图元类型
+            uint                GetPrimitive        ()const                 {return va?va->GetPrimitive():0;}               ///<取得要绘制的图元类型
 
-			bool				SetMaterial			(Material *);															///<设置材质数据
-			Material * 			GetMaterial			()const					{return material;}								///<取得材质指针
+            bool                SetMaterial         (Material *);                                                           ///<设置材质数据
+            Material *          GetMaterial         ()const                 {return material;}                              ///<取得材质指针
 
-            VertexBufferBase *  GetVertexBuffer     (VertexBufferType vbt)	{return va?va->GetVertexBuffer(vbt):nullptr;} 	///<取得对应顶点缓冲区数据
+            VertexBufferBase *  GetVertexBuffer     (VertexBufferType vbt)  {return va?va->GetVertexBuffer(vbt):nullptr;}   ///<取得对应顶点缓冲区数据
 
-            int                 GetVertexCompoment  ()const{return va?va->GetVertexCompoment():0;}                      	///<取得顶点数据坐标轴数
-            PixelCompoment      GetVertexPixelCompoment()const{return va?va->GetVertexPixelCompoment():HGL_PC_NONE;}       	///<取得顶点数据成份属性
+            int                 GetVertexCompoment  ()const{return va?va->GetVertexCompoment():0;}                          ///<取得顶点数据坐标轴数
+            PixelCompoment      GetVertexPixelCompoment()const{return va?va->GetVertexPixelCompoment():HGL_PC_NONE;}        ///<取得顶点数据成份属性
 
-			bool				SetDrawCount		(int,int);																///<设置要绘制的数据数量
-			bool		        GetDrawCount		(int &,int &);															///<取得指定的要绘制的数据数量
+            bool                SetDrawCount        (int,int);                                                              ///<设置要绘制的数据数量
+            bool                GetDrawCount        (int &,int &);                                                          ///<取得指定的要绘制的数据数量
 
-			bool				SetTexCoord			(int mtc,VertexBufferType);												///<设定贴图坐标对应缓冲区
-			VertexBufferBase *	GetTexCoord			(int mtc,VertexBufferType *vbt=0);										///<取得贴图坐标对应的缓冲区
+            bool                SetTexCoord         (int mtc,VertexBufferType);                                             ///<设定贴图坐标对应缓冲区
+            VertexBufferBase *  GetTexCoord         (int mtc,VertexBufferType *vbt=0);                                      ///<取得贴图坐标对应的缓冲区
 
         public: //着色程序
 
@@ -79,13 +79,13 @@ namespace hgl
             const RenderState * GetRenderState      ()const { return &state; }                                              ///<取得渲染状态
 
 #ifdef _DEBUG
-			Shader *			AutoCreateShader	(bool mvp=true,ShaderManage *sm=nullptr,const OSString &debug_outname=nullptr);
+            Shader *            AutoCreateShader    (bool mvp=true,ShaderManage *sm=nullptr,const OSString &debug_outname=nullptr);
 #else
-            Shader *			AutoCreateShader	(bool mvp=true,ShaderManage *sm=nullptr);							///<自动创建Shader
+            Shader *            AutoCreateShader    (bool mvp=true,ShaderManage *sm=nullptr);                           ///<自动创建Shader
 #endif//#endif//_DEBUG
 
-			
-		};//class Renderable
-	}//namespace graph
+
+        };//class Renderable
+    }//namespace graph
 }//namespace hgl
 #endif//HGL_GRAPH_RENDERABLE_INCLUDE

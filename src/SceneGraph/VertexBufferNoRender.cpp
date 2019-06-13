@@ -3,7 +3,7 @@
 namespace hgl
 {
     namespace graph
-	{
+    {
         VertexBufferBase::VertexBufferBase(uint level, uint size)
         {
             dc_num = 0;
@@ -20,14 +20,14 @@ namespace hgl
         {
             hgl_free(mem_data);
         }
-		
+
         void VertexBufferBase::ChangeVertexBuffer(int, int, void *)
-		{
-		}
+        {
+        }
 
         bool VertexBufferBase::CreateVertexBuffer(uint)
         {
-			return(true);
+            return(true);
         }
     }//namespace graph
 }//namespace hgl

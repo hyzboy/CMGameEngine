@@ -17,7 +17,7 @@ namespace hgl
                 RootFlowControl *rfc=(RootFlowControl *)glfwGetWindowUserPointer(win);
 
                 if(!rfc)return;
-                    
+
                 rfc->OnResize(width,height);
             }
 
@@ -35,7 +35,7 @@ namespace hgl
                 RootFlowControl *rfc=(RootFlowControl *)glfwGetWindowUserPointer(win);
 
                 if(!rfc)return;
-                    
+
                 rfc->OnMouseMove(x,y);
             }
 
@@ -44,7 +44,7 @@ namespace hgl
                 RootFlowControl *rfc=(RootFlowControl *)glfwGetWindowUserPointer(win);
 
                 if(!rfc)return;
-                    
+
                 rfc->OnMouseWheel(x,y);
             }
 
@@ -53,7 +53,7 @@ namespace hgl
                 RootFlowControl *rfc=(RootFlowControl *)glfwGetWindowUserPointer(win);
 
                 if(!rfc)return;
-                
+
                 if(action==GLFW_PRESS   )rfc->OnMouseDown   ((MouseButton)button);else
                 if(action==GLFW_REPEAT  )rfc->OnMouseRepeat ((MouseButton)button);else
                 if(action==GLFW_RELEASE )rfc->OnMouseUp     ((MouseButton)button);
@@ -66,7 +66,7 @@ namespace hgl
                 if(!rfc)return;
 
                 KeyboardButton kb=ConvertOSKey(key);
-                    
+
                 if(action==GLFW_PRESS   )rfc->OnKeyDown     (kb);else
                 if(action==GLFW_REPEAT  )rfc->OnKeyRepeat   (kb);else
                 if(action==GLFW_RELEASE )rfc->OnKeyUp       (kb);
@@ -77,7 +77,7 @@ namespace hgl
                 RootFlowControl *rfc=(RootFlowControl *)glfwGetWindowUserPointer(win);
 
                 if(!rfc)return;
-                    
+
                 rfc->OnChar((os_char)character);
             }
         }//namespace

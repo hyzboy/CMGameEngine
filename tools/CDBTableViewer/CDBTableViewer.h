@@ -11,7 +11,7 @@ public:
     CDBTableViewer();
     virtual ~CDBTableViewer();
 
-	void Load(const hgl::OSString &);
+    void Load(const hgl::OSString &);
 };
 
 #endif // CDBTableViewer_H

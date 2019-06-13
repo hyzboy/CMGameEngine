@@ -393,7 +393,7 @@ namespace hgl
          */
          VertexArray *CreateRenderableWireCube()
          {                                // Points of a cube.
-            /*     4            5 */	const float points[]={  -0.5f, +0.5f, -0.5f,    //    0
+            /*     4            5 */    const float points[]={  -0.5f, +0.5f, -0.5f,    //    0
             /*     *------------* */                            +0.5f, +0.5f, -0.5f,    //    1
             /*    /|           /| */                            +0.5f, -0.5f, -0.5f,    //    2
             /*  0/ |         1/ | */                            -0.5f, -0.5f, -0.5f,    //    3
@@ -402,16 +402,16 @@ namespace hgl
             /*  | 7|         | 6| */                            +0.5f, -0.5f, +0.5f,    //    6
             /*  |  *---------+--* */                            -0.5f, -0.5f, +0.5f};   //    7
             /*  | /          | /  */
-            /*  |/          2|/   */	// The associated indices.
+            /*  |/          2|/   */    // The associated indices.
             /* 3*------------*    */    const uint16 indices[]={    0,1,1,2,2,3,3,0,    0,4,1,5,2,6,3,7,    4,5,5,6,6,7,7,4};
 
-			VertexArray *obj=new VertexArray(HGL_PRIM_LINES);
+            VertexArray *obj=new VertexArray(HGL_PRIM_LINES);
 
             obj->SetVertex(new VB3f(8,points));
             obj->SetIndex(new VB1u16(12*2,indices));
 
             return(obj);
-		}
+        }
 //
 //         const float RectVertex[8]={0,0, 1,0, 1,1, 0,1};
 //

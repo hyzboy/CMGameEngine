@@ -15,7 +15,7 @@ namespace hgl
             pixel_format = video_format = 0;
         }
 
-        Texture::~Texture() 
+        Texture::~Texture()
         {
             glDeleteTextures(1,&texture_id);
         }
@@ -57,7 +57,7 @@ namespace hgl
                 InitTexture2DDSA();
             }
             //else
-            //{ 
+            //{
             //    InitTextureBaseControlBind();
 
             //    if (GL_ARB_texture_storage)             //4.2

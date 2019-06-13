@@ -4,16 +4,16 @@
 #include<hgl/al/al.h>
 namespace openal
 {
-	// XRAM Extension function pointer variables and enum values
+    // XRAM Extension function pointer variables and enum values
 
-	typedef ALboolean (AL_APIENTRY *LPEAXSETBUFFERMODE)(ALsizei n, ALuint *buffers, ALint value);
-	typedef ALenum    (AL_APIENTRY *LPEAXGETBUFFERMODE)(ALuint buffer, ALint *value);
+    typedef ALboolean (AL_APIENTRY *LPEAXSETBUFFERMODE)(ALsizei n, ALuint *buffers, ALint value);
+    typedef ALenum    (AL_APIENTRY *LPEAXGETBUFFERMODE)(ALuint buffer, ALint *value);
 
-	extern LPEAXSETBUFFERMODE eaxSetBufferMode;
-	extern LPEAXGETBUFFERMODE eaxGetBufferMode;
+    extern LPEAXSETBUFFERMODE eaxSetBufferMode;
+    extern LPEAXGETBUFFERMODE eaxGetBufferMode;
 
-	// X-RAM Enum values
-	extern ALenum eXRAMSize, eXRAMFree;
-	extern ALenum eXRAMAuto, eXRAMHardware, eXRAMAccessible;
+    // X-RAM Enum values
+    extern ALenum eXRAMSize, eXRAMFree;
+    extern ALenum eXRAMAuto, eXRAMHardware, eXRAMAccessible;
 }//namespace openal
 #endif//

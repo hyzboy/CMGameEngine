@@ -5,89 +5,89 @@
 
 namespace hgl
 {
-	/**
-	* SQL 支持模块名字空间
-	*/
-	namespace sql
-	{
-		class SQLRow
-		{
-		public:
+    /**
+    * SQL 支持模块名字空间
+    */
+    namespace sql
+    {
+        class SQLRow
+        {
+        public:
 
-			virtual ~SQLRow(){}
+            virtual ~SQLRow(){}
 
-		public:
+        public:
 
-			virtual char *GetString( int index ) = 0;
-		
-		};//class SQLRow
+            virtual char *GetString( int index ) = 0;
 
-		/**
-		* SQL 查询结果支持
-		*/
-		class SQLStoreResult
-		{	
-		public:
+        };//class SQLRow
 
-			virtual ~SQLStoreResult(){}
+        /**
+        * SQL 查询结果支持
+        */
+        class SQLStoreResult
+        {
+        public:
 
-		public:
+            virtual ~SQLStoreResult(){}
 
-			virtual int GetRowNumber()=0;																///<取得记录行数
-			virtual int GetFieldCount()=0;															///<取得记录字段数
-			virtual const char *GetFieldName(int)=0;												///<取得字段名称
+        public:
 
-			virtual SQLRow *GetRow(int) = 0;
-			virtual SQLField *GetField(int) = 0;
-			//virtual MYSQL_FIELD *GetField(int) = 0;
+            virtual int GetRowNumber()=0;                                                               ///<取得记录行数
+            virtual int GetFieldCount()=0;                                                          ///<取得记录字段数
+            virtual const char *GetFieldName(int)=0;                                                ///<取得字段名称
 
-		};//class SQLStoreResult
+            virtual SQLRow *GetRow(int) = 0;
+            virtual SQLField *GetField(int) = 0;
+            //virtual MYSQL_FIELD *GetField(int) = 0;
 
-		/**
-		* SQL 连接支持
-		*/
-		class SQLConnection
-		{
-		public:
+        };//class SQLStoreResult
 
-			virtual ~SQLConnection(){};
+        /**
+        * SQL 连接支持
+        */
+        class SQLConnection
+        {
+        public:
 
-			virtual SQLStoreResult *Query(const char *)=0;													///<执行一个SQL查询
-			virtual void GetMysqlRoleLiteInfo( ) = 0;
-		};//SQLConnection
+            virtual ~SQLConnection(){};
 
-		/**
-		* SQL 驱动类
-		*/
-		class SQLDriver
-		{
-		public:
+            virtual SQLStoreResult *Query(const char *)=0;                                                  ///<执行一个SQL查询
+            virtual void GetMysqlRoleLiteInfo( ) = 0;
+        };//SQLConnection
 
-			virtual ~SQLDriver(){};
+        /**
+        * SQL 驱动类
+        */
+        class SQLDriver
+        {
+        public:
 
-			virtual SQLConnection *CreateConnection(const char *,const char *,const char *,const char *,const char *charset=nullptr)=0;				///<创建一个访问连接
-		};//class SQLDriver
+            virtual ~SQLDriver(){};
 
-		/**
-		* SQL类型
-		*/
-		enum SQLType
-		{
-			sqlNone=0,
+            virtual SQLConnection *CreateConnection(const char *,const char *,const char *,const char *,const char *charset=nullptr)=0;             ///<创建一个访问连接
+        };//class SQLDriver
 
-			sqlMySQL,
-			//sqlMySQLEmbedded,
-			//sqlFireBird,
-			//sqlFireBirdEmbedded,
-			//sqlInterBase,
-			//sqlInterBaseEmbedded,
-			//sqlSQLite,
+        /**
+        * SQL类型
+        */
+        enum SQLType
+        {
+            sqlNone=0,
 
-			sqlEnd
+            sqlMySQL,
+            //sqlMySQLEmbedded,
+            //sqlFireBird,
+            //sqlFireBirdEmbedded,
+            //sqlInterBase,
+            //sqlInterBaseEmbedded,
+            //sqlSQLite,
 
-		};//enum SQLType
+            sqlEnd
 
-		SQLDriver *CreateSQLDriver(SQLType);														///<创建一个SQL驱动
-	}//namespace sql
+        };//enum SQLType
+
+        SQLDriver *CreateSQLDriver(SQLType);                                                        ///<创建一个SQL驱动
+    }//namespace sql
 }//namespace hgl
 #endif//HGL_DB_SQL_DRIVER_INCLUDE

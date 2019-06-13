@@ -33,7 +33,7 @@ protected:
 
     bool Playback();
 
-    bool IsExitDelete()const override{return false;}    
+    bool IsExitDelete()const override{return false;}
     bool Execute() override;
 
     void InitPrivate();

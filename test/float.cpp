@@ -4,8 +4,8 @@
 
 int main(int,char **)
 {
-	OUT(__float128);
-	OUT(long double);
+    OUT(__float128);
+    OUT(long double);
 
-	return 0;
+    return 0;
 }

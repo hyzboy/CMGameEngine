@@ -3,41 +3,41 @@
 
 namespace hgl
 {
-	namespace os
-	{
-		void CopyTextToClipboard(const u16char *str)
-		{
-			if(!str||!(*str))return;
+    namespace os
+    {
+        void CopyTextToClipboard(const u16char *str)
+        {
+            if(!str||!(*str))return;
 
-			if (!OpenClipboard(nullptr))return;
+            if (!OpenClipboard(nullptr))return;
 
-			EmptyClipboard();
+            EmptyClipboard();
 
-			HGLOBAL clipbuffer;
-			u16char * buffer;
+            HGLOBAL clipbuffer;
+            u16char * buffer;
 
-			clipbuffer = GlobalAlloc(GMEM_DDESHARE, strlen(str)+1);
-			buffer = (u16char *)GlobalLock(clipbuffer);
+            clipbuffer = GlobalAlloc(GMEM_DDESHARE, strlen(str)+1);
+            buffer = (u16char *)GlobalLock(clipbuffer);
 
-			strcpy(buffer, str);
+            strcpy(buffer, str);
 
-			GlobalUnlock(clipbuffer);
-			SetClipboardData(CF_UNICODETEXT, clipbuffer);
-			CloseClipboard();
-		}
+            GlobalUnlock(clipbuffer);
+            SetClipboardData(CF_UNICODETEXT, clipbuffer);
+            CloseClipboard();
+        }
 
-		const u16char *GetTextFromClipboard()
-		{
-			if (!OpenClipboard(nullptr))
-				return 0;
+        const u16char *GetTextFromClipboard()
+        {
+            if (!OpenClipboard(nullptr))
+                return 0;
 
-			u16char * buffer = 0;
+            u16char * buffer = 0;
 
-			HANDLE hData = GetClipboardData( CF_UNICODETEXT );
-			buffer = (u16char *)GlobalLock( hData );
-			GlobalUnlock( hData );
-			CloseClipboard();
-			return buffer;
-		}
-	}//namespace os
+            HANDLE hData = GetClipboardData( CF_UNICODETEXT );
+            buffer = (u16char *)GlobalLock( hData );
+            GlobalUnlock( hData );
+            CloseClipboard();
+            return buffer;
+        }
+    }//namespace os
 }//namespace hgl

@@ -56,7 +56,7 @@ namespace hgl
 
             if(ec!=dfs::ecNone)
                 con->Disconnect();
-            
+
             conn_pool->SafeRelease(con);
             return(ec==dfs::ecNone);
         }

@@ -51,11 +51,11 @@ namespace hgl
             void    operator &= (T v){(*value_pointer)&=v;}
             void    operator |= (T v){(*value_pointer)|=v;}
 
-            T       operator ++ (int){return((*value_pointer)++);}                           		///<后置++
-            T       operator -- (int){return((*value_pointer)--);}                           		///<后置--
+            T       operator ++ (int){return((*value_pointer)++);}                                  ///<后置++
+            T       operator -- (int){return((*value_pointer)--);}                                  ///<后置--
 
-            T       operator ++ ()   {return(++(*value_pointer));}                             	///<前置++
-            T       operator -- ()   {return(--(*value_pointer));}                             	///<前置--
+            T       operator ++ ()   {return(++(*value_pointer));}                              ///<前置++
+            T       operator -- ()   {return(--(*value_pointer));}                              ///<前置--
 
             bool    operator >  (const T & v){return((*value_pointer)> v);}
             bool    operator >= (const T & v){return((*value_pointer)>=v);}

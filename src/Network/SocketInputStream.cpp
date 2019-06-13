@@ -55,7 +55,7 @@ namespace hgl
                 return(-3);
             }
 
-			if(!buf)
+            if(!buf)
             {
                 LOG_ERROR(OS_TEXT("SocketInputStream::Read() fatal error,buf=nullptr,sock=")+OSString(sock));
                 return(-2);
@@ -97,7 +97,7 @@ namespace hgl
                 return(-1);
             }
 
-			if(!buf)
+            if(!buf)
             {
                 LOG_ERROR(OS_TEXT("SocketInputStream::Peek() fatal error,buf=nullptr,sock=")+OSString(sock));
                 return(-2);
@@ -134,7 +134,7 @@ namespace hgl
                 return(-3);
             }
 
-			if(!buf)
+            if(!buf)
             {
                 LOG_ERROR(OS_TEXT("SocketInputStream::ReadFully() fatal error,buf=nullptr,sock=")+OSString(sock));
                 return(-2);
@@ -236,14 +236,14 @@ namespace hgl
             return ReadFully(mb->data(),n);
         }
 
-		int64 SocketInputStream::Available()const
-		{
-			int recv_buf_size=0;
-			socklen_t len=sizeof(int);
+        int64 SocketInputStream::Available()const
+        {
+            int recv_buf_size=0;
+            socklen_t len=sizeof(int);
 
-			getsockopt(sock,SOL_SOCKET,SO_RCVBUF,(char *)&recv_buf_size,&len);		//这个函数会出错，但我们不理会
+            getsockopt(sock,SOL_SOCKET,SO_RCVBUF,(char *)&recv_buf_size,&len);      //这个函数会出错，但我们不理会
 
-			return recv_buf_size;
-		}
+            return recv_buf_size;
+        }
     }//namespace network
 }//namespace hgl

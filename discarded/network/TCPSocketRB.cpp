@@ -41,7 +41,7 @@ namespace hgl
             delete ris;
         }
 
-        void TCPSocketRB::UseSocket(int sock,IPAddress *addr) 
+        void TCPSocketRB::UseSocket(int sock,IPAddress *addr)
         {
             TCPSocket::UseSocket(sock,addr);
 

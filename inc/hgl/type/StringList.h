@@ -13,7 +13,7 @@ namespace hgl
     /**
     * 字符串列表处理类，用于保存字符串列表。
     */
-    template<typename T> class StringList															///字符串列表处理类
+    template<typename T> class StringList                                                           ///字符串列表处理类
     {
         static T NullString;
 
@@ -21,12 +21,12 @@ namespace hgl
 
         ObjectList<T> Items;
 
-    public:	//属性
+    public: //属性
 
-        T **GetDataList()const{return Items.GetData();}												///<取得字符串列表指针数据
-        const int GetCount()const{return Items.GetCount();}											///<字符串列表行数虚拟变量
+        T **GetDataList()const{return Items.GetData();}                                             ///<取得字符串列表指针数据
+        const int GetCount()const{return Items.GetCount();}                                         ///<字符串列表行数虚拟变量
 
-    public:	//操作符重载
+    public: //操作符重载
 
         T &operator[](int n)const
         {
@@ -59,22 +59,22 @@ namespace hgl
 
     public: //方法
 
-        StringList()=default;															            ///<本类构造函数
+        StringList()=default;                                                                       ///<本类构造函数
         //注：这里不要实现StringList(T &)或StringList(T *)之类
-        virtual ~StringList(){Clear();}																///<本类析构函数
+        virtual ~StringList(){Clear();}                                                             ///<本类析构函数
 
         /**
         * 增加一行字符串到当前列表中
         * @param str 要增加的字符串
         * @return 增加字符串成功后的索引
         */
-        int Add(const T &str){return Items.Add(new T(str));}										///<添加字符串
+        int Add(const T &str){return Items.Add(new T(str));}                                        ///<添加字符串
 
         /**
         * 增加一个字符串列表到当前字符串列表中
         * @param sl 要增加的字符串列表
         */
-        int Add(const StringList<T> &sl)															///<添加字符串
+        int Add(const StringList<T> &sl)                                                            ///<添加字符串
         {
             const int count=sl.GetCount();
 
@@ -87,13 +87,13 @@ namespace hgl
         /**
         * 清除所有字符串
         */
-        void Clear(){Items.Clear();}																///<删除列表中的所有字符串
+        void Clear(){Items.Clear();}                                                                ///<删除列表中的所有字符串
 
         /**
         * 删除指定的字符串
         * @param index 要删除的字符串索引
         */
-        void Delete(int index){Items.Delete(index);}												///<删除列表中指定的字符串
+        void Delete(int index){Items.Delete(index);}                                                ///<删除列表中指定的字符串
 
         /**
          * 删除指定字符串
@@ -122,7 +122,7 @@ namespace hgl
         * @param str 要查找的字符串
         * @return 查找到的字符串的索引,未找到返回-1
         */
-        int  Find(const T &str) const																///<查找字符串,未找到返回-1
+        int  Find(const T &str) const                                                               ///<查找字符串,未找到返回-1
         {
             const int count=Items.GetCount();
 
@@ -138,7 +138,7 @@ namespace hgl
         * @param str 要指找的字符串
         * @return 查找到的字符串的索引,未找到返回-1
         */
-        int  CaseFind(const T &str) const															///<查找字符串,英文无视大小写,未找到返回-1
+        int  CaseFind(const T &str) const                                                           ///<查找字符串,英文无视大小写,未找到返回-1
         {
             const int count=Items.GetCount();
 
@@ -188,7 +188,7 @@ namespace hgl
         * @param index 要插入字符串的位置
         * @param str 要插入的字符串
         */
-        void Insert(int index,const T &str)															///<在指定位置插入一个字符串
+        void Insert(int index,const T &str)                                                         ///<在指定位置插入一个字符串
         {
             if(index<Items.GetCount())
                 Items.List<T *>::Insert(index,new T(str));
@@ -199,12 +199,12 @@ namespace hgl
         * @param index1 第一个字符串的位置
         * @param index2 第二个字符串的位置
         */
-        void Exchange(int index1,int index2)														///<交换两行字符串
+        void Exchange(int index1,int index2)                                                        ///<交换两行字符串
         {
             Items.Exchange(index1,index2);
         }
 
-        T &GetString(int n)const{return *(Items[n]);}												///<取得指定行字符串
+        T &GetString(int n)const{return *(Items[n]);}                                               ///<取得指定行字符串
     };//template<typename T> class StringList
 
     template<typename T> T StringList<T>::NullString;                                               ///<空字符串实例
@@ -426,7 +426,7 @@ namespace hgl
                 return count;
             }
 
-            if(*p==0x0D)			// \r
+            if(*p==0x0D)            // \r
             {
                 sl.Add(BaseString<T>(sp,p-sp));
                 ++count;
@@ -434,7 +434,7 @@ namespace hgl
                 ++p;
                 --size;
 
-                if(*p==0x0A)		// \r\n,Windows下的断行是(\r\n)0x0D+0x0A，而其它系统是仅有一个
+                if(*p==0x0A)        // \r\n,Windows下的断行是(\r\n)0x0D+0x0A，而其它系统是仅有一个
                 {
                     ++p;
                     --size;
@@ -443,7 +443,7 @@ namespace hgl
                 sp=p;
             }
             else
-            if(*p==0x0A)			// \n
+            if(*p==0x0A)            // \n
             {
                 sl.Add(BaseString<T>(sp,p-sp));
                 ++count;
@@ -508,7 +508,7 @@ namespace hgl
                 return count;
             }
 
-            if(*p==0x0D)			// \r
+            if(*p==0x0D)            // \r
             {
                 sl[index]->Add(BaseString<T>(sp,p-sp));
                 if(++index==slc)index=0;
@@ -518,7 +518,7 @@ namespace hgl
                 ++p;
                 --size;
 
-                if(*p==0x0A)		// \r\n,Windows下的断行是(\r\n)0x0D+0x0A，而其它系统是仅有一个
+                if(*p==0x0A)        // \r\n,Windows下的断行是(\r\n)0x0D+0x0A，而其它系统是仅有一个
                 {
                     ++p;
                     --size;
@@ -527,7 +527,7 @@ namespace hgl
                 sp=p;
             }
             else
-            if(*p==0x0A)			// \n
+            if(*p==0x0A)            // \n
             {
                 sl[index]->Add(BaseString<T>(sp,p-sp));
                 if(++index==slc)index=0;
@@ -565,12 +565,12 @@ namespace hgl
             return SplitToMultiStringList<T>(sl,slc,str.c_str(),str.Length());
     }
 
-    using UTF8StringList	=StringList<UTF8String	>;
-    using UTF16StringList	=StringList<UTF16String	>;
-	using UTF32StringList	=StringList<UTF32String	>;
-    using AnsiStringList	=StringList<AnsiString	>;
-    using WideStringList	=StringList<WideString	>;
-	using OSStringList		=StringList<OSString	>;
+    using UTF8StringList    =StringList<UTF8String  >;
+    using UTF16StringList   =StringList<UTF16String >;
+    using UTF32StringList   =StringList<UTF32String >;
+    using AnsiStringList    =StringList<AnsiString  >;
+    using WideStringList    =StringList<WideString  >;
+    using OSStringList      =StringList<OSString    >;
 
     template<typename T,ByteOrderMask bom> struct ReadStringFromDIS
     {

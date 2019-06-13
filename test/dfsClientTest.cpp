@@ -14,82 +14,82 @@ dfsClientFile *dfs_file;
 
 class TestThread:public Thread
 {
-	char *buf;
+    char *buf;
 
 public:
 
-	TestThread()
-	{
-		buf=new char[TEST_FILE_SIZE+4];
-	}
+    TestThread()
+    {
+        buf=new char[TEST_FILE_SIZE+4];
+    }
 
-	~TestThread()
-	{
-		delete[] buf;
-	}
+    ~TestThread()
+    {
+        delete[] buf;
+    }
 
-	bool Execute()
-	{
-		if(rand()%99)
-		{
-			InputStream *is=dfs_file->LoadFile(rand()%TEST_FILE_MAX);
+    bool Execute()
+    {
+        if(rand()%99)
+        {
+            InputStream *is=dfs_file->LoadFile(rand()%TEST_FILE_MAX);
 
-			delete is;
-		}
-		else
-		{
-			OutputStream *os=dfs_file->SaveFile(rand()%TEST_FILE_MAX);
+            delete is;
+        }
+        else
+        {
+            OutputStream *os=dfs_file->SaveFile(rand()%TEST_FILE_MAX);
 
-			int length=4+(rand()%TEST_FILE_SIZE);
+            int length=4+(rand()%TEST_FILE_SIZE);
 
-			for(int i=0;i<length;i++)
-				buf[i]=rand()%256;
+            for(int i=0;i<length;i++)
+                buf[i]=rand()%256;
 
-			os->Write(buf,length);
-			os->Close();
-			delete os;
-		}
+            os->Write(buf,length);
+            os->Close();
+            delete os;
+        }
 
-		return(true);
-	}
+        return(true);
+    }
 };//class TestThread
 
 int main(int args,char **argv)
 {
-	if(args<4)
-	{
-		std::cout<<"dfsClientTest [dfsFileServer IP][Thread count][file count]"<<std::endl;
-		return(0);
-	}
+    if(args<4)
+    {
+        std::cout<<"dfsClientTest [dfsFileServer IP][Thread count][file count]"<<std::endl;
+        return(0);
+    }
 
-	stoi(argv[2],TEST_THREAD_MAX);
-	stoi(argv[3],TEST_FILE_MAX);
-	stoi(argv[4],TEST_FILE_SIZE);
+    stoi(argv[2],TEST_THREAD_MAX);
+    stoi(argv[3],TEST_FILE_MAX);
+    stoi(argv[4],TEST_FILE_SIZE);
 
-	std::cout<<"dfsClientTest Thread:"<<TEST_THREAD_MAX<<",File:"<<TEST_FILE_MAX<<",Size:"<<TEST_FILE_SIZE<<std::endl;
+    std::cout<<"dfsClientTest Thread:"<<TEST_THREAD_MAX<<",File:"<<TEST_FILE_MAX<<",Size:"<<TEST_FILE_SIZE<<std::endl;
 
-	dfs_file=new dfsClientFile("Test",TEST_THREAD_MAX);
+    dfs_file=new dfsClientFile("Test",TEST_THREAD_MAX);
 
-	dfs_file->Init(argv[1],4000,"Test");
+    dfs_file->Init(argv[1],4000,"Test");
 
-	srandom(time(nullptr));
+    srandom(time(nullptr));
 
-	TestThread **tt;
+    TestThread **tt;
 
-	tt=new TestThread *[TEST_THREAD_MAX];
+    tt=new TestThread *[TEST_THREAD_MAX];
 
-	for(int i=0;i<TEST_THREAD_MAX;i++)
-	{
-		tt[i]=new TestThread;
-		tt[i]->Start();
-	}
+    for(int i=0;i<TEST_THREAD_MAX;i++)
+    {
+        tt[i]=new TestThread;
+        tt[i]->Start();
+    }
 
-	for(int i=0;i<TEST_THREAD_MAX;i++)
-	{
-		tt[i]->Wait();
-		delete tt[i];
-	}
+    for(int i=0;i<TEST_THREAD_MAX;i++)
+    {
+        tt[i]->Wait();
+        delete tt[i];
+    }
 
-	delete tt;
-	return(0);
+    delete tt;
+    return(0);
 }

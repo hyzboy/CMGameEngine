@@ -51,7 +51,7 @@ namespace hgl
 
                     if(!this->dis->ReadInt32(msg_size))RETURN_FALSE;
 
-                    if(msg_size==0)return(true);				//heart
+                    if(msg_size==0)return(true);                //heart
 
                     if(msg_size<sizeof(int32))RETURN_FALSE;
 

@@ -6,97 +6,97 @@
 #include<hgl/graph/PixelCompoment.h>
 namespace hgl
 {
-	namespace graph
-	{
-		namespace shadergen
-		{
-			struct vs:public shader_stringlist
-			{
-				shader_in_type in_normal;
-				shader_in_type in_vertex_color;
+    namespace graph
+    {
+        namespace shadergen
+        {
+            struct vs:public shader_stringlist
+            {
+                shader_in_type in_normal;
+                shader_in_type in_vertex_color;
 
-				bool color_material;
+                bool color_material;
 
                 LightMode light_mode;
                 bool sun_light;
 
-				UTF8String vertex_color_to_vec4;
+                UTF8String vertex_color_to_vec4;
 
-				int vertex_type;
+                int vertex_type;
 
-				bool mvp_matrix;
+                bool mvp_matrix;
 
-				bool in_vertex_buffer[HGL_MAX_VERTEX_BUFFER];
+                bool in_vertex_buffer[HGL_MAX_VERTEX_BUFFER];
 
-				int in_texcoord_count;
-				int in_texcoord_num[HGL_MAX_TEX_COORD];
+                int in_texcoord_count;
+                int in_texcoord_num[HGL_MAX_TEX_COORD];
 
-				int out_texcoord_count;
-				bool out_texcoord[HGL_MAX_TEX_COORD];
-				UTF8String out_texcoord_name[HGL_MAX_TEX_COORD];
-				UTF8String out_texcoord_source[HGL_MAX_TEX_COORD];		//来源
+                int out_texcoord_count;
+                bool out_texcoord[HGL_MAX_TEX_COORD];
+                UTF8String out_texcoord_name[HGL_MAX_TEX_COORD];
+                UTF8String out_texcoord_source[HGL_MAX_TEX_COORD];      //来源
 
-				int in_tex_count;
-				bool in_tex[mtcMax];
-				UTF8String tex_sampler[mtcMax];
+                int in_tex_count;
+                bool in_tex[mtcMax];
+                UTF8String tex_sampler[mtcMax];
 
-				Axis up_axis;				                        //向上轴
+                Axis up_axis;                                       //向上轴
 
             protected:
 
                 void add_layout_in(int vb,const char *name,int num);
 
-			protected:
+            protected:
 
-				int SetVertexPixelCompoment(PixelCompoment);
+                int SetVertexPixelCompoment(PixelCompoment);
 
-			public:
+            public:
 
-				vs();
+                vs();
 
-			public:
+            public:
 
-				void add_mvp(bool);
+                void add_mvp(bool);
 
-			protected:	//顶点
+            protected:  //顶点
 
-				int vertex_format;
+                int vertex_format;
 
-			public:		//顶点
+            public:     //顶点
 
-				void add_in_vertex(int);
+                void add_in_vertex(int);
 
-			public:		//法线
+            public:     //法线
 
-				void add_in_normal();
-				void add_uniform_normal();
+                void add_in_normal();
+                void add_uniform_normal();
 
-			public:		//颜色
+            public:     //颜色
 
-				void set_color_material();
+                void set_color_material();
 
-				void add_in_color(PixelCompoment fmt);
+                void add_in_color(PixelCompoment fmt);
 
             public:     //灯光
 
                 void set_light_mode(const LightMode &);
                 void set_sun_light(bool);
 
-			public:		//纹理
+            public:     //纹理
 
-				void add_in_texture(const char *,uint,uint,int mtc);
-				void add_in_texcoord(int,const char *,int,int mtc);
-				void add_out_texcoord(int,int mtc,const char *);
+                void add_in_texture(const char *,uint,uint,int mtc);
+                void add_in_texcoord(int,const char *,int,int mtc);
+                void add_out_texcoord(int,int mtc,const char *);
 
-			public:		//高度图
+            public:     //高度图
 
-				void set_up_axis(Axis a){up_axis=a;}
+                void set_up_axis(Axis a){up_axis=a;}
 
-			public:		//最终计算
+            public:     //最终计算
 
-				bool add_end(bool);
-			};//struct vs
-		}//namespace shadergen
-	}//namespace graph
+                bool add_end(bool);
+            };//struct vs
+        }//namespace shadergen
+    }//namespace graph
 }//namespace hgl
 #endif//HGL_GRAPH_GEN_VERTEX_SHADER_INCLUDE

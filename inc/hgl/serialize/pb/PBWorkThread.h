@@ -25,8 +25,8 @@ namespace hgl
 
             protected:
 
-                virtual ID CreateUserID()=0;					///<请自行实现
-                virtual USER_OUTPUT *CreateUserOutput()=0;		///<请自行实现
+                virtual ID CreateUserID()=0;                    ///<请自行实现
+                virtual USER_OUTPUT *CreateUserOutput()=0;      ///<请自行实现
 
                 /**
                 * 注册当前用户到管理器

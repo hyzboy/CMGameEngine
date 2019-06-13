@@ -24,66 +24,66 @@
 //--------------------------------------------------------------------------------------------------
 namespace hgl
 {
-	namespace network
-	{
-		/**
-		* 创建一个UDPLite连接，使用指定的IP地址和端口
-		* @param addr 地址
-		* @return true 创建服务器成功
-		* @return false 创建服务器失败
-		*/
-		bool UDPLiteSocket::Create(const IPAddress *addr)
-		{
+    namespace network
+    {
+        /**
+        * 创建一个UDPLite连接，使用指定的IP地址和端口
+        * @param addr 地址
+        * @return true 创建服务器成功
+        * @return false 创建服务器失败
+        */
+        bool UDPLiteSocket::Create(const IPAddress *addr)
+        {
             if(!addr)RETURN_FALSE;
 
             if(addr->GetSocketType()!=SOCK_DGRAM)RETURN_FALSE;
             if(addr->GetProtocol()!=IPPROTO_UDPLITE)RETURN_FALSE;
 
-			if(!CreateSocket(addr->GetFamily(),SOCK_DGRAM,IPPROTO_UDPLITE))
-				RETURN_FALSE;
+            if(!CreateSocket(addr->GetFamily(),SOCK_DGRAM,IPPROTO_UDPLITE))
+                RETURN_FALSE;
 
-			socket_protocols=IPPROTO_UDPLITE;
+            socket_protocols=IPPROTO_UDPLITE;
 
             if(!addr->Bind(ThisSocket))
-			{
-				hgl::CloseSocket(ThisSocket);
-				return(false);
-			}
+            {
+                hgl::CloseSocket(ThisSocket);
+                return(false);
+            }
 
-			SetBlock(false);
-			return(true);
-		}
+            SetBlock(false);
+            return(true);
+        }
 
-		/**
-		* 创建一个UDPLite连接
-		*/
-		bool UDPLiteSocket::Create(int family)
-		{
+        /**
+        * 创建一个UDPLite连接
+        */
+        bool UDPLiteSocket::Create(int family)
+        {
             if(family!=AF_INET&&family!=AF_INET6)RETURN_FALSE;
 
-			if((ThisSocket=socket(family,SOCK_DGRAM,IPPROTO_UDPLITE))<0)
-			{
-				LOG_ERROR(U16_TEXT("创建UDPLiteSocket失败！errno:")+UTF16String(GetLastSocketError()));
-				return(false);
-			}
+            if((ThisSocket=socket(family,SOCK_DGRAM,IPPROTO_UDPLITE))<0)
+            {
+                LOG_ERROR(U16_TEXT("创建UDPLiteSocket失败！errno:")+UTF16String(GetLastSocketError()));
+                return(false);
+            }
 
-			socket_protocols=IPPROTO_UDPLITE;
+            socket_protocols=IPPROTO_UDPLITE;
 
-			SetBlock(false);
-			return(true);
-		}
+            SetBlock(false);
+            return(true);
+        }
 
         void UDPLiteSocket::SetChecksumCoverage(int send_val,int recv_val)
         {
             if(ThisSocket==-1)return;
 
 #if HGL_OS == HGL_OS_Windows
-			setsockopt(ThisSocket, SOL_UDPLITE, UDPLITE_SEND_CSCOV, (const char *)&send_val, sizeof(int));
-			setsockopt(ThisSocket, SOL_UDPLITE, UDPLITE_RECV_CSCOV, (const char *)&recv_val, sizeof(int));
+            setsockopt(ThisSocket, SOL_UDPLITE, UDPLITE_SEND_CSCOV, (const char *)&send_val, sizeof(int));
+            setsockopt(ThisSocket, SOL_UDPLITE, UDPLITE_RECV_CSCOV, (const char *)&recv_val, sizeof(int));
 #else
             setsockopt(ThisSocket, SOL_UDPLITE, UDPLITE_SEND_CSCOV, &send_val, sizeof(int));
             setsockopt(ThisSocket, SOL_UDPLITE, UDPLITE_RECV_CSCOV, &recv_val, sizeof(int));
 #endif//
         }
-	}//namespace network
+    }//namespace network
 }//namespace hgl

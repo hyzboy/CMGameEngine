@@ -1,5 +1,5 @@
-/**
- * ÊµÑéÏîÄ¿£¬´ËÊµÑé½á¹û²¢Î´³É¹¦
+ï»¿/**
+ * å®éªŒé¡¹ç›®ï¼Œæ­¤å®éªŒç»“æœå¹¶æœªæˆåŠŸ
  */
 #include<hgl/Graphics.h>                //GraphicsApplication,SystemInitInfo
 #include<hgl/graph/Render.h>            //SetClearColor,ClearColorDepthBuffer
@@ -32,17 +32,17 @@ void WriteTBN(VertexBufferBase *vbb,const Vector4f &t,const Vector4f &b,const Ve
 }
 
 /**
- * ´´½¨Ò»¸öTBNÖáµÄ¿ÉäÖÈ¾Êı¾İ
- * @param size ×ø±êÖá³ß´ç
- * @return ¿ÉäÖÈ¾Êı¾İ
+ * åˆ›å»ºä¸€ä¸ªTBNè½´çš„å¯æ¸²æŸ“æ•°æ®
+ * @param size åæ ‡è½´å°ºå¯¸
+ * @return å¯æ¸²æŸ“æ•°æ®
  */
 Renderable *CreateRenderableTBN(const Vector4f &t,const Vector4f &b,const Vector4f &n,const float light)
 {
     VertexArray *obj=new VertexArray(HGL_PRIM_LINES);
 
-    //´´½¨¶¥µã»º³åÇø
-    VB3f *vertex=new VB3f(6);               //´´½¨Ò»¸ö3D×ø±êµã¡¢¸¡µãÊı¾İµÄ»º³åÇø
-    VB3f *color=new VB3f(6);                //´´½¨Ò»¸ö4ÔªÑÕÉ«¡¢¸¡µãÊı¾İµÄ»º³åÇø
+    //åˆ›å»ºé¡¶ç‚¹ç¼“å†²åŒº
+    VB3f *vertex=new VB3f(6);               //åˆ›å»ºä¸€ä¸ª3Dåæ ‡ç‚¹ã€æµ®ç‚¹æ•°æ®çš„ç¼“å†²åŒº
+    VB3f *color=new VB3f(6);                //åˆ›å»ºä¸€ä¸ª4å…ƒé¢œè‰²ã€æµ®ç‚¹æ•°æ®çš„ç¼“å†²åŒº
 
     color->Begin();
     vertex->Begin();
@@ -108,26 +108,26 @@ private:
 
     Vector2f rotate2d(const Vector2f &v,double ang)
     {
-		double as,ac;
-		double nx,ny;
+        double as,ac;
+        double nx,ny;
 
         as=sin(ang*HGL_PI/180.0f);
-		ac=cos(ang*HGL_PI/180.0f);
+        ac=cos(ang*HGL_PI/180.0f);
 
-		nx=v.x*ac-v.y*as;
-		ny=v.x*as+v.y*ac;
+        nx=v.x*ac-v.y*as;
+        ny=v.x*as+v.y*ac;
 
         return Vector2f(nx,ny);
     }
 
     void CreateTBN()
     {
-        //È±Ê¡TBN
+        //ç¼ºçœTBN
         Vector4f t(1,0,0,0);
         Vector4f b(0,0,1,0);
         Vector4f n(0,1,0,0);
 
-        //Ô­Ê¼×ø±êÏµ
+        //åŸå§‹åæ ‡ç³»
         tbn[0]=CreateRenderableTBN(Vector4f(1,0,0,0),Vector4f(0,1,0,0),Vector4f(0,0,1,0),1);
         tbn[0]->AutoCreateShader(true,nullptr,OS_TEXT("TBN"));
         tbn[1]=CreateRenderableTBN(t,b,n,1);
@@ -167,7 +167,7 @@ public:
 
     void RecomputeTBN()
     {
-        //È±Ê¡TBN
+        //ç¼ºçœTBN
         Vector4f t(1,0,0,0);
         Vector4f b(0,0,1,0);
         Vector4f n(0,1,0,0);
@@ -176,22 +176,22 @@ public:
 
         do
         {
-            rot=rotate(rand(),Vector4f(rand(),rand(),rand(),0));                                    //Ëæ»úÒ»¸öĞı×ª¾ØÕó
-        
+            rot=rotate(rand(),Vector4f(rand(),rand(),rand(),0));                                    //éšæœºä¸€ä¸ªæ—‹è½¬çŸ©é˜µ
+
             n=normalized(n*rot);
             t=normalized(t*rot);
             b=normalized(b*rot);
-        }while(n.y<=0);                                                           //µØĞÎ¸ß¶ÈÍ¼·¨ÏßY²»¿ÉÄÜÎª¸ºÖµ
-        
+        }while(n.y<=0);                                                           //åœ°å½¢é«˜åº¦å›¾æ³•çº¿Yä¸å¯èƒ½ä¸ºè´Ÿå€¼
+
         WriteTBN(tbn[1]->GetVertexBuffer(vbtVertex),t,b,n);
 
-        //µÚ¶ş¸öTBNÊı¾İ£¬N/TÊ¹ÓÃÖ®Ç°µÄÕı³£Öµ,BÊ¹ÓÃcross¼ÆËã
+        //ç¬¬äºŒä¸ªTBNæ•°æ®ï¼ŒN/Tä½¿ç”¨ä¹‹å‰çš„æ­£å¸¸å€¼,Bä½¿ç”¨crossè®¡ç®—
         WriteTBN(tbn[2]->GetVertexBuffer(vbtVertex),t,cross(t,n),n);
 
-        //µÚÈı¸öTBNÊı¾İ£¬T/BÈ«²¿Ê¹ÓÃNËã³öÀ´
+        //ç¬¬ä¸‰ä¸ªTBNæ•°æ®ï¼ŒT/Bå…¨éƒ¨ä½¿ç”¨Nç®—å‡ºæ¥
 
-        //Ëã³öĞı×ª½Ç¶È
-        
+        //ç®—å‡ºæ—‹è½¬è§’åº¦
+
         Vector2f xy_0(0.0,1.0);
         Vector2f xy_n(n.x,n.y);
 
@@ -201,11 +201,11 @@ public:
         Vector2f xz_n(n.x,n.z);
 
         double xz_ang=get_angle(xz_0,xz_n);
-        
+
         Vector2f new_t_xy=rotate2d(Vector2f(1,0),xy_ang);
         Vector2f new_t_xz=rotate2d(Vector2f(1,0),xz_ang);
         Vector4f new_t;
-        
+
         if(n.x<0)
             new_t=Vector4f(new_t_xy.x,new_t_xy.y,1-new_t_xz.y,0);
         else
@@ -220,7 +220,7 @@ public:
 
         WriteTBN(tbn[3]->GetVertexBuffer(vbtVertex),new_t,cross(new_t,n),n);
     }
-        
+
     void Draw(const Matrix4f *)
     {
         ClearColorDepthBuffer();
@@ -238,4 +238,4 @@ public:
     }
 };//class TestObject
 
-HGL_GRAPHICS_APPLICATION("¿ìËÙµØĞÎTBN¼ÆËã","FastTerrainTBN",new TestObject());
+HGL_GRAPHICS_APPLICATION("å¿«é€Ÿåœ°å½¢TBNè®¡ç®—","FastTerrainTBN",new TestObject());

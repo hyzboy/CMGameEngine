@@ -176,10 +176,10 @@ namespace hgl
                     if(!in_color)               //无顶点颜色
                     {
                         if(!color_material)     //无材质颜色
-						{
-							LOG_ERROR("No Diffuse,No VertexColor,No Color Material.");
+                        {
+                            LOG_ERROR("No Diffuse,No VertexColor,No Color Material.");
                             RETURN_FALSE;      //即使有其它贴图，也必须有颜色
-						}
+                        }
 
                         fin_color=HGL_MATERIAL_COLOR;
                     }

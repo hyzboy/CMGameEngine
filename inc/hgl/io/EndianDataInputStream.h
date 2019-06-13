@@ -5,96 +5,96 @@
 #include<hgl/endian/Endian.h>
 namespace hgl
 {
-	namespace io
-	{
-		class DirectDataInputStream:public DataInputStream
-		{
-		public:
+    namespace io
+    {
+        class DirectDataInputStream:public DataInputStream
+        {
+        public:
 
-			using DataInputStream::DataInputStream;
-			virtual ~DirectDataInputStream()=default;
+            using DataInputStream::DataInputStream;
+            virtual ~DirectDataInputStream()=default;
 
-			#define STREAM_DIRECT_READ(type,name)	virtual bool Read##name(type &value)	\
-													{	\
-														return Read(value);	\
-													}	\
-													\
-													virtual int64 Read##name(type *data,const int64 count)	\
-													{	\
-														if(count<=0)return(count);	\
-														if(!data)return(-1);	\
-														\
-														return ReadArrays(data,count);	\
-													}
+            #define STREAM_DIRECT_READ(type,name)   virtual bool Read##name(type &value)    \
+                                                    {   \
+                                                        return Read(value); \
+                                                    }   \
+                                                    \
+                                                    virtual int64 Read##name(type *data,const int64 count)  \
+                                                    {   \
+                                                        if(count<=0)return(count);  \
+                                                        if(!data)return(-1);    \
+                                                        \
+                                                        return ReadArrays(data,count);  \
+                                                    }
 
-			STREAM_DIRECT_READ(int16,	Int16	);
-			STREAM_DIRECT_READ(int32,	Int32	);
-			STREAM_DIRECT_READ(int64,	Int64	);
+            STREAM_DIRECT_READ(int16,   Int16   );
+            STREAM_DIRECT_READ(int32,   Int32   );
+            STREAM_DIRECT_READ(int64,   Int64   );
 
-			STREAM_DIRECT_READ(uint16,	Uint16	);
-			STREAM_DIRECT_READ(uint32,	Uint32	);
-			STREAM_DIRECT_READ(uint64,	Uint64	);
+            STREAM_DIRECT_READ(uint16,  Uint16  );
+            STREAM_DIRECT_READ(uint32,  Uint32  );
+            STREAM_DIRECT_READ(uint64,  Uint64  );
 
-			STREAM_DIRECT_READ(u16char,UTF16Char);
-			STREAM_DIRECT_READ(float,	Float	);
-			STREAM_DIRECT_READ(double,	Double	);
+            STREAM_DIRECT_READ(u16char,UTF16Char);
+            STREAM_DIRECT_READ(float,   Float   );
+            STREAM_DIRECT_READ(double,  Double  );
 
-			#undef STREAM_DIRECT_READ
-		};//class DirectDataInputStream
+            #undef STREAM_DIRECT_READ
+        };//class DirectDataInputStream
 
-		class SwapDataInputStream:public DataInputStream
-		{
-		public:
+        class SwapDataInputStream:public DataInputStream
+        {
+        public:
 
-			using DataInputStream::DataInputStream;
-			virtual ~SwapDataInputStream()=default;
+            using DataInputStream::DataInputStream;
+            virtual ~SwapDataInputStream()=default;
 
-			#define STREAM_SWAP_READ(type,name) virtual bool Read##name(type &value)	\
-												{\
-													type swap_value;	\
-													\
-													if(!Read(swap_value))	\
-														return(false);	\
-												\
-													value=EndianSwap(swap_value);	\
-													return(true);	\
-												}	\
-												\
-												virtual int64 Read##name(type *data,const int64 count)	\
-												{	\
-													if(count<=0)return(count);	\
-													if(!data)return(-1);	\
-													\
-													const int64 result=ReadArrays(data,count);	\
-													\
-													if(result<=0)return(result);	\
-													\
-													EndianSwap(data,result);	\
-													return(result);	\
-												}
+            #define STREAM_SWAP_READ(type,name) virtual bool Read##name(type &value)    \
+                                                {\
+                                                    type swap_value;    \
+                                                    \
+                                                    if(!Read(swap_value))   \
+                                                        return(false);  \
+                                                \
+                                                    value=EndianSwap(swap_value);   \
+                                                    return(true);   \
+                                                }   \
+                                                \
+                                                virtual int64 Read##name(type *data,const int64 count)  \
+                                                {   \
+                                                    if(count<=0)return(count);  \
+                                                    if(!data)return(-1);    \
+                                                    \
+                                                    const int64 result=ReadArrays(data,count);  \
+                                                    \
+                                                    if(result<=0)return(result);    \
+                                                    \
+                                                    EndianSwap(data,result);    \
+                                                    return(result); \
+                                                }
 
-			STREAM_SWAP_READ(int16,		Int16	);
-			STREAM_SWAP_READ(int32,		Int32	);
-			STREAM_SWAP_READ(int64,		Int64	);
+            STREAM_SWAP_READ(int16,     Int16   );
+            STREAM_SWAP_READ(int32,     Int32   );
+            STREAM_SWAP_READ(int64,     Int64   );
 
-			STREAM_SWAP_READ(uint16,	Uint16	);
-			STREAM_SWAP_READ(uint32,	Uint32	);
-			STREAM_SWAP_READ(uint64,	Uint64	);
+            STREAM_SWAP_READ(uint16,    Uint16  );
+            STREAM_SWAP_READ(uint32,    Uint32  );
+            STREAM_SWAP_READ(uint64,    Uint64  );
 
-			STREAM_SWAP_READ(u16char,	UTF16Char);
-			STREAM_SWAP_READ(float,		Float	);
-			STREAM_SWAP_READ(double,	Double	);
+            STREAM_SWAP_READ(u16char,   UTF16Char);
+            STREAM_SWAP_READ(float,     Float   );
+            STREAM_SWAP_READ(double,    Double  );
 
-			#undef STREAM_SWAP_READ
-		};//class SwapDataInputStream
+            #undef STREAM_SWAP_READ
+        };//class SwapDataInputStream
 
 #if HGL_ENDIAN == HGL_LITTLE_ENDIAN
-		typedef DirectDataInputStream	LEDataInputStream;
-		typedef SwapDataInputStream		BEDataInputStream;
+        typedef DirectDataInputStream   LEDataInputStream;
+        typedef SwapDataInputStream     BEDataInputStream;
 #else
-		typedef DirectDataInputStream	BEDataInputStream;
-		typedef SwapDataInputStream		LEDataInputStream;
+        typedef DirectDataInputStream   BEDataInputStream;
+        typedef SwapDataInputStream     LEDataInputStream;
 #endif//HGL_ENDIAN == HGL_LITTLE_ENDIAN
-	}//namespace io
+    }//namespace io
 }//namespace hgl
 #endif//HGL_IO_ENDIAN_DATA_INPUT_STREAM_INCLUDE

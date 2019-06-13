@@ -22,29 +22,29 @@ class TestObject:public CameraControlFlowObject
 
 public:
 
-	TestObject()
-	{
+    TestObject()
+    {
         SetClearColor(0.2f,0.2f,0.2f);
 
         grid=new PlaneGrid(120,50);
 
         ss=new SpiralSphere(up_vector);
-	}
+    }
 
-	~TestObject()
-	{
+    ~TestObject()
+    {
         delete ss;
         delete grid;
-	}
+    }
 
-	void Draw(const Matrix4f *)
-	{
+    void Draw(const Matrix4f *)
+    {
         ClearColorDepthBuffer();
 
         grid->Render(&proj,&mv);
-        
+
         ss->Render(&proj,&mv);            //渲染球体列表
-	}
+    }
 };//class TestObject
 
 HGL_GRAPHICS_APPLICATION("摄像机控制","CameraControl",new TestObject());

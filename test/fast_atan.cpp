@@ -11,9 +11,9 @@
     using uint64=unsigned __int64;
     using float128=long double;
 
-    constexpr float128 PI			=3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117068;
-    constexpr float128 PI_2		    =1.5707963267948966192313216916397514;
-    constexpr float128 PI_4		    =0.7853981633974483096156608458198757;
+    constexpr float128 PI           =3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117068;
+    constexpr float128 PI_2         =1.5707963267948966192313216916397514;
+    constexpr float128 PI_4         =0.7853981633974483096156608458198757;
 #else
 //     extern "C"
 //     {
@@ -23,9 +23,9 @@
     using uint64=unsigned long long;
     using float128=__float128;
 
-    constexpr float128 PI			=3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117068q;
-    constexpr float128 PI_2		    =1.5707963267948966192313216916397514Q;
-    constexpr float128 PI_4		    =0.7853981633974483096156608458198757Q;
+    constexpr float128 PI           =3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117068q;
+    constexpr float128 PI_2         =1.5707963267948966192313216916397514Q;
+    constexpr float128 PI_4         =0.7853981633974483096156608458198757Q;
 #endif//
 
     constexpr float128 PI_3_4       =PI*0.75;
@@ -168,15 +168,15 @@ double arctan2(double y, double x)
 
 double fastAtan2(double y, double x)
 {
-  	const double ay = y < 0 ? -y : y;
-  	const double ax = x < 0 ? -x : x;
-  	const double a = (ax < ay ? ax : ay) / (ax > ay ? ax : ay);
-  	const double s = a * a;
-  	double r = ((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a;
-  	if (ay > ax) r = 1.57079637 - r;
-  	if (x < 0) r = PI - r;
-  	if (y < 0) r = -r;
-  	return r;
+    const double ay = y < 0 ? -y : y;
+    const double ax = x < 0 ? -x : x;
+    const double a = (ax < ay ? ax : ay) / (ax > ay ? ax : ay);
+    const double s = a * a;
+    double r = ((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a;
+    if (ay > ax) r = 1.57079637 - r;
+    if (x < 0) r = PI - r;
+    if (y < 0) r = -r;
+    return r;
 }
 
 inline int toAngle(double value)

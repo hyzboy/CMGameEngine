@@ -96,20 +96,20 @@ mw.loader.load(["mediawiki.page.startup","mediawiki.legacy.wikibits","mediawiki.
 <!--[if lt IE 7]><style type="text/css">body{behavior:url("/w/static-1.24wmf15/skins/Vector/csshover.min.htc")}</style><![endif]-->
 <script type="text/javascript" src="C++%20Technical%20Report%201%20-%20%E7%BB%B4%E5%9F%BA%E7%99%BE%E7%A7%91%EF%BC%8C%E8%87%AA%E7%94%B1%E7%9A%84%E7%99%BE%E7%A7%91%E5%85%A8%E4%B9%A6_files/index_002.php"></script><style type="text/css"> #fi #fic {margin-right:100px !important}  #fi #rh {margin-left:-115px !important;width:95px !important}  #fi .rh {display:none !important}  body:not(.xE) div[role='main'] .Bu:not(:first-child) {display: none !important} </style><link href="C++%20Technical%20Report%201%20-%20%E7%BB%B4%E5%9F%BA%E7%99%BE%E7%A7%91%EF%BC%8C%E8%87%AA%E7%94%B1%E7%9A%84%E7%99%BE%E7%A7%91%E5%85%A8%E4%B9%A6_files/sbi.css" rel="stylesheet" type="text/css" id="sbi-style"></head>
 <body ryt12142="1" class="mediawiki ltr sitedir-ltr ns-0 ns-subject page-C_Technical_Report_1 skin-vector action-view vector-animateLayout">
-		<div id="mw-page-base" class="noprint"></div>
-		<div id="mw-head-base" class="noprint"></div>
-		<div id="content" class="mw-body" role="main">
-			<a id="top"></a>
+        <div id="mw-page-base" class="noprint"></div>
+        <div id="mw-head-base" class="noprint"></div>
+        <div id="content" class="mw-body" role="main">
+            <a id="top"></a>
 
-							<div id="siteNotice"><div id="centralNotice"></div><!-- CentralNotice --></div>
-						<h1 id="firstHeading" class="firstHeading" lang="zh-CN"><div style="float: right;"></div><span dir="auto">C++ Technical Report 1</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="http://zh.wikipedia.org/w/index.php?title=C%2B%2B_Technical_Report_1&amp;action=edit&amp;section=0" title="编辑首段">编辑</a><span class="mw-editsection-bracket">]</span></span></h1>
-						<div id="bodyContent" class="mw-body-content">
-									<div id="siteSub">维基百科，自由的百科全书</div>
-								<div id="contentSub" dir="ltr" lang="zh-CN"></div>
-												<div id="jump-to-nav" class="mw-jump">
-					跳转至：					<a href="#mw-navigation">导航</a>、					<a href="#p-search">搜索</a>
-				</div>
-				<div id="mw-content-text" dir="ltr" class="mw-content-ltr" lang="zh-CN">
+                            <div id="siteNotice"><div id="centralNotice"></div><!-- CentralNotice --></div>
+                        <h1 id="firstHeading" class="firstHeading" lang="zh-CN"><div style="float: right;"></div><span dir="auto">C++ Technical Report 1</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="http://zh.wikipedia.org/w/index.php?title=C%2B%2B_Technical_Report_1&amp;action=edit&amp;section=0" title="编辑首段">编辑</a><span class="mw-editsection-bracket">]</span></span></h1>
+                        <div id="bodyContent" class="mw-body-content">
+                                    <div id="siteSub">维基百科，自由的百科全书</div>
+                                <div id="contentSub" dir="ltr" lang="zh-CN"></div>
+                                                <div id="jump-to-nav" class="mw-jump">
+                    跳转至：                    <a href="#mw-navigation">导航</a>、                    <a href="#p-search">搜索</a>
+                </div>
+                <div id="mw-content-text" dir="ltr" class="mw-content-ltr" lang="zh-CN">
 <div id="noteTA-46703" class="noteTA">
 <div class="noteTA-group">
 <div data-noteta-group-source="module" data-noteta-group="IT"></div>
@@ -191,19 +191,19 @@ mw.loader.load(["mediawiki.page.startup","mediawiki.legacy.wikibits","mediawiki.
 <div dir="ltr" class="mw-geshi mw-code mw-content-ltr">
 <div class="cpp source-cpp">
 <pre class="de1"><span class="kw4">void</span> f<span class="br0">(</span> <span class="kw4">int</span> <span class="sy3">&amp;</span>r <span class="br0">)</span> <span class="br0">{</span> r<span class="sy2">++</span><span class="sy4">;</span> <span class="br0">}</span>
- 
+
 <span class="kw2">template</span><span class="sy1">&lt;</span> <span class="kw2">class</span> Funct, <span class="kw2">class</span> Arg <span class="sy1">&gt;</span>
 <span class="kw4">void</span> g<span class="br0">(</span> Funct f, Arg t <span class="br0">)</span>
 <span class="br0">{</span>
   f<span class="br0">(</span>t<span class="br0">)</span><span class="sy4">;</span>
 <span class="br0">}</span>
- 
+
 <span class="kw4">int</span> main<span class="br0">(</span><span class="br0">)</span>
 <span class="br0">{</span>
   <span class="kw4">int</span> i <span class="sy1">=</span> <span class="nu0">0</span><span class="sy4">;</span>
   g<span class="br0">(</span> f, i <span class="br0">)</span><span class="sy4">;</span>          <span class="co1">// 'g&lt; void(int &amp;r), int &gt;' 被实例化</span>
   <span class="kw3">cout</span> <span class="sy1">&lt;&lt;</span> i <span class="sy1">&lt;&lt;</span> endl<span class="sy4">;</span>  <span class="co1">// 輸出：0</span>
- 
+
   g<span class="br0">(</span> f, ref<span class="br0">(</span>i<span class="br0">)</span> <span class="br0">)</span><span class="sy4">;</span>     <span class="co1">// 'g&lt; void(int &amp;r), reference_wrapper&lt;int&gt; &gt;' 被实例化</span>
   <span class="kw3">cout</span> <span class="sy1">&lt;&lt;</span> i <span class="sy1">&lt;&lt;</span> endl<span class="sy4">;</span>  <span class="co1">// 輸出：1</span>
 <span class="br0">}</span>
@@ -451,7 +451,7 @@ N_\nu(x) = \begin{cases}
 </ul>
 
 
-<!-- 
+<!--
 NewPP limit report
 Parsed by mw1035
 CPU time usage: 1.436 seconds
@@ -468,165 +468,165 @@ Lua memory usage: 1.66 MB/50 MB
 
 <!-- Saved in parser cache with key zhwiki:pcache:idhash:963709-0!*!0!!zh-cn!4!zh-cn!*!math=0 and timestamp 20140801060236 and revision id 31155879
  -->
-<noscript><img src="//zh.wikipedia.org/wiki/Special:CentralAutoLogin/start?type=1x1" alt="" title="" width="1" height="1" style="border: none; position: absolute;" /></noscript></div>									<div class="printfooter">
-						取自“<a dir="ltr" href="http://zh.wikipedia.org/w/index.php?title=C%2B%2B_Technical_Report_1&amp;oldid=31155879">http://zh.wikipedia.org/w/index.php?title=C%2B%2B_Technical_Report_1&amp;oldid=31155879</a>”					</div>
-													<div id="catlinks" class="catlinks"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="http://zh.wikipedia.org/wiki/Special:%E9%A1%B5%E9%9D%A2%E5%88%86%E7%B1%BB" title="Special:页面分类">分类</a>：<ul><li><a href="http://zh.wikipedia.org/wiki/Category:C%2B%2B" title="Category:C++">C++</a></li></ul></div><div id="mw-hidden-catlinks" class="mw-hidden-catlinks mw-hidden-cats-hidden">隐藏分类：<ul><li><a href="http://zh.wikipedia.org/wiki/Category:%E8%87%AA2014%E5%B9%B41%E6%9C%88%E5%BE%85%E6%9B%B4%E6%96%B0%E6%9D%A1%E7%9B%AE" title="Category:自2014年1月待更新条目">自2014年1月待更新条目</a></li></ul></div></div>												<div class="visualClear"></div>
-							</div>
-		</div>
-		<div id="mw-navigation">
-			<h2>导航菜单</h2>
+<noscript><img src="//zh.wikipedia.org/wiki/Special:CentralAutoLogin/start?type=1x1" alt="" title="" width="1" height="1" style="border: none; position: absolute;" /></noscript></div>                                 <div class="printfooter">
+                        取自“<a dir="ltr" href="http://zh.wikipedia.org/w/index.php?title=C%2B%2B_Technical_Report_1&amp;oldid=31155879">http://zh.wikipedia.org/w/index.php?title=C%2B%2B_Technical_Report_1&amp;oldid=31155879</a>”                 </div>
+                                                    <div id="catlinks" class="catlinks"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="http://zh.wikipedia.org/wiki/Special:%E9%A1%B5%E9%9D%A2%E5%88%86%E7%B1%BB" title="Special:页面分类">分类</a>：<ul><li><a href="http://zh.wikipedia.org/wiki/Category:C%2B%2B" title="Category:C++">C++</a></li></ul></div><div id="mw-hidden-catlinks" class="mw-hidden-catlinks mw-hidden-cats-hidden">隐藏分类：<ul><li><a href="http://zh.wikipedia.org/wiki/Category:%E8%87%AA2014%E5%B9%B41%E6%9C%88%E5%BE%85%E6%9B%B4%E6%96%B0%E6%9D%A1%E7%9B%AE" title="Category:自2014年1月待更新条目">自2014年1月待更新条目</a></li></ul></div></div>                                             <div class="visualClear"></div>
+                            </div>
+        </div>
+        <div id="mw-navigation">
+            <h2>导航菜单</h2>
 
-			<div id="mw-head">
-									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
-						<h3 id="p-personal-label">个人工具</h3>
-						<ul dir="ltr" lang="zh-CN">
-							<li id="pt-createaccount"><a href="http://zh.wikipedia.org/w/index.php?title=Special:%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95&amp;returnto=C%2B%2B+Technical+Report+1&amp;type=signup">创建账户</a></li><li id="pt-login"><a href="http://zh.wikipedia.org/w/index.php?title=Special:%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95&amp;returnto=C%2B%2B+Technical+Report+1" title="建议你登录，尽管并非必须。[Alt+Shift+o]" accesskey="o">登录</a></li>						</ul>
-					</div>
-									<div id="left-navigation">
-										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
-						<h3 id="p-namespaces-label">名字空间</h3>
-						<ul dir="ltr" lang="zh-CN">
-															<li id="ca-nstab-main" class="selected"><span><a href="http://zh.wikipedia.org/wiki/C%2B%2B_Technical_Report_1" title="浏览条目正文[Alt+Shift+c]" accesskey="c">条目</a></span></li>
-															<li id="ca-talk" class="new"><span><a href="http://zh.wikipedia.org/w/index.php?title=Talk:C%2B%2B_Technical_Report_1&amp;action=edit&amp;redlink=1&amp;section=new" title="关于此页面的讨论[Alt+Shift+t]" accesskey="t">讨论</a></span></li>
-													</ul>
-					</div>
-										<div id="p-variants" role="navigation" class="vectorMenu" aria-labelledby="p-variants-label">
-												<h3 tabindex="0" id="p-variants-label"><span style="display: block;">大陆简体</span><a tabindex="-1" href="#"></a></h3>
+            <div id="mw-head">
+                                    <div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+                        <h3 id="p-personal-label">个人工具</h3>
+                        <ul dir="ltr" lang="zh-CN">
+                            <li id="pt-createaccount"><a href="http://zh.wikipedia.org/w/index.php?title=Special:%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95&amp;returnto=C%2B%2B+Technical+Report+1&amp;type=signup">创建账户</a></li><li id="pt-login"><a href="http://zh.wikipedia.org/w/index.php?title=Special:%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95&amp;returnto=C%2B%2B+Technical+Report+1" title="建议你登录，尽管并非必须。[Alt+Shift+o]" accesskey="o">登录</a></li>                     </ul>
+                    </div>
+                                    <div id="left-navigation">
+                                        <div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+                        <h3 id="p-namespaces-label">名字空间</h3>
+                        <ul dir="ltr" lang="zh-CN">
+                                                            <li id="ca-nstab-main" class="selected"><span><a href="http://zh.wikipedia.org/wiki/C%2B%2B_Technical_Report_1" title="浏览条目正文[Alt+Shift+c]" accesskey="c">条目</a></span></li>
+                                                            <li id="ca-talk" class="new"><span><a href="http://zh.wikipedia.org/w/index.php?title=Talk:C%2B%2B_Technical_Report_1&amp;action=edit&amp;redlink=1&amp;section=new" title="关于此页面的讨论[Alt+Shift+t]" accesskey="t">讨论</a></span></li>
+                                                    </ul>
+                    </div>
+                                        <div id="p-variants" role="navigation" class="vectorMenu" aria-labelledby="p-variants-label">
+                                                <h3 tabindex="0" id="p-variants-label"><span style="display: block;">大陆简体</span><a tabindex="-1" href="#"></a></h3>
 
-						<div class="menu">
-							<ul>
-																	<li id="ca-varlang-0"><a href="http://zh.wikipedia.org/zh/C%2B%2B_Technical_Report_1" hreflang="zh" lang="zh">不转换</a></li>
-																	<li id="ca-varlang-1"><a href="http://zh.wikipedia.org/zh-hans/C%2B%2B_Technical_Report_1" hreflang="zh-Hans" lang="zh-Hans">简体</a></li>
-																	<li id="ca-varlang-2"><a href="http://zh.wikipedia.org/zh-hant/C%2B%2B_Technical_Report_1" hreflang="zh-Hant" lang="zh-Hant">繁體</a></li>
-																	<li id="ca-varlang-3" class="selected"><a href="http://zh.wikipedia.org/zh-cn/C%2B%2B_Technical_Report_1" hreflang="zh-CN" lang="zh-CN">大陆简体</a></li>
-																	<li id="ca-varlang-4"><a href="http://zh.wikipedia.org/zh-hk/C%2B%2B_Technical_Report_1" hreflang="zh-HK" lang="zh-HK">香港繁體</a></li>
-																	<li id="ca-varlang-5"><a href="http://zh.wikipedia.org/zh-mo/C%2B%2B_Technical_Report_1" hreflang="zh-MO" lang="zh-MO">澳門繁體</a></li>
-																	<li id="ca-varlang-6"><a href="http://zh.wikipedia.org/zh-sg/C%2B%2B_Technical_Report_1" hreflang="zh-SG" lang="zh-SG">马新简体</a></li>
-																	<li id="ca-varlang-7"><a href="http://zh.wikipedia.org/zh-tw/C%2B%2B_Technical_Report_1" hreflang="zh-TW" lang="zh-TW">台灣正體</a></li>
-															</ul>
-						</div>
-					</div><div class="metadata topicon noprint nopopups noteTA-topicon vectorTabs" title="本页使用了标题或全文手工转换" id="noteTA-topicon-46703"><ul><li><span><a href="#"><span style="padding:1px 3px; background: #d3e3f4; color:#000000;">汉</span><span style="padding:1px 3px; background: #e9e9e9; color:#434343;">漢</span></a></span></li></ul></div>
-									</div>
-				<div id="right-navigation">
-										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
-						<h3 id="p-views-label">查看</h3>
-						<ul dir="ltr" lang="zh-CN">
-															<li id="ca-view" class="selected"><span><a href="http://zh.wikipedia.org/wiki/C%2B%2B_Technical_Report_1">阅读</a></span></li>
-															<li id="ca-edit"><span><a href="http://zh.wikipedia.org/w/index.php?title=C%2B%2B_Technical_Report_1&amp;action=edit" title="你可以编辑本页面。请在保存前使用预览按钮[Alt+Shift+e]" accesskey="e">编辑</a></span></li>
-															<li id="ca-history" class="collapsible"><span><a href="http://zh.wikipedia.org/w/index.php?title=C%2B%2B_Technical_Report_1&amp;action=history" title="本页面的早前版本。[Alt+Shift+h]" accesskey="h">查看历史</a></span></li>
-													</ul>
-					</div>
-										<div style="" id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
-						<h3 tabindex="0" id="p-cactions-label"><span>更多</span><a tabindex="-1" href="#"></a></h3>
+                        <div class="menu">
+                            <ul>
+                                                                    <li id="ca-varlang-0"><a href="http://zh.wikipedia.org/zh/C%2B%2B_Technical_Report_1" hreflang="zh" lang="zh">不转换</a></li>
+                                                                    <li id="ca-varlang-1"><a href="http://zh.wikipedia.org/zh-hans/C%2B%2B_Technical_Report_1" hreflang="zh-Hans" lang="zh-Hans">简体</a></li>
+                                                                    <li id="ca-varlang-2"><a href="http://zh.wikipedia.org/zh-hant/C%2B%2B_Technical_Report_1" hreflang="zh-Hant" lang="zh-Hant">繁體</a></li>
+                                                                    <li id="ca-varlang-3" class="selected"><a href="http://zh.wikipedia.org/zh-cn/C%2B%2B_Technical_Report_1" hreflang="zh-CN" lang="zh-CN">大陆简体</a></li>
+                                                                    <li id="ca-varlang-4"><a href="http://zh.wikipedia.org/zh-hk/C%2B%2B_Technical_Report_1" hreflang="zh-HK" lang="zh-HK">香港繁體</a></li>
+                                                                    <li id="ca-varlang-5"><a href="http://zh.wikipedia.org/zh-mo/C%2B%2B_Technical_Report_1" hreflang="zh-MO" lang="zh-MO">澳門繁體</a></li>
+                                                                    <li id="ca-varlang-6"><a href="http://zh.wikipedia.org/zh-sg/C%2B%2B_Technical_Report_1" hreflang="zh-SG" lang="zh-SG">马新简体</a></li>
+                                                                    <li id="ca-varlang-7"><a href="http://zh.wikipedia.org/zh-tw/C%2B%2B_Technical_Report_1" hreflang="zh-TW" lang="zh-TW">台灣正體</a></li>
+                                                            </ul>
+                        </div>
+                    </div><div class="metadata topicon noprint nopopups noteTA-topicon vectorTabs" title="本页使用了标题或全文手工转换" id="noteTA-topicon-46703"><ul><li><span><a href="#"><span style="padding:1px 3px; background: #d3e3f4; color:#000000;">汉</span><span style="padding:1px 3px; background: #e9e9e9; color:#434343;">漢</span></a></span></li></ul></div>
+                                    </div>
+                <div id="right-navigation">
+                                        <div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+                        <h3 id="p-views-label">查看</h3>
+                        <ul dir="ltr" lang="zh-CN">
+                                                            <li id="ca-view" class="selected"><span><a href="http://zh.wikipedia.org/wiki/C%2B%2B_Technical_Report_1">阅读</a></span></li>
+                                                            <li id="ca-edit"><span><a href="http://zh.wikipedia.org/w/index.php?title=C%2B%2B_Technical_Report_1&amp;action=edit" title="你可以编辑本页面。请在保存前使用预览按钮[Alt+Shift+e]" accesskey="e">编辑</a></span></li>
+                                                            <li id="ca-history" class="collapsible"><span><a href="http://zh.wikipedia.org/w/index.php?title=C%2B%2B_Technical_Report_1&amp;action=history" title="本页面的早前版本。[Alt+Shift+h]" accesskey="h">查看历史</a></span></li>
+                                                    </ul>
+                    </div>
+                                        <div style="" id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+                        <h3 tabindex="0" id="p-cactions-label"><span>更多</span><a tabindex="-1" href="#"></a></h3>
 
-						<div class="menu">
-							<ul dir="ltr" lang="zh-CN">
-															</ul>
-						</div>
-					</div>
-										<div id="p-search" role="search">
-						<h3 dir="ltr" lang="zh-CN">
-							<label for="searchInput">搜索</label>
-						</h3>
+                        <div class="menu">
+                            <ul dir="ltr" lang="zh-CN">
+                                                            </ul>
+                        </div>
+                    </div>
+                                        <div id="p-search" role="search">
+                        <h3 dir="ltr" lang="zh-CN">
+                            <label for="searchInput">搜索</label>
+                        </h3>
 
-						<form action="/w/index.php" id="searchform">
-														<div id="simpleSearch">
-															<input autocomplete="off" tabindex="1" name="search" placeholder="搜索" title="搜索维基百科[Alt+Shift+f]" accesskey="f" id="searchInput" type="search"><input value="Special:搜索" name="title" type="hidden"><input name="go" value="前往" title="如果相同的标题存在的话便直接前往该页面" id="searchButton" class="searchButton" type="submit">								</div>
-						</form>
-					</div>
-									</div>
-			</div>
-			<div id="mw-panel">
-				<div id="p-logo" role="banner"><a style="background-image: url(//upload.wikimedia.org/wikipedia/zh/b/bc/Wiki.png);" href="http://zh.wikipedia.org/wiki/Wikipedia:%E9%A6%96%E9%A1%B5" title="首页"></a></div>
-						<div class="portal first" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
-			<h3 dir="ltr" id="p-navigation-label" lang="zh-CN">导航</h3>
+                        <form action="/w/index.php" id="searchform">
+                                                        <div id="simpleSearch">
+                                                            <input autocomplete="off" tabindex="1" name="search" placeholder="搜索" title="搜索维基百科[Alt+Shift+f]" accesskey="f" id="searchInput" type="search"><input value="Special:搜索" name="title" type="hidden"><input name="go" value="前往" title="如果相同的标题存在的话便直接前往该页面" id="searchButton" class="searchButton" type="submit">                               </div>
+                        </form>
+                    </div>
+                                    </div>
+            </div>
+            <div id="mw-panel">
+                <div id="p-logo" role="banner"><a style="background-image: url(//upload.wikimedia.org/wikipedia/zh/b/bc/Wiki.png);" href="http://zh.wikipedia.org/wiki/Wikipedia:%E9%A6%96%E9%A1%B5" title="首页"></a></div>
+                        <div class="portal first" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+            <h3 dir="ltr" id="p-navigation-label" lang="zh-CN">导航</h3>
 
-			<div class="body">
-									<ul>
-													<li id="n-mainpage-description"><a href="http://zh.wikipedia.org/wiki/Wikipedia:%E9%A6%96%E9%A1%B5" title="访问首页[Alt+Shift+z]" accesskey="z">首页</a></li>
-													<li id="n-indexpage"><a href="http://zh.wikipedia.org/wiki/Wikipedia:%E5%88%86%E7%B1%BB%E7%B4%A2%E5%BC%95" title="以分类索引搜寻中文维基百科">分类索引</a></li>
-													<li id="n-Featured_content"><a href="http://zh.wikipedia.org/wiki/Portal:%E7%89%B9%E8%89%B2%E5%85%A7%E5%AE%B9" title="查看中文维基百科的特色内容">特色内容</a></li>
-													<li id="n-currentevents"><a href="http://zh.wikipedia.org/wiki/Portal:%E6%96%B0%E8%81%9E%E5%8B%95%E6%85%8B" title="提供当前新闻事件的背景资料">新闻动态</a></li>
-													<li id="n-recentchanges"><a href="http://zh.wikipedia.org/wiki/Special:%E6%9C%80%E8%BF%91%E6%9B%B4%E6%94%B9" title="列出维基百科中的最近修改[Alt+Shift+r]" accesskey="r">最近更改</a></li>
-													<li id="n-randompage"><a href="http://zh.wikipedia.org/wiki/Special:%E9%9A%8F%E6%9C%BA%E9%A1%B5%E9%9D%A2" title="随机载入一个页面[Alt+Shift+x]" accesskey="x">随机条目</a></li>
-											</ul>
-							</div>
-		</div>
-			<div class="portal" role="navigation" id="p-help" aria-labelledby="p-help-label">
-			<h3 dir="ltr" id="p-help-label" lang="zh-CN">帮助</h3>
+            <div class="body">
+                                    <ul>
+                                                    <li id="n-mainpage-description"><a href="http://zh.wikipedia.org/wiki/Wikipedia:%E9%A6%96%E9%A1%B5" title="访问首页[Alt+Shift+z]" accesskey="z">首页</a></li>
+                                                    <li id="n-indexpage"><a href="http://zh.wikipedia.org/wiki/Wikipedia:%E5%88%86%E7%B1%BB%E7%B4%A2%E5%BC%95" title="以分类索引搜寻中文维基百科">分类索引</a></li>
+                                                    <li id="n-Featured_content"><a href="http://zh.wikipedia.org/wiki/Portal:%E7%89%B9%E8%89%B2%E5%85%A7%E5%AE%B9" title="查看中文维基百科的特色内容">特色内容</a></li>
+                                                    <li id="n-currentevents"><a href="http://zh.wikipedia.org/wiki/Portal:%E6%96%B0%E8%81%9E%E5%8B%95%E6%85%8B" title="提供当前新闻事件的背景资料">新闻动态</a></li>
+                                                    <li id="n-recentchanges"><a href="http://zh.wikipedia.org/wiki/Special:%E6%9C%80%E8%BF%91%E6%9B%B4%E6%94%B9" title="列出维基百科中的最近修改[Alt+Shift+r]" accesskey="r">最近更改</a></li>
+                                                    <li id="n-randompage"><a href="http://zh.wikipedia.org/wiki/Special:%E9%9A%8F%E6%9C%BA%E9%A1%B5%E9%9D%A2" title="随机载入一个页面[Alt+Shift+x]" accesskey="x">随机条目</a></li>
+                                            </ul>
+                            </div>
+        </div>
+            <div class="portal" role="navigation" id="p-help" aria-labelledby="p-help-label">
+            <h3 dir="ltr" id="p-help-label" lang="zh-CN">帮助</h3>
 
-			<div class="body">
-									<ul>
-													<li id="n-help"><a href="http://zh.wikipedia.org/wiki/Help:%E7%9B%AE%E5%BD%95" title="寻求帮助">帮助</a></li>
-													<li id="n-portal"><a href="http://zh.wikipedia.org/wiki/Wikipedia:%E7%A4%BE%E5%8C%BA%E4%B8%BB%E9%A1%B5" title="关于本计划、你可以做什么、应该如何做">社区专页</a></li>
-													<li id="n-policy"><a href="http://zh.wikipedia.org/wiki/Wikipedia:%E6%96%B9%E9%87%9D%E8%88%87%E6%8C%87%E5%BC%95" title="查看维基百科的方针和指引">方针与指引</a></li>
-													<li id="n-villagepump"><a href="http://zh.wikipedia.org/wiki/Wikipedia:%E4%BA%92%E5%8A%A9%E5%AE%A2%E6%A0%88" title="参与维基百科社群的讨论">互助客栈</a></li>
-													<li id="n-Information_desk"><a href="http://zh.wikipedia.org/wiki/Wikipedia:%E7%9F%A5%E8%AF%86%E9%97%AE%E7%AD%94" title="解答任何与维基百科无关的问题的地方">知识问答</a></li>
-													<li id="n-conversion"><a href="http://zh.wikipedia.org/wiki/Wikipedia:%E5%AD%97%E8%AF%8D%E8%BD%AC%E6%8D%A2%E8%AF%B7%E6%B1%82%E6%88%96%E5%80%99%E9%80%89" title="提出字词转换请求">字词转换</a></li>
-													<li id="n-IRC"><a href="http://zh.wikipedia.org/wiki/Wikipedia:IRC%E8%81%8A%E5%A4%A9%E9%A2%91%E9%81%93/IRC?withJS=MediaWiki:Gadget-irc.js">IRC即时聊天</a></li>
-													<li id="n-contact"><a href="http://zh.wikipedia.org/wiki/Wikipedia:%E8%81%94%E7%B3%BB%E6%88%91%E4%BB%AC" title="如何联络维基百科">联系我们</a></li>
-													<li id="n-about"><a href="http://zh.wikipedia.org/wiki/Wikipedia:%E5%85%B3%E4%BA%8E" title="查看维基百科的简介">关于维基百科</a></li>
-													<li id="n-sitesupport"><a href="http://donate.wikimedia.org/wiki/Special:FundraiserRedirector?utm_source=donate&amp;utm_medium=sidebar&amp;utm_campaign=C13_zh.wikipedia.org&amp;uselang=zh" title="如果您在维基百科受益良多，您可以考虑资助我们">资助维基百科</a></li>
-											</ul>
-							</div>
-		</div>
-			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
-			<h3 dir="ltr" id="p-tb-label" lang="zh-CN">工具</h3>
+            <div class="body">
+                                    <ul>
+                                                    <li id="n-help"><a href="http://zh.wikipedia.org/wiki/Help:%E7%9B%AE%E5%BD%95" title="寻求帮助">帮助</a></li>
+                                                    <li id="n-portal"><a href="http://zh.wikipedia.org/wiki/Wikipedia:%E7%A4%BE%E5%8C%BA%E4%B8%BB%E9%A1%B5" title="关于本计划、你可以做什么、应该如何做">社区专页</a></li>
+                                                    <li id="n-policy"><a href="http://zh.wikipedia.org/wiki/Wikipedia:%E6%96%B9%E9%87%9D%E8%88%87%E6%8C%87%E5%BC%95" title="查看维基百科的方针和指引">方针与指引</a></li>
+                                                    <li id="n-villagepump"><a href="http://zh.wikipedia.org/wiki/Wikipedia:%E4%BA%92%E5%8A%A9%E5%AE%A2%E6%A0%88" title="参与维基百科社群的讨论">互助客栈</a></li>
+                                                    <li id="n-Information_desk"><a href="http://zh.wikipedia.org/wiki/Wikipedia:%E7%9F%A5%E8%AF%86%E9%97%AE%E7%AD%94" title="解答任何与维基百科无关的问题的地方">知识问答</a></li>
+                                                    <li id="n-conversion"><a href="http://zh.wikipedia.org/wiki/Wikipedia:%E5%AD%97%E8%AF%8D%E8%BD%AC%E6%8D%A2%E8%AF%B7%E6%B1%82%E6%88%96%E5%80%99%E9%80%89" title="提出字词转换请求">字词转换</a></li>
+                                                    <li id="n-IRC"><a href="http://zh.wikipedia.org/wiki/Wikipedia:IRC%E8%81%8A%E5%A4%A9%E9%A2%91%E9%81%93/IRC?withJS=MediaWiki:Gadget-irc.js">IRC即时聊天</a></li>
+                                                    <li id="n-contact"><a href="http://zh.wikipedia.org/wiki/Wikipedia:%E8%81%94%E7%B3%BB%E6%88%91%E4%BB%AC" title="如何联络维基百科">联系我们</a></li>
+                                                    <li id="n-about"><a href="http://zh.wikipedia.org/wiki/Wikipedia:%E5%85%B3%E4%BA%8E" title="查看维基百科的简介">关于维基百科</a></li>
+                                                    <li id="n-sitesupport"><a href="http://donate.wikimedia.org/wiki/Special:FundraiserRedirector?utm_source=donate&amp;utm_medium=sidebar&amp;utm_campaign=C13_zh.wikipedia.org&amp;uselang=zh" title="如果您在维基百科受益良多，您可以考虑资助我们">资助维基百科</a></li>
+                                            </ul>
+                            </div>
+        </div>
+            <div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+            <h3 dir="ltr" id="p-tb-label" lang="zh-CN">工具</h3>
 
-			<div class="body">
-									<ul>
-													<li id="t-whatlinkshere"><a href="http://zh.wikipedia.org/wiki/Special:%E9%93%BE%E5%85%A5%E9%A1%B5%E9%9D%A2/C%2B%2B_Technical_Report_1" title="列出所有与本页相链的页面[Alt+Shift+j]" accesskey="j">链入页面</a></li>
-													<li id="t-recentchangeslinked"><a href="http://zh.wikipedia.org/wiki/Special:%E9%93%BE%E5%87%BA%E6%9B%B4%E6%94%B9/C%2B%2B_Technical_Report_1" title="页面链出所有页面的更改[Alt+Shift+k]" accesskey="k">相关更改</a></li>
-													<li id="t-upload"><a href="http://zh.wikipedia.org/wiki/Project:%E4%B8%8A%E4%BC%A0" title="上传图像或多媒体文件[Alt+Shift+u]" accesskey="u">上传文件</a></li>
-													<li id="t-specialpages"><a href="http://zh.wikipedia.org/wiki/Special:%E7%89%B9%E6%AE%8A%E9%A1%B5%E9%9D%A2" title="全部特殊页面的列表[Alt+Shift+q]" accesskey="q">特殊页面</a></li>
-													<li id="t-print"><a href="http://zh.wikipedia.org/w/index.php?title=C%2B%2B_Technical_Report_1&amp;printable=yes" rel="alternate" title="本页面的可打印版本[Alt+Shift+p]" accesskey="p">打印版本</a></li>
-													<li id="t-permalink"><a href="http://zh.wikipedia.org/w/index.php?title=C%2B%2B_Technical_Report_1&amp;oldid=31155879" title="本页面该版本的固定链接">固定链接</a></li>
-													<li id="t-info"><a href="http://zh.wikipedia.org/w/index.php?title=C%2B%2B_Technical_Report_1&amp;action=info">页面信息</a></li>
-													<li id="t-wikibase"><a href="http://www.wikidata.org/wiki/Q2977773" title="查看连接的数据存储库项[Alt+Shift+g]" accesskey="g">维基数据项</a></li>
-						<li id="t-cite"><a href="http://zh.wikipedia.org/w/index.php?title=Special:%E5%BC%95%E7%94%A8&amp;page=C%2B%2B_Technical_Report_1&amp;id=31155879" title="关于如何引用本页的信息">引用本页</a></li>					<li id="t-topbottomlink"><a href="javascript:void(0);" title="在画面左上角及左下角显示跳至页顶和页底的连接">左侧跳顶连接</a></li></ul>
-							</div>
-		</div>
-			<div class="portal" role="navigation" id="p-lang" aria-labelledby="p-lang-label"><span original-title="语言设置" aria-haspopup="true" role="button" tabindex="0" class="uls-settings-trigger"></span>
-			<h3 dir="ltr" id="p-lang-label" lang="zh-CN">其他语言</h3>
+            <div class="body">
+                                    <ul>
+                                                    <li id="t-whatlinkshere"><a href="http://zh.wikipedia.org/wiki/Special:%E9%93%BE%E5%85%A5%E9%A1%B5%E9%9D%A2/C%2B%2B_Technical_Report_1" title="列出所有与本页相链的页面[Alt+Shift+j]" accesskey="j">链入页面</a></li>
+                                                    <li id="t-recentchangeslinked"><a href="http://zh.wikipedia.org/wiki/Special:%E9%93%BE%E5%87%BA%E6%9B%B4%E6%94%B9/C%2B%2B_Technical_Report_1" title="页面链出所有页面的更改[Alt+Shift+k]" accesskey="k">相关更改</a></li>
+                                                    <li id="t-upload"><a href="http://zh.wikipedia.org/wiki/Project:%E4%B8%8A%E4%BC%A0" title="上传图像或多媒体文件[Alt+Shift+u]" accesskey="u">上传文件</a></li>
+                                                    <li id="t-specialpages"><a href="http://zh.wikipedia.org/wiki/Special:%E7%89%B9%E6%AE%8A%E9%A1%B5%E9%9D%A2" title="全部特殊页面的列表[Alt+Shift+q]" accesskey="q">特殊页面</a></li>
+                                                    <li id="t-print"><a href="http://zh.wikipedia.org/w/index.php?title=C%2B%2B_Technical_Report_1&amp;printable=yes" rel="alternate" title="本页面的可打印版本[Alt+Shift+p]" accesskey="p">打印版本</a></li>
+                                                    <li id="t-permalink"><a href="http://zh.wikipedia.org/w/index.php?title=C%2B%2B_Technical_Report_1&amp;oldid=31155879" title="本页面该版本的固定链接">固定链接</a></li>
+                                                    <li id="t-info"><a href="http://zh.wikipedia.org/w/index.php?title=C%2B%2B_Technical_Report_1&amp;action=info">页面信息</a></li>
+                                                    <li id="t-wikibase"><a href="http://www.wikidata.org/wiki/Q2977773" title="查看连接的数据存储库项[Alt+Shift+g]" accesskey="g">维基数据项</a></li>
+                        <li id="t-cite"><a href="http://zh.wikipedia.org/w/index.php?title=Special:%E5%BC%95%E7%94%A8&amp;page=C%2B%2B_Technical_Report_1&amp;id=31155879" title="关于如何引用本页的信息">引用本页</a></li>                    <li id="t-topbottomlink"><a href="javascript:void(0);" title="在画面左上角及左下角显示跳至页顶和页底的连接">左侧跳顶连接</a></li></ul>
+                            </div>
+        </div>
+            <div class="portal" role="navigation" id="p-lang" aria-labelledby="p-lang-label"><span original-title="语言设置" aria-haspopup="true" role="button" tabindex="0" class="uls-settings-trigger"></span>
+            <h3 dir="ltr" id="p-lang-label" lang="zh-CN">其他语言</h3>
 
-			<div class="body">
-									<ul>
-													<li class="interlanguage-link interwiki-en"><a href="http://en.wikipedia.org/wiki/C%2B%2B_Technical_Report_1" title="C++ Technical Report 1 – 英文" hreflang="en" lang="en">English</a></li>
-													<li class="interlanguage-link interwiki-fi"><a href="http://fi.wikipedia.org/wiki/Technical_Report_1" title="Technical Report 1 – 芬兰文" hreflang="fi" lang="fi">Suomi</a></li>
-													<li class="interlanguage-link interwiki-ja"><a href="http://ja.wikipedia.org/wiki/C%2B%2B_Technical_Report_1" title="C++ Technical Report 1 – 日文" hreflang="ja" lang="ja">日本語</a></li>
-													<li class="interlanguage-link interwiki-ko"><a href="http://ko.wikipedia.org/wiki/C%2B%2B_%EA%B8%B0%EC%88%A0_%EB%B3%B4%EA%B3%A0%EC%84%9C_1" title="C++ 기술 보고서 1 – 韩文" hreflang="ko" lang="ko">한국어</a></li>
-													<li class="interlanguage-link interwiki-pl"><a href="http://pl.wikipedia.org/wiki/Technical_Report_1" title="Technical Report 1 – 波兰文" hreflang="pl" lang="pl">Polski</a></li>
-													<li class="interlanguage-link interwiki-ru"><a href="http://ru.wikipedia.org/wiki/C%2B%2B_Technical_Report_1" title="C++ Technical Report 1 – 俄文" hreflang="ru" lang="ru">Русский</a></li>
-													
-											</ul>
-				<div class="after-portlet after-portlet-lang"><span class="wb-langlinks-edit wb-langlinks-link"><a action="edit" href="http://www.wikidata.org/wiki/Q2977773#sitelinks-wikipedia" text="编辑链接" title="编辑跨语言链接" class="wbc-editpage">编辑链接</a></span></div>			</div>
-		</div>
-				</div>
-		</div>
-		<div id="footer" role="contentinfo" dir="ltr" lang="zh-CN">
-							<ul id="footer-info">
-											<li id="footer-info-lastmod"> 本页面最后修订于2014年5月1日 (星期四) 06:03。<br></li>
-											<li id="footer-info-copyright">本站的全部文字在<a rel="license" href="http://zh.wikipedia.org/zh-cn/Wikipedia%3ACC-BY-SA-3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" title="Wikipedia:CC-BY-SA-3.0协议文本">知识共享 署名-相同方式共享 3.0协议</a><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.zh" style="display:none;"></a>之条款下提供，附加条款亦可能应用。（请参阅<a href="http://wikimediafoundation.org/wiki/%E4%BD%BF%E7%94%A8%E6%9D%A1%E6%AC%BE">使用条款</a>）<br>
+            <div class="body">
+                                    <ul>
+                                                    <li class="interlanguage-link interwiki-en"><a href="http://en.wikipedia.org/wiki/C%2B%2B_Technical_Report_1" title="C++ Technical Report 1 – 英文" hreflang="en" lang="en">English</a></li>
+                                                    <li class="interlanguage-link interwiki-fi"><a href="http://fi.wikipedia.org/wiki/Technical_Report_1" title="Technical Report 1 – 芬兰文" hreflang="fi" lang="fi">Suomi</a></li>
+                                                    <li class="interlanguage-link interwiki-ja"><a href="http://ja.wikipedia.org/wiki/C%2B%2B_Technical_Report_1" title="C++ Technical Report 1 – 日文" hreflang="ja" lang="ja">日本語</a></li>
+                                                    <li class="interlanguage-link interwiki-ko"><a href="http://ko.wikipedia.org/wiki/C%2B%2B_%EA%B8%B0%EC%88%A0_%EB%B3%B4%EA%B3%A0%EC%84%9C_1" title="C++ 기술 보고서 1 – 韩文" hreflang="ko" lang="ko">한국어</a></li>
+                                                    <li class="interlanguage-link interwiki-pl"><a href="http://pl.wikipedia.org/wiki/Technical_Report_1" title="Technical Report 1 – 波兰文" hreflang="pl" lang="pl">Polski</a></li>
+                                                    <li class="interlanguage-link interwiki-ru"><a href="http://ru.wikipedia.org/wiki/C%2B%2B_Technical_Report_1" title="C++ Technical Report 1 – 俄文" hreflang="ru" lang="ru">Русский</a></li>
+
+                                            </ul>
+                <div class="after-portlet after-portlet-lang"><span class="wb-langlinks-edit wb-langlinks-link"><a action="edit" href="http://www.wikidata.org/wiki/Q2977773#sitelinks-wikipedia" text="编辑链接" title="编辑跨语言链接" class="wbc-editpage">编辑链接</a></span></div>            </div>
+        </div>
+                </div>
+        </div>
+        <div id="footer" role="contentinfo" dir="ltr" lang="zh-CN">
+                            <ul id="footer-info">
+                                            <li id="footer-info-lastmod"> 本页面最后修订于2014年5月1日 (星期四) 06:03。<br></li>
+                                            <li id="footer-info-copyright">本站的全部文字在<a rel="license" href="http://zh.wikipedia.org/zh-cn/Wikipedia%3ACC-BY-SA-3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" title="Wikipedia:CC-BY-SA-3.0协议文本">知识共享 署名-相同方式共享 3.0协议</a><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.zh" style="display:none;"></a>之条款下提供，附加条款亦可能应用。（请参阅<a href="http://wikimediafoundation.org/wiki/%E4%BD%BF%E7%94%A8%E6%9D%A1%E6%AC%BE">使用条款</a>）<br>
 Wikipedia®和维基百科标志是<a href="http://wikimediafoundation.org/">维基媒体基金会</a>的注册商标；维基™是维基媒体基金会的商标。<br>维基媒体基金会是在美国佛罗里达州登记的501(c)(3)<a href="http://wikimediafoundation.org/wiki/%E8%B5%84%E5%8A%A9%E7%9A%84%E5%85%8D%E7%A8%8E%E6%94%BF%E7%AD%96">免税</a>、非营利、慈善机构。<br></li>
-									</ul>
-							<ul id="footer-places">
-											<li id="footer-places-privacy"><a href="http://wikimediafoundation.org/wiki/%E9%9A%90%E7%A7%81%E6%94%BF%E7%AD%96" title="wikimedia:隐私政策">隐私权政策</a></li>
-											<li id="footer-places-about"><a href="http://zh.wikipedia.org/wiki/Wikipedia:%E5%85%B3%E4%BA%8E" title="Wikipedia:关于">关于维基百科</a></li>
-											<li id="footer-places-disclaimer"><a href="http://zh.wikipedia.org/wiki/Wikipedia:%E5%85%8D%E8%B4%A3%E5%A3%B0%E6%98%8E" title="Wikipedia:免责声明">免责声明</a></li>
-											<li id="footer-places-developers"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/How_to_contribute">开发者</a></li>
-											<li id="footer-places-mobileview"><a href="http://zh.m.wikipedia.org/wiki/C%2B%2B_Technical_Report_1" class="noprint stopMobileRedirectToggle">移动版视图</a></li>
-									</ul>
-										<ul id="footer-icons" class="noprint">
-											<li id="footer-copyrightico">
-															<a href="http://wikimediafoundation.org/"><img src="C++%20Technical%20Report%201%20-%20%E7%BB%B4%E5%9F%BA%E7%99%BE%E7%A7%91%EF%BC%8C%E8%87%AA%E7%94%B1%E7%9A%84%E7%99%BE%E7%A7%91%E5%85%A8%E4%B9%A6_files/wikimedia-button.png" alt="Wikimedia Foundation" height="31" width="88"></a>
-													</li>
-											<li id="footer-poweredbyico">
-															<a href="http://www.mediawiki.org/"><img src="C++%20Technical%20Report%201%20-%20%E7%BB%B4%E5%9F%BA%E7%99%BE%E7%A7%91%EF%BC%8C%E8%87%AA%E7%94%B1%E7%9A%84%E7%99%BE%E7%A7%91%E5%85%A8%E4%B9%A6_files/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" height="31" width="88"></a>
-													</li>
-									</ul>
-						<div style="clear:both"></div>
-		</div>
-		<script>/*<![CDATA[*/window.jQuery && jQuery.ready();/*]]>*/</script><script>if(window.mw){
+                                    </ul>
+                            <ul id="footer-places">
+                                            <li id="footer-places-privacy"><a href="http://wikimediafoundation.org/wiki/%E9%9A%90%E7%A7%81%E6%94%BF%E7%AD%96" title="wikimedia:隐私政策">隐私权政策</a></li>
+                                            <li id="footer-places-about"><a href="http://zh.wikipedia.org/wiki/Wikipedia:%E5%85%B3%E4%BA%8E" title="Wikipedia:关于">关于维基百科</a></li>
+                                            <li id="footer-places-disclaimer"><a href="http://zh.wikipedia.org/wiki/Wikipedia:%E5%85%8D%E8%B4%A3%E5%A3%B0%E6%98%8E" title="Wikipedia:免责声明">免责声明</a></li>
+                                            <li id="footer-places-developers"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/How_to_contribute">开发者</a></li>
+                                            <li id="footer-places-mobileview"><a href="http://zh.m.wikipedia.org/wiki/C%2B%2B_Technical_Report_1" class="noprint stopMobileRedirectToggle">移动版视图</a></li>
+                                    </ul>
+                                        <ul id="footer-icons" class="noprint">
+                                            <li id="footer-copyrightico">
+                                                            <a href="http://wikimediafoundation.org/"><img src="C++%20Technical%20Report%201%20-%20%E7%BB%B4%E5%9F%BA%E7%99%BE%E7%A7%91%EF%BC%8C%E8%87%AA%E7%94%B1%E7%9A%84%E7%99%BE%E7%A7%91%E5%85%A8%E4%B9%A6_files/wikimedia-button.png" alt="Wikimedia Foundation" height="31" width="88"></a>
+                                                    </li>
+                                            <li id="footer-poweredbyico">
+                                                            <a href="http://www.mediawiki.org/"><img src="C++%20Technical%20Report%201%20-%20%E7%BB%B4%E5%9F%BA%E7%99%BE%E7%A7%91%EF%BC%8C%E8%87%AA%E7%94%B1%E7%9A%84%E7%99%BE%E7%A7%91%E5%85%A8%E4%B9%A6_files/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" height="31" width="88"></a>
+                                                    </li>
+                                    </ul>
+                        <div style="clear:both"></div>
+        </div>
+        <script>/*<![CDATA[*/window.jQuery && jQuery.ready();/*]]>*/</script><script>if(window.mw){
 mw.loader.state({"site":"loading","user":"ready","user.groups":"ready"});
 }</script>
 <script>if(window.mw){
@@ -639,6 +639,6 @@ mw.loader.load(["ext.math.mathjax.enabler","mediawiki.toc","mobile.desktop","med
 <script>if(window.mw){
 mw.config.set({"wgBackendResponseTime":382,"wgHostname":"mw1079"});
 }</script>
-	
 
-	<div style="left: 0px; top: 0px; position: absolute; width: 29px; height: 27px; border: medium none; margin: 0px; padding: 0px; z-index: 2147483647; display: none;" class="sbi_search" id="sbi_camera_button"></div></body></html>
+
+    <div style="left: 0px; top: 0px; position: absolute; width: 29px; height: 27px; border: medium none; margin: 0px; padding: 0px; z-index: 2147483647; display: none;" class="sbi_search" id="sbi_camera_button"></div></body></html>

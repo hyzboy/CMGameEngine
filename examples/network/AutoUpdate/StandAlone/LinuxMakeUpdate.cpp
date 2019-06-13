@@ -15,24 +15,24 @@
 /**
 * 文件信息数据结构
 */
-struct FileInfo								///文件信息
+struct FileInfo                             ///文件信息
 {
-    char name[_POSIX_PATH_MAX];				///<文件名(不包含路径)
-    char fullname[_POSIX_PATH_MAX];			///<完整名称(包含路径)
+    char name[_POSIX_PATH_MAX];             ///<文件名(不包含路径)
+    char fullname[_POSIX_PATH_MAX];         ///<完整名称(包含路径)
 
-    unsigned long long size;					///<文件长度
+    unsigned long long size;                    ///<文件长度
 
     union
     {
-        unsigned int attrib;				///<文件属性
+        unsigned int attrib;                ///<文件属性
 
         struct
         {
-            bool is_file:1;					///<是文件
-            bool is_directory:1;			///<是目录
+            bool is_file:1;                 ///<是文件
+            bool is_directory:1;            ///<是目录
 
-            bool can_read:1;				///<可以读
-            bool can_write:1;				///<可以写
+            bool can_read:1;                ///<可以读
+            bool can_write:1;               ///<可以写
         };
     };
 };//struct FileInfo
@@ -185,7 +185,7 @@ int EnumFile(EnumFileConfig *config)
             fi.is_directory=false;
         }
 
-        fi.can_read	=statbuf.st_mode&S_IROTH;
+        fi.can_read =statbuf.st_mode&S_IROTH;
         fi.can_write=statbuf.st_mode&S_IWOTH;
 
         if(S_ISDIR(statbuf.st_mode))

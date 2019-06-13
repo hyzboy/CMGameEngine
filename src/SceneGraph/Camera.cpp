@@ -48,20 +48,20 @@ namespace hgl
 
             return result*translate(-eye);
         }
-		
-		void CameraToFrustum(Frustum *f,const Camera *cam)
-		{
-			if(!f||!cam)return;
 
-			f->SetVerticalFovAndAspectRatio(DegToRad(cam->fov),cam->width/cam->height);
-			f->SetViewPlaneDistances(cam->znear,cam->zfar);
+        void CameraToFrustum(Frustum *f,const Camera *cam)
+        {
+            if(!f||!cam)return;
 
-			//Matrix4f projection_matrix=f->ProjectionMatrix();		//可以用Frustum来算projection matrix
-		}
+            f->SetVerticalFovAndAspectRatio(DegToRad(cam->fov),cam->width/cam->height);
+            f->SetViewPlaneDistances(cam->znear,cam->zfar);
+
+            //Matrix4f projection_matrix=f->ProjectionMatrix();     //可以用Frustum来算projection matrix
+        }
 
         void MakeCameraMatrix(Matrix4f *proj,Matrix4f *mv,const Camera *cam)
         {
-			*proj=hgl::graph::Perspective(cam->fov,cam->width/cam->height,cam->znear,cam->zfar);
+            *proj=hgl::graph::Perspective(cam->fov,cam->width/cam->height,cam->znear,cam->zfar);
             *mv=hgl::graph::LookAt(cam->eye,cam->center,cam->up_vector);
         }
     }//namespace graph

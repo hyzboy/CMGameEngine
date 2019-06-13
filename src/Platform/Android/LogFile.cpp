@@ -6,8 +6,8 @@
 
 namespace hgl
 {
-	namespace logger
-	{
+    namespace logger
+    {
         namespace
         {
             char files_dir[HGL_MAX_PATH];
@@ -27,5 +27,5 @@ namespace hgl
         {
             return(new io::UTF8TextOutputStream(os));
         }
-	}//namespace logger
+    }//namespace logger
 }//namespace hgl

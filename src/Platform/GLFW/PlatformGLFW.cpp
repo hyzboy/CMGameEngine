@@ -3,7 +3,7 @@
 
 namespace hgl
 {
-	void InitKeyConvert();
+    void InitKeyConvert();
 
     namespace platform
     {

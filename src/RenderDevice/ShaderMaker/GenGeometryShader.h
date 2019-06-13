@@ -4,27 +4,27 @@
 #include"ShaderStringList.h"
 namespace hgl
 {
-	namespace graph
-	{
-		namespace shadergen
-		{
-			struct gs:public shader_stringlist
-			{
-			private:
+    namespace graph
+    {
+        namespace shadergen
+        {
+            struct gs:public shader_stringlist
+            {
+            private:
 
-				uint in_prim;
-				uint out_prim;
-				uint max_vertices;
+                uint in_prim;
+                uint out_prim;
+                uint max_vertices;
 
-			public:
+            public:
 
-				gs(uint,uint,uint);
+                gs(uint,uint,uint);
 
-			public:
+            public:
 
-				void add_main_end();
-			};//struct gs:public shader_stringlist
-		}//namespace shadergen
-	}//namespace graph
+                void add_main_end();
+            };//struct gs:public shader_stringlist
+        }//namespace shadergen
+    }//namespace graph
 }//namespace hgl
 #endif//HGL_GRAPH_GEN_GEOMETRY_SHADER_INCLUDE

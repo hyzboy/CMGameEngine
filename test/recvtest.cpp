@@ -10,47 +10,47 @@ using namespace hgl::network;
 
 int main(int argc,char **argv)
 {
-	if(argc<3)
-	{
-		std::cout<<"RecvTest ip port"<<std::endl;
-		return(0);
-	}
+    if(argc<3)
+    {
+        std::cout<<"RecvTest ip port"<<std::endl;
+        return(0);
+    }
 
-	struct timespec s,e;
-	uint64 st,et;
-	TCPClient tcp;
-	char buf[1024];
-	int port;
+    struct timespec s,e;
+    uint64 st,et;
+    TCPClient tcp;
+    char buf[1024];
+    int port;
 
-	stoi(argv[2],port);
+    stoi(argv[2],port);
 
     SharedPtr<IPAddress> ip=CreateIPv4TCP(argv[1],port);
 
-	if(!tcp.CreateConnect(ip))
+    if(!tcp.CreateConnect(ip))
     {
         std::cerr<<"create connect failed.";
         return(1);
     }
 
-	tcp.SetBlock(true,1.0);
+    tcp.SetBlock(true,1.0);
 
-	InputStream *is=tcp.GetInputStream();      //这个不需要delete
+    InputStream *is=tcp.GetInputStream();      //这个不需要delete
 
-	while(true)
-	{
-		clock_gettime(CLOCK_REALTIME,&s);
+    while(true)
+    {
+        clock_gettime(CLOCK_REALTIME,&s);
 
-		int result=is->Read(buf,1024);
+        int result=is->Read(buf,1024);
 
-		clock_gettime(CLOCK_REALTIME,&e);
+        clock_gettime(CLOCK_REALTIME,&e);
 
-		int err=errno;
+        int err=errno;
 
-		st=(s.tv_sec*HGL_NANO_SEC_PER_SEC)+s.tv_nsec;
-		et=(e.tv_sec*HGL_NANO_SEC_PER_SEC)+e.tv_nsec;
+        st=(s.tv_sec*HGL_NANO_SEC_PER_SEC)+s.tv_nsec;
+        et=(e.tv_sec*HGL_NANO_SEC_PER_SEC)+e.tv_nsec;
 
-		std::cout<<"ReadFully(1024) time:"<<et-st<<",errno:"<<err<<std::endl;
-	}
+        std::cout<<"ReadFully(1024) time:"<<et-st<<",errno:"<<err<<std::endl;
+    }
 
-	return 0;
+    return 0;
 }

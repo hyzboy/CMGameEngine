@@ -4,13 +4,13 @@
 #include<hgl/type/List.h>
 namespace hgl
 {
-	namespace network
-	{
-		/**
-		 * Socket事件
-		 */
-		struct SocketEvent
-		{
+    namespace network
+    {
+        /**
+         * Socket事件
+         */
+        struct SocketEvent
+        {
             int sock;
 
             uint event;
@@ -23,6 +23,6 @@ namespace hgl
         };//struct SocketEvent
 
         using SocketEventList=List<SocketEvent>;
-	}//namespace network
+    }//namespace network
 }//namespace hgl
 #endif//HGL_NETWORK_SOCKET_EVENT_INCLUDE

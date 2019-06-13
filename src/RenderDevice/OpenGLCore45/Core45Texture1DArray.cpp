@@ -9,7 +9,7 @@ namespace hgl
         Texture1DArray::Texture1DArray()
         {
             type=HGL_TEXTURE_1D_ARRAY;
-			length=count=wrap=0;
+            length=count=wrap=0;
             glCreateTextures(GL_TEXTURE_1D_ARRAY,1,&texture_id);
         }
 
@@ -47,14 +47,14 @@ namespace hgl
 
             if(sfmt->compress)      //原本就是压缩格式
             {
-				if(data)
+                if(data)
                 glCompressedTextureSubImage2D(texture_id,0,0,0,l,c,vf,image_size,data);
             }
             else                    //正常非压缩格式
             {
                 glTextureStorage2D(texture_id, 1, vf, l, c);
 
-				if(data)
+                if(data)
                 glTextureSubImage2D(texture_id, 0, 0, 0, l, c, sfmt->color_format, sfmt->data_type, data);
             }
 
@@ -120,11 +120,11 @@ namespace hgl
 
         bool Texture1DArray::ChangeImage(uint s,uint t,uint c,uint h,void *data,uint bytes,TSF sf)
         {
-            if(	s>length||t>count
-				||c>length-s
-				||h>count-t
-				||!data
-				||!TextureSourceFormatCheck(sf))
+            if( s>length||t>count
+                ||c>length-s
+                ||h>count-t
+                ||!data
+                ||!TextureSourceFormatCheck(sf))
                 RETURN_FALSE;
 
             const TextureFormat *sfmt=TextureFormatInfoList+sf;       //原始数据格式

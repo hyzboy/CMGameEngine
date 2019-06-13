@@ -16,7 +16,7 @@ namespace hgl
         WebSocketAccept::WebSocketAccept(int s,IPAddress *ip):TCPAccept(s,ip),recv_buffer(HGL_TCP_BUFFER_SIZE)
         {
         }
-        
+
         void WebSocketAccept::WebSocketHandshake()
         {
             constexpr char HTTP_HEADER_END_STR[4]={'\r','\n','\r','\n'};        //别用"\r\n\r\n"，不然sizeof会得出来5
@@ -40,7 +40,7 @@ namespace hgl
                     LOG_ERROR(OS_TEXT("WebSocketAccept::WebSocketHandshake() read data error"));
                     break;
                 }
-                
+
                 recv_total+=size;
                 pos+=size;
 
@@ -53,9 +53,9 @@ namespace hgl
                 total=end-ws_header.data();
 
                 UTF8String key;
-                UTF8String ws_protocol;                                     
+                UTF8String ws_protocol;
                 uint       ws_version;
-                    
+
                 UTF8String ws_accept_protocol;
 
                 if(GetWebSocketInfo(key,ws_protocol,ws_version,ws_header.data(),total))
@@ -71,8 +71,8 @@ namespace hgl
 
                             if(size>0)
                                 memcpy(recv_buffer.data(),end,size);
-                            
-                            recv_length=size;                            
+
+                            recv_length=size;
                             return;
                         }
                     }
@@ -82,7 +82,7 @@ namespace hgl
 
             CloseSocket();
         }
-        
+
         /**
          * 从socket接收数据回调函数<br>此写法有待改良
          */
@@ -126,10 +126,10 @@ namespace hgl
                     recv_total+=result;
                     total+=result;
                 }
-                
+
                 if(recv_length<msg_header_size)      //已经有头了
                     continue;
-                
+
                 uint8 *p=recv_buffer.data();
 
                 msg_opcode  =p[0]&0x7;
@@ -142,7 +142,7 @@ namespace hgl
 
                 msg_fin     =(p[0]>>7)&0x1;
                 msg_masked  =(p[1]>>7)&0x1;
-                    
+
                 uint length_field=p[1]&0x7F;
 
                 msg_header_size=2;
@@ -171,7 +171,7 @@ namespace hgl
 
                     msg_length=ntohl(*(uint32 *)(p+2));
                 }
-                    
+
                 msg_full_length=msg_length;
 
                 if(msg_masked)
@@ -197,11 +197,11 @@ namespace hgl
                 //收完了
 
                 char *pack;
-                
+
                 p+=msg_header_size;
 
                 if(msg_masked)
-                {      
+                {
                     uint32 mask=*(uint32 *)p;
 
                     p+=4;
@@ -228,7 +228,7 @@ namespace hgl
                 if(msg_opcode==2)
                 {
                     if(msg_length>0)
-                    {                        
+                    {
                     #ifdef _DEBUG
                         data_out_str.SetLength(msg_length*3);
 
@@ -239,10 +239,10 @@ namespace hgl
 
                         OnBinary(pack,msg_length,msg_fin);
                     }
-                    
+
                     if(!msg_fin)
                         last_opcode=2;
-                    else 
+                    else
                         last_opcode=0;
                 }
                 else
@@ -331,7 +331,7 @@ namespace hgl
         }
 
         bool WebSocketAccept::SendBinary(void *data,uint32 size,bool fin)
-        {            
+        {
         #ifdef _DEBUG
             data_out_str.SetLength(size*3);
 

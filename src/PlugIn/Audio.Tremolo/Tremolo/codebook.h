@@ -46,9 +46,9 @@ typedef struct codebook{
   void        *dec_table;
   int          dec_method;
   int          dec_type; /* 0 = entry number
-			    1 = packed vector of values
-			    2 = packed vector of column offsets, maptype 1
-			    3 = scalar offset into value array,  maptype 2 */
+                1 = packed vector of values
+                2 = packed vector of column offsets, maptype 1
+                3 = scalar offset into value array,  maptype 2 */
   int          q_bits;
   long         dim;      /* codebook dimensions (elements per vector) */
   int          q_delp;
@@ -74,14 +74,14 @@ extern int  vorbis_book_unpack(oggpack_buffer *b,codebook *c);
 
 extern long vorbis_book_decode(codebook *book, oggpack_buffer *b);
 extern long vorbis_book_decodevs_add(codebook *book, ogg_int32_t *a,
-				     oggpack_buffer *b,int n,int point);
+                     oggpack_buffer *b,int n,int point);
 extern long vorbis_book_decodev_set(codebook *book, ogg_int32_t *a,
-				    oggpack_buffer *b,int n,int point);
+                    oggpack_buffer *b,int n,int point);
 extern long vorbis_book_decodev_add(codebook *book, ogg_int32_t *a,
-				    oggpack_buffer *b,int n,int point);
+                    oggpack_buffer *b,int n,int point);
 extern long vorbis_book_decodevv_add(codebook *book, ogg_int32_t **a,
-				     long off,int ch,
-				    oggpack_buffer *b,int n,int point);
+                     long off,int ch,
+                    oggpack_buffer *b,int n,int point);
 
 extern int _ilog(unsigned int v);
 

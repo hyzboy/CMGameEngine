@@ -1,25 +1,25 @@
-	static FontInfo *DefaultFont;
+    static FontInfo *DefaultFont;
 
 private:
 
-	UTF16String name;
+    UTF16String name;
 
-	int width,height;
-	bool bold,italic;
+    int width,height;
+    bool bold,italic;
 
 protected:
 
-	UTF16String &GetName(){return name;}
-	void SetName(UTF16String &);
+    UTF16String &GetName(){return name;}
+    void SetName(UTF16String &);
 
-	int GetWidth(){return width;}
-	int GetHeight(){return height;}
-	bool GetBold(){return bold;}
-	bool GetItalic(){return italic;}
+    int GetWidth(){return width;}
+    int GetHeight(){return height;}
+    bool GetBold(){return bold;}
+    bool GetItalic(){return italic;}
 
-	void SetWidth(int);
-	void SetHeight(int);
-	void SetBold(bool);
-	void SetItalic(bool);
+    void SetWidth(int);
+    void SetHeight(int);
+    void SetBold(bool);
+    void SetItalic(bool);
 
-	void InitPrivate();
+    void InitPrivate();

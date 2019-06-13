@@ -6,19 +6,19 @@
 #include<hgl/graph/RenderState.h>
 namespace hgl
 {
-	namespace graph
-	{
-		/**
-		 * Shader管理仓库
-		 */
-		class ShaderManage:public ResManage<RenderState,Shader>
-		{
-		protected:
+    namespace graph
+    {
+        /**
+         * Shader管理仓库
+         */
+        class ShaderManage:public ResManage<RenderState,Shader>
+        {
+        protected:
 
-			Shader *Create(const RenderState &) override;
-		};//class ShaderManage
+            Shader *Create(const RenderState &) override;
+        };//class ShaderManage
 
-		extern ShaderManage *global_shader_manage;							///<全局Shader仓库
-	}//namespace graph
+        extern ShaderManage *global_shader_manage;                          ///<全局Shader仓库
+    }//namespace graph
 }//namespace hgl
 #endif//HGL_GRAPH_SHADER_MANAGE_INCLUDE

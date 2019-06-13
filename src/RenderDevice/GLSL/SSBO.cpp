@@ -105,7 +105,7 @@ namespace hgl
             use_map=GL_MAP_READ_BIT;
 
 //            glBindBufferBase(GL_SHADER_STORAGE_BUFFER,binding_point,ssbo);
-            
+
             buffer=glMapNamedBufferRange(ssbo,0,size,GL_MAP_READ_BIT);
 
             return(buffer);

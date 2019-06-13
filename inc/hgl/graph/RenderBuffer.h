@@ -5,28 +5,28 @@
 #include<hgl/graph/GL/glew.h>
 namespace hgl
 {
-	namespace graph
-	{
-		/**
-		 * 渲染缓冲区
-		 */
-		class RenderBuffer
-		{
-		protected:
+    namespace graph
+    {
+        /**
+         * 渲染缓冲区
+         */
+        class RenderBuffer
+        {
+        protected:
 
-			GLuint buffer_id;
+            GLuint buffer_id;
 
-		public:
+        public:
 
-			RenderBuffer();
-			RenderBuffer(int);
-			virtual ~RenderBuffer();
+            RenderBuffer();
+            RenderBuffer(int);
+            virtual ~RenderBuffer();
 
-			bool Create();																			///<创建一个渲染缓冲区
-			bool Close();																			///<关闭当前渲染缓冲区
-		};//class RenderBuffer
+            bool Create();                                                                          ///<创建一个渲染缓冲区
+            bool Close();                                                                           ///<关闭当前渲染缓冲区
+        };//class RenderBuffer
 
-		extern RenderBuffer *PrimaryRenderBuffer;													///<缺省主渲染缓冲区
-	}//namespace graph
+        extern RenderBuffer *PrimaryRenderBuffer;                                                   ///<缺省主渲染缓冲区
+    }//namespace graph
 }//namespace hgl
 #endif//HGL_GRAPH_RENDER_BUFFER_INCLUDE

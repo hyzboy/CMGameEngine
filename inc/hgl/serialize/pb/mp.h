@@ -127,24 +127,24 @@ namespace hgl
             };//class PBMessageProc
 
             //使用范例
-        /*	class UserThread
+        /*  class UserThread
             {
             public:
 
                 UserThread()
                 {
-                    mp.Init(c2s_login::id,c2s_request_all_level_info::id);								//初始化消息号
+                    mp.Init(c2s_login::id,c2s_request_all_level_info::id);                              //初始化消息号
 
                                                                                                         //定义设置宠
-                #define SET_PB_EVENT(name)	{	\
-                                                PBCmdFunc pcf;	\
+                #define SET_PB_EVENT(name)  {   \
+                                                PBCmdFunc pcf;  \
                                                 \
-                                                SetEventCall(pcf,this,UserThread,on_##name);	\
+                                                SetEventCall(pcf,this,UserThread,on_##name);    \
                                                 \
-                                                mp.SetProc(c2s_##name::id,pcf,new c2s_##name);	\
+                                                mp.SetProc(c2s_##name::id,pcf,new c2s_##name);  \
                                             }
 
-                    SET_PB_EVENT(login);																//设置处理函数
+                    SET_PB_EVENT(login);                                                                //设置处理函数
                     SET_PB_EVENT(join_game);
                     SET_PB_EVENT(leave_table);
 

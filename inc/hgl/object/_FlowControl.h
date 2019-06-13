@@ -96,7 +96,7 @@ namespace hgl
         {
             T *next=active_obj->GetNextObject();
 
-            Clear();			//清空所有流程
+            Clear();            //清空所有流程
 
             if(next==nullptr)
             {
