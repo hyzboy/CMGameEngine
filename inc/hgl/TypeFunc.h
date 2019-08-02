@@ -252,6 +252,19 @@ namespace hgl
     constexpr double HGL_COS_ANG_270=0;
     constexpr double HGL_COS_ANG_315=0.707106781187;
 
+    #define HGL_DEF_ANG2RAD(ang)    constexpr double HGL_RAD_##ang=double(ang)*(HGL_PI/180.0f);
+
+    HGL_DEF_ANG2RAD(0)
+    HGL_DEF_ANG2RAD(45)
+    HGL_DEF_ANG2RAD(90)
+    HGL_DEF_ANG2RAD(135)
+    HGL_DEF_ANG2RAD(180)
+    HGL_DEF_ANG2RAD(225)
+    HGL_DEF_ANG2RAD(270)
+    HGL_DEF_ANG2RAD(315)
+
+    #undef HGL_DEF_ANG2RAD
+
     constexpr double HGL_GOLDEN_RATIO                       =0.61803398874989484820458683436563811772030917980576;//黄金比例
     constexpr double HGL_SILVER_RATIO                       =2.4142135623730950488; //白银比例
 
@@ -398,6 +411,14 @@ namespace hgl
         memcpy(&x,&y,sizeof(T));
         memcpy(&y,&t,sizeof(T));
     }
+    
+    template<typename T> T hgl_clamp(const T &cur,const T &min_value,const T &max_value)
+    {
+        if(cur<min_value)return min_value;
+        if(cur>max_value)return max_value;
+
+        return cur;
+    }
 
     template<typename T> inline T hgl_abs(const T &v){return (v>=0?v:-v);}
 
@@ -529,6 +550,29 @@ namespace hgl
     inline void hgl_zero(T *data,const size_t count)
     {
         memset(data,0,count*sizeof(T));
+    }
+
+    /**
+     * 分配指定类型数据块并清0
+     */
+    template<typename T>
+    inline T *hgl_zero_new(const size_t count)
+    {
+        if(count<=0)return(nullptr);
+
+        T *data=new T[count];
+        memset(data,0,count*sizeof(T));
+        return data;
+    }
+
+    template<typename T>
+    inline T *hgl_copy_new(const size_t count,const T *src)
+    {
+        if(count<=0)return(nullptr);
+
+        T *data=new T[count];
+        memcpy(data,src,count*sizeof(T));
+        return data;
     }
 
     /**
