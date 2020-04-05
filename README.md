@@ -4,7 +4,7 @@
 * 对本工程的再开发或使用，必须有明确的名称标识。否则你将不会得到任何形式的支持，并被加入黑名单，即使你付费。
 
 * 源代码仓库: https://github.com/hyzboy/CMGameEngine
-* 官方网站: http://www.hyzgame.com.cn
+* 官方网站: http://www.hyzgame.com
 * 联系方式：
   * 电子邮箱：hyzboy (@) gmail.com
   * QQ/微信：324000607
